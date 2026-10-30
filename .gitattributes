@@ -1,0 +1,14 @@
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary
+*.zip binary
+*.FCStd binary
+*.blend binary
+*.stl binary
+# Preserve exporter formatting in generated CAD and validation artifacts.
+*.step -whitespace
+reports/**/*.svg -whitespace
+reports/**/*.txt -whitespace
+reports/*.svg -whitespace
+reports/*.txt -whitespace

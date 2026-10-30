@@ -1,0 +1,4851 @@
+{
+  "revision": "A0",
+  "status": "bench_prototype_not_vehicle_qualified",
+  "gpio": {
+    "INJ1_CMD": 4,
+    "INJ2_CMD": 5,
+    "INJ3_CMD": 6,
+    "INJ4_CMD": 7,
+    "IGN1_CMD": 15,
+    "IGN2_CMD": 16,
+    "IGN3_CMD": 17,
+    "IGN4_CMD": 18,
+    "CRANK": 8,
+    "CAM": 9,
+    "ADC_CS": 10,
+    "SPI_MOSI": 11,
+    "SPI_CLK": 12,
+    "SPI_MISO": 13,
+    "CAN_TX": 14,
+    "CAN_RX": 21,
+    "ARM": 38,
+    "WDI": 39,
+    "SAFE_N_MON": 40,
+    "I2C_SDA": 41,
+    "I2C_SCL": 42,
+    "UART_TX": 43,
+    "UART_RX": 44,
+    "PUMP_CMD": 2,
+    "FAN_CMD": 1,
+    "INTERLOCK": 48
+  },
+  "parts": [
+    {
+      "ref": "J1",
+      "value": "FUSED_KEY_12V",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
+      "pins": {
+        "1": "VBAT_FUSED",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        18,
+        22
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "External 1 A fuse at source. Bench header, not a sealed vehicle connector.",
+      "dnp": false
+    },
+    {
+      "ref": "D1",
+      "value": "SMCJ24CA",
+      "footprint": "Diode_SMD:D_SMC",
+      "pins": {
+        "1": "VBAT_FUSED",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        28,
+        25
+      ],
+      "angle": 0,
+      "mpn": "SMCJ24CA-E3/57T",
+      "note": "Bidirectional TVS. 24 V standoff; 38.9 V specified pulse clamp, not load-dump qualification.",
+      "dnp": false
+    },
+    {
+      "ref": "D2",
+      "value": "STPS5H100BY",
+      "footprint": "Package_TO_SOT_SMD:TO-252-2",
+      "pins": {
+        "1": "VBAT_FUSED",
+        "2": "VIN_PROT",
+        "3": null
+      },
+      "names": {
+        "1": "A",
+        "2": "K"
+      },
+      "types": {},
+      "page": "power",
+      "xy": [
+        39,
+        25
+      ],
+      "angle": 0,
+      "mpn": "STPS5H100BY",
+      "note": "100 V series reverse-polarity blocking diode; check forward loss and pulse stress.",
+      "dnp": false
+    },
+    {
+      "ref": "C1",
+      "value": "47u 63V",
+      "footprint": "Capacitor_SMD:CP_Elec_8x10",
+      "pins": {
+        "1": "VIN_PROT",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        42,
+        36
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Electrolytic, exact series must be qualified.",
+      "dnp": false
+    },
+    {
+      "ref": "C2",
+      "value": "2.2u 100V X7R",
+      "footprint": "Capacitor_SMD:C_1210_3225Metric",
+      "pins": {
+        "1": "VIN_PROT",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        48,
+        24
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C3",
+      "value": "100n 100V",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "VIN_PROT",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        48,
+        28
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U1",
+      "value": "LM5164QDDARQ1",
+      "footprint": "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.29x3mm",
+      "pins": {
+        "1": "GND",
+        "2": "VIN_PROT",
+        "3": "UVLO",
+        "4": "RON",
+        "5": "FB",
+        "6": "SAFE_N",
+        "7": "BST",
+        "8": "SW",
+        "9": "GND"
+      },
+      "names": {
+        "1": "GND",
+        "2": "VIN",
+        "3": "EN_UVLO",
+        "4": "RON",
+        "5": "FB",
+        "6": "PGOOD",
+        "7": "BST",
+        "8": "SW",
+        "9": "EP"
+      },
+      "types": {
+        "1": "power_in",
+        "2": "power_in",
+        "6": "open_collector",
+        "8": "output",
+        "9": "power_in"
+      },
+      "page": "power",
+      "xy": [
+        57,
+        28
+      ],
+      "angle": 0,
+      "mpn": "LM5164QDDARQ1",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R1",
+      "value": "316k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "VIN_PROT",
+        "2": "UVLO"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        50,
+        35
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R2",
+      "value": "100k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "UVLO",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        50,
+        39
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R3",
+      "value": "41.2k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "RON",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        54,
+        39
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C4",
+      "value": "2.2n 50V C0G",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "BST",
+        "2": "SW"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        61,
+        24
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "L1",
+      "value": "33uH 2.5A Isat",
+      "footprint": "Inductor_SMD:L_Bourns_SRP7028A_7.3x6.6mm",
+      "pins": {
+        "1": "SW",
+        "2": "+5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        69,
+        28
+      ],
+      "angle": 0,
+      "mpn": "SRP7028A-330M",
+      "note": "2.5 A saturation and 2 A RMS ratings at stated vendor test conditions. Verify derating at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "C5",
+      "value": "22u 16V X7R",
+      "footprint": "Capacitor_SMD:C_1210_3225Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        78,
+        25
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C6",
+      "value": "22u 16V X7R",
+      "footprint": "Capacitor_SMD:C_1210_3225Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        78,
+        31
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R4",
+      "value": "316k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "FB"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        63,
+        37
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R5",
+      "value": "100k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "FB",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        63,
+        41
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R6",
+      "value": "100k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "SW",
+        "2": "RIPPLE"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        69,
+        39
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C7",
+      "value": "3.3n C0G",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "RIPPLE",
+        "2": "+5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        74,
+        39
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C8",
+      "value": "100p C0G",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "RIPPLE",
+        "2": "FB"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        69,
+        44
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U2",
+      "value": "NCV1117ST33T3G",
+      "footprint": "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
+      "pins": {
+        "1": "GND",
+        "2": "+3V3",
+        "3": "+5V"
+      },
+      "names": {
+        "1": "GND",
+        "2": "OUT",
+        "3": "IN"
+      },
+      "types": {
+        "1": "power_in",
+        "2": "power_out",
+        "3": "power_in"
+      },
+      "page": "power",
+      "xy": [
+        91,
+        27
+      ],
+      "angle": 0,
+      "mpn": "NCV1117ST33T3G",
+      "note": "Thermal budget <=200 mA continuous pending measurement. Requires output ESR review.",
+      "dnp": false
+    },
+    {
+      "ref": "C9",
+      "value": "22u 10V ESR 0.3-1R",
+      "footprint": "Capacitor_SMD:CP_Elec_6.3x5.8",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        101,
+        27
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Select exact electrolytic series to satisfy LDO stability over temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "C10",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        96,
+        35
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R7",
+      "value": "100R 0.25W",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        104,
+        35
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "33 mA rail bleed provides a sink for fault clamp current. Must validate unpowered injection.",
+      "dnp": false
+    },
+    {
+      "ref": "F2",
+      "value": "PTC 100mA",
+      "footprint": "Fuse:Fuse_1812_4532Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "SENSOR_5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        81,
+        43
+      ],
+      "angle": 0,
+      "mpn": "MF-MSMF010-2",
+      "note": "Resettable fuse, slow thermal response; no precision current limit.",
+      "dnp": false
+    },
+    {
+      "ref": "C11",
+      "value": "1u",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        88,
+        43
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U3",
+      "value": "ESP32-S3-WROOM-1-N8",
+      "footprint": "RF_Module:ESP32-S3-WROOM-1",
+      "pins": {
+        "1": "GND",
+        "2": "+3V3",
+        "3": "EN",
+        "40": "GND",
+        "41": "GND",
+        "4": "INJ1_CMD",
+        "5": "INJ2_CMD",
+        "6": "INJ3_CMD",
+        "7": "INJ4_CMD",
+        "8": "IGN1_CMD",
+        "9": "IGN2_CMD",
+        "10": "IGN3_CMD",
+        "11": "IGN4_CMD",
+        "12": "CRANK",
+        "13": null,
+        "14": null,
+        "15": null,
+        "16": null,
+        "17": "CAM",
+        "18": "ADC_CS",
+        "19": "SPI_MOSI",
+        "20": "SPI_CLK",
+        "21": "SPI_MISO",
+        "22": "CAN_TX",
+        "23": "CAN_RX",
+        "24": null,
+        "25": "INTERLOCK",
+        "26": null,
+        "27": "BOOT_N",
+        "28": null,
+        "29": null,
+        "30": null,
+        "31": "ARM",
+        "32": "WDI",
+        "33": "SAFE_N_MON",
+        "34": "I2C_SDA",
+        "35": "I2C_SCL",
+        "36": "UART_RX",
+        "37": "UART_TX",
+        "38": "PUMP_CMD",
+        "39": "FAN_CMD"
+      },
+      "names": {
+        "1": "GND",
+        "2": "3V3",
+        "3": "EN",
+        "40": "GND",
+        "41": "EP",
+        "4": "IO4",
+        "5": "IO5",
+        "6": "IO6",
+        "7": "IO7",
+        "8": "IO15",
+        "9": "IO16",
+        "10": "IO17",
+        "11": "IO18",
+        "12": "IO8",
+        "13": "IO19",
+        "14": "IO20",
+        "15": "IO3",
+        "16": "IO46",
+        "17": "IO9",
+        "18": "IO10",
+        "19": "IO11",
+        "20": "IO12",
+        "21": "IO13",
+        "22": "IO14",
+        "23": "IO21",
+        "24": "IO47",
+        "25": "IO48",
+        "26": "IO45",
+        "27": "IO0",
+        "28": "IO35",
+        "29": "IO36",
+        "30": "IO37",
+        "31": "IO38",
+        "32": "IO39",
+        "33": "IO40",
+        "34": "IO41",
+        "35": "IO42",
+        "36": "IO44",
+        "37": "IO43",
+        "38": "IO2",
+        "39": "IO1"
+      },
+      "types": {
+        "4": "bidirectional",
+        "5": "bidirectional",
+        "6": "bidirectional",
+        "7": "bidirectional",
+        "8": "bidirectional",
+        "9": "bidirectional",
+        "10": "bidirectional",
+        "11": "bidirectional",
+        "12": "bidirectional",
+        "13": "bidirectional",
+        "14": "bidirectional",
+        "15": "bidirectional",
+        "16": "bidirectional",
+        "17": "bidirectional",
+        "18": "bidirectional",
+        "19": "bidirectional",
+        "20": "bidirectional",
+        "21": "bidirectional",
+        "22": "bidirectional",
+        "23": "bidirectional",
+        "24": "bidirectional",
+        "25": "bidirectional",
+        "26": "bidirectional",
+        "27": "bidirectional",
+        "28": "bidirectional",
+        "29": "bidirectional",
+        "30": "bidirectional",
+        "31": "bidirectional",
+        "32": "bidirectional",
+        "33": "bidirectional",
+        "34": "bidirectional",
+        "35": "bidirectional",
+        "36": "bidirectional",
+        "37": "bidirectional",
+        "38": "bidirectional",
+        "39": "bidirectional",
+        "1": "power_in",
+        "2": "power_in",
+        "3": "input",
+        "40": "power_in",
+        "41": "power_in"
+      },
+      "page": "core",
+      "xy": [
+        39,
+        65
+      ],
+      "angle": 0,
+      "mpn": "ESP32-S3-WROOM-1-N8",
+      "note": "Industrial radio module, no automotive or functional safety qualification. Antenna faces left board edge.",
+      "dnp": false
+    },
+    {
+      "ref": "R8",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "EN"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        24,
+        51
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C12",
+      "value": "1u",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "EN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        29,
+        51
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D3",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "SAFE_N",
+        "2": "EN"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "core",
+      "xy": [
+        34,
+        51
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "SAFE_N low discharges EN without EN capacitor delaying hardware inhibit.",
+      "dnp": false
+    },
+    {
+      "ref": "C13",
+      "value": "10u",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        33,
+        78
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C14",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        38,
+        78
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R9",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "BOOT_N"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        24,
+        81
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "J2",
+      "value": "UART_FLASH_3V3_ONLY",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "UART_TX",
+        "3": "UART_RX",
+        "4": "EN",
+        "5": "BOOT_N"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        17,
+        86
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "External USB UART, 3.3 V logic. Supply board via J1; no USB backfeed.",
+      "dnp": false
+    },
+    {
+      "ref": "U4",
+      "value": "TPS3431SDRBRQ1",
+      "footprint": "Package_SON:VSON-8-1EP_3x3mm_P0.65mm_EP1.65x2.4mm",
+      "pins": {
+        "1": "+3V3",
+        "2": "WDT_SELECT",
+        "3": "+3V3",
+        "4": "GND",
+        "5": "+3V3",
+        "6": "WDI",
+        "7": "SAFE_N",
+        "8": "SAFE_N",
+        "9": "GND"
+      },
+      "names": {
+        "1": "VDD",
+        "2": "CWD",
+        "3": "EN",
+        "4": "GND",
+        "5": "SET1",
+        "6": "WDI",
+        "7": "WDO_N",
+        "8": "ENOUT",
+        "9": "EP"
+      },
+      "types": {
+        "1": "power_in",
+        "4": "power_in",
+        "7": "open_collector",
+        "8": "open_collector",
+        "9": "power_in"
+      },
+      "page": "core",
+      "xy": [
+        56,
+        54
+      ],
+      "angle": 0,
+      "mpn": "TPS3431SDRBRQ1",
+      "note": "1.6 s nominal watchdog with CWD floating. ENOUT and WDO wired AND. Pulse limiters provide shorter actuator ceilings.",
+      "dnp": false
+    },
+    {
+      "ref": "R10",
+      "value": "10k OPTIONAL 200ms",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "WDT_SELECT"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        51,
+        47
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "DNP for 1.6 s boot allowance. Populate only after worst-case boot timing is measured.",
+      "dnp": true
+    },
+    {
+      "ref": "R11",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "SAFE_N"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        58,
+        47
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R12",
+      "value": "100k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "WDI",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        65,
+        49
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C15",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        56,
+        61
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U5",
+      "value": "TLV803EA30DBZR",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "pins": {
+        "1": "GND",
+        "2": "SAFE_N",
+        "3": "+3V3"
+      },
+      "names": {
+        "1": "GND",
+        "2": "RESET_N",
+        "3": "VDD"
+      },
+      "types": {
+        "1": "power_in",
+        "2": "open_collector",
+        "3": "power_in"
+      },
+      "page": "core",
+      "xy": [
+        68,
+        55
+      ],
+      "angle": 0,
+      "mpn": "TLV803EA30DBZR",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C16",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        68,
+        61
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R13",
+      "value": "1k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "SAFE_N",
+        "2": "SAFE_N_MON"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        64,
+        66
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "J3",
+      "value": "NORMALLY_OPEN_INTERLOCK",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
+      "pins": {
+        "1": "+3V3",
+        "2": "INTERLOCK"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        77,
+        56
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Fit only on supervised dummy-load bench. Open contact forces output inhibit independent of MCU.",
+      "dnp": false
+    },
+    {
+      "ref": "R14",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "INTERLOCK",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        77,
+        63
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R15",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "ARM",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        77,
+        68
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "J4",
+      "value": "EXPANSION_3V3",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "+3V3",
+        "3": "I2C_SDA",
+        "4": "I2C_SCL",
+        "5": "SAFE_N"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        83,
+        87
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R16",
+      "value": "4.7k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "I2C_SDA"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        75,
+        84
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R17",
+      "value": "4.7k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "I2C_SCL"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        75,
+        89
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "J5",
+      "value": "SENSOR_LOOM",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "GND",
+        "3": "MAP",
+        "4": "TPS",
+        "5": "CLT",
+        "6": "IAT",
+        "7": "LAMBDA_WB",
+        "8": "POSTCAT_BUF",
+        "9": "GND",
+        "10": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        18,
+        126
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R20",
+      "value": "22k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "MAP",
+        "2": "ADC0"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        33,
+        109
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R21",
+      "value": "33k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "ADC0",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        33,
+        113
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C20",
+      "value": "10n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "ADC0",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        33,
+        117
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D100",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "ADC0",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        31,
+        121
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D101",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC0"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        36,
+        121
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R22",
+      "value": "22k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "TPS",
+        "2": "ADC1"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        52,
+        109
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R23",
+      "value": "33k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "ADC1",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        52,
+        113
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C21",
+      "value": "10n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "ADC1",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        52,
+        117
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D110",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "ADC1",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        50,
+        121
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D111",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC1"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        55,
+        121
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R24",
+      "value": "22k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "CLT",
+        "2": "ADC2"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        71,
+        109
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R25",
+      "value": "33k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "ADC2",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        71,
+        113
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C22",
+      "value": "10n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "ADC2",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        71,
+        117
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D120",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "ADC2",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        69,
+        121
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D121",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC2"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        74,
+        121
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R26",
+      "value": "22k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "IAT",
+        "2": "ADC3"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        33,
+        129
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R27",
+      "value": "33k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "ADC3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        33,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C23",
+      "value": "10n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "ADC3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        33,
+        137
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D130",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "ADC3",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        31,
+        141
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D131",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC3"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        36,
+        141
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R28",
+      "value": "22k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "LAMBDA_WB",
+        "2": "ADC4"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        52,
+        129
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R29",
+      "value": "33k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "ADC4",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        52,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C24",
+      "value": "10n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "ADC4",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        52,
+        137
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D140",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "ADC4",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        50,
+        141
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D141",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC4"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        55,
+        141
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R30",
+      "value": "22k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "POSTCAT_BUF",
+        "2": "ADC5"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        71,
+        129
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R31",
+      "value": "33k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "ADC5",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        71,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C25",
+      "value": "10n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "ADC5",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        71,
+        137
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D150",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "ADC5",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        69,
+        141
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D151",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC5"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        74,
+        141
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R32",
+      "value": "2.49k 1% NTC",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "CLT"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        80,
+        113
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Populate only for passive NTC sensor; transfer curve must match selected sensor.",
+      "dnp": true
+    },
+    {
+      "ref": "R33",
+      "value": "2.49k 1% NTC",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "IAT"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        86,
+        113
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Populate only for passive NTC sensor; transfer curve must match selected sensor.",
+      "dnp": true
+    },
+    {
+      "ref": "R34",
+      "value": "120k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "VIN_PROT",
+        "2": "ADC6"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        93,
+        108
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R35",
+      "value": "10k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "ADC6",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        93,
+        112
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C26",
+      "value": "10n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "ADC6",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        93,
+        116
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D160",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "ADC6",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        90,
+        120
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D161",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC6"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        95,
+        120
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R36",
+      "value": "22k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "ADC7"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        105,
+        108
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R37",
+      "value": "33k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "ADC7",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        105,
+        112
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C27",
+      "value": "10n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "ADC7",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        105,
+        116
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D170",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "ADC7",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        102,
+        120
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D171",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC7"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        107,
+        120
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U6",
+      "value": "MCP3208-CI/SL",
+      "footprint": "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm",
+      "pins": {
+        "1": "ADC0",
+        "2": "ADC1",
+        "3": "ADC2",
+        "4": "ADC3",
+        "5": "ADC4",
+        "6": "ADC5",
+        "7": "ADC6",
+        "8": "ADC7",
+        "9": "GND",
+        "10": "ADC_CS",
+        "11": "SPI_MOSI",
+        "12": "SPI_MISO",
+        "13": "SPI_CLK",
+        "14": "GND",
+        "15": "+3V3",
+        "16": "+3V3"
+      },
+      "names": {
+        "1": "CH0",
+        "2": "CH1",
+        "3": "CH2",
+        "4": "CH3",
+        "5": "CH4",
+        "6": "CH5",
+        "7": "CH6",
+        "8": "CH7",
+        "9": "DGND",
+        "10": "CS_N",
+        "11": "DIN",
+        "12": "DOUT",
+        "13": "CLK",
+        "14": "AGND",
+        "15": "VREF",
+        "16": "VDD"
+      },
+      "types": {
+        "9": "power_in",
+        "12": "tri_state",
+        "14": "power_in",
+        "15": "power_in",
+        "16": "power_in"
+      },
+      "page": "analog",
+      "xy": [
+        93,
+        135
+      ],
+      "angle": 0,
+      "mpn": "MCP3208-CI/SL",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C28",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        99,
+        128
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C29",
+      "value": "1u",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        104,
+        128
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R38",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC_CS"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        88,
+        144
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "J6",
+      "value": "HALL_TRIGGERS",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "GND",
+        "3": "CRANK_RAW",
+        "4": "CAM_RAW"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        18,
+        55
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R40",
+      "value": "33k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "CRANK_RAW",
+        "2": "CRANK_FILT"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        25,
+        56
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C30",
+      "value": "100p C0G",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "CRANK_FILT",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        30,
+        56
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D200",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "CRANK_FILT",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        28,
+        60
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D201",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "+3V3",
+        "2": "CRANK_FILT"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        33,
+        60
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R41",
+      "value": "2.2k HALL PULLUP",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "CRANK_RAW"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        22,
+        62
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": true
+    },
+    {
+      "ref": "R42",
+      "value": "33k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "CAM_RAW",
+        "2": "CAM_FILT"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        25,
+        67
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C31",
+      "value": "100p C0G",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "CAM_FILT",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        30,
+        67
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D210",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "CAM_FILT",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        28,
+        71
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D211",
+      "value": "BAT54WS",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "pins": {
+        "1": "+3V3",
+        "2": "CAM_FILT"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        33,
+        71
+      ],
+      "angle": 0,
+      "mpn": "BAT54WS-7-F",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R43",
+      "value": "2.2k HALL PULLUP",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "CAM_RAW"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        22,
+        73
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": true
+    },
+    {
+      "ref": "U7",
+      "value": "SN74LVC2G17DBVR",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+      "pins": {
+        "1": "CRANK_FILT",
+        "2": "GND",
+        "3": "CAM_FILT",
+        "4": "CAM",
+        "5": "+3V3",
+        "6": "CRANK"
+      },
+      "names": {
+        "1": "1A",
+        "2": "GND",
+        "3": "2A",
+        "4": "2Y",
+        "5": "VCC",
+        "6": "1Y"
+      },
+      "types": {
+        "2": "power_in",
+        "4": "output",
+        "5": "power_in",
+        "6": "output"
+      },
+      "page": "trigger_can",
+      "xy": [
+        34,
+        86
+      ],
+      "angle": 0,
+      "mpn": "SN74LVC2G17DBVR",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C32",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        39,
+        86
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U8",
+      "value": "TCAN1051VDRQ1",
+      "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+      "pins": {
+        "1": "CAN_TX",
+        "2": "GND",
+        "3": "+5V",
+        "4": "CAN_RX",
+        "5": "+3V3",
+        "6": "CANL",
+        "7": "CANH",
+        "8": "CAN_SILENT"
+      },
+      "names": {
+        "1": "TXD",
+        "2": "GND",
+        "3": "VCC",
+        "4": "RXD",
+        "5": "VIO",
+        "6": "CANL",
+        "7": "CANH",
+        "8": "S"
+      },
+      "types": {
+        "2": "power_in",
+        "3": "power_in",
+        "4": "output",
+        "5": "power_in",
+        "6": "bidirectional",
+        "7": "bidirectional"
+      },
+      "page": "trigger_can",
+      "xy": [
+        66,
+        81
+      ],
+      "angle": 0,
+      "mpn": "TCAN1051VDRQ1",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C33",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        60,
+        77
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C34",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        60,
+        85
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R44",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "CAN_SILENT"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        72,
+        74
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R45",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+3V3",
+        "2": "CAN_TX"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        66,
+        71
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "JP1",
+      "value": "CAN_TX_ENABLE_OPEN",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
+      "pins": {
+        "1": "CAN_SILENT",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        80,
+        74
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Open by default. Silent hardware plus software listen-only.",
+      "dnp": false
+    },
+    {
+      "ref": "J7",
+      "value": "CAN_BUS",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical",
+      "pins": {
+        "1": "CANH",
+        "2": "CANL",
+        "3": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        91,
+        77
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D22",
+      "value": "PESD2CAN",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "pins": {
+        "1": "CANH",
+        "2": "CANL",
+        "3": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        84,
+        82
+      ],
+      "angle": 0,
+      "mpn": "PESD2CAN,215",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R46",
+      "value": "120R",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "CANH",
+        "2": "CAN_TERM"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        87,
+        91
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "JP2",
+      "value": "CAN_TERMINATION_OPEN",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
+      "pins": {
+        "1": "CAN_TERM",
+        "2": "CANL"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        94,
+        91
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U9",
+      "value": "74HCT08D-Q100",
+      "footprint": "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm",
+      "pins": {
+        "7": "GND",
+        "14": "+5V",
+        "1": "ARM",
+        "2": "SAFE_N",
+        "3": "ARM_SAFE",
+        "4": "ARM_SAFE",
+        "5": "INTERLOCK",
+        "6": "RUN_5V",
+        "9": "PUMP_CMD",
+        "10": "RUN_5V",
+        "8": "PUMP_GATE",
+        "12": "FAN_CMD",
+        "13": "RUN_5V",
+        "11": "FAN_GATE"
+      },
+      "names": {
+        "7": "GND",
+        "14": "VCC",
+        "1": "1A",
+        "2": "1B",
+        "3": "1Y",
+        "4": "2A",
+        "5": "2B",
+        "6": "2Y",
+        "9": "3A",
+        "10": "3B",
+        "8": "3Y",
+        "12": "4A",
+        "13": "4B",
+        "11": "4Y"
+      },
+      "types": {
+        "7": "power_in",
+        "14": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "9": "input",
+        "10": "input",
+        "8": "output",
+        "12": "input",
+        "13": "input",
+        "11": "output"
+      },
+      "page": "outputs",
+      "xy": [
+        124,
+        77
+      ],
+      "angle": 0,
+      "mpn": "74HCT08D-Q100,118",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C35",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        118,
+        77
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R47",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "RUN_5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        123,
+        88
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R48",
+      "value": "1k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "PUMP_GATE",
+        "2": "PUMP_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        144,
+        72
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R51",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "PUMP_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        149,
+        72
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q5",
+      "value": "VNL5050N3TR-E",
+      "footprint": "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
+      "pins": {
+        "1": "PUMP_IN",
+        "2": "PUMP_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        144,
+        82
+      ],
+      "angle": 0,
+      "mpn": "VNL5050N3TR-E",
+      "note": "External fused relay coil only, <=150 mA. External coil flyback diode required.",
+      "dnp": false
+    },
+    {
+      "ref": "R54",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "PUMP_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        144,
+        92
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R49",
+      "value": "1k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "FAN_GATE",
+        "2": "FAN_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        160,
+        72
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R52",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "FAN_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        165,
+        72
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q6",
+      "value": "VNL5050N3TR-E",
+      "footprint": "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
+      "pins": {
+        "1": "FAN_IN",
+        "2": "FAN_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        160,
+        82
+      ],
+      "angle": 0,
+      "mpn": "VNL5050N3TR-E",
+      "note": "External fused relay coil only, <=150 mA. External coil flyback diode required.",
+      "dnp": false
+    },
+    {
+      "ref": "R55",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "FAN_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        160,
+        92
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R50",
+      "value": "1k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "RUN_5V",
+        "2": "MAIN_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        176,
+        72
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R53",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "MAIN_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        181,
+        72
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q7",
+      "value": "VNL5050N3TR-E",
+      "footprint": "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
+      "pins": {
+        "1": "MAIN_IN",
+        "2": "MAIN_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        176,
+        82
+      ],
+      "angle": 0,
+      "mpn": "VNL5050N3TR-E",
+      "note": "External fused relay coil only, <=150 mA. External coil flyback diode required.",
+      "dnp": false
+    },
+    {
+      "ref": "J8",
+      "value": "EXTERNAL_RELAYS",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
+      "pins": {
+        "1": "MAIN_LS",
+        "2": "PUMP_LS",
+        "3": "FAN_LS",
+        "4": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        194,
+        77
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U10",
+      "value": "74HCT08D-Q100",
+      "footprint": "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm",
+      "pins": {
+        "7": "GND",
+        "14": "+5V",
+        "1": "INJ1_CMD",
+        "2": "INJ1_WINDOW",
+        "3": "INJ1_LIMITED",
+        "4": "INJ2_CMD",
+        "5": "INJ2_WINDOW",
+        "6": "INJ2_LIMITED",
+        "9": "INJ3_CMD",
+        "10": "INJ3_WINDOW",
+        "8": "INJ3_LIMITED",
+        "12": "INJ4_CMD",
+        "13": "INJ4_WINDOW",
+        "11": "INJ4_LIMITED"
+      },
+      "names": {
+        "7": "GND",
+        "14": "VCC",
+        "1": "1A",
+        "2": "1B",
+        "3": "1Y",
+        "4": "2A",
+        "5": "2B",
+        "6": "2Y",
+        "9": "3A",
+        "10": "3B",
+        "8": "3Y",
+        "12": "4A",
+        "13": "4B",
+        "11": "4Y"
+      },
+      "types": {
+        "7": "power_in",
+        "14": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "9": "input",
+        "10": "input",
+        "8": "output",
+        "12": "input",
+        "13": "input",
+        "11": "output"
+      },
+      "page": "injectors",
+      "xy": [
+        130,
+        30
+      ],
+      "angle": 0,
+      "mpn": "74HCT08D-Q100,118",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C36",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        123,
+        30
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U16",
+      "value": "74HCT08D-Q100",
+      "footprint": "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm",
+      "pins": {
+        "7": "GND",
+        "14": "+5V",
+        "1": "INJ1_CMD",
+        "2": "RUN_5V",
+        "3": "INJ1_RESET_N",
+        "4": "INJ2_CMD",
+        "5": "RUN_5V",
+        "6": "INJ2_RESET_N",
+        "9": "INJ3_CMD",
+        "10": "RUN_5V",
+        "8": "INJ3_RESET_N",
+        "12": "INJ4_CMD",
+        "13": "RUN_5V",
+        "11": "INJ4_RESET_N"
+      },
+      "names": {
+        "7": "GND",
+        "14": "VCC",
+        "1": "1A",
+        "2": "1B",
+        "3": "1Y",
+        "4": "2A",
+        "5": "2B",
+        "6": "2Y",
+        "9": "3A",
+        "10": "3B",
+        "8": "3Y",
+        "12": "4A",
+        "13": "4B",
+        "11": "4Y"
+      },
+      "types": {
+        "7": "power_in",
+        "14": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "9": "input",
+        "10": "input",
+        "8": "output",
+        "12": "input",
+        "13": "input",
+        "11": "output"
+      },
+      "page": "injectors",
+      "xy": [
+        130,
+        52
+      ],
+      "angle": 0,
+      "mpn": "74HCT08D-Q100,118",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C42",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        123,
+        52
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U12",
+      "value": "74HCT221D",
+      "footprint": "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm",
+      "pins": {
+        "1": "GND",
+        "2": "INJ1_CMD",
+        "3": "INJ1_RESET_N",
+        "4": null,
+        "5": "INJ2_WINDOW",
+        "6": "GND",
+        "7": "INJ2_RC",
+        "8": "GND",
+        "9": "GND",
+        "10": "INJ2_CMD",
+        "11": "INJ2_RESET_N",
+        "12": null,
+        "13": "INJ1_WINDOW",
+        "14": "GND",
+        "15": "INJ1_RC",
+        "16": "+5V"
+      },
+      "names": {
+        "1": "1A",
+        "2": "1B",
+        "3": "1RD_N",
+        "4": "1Q_N",
+        "5": "2Q",
+        "6": "2CEXT",
+        "7": "2REXT_CEXT",
+        "8": "GND",
+        "9": "2A",
+        "10": "2B",
+        "11": "2RD_N",
+        "12": "2Q_N",
+        "13": "1Q",
+        "14": "1CEXT",
+        "15": "1REXT_CEXT",
+        "16": "VCC"
+      },
+      "types": {
+        "4": "output",
+        "5": "output",
+        "8": "power_in",
+        "12": "output",
+        "13": "output",
+        "16": "power_in"
+      },
+      "page": "injectors",
+      "xy": [
+        151,
+        30
+      ],
+      "angle": 0,
+      "mpn": "74HCT221D,118",
+      "note": "Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism.",
+      "dnp": false
+    },
+    {
+      "ref": "C38",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        151,
+        21
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R61",
+      "value": "100k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "INJ1_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        145,
+        42
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C61",
+      "value": "270n 5% FILM",
+      "footprint": "Capacitor_SMD:C_1206_3216Metric",
+      "pins": {
+        "1": "INJ1_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        145,
+        47
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R65",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "INJ1_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        145,
+        52
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R62",
+      "value": "100k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "INJ2_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        157,
+        42
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C62",
+      "value": "270n 5% FILM",
+      "footprint": "Capacitor_SMD:C_1206_3216Metric",
+      "pins": {
+        "1": "INJ2_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        157,
+        47
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R66",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "INJ2_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        157,
+        52
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U13",
+      "value": "74HCT221D",
+      "footprint": "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm",
+      "pins": {
+        "1": "GND",
+        "2": "INJ3_CMD",
+        "3": "INJ3_RESET_N",
+        "4": null,
+        "5": "INJ4_WINDOW",
+        "6": "GND",
+        "7": "INJ4_RC",
+        "8": "GND",
+        "9": "GND",
+        "10": "INJ4_CMD",
+        "11": "INJ4_RESET_N",
+        "12": null,
+        "13": "INJ3_WINDOW",
+        "14": "GND",
+        "15": "INJ3_RC",
+        "16": "+5V"
+      },
+      "names": {
+        "1": "1A",
+        "2": "1B",
+        "3": "1RD_N",
+        "4": "1Q_N",
+        "5": "2Q",
+        "6": "2CEXT",
+        "7": "2REXT_CEXT",
+        "8": "GND",
+        "9": "2A",
+        "10": "2B",
+        "11": "2RD_N",
+        "12": "2Q_N",
+        "13": "1Q",
+        "14": "1CEXT",
+        "15": "1REXT_CEXT",
+        "16": "VCC"
+      },
+      "types": {
+        "4": "output",
+        "5": "output",
+        "8": "power_in",
+        "12": "output",
+        "13": "output",
+        "16": "power_in"
+      },
+      "page": "injectors",
+      "xy": [
+        177,
+        30
+      ],
+      "angle": 0,
+      "mpn": "74HCT221D,118",
+      "note": "Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism.",
+      "dnp": false
+    },
+    {
+      "ref": "C39",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        177,
+        21
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R63",
+      "value": "100k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "INJ3_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        171,
+        42
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C63",
+      "value": "270n 5% FILM",
+      "footprint": "Capacitor_SMD:C_1206_3216Metric",
+      "pins": {
+        "1": "INJ3_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        171,
+        47
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R67",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "INJ3_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        171,
+        52
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R64",
+      "value": "100k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "INJ4_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        183,
+        42
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C64",
+      "value": "270n 5% FILM",
+      "footprint": "Capacitor_SMD:C_1206_3216Metric",
+      "pins": {
+        "1": "INJ4_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        183,
+        47
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R68",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "INJ4_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        183,
+        52
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R101",
+      "value": "1k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "INJ1_LIMITED",
+        "2": "INJ1_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        124,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R105",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "INJ1_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        129,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q1",
+      "value": "VNL5050N3TR-E",
+      "footprint": "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
+      "pins": {
+        "1": "INJ1_IN",
+        "2": "INJ1_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        124,
+        70
+      ],
+      "angle": 0,
+      "mpn": "VNL5050N3TR-E",
+      "note": "High impedance injector only. <=1.2 A/channel design target pending thermal and repetitive clamp tests.",
+      "dnp": false
+    },
+    {
+      "ref": "R102",
+      "value": "1k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "INJ2_LIMITED",
+        "2": "INJ2_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        144,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R106",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "INJ2_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        149,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q2",
+      "value": "VNL5050N3TR-E",
+      "footprint": "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
+      "pins": {
+        "1": "INJ2_IN",
+        "2": "INJ2_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        144,
+        70
+      ],
+      "angle": 0,
+      "mpn": "VNL5050N3TR-E",
+      "note": "High impedance injector only. <=1.2 A/channel design target pending thermal and repetitive clamp tests.",
+      "dnp": false
+    },
+    {
+      "ref": "R103",
+      "value": "1k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "INJ3_LIMITED",
+        "2": "INJ3_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        164,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R107",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "INJ3_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        169,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q3",
+      "value": "VNL5050N3TR-E",
+      "footprint": "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
+      "pins": {
+        "1": "INJ3_IN",
+        "2": "INJ3_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        164,
+        70
+      ],
+      "angle": 0,
+      "mpn": "VNL5050N3TR-E",
+      "note": "High impedance injector only. <=1.2 A/channel design target pending thermal and repetitive clamp tests.",
+      "dnp": false
+    },
+    {
+      "ref": "R104",
+      "value": "1k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "INJ4_LIMITED",
+        "2": "INJ4_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        184,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R108",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "INJ4_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        189,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q4",
+      "value": "VNL5050N3TR-E",
+      "footprint": "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
+      "pins": {
+        "1": "INJ4_IN",
+        "2": "INJ4_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        184,
+        70
+      ],
+      "angle": 0,
+      "mpn": "VNL5050N3TR-E",
+      "note": "High impedance injector only. <=1.2 A/channel design target pending thermal and repetitive clamp tests.",
+      "dnp": false
+    },
+    {
+      "ref": "J9",
+      "value": "INJECTOR_LOW_SIDES",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical",
+      "pins": {
+        "1": "INJ1_LS",
+        "2": "INJ2_LS",
+        "3": "INJ3_LS",
+        "4": "INJ4_LS",
+        "5": "GND",
+        "6": "GND",
+        "7": "GND",
+        "8": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        199,
+        25
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "External fused, relay-switched actuator 12V. Header is bench-only.",
+      "dnp": false
+    },
+    {
+      "ref": "U11",
+      "value": "74HCT08D-Q100",
+      "footprint": "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm",
+      "pins": {
+        "7": "GND",
+        "14": "+5V",
+        "1": "IGN1_CMD",
+        "2": "IGN1_WINDOW",
+        "3": "IGN1_LIMITED",
+        "4": "IGN2_CMD",
+        "5": "IGN2_WINDOW",
+        "6": "IGN2_LIMITED",
+        "9": "IGN3_CMD",
+        "10": "IGN3_WINDOW",
+        "8": "IGN3_LIMITED",
+        "12": "IGN4_CMD",
+        "13": "IGN4_WINDOW",
+        "11": "IGN4_LIMITED"
+      },
+      "names": {
+        "7": "GND",
+        "14": "VCC",
+        "1": "1A",
+        "2": "1B",
+        "3": "1Y",
+        "4": "2A",
+        "5": "2B",
+        "6": "2Y",
+        "9": "3A",
+        "10": "3B",
+        "8": "3Y",
+        "12": "4A",
+        "13": "4B",
+        "11": "4Y"
+      },
+      "types": {
+        "7": "power_in",
+        "14": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "9": "input",
+        "10": "input",
+        "8": "output",
+        "12": "input",
+        "13": "input",
+        "11": "output"
+      },
+      "page": "ignition",
+      "xy": [
+        130,
+        121
+      ],
+      "angle": 0,
+      "mpn": "74HCT08D-Q100,118",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C37",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        123,
+        121
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U17",
+      "value": "74HCT08D-Q100",
+      "footprint": "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm",
+      "pins": {
+        "7": "GND",
+        "14": "+5V",
+        "1": "IGN1_CMD",
+        "2": "RUN_5V",
+        "3": "IGN1_RESET_N",
+        "4": "IGN2_CMD",
+        "5": "RUN_5V",
+        "6": "IGN2_RESET_N",
+        "9": "IGN3_CMD",
+        "10": "RUN_5V",
+        "8": "IGN3_RESET_N",
+        "12": "IGN4_CMD",
+        "13": "RUN_5V",
+        "11": "IGN4_RESET_N"
+      },
+      "names": {
+        "7": "GND",
+        "14": "VCC",
+        "1": "1A",
+        "2": "1B",
+        "3": "1Y",
+        "4": "2A",
+        "5": "2B",
+        "6": "2Y",
+        "9": "3A",
+        "10": "3B",
+        "8": "3Y",
+        "12": "4A",
+        "13": "4B",
+        "11": "4Y"
+      },
+      "types": {
+        "7": "power_in",
+        "14": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "9": "input",
+        "10": "input",
+        "8": "output",
+        "12": "input",
+        "13": "input",
+        "11": "output"
+      },
+      "page": "ignition",
+      "xy": [
+        130,
+        143
+      ],
+      "angle": 0,
+      "mpn": "74HCT08D-Q100,118",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C43",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        123,
+        143
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U14",
+      "value": "74HCT221D",
+      "footprint": "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm",
+      "pins": {
+        "1": "GND",
+        "2": "IGN1_CMD",
+        "3": "IGN1_RESET_N",
+        "4": null,
+        "5": "IGN2_WINDOW",
+        "6": "GND",
+        "7": "IGN2_RC",
+        "8": "GND",
+        "9": "GND",
+        "10": "IGN2_CMD",
+        "11": "IGN2_RESET_N",
+        "12": null,
+        "13": "IGN1_WINDOW",
+        "14": "GND",
+        "15": "IGN1_RC",
+        "16": "+5V"
+      },
+      "names": {
+        "1": "1A",
+        "2": "1B",
+        "3": "1RD_N",
+        "4": "1Q_N",
+        "5": "2Q",
+        "6": "2CEXT",
+        "7": "2REXT_CEXT",
+        "8": "GND",
+        "9": "2A",
+        "10": "2B",
+        "11": "2RD_N",
+        "12": "2Q_N",
+        "13": "1Q",
+        "14": "1CEXT",
+        "15": "1REXT_CEXT",
+        "16": "VCC"
+      },
+      "types": {
+        "4": "output",
+        "5": "output",
+        "8": "power_in",
+        "12": "output",
+        "13": "output",
+        "16": "power_in"
+      },
+      "page": "ignition",
+      "xy": [
+        151,
+        121
+      ],
+      "angle": 0,
+      "mpn": "74HCT221D,118",
+      "note": "Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism.",
+      "dnp": false
+    },
+    {
+      "ref": "C40",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        151,
+        112
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R81",
+      "value": "100k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "IGN1_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        145,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C81",
+      "value": "68n 5% C0G",
+      "footprint": "Capacitor_SMD:C_1206_3216Metric",
+      "pins": {
+        "1": "IGN1_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        145,
+        138
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R85",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "IGN1_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        145,
+        143
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R82",
+      "value": "100k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "IGN2_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        157,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C82",
+      "value": "68n 5% C0G",
+      "footprint": "Capacitor_SMD:C_1206_3216Metric",
+      "pins": {
+        "1": "IGN2_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        157,
+        138
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R86",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "IGN2_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        157,
+        143
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U15",
+      "value": "74HCT221D",
+      "footprint": "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm",
+      "pins": {
+        "1": "GND",
+        "2": "IGN3_CMD",
+        "3": "IGN3_RESET_N",
+        "4": null,
+        "5": "IGN4_WINDOW",
+        "6": "GND",
+        "7": "IGN4_RC",
+        "8": "GND",
+        "9": "GND",
+        "10": "IGN4_CMD",
+        "11": "IGN4_RESET_N",
+        "12": null,
+        "13": "IGN3_WINDOW",
+        "14": "GND",
+        "15": "IGN3_RC",
+        "16": "+5V"
+      },
+      "names": {
+        "1": "1A",
+        "2": "1B",
+        "3": "1RD_N",
+        "4": "1Q_N",
+        "5": "2Q",
+        "6": "2CEXT",
+        "7": "2REXT_CEXT",
+        "8": "GND",
+        "9": "2A",
+        "10": "2B",
+        "11": "2RD_N",
+        "12": "2Q_N",
+        "13": "1Q",
+        "14": "1CEXT",
+        "15": "1REXT_CEXT",
+        "16": "VCC"
+      },
+      "types": {
+        "4": "output",
+        "5": "output",
+        "8": "power_in",
+        "12": "output",
+        "13": "output",
+        "16": "power_in"
+      },
+      "page": "ignition",
+      "xy": [
+        177,
+        121
+      ],
+      "angle": 0,
+      "mpn": "74HCT221D,118",
+      "note": "Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism.",
+      "dnp": false
+    },
+    {
+      "ref": "C41",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        177,
+        112
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R83",
+      "value": "100k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "IGN3_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        171,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C83",
+      "value": "68n 5% C0G",
+      "footprint": "Capacitor_SMD:C_1206_3216Metric",
+      "pins": {
+        "1": "IGN3_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        171,
+        138
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R87",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "IGN3_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        171,
+        143
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R84",
+      "value": "100k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "IGN4_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        183,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C84",
+      "value": "68n 5% C0G",
+      "footprint": "Capacitor_SMD:C_1206_3216Metric",
+      "pins": {
+        "1": "IGN4_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        183,
+        138
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R88",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "IGN4_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        183,
+        143
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R111",
+      "value": "220R",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "IGN1_LIMITED",
+        "2": "IGN1_5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        124,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R115",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "IGN1_5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        129,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R112",
+      "value": "220R",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "IGN2_LIMITED",
+        "2": "IGN2_5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        144,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R116",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "IGN2_5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        149,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R113",
+      "value": "220R",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "IGN3_LIMITED",
+        "2": "IGN3_5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        164,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R117",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "IGN3_5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        169,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R114",
+      "value": "220R",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "IGN4_LIMITED",
+        "2": "IGN4_5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        184,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R118",
+      "value": "10k",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "pins": {
+        "1": "IGN4_5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        189,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "J10",
+      "value": "SMART_COIL_5V_LOGIC",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical",
+      "pins": {
+        "1": "IGN1_5V",
+        "2": "IGN2_5V",
+        "3": "IGN3_5V",
+        "4": "IGN4_5V",
+        "5": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        199,
+        116
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "External fused, relay-switched actuator 12V. Header is bench-only.",
+      "dnp": false
+    },
+    {
+      "ref": "TP1",
+      "value": "GND",
+      "footprint": "TestPoint:TestPoint_Pad_D2.0mm",
+      "pins": {
+        "1": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        112,
+        21
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "TP2",
+      "value": "VIN_PROT",
+      "footprint": "TestPoint:TestPoint_Pad_D2.0mm",
+      "pins": {
+        "1": "VIN_PROT"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        112,
+        28
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "TP3",
+      "value": "+5V",
+      "footprint": "TestPoint:TestPoint_Pad_D2.0mm",
+      "pins": {
+        "1": "+5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        112,
+        35
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "TP4",
+      "value": "+3V3",
+      "footprint": "TestPoint:TestPoint_Pad_D2.0mm",
+      "pins": {
+        "1": "+3V3"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        112,
+        42
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "TP5",
+      "value": "SAFE_N",
+      "footprint": "TestPoint:TestPoint_Pad_D2.0mm",
+      "pins": {
+        "1": "SAFE_N"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        112,
+        55
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "TP6",
+      "value": "RUN_5V",
+      "footprint": "TestPoint:TestPoint_Pad_D2.0mm",
+      "pins": {
+        "1": "RUN_5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        112,
+        64
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "H1",
+      "value": "M3 NPTH",
+      "footprint": "MountingHole:MountingHole_3.2mm_M3",
+      "pins": {},
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        14,
+        14
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "H2",
+      "value": "M3 NPTH",
+      "footprint": "MountingHole:MountingHole_3.2mm_M3",
+      "pins": {},
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        206,
+        14
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "H3",
+      "value": "M3 NPTH",
+      "footprint": "MountingHole:MountingHole_3.2mm_M3",
+      "pins": {},
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        14,
+        156
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "H4",
+      "value": "M3 NPTH",
+      "footprint": "MountingHole:MountingHole_3.2mm_M3",
+      "pins": {},
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        206,
+        156
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+Reference,Value,MPN,Footprint,DNP,Note
+J1,FUSED_KEY_12V,B2P-VH(LF)(SN),Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical,False,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+D1,SMCJ24CA,SMCJ24CA-E3/57T,Diode_SMD:D_SMC,False,"Bidirectional TVS. 24 V standoff; 38.9 V specified pulse clamp, not load-dump qualification."
+D2,STPS5H100BY,STPS5H100BY,Package_TO_SOT_SMD:TO-252-2,False,100 V series reverse-polarity blocking diode; check forward loss and pulse stress.
+C1,47u 63V,,Capacitor_SMD:CP_Elec_8x10,False,"Electrolytic, exact series must be qualified."
+C2,2.2u 100V X7R,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+C3,100n 100V,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+U1,Pololu D36V6F5,Pololu 3792,ECU:Pololu_D36V6F5_vertical,False,A1 hand-solder revision; see docs/hand-solder.md
+C5,22u 16V X7R,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+C6,22u 16V X7R,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+U2,NCV1117ST33T3G,NCV1117ST33T3G,Package_TO_SOT_SMD:SOT-223-3_TabPin2,False,Thermal budget <=200 mA continuous pending measurement. Requires output ESR review.
+C9,22u 10V ESR 0.3-1R,,Capacitor_SMD:CP_Elec_6.3x5.8,False,Select exact electrolytic series to satisfy LDO stability over temperature.
+C10,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R7,100R 0.25W,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,33 mA rail bleed provides a sink for fault clamp current. Must validate unpowered injection.
+F2,PTC 100mA,MF-MSMF010-2,Fuse:Fuse_1812_4532Metric,False,"Resettable fuse, slow thermal response; no precision current limit."
+C11,1u,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+U3,ESP32-S3-DevKitC-1-N8R8 v1.1,ESP32-S3-DevKitC-1-N8R8,ECU:ESP32_S3_DevKitC_1_socket,False,A1 hand-solder revision; see docs/hand-solder.md
+R8,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C12,1u,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+D3,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+C13,10u,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+C14,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R9,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+J2,UART_FLASH_3V3_ONLY,,Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,False,"External USB UART, 3.3 V logic. Supply board via J1; no USB backfeed."
+U4,TPS3828-33DBVR,TPS3828-33DBVR,Package_TO_SOT_SMD:SOT-23-5,False,A1 hand-solder revision; see docs/hand-solder.md
+R11,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R12,100k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C15,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+U5,TLV803EA30DBZR,TLV803EA30DBZR,Package_TO_SOT_SMD:SOT-23,False,
+C16,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R13,1k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+J3,NORMALLY_OPEN_INTERLOCK,,Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,False,Fit only on supervised dummy-load bench. Open contact forces output inhibit independent of MCU.
+R14,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R15,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+J4,EXPANSION_3V3,,Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,False,
+R16,4.7k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R17,4.7k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R20,22k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R21,33k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C20,10n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+D100,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D101,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R22,22k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R23,33k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C21,10n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+D110,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D111,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R24,22k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R25,33k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C22,10n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+D120,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D121,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R26,22k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R27,33k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C23,10n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+D130,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D131,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R28,22k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R29,33k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C24,10n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+D140,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D141,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R30,22k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R31,33k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C25,10n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+D150,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D151,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R32,2.49k 1% NTC,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,True,Populate only for passive NTC sensor; transfer curve must match selected sensor.
+R33,2.49k 1% NTC,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,True,Populate only for passive NTC sensor; transfer curve must match selected sensor.
+R34,120k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R35,10k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C26,10n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+D160,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D161,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R36,22k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R37,33k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C27,10n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+D170,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D171,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+U6,MCP3208-CI/SL,MCP3208-CI/SL,Package_SO:SOIC-16_3.9x9.9mm_P1.27mm,False,
+C28,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+C29,1u,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R38,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R40,33k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C30,100p C0G,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+D200,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D201,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R41,2.2k HALL PULLUP,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,True,
+R42,33k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C31,100p C0G,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+D210,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D211,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R43,2.2k HALL PULLUP,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,True,
+U7,SN74LVC14AD,SN74LVC14AD,Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,False,A1 hand-solder revision; see docs/hand-solder.md
+C32,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+U8,TCAN1051VDRQ1,TCAN1051VDRQ1,Package_SO:SOIC-8_3.9x4.9mm_P1.27mm,False,
+C33,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+C34,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R44,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R45,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+JP1,CAN_TX_ENABLE_OPEN,,Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,False,Open by default. Silent hardware plus software listen-only.
+J7,CAN_BUS,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+D22,PESD2CAN,"PESD2CAN,215",Package_TO_SOT_SMD:SOT-23,False,
+R46,120R,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+JP2,CAN_TERMINATION_OPEN,,Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,False,
+U9,74HCT08D-Q100,"74HCT08D-Q100,118",Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,False,
+C35,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R47,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R48,1k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R51,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+Q5,VNL5050N3TR-E,VNL5050N3TR-E,Package_TO_SOT_SMD:SOT-223-3_TabPin2,False,"External fused relay coil only, <=150 mA. External coil flyback diode required."
+R54,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R49,1k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R52,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+Q6,VNL5050N3TR-E,VNL5050N3TR-E,Package_TO_SOT_SMD:SOT-223-3_TabPin2,False,"External fused relay coil only, <=150 mA. External coil flyback diode required."
+R55,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R50,1k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R53,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+Q7,VNL5050N3TR-E,VNL5050N3TR-E,Package_TO_SOT_SMD:SOT-223-3_TabPin2,False,"External fused relay coil only, <=150 mA. External coil flyback diode required."
+J8,EXTERNAL_RELAYS,B4P-VH(LF)(SN),Connector_JST:JST_VH_B4P-VH_1x04_P3.96mm_Vertical,False,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+U10,74HCT08D-Q100,"74HCT08D-Q100,118",Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,False,
+C36,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+U16,74HCT08D-Q100,"74HCT08D-Q100,118",Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,False,
+C42,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+U12,74HCT221D,"74HCT221D,118",Package_SO:SOIC-16_3.9x9.9mm_P1.27mm,False,"Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism."
+C38,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R61,270k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C61,100n 5% C0G,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R65,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R62,270k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C62,100n 5% C0G,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R66,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+U13,74HCT221D,"74HCT221D,118",Package_SO:SOIC-16_3.9x9.9mm_P1.27mm,False,"Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism."
+C39,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R63,270k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C63,100n 5% C0G,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R67,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R64,270k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C64,100n 5% C0G,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R68,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R101,1k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R105,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+Q1,VNL5050N3TR-E,VNL5050N3TR-E,Package_TO_SOT_SMD:SOT-223-3_TabPin2,False,High impedance injector only. <=1.2 A/channel design target pending thermal and repetitive clamp tests.
+R102,1k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R106,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+Q2,VNL5050N3TR-E,VNL5050N3TR-E,Package_TO_SOT_SMD:SOT-223-3_TabPin2,False,High impedance injector only. <=1.2 A/channel design target pending thermal and repetitive clamp tests.
+R103,1k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R107,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+Q3,VNL5050N3TR-E,VNL5050N3TR-E,Package_TO_SOT_SMD:SOT-223-3_TabPin2,False,High impedance injector only. <=1.2 A/channel design target pending thermal and repetitive clamp tests.
+R104,1k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R108,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+Q4,VNL5050N3TR-E,VNL5050N3TR-E,Package_TO_SOT_SMD:SOT-223-3_TabPin2,False,High impedance injector only. <=1.2 A/channel design target pending thermal and repetitive clamp tests.
+J9,INJECTOR_LOW_SIDES,B8P-VH(LF)(SN),Connector_JST:JST_VH_B8P-VH_1x08_P3.96mm_Vertical,False,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+U11,74HCT08D-Q100,"74HCT08D-Q100,118",Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,False,
+C37,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+U17,74HCT08D-Q100,"74HCT08D-Q100,118",Package_SO:SOIC-14_3.9x8.7mm_P1.27mm,False,
+C43,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+U14,74HCT221D,"74HCT221D,118",Package_SO:SOIC-16_3.9x9.9mm_P1.27mm,False,"Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism."
+C40,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R81,100k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C81,68n 5% C0G,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R85,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R82,100k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C82,68n 5% C0G,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R86,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+U15,74HCT221D,"74HCT221D,118",Package_SO:SOIC-16_3.9x9.9mm_P1.27mm,False,"Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism."
+C41,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R83,100k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C83,68n 5% C0G,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R87,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R84,100k 1%,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+C84,68n 5% C0G,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,
+R88,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R111,220R,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R115,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R112,220R,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R116,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R113,220R,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R117,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R114,220R,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+R118,10k,,Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,False,
+J10,SMART_COIL_5V_LOGIC,B5P-VH(LF)(SN),Connector_JST:JST_VH_B5P-VH_1x05_P3.96mm_Vertical,False,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+TP1,GND,,TestPoint:TestPoint_Pad_D2.0mm,False,
+TP2,VIN_PROT,,TestPoint:TestPoint_Pad_D2.0mm,False,
+TP3,+5V,,TestPoint:TestPoint_Pad_D2.0mm,False,
+TP4,+3V3,,TestPoint:TestPoint_Pad_D2.0mm,False,
+TP5,SAFE_N,,TestPoint:TestPoint_Pad_D2.0mm,False,
+TP6,RUN_5V,,TestPoint:TestPoint_Pad_D2.0mm,False,
+H1,M3 NPTH,,MountingHole:MountingHole_3.2mm_M3,False,
+H2,M3 NPTH,,MountingHole:MountingHole_3.2mm_M3,False,
+H3,M3 NPTH,,MountingHole:MountingHole_3.2mm_M3,False,
+H4,M3 NPTH,,MountingHole:MountingHole_3.2mm_M3,False,
+J11,MAP,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,A1 internal locking connector; not sealed. See connector-pinout.csv
+J12,TPS,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,A1 internal locking connector; not sealed. See connector-pinout.csv
+J13,CLT,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,A1 internal locking connector; not sealed. See connector-pinout.csv
+J14,IAT,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,A1 internal locking connector; not sealed. See connector-pinout.csv
+J15,LAMBDA_WB,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,A1 internal locking connector; not sealed. See connector-pinout.csv
+J16,POSTCAT_BUF,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,A1 internal locking connector; not sealed. See connector-pinout.csv
+J17,CRANK,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,A1 internal locking connector; not sealed. See connector-pinout.csv
+J18,CAM,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,A1 internal locking connector; not sealed. See connector-pinout.csv
+U18,TLV803EA46DBZR,TLV803EA46DBZR,Package_TO_SOT_SMD:SOT-23,False,A1 internal locking connector; not sealed. See connector-pinout.csv
+C44,100n,,Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,False,A1 internal locking connector; not sealed. See connector-pinout.csv

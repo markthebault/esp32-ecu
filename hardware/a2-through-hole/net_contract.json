@@ -1,0 +1,5146 @@
+{
+  "revision": "A2",
+  "status": "routed_through_hole_bench_prototype_not_vehicle_qualified",
+  "gpio": {
+    "INJ1_CMD": 4,
+    "INJ2_CMD": 5,
+    "INJ3_CMD": 6,
+    "INJ4_CMD": 7,
+    "IGN1_CMD": 15,
+    "IGN2_CMD": 16,
+    "IGN3_CMD": 17,
+    "IGN4_CMD": 18,
+    "CRANK": 8,
+    "CAM": 9,
+    "ADC_CS": 10,
+    "SPI_MOSI": 11,
+    "SPI_CLK": 12,
+    "SPI_MISO": 13,
+    "CAN_TX": 14,
+    "CAN_RX": 21,
+    "ARM": 47,
+    "WDI": 39,
+    "SAFE_N_MON": 40,
+    "I2C_SDA": 41,
+    "I2C_SCL": 42,
+    "UART_TX": 43,
+    "UART_RX": 44,
+    "PUMP_CMD": 2,
+    "FAN_CMD": 1,
+    "INTERLOCK": 48
+  },
+  "parts": [
+    {
+      "ref": "J1",
+      "value": "FUSED_KEY_12V",
+      "footprint": "Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical",
+      "pins": {
+        "1": "VBAT_FUSED",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        18,
+        22
+      ],
+      "angle": 0,
+      "mpn": "B2P-VH(LF)(SN)",
+      "note": "Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.",
+      "dnp": false
+    },
+    {
+      "ref": "D1",
+      "value": "1.5KE27CA",
+      "footprint": "Diode_THT:D_DO-201AD_P5.08mm_Vertical_AnodeUp",
+      "pins": {
+        "1": "VBAT_FUSED",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        28,
+        25
+      ],
+      "angle": 0,
+      "mpn": "1.5KE27CA",
+      "note": "Axial bidirectional TVS; 23.1V standoff and specified 37.5V pulse clamp. No load-dump qualification claim.",
+      "dnp": false
+    },
+    {
+      "ref": "D2",
+      "value": "SB5100",
+      "footprint": "Diode_THT:D_DO-201AD_P15.24mm_Horizontal",
+      "pins": {
+        "1": "VIN_PROT",
+        "2": "VBAT_FUSED"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "power",
+      "xy": [
+        39,
+        25
+      ],
+      "angle": 0,
+      "mpn": "SB5100-B",
+      "note": "100 V series reverse-polarity blocking diode; check forward loss and pulse stress.",
+      "dnp": false
+    },
+    {
+      "ref": "C1",
+      "value": "47u 63V",
+      "footprint": "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm",
+      "pins": {
+        "1": "VIN_PROT",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        42,
+        36
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Electrolytic, exact series must be qualified.",
+      "dnp": false
+    },
+    {
+      "ref": "C2",
+      "value": "47u 63V",
+      "footprint": "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm",
+      "pins": {
+        "1": "VIN_FILTERED",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        48,
+        24
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C3",
+      "value": "100n 100V",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "VIN_PROT",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        48,
+        28
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U1",
+      "value": "Pololu D36V6F5",
+      "footprint": "ECU:Pololu_D36V6F5_vertical",
+      "pins": {
+        "1": null,
+        "2": "VIN_FILTERED",
+        "3": "GND",
+        "4": "+5V"
+      },
+      "names": {
+        "1": "SHDN",
+        "2": "VIN",
+        "3": "GND",
+        "4": "VOUT"
+      },
+      "types": {
+        "2": "power_in",
+        "3": "power_in",
+        "4": "power_out"
+      },
+      "page": "power",
+      "xy": [
+        57,
+        28
+      ],
+      "angle": 0,
+      "mpn": "Pololu 3792",
+      "note": "A2 hand-solder revision; see docs/through-hole.md",
+      "dnp": false
+    },
+    {
+      "ref": "C5",
+      "value": "22u 16V X7R",
+      "footprint": "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        78,
+        25
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C6",
+      "value": "22u 16V X7R",
+      "footprint": "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        78,
+        31
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U2",
+      "value": "LD1117V33",
+      "footprint": "Package_TO_SOT_THT:TO-220-3_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "+3V3",
+        "3": "+5V"
+      },
+      "names": {
+        "1": "GND",
+        "2": "OUT",
+        "3": "IN"
+      },
+      "types": {
+        "1": "power_in",
+        "2": "power_out",
+        "3": "power_in"
+      },
+      "page": "power",
+      "xy": [
+        91,
+        27
+      ],
+      "angle": 0,
+      "mpn": "LD1117V33",
+      "note": "3V3 regulator. 200mA continuous target pending thermal measurement. Use specified electrolytic ESR; no USB/carrier dual power.",
+      "dnp": false
+    },
+    {
+      "ref": "C9",
+      "value": "22u 10V ESR 0.3-1R",
+      "footprint": "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        101,
+        27
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Select exact electrolytic series to satisfy LDO stability over temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "C10",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        96,
+        35
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R7",
+      "value": "100R 0.25W",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        104,
+        35
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "33 mA rail bleed provides a sink for fault clamp current. Must validate unpowered injection.",
+      "dnp": false
+    },
+    {
+      "ref": "F2",
+      "value": "PTC 100mA radial",
+      "footprint": "ECU:PTC_MF_R010",
+      "pins": {
+        "1": "+5V",
+        "2": "SENSOR_5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        81,
+        43
+      ],
+      "angle": 0,
+      "mpn": "MF-R010",
+      "note": "100mA hold rating at datasheet ambient; thermal derating and slow trip, not an electronic current limiter.",
+      "dnp": false
+    },
+    {
+      "ref": "C11",
+      "value": "1u",
+      "footprint": "Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        88,
+        43
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U3",
+      "value": "ESP32-S3-DevKitC-1-N8R8 v1.1",
+      "footprint": "ECU:ESP32_S3_DevKitC_1_socket",
+      "pins": {
+        "1": "+3V3",
+        "2": "+3V3",
+        "3": "EN",
+        "4": "INJ1_CMD",
+        "5": "INJ2_CMD",
+        "6": "INJ3_CMD",
+        "7": "INJ4_CMD",
+        "8": "IGN1_CMD",
+        "9": "IGN2_CMD",
+        "10": "IGN3_CMD",
+        "11": "IGN4_CMD",
+        "12": "CRANK",
+        "13": null,
+        "14": null,
+        "15": "CAM",
+        "16": "ADC_CS",
+        "17": "SPI_MOSI_MCU",
+        "18": "SPI_CLK_MCU",
+        "19": "SPI_MISO",
+        "20": "CAN_TX",
+        "21": null,
+        "22": "GND",
+        "23": "GND",
+        "24": "UART_TX",
+        "25": "UART_RX",
+        "26": "FAN_CMD",
+        "27": "PUMP_CMD",
+        "28": "I2C_SCL",
+        "29": "I2C_SDA",
+        "30": "SAFE_N_MON",
+        "31": "WDI",
+        "32": null,
+        "33": null,
+        "34": null,
+        "35": null,
+        "36": "BOOT_N",
+        "37": null,
+        "38": "INTERLOCK",
+        "39": "ARM",
+        "40": "CAN_RX",
+        "41": null,
+        "42": null,
+        "43": "GND",
+        "44": "GND"
+      },
+      "names": {
+        "1": "+3V3",
+        "2": "+3V3",
+        "3": "EN",
+        "4": "4",
+        "5": "5",
+        "6": "6",
+        "7": "7",
+        "8": "15",
+        "9": "16",
+        "10": "17",
+        "11": "18",
+        "12": "8",
+        "13": "3",
+        "14": "46",
+        "15": "9",
+        "16": "10",
+        "17": "11",
+        "18": "12",
+        "19": "13",
+        "20": "14",
+        "21": "None",
+        "22": "GND",
+        "23": "GND",
+        "24": "43",
+        "25": "44",
+        "26": "1",
+        "27": "2",
+        "28": "42",
+        "29": "41",
+        "30": "40",
+        "31": "39",
+        "32": "38",
+        "33": "37",
+        "34": "36",
+        "35": "",
+        "36": "0",
+        "37": "45",
+        "38": "48",
+        "39": "47",
+        "40": "21",
+        "41": "20",
+        "42": "19",
+        "43": "GND",
+        "44": "GND"
+      },
+      "types": {
+        "1": "power_in",
+        "2": "power_in",
+        "3": "bidirectional",
+        "4": "bidirectional",
+        "5": "bidirectional",
+        "6": "bidirectional",
+        "7": "bidirectional",
+        "8": "bidirectional",
+        "9": "bidirectional",
+        "10": "bidirectional",
+        "11": "bidirectional",
+        "12": "bidirectional",
+        "13": "bidirectional",
+        "14": "bidirectional",
+        "15": "bidirectional",
+        "16": "bidirectional",
+        "17": "bidirectional",
+        "18": "bidirectional",
+        "19": "bidirectional",
+        "20": "bidirectional",
+        "21": "bidirectional",
+        "22": "power_in",
+        "23": "power_in",
+        "24": "bidirectional",
+        "25": "bidirectional",
+        "26": "bidirectional",
+        "27": "bidirectional",
+        "28": "bidirectional",
+        "29": "bidirectional",
+        "30": "bidirectional",
+        "31": "bidirectional",
+        "32": "bidirectional",
+        "33": "bidirectional",
+        "34": "bidirectional",
+        "35": "bidirectional",
+        "36": "bidirectional",
+        "37": "bidirectional",
+        "38": "bidirectional",
+        "39": "bidirectional",
+        "40": "bidirectional",
+        "41": "bidirectional",
+        "42": "bidirectional",
+        "43": "power_in",
+        "44": "power_in"
+      },
+      "page": "core",
+      "xy": [
+        39,
+        65
+      ],
+      "angle": 0,
+      "mpn": "ESP32-S3-DevKitC-1-N8R8",
+      "note": "A2 hand-solder revision; see docs/through-hole.md",
+      "dnp": false
+    },
+    {
+      "ref": "R8",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "EN"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        24,
+        51
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C12",
+      "value": "1u",
+      "footprint": "Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm",
+      "pins": {
+        "1": "EN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        29,
+        51
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D3",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "SAFE_N",
+        "2": "EN"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "core",
+      "xy": [
+        34,
+        51
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "C13",
+      "value": "10u",
+      "footprint": "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        33,
+        78
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C14",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        38,
+        78
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R9",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "BOOT_N"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        24,
+        81
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "J2",
+      "value": "UART_FLASH_3V3_ONLY",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "UART_TX",
+        "3": "UART_RX",
+        "4": "EN",
+        "5": "BOOT_N"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        17,
+        86
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "External USB UART, 3.3 V logic. Supply board via J1; no USB backfeed.",
+      "dnp": false
+    },
+    {
+      "ref": "U4",
+      "value": "MAX1232EPA+",
+      "footprint": "Package_DIP:DIP-8_W7.62mm_LongPads",
+      "pins": {
+        "1": "+5V",
+        "2": "+5V",
+        "3": "GND",
+        "4": "GND",
+        "5": null,
+        "6": "SAFE_N",
+        "7": "WDI",
+        "8": "+5V"
+      },
+      "names": {
+        "1": "PBRST_N",
+        "2": "TD",
+        "3": "TOL",
+        "4": "GND",
+        "5": "RST_HIGH",
+        "6": "RESET_N_OD",
+        "7": "ST_N",
+        "8": "VCC"
+      },
+      "types": {
+        "4": "power_in",
+        "5": "output",
+        "6": "open_collector",
+        "8": "power_in"
+      },
+      "page": "core",
+      "xy": [
+        56,
+        54
+      ],
+      "angle": 0,
+      "mpn": "MAX1232EPA+",
+      "note": "5V monitor and watchdog: TD=VCC, 500..2000ms watchdog (1.2s typical); reset active 250..1000ms. TTL ST accepts 3V3. Open-drain reset wired to 3V3 SAFE_N.",
+      "dnp": false
+    },
+    {
+      "ref": "R11",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "SAFE_N"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        58,
+        47
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R12",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "WDI",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        65,
+        49
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C15",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        56,
+        61
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U5",
+      "value": "MCP120-315DI/TO",
+      "footprint": "Package_TO_SOT_THT:TO-92_Inline_Wide",
+      "pins": {
+        "1": "SAFE_N",
+        "2": "+3V3",
+        "3": "GND"
+      },
+      "names": {
+        "1": "RESET_N_OD",
+        "2": "VDD",
+        "3": "VSS"
+      },
+      "types": {
+        "1": "open_collector",
+        "2": "power_in",
+        "3": "power_in"
+      },
+      "page": "core",
+      "xy": [
+        68,
+        55
+      ],
+      "angle": 0,
+      "mpn": "MCP120-315DI/TO",
+      "note": "D bondout TO-92: RESET, VDD, VSS. Different bondout suffixes are not drop-in.",
+      "dnp": false
+    },
+    {
+      "ref": "C16",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        68,
+        61
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R13",
+      "value": "1k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "SAFE_N",
+        "2": "SAFE_N_MON"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        64,
+        66
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "J3",
+      "value": "NORMALLY_OPEN_INTERLOCK",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
+      "pins": {
+        "1": "+3V3",
+        "2": "INTERLOCK"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        77,
+        56
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Fit only on supervised dummy-load bench. Open contact forces output inhibit independent of MCU.",
+      "dnp": false
+    },
+    {
+      "ref": "R14",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "INTERLOCK",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        77,
+        63
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R15",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "ARM",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        77,
+        68
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "J4",
+      "value": "EXPANSION_3V3",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "+3V3",
+        "3": "I2C_SDA",
+        "4": "I2C_SCL",
+        "5": "SAFE_N"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        83,
+        87
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R16",
+      "value": "4.7k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "I2C_SDA"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        75,
+        84
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R17",
+      "value": "4.7k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "I2C_SCL"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        75,
+        89
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R20",
+      "value": "22k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "MAP",
+        "2": "ADC0"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        33,
+        109
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R21",
+      "value": "33k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "ADC0",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        33,
+        113
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C20",
+      "value": "10n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "ADC0",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        33,
+        117
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D100",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "ADC0",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        31,
+        121
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "D101",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC0"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        36,
+        121
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "R22",
+      "value": "22k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "TPS",
+        "2": "ADC1"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        52,
+        109
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R23",
+      "value": "33k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "ADC1",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        52,
+        113
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C21",
+      "value": "10n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "ADC1",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        52,
+        117
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D110",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "ADC1",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        50,
+        121
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "D111",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC1"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        55,
+        121
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "R24",
+      "value": "22k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "CLT",
+        "2": "ADC2"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        71,
+        109
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R25",
+      "value": "33k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "ADC2",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        71,
+        113
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C22",
+      "value": "10n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "ADC2",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        71,
+        117
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D120",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "ADC2",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        69,
+        121
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "D121",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC2"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        74,
+        121
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "R26",
+      "value": "22k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "IAT",
+        "2": "ADC3"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        33,
+        129
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R27",
+      "value": "33k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "ADC3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        33,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C23",
+      "value": "10n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "ADC3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        33,
+        137
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D130",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "ADC3",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        31,
+        141
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "D131",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC3"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        36,
+        141
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "R28",
+      "value": "22k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "LAMBDA_WB",
+        "2": "ADC4"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        52,
+        129
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R29",
+      "value": "33k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "ADC4",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        52,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C24",
+      "value": "10n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "ADC4",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        52,
+        137
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D140",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "ADC4",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        50,
+        141
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "D141",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC4"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        55,
+        141
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "R30",
+      "value": "22k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "POSTCAT_BUF",
+        "2": "ADC5"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        71,
+        129
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R31",
+      "value": "33k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "ADC5",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        71,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C25",
+      "value": "10n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "ADC5",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        71,
+        137
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D150",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "ADC5",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        69,
+        141
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "D151",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC5"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        74,
+        141
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "R32",
+      "value": "2.49k 1% NTC",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "CLT"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        80,
+        113
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Populate only for passive NTC sensor; transfer curve must match selected sensor.",
+      "dnp": true
+    },
+    {
+      "ref": "R33",
+      "value": "2.49k 1% NTC",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "IAT"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        86,
+        113
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Populate only for passive NTC sensor; transfer curve must match selected sensor.",
+      "dnp": true
+    },
+    {
+      "ref": "R34",
+      "value": "120k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "VIN_PROT",
+        "2": "ADC6"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        93,
+        108
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R35",
+      "value": "10k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "ADC6",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        93,
+        112
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C26",
+      "value": "10n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "ADC6",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        93,
+        116
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D160",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "ADC6",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        90,
+        120
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "D161",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC6"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        95,
+        120
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "R36",
+      "value": "22k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "ADC7"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        105,
+        108
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R37",
+      "value": "33k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "ADC7",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        105,
+        112
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C27",
+      "value": "10n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "ADC7",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        105,
+        116
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D170",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "ADC7",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        102,
+        120
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "D171",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC7"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "analog",
+      "xy": [
+        107,
+        120
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "U6",
+      "value": "MCP3208-CI/P",
+      "footprint": "Package_DIP:DIP-16_W7.62mm_LongPads",
+      "pins": {
+        "1": "ADC0",
+        "2": "ADC1",
+        "3": "ADC2",
+        "4": "ADC3",
+        "5": "ADC4",
+        "6": "ADC5",
+        "7": "ADC6",
+        "8": "ADC7",
+        "9": "GND",
+        "10": "ADC_CS",
+        "11": "SPI_MOSI",
+        "12": "SPI_MISO",
+        "13": "SPI_CLK",
+        "14": "GND",
+        "15": "+3V3",
+        "16": "+3V3"
+      },
+      "names": {
+        "1": "CH0",
+        "2": "CH1",
+        "3": "CH2",
+        "4": "CH3",
+        "5": "CH4",
+        "6": "CH5",
+        "7": "CH6",
+        "8": "CH7",
+        "9": "DGND",
+        "10": "CS_N",
+        "11": "DIN",
+        "12": "DOUT",
+        "13": "CLK",
+        "14": "AGND",
+        "15": "VREF",
+        "16": "VDD"
+      },
+      "types": {
+        "9": "power_in",
+        "12": "tri_state",
+        "14": "power_in",
+        "15": "power_in",
+        "16": "power_in"
+      },
+      "page": "analog",
+      "xy": [
+        93,
+        135
+      ],
+      "angle": 0,
+      "mpn": "MCP3208-CI/P",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C28",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        99,
+        128
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C29",
+      "value": "1u",
+      "footprint": "Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        104,
+        128
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R38",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "ADC_CS"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        88,
+        144
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R40",
+      "value": "33k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "CRANK_RAW",
+        "2": "CRANK_FILT"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        25,
+        56
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C30",
+      "value": "100p C0G",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "CRANK_FILT",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        30,
+        56
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D200",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "CRANK_FILT",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        28,
+        60
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "D201",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "CRANK_FILT"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        33,
+        60
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "R41",
+      "value": "2.2k HALL PULLUP",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "CRANK_RAW"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        22,
+        62
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": true
+    },
+    {
+      "ref": "R42",
+      "value": "33k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "CAM_RAW",
+        "2": "CAM_FILT"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        25,
+        67
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C31",
+      "value": "100p C0G",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "CAM_FILT",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        30,
+        67
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "D210",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "CAM_FILT",
+        "2": "GND"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        28,
+        71
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "D211",
+      "value": "BAT85",
+      "footprint": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "CAM_FILT"
+      },
+      "names": {
+        "1": "K",
+        "2": "A"
+      },
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        33,
+        71
+      ],
+      "angle": 0,
+      "mpn": "BAT85,113",
+      "note": "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.",
+      "dnp": false
+    },
+    {
+      "ref": "R43",
+      "value": "2.2k HALL PULLUP",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "SENSOR_5V",
+        "2": "CAM_RAW"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        22,
+        73
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": true
+    },
+    {
+      "ref": "U7",
+      "value": "SN74HC14N",
+      "footprint": "Package_DIP:DIP-14_W7.62mm_LongPads",
+      "pins": {
+        "1": "CRANK_FILT",
+        "2": "CRANK_INV",
+        "3": "CRANK_INV",
+        "4": "CRANK",
+        "5": "CAM_FILT",
+        "6": "CAM_INV",
+        "7": "GND",
+        "8": "CAM",
+        "9": "CAM_INV",
+        "10": null,
+        "11": "GND",
+        "12": null,
+        "13": "GND",
+        "14": "+3V3"
+      },
+      "names": {},
+      "types": {
+        "2": "output",
+        "4": "output",
+        "6": "output",
+        "8": "output",
+        "10": "output",
+        "12": "output",
+        "7": "power_in",
+        "14": "power_in"
+      },
+      "page": "trigger_can",
+      "xy": [
+        34,
+        86
+      ],
+      "angle": 0,
+      "mpn": "SN74HC14N",
+      "note": "A2 hand-solder revision; see docs/through-hole.md",
+      "dnp": false
+    },
+    {
+      "ref": "C32",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        39,
+        86
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U8",
+      "value": "MCP2562-E/P",
+      "footprint": "Package_DIP:DIP-8_W7.62mm_LongPads",
+      "pins": {
+        "1": "CAN_TX",
+        "2": "GND",
+        "3": "+5V",
+        "4": "CAN_RX",
+        "5": "+3V3",
+        "6": "CANL",
+        "7": "CANH",
+        "8": "CAN_SILENT"
+      },
+      "names": {
+        "1": "TXD",
+        "2": "GND",
+        "3": "VCC",
+        "4": "RXD",
+        "5": "VIO",
+        "6": "CANL",
+        "7": "CANH",
+        "8": "STBY"
+      },
+      "types": {
+        "2": "power_in",
+        "3": "power_in",
+        "4": "output",
+        "5": "power_in",
+        "6": "bidirectional",
+        "7": "bidirectional"
+      },
+      "page": "trigger_can",
+      "xy": [
+        66,
+        81
+      ],
+      "angle": 0,
+      "mpn": "MCP2562-E/P",
+      "note": "Standby by default. JP1 open; firmware listen-only. Not a silent normal-mode transceiver.",
+      "dnp": false
+    },
+    {
+      "ref": "C33",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        60,
+        77
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C34",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        60,
+        85
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R44",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "CAN_SILENT"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        72,
+        74
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R45",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+3V3",
+        "2": "CAN_TX"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        66,
+        71
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "JP1",
+      "value": "CAN_TX_ENABLE_OPEN",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
+      "pins": {
+        "1": "CAN_SILENT",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        80,
+        74
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Open by default. Silent hardware plus software listen-only.",
+      "dnp": false
+    },
+    {
+      "ref": "J7",
+      "value": "CAN_H_L_G_SHIELD",
+      "footprint": "Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical",
+      "pins": {
+        "1": "CANH",
+        "2": "CANL",
+        "3": "GND",
+        "4": "CHASSIS"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        91,
+        77
+      ],
+      "angle": 0,
+      "mpn": "B4B-XH-A(LF)(SN)",
+      "note": "Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.",
+      "dnp": false
+    },
+    {
+      "ref": "D22",
+      "value": "P6KE24CA",
+      "footprint": "Diode_THT:D_DO-15_P12.70mm_Horizontal",
+      "pins": {
+        "1": "CANH",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        84,
+        82
+      ],
+      "angle": 0,
+      "mpn": "P6KE24CA",
+      "note": "Axial bidirectional CAN surge clamp; verify overshoot and capacitance on assembled bus.",
+      "dnp": false
+    },
+    {
+      "ref": "R46",
+      "value": "120R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "CANH",
+        "2": "CAN_TERM"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        87,
+        91
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "JP2",
+      "value": "CAN_TERMINATION_OPEN",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
+      "pins": {
+        "1": "CAN_TERM",
+        "2": "CANL"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        94,
+        91
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U9",
+      "value": "SN74HCT08N",
+      "footprint": "Package_DIP:DIP-14_W7.62mm_LongPads",
+      "pins": {
+        "7": "GND",
+        "14": "+5V",
+        "1": "ARM",
+        "2": "SAFE_N",
+        "3": "ARM_SAFE",
+        "4": "ARM_SAFE",
+        "5": "INTERLOCK",
+        "6": "RUN_5V",
+        "9": "PUMP_CMD",
+        "10": "RUN_5V",
+        "8": "PUMP_GATE",
+        "12": "FAN_CMD",
+        "13": "RUN_5V",
+        "11": "FAN_GATE"
+      },
+      "names": {
+        "7": "GND",
+        "14": "VCC",
+        "1": "1A",
+        "2": "1B",
+        "3": "1Y",
+        "4": "2A",
+        "5": "2B",
+        "6": "2Y",
+        "9": "3A",
+        "10": "3B",
+        "8": "3Y",
+        "12": "4A",
+        "13": "4B",
+        "11": "4Y"
+      },
+      "types": {
+        "7": "power_in",
+        "14": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "9": "input",
+        "10": "input",
+        "8": "output",
+        "12": "input",
+        "13": "input",
+        "11": "output"
+      },
+      "page": "outputs",
+      "xy": [
+        124,
+        77
+      ],
+      "angle": 0,
+      "mpn": "SN74HCT08N",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C35",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        118,
+        77
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R47",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "RUN_5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        123,
+        88
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R48",
+      "value": "1k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "PUMP_GATE",
+        "2": "PUMP_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        144,
+        72
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R51",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "PUMP_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        149,
+        72
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q5",
+      "value": "VNP35N07-E",
+      "footprint": "Package_TO_SOT_THT:TO-220-3_Vertical",
+      "pins": {
+        "1": "PUMP_IN",
+        "2": "PUMP_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        144,
+        82
+      ],
+      "angle": 0,
+      "mpn": "VNP35N07-E",
+      "note": "Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests.",
+      "dnp": false
+    },
+    {
+      "ref": "R54",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "PUMP_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        144,
+        92
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R49",
+      "value": "1k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "FAN_GATE",
+        "2": "FAN_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        160,
+        72
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R52",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "FAN_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        165,
+        72
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q6",
+      "value": "VNP35N07-E",
+      "footprint": "Package_TO_SOT_THT:TO-220-3_Vertical",
+      "pins": {
+        "1": "FAN_IN",
+        "2": "FAN_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        160,
+        82
+      ],
+      "angle": 0,
+      "mpn": "VNP35N07-E",
+      "note": "Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests.",
+      "dnp": false
+    },
+    {
+      "ref": "R55",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "FAN_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        160,
+        92
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R50",
+      "value": "1k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "RUN_5V",
+        "2": "MAIN_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        176,
+        72
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R53",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "MAIN_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        181,
+        72
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q7",
+      "value": "VNP35N07-E",
+      "footprint": "Package_TO_SOT_THT:TO-220-3_Vertical",
+      "pins": {
+        "1": "MAIN_IN",
+        "2": "MAIN_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        176,
+        82
+      ],
+      "angle": 0,
+      "mpn": "VNP35N07-E",
+      "note": "Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests.",
+      "dnp": false
+    },
+    {
+      "ref": "J8",
+      "value": "EXTERNAL_RELAYS",
+      "footprint": "Connector_JST:JST_VH_B4P-VH_1x04_P3.96mm_Vertical",
+      "pins": {
+        "1": "MAIN_LS",
+        "2": "PUMP_LS",
+        "3": "FAN_LS",
+        "4": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        194,
+        77
+      ],
+      "angle": 0,
+      "mpn": "B4P-VH(LF)(SN)",
+      "note": "Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.",
+      "dnp": false
+    },
+    {
+      "ref": "U10",
+      "value": "SN74HCT08N",
+      "footprint": "Package_DIP:DIP-14_W7.62mm_LongPads",
+      "pins": {
+        "7": "GND",
+        "14": "+5V",
+        "1": "INJ1_CMD",
+        "2": "INJ1_WINDOW",
+        "3": "INJ1_LIMITED",
+        "4": "INJ2_CMD",
+        "5": "INJ2_WINDOW",
+        "6": "INJ2_LIMITED",
+        "9": "INJ3_CMD",
+        "10": "INJ3_WINDOW",
+        "8": "INJ3_LIMITED",
+        "12": "INJ4_CMD",
+        "13": "INJ4_WINDOW",
+        "11": "INJ4_LIMITED"
+      },
+      "names": {
+        "7": "GND",
+        "14": "VCC",
+        "1": "1A",
+        "2": "1B",
+        "3": "1Y",
+        "4": "2A",
+        "5": "2B",
+        "6": "2Y",
+        "9": "3A",
+        "10": "3B",
+        "8": "3Y",
+        "12": "4A",
+        "13": "4B",
+        "11": "4Y"
+      },
+      "types": {
+        "7": "power_in",
+        "14": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "9": "input",
+        "10": "input",
+        "8": "output",
+        "12": "input",
+        "13": "input",
+        "11": "output"
+      },
+      "page": "injectors",
+      "xy": [
+        130,
+        30
+      ],
+      "angle": 0,
+      "mpn": "SN74HCT08N",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C36",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        123,
+        30
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U16",
+      "value": "SN74HCT08N",
+      "footprint": "Package_DIP:DIP-14_W7.62mm_LongPads",
+      "pins": {
+        "7": "GND",
+        "14": "+5V",
+        "1": "INJ1_CMD",
+        "2": "RUN_5V",
+        "3": "INJ1_RESET_N",
+        "4": "INJ2_CMD",
+        "5": "RUN_5V",
+        "6": "INJ2_RESET_N",
+        "9": "INJ3_CMD",
+        "10": "RUN_5V",
+        "8": "INJ3_RESET_N",
+        "12": "INJ4_CMD",
+        "13": "RUN_5V",
+        "11": "INJ4_RESET_N"
+      },
+      "names": {
+        "7": "GND",
+        "14": "VCC",
+        "1": "1A",
+        "2": "1B",
+        "3": "1Y",
+        "4": "2A",
+        "5": "2B",
+        "6": "2Y",
+        "9": "3A",
+        "10": "3B",
+        "8": "3Y",
+        "12": "4A",
+        "13": "4B",
+        "11": "4Y"
+      },
+      "types": {
+        "7": "power_in",
+        "14": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "9": "input",
+        "10": "input",
+        "8": "output",
+        "12": "input",
+        "13": "input",
+        "11": "output"
+      },
+      "page": "injectors",
+      "xy": [
+        130,
+        52
+      ],
+      "angle": 0,
+      "mpn": "SN74HCT08N",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C42",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        123,
+        52
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U12",
+      "value": "CD74HCT221E",
+      "footprint": "Package_DIP:DIP-16_W7.62mm_LongPads",
+      "pins": {
+        "1": "GND",
+        "2": "INJ1_CMD",
+        "3": "INJ1_RESET_N",
+        "4": null,
+        "5": "INJ2_WINDOW",
+        "6": "GND",
+        "7": "INJ2_RC",
+        "8": "GND",
+        "9": "GND",
+        "10": "INJ2_CMD",
+        "11": "INJ2_RESET_N",
+        "12": null,
+        "13": "INJ1_WINDOW",
+        "14": "GND",
+        "15": "INJ1_RC",
+        "16": "+5V"
+      },
+      "names": {
+        "1": "1A",
+        "2": "1B",
+        "3": "1RD_N",
+        "4": "1Q_N",
+        "5": "2Q",
+        "6": "2CEXT",
+        "7": "2REXT_CEXT",
+        "8": "GND",
+        "9": "2A",
+        "10": "2B",
+        "11": "2RD_N",
+        "12": "2Q_N",
+        "13": "1Q",
+        "14": "1CEXT",
+        "15": "1REXT_CEXT",
+        "16": "VCC"
+      },
+      "types": {
+        "4": "output",
+        "5": "output",
+        "8": "power_in",
+        "12": "output",
+        "13": "output",
+        "16": "power_in"
+      },
+      "page": "injectors",
+      "xy": [
+        151,
+        30
+      ],
+      "angle": 0,
+      "mpn": "CD74HCT221E",
+      "note": "Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism.",
+      "dnp": false
+    },
+    {
+      "ref": "C38",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        151,
+        21
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R61",
+      "value": "100k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+5V",
+        "2": "INJ1_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        145,
+        42
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C61",
+      "value": "270n 5% FILM",
+      "footprint": "Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm",
+      "pins": {
+        "1": "INJ1_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        145,
+        47
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R65",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "INJ1_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        145,
+        52
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R62",
+      "value": "100k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+5V",
+        "2": "INJ2_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        157,
+        42
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C62",
+      "value": "270n 5% FILM",
+      "footprint": "Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm",
+      "pins": {
+        "1": "INJ2_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        157,
+        47
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R66",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "INJ2_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        157,
+        52
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U13",
+      "value": "CD74HCT221E",
+      "footprint": "Package_DIP:DIP-16_W7.62mm_LongPads",
+      "pins": {
+        "1": "GND",
+        "2": "INJ3_CMD",
+        "3": "INJ3_RESET_N",
+        "4": null,
+        "5": "INJ4_WINDOW",
+        "6": "GND",
+        "7": "INJ4_RC",
+        "8": "GND",
+        "9": "GND",
+        "10": "INJ4_CMD",
+        "11": "INJ4_RESET_N",
+        "12": null,
+        "13": "INJ3_WINDOW",
+        "14": "GND",
+        "15": "INJ3_RC",
+        "16": "+5V"
+      },
+      "names": {
+        "1": "1A",
+        "2": "1B",
+        "3": "1RD_N",
+        "4": "1Q_N",
+        "5": "2Q",
+        "6": "2CEXT",
+        "7": "2REXT_CEXT",
+        "8": "GND",
+        "9": "2A",
+        "10": "2B",
+        "11": "2RD_N",
+        "12": "2Q_N",
+        "13": "1Q",
+        "14": "1CEXT",
+        "15": "1REXT_CEXT",
+        "16": "VCC"
+      },
+      "types": {
+        "4": "output",
+        "5": "output",
+        "8": "power_in",
+        "12": "output",
+        "13": "output",
+        "16": "power_in"
+      },
+      "page": "injectors",
+      "xy": [
+        177,
+        30
+      ],
+      "angle": 0,
+      "mpn": "CD74HCT221E",
+      "note": "Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism.",
+      "dnp": false
+    },
+    {
+      "ref": "C39",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        177,
+        21
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R63",
+      "value": "100k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+5V",
+        "2": "INJ3_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        171,
+        42
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C63",
+      "value": "270n 5% FILM",
+      "footprint": "Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm",
+      "pins": {
+        "1": "INJ3_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        171,
+        47
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R67",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "INJ3_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        171,
+        52
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R64",
+      "value": "100k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+5V",
+        "2": "INJ4_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        183,
+        42
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C64",
+      "value": "270n 5% FILM",
+      "footprint": "Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm",
+      "pins": {
+        "1": "INJ4_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        183,
+        47
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R68",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "INJ4_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        183,
+        52
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R101",
+      "value": "1k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "INJ1_LIMITED",
+        "2": "INJ1_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        124,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R105",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "INJ1_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        129,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q1",
+      "value": "VNP35N07-E",
+      "footprint": "Package_TO_SOT_THT:TO-220-3_Vertical",
+      "pins": {
+        "1": "INJ1_IN",
+        "2": "INJ1_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        124,
+        70
+      ],
+      "angle": 0,
+      "mpn": "VNP35N07-E",
+      "note": "Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests.",
+      "dnp": false
+    },
+    {
+      "ref": "R102",
+      "value": "1k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "INJ2_LIMITED",
+        "2": "INJ2_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        144,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R106",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "INJ2_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        149,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q2",
+      "value": "VNP35N07-E",
+      "footprint": "Package_TO_SOT_THT:TO-220-3_Vertical",
+      "pins": {
+        "1": "INJ2_IN",
+        "2": "INJ2_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        144,
+        70
+      ],
+      "angle": 0,
+      "mpn": "VNP35N07-E",
+      "note": "Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests.",
+      "dnp": false
+    },
+    {
+      "ref": "R103",
+      "value": "1k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "INJ3_LIMITED",
+        "2": "INJ3_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        164,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R107",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "INJ3_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        169,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q3",
+      "value": "VNP35N07-E",
+      "footprint": "Package_TO_SOT_THT:TO-220-3_Vertical",
+      "pins": {
+        "1": "INJ3_IN",
+        "2": "INJ3_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        164,
+        70
+      ],
+      "angle": 0,
+      "mpn": "VNP35N07-E",
+      "note": "Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests.",
+      "dnp": false
+    },
+    {
+      "ref": "R104",
+      "value": "1k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "INJ4_LIMITED",
+        "2": "INJ4_IN"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        184,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R108",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "INJ4_IN",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        189,
+        60
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "Q4",
+      "value": "VNP35N07-E",
+      "footprint": "Package_TO_SOT_THT:TO-220-3_Vertical",
+      "pins": {
+        "1": "INJ4_IN",
+        "2": "INJ4_LS",
+        "3": "GND"
+      },
+      "names": {
+        "1": "INPUT_5V",
+        "2": "DRAIN",
+        "3": "SOURCE"
+      },
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        184,
+        70
+      ],
+      "angle": 0,
+      "mpn": "VNP35N07-E",
+      "note": "Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests.",
+      "dnp": false
+    },
+    {
+      "ref": "J9",
+      "value": "INJECTOR_LOW_SIDES",
+      "footprint": "Connector_JST:JST_VH_B8P-VH_1x08_P3.96mm_Vertical",
+      "pins": {
+        "1": "INJ1_LS",
+        "2": "INJ2_LS",
+        "3": "INJ3_LS",
+        "4": "INJ4_LS",
+        "5": "GND",
+        "6": "GND",
+        "7": "GND",
+        "8": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "injectors",
+      "xy": [
+        199,
+        25
+      ],
+      "angle": 0,
+      "mpn": "B8P-VH(LF)(SN)",
+      "note": "Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.",
+      "dnp": false
+    },
+    {
+      "ref": "U11",
+      "value": "SN74HCT08N",
+      "footprint": "Package_DIP:DIP-14_W7.62mm_LongPads",
+      "pins": {
+        "7": "GND",
+        "14": "+5V",
+        "1": "IGN1_CMD",
+        "2": "IGN1_WINDOW",
+        "3": "IGN1_LIMITED",
+        "4": "IGN2_CMD",
+        "5": "IGN2_WINDOW",
+        "6": "IGN2_LIMITED",
+        "9": "IGN3_CMD",
+        "10": "IGN3_WINDOW",
+        "8": "IGN3_LIMITED",
+        "12": "IGN4_CMD",
+        "13": "IGN4_WINDOW",
+        "11": "IGN4_LIMITED"
+      },
+      "names": {
+        "7": "GND",
+        "14": "VCC",
+        "1": "1A",
+        "2": "1B",
+        "3": "1Y",
+        "4": "2A",
+        "5": "2B",
+        "6": "2Y",
+        "9": "3A",
+        "10": "3B",
+        "8": "3Y",
+        "12": "4A",
+        "13": "4B",
+        "11": "4Y"
+      },
+      "types": {
+        "7": "power_in",
+        "14": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "9": "input",
+        "10": "input",
+        "8": "output",
+        "12": "input",
+        "13": "input",
+        "11": "output"
+      },
+      "page": "ignition",
+      "xy": [
+        130,
+        121
+      ],
+      "angle": 0,
+      "mpn": "SN74HCT08N",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C37",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        123,
+        121
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U17",
+      "value": "SN74HCT08N",
+      "footprint": "Package_DIP:DIP-14_W7.62mm_LongPads",
+      "pins": {
+        "7": "GND",
+        "14": "+5V",
+        "1": "IGN1_CMD",
+        "2": "RUN_5V",
+        "3": "IGN1_RESET_N",
+        "4": "IGN2_CMD",
+        "5": "RUN_5V",
+        "6": "IGN2_RESET_N",
+        "9": "IGN3_CMD",
+        "10": "RUN_5V",
+        "8": "IGN3_RESET_N",
+        "12": "IGN4_CMD",
+        "13": "RUN_5V",
+        "11": "IGN4_RESET_N"
+      },
+      "names": {
+        "7": "GND",
+        "14": "VCC",
+        "1": "1A",
+        "2": "1B",
+        "3": "1Y",
+        "4": "2A",
+        "5": "2B",
+        "6": "2Y",
+        "9": "3A",
+        "10": "3B",
+        "8": "3Y",
+        "12": "4A",
+        "13": "4B",
+        "11": "4Y"
+      },
+      "types": {
+        "7": "power_in",
+        "14": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "9": "input",
+        "10": "input",
+        "8": "output",
+        "12": "input",
+        "13": "input",
+        "11": "output"
+      },
+      "page": "ignition",
+      "xy": [
+        130,
+        143
+      ],
+      "angle": 0,
+      "mpn": "SN74HCT08N",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C43",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        123,
+        143
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U14",
+      "value": "CD74HCT221E",
+      "footprint": "Package_DIP:DIP-16_W7.62mm_LongPads",
+      "pins": {
+        "1": "GND",
+        "2": "IGN1_CMD",
+        "3": "IGN1_RESET_N",
+        "4": null,
+        "5": "IGN2_WINDOW",
+        "6": "GND",
+        "7": "IGN2_RC",
+        "8": "GND",
+        "9": "GND",
+        "10": "IGN2_CMD",
+        "11": "IGN2_RESET_N",
+        "12": null,
+        "13": "IGN1_WINDOW",
+        "14": "GND",
+        "15": "IGN1_RC",
+        "16": "+5V"
+      },
+      "names": {
+        "1": "1A",
+        "2": "1B",
+        "3": "1RD_N",
+        "4": "1Q_N",
+        "5": "2Q",
+        "6": "2CEXT",
+        "7": "2REXT_CEXT",
+        "8": "GND",
+        "9": "2A",
+        "10": "2B",
+        "11": "2RD_N",
+        "12": "2Q_N",
+        "13": "1Q",
+        "14": "1CEXT",
+        "15": "1REXT_CEXT",
+        "16": "VCC"
+      },
+      "types": {
+        "4": "output",
+        "5": "output",
+        "8": "power_in",
+        "12": "output",
+        "13": "output",
+        "16": "power_in"
+      },
+      "page": "ignition",
+      "xy": [
+        151,
+        121
+      ],
+      "angle": 0,
+      "mpn": "CD74HCT221E",
+      "note": "Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism.",
+      "dnp": false
+    },
+    {
+      "ref": "C40",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        151,
+        112
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R81",
+      "value": "100k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+5V",
+        "2": "IGN1_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        145,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C81",
+      "value": "68n 5% FILM",
+      "footprint": "Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm",
+      "pins": {
+        "1": "IGN1_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        145,
+        138
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R85",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "IGN1_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        145,
+        143
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R82",
+      "value": "100k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+5V",
+        "2": "IGN2_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        157,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C82",
+      "value": "68n 5% FILM",
+      "footprint": "Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm",
+      "pins": {
+        "1": "IGN2_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        157,
+        138
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R86",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "IGN2_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        157,
+        143
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "U15",
+      "value": "CD74HCT221E",
+      "footprint": "Package_DIP:DIP-16_W7.62mm_LongPads",
+      "pins": {
+        "1": "GND",
+        "2": "IGN3_CMD",
+        "3": "IGN3_RESET_N",
+        "4": null,
+        "5": "IGN4_WINDOW",
+        "6": "GND",
+        "7": "IGN4_RC",
+        "8": "GND",
+        "9": "GND",
+        "10": "IGN4_CMD",
+        "11": "IGN4_RESET_N",
+        "12": null,
+        "13": "IGN3_WINDOW",
+        "14": "GND",
+        "15": "IGN3_RC",
+        "16": "+5V"
+      },
+      "names": {
+        "1": "1A",
+        "2": "1B",
+        "3": "1RD_N",
+        "4": "1Q_N",
+        "5": "2Q",
+        "6": "2CEXT",
+        "7": "2REXT_CEXT",
+        "8": "GND",
+        "9": "2A",
+        "10": "2B",
+        "11": "2RD_N",
+        "12": "2Q_N",
+        "13": "1Q",
+        "14": "1CEXT",
+        "15": "1REXT_CEXT",
+        "16": "VCC"
+      },
+      "types": {
+        "4": "output",
+        "5": "output",
+        "8": "power_in",
+        "12": "output",
+        "13": "output",
+        "16": "power_in"
+      },
+      "page": "ignition",
+      "xy": [
+        177,
+        121
+      ],
+      "angle": 0,
+      "mpn": "CD74HCT221E",
+      "note": "Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism.",
+      "dnp": false
+    },
+    {
+      "ref": "C41",
+      "value": "100n",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        177,
+        112
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R83",
+      "value": "100k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+5V",
+        "2": "IGN3_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        171,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C83",
+      "value": "68n 5% FILM",
+      "footprint": "Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm",
+      "pins": {
+        "1": "IGN3_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        171,
+        138
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R87",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "IGN3_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        171,
+        143
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R84",
+      "value": "100k 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "+5V",
+        "2": "IGN4_RC"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        183,
+        133
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C84",
+      "value": "68n 5% FILM",
+      "footprint": "Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm",
+      "pins": {
+        "1": "IGN4_RC",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        183,
+        138
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R88",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "IGN4_CMD",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        183,
+        143
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R111",
+      "value": "220R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "IGN1_LIMITED",
+        "2": "IGN1_5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        124,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R115",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "IGN1_5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        129,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R112",
+      "value": "220R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "IGN2_LIMITED",
+        "2": "IGN2_5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        144,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R116",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "IGN2_5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        149,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R113",
+      "value": "220R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "IGN3_LIMITED",
+        "2": "IGN3_5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        164,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R117",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "IGN3_5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        169,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R114",
+      "value": "220R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "IGN4_LIMITED",
+        "2": "IGN4_5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        184,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R118",
+      "value": "10k",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "IGN4_5V",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        189,
+        151
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "J10",
+      "value": "SMART_COIL_5V_LOGIC",
+      "footprint": "Connector_JST:JST_VH_B5P-VH_1x05_P3.96mm_Vertical",
+      "pins": {
+        "1": "IGN1_5V",
+        "2": "IGN2_5V",
+        "3": "IGN3_5V",
+        "4": "IGN4_5V",
+        "5": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "ignition",
+      "xy": [
+        199,
+        116
+      ],
+      "angle": 0,
+      "mpn": "B5P-VH(LF)(SN)",
+      "note": "Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.",
+      "dnp": false
+    },
+    {
+      "ref": "TP1",
+      "value": "GND",
+      "footprint": "TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm",
+      "pins": {
+        "1": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        112,
+        21
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "TP2",
+      "value": "VIN_PROT",
+      "footprint": "TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm",
+      "pins": {
+        "1": "VIN_PROT"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        112,
+        28
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "TP3",
+      "value": "+5V",
+      "footprint": "TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm",
+      "pins": {
+        "1": "+5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        112,
+        35
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "TP4",
+      "value": "+3V3",
+      "footprint": "TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm",
+      "pins": {
+        "1": "+3V3"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        112,
+        42
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "TP5",
+      "value": "SAFE_N",
+      "footprint": "TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm",
+      "pins": {
+        "1": "SAFE_N"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        112,
+        55
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "TP6",
+      "value": "RUN_5V",
+      "footprint": "TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm",
+      "pins": {
+        "1": "RUN_5V"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        112,
+        64
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "H1",
+      "value": "M3 NPTH",
+      "footprint": "MountingHole:MountingHole_3.2mm_M3",
+      "pins": {},
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        14,
+        14
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "H2",
+      "value": "M3 NPTH",
+      "footprint": "MountingHole:MountingHole_3.2mm_M3",
+      "pins": {},
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        206,
+        14
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "H3",
+      "value": "M3 NPTH",
+      "footprint": "MountingHole:MountingHole_3.2mm_M3",
+      "pins": {},
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        14,
+        156
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "H4",
+      "value": "M3 NPTH",
+      "footprint": "MountingHole:MountingHole_3.2mm_M3",
+      "pins": {},
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        206,
+        156
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "J11",
+      "value": "MAP",
+      "footprint": "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "SENSOR_5V",
+        "3": "MAP"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "B3B-XH-A(LF)(SN)",
+      "note": "A2 internal locking connector; not sealed. See connector-pinout.csv",
+      "dnp": false
+    },
+    {
+      "ref": "J12",
+      "value": "TPS",
+      "footprint": "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "SENSOR_5V",
+        "3": "TPS"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "B3B-XH-A(LF)(SN)",
+      "note": "A2 internal locking connector; not sealed. See connector-pinout.csv",
+      "dnp": false
+    },
+    {
+      "ref": "J13",
+      "value": "CLT",
+      "footprint": "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "SENSOR_5V",
+        "3": "CLT"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "B3B-XH-A(LF)(SN)",
+      "note": "A2 internal locking connector; not sealed. See connector-pinout.csv",
+      "dnp": false
+    },
+    {
+      "ref": "J14",
+      "value": "IAT",
+      "footprint": "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "SENSOR_5V",
+        "3": "IAT"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "B3B-XH-A(LF)(SN)",
+      "note": "A2 internal locking connector; not sealed. See connector-pinout.csv",
+      "dnp": false
+    },
+    {
+      "ref": "J15",
+      "value": "LAMBDA_WB",
+      "footprint": "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "SENSOR_5V",
+        "3": "LAMBDA_WB"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "B3B-XH-A(LF)(SN)",
+      "note": "A2 internal locking connector; not sealed. See connector-pinout.csv",
+      "dnp": false
+    },
+    {
+      "ref": "J16",
+      "value": "POSTCAT_BUF",
+      "footprint": "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "SENSOR_5V",
+        "3": "POSTCAT_BUF"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "B3B-XH-A(LF)(SN)",
+      "note": "A2 internal locking connector; not sealed. See connector-pinout.csv",
+      "dnp": false
+    },
+    {
+      "ref": "J17",
+      "value": "CRANK",
+      "footprint": "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "SENSOR_5V",
+        "3": "CRANK_RAW"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "B3B-XH-A(LF)(SN)",
+      "note": "A2 internal locking connector; not sealed. See connector-pinout.csv",
+      "dnp": false
+    },
+    {
+      "ref": "J18",
+      "value": "CAM",
+      "footprint": "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "SENSOR_5V",
+        "3": "CAM_RAW"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "B3B-XH-A(LF)(SN)",
+      "note": "A2 internal locking connector; not sealed. See connector-pinout.csv",
+      "dnp": false
+    },
+    {
+      "ref": "D23",
+      "value": "P6KE24CA",
+      "footprint": "Diode_THT:D_DO-15_P12.70mm_Horizontal",
+      "pins": {
+        "1": "CANL",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "P6KE24CA",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "L2",
+      "value": "47uH input filter",
+      "footprint": "Inductor_THT:L_Radial_D10.0mm_P5.00mm_Fastron_07P",
+      "pins": {
+        "1": "VIN_PROT",
+        "2": "VIN_FILTERED"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "RLB0914-470KL",
+      "note": "Radial choke, 5mm pitch. 1.56A datasheet current; check derating. Not the converter switching inductor.",
+      "dnp": false
+    },
+    {
+      "ref": "R150",
+      "value": "1R 0.5W damping",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "VIN_FILTERED",
+        "2": "FILTER_DAMP"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Series RC damping branch across converter input; verify input impedance/load-step stability.",
+      "dnp": false
+    },
+    {
+      "ref": "C45",
+      "value": "47u 63V",
+      "footprint": "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm",
+      "pins": {
+        "1": "FILTER_DAMP",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "C46",
+      "value": "100n 100V",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "VIN_FILTERED",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "power",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "J19",
+      "value": "POWER_RETURN",
+      "footprint": "Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "outputs",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "B2P-VH(LF)(SN)",
+      "note": "Both pins are actuator return. Two adequately sized parallel wires to engine ground star; never use sensor wires for injector return.",
+      "dnp": false
+    },
+    {
+      "ref": "J20",
+      "value": "SHIELD_BOND",
+      "footprint": "Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical",
+      "pins": {
+        "1": "CHASSIS",
+        "2": "CHASSIS"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "B2P-VH(LF)(SN)",
+      "note": "Shield/lining bond only. No normal load current. Short broad strap to enclosure conductive lining and designated chassis bond.",
+      "dnp": false
+    },
+    {
+      "ref": "C47",
+      "value": "4.7n 100V",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "CHASSIS",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "RF coupling of shield and signal ground; not galvanic isolation.",
+      "dnp": false
+    },
+    {
+      "ref": "R151",
+      "value": "1M",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "CHASSIS",
+        "2": "GND"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Static bleed, not a protective earth bond.",
+      "dnp": false
+    },
+    {
+      "ref": "C150",
+      "value": "1n C0G 100V",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "MAP",
+        "2": "CHASSIS"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress.",
+      "dnp": false
+    },
+    {
+      "ref": "C151",
+      "value": "1n C0G 100V",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "TPS",
+        "2": "CHASSIS"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress.",
+      "dnp": false
+    },
+    {
+      "ref": "C152",
+      "value": "1n C0G 100V",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "CLT",
+        "2": "CHASSIS"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress.",
+      "dnp": false
+    },
+    {
+      "ref": "C153",
+      "value": "1n C0G 100V",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "IAT",
+        "2": "CHASSIS"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress.",
+      "dnp": false
+    },
+    {
+      "ref": "C154",
+      "value": "1n C0G 100V",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "LAMBDA_WB",
+        "2": "CHASSIS"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress.",
+      "dnp": false
+    },
+    {
+      "ref": "C155",
+      "value": "1n C0G 100V",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "POSTCAT_BUF",
+        "2": "CHASSIS"
+      },
+      "names": {},
+      "types": {},
+      "page": "analog",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress.",
+      "dnp": false
+    },
+    {
+      "ref": "C156",
+      "value": "100p C0G 100V",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "CRANK_RAW",
+        "2": "CHASSIS"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress.",
+      "dnp": false
+    },
+    {
+      "ref": "C157",
+      "value": "100p C0G 100V",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "CAM_RAW",
+        "2": "CHASSIS"
+      },
+      "names": {},
+      "types": {},
+      "page": "trigger_can",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress.",
+      "dnp": false
+    },
+    {
+      "ref": "H5",
+      "value": "M3 SHIELD LUG",
+      "footprint": "MountingHole:MountingHole_3.2mm_M3_Pad",
+      "pins": {
+        "1": "CHASSIS"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Conductive plated lug, bolt and short broad braid to enclosure side stud; not a signal-ground mounting point.",
+      "dnp": false
+    },
+    {
+      "ref": "R152",
+      "value": "47R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "SPI_CLK_MCU",
+        "2": "SPI_CLK"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    },
+    {
+      "ref": "R153",
+      "value": "47R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "SPI_MOSI_MCU",
+        "2": "SPI_MOSI"
+      },
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "",
+      "dnp": false
+    }
+  ]
+}

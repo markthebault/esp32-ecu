@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "profile_id": "generic-pfi4-uncalibrated",
+  "status": "DESIGN_TEMPLATE_NOT_LOADED_BY_FIRMWARE",
+  "hardware_class": "A0_12V_PFI4_HIGH_IMPEDANCE_SMART_COILS_HALL",
+  "identification_optional": {
+    "make": null,
+    "model": null,
+    "year": null,
+    "engine_code": null
+  },
+  "bench_trigger_defaults": {
+    "decoder": "missing_tooth",
+    "wheel_slots": 60,
+    "missing_teeth": 2,
+    "capture_speed_ceiling_rpm": 8000,
+    "scope": "360_DEGREE_CAPTURE_ONLY_NO_ENGINE_ACTUATION"
+  },
+  "engine": {
+    "cylinders": 4,
+    "cycle_degrees": 720,
+    "displacement_cc": null,
+    "firing_order": null,
+    "trigger_edge": null,
+    "trigger_tdc_offset_deg": null,
+    "cam_pattern": null
+  },
+  "calibration_required_before_actuation": {
+    "sensor_transfer_curves": null,
+    "injector_flow_and_voltage_deadtime_curve": null,
+    "coil_polarity_input_threshold_and_dwell_curve": null,
+    "fuel_properties": null,
+    "volumetric_efficiency_table": null,
+    "ignition_advance_table": null,
+    "cranking_warmup_and_transient_fueling": null,
+    "lambda_controller_transfer_and_fault_handling": null,
+    "misfire_and_catalyst_protection": null,
+    "engine_protection_limits": null
+  },
+  "installation_references_optional_during_platform_development": {
+    "harness_adapter": null,
+    "hardware_modules": [],
+    "oem_network_integration": null,
+    "commissioning_record": null
+  },
+  "validation": {
+    "bench_signal_test_report": null,
+    "physical_power_and_output_qualification": null,
+    "engine_calibration_report": null
+  }
+}

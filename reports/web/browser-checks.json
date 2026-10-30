@@ -1,0 +1,14 @@
+{
+  "implementation": "same offline HTML served by host simulator and embedded ESP32-S3 firmware",
+  "hardware_connected": false,
+  "checks": {
+    "saved_linear_map_profile_changes_live_conversion": true,
+    "invalid_endpoint_rejected_without_revision_change": true,
+    "simulated_short_reports_raw_zero_and_fault": true,
+    "injected_fetch_failure_marks_readings_stale": true,
+    "reconnect_recovers_live_status": true,
+    "five_pages_fit_390px_without_horizontal_scroll": true,
+    "full_manual_reader_loads_matching_PDF_chapter": true
+  },
+  "example_profile": "Simulator only; not a vehicle calibration"
+}

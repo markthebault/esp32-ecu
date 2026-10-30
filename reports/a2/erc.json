@@ -1,0 +1,71 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-30T11:23:36",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.6",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/96fad914-1e68-5561-8e87-9fcee87c590e",
+            "violations": []
+        },
+        {
+            "path": "/power/",
+            "uuid_path": "/96fad914-1e68-5561-8e87-9fcee87c590e/2ec57f83-7741-5c85-a32c-5ddaa049b6c1",
+            "violations": []
+        },
+        {
+            "path": "/core/",
+            "uuid_path": "/96fad914-1e68-5561-8e87-9fcee87c590e/96de1316-eee6-5dc1-96ee-51993e2e1f9b",
+            "violations": []
+        },
+        {
+            "path": "/analog/",
+            "uuid_path": "/96fad914-1e68-5561-8e87-9fcee87c590e/3b788e4a-563d-5a9d-80ab-dacc7946e5f1",
+            "violations": []
+        },
+        {
+            "path": "/trigger_can/",
+            "uuid_path": "/96fad914-1e68-5561-8e87-9fcee87c590e/0f4f1b16-0734-5e24-b2fa-ad75c8fff3b5",
+            "violations": []
+        },
+        {
+            "path": "/outputs/",
+            "uuid_path": "/96fad914-1e68-5561-8e87-9fcee87c590e/3595833c-50c6-55ca-9462-38c3728a87b2",
+            "violations": []
+        },
+        {
+            "path": "/injectors/",
+            "uuid_path": "/96fad914-1e68-5561-8e87-9fcee87c590e/3ac4ea34-0d2d-5a4a-92da-9d55bb8c3ce3",
+            "violations": []
+        },
+        {
+            "path": "/ignition/",
+            "uuid_path": "/96fad914-1e68-5561-8e87-9fcee87c590e/4cc88e95-7686-5d34-aae3-8355f486800f",
+            "violations": []
+        }
+    ],
+    "source": "esp32-ecu.kicad_sch"
+}

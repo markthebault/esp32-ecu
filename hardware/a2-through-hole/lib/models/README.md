@@ -1,0 +1,1 @@
+These are dimensioned assembly envelopes for the purchased modules. They are not manufacturer detailed CAD and do not establish connector fit. The ESP32 envelope includes the socketed mounting height; the actual 44-pad and 22.86 mm row datums are in the KiCad footprint. Radios are disabled; no antenna performance claim.

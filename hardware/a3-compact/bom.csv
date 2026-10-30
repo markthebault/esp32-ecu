@@ -1,0 +1,220 @@
+Reference,Value,MPN,Footprint,DNP,Assembly,Note
+J1,FUSED_KEY_12V,B2P-VH(LF)(SN),Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical,False,Through hole,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+D1,1.5KE27CA,1.5KE27CA,Diode_THT:D_DO-201AD_P5.08mm_Vertical_AnodeUp,False,Through hole,Axial bidirectional TVS; 23.1V standoff and specified 37.5V pulse clamp. No load-dump qualification claim.
+D2,SB5100,SB5100-B,Diode_THT:D_DO-201AD_P15.24mm_Horizontal,False,Through hole,100 V series reverse-polarity blocking diode; check forward loss and pulse stress.
+C1,47u 63V,,Capacitor_THT:CP_Radial_D8.0mm_P3.50mm,False,Through hole,"Electrolytic, exact series must be qualified."
+C2,47u 63V,,Capacitor_THT:CP_Radial_D8.0mm_P3.50mm,False,Through hole,
+C3,100n 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+U1,Pololu D36V6F5,Pololu 3792,ECU:Pololu_D36V6F5_vertical,False,Purchased assembled module,A3 hand-solder revision; see docs/compact.md
+C5,22u 16V electrolytic,,Capacitor_THT:CP_Radial_D8.0mm_P3.50mm,False,Through hole,Radial electrolytic on the 5V rail; select exact series and verify rail stability/ripple over temperature.
+C6,22u 16V electrolytic,,Capacitor_THT:CP_Radial_D8.0mm_P3.50mm,False,Through hole,Radial electrolytic on the 5V rail; select exact series and verify rail stability/ripple over temperature.
+U2,LD1117V33,LD1117V33,Package_TO_SOT_THT:TO-220-3_Vertical,False,Through hole,3V3 regulator. 200mA continuous target pending thermal measurement. Use specified electrolytic ESR; no USB/carrier dual power.
+C9,22u 10V ESR 0.3-1R,,Capacitor_THT:CP_Radial_D8.0mm_P3.50mm,False,Through hole,Select exact electrolytic series to satisfy LDO stability over temperature.
+C10,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+R7,100R 0.25W,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,33 mA rail bleed provides a sink for fault clamp current. Must validate unpowered injection.
+F2,PTC 100mA radial,MF-R010,ECU:PTC_MF_R010,False,Through hole,"100mA hold rating at datasheet ambient; thermal derating and slow trip, not an electronic current limiter."
+C11,1u,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Through hole,
+U3,ESP32-S3-DevKitC-1-N8R8 v1.1,ESP32-S3-DevKitC-1-N8R8,ECU:ESP32_S3_DevKitC_1_socket,False,Purchased assembled module,A3 hand-solder revision; see docs/compact.md
+R8,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C12,1u,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Through hole,
+D3,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+C13,10u,,Capacitor_THT:CP_Radial_D8.0mm_P3.50mm,False,Through hole,
+C14,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+R9,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+J2,UART_FLASH_3V3_ONLY,,Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,False,Through hole,"External USB UART, 3.3 V logic. Supply board via J1; no USB backfeed."
+U4,MAX1232EPA+,MAX1232EPA+,Package_DIP:DIP-8_W7.62mm_LongPads,False,Through hole,"5V monitor and watchdog: TD=VCC, 500..2000ms watchdog (1.2s typical); reset active 250..1000ms. TTL ST accepts 3V3. Open-drain reset wired to 3V3 SAFE_N."
+R11,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R12,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C15,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+U5,MCP120-315DI/TO,MCP120-315DI/TO,Package_TO_SOT_THT:TO-92_Inline_Wide,False,Through hole,"D bondout TO-92: RESET, VDD, VSS. Different bondout suffixes are not drop-in."
+C16,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+R13,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+J3,NORMALLY_OPEN_INTERLOCK,,Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,False,Through hole,Fit only on supervised dummy-load bench. Open contact forces output inhibit independent of MCU.
+R14,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R15,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+J4,EXPANSION_3V3,,Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,False,Through hole,
+R16,4.7k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R17,4.7k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R20,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R21,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C20,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+D100,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D101,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R22,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R23,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C21,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+D110,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D111,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R24,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R25,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C22,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+D120,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D121,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R26,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R27,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C23,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+D130,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D131,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R28,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R29,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C24,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+D140,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D141,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R30,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R31,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C25,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+D150,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D151,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R32,2.49k 1% NTC,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,True,Through hole,Populate only for passive NTC sensor; transfer curve must match selected sensor.
+R33,2.49k 1% NTC,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,True,Through hole,Populate only for passive NTC sensor; transfer curve must match selected sensor.
+R34,120k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R35,10k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C26,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+D160,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D161,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R36,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R37,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C27,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+D170,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D171,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+U6,MCP3208-CI/P,MCP3208-CI/P,Package_DIP:DIP-16_W7.62mm_LongPads,False,Through hole,
+C28,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+C29,1u,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Through hole,
+R38,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R40,33k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C30,100p C0G,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+D200,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D201,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R41,2.2k HALL PULLUP,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,True,Through hole,
+R42,33k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C31,100p C0G,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+D210,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D211,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Through hole,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R43,2.2k HALL PULLUP,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,True,Through hole,
+U7,SN74HC14N,SN74HC14N,Package_DIP:DIP-14_W7.62mm_LongPads,False,Through hole,A3 hand-solder revision; see docs/compact.md
+C32,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+U8,MCP2562-E/P,MCP2562-E/P,Package_DIP:DIP-8_W7.62mm_LongPads,False,Through hole,Standby by default. JP1 open; firmware listen-only. Not a silent normal-mode transceiver.
+C33,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+C34,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+R44,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R45,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+JP1,CAN_TX_ENABLE_OPEN,,Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,False,Through hole,Open by default. Silent hardware plus software listen-only.
+J7,CAN_H_L_G_SHIELD,B4B-XH-A(LF)(SN),Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical,False,Through hole,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+D22,P6KE24CA,P6KE24CA,Diode_THT:D_DO-15_P12.70mm_Horizontal,False,Through hole,Axial bidirectional CAN surge clamp; verify overshoot and capacitance on assembled bus.
+R46,120R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+JP2,CAN_TERMINATION_OPEN,,Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,False,Through hole,
+U9,SN74HCT08N,SN74HCT08N,Package_DIP:DIP-14_W7.62mm_LongPads,False,Through hole,
+C35,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+R47,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R48,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R51,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+Q5,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Through hole,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+R54,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R49,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R52,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+Q6,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Through hole,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+R55,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R50,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R53,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+Q7,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Through hole,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+J8,EXTERNAL_RELAYS,B4P-VH(LF)(SN),Connector_JST:JST_VH_B4P-VH_1x04_P3.96mm_Vertical,False,Through hole,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+U10,SN74HCT08N,SN74HCT08N,Package_DIP:DIP-14_W7.62mm_LongPads,False,Through hole,
+C36,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+U16,SN74HCT08N,SN74HCT08N,Package_DIP:DIP-14_W7.62mm_LongPads,False,Through hole,
+C42,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+U12,CD74HCT221E,CD74HCT221E,Package_DIP:DIP-16_W7.62mm_LongPads,False,Through hole,"Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism."
+C38,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+R61,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C61,270n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Through hole,
+R65,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R62,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C62,270n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Through hole,
+R66,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+U13,CD74HCT221E,CD74HCT221E,Package_DIP:DIP-16_W7.62mm_LongPads,False,Through hole,"Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism."
+C39,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+R63,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C63,270n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Through hole,
+R67,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R64,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C64,270n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Through hole,
+R68,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R101,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R105,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+Q1,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Through hole,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+R102,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R106,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+Q2,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Through hole,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+R103,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R107,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+Q3,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Through hole,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+R104,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R108,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+Q4,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Through hole,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+J9,INJECTOR_LOW_SIDES,B8P-VH(LF)(SN),Connector_JST:JST_VH_B8P-VH_1x08_P3.96mm_Vertical,False,Through hole,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+U11,SN74HCT08N,SN74HCT08N,Package_DIP:DIP-14_W7.62mm_LongPads,False,Through hole,
+C37,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+U17,SN74HCT08N,SN74HCT08N,Package_DIP:DIP-14_W7.62mm_LongPads,False,Through hole,
+C43,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+U14,CD74HCT221E,CD74HCT221E,Package_DIP:DIP-16_W7.62mm_LongPads,False,Through hole,"Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism."
+C40,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+R81,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C81,68n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Through hole,
+R85,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R82,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C82,68n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Through hole,
+R86,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+U15,CD74HCT221E,CD74HCT221E,Package_DIP:DIP-16_W7.62mm_LongPads,False,Through hole,"Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism."
+C41,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+R83,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C83,68n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Through hole,
+R87,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R84,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+C84,68n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Through hole,
+R88,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R111,220R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R115,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R112,220R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R116,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R113,220R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R117,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R114,220R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R118,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+J10,SMART_COIL_5V_LOGIC,B5P-VH(LF)(SN),Connector_JST:JST_VH_B5P-VH_1x05_P3.96mm_Vertical,False,Through hole,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+TP1,GND,,TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm,False,PCB feature,
+TP2,VIN_PROT,,TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm,False,PCB feature,
+TP3,+5V,,TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm,False,PCB feature,
+TP4,+3V3,,TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm,False,PCB feature,
+TP5,SAFE_N,,TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm,False,PCB feature,
+TP6,RUN_5V,,TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm,False,PCB feature,
+H1,M3 NPTH,,MountingHole:MountingHole_3.2mm_M3,False,PCB feature,
+H2,M3 NPTH,,MountingHole:MountingHole_3.2mm_M3,False,PCB feature,
+H3,M3 NPTH,,MountingHole:MountingHole_3.2mm_M3,False,PCB feature,
+H4,M3 NPTH,,MountingHole:MountingHole_3.2mm_M3,False,PCB feature,
+J11,MAP,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Through hole,A3 internal locking connector; not sealed. See connector-pinout.csv
+J12,TPS,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Through hole,A3 internal locking connector; not sealed. See connector-pinout.csv
+J13,CLT,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Through hole,A3 internal locking connector; not sealed. See connector-pinout.csv
+J14,IAT,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Through hole,A3 internal locking connector; not sealed. See connector-pinout.csv
+J15,LAMBDA_WB,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Through hole,A3 internal locking connector; not sealed. See connector-pinout.csv
+J16,POSTCAT_BUF,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Through hole,A3 internal locking connector; not sealed. See connector-pinout.csv
+J17,CRANK,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Through hole,A3 internal locking connector; not sealed. See connector-pinout.csv
+J18,CAM,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Through hole,A3 internal locking connector; not sealed. See connector-pinout.csv
+D23,P6KE24CA,P6KE24CA,Diode_THT:D_DO-15_P12.70mm_Horizontal,False,Through hole,
+L2,47uH input filter,RLB0914-470KL,Inductor_THT:L_Radial_D10.0mm_P5.00mm_Fastron_07P,False,Through hole,"Radial choke, 5mm pitch. 1.56A datasheet current; check derating. Not the converter switching inductor."
+R150,1R 0.5W damping,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,False,Through hole,Series RC damping branch across converter input; verify input impedance/load-step stability.
+C45,47u 63V,,Capacitor_THT:CP_Radial_D8.0mm_P3.50mm,False,Through hole,
+C46,100n 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,
+J19,POWER_RETURN,B2P-VH(LF)(SN),Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical,False,Through hole,Both pins are actuator return. Two adequately sized parallel wires to engine ground star; never use sensor wires for injector return.
+J20,SHIELD_BOND,B2P-VH(LF)(SN),ECU:JST_VH_B2P_SHIELD_Compact,False,Through hole,Shield/lining bond only. No normal load current. Short broad strap to enclosure conductive lining and designated chassis bond.
+C47,4.7n 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,RF coupling of shield and signal ground; not galvanic isolation.
+R151,1M,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,"Static bleed, not a protective earth bond."
+C150,1n C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C151,1n C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C152,1n C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C153,1n C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C154,1n C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C155,1n C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C156,100p C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C157,100p C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Through hole,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+H5,M3 SHIELD LUG,,MountingHole:MountingHole_3.2mm_M3_Pad,False,PCB feature,"Conductive plated lug, bolt and short broad braid to enclosure side stud; not a signal-ground mounting point."
+R152,47R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,
+R153,47R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Through hole,

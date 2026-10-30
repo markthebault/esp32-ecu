@@ -1,0 +1,415 @@
+{
+  "schema_version": 1,
+  "guide_version": "1.0",
+  "hardware_revision": "A3-120",
+  "scope": "Bench configuration and diagnostics. No engine scheduling or vehicle qualification.",
+  "general": [
+    "Board pin numbers refer to the PCB top view; pin 1 is the square pad. The mating plug view can be mirrored. Verify the actual harness with continuity tests.",
+    "Disconnect power before resistance/continuity tests. Do not measure resistance on a live vehicle bus or use a megohmmeter on electronics.",
+    "Keep J3 open and all actuator harnesses disconnected during sensor commissioning. This firmware keeps ARM off.",
+    "Use the actual sensor or controller manufacturer pinout, transfer curve, mounting torque and air gap. There is no universal vehicle-side pinout.",
+    "Measure signal voltage against that sensor connector pin 1, not an arbitrary chassis bolt. Never use a test lamp on a sensor or MCU pin."
+  ],
+  "sources": [
+    {
+      "title": "Espressif S3 DevKitC v1.1 pins and power methods",
+      "url": "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/user_guide_v1.1.html"
+    },
+    {
+      "title": "Microchip MCP3208 ADC",
+      "url": "https://www.microchip.com/en-us/product/mcp3208"
+    },
+    {
+      "title": "Microchip MCP2562 CAN transceiver",
+      "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/25167A.pdf"
+    },
+    {
+      "title": "Bosch LSU 4.9 requires a dedicated controller",
+      "url": "https://www.bosch-motorsport.com/products/sensors/lambda/lambda-sensor-mini-lsu-4-9/"
+    },
+    {
+      "title": "Kvaser CAN termination checks",
+      "url": "https://kvaser.com/developer-blog/how-to-test-your-can-termination-works-correctly/"
+    },
+    {
+      "title": "ST protected low-side driver",
+      "url": "https://www.st.com/resource/en/datasheet/vnp35n07-e.pdf"
+    }
+  ],
+  "sensors": [
+    {
+      "id": "map",
+      "name": "MAP / manifold pressure",
+      "connector": "J11",
+      "signal": "MAP",
+      "adc_channel": 0,
+      "pins": [
+        "1 GND",
+        "2 SENSOR_5V",
+        "3 MAP"
+      ],
+      "mount": [
+        "Retain the OEM pressure port or use a suitable sealed manifold-pressure takeoff after the throttle. Keep the hose short and secure, and follow the sensor maker's fluid/orientation limits.",
+        "Route away from hot exhaust and ignition wiring. Leak-check any added hose before running an engine."
+      ],
+      "checks": [
+        "Confirm the sensor uses 5 V and identify its actual supply, ground and signal wires from its datasheet.",
+        "With power off, check each harness conductor end-to-end and for unintended shorts, with both ends unplugged.",
+        "Power the board, check pin 2 near 5 V, then connect the sensor and measure pin 3 versus pin 1.",
+        "Use a regulated hand vacuum/pressure source within the sensor rating, compare the web voltage with a meter, then enter the manufacturer transfer curve or measured reference points."
+      ],
+      "expected": [
+        "Key-on / engine-off pressure should agree with a trusted local absolute-pressure reference after calibration. It is not always 100 kPa.",
+        "A steady applied pressure should produce a steady voltage and calibrated value."
+      ],
+      "faults": [
+        "Flat near 0 V: inspect power, ground, signal short and sensor pin order.",
+        "Flat high: inspect a short to supply, wrong curve, or a saturated sensor.",
+        "Pressure wrong but voltage agrees with the meter: check absolute versus gauge units, curve and pressure reference.",
+        "Noisy or slow: inspect hose leaks/restriction, ground offset, shield routing and configured filtering."
+      ],
+      "circuit": "R20 22k series, R21 33k to ground, C20 10nF; U6 channel 0.",
+      "optional_pullup": null,
+      "units_hint": "kPa"
+    },
+    {
+      "id": "tps",
+      "name": "TPS / throttle position",
+      "connector": "J12",
+      "signal": "TPS",
+      "adc_channel": 1,
+      "pins": [
+        "1 GND",
+        "2 SENSOR_5V",
+        "3 TPS"
+      ],
+      "mount": [
+        "Use the OEM TPS mounting and its correct shaft coupling. A single analog input does not replace an electronic throttle system or its redundant safety channels.",
+        "Turn the throttle only with the vehicle made safe; do not force an electronic throttle plate or alter mechanical stops."
+      ],
+      "checks": [
+        "Identify whether the TPS is a 3-wire potentiometer or another sensor. Do not connect throttle-motor wires to J12.",
+        "Verify pin 2 supply and pin 1 ground, then observe signal voltage while moving the permitted mechanism slowly.",
+        "Record closed and fully open reference voltages, enter those as 0% and 100%, and mark calibration confirmed only after checking the whole travel."
+      ],
+      "expected": [
+        "The voltage should sweep smoothly without dropouts. Some sensors have a decreasing transfer curve; configure the corresponding endpoint values."
+      ],
+      "faults": [
+        "Jumps at one position: inspect sensor track/coupling or a broken harness conductor.",
+        "Direction reversed: swap calibration endpoint values, not supply and ground wires.",
+        "Does not reach 0%/100%: recheck mechanical travel and measured endpoints.",
+        "Two TPS tracks or a throttle motor are present: this hardware does not implement OEM DBW control."
+      ],
+      "circuit": "R22 22k series, R23 33k to ground, C21 10nF; U6 channel 1.",
+      "optional_pullup": null,
+      "units_hint": "%"
+    },
+    {
+      "id": "clt",
+      "name": "Coolant temperature",
+      "connector": "J13",
+      "signal": "CLT",
+      "adc_channel": 2,
+      "pins": [
+        "1 GND",
+        "2 SENSOR_5V",
+        "3 CLT"
+      ],
+      "mount": [
+        "Use the OEM coolant sensor and mounting boss, with the engine cold and cooling system depressurized. Follow the specified seal and torque.",
+        "Keep the original vehicle sensor if required by other systems; verify loading before sharing any signal."
+      ],
+      "checks": [
+        "For a passive two-wire NTC, use pins 1 and 3 only. Leave pin 2 empty in the mating housing.",
+        "Fit R32 only if this is a passive NTC requiring the board pull-up. Check its actual resistance; the design value is 2.49 kohm.",
+        "Measure sensor resistance while disconnected and compare at known temperatures with its datasheet. Prefer several reference points.",
+        "Enter beta parameters or a voltage table. In NTC mode, confirm the physical pull-up is fitted; the UI cannot install a resistor."
+      ],
+      "expected": [
+        "A common NTC resistance falls as temperature rises, and its signal voltage falls with this pull-up topology.",
+        "The conversion accounts for the board's 55 kohm divider load and measured sensor supply."
+      ],
+      "faults": [
+        "Near 0 V: sensor/loom short to ground or very low resistance.",
+        "High signal / open-model fault: unplugged sensor, broken ground/signal or missing/wrong pull-up.",
+        "Plausible voltage but wrong temperature: wrong NTC curve, pull-up value, supply reading or units.",
+        "Do not assume a floating/unexcited input will read maximum voltage: R32 is DNP by default."
+      ],
+      "circuit": "R24 22k series, R25 33k to ground, C22 10nF; U6 channel 2.",
+      "optional_pullup": "R32",
+      "units_hint": "deg C"
+    },
+    {
+      "id": "iat",
+      "name": "Intake-air temperature",
+      "connector": "J14",
+      "signal": "IAT",
+      "adc_channel": 3,
+      "pins": [
+        "1 GND",
+        "2 SENSOR_5V",
+        "3 IAT"
+      ],
+      "mount": [
+        "Use a suitable intake-air boss and the sensor maker's orientation. Avoid placing the sensing element against the intake wall or at an unrepresentative heat source.",
+        "Follow the original mechanical arrangement; secure any aftermarket sensor so it cannot enter the intake."
+      ],
+      "checks": [
+        "A passive two-wire NTC connects to pins 1 and 3; pin 2 remains empty.",
+        "R33 is the optional board pull-up, normally 2.49 kohm. Confirm it is physically fitted before using NTC conversion.",
+        "Compare disconnected resistance and stabilized readings with a reference thermometer at several temperatures. Enter the actual sensor curve."
+      ],
+      "expected": [
+        "After a long cold soak, intake and coolant temperature should be reasonably consistent with their actual surroundings. Heat soak can produce real differences."
+      ],
+      "faults": [
+        "Use the same open/short/pull-up checks as CLT, but inspect intake heat soak and airflow before blaming calibration.",
+        "Fast spikes suggest intermittent wires or electrical interference. A slow heat-soak drift may be physical."
+      ],
+      "circuit": "R26 22k series, R27 33k to ground, C23 10nF; U6 channel 3.",
+      "optional_pullup": "R33",
+      "units_hint": "deg C"
+    },
+    {
+      "id": "wideband",
+      "name": "Wideband controller output",
+      "connector": "J15",
+      "signal": "LAMBDA_WB",
+      "adc_channel": 4,
+      "pins": [
+        "1 GND",
+        "2 SENSOR_5V",
+        "3 LAMBDA_WB"
+      ],
+      "mount": [
+        "Install the exhaust sensor according to the sensor/controller maker's rules for bung angle, temperature and condensation. The ECU board does not heat or drive a raw wideband sensor.",
+        "Mount the external controller away from hot exhaust and splash paths; use its specified fused power and grounds."
+      ],
+      "checks": [
+        "Connect controller analog signal to pin 3 and its specified analog reference to pin 1.",
+        "Leave pin 2 unpopulated; the board sensor supply must not power the controller or heater.",
+        "Enter the controller's actual 0-5 V mapping and units. Lambda and AFR are not interchangeable without the correct fuel stoichiometry.",
+        "Use the controller's documented analog-output test mode or a known voltage source before interpreting exhaust readings."
+      ],
+      "expected": [
+        "Web voltage and a meter should agree; converted lambda should agree with the controller when both use the same mapping and ground reference."
+      ],
+      "faults": [
+        "Controller display correct but ECU wrong: inspect mapping, analog-reference offset and output mode.",
+        "Fixed fault voltage: read the external controller's error codes before treating it as mixture.",
+        "No output until heated: verify controller state and heater supply.",
+        "A raw LSU sensor cannot be connected directly; do not invent a direct 5-wire/6-wire pin mapping."
+      ],
+      "circuit": "R28 22k series, R29 33k to ground, C24 10nF; U6 channel 4.",
+      "optional_pullup": null,
+      "units_hint": "lambda"
+    },
+    {
+      "id": "postcat",
+      "name": "Buffered post-catalyst signal",
+      "connector": "J16",
+      "signal": "POSTCAT_BUF",
+      "adc_channel": 5,
+      "pins": [
+        "1 GND",
+        "2 SENSOR_5V",
+        "3 POSTCAT_BUF"
+      ],
+      "mount": [
+        "Retain the catalyst and rear oxygen sensor in their proper locations. This input is for measurement, not catalyst emulation or bypass.",
+        "Use a suitable external high-input-impedance conditioner/buffer where needed. The board input presents about 55 kohm to the sensor signal."
+      ],
+      "checks": [
+        "Connect only the buffer's conditioned 0-5 V output to pin 3 and its analog reference to pin 1. Leave pin 2 empty unless the buffer specifically permits this supply within the shared current budget.",
+        "Do not connect heater wires, a raw wideband sensor, or assume every raw narrowband output can tolerate this load.",
+        "Compare the buffer output with a meter; enter its transfer curve or retain voltage display."
+      ],
+      "expected": [
+        "Voltage is the directly supported diagnostic. This firmware does not implement catalyst-efficiency monitoring, emissions readiness or OEM rear-sensor diagnostics."
+      ],
+      "faults": [
+        "Signal changes when shared with OEM ECU: stop and review input loading and the buffer interface.",
+        "Zero or clipped output: inspect buffer supply/reference and output limits.",
+        "A stable rear reading alone does not prove catalyst health."
+      ],
+      "circuit": "R30 22k series, R31 33k to ground, C25 10nF; U6 channel 5.",
+      "optional_pullup": null,
+      "units_hint": "V"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "crank",
+      "name": "Crank Hall input",
+      "connector": "J17",
+      "pins": [
+        "1 GND",
+        "2 SENSOR_5V",
+        "3 CRANK_RAW"
+      ],
+      "mount": [
+        "Use the original rigid bracket/target-wheel relationship and the exact manufacturer air gap, polarity, supply rating and torque. There is no universal trigger gap.",
+        "This input accepts a compatible 5 V Hall interface. A two-wire variable-reluctance sensor needs an external conditioner."
+      ],
+      "checks": [
+        "Verify supply and ground before connecting. Determine whether the Hall output is push-pull or open-collector.",
+        "For an open-collector output without another suitable pull-up, fit the specified optional pull-up and verify the current/voltage requirements.",
+        "Use an oscilloscope to compare connector pin 3 with the conditioned MCU input. A multimeter can miss missing pulses and noise.",
+        "With ignition/injection disabled, turn the target safely or use an isolated bench signal generator. Do not connect a generator in parallel with an energized sensor."
+      ],
+      "expected": [
+        "Only rising edges are captured. Both signal paths use two Schmitt inversions, preserving the input polarity.",
+        "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Cam is counted but full 720-degree phase decoding is not implemented."
+      ],
+      "faults": [
+        "No edges: inspect supply, missing pull-up, wrong sensor type, target gap, signal/ground pin order and U7 conditioning.",
+        "Edges but no sync: inspect total slots/missing teeth, speed range, signal quality and electrical noise. A simple square wave is not a valid missing-tooth wheel.",
+        "False RPM / overflow: inspect ringing, shield/return routing, gap and pull-up; power-cycle after a latched capture overflow."
+      ],
+      "circuit": "R40 33k series, C30 100pF, optional R41 2.2k pull-up; U7 -> GPIO8.",
+      "optional_pullup": "R41"
+    },
+    {
+      "id": "cam",
+      "name": "Cam Hall input",
+      "connector": "J18",
+      "pins": [
+        "1 GND",
+        "2 SENSOR_5V",
+        "3 CAM_RAW"
+      ],
+      "mount": [
+        "Use the original rigid bracket/target-wheel relationship and the exact manufacturer air gap, polarity, supply rating and torque. There is no universal trigger gap.",
+        "This input accepts a compatible 5 V Hall interface. A two-wire variable-reluctance sensor needs an external conditioner."
+      ],
+      "checks": [
+        "Verify supply and ground before connecting. Determine whether the Hall output is push-pull or open-collector.",
+        "For an open-collector output without another suitable pull-up, fit the specified optional pull-up and verify the current/voltage requirements.",
+        "Use an oscilloscope to compare connector pin 3 with the conditioned MCU input. A multimeter can miss missing pulses and noise.",
+        "With ignition/injection disabled, turn the target safely or use an isolated bench signal generator. Do not connect a generator in parallel with an energized sensor."
+      ],
+      "expected": [
+        "Only rising edges are captured. Both signal paths use two Schmitt inversions, preserving the input polarity.",
+        "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Cam is counted but full 720-degree phase decoding is not implemented."
+      ],
+      "faults": [
+        "No edges: inspect supply, missing pull-up, wrong sensor type, target gap, signal/ground pin order and U7 conditioning.",
+        "Edges but no sync: inspect total slots/missing teeth, speed range, signal quality and electrical noise. A simple square wave is not a valid missing-tooth wheel.",
+        "False RPM / overflow: inspect ringing, shield/return routing, gap and pull-up; power-cycle after a latched capture overflow."
+      ],
+      "circuit": "R42 33k series, C31 100pF, optional R43 2.2k pull-up; U7 -> GPIO9.",
+      "optional_pullup": "R43"
+    }
+  ],
+  "services": [
+    {
+      "connector": "J1",
+      "title": "Logic power",
+      "checks": [
+        "Pin 1 is externally fused key-on 12 V; pin 2 is ground. Use the specified external 1 A source fuse.",
+        "For first bench checks, unplug every sensor and actuator, keep J3 open, use a 12 V current-limited supply, and check polarity before enabling it.",
+        "Measure TP2 VIN_PROT, TP3 5 V, TP4 3V3, then each sensor pin 2. TP2 is after the reverse diode and before the input filter.",
+        "Repeated resets can be undervoltage/current limit, a short, wrong part orientation, regulator instability or watchdog timeout. Disconnect external loads one at a time."
+      ]
+    },
+    {
+      "connector": "J2",
+      "title": "UART / boot / reset",
+      "checks": [
+        "Pins: 1 ground, 2 ECU TX -> adapter RX, 3 ECU RX <- adapter TX, 4 EN, 5 BOOT_N. Use 3.3 V logic, 115200 baud, 8-N-1.",
+        "Do not connect an adapter power wire or a powered DevKit USB cable while the carrier supplies the module. For USB programming, remove the module from the carrier.",
+        "If silent, check supply and EN, cross TX/RX correctly, verify the A3 build and chosen serial port, then capture the boot log. The existing console tag can still say ecu_a0.",
+        "For ROM download mode, hold BOOT_N low during an EN reset, then release it. Do not short EN or BOOT_N to 12 V."
+      ]
+    },
+    {
+      "connector": "J3",
+      "title": "Physical interlock",
+      "checks": [
+        "Pin 1 is 3V3 and pin 2 is INTERLOCK. Open is the normal state during commissioning.",
+        "lock=0 with the contact open is expected. Closing it can allow hardware run gating; do not close it with vehicle actuators connected.",
+        "The configuration firmware keeps ARM=0 regardless. Never bypass SAFE_N to make a fault disappear."
+      ]
+    },
+    {
+      "connector": "J4",
+      "title": "Internal expansion",
+      "checks": [
+        "Pins: ground / 3V3 / SDA / SCL / SAFE_N. This is an internal 3.3 V service bus, not a 12 V sensor connector.",
+        "Check pull-ups and idle SDA/SCL near 3V3. A stuck-low line suggests a short, wrong device voltage or a device holding the bus.",
+        "No generic external I2C scanner or expansion actuator control is implemented by this release."
+      ]
+    },
+    {
+      "connector": "J7 / JP1 / JP2",
+      "title": "CAN and termination",
+      "checks": [
+        "J7: CANH / CANL / ground / CHASSIS. Keep the pair twisted and verify the network bitrate. Firmware reception is 500 kbit/s listen-only; no OEM decoding is provided.",
+        "JP1 open leaves MCP2562 in standby, so ordinary frames will not be received. Close it only on the appropriate supervised bus for normal transceiver reception. Firmware remains listen-only.",
+        "JP2 adds onboard 120 ohm termination when closed. Leave it open on an already terminated vehicle network.",
+        "With the complete network unpowered, two 120 ohm end terminations normally measure about 60 ohm between CANH and CANL. A removed/unpowered interface alone need not read 60 ohm.",
+        "No frames: inspect JP1, bitrate, polarity, grounds, bus activity and termination. A standalone two-node listen-only bench cannot supply missing ACKs for a lone transmitter."
+      ]
+    },
+    {
+      "connector": "J8",
+      "title": "External relay coils",
+      "checks": [
+        "Pins: MAIN low side / PUMP low side / FAN low side / ground. External fused relay supplies and correctly oriented flyback diodes are required.",
+        "Target coil current is at most 150 mA per channel, pending physical tests. Do not connect a fan motor or pump motor directly.",
+        "The configuration firmware commands all channels OFF. An inactive relay is expected, not a reason to bypass the inhibit.",
+        "With a coil connected to a safe test supply, OFF low-side voltage can be near the external supply, not zero. Driver/tab is electrically live. Actuation tests require a separate qualified dummy-load procedure."
+      ]
+    },
+    {
+      "connector": "J9 / J19",
+      "title": "Injector outputs and power return",
+      "checks": [
+        "J9 pins 1-4 are injector low sides 1-4; pins 5-8 are ground. J19 both pins are the dedicated power return.",
+        "Only saturated high-impedance PFI injectors are in scope; 1.2 A/channel is a design target pending tests. No GDI or peak-and-hold driver is provided.",
+        "Actuator 12 V is external, fused and relay switched. Never use the sensor ground harness as the injector current return.",
+        "All outputs remain OFF in this firmware. Check resistance/continuity only disconnected; do not pulse a fueled engine to troubleshoot wiring.",
+        "A high OFF output with an externally powered load is normal. Persistent current with ARM off indicates wrong wiring, a shorted driver or a board fault: disconnect power."
+      ]
+    },
+    {
+      "connector": "J10",
+      "title": "Smart-coil logic only",
+      "checks": [
+        "Pins 1-4 are active-high 5 V smart-coil commands; pin 5 is ground. They are not ignition-coil primary outputs.",
+        "Use only a compatible low-current logic input (design target at most 4 mA). Coil power and power-ground wiring remain external.",
+        "The configuration firmware keeps dwell commands OFF. Do not use a test lamp, an ordinary LED without its resistor, or a coil primary as a logic test load.",
+        "Changing or interrupting dwell on a real coil can produce a spark. Keep real ignition hardware disconnected during bench configuration."
+      ]
+    },
+    {
+      "connector": "J20 / H5",
+      "title": "Shield and enclosure bond",
+      "checks": [
+        "J20 pins and plated lug H5 are CHASSIS, not normal sensor/actuator current returns. Bond them to the internal lining using the assembly guide.",
+        "Check lining/braid continuity with power off. The CHASSIS-to-GND 1 Mohm bleed and 4.7 nF RF capacitor are intentional, not a hard DC ground link.",
+        "Keep all bonds inside the water seal and route any external reference conductor through a sealed gland. Do not drill an unsealed shield-stud hole."
+      ]
+    },
+    {
+      "connector": "TP1-TP6",
+      "title": "Test points",
+      "checks": [
+        "TP1 ground; TP2 VIN_PROT; TP3 5 V; TP4 3V3; TP5 SAFE_N; TP6 RUN_5V.",
+        "With J3 open and monitor firmware, RUN_5V should be low even when supplies are healthy. SAFE_N is an open-drain supervised net, normally pulled near 3V3 when released.",
+        "If SAFE_N repeatedly drops, scope it with the supply rails and WDI. Do not defeat the MAX1232 or 3V3 supervisor.",
+        "Use a properly referenced or isolated scope arrangement; do not clip an earth-referenced scope ground to an arbitrary live output."
+      ]
+    }
+  ],
+  "config_help": [
+    "Voltage mode shows the reconstructed connector voltage; it does not require a sensor transfer curve.",
+    "Linear mode uses two measured input voltages and two physical values. Set the actual units and validate a third reference point.",
+    "Table mode interpolates between 2-16 ascending voltage/value pairs. Values outside the table range are faults, not extrapolated measurements.",
+    "NTC beta mode is for CLT/IAT only and requires the physical pull-up. It uses the measured sensor supply and compensates the 55 kohm divider load. A voltage table is preferable when the real curve is available.",
+    "Filtering is for readout smoothing, not a substitute for fixing wiring/noise. Electrical fault checks use the instantaneous input.",
+    "A saved sensor profile changes diagnostic readout only. Engine scheduling, DBW, injector tuning, catalyst diagnostics and OEM protocols are not implemented.",
+    "Trigger geometry is applied to the bench decoder when configuration is saved. Crank synchronization is 360 degrees only."
+  ]
+}
