@@ -1,0 +1,28 @@
+{
+  "build_host": "Linux",
+  "firmware_environments": [
+    "compact_a3_web",
+    "compact_n16r8_web"
+  ],
+  "configuration_api_tests": 20,
+  "radio_simulator_codec_tests": 8,
+  "control_scenarios": 116,
+  "native_protocol_test": "ASan/UBSan: framing, endian, MAC validation, cross-language HMAC vectors and button timing passed",
+  "browser_test": "pair, approve, saved-state reload, cancel, unpair; synthetic/offline labels; 320/390/768/1440px; no JS errors",
+  "hardware_radio_tested": false,
+  "physical_led_tested": false,
+  "sealed_button_or_lens_fit_tested": false,
+  "socket_dimensions_verified": false,
+  "a4_native_erc_drc_run": false,
+  "engine_outputs": "inhibited",
+  "artifacts": {
+    "compact_a3_web": {
+      "bytes": 1066336,
+      "sha256": "5db0900c7f8d2203b565cc6387dcb457bd1d871ec6316dc066e50b9307b3f4d8"
+    },
+    "compact_n16r8_web": {
+      "bytes": 1077040,
+      "sha256": "5c7c92cade1340da5e192530972b4c578f329e1778f6e6c1344e458c20375858"
+    }
+  }
+}

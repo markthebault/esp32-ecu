@@ -1,6 +1,7 @@
 #include "ecu/control.hpp"
 #include "ecu/pins.hpp"
 #include "ecu/web_config.hpp"
+#include "ecu/espnow.hpp"
 #include "driver/gpio.h"
 #include "driver/gptimer.h"
 #include "driver/mcpwm_cap.h"
@@ -176,6 +177,7 @@ extern "C" void app_main() {
     (void)ecu::web::try_config(profile);
     ecu::MissingTooth decoder({profile.slots,profile.missing,profile.max_rpm});
     ecu::web::start_service();
+    ecu::radio::start();
     ESP_LOGI(tag,"Bench trigger profile: %u-%u, capture ceiling %u RPM",
              profile.slots,profile.missing,profile.max_rpm);
     bool have_capture = false, watchdog_high = false;
@@ -222,10 +224,18 @@ extern "C" void app_main() {
         twai_message_t message{};
         // Bound background work so a busy bus cannot starve supervision.
         for (unsigned i=0; i<16 && twai_receive(&message,0) == ESP_OK; ++i) ++can_frames;
-        const bool healthy = decoder.valid() && adc_ok && !capture_overflow && esp_timer_get_time()-now < 10000;
+        const bool monitor_healthy = adc_ok && !capture_overflow && esp_timer_get_time()-now < 10000;
+        const bool healthy = decoder.valid() && monitor_healthy;
         if (!healthy || !safe || !interlock) all_off();
         // The watchdog is fed by the supervised loop, not a free-running ISR.
-        if (healthy && now-last_heartbeat >= 10000) {
+        // An inhibited monitor must stay available without a crank source.
+        // Pulse builds still require valid trigger decoding to feed supervision.
+#if ECU_BENCH_PULSES
+        const bool feed_watchdog = healthy;
+#else
+        const bool feed_watchdog = monitor_healthy;
+#endif
+        if (feed_watchdog && now-last_heartbeat >= 10000) {
             watchdog_high = !watchdog_high;
             gpio_set_level(static_cast<gpio_num_t>(ecu::pins::wdi),watchdog_high ? 1 : 0);
             last_heartbeat = now;

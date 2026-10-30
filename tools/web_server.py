@@ -5,6 +5,7 @@ Requires a C++ compiler and ESP-IDF's cJSON source installed by PlatformIO.
 import argparse,ctypes,json,math,os,secrets,subprocess,sys,tempfile,threading,time
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
+from radio_simulator import RadioSimulator
 R=Path(__file__).resolve().parents[1]
 class Reading(ctypes.Structure):
  _fields_=[('value',ctypes.c_double),('sensor_v',ctypes.c_double),('adc_v',ctypes.c_double),('valid',ctypes.c_int),('fault',ctypes.c_char*64)]
@@ -22,7 +23,7 @@ def load_bridge():
  return bridge
 class Device:
  def __init__(self,path,bridge):
-  self.path=path;self.bridge=bridge;self.lock=threading.Lock();self.started=time.monotonic();self.token=secrets.token_hex(16);self.faults={};self.filtered=None;self.last=0;self.storage_ok=True;self.storage='defaults; no saved profile'
+  self.radio=RadioSimulator(path.with_name(path.name+'.peers'));self.path=path;self.bridge=bridge;self.lock=threading.Lock();self.started=time.monotonic();self.token=secrets.token_hex(16);self.faults={};self.filtered=None;self.last=0;self.storage_ok=True;self.storage='defaults; no saved profile'
   self.defaults=json.loads((R/'config/defaults.json').read_text());self.profile=self.defaults
   if path.exists():
    try:
@@ -80,6 +81,10 @@ class Handler(BaseHTTPRequestHandler):
   if self.path=='/api/defaults':return self.reply(200,d.defaults)
   if self.path=='/api/guide':return self.reply(200,json.loads((R/'config/interface-guide.json').read_text()))
   if self.path=='/api/manual':return self.reply(200,json.loads((R/'config/manual.json').read_text()))
+  if self.path=='/api/radio':
+   origin=self.headers.get('Origin');host=self.headers.get('Host','')
+   if self.headers.get('X-ECU-Token')!=d.token or (origin and origin!='http://'+host):return self.reply(403,{'error':'Session token or origin rejected.'})
+   with d.lock:return self.reply(200,d.radio.status())
   if self.path=='/api/status':return self.reply(200,d.status())
   return self.reply(404,{'error':'Not found'})
  def mutate(self):
@@ -90,6 +95,13 @@ class Handler(BaseHTTPRequestHandler):
   except ValueError:return self.reply(400,{'error':'Invalid length'})
   if not 0<length<=16384:return self.reply(413,{'error':'Body must be 1-16384 bytes.'})
   body=self.rfile.read(length)
+  if self.command=='POST' and self.path=='/api/radio':
+   if len(body)>256:return self.reply(413,{'error':'Radio command exceeds 256 bytes.'})
+   try:
+    data=json.loads(body)
+    with d.lock:result=d.radio.command(data)
+    return self.reply(*result)
+   except (ValueError,KeyError,TypeError):return self.reply(422,{'error':'Invalid radio command.'})
   if self.command=='PUT' and self.path=='/api/config':return self.reply(*d.save(body))
   if self.command=='POST' and self.path=='/api/simulate':
    try:

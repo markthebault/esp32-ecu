@@ -1,4 +1,5 @@
 #include "ecu/web_config.hpp"
+#include "ecu/espnow.hpp"
 #include "ecu/pins.hpp"
 #include "config_json.hpp"
 #include "web_assets.hpp"
@@ -119,24 +120,41 @@ esp_err_t status_get(httpd_req_t*r){
  }
  return send_json(r,j);
 }
-void service_task(void*){
- if(gpio_get_level(static_cast<gpio_num_t>(pins::interlock))){ESP_LOGE(tag,"Service AP refused: open J3, then reboot.");vTaskDelete(nullptr);return;}
- ESP_ERROR_CHECK(esp_netif_init());ESP_ERROR_CHECK(esp_event_loop_create_default());esp_netif_create_default_wifi_ap();
+esp_err_t radio_get(httpd_req_t*r){
+ if(!authorized(r))return message(r,"Session token or origin rejected.","403 Forbidden");
+ return send_json(r,radio::status());
+}
+esp_err_t radio_post(httpd_req_t*r){
+ if(!authorized(r))return message(r,"Session token or origin rejected.","403 Forbidden");
+ if(r->content_len<=0||r->content_len>256)return message(r,"Radio command must be 1-256 bytes.","413 Content Too Large");
+ char type[80]{};httpd_req_get_hdr_value_str(r,"Content-Type",type,sizeof(type));
+ if(std::strncmp(type,"application/json",16))return message(r,"Use application/json.","415 Unsupported Media Type");
+ char body[257]{};int n=0;while(n<r->content_len){int got=httpd_req_recv(r,body+n,r->content_len-n);if(got<=0)return ESP_FAIL;n+=got;}
+ if(!safe_json(body,n))return message(r,"Invalid command.","400 Bad Request");
+ auto*j=cJSON_Parse(body);if(!j||!cJSON_IsObject(j)){cJSON_Delete(j);return message(r,"Invalid command.","422 Unprocessable Entity");}
+ auto*a=cJSON_GetObjectItemCaseSensitive(j,"action");auto*m=cJSON_GetObjectItemCaseSensitive(j,"mac");auto*w=cJSON_GetObjectItemCaseSensitive(j,"window");
+ const bool ok=cJSON_IsString(a)&&(!m||cJSON_IsString(m))&&(!w||cJSON_IsString(w))&&radio::command(a->valuestring,m?m->valuestring:"",w?w->valuestring:"");
+ cJSON_Delete(j);if(!ok)return message(r,"Invalid radio command or queue busy.","422 Unprocessable Entity");
+ auto*out=cJSON_CreateObject();cJSON_AddBoolToObject(out,"queued",true);return send_json(r,out,"202 Accepted");
+}
+void service_task(){
+ if(gpio_get_level(static_cast<gpio_num_t>(pins::interlock))){ESP_LOGE(tag,"Service AP refused: open J3, then reboot.");return;}
+ ESP_ERROR_CHECK(esp_netif_init());ESP_ERROR_CHECK(esp_event_loop_create_default());esp_netif_create_default_wifi_ap();esp_netif_create_default_wifi_sta();
  wifi_init_config_t init=WIFI_INIT_CONFIG_DEFAULT();ESP_ERROR_CHECK(esp_wifi_init(&init));ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
  std::uint8_t mac[6];ESP_ERROR_CHECK(esp_wifi_get_mac(WIFI_IF_AP,mac));wifi_config_t wifi{};
  std::snprintf(reinterpret_cast<char*>(wifi.ap.ssid),sizeof(wifi.ap.ssid),"ECU-Service-%02X%02X",mac[4],mac[5]);
  const auto random=esp_random();std::snprintf(reinterpret_cast<char*>(wifi.ap.password),sizeof(wifi.ap.password),"ECU%08lX%04lX",static_cast<unsigned long>(random),static_cast<unsigned long>(esp_random()&0xffff));
  wifi.ap.ssid_len=std::strlen(reinterpret_cast<char*>(wifi.ap.ssid));wifi.ap.channel=6;wifi.ap.authmode=WIFI_AUTH_WPA2_PSK;wifi.ap.max_connection=2;wifi.ap.pmf_cfg.required=true;
- ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP,&wifi));ESP_ERROR_CHECK(esp_wifi_start());
+ ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP,&wifi));ESP_ERROR_CHECK(esp_wifi_start());
  for(unsigned i=0;i<4;++i)std::snprintf(token+i*8,9,"%08lX",static_cast<unsigned long>(esp_random()));
- httpd_config_t http=HTTPD_DEFAULT_CONFIG();http.stack_size=12288;http.max_uri_handlers=8;http.lru_purge_enable=true;http.recv_wait_timeout=5;http.send_wait_timeout=5;
+ httpd_config_t http=HTTPD_DEFAULT_CONFIG();http.stack_size=12288;http.max_uri_handlers=10;http.lru_purge_enable=true;http.recv_wait_timeout=5;http.send_wait_timeout=5;
  httpd_handle_t server{};ESP_ERROR_CHECK(httpd_start(&server,&http));
  const httpd_uri_t routes[]={
+  {"/api/radio",HTTP_GET,radio_get,nullptr},{"/api/radio",HTTP_POST,radio_post,nullptr},
   {"/",HTTP_GET,index_get,nullptr},{"/api/session",HTTP_GET,session_get,nullptr},{"/api/guide",HTTP_GET,guide_get,nullptr},{"/api/manual",HTTP_GET,manual_get,nullptr},
   {"/api/defaults",HTTP_GET,defaults_get,nullptr},{"/api/config",HTTP_GET,config_get,nullptr},{"/api/config",HTTP_PUT,config_put,nullptr},{"/api/status",HTTP_GET,status_get,nullptr}};
  for(const auto&route:routes)ESP_ERROR_CHECK(httpd_register_uri_handler(server,&route));
  ESP_LOGW(tag,"BENCH ONLY. J3 open. No actuators. SSID=%s password=%s URL=http://192.168.4.1",wifi.ap.ssid,wifi.ap.password);
- vTaskDelete(nullptr);
 }
 #endif
 }
@@ -157,7 +175,7 @@ void init(){
 }
 void start_service(){
 #if ECU_CONFIG_WEB
- started=esp_timer_get_time();configASSERT(xTaskCreate(service_task,"ecu_web",6144,nullptr,3,nullptr)==pdPASS);
+ started=esp_timer_get_time();service_task();
 #endif
 }
 bool try_config(config::Config&out){if(xSemaphoreTake(mutex,0)!=pdTRUE)return false;out=active;xSemaphoreGive(mutex);return true;}
@@ -169,6 +187,6 @@ void publish(const Sample&s){
   if(!last_sample||filtered_revision!=active.revision||active.sensors[i].filter_ms<=0)filtered[i]=v;
   else filtered[i]+=dt/(active.sensors[i].filter_ms+dt)*(v-filtered[i]);
  }
- filtered_revision=active.revision;latest=s;last_sample=now;xSemaphoreGive(mutex);
+ filtered_revision=active.revision;latest=s;last_sample=now;radio::publish(s,active,filtered);xSemaphoreGive(mutex);
 }
 }

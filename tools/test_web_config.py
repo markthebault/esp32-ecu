@@ -66,6 +66,25 @@ class HttpTests(unittest.TestCase):
   body=json.dumps(self.server.device.profile);self.assertEqual(self.request('PUT','/api/config',body,{'Content-Type':'application/json'})[0],403)
   headers={'Content-Type':'application/json','X-ECU-Token':self.server.device.token,'Origin':'http://another-host'}
   self.assertEqual(self.request('PUT','/api/config',body,headers)[0],403)
+ def test_radio_authentication_and_pair_unpair(self):
+  self.assertEqual(self.request('GET','/api/radio')[0],403)
+  headers={'Content-Type':'application/json','X-ECU-Token':self.server.device.token}
+  self.assertEqual(self.request('GET','/api/radio',headers={**headers,'Origin':'http://wrong'})[0],403)
+  self.assertEqual(self.request('POST','/api/radio','{"action":"open"}')[0],403)
+  self.assertEqual(self.request('POST','/api/radio','{"action":"open"}',headers)[0],202)
+  _,state=self.request('GET','/api/radio',headers=headers);self.assertTrue(state['pairing']);self.assertEqual(state['led'],'blue_blink');self.assertEqual(len(state['setup_key']),32)
+  self.assertEqual(self.request('POST','/api/radio','{"action":"simulate"}',headers)[0],202)
+  _,state=self.request('GET','/api/radio',headers=headers)
+  body=json.dumps(dict(action='confirm',mac=state['candidate']['mac'],window=state['window']))
+  self.assertEqual(self.request('POST','/api/radio',body,headers)[0],202)
+  _,state=self.request('GET','/api/radio',headers=headers);self.assertEqual(len(state['peers']),1);self.assertFalse(state['pairing']);self.assertEqual(state['setup_key'],'')
+  self.assertEqual(self.request('POST','/api/radio',json.dumps(dict(action='unpair',mac=state['peers'][0]['mac'])),headers)[0],202)
+  _,state=self.request('GET','/api/radio',headers=headers);self.assertEqual(state['peers'],[])
+ def test_radio_rejects_malformed_commands(self):
+  headers={'Content-Type':'application/json','X-ECU-Token':self.server.device.token}
+  for body in ['{bad','[]','{"action":"enable_outputs"}']:
+   self.assertEqual(self.request('POST','/api/radio',body,headers)[0],422)
+  self.assertEqual(self.request('POST','/api/radio',' '*257,headers)[0],413)
  def test_http_save_and_live_conversion(self):
   code,p=self.request('GET','/api/config');self.assertEqual(code,200);p['sensors'][0].update(mode='linear',unit='kPa',y0=10,y1=110)
   headers={'Content-Type':'application/json','X-ECU-Token':self.server.device.token};code,saved=self.request('PUT','/api/config',json.dumps(p),headers);self.assertEqual(code,200)
