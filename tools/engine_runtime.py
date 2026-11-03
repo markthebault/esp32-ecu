@@ -1,5 +1,5 @@
 """Shared native ECU core and persistent shadow-engine tune. No GPIO transport."""
-import copy, ctypes, fcntl, json, os, subprocess, tempfile, threading, time
+import copy, ctypes, fcntl, json, os, secrets, subprocess, tempfile, threading, time
 from pathlib import Path
 R=Path(__file__).resolve().parents[1]
 _build_lock=threading.Lock()
@@ -31,6 +31,7 @@ def load_engine_bridge():
   b.engine_pop.argtypes=[ctypes.c_void_p];b.engine_pop.restype=ctypes.c_uint
   b.engine_event_dwell.argtypes=[ctypes.c_void_p];b.engine_event_dwell.restype=ctypes.c_uint64
   b.engine_event_advance.argtypes=[ctypes.c_void_p];b.engine_event_advance.restype=ctypes.c_double
+  b.engine_data_json.argtypes=[ctypes.c_void_p];b.engine_data_json.restype=ctypes.c_char_p
   b.engine_plan.argtypes=[ctypes.c_void_p];b.engine_plan.restype=ctypes.c_char_p
   return b
 class EngineRuntime:
@@ -54,6 +55,12 @@ class EngineRuntime:
   out=json.loads(self.bridge.engine_step(self.handle,json.dumps(sample,allow_nan=False).encode(),int(time_us),int(time_us if sampled_us is None else sampled_us)))
   if 'error' in out:raise ValueError(out['error'])
   return out
+ def data(self):
+  body=self.bridge.engine_data_json(self.handle)
+  if not body:raise MemoryError('Engine observation allocation failed')
+  data=json.loads(body)
+  if data.get('schema_version')!=1:raise MemoryError('Engine observation serialization failed')
+  return data
  def cut(self):self.bridge.engine_cut(self.handle)
  def timing_reason(self):return self.bridge.engine_timing_reason(self.handle).decode()
  def next_event_us(self):return self.bridge.engine_next_time(self.handle)
@@ -80,6 +87,8 @@ class EngineStore:
   self.runtime=EngineRuntime(self.tune,self.bridge);self.latest=None;self.last_run=None
   from trigger_capture import TriggerCapture
   self.trigger_capture=TriggerCapture(self.bridge);self.trigger_metadata={}
+  from engine_observability import EngineRecorder
+  self.data_recorder=EngineRecorder();self.data_boot=secrets.token_hex(16);self.data_log_metadata={}
  def canonical(self,body):
   encoded=self.bridge.engine_canonicalize(body)
   if not encoded:raise ValueError('Engine tune canonicalization failed')
@@ -192,3 +201,57 @@ class EngineStore:
    rows=copy.deepcopy(self.last_run['trace']);scenario=self.last_run['summary']['scenario']
   from engine_log import export_msl
   return export_msl(rows,scenario)
+
+ def coherent_sample(self):
+  with self.lock:
+   data=copy.deepcopy(self.last_run['trace'][-1]['engine_sample']) if self.last_run else self.runtime.data()
+   elapsed=round(max(0,time.monotonic()-self.completed_monotonic)*1e6) if self.last_run else 0
+   end=round(self.last_run['summary']['duration_s']*1e6) if self.last_run else 0
+   for key,stamp in [('sample_age_ms','sampled_us'),('control_age_ms','control_us')]:
+    point=int(data[stamp]);data[key]=(max(0,end-point)+elapsed+999)//1000 if self.last_run else None
+   data.update(display_fresh=False,historical=True,simulator=True,qualification='Completed synthetic SIL observation; original virtual timestamps retained, never live target measurements')
+   return data
+
+ def data_log_header(self):
+  with self.lock:
+   return dict(self.data_recorder.header(),boot_id=self.data_boot,producer_lock_contention_attempts=0,export_busy=False,
+               scope='Completed synthetic SIL replay through the native bounded recorder; no RF, target clock or GPIO measurements',**self.data_log_metadata)
+
+ def data_log_page(self,log_id,after,boot):
+  with self.lock:
+   if boot!=self.data_boot:return 409,{'error':'Device boot changed; reload log metadata'}
+   page=self.data_recorder.page(log_id,after)
+   page.update(boot_id=self.data_boot,copied_page=True,producer_lock_contention_attempts=0,export_busy=False,**self.data_log_metadata)
+   return (409 if page['snapshot_superseded'] or page['future_cursor'] or page['invalid_row'] else 200),page
+
+ def data_log_command(self,body,boot):
+  if len(body)>256:return 413,{'error':'Log command exceeds 256 bytes'}
+  with self.lock:
+   if boot!=self.data_boot:return 409,{'error':'Device boot changed; reload log metadata'}
+   # The C++ parser is authoritative, including duplicate keys and unknown fields.
+   # Validate on a temporary recorder before touching the retained previous log.
+   from engine_observability import EngineRecorder
+   temporary=EngineRecorder(self.data_recorder.bridge)
+   try:valid=temporary.command(body,0)
+   finally:temporary.close()
+   if valid==422:return 422,{'error':'Invalid log command'}
+   request=json.loads(body)
+   if request['action']=='start':
+    if not self.last_run:return 409,{'error':'Run a SIL scenario before replaying engine observations'}
+    end=round(self.last_run['summary']['duration_s']*1e6);start=max(0,end-request['duration_s']*1000000)
+    result=self.data_recorder.command(body,start)
+    if result!=200:return result,{'error':'Log is active or its identity changed'}
+    for row in self.last_run['trace']:
+     observation=row['engine_sample'];timestamp=int(observation['control_us'])
+     if start<=timestamp<end:self.data_recorder.append(observation,timestamp)
+    self.data_recorder.expire(start+request['duration_s']*1000000)
+    self.data_log_metadata=dict(historical=True,simulator=True,source_scenario=self.last_run['summary']['scenario'],source_tune_revision=self.last_run['summary']['tune_revision'])
+   else:
+    h=self.data_recorder.header();result=self.data_recorder.command(body,max(int(h['started_us']),int(h['ended_us'])))
+    if result!=200:return result,{'error':'Log changed; reload before stopping'}
+   return 200,self.data_log_header()
+
+ def data_log_msl(self,log_id,boot):
+  with self.lock:
+   if boot!=self.data_boot:raise ValueError('Device boot changed; reload log metadata')
+   return self.data_recorder.msl(log_id,boot)

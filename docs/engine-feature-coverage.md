@@ -38,11 +38,12 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | Supervision/recovery | Target independent command/producer/tooth/cam/high-time deadlines, transactional scheduling and configuration holds | Reasons/counters/bounded traces/revisions/storage | Target timing/watchdog/restart policy needs physical HIL |
 | TunerStudio offline | Own definition/MSQ exchange | Settings/curve/map editors, strict identity/revision import | Files only, no physical binary transport |
 | TunerStudio online | Local MS-envelope prototype | Wire read/write/burn tests; app rejects own identity | Vendor integration and dedicated transport required |
-| MegaLogViewer HD | Engine MSL and raw-trigger MSL; actual application opens/plots both | Source-labelled downloads; unknown trigger values retained | Physical target capture/logging behavior unmeasured |
+| MegaLogViewer HD | SIL, raw-trigger and bounded target engine MSL; actual application opens/plots browser engine/trigger exports | Source/loss/age/validity labels, collected versus retained downloads; derived missing-lambda display caveat | Physical target capture/logging behavior unmeasured |
 | Tooth/composite/ignition logging | Target finite512-edge crank/cam recorder, raw intervals and128-record output/cut ring | Trigger charts/zoom, JSON/MSL export, bounded paging and fault counts; no TS high-speed logger | Independent capture channels implemented; capture integrity/per-pin timing need HIL |
 | Autotune / VE Analyze Live | Missing | No button implies working autotune | Integration, calibrated data and suitable license |
 | ESP-NOW screens | Existing authenticated read-only sensor telemetry | Button/UI pair, approve/unpair, LED | Sealed buttons/LED fit remains provisional |
-| New engine telemetry to screens | New engine-specific schema missing | Current protocol is sensor-monitor telemetry | Versioned receiver compatibility work |
+| New engine telemetry to screens | Opt-in232-byte authenticated schema, coherent inputs/proposals/phase/worker observations, timed nonce recovery and64-bit sequences | Negotiated schema/source-age diagnostics; Python receiver and clock/replay/queue tests; legacy stream retained | Actual two-device/RF/load testing and screen implementation pending |
+| Target engine data logging | Bounded256-row fixed RAM ring, absolute sampling and final loss accounting | Period/duration controls, paged browser collection, gap disclosures, JSON/MSL and retained-window export | Runtime load, minimum heap, stack high-water and physical data integrity tests pending |
 | Hand assembly / enclosure | A3 sources and A4 fit draft retained | Existing build/manual/guides | Module geometry, antenna RF and sealed fit checks pending |
 | External engine benchmark | Verified MVEM air path, pulse-driven empirical combustion/free shaft; production Speeduino loop compared | Declared neutral profiles, edge/ledger/fault logs, step convergence | Uncalibrated research plant; native HAL is not target/HIL qualification |
 | Vehicle electrical/environment | Not established | Software never implies qualification | Surge/EMI/current/thermal/splash/fit tests undone |
@@ -64,3 +65,5 @@ DBW/OEM integration remain outside the current bench scope.
 [Trigger debugging](engine-trigger-debug.md) covers raw capture, the Speeduino logger comparison and the source-labelled MegaLogViewer workflow.
 
 [Sequential configuration, supervision and comparison](engine-sequential.md) records the latest software increment and its physical limits.
+
+[Engine observability](engine-observability.md) covers coherent samples, target RAM logging, browser collection and the [opt-in screen protocol](espnow-engine.md), with independent review findings and declared clock assumptions.

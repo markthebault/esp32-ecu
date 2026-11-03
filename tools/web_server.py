@@ -79,6 +79,7 @@ class Handler(BaseHTTPRequestHandler):
   d=self.server.device
   if self.path in ('/','/index.html'):return self.reply(200,(R/'web/index.html').read_bytes(),'text/html; charset=utf-8')
   if self.path=='/trigger_logger.js':return self.reply(200,(R/'web/trigger_logger.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/engine_logger.js':return self.reply(200,(R/'web/engine_logger.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/api/session':return self.reply(200,dict(token=d.token,simulator=True))
   if self.path=='/api/config':
    with d.lock:return self.reply(200,d.profile)
@@ -93,6 +94,19 @@ class Handler(BaseHTTPRequestHandler):
    with d.engine.lock:return self.reply(200,d.engine.tune)
   if self.path=='/api/engine/defaults':return self.reply(200,d.engine.defaults)
   if self.path=='/api/engine/status':return self.reply(200,d.engine.status())
+  if self.path=='/api/engine/sample':return self.reply(200,d.engine.coherent_sample())
+  if self.path.split('?',1)[0] in ('/api/engine/data-log','/api/engine/data-log.msl'):
+   origin=self.headers.get('Origin');host=self.headers.get('Host','')
+   if self.headers.get('X-ECU-Token')!=d.token or (origin and origin!='http://'+host):return self.reply(403,{'error':'Session token or origin rejected.'})
+   base,_,query=self.path.partition('?')
+   if base=='/api/engine/data-log' and not query:return self.reply(200,d.engine.data_log_header())
+   match=re.fullmatch(r'log_id=([0-9]{1,10})&after=([0-9]{1,10})',query)
+   if not match or not 1<=int(match[1])<=4294967295 or int(match[2])>4294967295:return self.reply(422,{'error':'Use log_id and after for a bounded row page'})
+   log_id,after=map(int,match.groups());boot=self.headers.get('X-ECU-Log-Boot')
+   if base=='/api/engine/data-log':return self.reply(*d.engine.data_log_page(log_id,after,boot))
+   if after:return self.reply(422,{'error':'Use after=0 for a retained-window export'})
+   try:return self.reply(200,d.engine.data_log_msl(log_id,boot).encode(),'text/plain; charset=utf-8')
+   except ValueError as e:return self.reply(409,{'error':str(e)})
   if self.path=='/api/engine/timing':return self.reply(200,d.engine.timing_trace())
   if self.path.split('?',1)[0]=='/api/engine/trigger-log':
    query=self.path.partition('?')[2];frame_id=offset=0
@@ -123,6 +137,7 @@ class Handler(BaseHTTPRequestHandler):
    except (ValueError,KeyError,TypeError):return self.reply(422,{'error':'Invalid radio command.'})
   if self.command=='PUT' and self.path=='/api/engine/config':return self.reply(*d.engine.save(body))
   if self.command=='POST' and self.path=='/api/engine/trigger-log':return self.reply(*d.engine.trigger_command(body))
+  if self.command=='POST' and self.path=='/api/engine/data-log':return self.reply(*d.engine.data_log_command(body,self.headers.get('X-ECU-Log-Boot')))
   if self.command=='POST' and self.path=='/api/engine/run':
    try:return self.reply(*d.engine.run(json.loads(body)))
    except ValueError:return self.reply(422,{'error':'Invalid simulation JSON'})

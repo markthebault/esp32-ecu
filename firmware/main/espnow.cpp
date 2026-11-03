@@ -1,5 +1,6 @@
 #include "ecu/espnow.hpp"
-#include "ecu/espnow_protocol.hpp"
+#include "ecu/engine_radio.hpp"
+#include "ecu/engine_target.hpp"
 #include "driver/gpio.h"
 #include "driver/rmt_tx.h"
 #include "driver/rmt_encoder.h"
@@ -38,15 +39,17 @@ constexpr const char* tag="ecu_now";
 constexpr std::uint8_t broadcast[6]={255,255,255,255,255,255};
 struct Peer {std::uint8_t mac[6]{},key[16]{};char name[24]{};};
 struct Store {std::uint32_t version=1;std::uint8_t pmk[16]{};Peer peers[max_peers]{};};
-struct Live {std::uint8_t data[88]{},meta[6][98]{};bool fault=true;std::int64_t stamp=0;};
+struct Live {std::uint8_t data[88]{},meta[6][98]{};engine::RuntimeSample engine;std::uint64_t engine_sample_age=UINT64_MAX,engine_control_age=UINT64_MAX,worker_age=UINT64_MAX;bool fault=true;std::int64_t stamp=0;};
+struct StreamPeer {PeerCapabilities capabilities;std::array<std::uint8_t,32> key{};SentWindow<std::uint32_t> sensor_sent;SentWindow<std::uint64_t> engine_sent;bool key_ready=false;std::int64_t last_reply=0;};
+static_assert(sizeof(Store)==204,"Existing peer Storev1 layout must remain unchanged");
 struct Rx {std::uint8_t mac[6]{},data[max_packet]{};int size=0;};
 struct Command {char action[12]{},mac[18]{},window[33]{};};
 QueueHandle_t samples,received,commands;SemaphoreHandle_t view_mutex;
 Store saved;Live live;std::uint8_t own[6]{},secret[16]{},window[16]{},candidate_nonce[16]{};Peer candidate;
-std::uint64_t acks[max_peers]{},ack_seq[max_peers]{};bool ack_seen[max_peers]{};
+std::uint64_t acks[max_peers]{};bool ack_seen[max_peers]{};StreamPeer streams[max_peers];std::uint8_t engine_nonce[16]{};std::uint64_t engine_sequence=0;
 std::int64_t deadline=0,last_beacon=0,candidate_started=0;bool waiting=false,approved=false,storage_ok=false,radio_ok=false;
 std::int64_t fault_until=0;
-std::atomic<std::uint32_t> session_id{0};std::uint32_t sequence=0;std::atomic<bool> sending{false};std::atomic<bool> rx_overflow{false};
+std::atomic<std::uint32_t> session_id{0};std::uint32_t sequence=0;std::atomic<bool> sending{false};std::atomic<bool> rx_overflow{false};std::atomic<std::uint32_t> mac_failures{0};std::uint32_t mac_failure_count=0;std::uint64_t engine_packets=0,sensor_packets=0,capability_replies=0;
 cJSON* view=nullptr;const char* last_error="initializing";
 rmt_channel_handle_t led_channel{};rmt_encoder_handle_t led_encoder{};
 std::int64_t now(){return esp_timer_get_time();}
@@ -77,13 +80,21 @@ bool send(const std::uint8_t*mac,const std::uint8_t*data,unsigned size){
  if(sending.exchange(true))return false;
  auto err=esp_now_send(mac,data,size);if(err!=ESP_OK){sending=false;fault_until=now()+3000000;last_error="ESP-NOW send failed";return false;}return true;
 }
-void sent(const wifi_tx_info_t*,esp_now_send_status_t){sending=false;}
+void sent(const wifi_tx_info_t*,esp_now_send_status_t status){if(status!=ESP_NOW_SEND_SUCCESS)++mac_failures;sending=false;}
 void receive(const esp_now_recv_info_t*info,const std::uint8_t*data,int len){
  if(!info||!info->src_addr||len<8||len>int(max_packet))return;
  Rx r;std::memcpy(r.mac,info->src_addr,6);r.size=len;std::memcpy(r.data,data,len);
  if(xQueueSend(received,&r,0)!=pdTRUE)rx_overflow=true;
 }
-bool hmac(const std::uint8_t*key,const std::uint8_t*data,unsigned size,std::uint8_t*out){return mbedtls_md_hmac(mbedtls_md_info_from_type(MBEDTLS_MD_SHA256),key,16,data,size,out)==0;}
+bool hmac_key(const std::uint8_t*key,unsigned key_size,const std::uint8_t*data,unsigned size,std::uint8_t*out){
+ const bool ok=mbedtls_md_hmac(mbedtls_md_info_from_type(MBEDTLS_MD_SHA256),key,key_size,data,size,out)==0;
+ if(!ok){fault_until=now()+3000000;last_error="Telemetry authentication operation failed";}return ok;
+}
+bool hmac(const std::uint8_t*key,const std::uint8_t*data,unsigned size,std::uint8_t*out){return hmac_key(key,16,data,size,out);}
+bool prepare_stream(unsigned i){
+ streams[i]=StreamPeer{};auto transcript=engine_key_transcript(engine_nonce,session_id);
+ streams[i].key_ready=hmac(saved.peers[i].key,transcript.data(),transcript.size(),streams[i].key.data());return streams[i].key_ready;
+}
 void close_pairing(){
  if(waiting&&index_of(candidate.mac)<0)esp_now_del_peer(candidate.mac);
  deadline=0;waiting=false;approved=false;candidate=Peer{};
@@ -105,9 +116,19 @@ void accept(){
 void handle(const Rx&r){
  const auto*p=r.data;
  if(valid(p,r.size,Ack,52)){
-  const int i=index_of(r.mac);
-  std::uint8_t proof[32]{};
-  if(i>=0&&hmac(saved.peers[i].key,p,20,proof)&&same(proof,p+20,32)&&read32(p+8)==session_id){const auto seq=read32(p+12);if(seq<=sequence&&(!ack_seen[i]||seq>ack_seq[i])){ack_seq[i]=seq;ack_seen[i]=true;acks[i]=now();}}return;
+  const int i=index_of(r.mac);std::uint8_t proof[32]{};
+  if(i>=0&&read32(p+16)==0&&read32(p+8)==session_id&&hmac(saved.peers[i].key,p,20,proof)&&same(proof,p+20,32)&&streams[i].sensor_sent.acknowledge(read32(p+12),now())){ack_seen[i]=true;acks[i]=now();}return;
+ }
+ if(valid(p,r.size,Capabilities,capability_size)){
+  const int i=index_of(r.mac);std::uint8_t proof[32]{};
+  if(i>=0&&streams[i].key_ready&&hmac(saved.peers[i].key,p,44,proof)&&same(proof,p+44,32))streams[i].capabilities.request(p,r.size,session_id);
+  return;
+ }
+ if(valid(p,r.size,EngineAck,engine_ack_size)){
+  const int i=index_of(r.mac);std::uint8_t proof[32]{};
+  if(i>=0&&streams[i].key_ready&&streams[i].capabilities.engine()&&read32(p+8)==session_id&&read32(p+20)==0&&
+     hmac_key(streams[i].key.data(),32,p,24,proof)&&same(proof,p+24,32)&&streams[i].engine_sent.acknowledge(read64(p+12),now())){ack_seen[i]=true;acks[i]=now();}
+  return;
  }
  // READY uses the encrypted per-peer key and repeats the full pairing window.
  std::uint8_t ready_proof[32]{};
@@ -116,7 +137,7 @@ void handle(const Rx&r){
   if(slot==max_peers){last_error="Screen limit reached";close_pairing();return;}
   next.peers[slot]=candidate;
   if(!commit(next)){close_pairing();return;}
-  saved=next;acks[slot]=now();ack_seen[slot]=false;waiting=false;close_pairing();last_error="";return;
+  saved=next;if(!prepare_stream(slot)){fault_until=now()+3000000;last_error="Engine telemetry key unavailable";}acks[slot]=now();ack_seen[slot]=false;waiting=false;close_pairing();if(streams[slot].key_ready)last_error="";return;
  }
  if(!valid(p,r.size,Request,96)||!deadline||now()>=deadline||!same(p+8,window,16)||!unicast(r.mac)||index_of(r.mac)>=0)return;
  if(waiting)return;
@@ -136,7 +157,7 @@ void command_run(const Command&c){
  if(!std::strcmp(c.action,"confirm")){char mac[18]{};mac_text(candidate.mac,mac);if(!std::strcmp(c.window,id)&&!std::strcmp(c.mac,mac))accept();return;}
  if(!std::strcmp(c.action,"unpair"))for(unsigned i=0;i<max_peers;++i){char mac[18]{};mac_text(saved.peers[i].mac,mac);if(occupied(saved.peers[i])&&!std::strcmp(mac,c.mac)){
   Store next=saved;next.peers[i]=Peer{};if(!commit(next))return;
-  esp_now_del_peer(saved.peers[i].mac);saved=next;acks[i]=0;ack_seen[i]=false;last_error="";return;
+  esp_now_del_peer(saved.peers[i].mac);saved=next;streams[i]=StreamPeer{};acks[i]=0;ack_seen[i]=false;last_error="";return;
  }}
 }
 void led_init(){
@@ -155,10 +176,13 @@ void update_view(bool fault){
  auto*j=cJSON_CreateObject();cJSON_AddBoolToObject(j,"available",radio_ok);cJSON_AddBoolToObject(j,"storage_ok",storage_ok);cJSON_AddBoolToObject(j,"simulator",false);
  cJSON_AddBoolToObject(j,"pairing",deadline>now());cJSON_AddNumberToObject(j,"remaining_s",deadline>now()?(deadline-now()+999999)/1000000:0);cJSON_AddStringToObject(j,"error",last_error);
  cJSON_AddStringToObject(j,"led",fault?"red_blink":deadline?"blue_blink":"green");cJSON_AddNumberToObject(j,"channel",channel);cJSON_AddNumberToObject(j,"max_peers",max_peers);
+ cJSON_AddNumberToObject(j,"engine_schema",engine_schema);cJSON_AddNumberToObject(j,"engine_packet_bytes",engine_size);cJSON_AddNumberToObject(j,"engine_packets_submitted",engine_packets);cJSON_AddNumberToObject(j,"sensor_packets_submitted",sensor_packets);cJSON_AddNumberToObject(j,"capability_replies_submitted",capability_replies);cJSON_AddNumberToObject(j,"mac_send_failures",mac_failure_count);
+ const auto age=transmitted_age(live.engine_sample_age,live.stamp,now());if(age==UINT32_MAX)cJSON_AddNullToObject(j,"engine_sample_age_ms");else cJSON_AddNumberToObject(j,"engine_sample_age_ms",age);
+ cJSON_AddStringToObject(j,"engine_data_source",live.engine.source==engine::DataSource::Target?"target_control_observation":"no_observation");
  char mac[18]{};mac_text(own,mac);cJSON_AddStringToObject(j,"mac",mac);
  char id[33]{},key[33]{};if(deadline){hex(window,16,id);hex(secret,16,key);}cJSON_AddStringToObject(j,"window",id);cJSON_AddStringToObject(j,"setup_key",key);
  if(waiting){auto*c=cJSON_AddObjectToObject(j,"candidate");mac_text(candidate.mac,mac);cJSON_AddStringToObject(c,"mac",mac);cJSON_AddStringToObject(c,"name",candidate.name);cJSON_AddBoolToObject(c,"approved",approved);}
- auto*a=cJSON_AddArrayToObject(j,"peers");for(unsigned i=0;i<max_peers;++i)if(occupied(saved.peers[i])){auto*p=cJSON_CreateObject();mac_text(saved.peers[i].mac,mac);cJSON_AddStringToObject(p,"mac",mac);cJSON_AddStringToObject(p,"name",saved.peers[i].name);const bool connected=ack_seen[i]&&now()-acks[i]<3000000;cJSON_AddBoolToObject(p,"connected",connected);cJSON_AddNumberToObject(p,"last_ack_ms",acks[i]?(now()-acks[i])/1000:-1);cJSON_AddItemToArray(a,p);}
+ auto*a=cJSON_AddArrayToObject(j,"peers");for(unsigned i=0;i<max_peers;++i)if(occupied(saved.peers[i])){auto*p=cJSON_CreateObject();mac_text(saved.peers[i].mac,mac);cJSON_AddStringToObject(p,"mac",mac);cJSON_AddStringToObject(p,"name",saved.peers[i].name);const bool connected=ack_seen[i]&&now()-acks[i]<3000000;cJSON_AddBoolToObject(p,"connected",connected);cJSON_AddBoolToObject(p,"engine_telemetry",streams[i].capabilities.engine());cJSON_AddNumberToObject(p,"engine_schema",streams[i].capabilities.engine()?engine_schema:0);cJSON_AddNumberToObject(p,"capability_counter",streams[i].capabilities.counter());cJSON_AddNumberToObject(p,"last_ack_ms",acks[i]?(now()-acks[i])/1000:-1);cJSON_AddItemToArray(a,p);}
  xSemaphoreTake(view_mutex,portMAX_DELAY);cJSON_Delete(view);view=j;xSemaphoreGive(view_mutex);
 }
 bool init_wifi(){
@@ -178,7 +202,9 @@ void task(void*){
  if(radio_ok){Peer b;std::memcpy(b.mac,broadcast,6);radio_ok=add(b,false)==ESP_OK;}
  if(radio_ok&&storage_ok)for(const auto&p:saved.peers)if(occupied(p)&&add(p,true)!=ESP_OK)radio_ok=false;
  if(!radio_ok)last_error="ESP-NOW initialization failed";else if(storage_ok)last_error="";
- session_id=esp_random();Button key;std::int64_t next_send=0,last_view=0,last_led=0;unsigned peer_cursor=0,round=0;std::int64_t first_live=0;
+ session_id=esp_random();if(!session_id)session_id=1;esp_fill_random(engine_nonce,sizeof(engine_nonce));
+ for(unsigned i=0;i<max_peers;++i)if(occupied(saved.peers[i])&&!prepare_stream(i))radio_ok=false;
+ Button key;std::int64_t next_send=0,last_view=0,last_led=0;unsigned peer_cursor=0,round=0;std::int64_t first_live=0;
  while(true){
   const auto stamp=now();if(xQueueReceive(samples,&live,0)==pdTRUE&&!first_live)first_live=stamp;
   if(deadline&&stamp>=deadline)close_pairing();
@@ -188,16 +214,34 @@ void task(void*){
   if(radio_ok&&!sending){
    if(approved&&stamp-candidate_started>=250000){std::uint8_t a[56]{};header(a,Accepted,sizeof(a));std::memcpy(a+8,window,16);hmac(candidate.key,a,24,a+24);send(candidate.mac,a,sizeof(a));candidate_started=stamp;}
    else if(deadline&&!waiting&&stamp-last_beacon>=500000){std::uint8_t b[24]{};header(b,Beacon,sizeof(b));std::memcpy(b+8,window,16);send(broadcast,b,sizeof(b));last_beacon=stamp;}
-   else if(stamp>=next_send&&live.stamp&&stamp-live.stamp<1000000){
+   else if(stamp>=next_send){
     // One transmission at a time, no accumulated backlog. Four slots per 50 ms.
     const unsigned i=peer_cursor;peer_cursor=(peer_cursor+1)%max_peers;next_send+=12500;if(stamp-next_send>12500)next_send=stamp+12500;if(!peer_cursor)++round;
     if(occupied(saved.peers[i])){
-     if(round%10==0){const unsigned sensor=(round/10)%6;send(saved.peers[i].mac,live.meta[sensor],98);}
-     else{auto packet=live;u32(packet.data+8,session_id);u32(packet.data+12,++sequence);u32(packet.data+16,std::uint32_t(live.stamp/1000));u32(packet.data+84,std::uint32_t((stamp-live.stamp)/1000));send(saved.peers[i].mac,packet.data,88);}
+     auto& stream=streams[i];const auto tx_now=now();
+     if(stream.capabilities.pending()&&stamp-stream.last_reply>=250000){
+      std::uint8_t packet[capability_reply_size];stream.capabilities.reply(packet,session_id,engine_nonce,engine_sequence,tx_now);
+      if(hmac(saved.peers[i].key,packet,76,packet+76)&&send(saved.peers[i].mac,packet,sizeof(packet))){stream.capabilities.sent();stream.last_reply=tx_now;++capability_replies;}
+     }else if(!live.stamp||tx_now<live.stamp){
+      // Negotiation remains available before the first sensor observation.
+     }else if(round%10==0&&tx_now-live.stamp<1000000){
+      const unsigned sensor=(round/10)%6;std::uint8_t packet[98];std::memcpy(packet,live.meta[sensor],98);u32(packet+94,session_id);send(saved.peers[i].mac,packet,sizeof(packet));
+     }else if(stream.capabilities.engine()&&round%10!=1&&live.engine.has(engine::Present)){
+      if(engine_sequence==UINT64_MAX){last_error="Engine telemetry sequence exhausted; restart required";fault_until=stamp+3000000;}
+      else{
+       std::uint8_t packet[engine_size];const auto sequence=++engine_sequence;
+       if(engine_body(packet,live.engine,session_id,sequence,transmitted_age(live.engine_sample_age,live.stamp,tx_now),transmitted_age(live.engine_control_age,live.stamp,tx_now),transmitted_age(live.worker_age,live.stamp,tx_now),tx_now)&&
+          hmac_key(stream.key.data(),32,packet,engine_body_size,packet+engine_body_size)&&send(saved.peers[i].mac,packet,sizeof(packet))){stream.engine_sent.submitted(sequence,tx_now);++engine_packets;}
+      }
+     }else if(tx_now-live.stamp<1000000){
+      std::uint8_t packet[88];std::memcpy(packet,live.data,sizeof(packet));u32(packet+8,session_id);u32(packet+12,++sequence);u32(packet+16,std::uint32_t(live.stamp/1000));u32(packet+84,std::uint32_t((tx_now-live.stamp)/1000));
+      if(send(saved.peers[i].mac,packet,sizeof(packet))){stream.sensor_sent.submitted(sequence,tx_now);++sensor_packets;}
+     }
     }
    }
   }
   if(rx_overflow.exchange(false))fault_until=stamp+3000000;
+  const auto failed=mac_failures.exchange(0);if(failed){mac_failure_count+=failed;fault_until=stamp+3000000;last_error="ESP-NOW MAC send failure";}
   bool fault=!radio_ok||!storage_ok||live.fault||!live.stamp||stamp-live.stamp>1000000||stamp<fault_until;
   for(unsigned i=0;i<max_peers;++i)if(occupied(saved.peers[i])&&first_live&&stamp-(acks[i]?acks[i]:first_live)>3000000)fault=true;
   if(stamp-last_led>=100000){led(fault,deadline!=0);last_led=stamp;}
@@ -212,7 +256,10 @@ void start(){
 }
 void publish(const web::Sample&s,const config::Config&c,const std::array<double,6>&filtered){
  if(!samples)return;
- Live l;l.stamp=now();l.fault=!s.adc_ok||s.overflow||s.timing_fault;
+ Live l;l.stamp=now();const auto gp_now=engine_target::clock_us();l.engine=s.engine;
+ l.engine_sample_age=engine::data_age_us(s.engine,s.engine.sampled_us,gp_now);l.engine_control_age=engine::data_age_us(s.engine,s.engine.control_us,gp_now);
+ if(s.engine.worker_sequence||s.engine.worker_observed_us)l.worker_age=engine::data_age_us(s.engine,s.engine.worker_observed_us,gp_now);
+ l.fault=!s.adc_ok||s.overflow||s.timing_fault;
  header(l.data,Telemetry,88);u32(l.data+20,c.revision);
  // Always bit 4: outputs inhibited. No received packet can change it.
  u16(l.data+24,(s.adc_ok?1:0)|(s.safe?2:0)|(s.interlock?4:0)|(s.synced?8:0)|16|(s.overflow?32:0));
@@ -225,6 +272,7 @@ void publish(const web::Sample&s,const config::Config&c,const std::array<double,
   auto*m=l.meta[i];header(m,Metadata,98);u32(m+8,c.revision);m[12]=i;m[13]=std::uint8_t(c.sensors[i].mode);std::memcpy(m+14,c.sensors[i].unit,16);std::memcpy(m+30,c.sensors[i].label,64);u32(m+94,session_id);
  }
  if(s.adc_ok&&(rail<4||rail>5.3))l.fault=true;
+ if(s.engine.has(engine::Present)&&(!s.engine.has(engine::StorageOk)||(s.rpm>0&&(s.engine.controller_faults||l.engine_control_age>1000000))))l.fault=true;
  if(l.fault)l.data[24]|=64;
  xQueueOverwrite(samples,&l);
 }

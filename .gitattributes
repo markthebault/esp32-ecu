@@ -18,3 +18,5 @@ reports/*.txt -whitespace
 # Preserve application-authored tuning files and raw sequential build logs.
 tuning/examples/tunerstudio-sequential-roundtrip.msq -whitespace
 reports/engine/sequential/*.log -whitespace
+# Keep raw tool output in the reviewed engine observability evidence.
+reports/engine/observability/*.log -whitespace

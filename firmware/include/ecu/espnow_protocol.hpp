@@ -5,10 +5,13 @@
 #include <cmath>
 namespace ecu::radio::wire {
 constexpr unsigned max_peers=4, channel=6, header_size=8, max_packet=250;
-enum Type : std::uint8_t { Beacon=1, Request=2, Accepted=3, Telemetry=4, Metadata=5, Ack=6 };
+enum Type : std::uint8_t { Beacon=1, Request=2, Accepted=3, Telemetry=4, Metadata=5, Ack=6,
+ Capabilities=7,CapabilitiesReply=8,EngineTelemetry=9,EngineAck=10 };
 inline void u16(std::uint8_t*p,std::uint16_t v){p[0]=v;p[1]=v>>8;}
 inline void u32(std::uint8_t*p,std::uint32_t v){for(unsigned i=0;i<4;++i)p[i]=v>>(i*8);}
 inline std::uint32_t read32(const std::uint8_t*p){return p[0]|(std::uint32_t(p[1])<<8)|(std::uint32_t(p[2])<<16)|(std::uint32_t(p[3])<<24);}
+inline void u64(std::uint8_t*p,std::uint64_t v){u32(p,static_cast<std::uint32_t>(v));u32(p+4,static_cast<std::uint32_t>(v>>32));}
+inline std::uint64_t read64(const std::uint8_t*p){return read32(p)|(std::uint64_t(read32(p+4))<<32);}
 inline void f32(std::uint8_t*p,double v){float f=std::isfinite(v)?static_cast<float>(v):NAN;std::uint32_t n;static_assert(sizeof(f)==4);std::memcpy(&n,&f,4);u32(p,n);}
 inline void header(std::uint8_t*p,Type type,unsigned size){std::memcpy(p,"ECN1",4);p[4]=1;p[5]=type;u16(p+6,size);}
 inline bool valid(const std::uint8_t*p,unsigned n,Type type,unsigned size){return n==size&&n>=8&&!std::memcmp(p,"ECN1",4)&&p[4]==1&&p[5]==type&&(p[6]|(unsigned(p[7])<<8))==n;}

@@ -1,0 +1,176 @@
+{
+  "reviewer": "independent child agent /root/engine_telemetry_review",
+  "completed_utc": "2026-11-03T19:19:10.851938+00:00",
+  "repository": "/home/mark/persospace/esp32-ecu",
+  "branch": "feature/engine-development-sil",
+  "baseline_commit": "dfccd662bb21953ddfe6400580218c6356a0b296",
+  "production_files_modified_by_reviewer": false,
+  "scope": "Read-only review of engine ESP-NOW capabilities, authentication/replay/freshness, ACK lifecycle, unchanged legacy transport, and coherent target snapshot handoff. Private harnesses and reports only.",
+  "outcome": "No unresolved blocker found in the reviewed snapshot after implementation-agent fixes and independent revalidation. This is host/static protocol validation, not physical ESP32, RF, GPIO, engine or vehicle qualification.",
+  "reviewed_current_sha256": {
+    "firmware/include/ecu/engine_radio.hpp": "b3ceca49949a3c42dbd9735b99ca834c1d84ea886695af16010de8b5fb66e4c9",
+    "firmware/include/ecu/espnow_protocol.hpp": "634bd5a99ddd8c682a20959720f5599a0e39f20c25d8cadf4b3e8024eca25b6a",
+    "firmware/include/ecu/engine_data.hpp": "29f11e01b350e7a996ce211d965e2b894b66d192ba80ff2233ca8b0da663b153",
+    "firmware/include/ecu/engine_binding.hpp": "f1e8d39d850b70e4f8de70bc61c89f161305aa48a4cec4258333710484a0aa92",
+    "firmware/main/espnow.cpp": "cdc3a4676d232b5c8ff2b26ae8490dea9ab705715d304ff70413e6e99f99745e",
+    "firmware/main/engine_service.cpp": "6cd5cd489020e31771e5454943f6e9e82168045a8926dcc0ea5bb94d32483d36",
+    "firmware/main/engine_target.cpp": "5c5f76b8eed55158caa200538869ed0c56d32570dd324bf25cd8242b3d5b5de7",
+    "firmware/main/app.cpp": "b00afe666c83d9391530a53b495279d4b5bdb3323495a75f0e0b633047283c44",
+    "tools/engine_receiver.py": "718510d53b080b490da306a5c6d10d1d6378c0b1a4738977a3dda347721806e8",
+    "docs/espnow-engine.md": "dc8ae84a73f16c4ab0079a3ccf875f9e48a96f16ffc2f99c3dc8d8e47957a810",
+    "docs/espnow.md": "5cf7b1490d89c93b9e837708ed479edd91f64fc75b3fe8a996f23ed21f8a9583"
+  },
+  "original_review_snapshot_sha256": {
+    "firmware/include/ecu/engine.hpp": "9b71f61fe63d1d87c6514a6a79540811f7e4affd87dd720266c52ad5cae07039",
+    "firmware/include/ecu/engine_data.hpp": "29f11e01b350e7a996ce211d965e2b894b66d192ba80ff2233ca8b0da663b153",
+    "firmware/include/ecu/espnow_protocol.hpp": "634bd5a99ddd8c682a20959720f5599a0e39f20c25d8cadf4b3e8024eca25b6a",
+    "firmware/include/ecu/engine_radio.hpp": "c762e68931f4f20e712c102cba63b0b214d680110323c382965988ff75702979",
+    "tools/engine_receiver.py": "1de402b72f1b6399090379f8f4beaea776aa9f826eab79d47bdf3b1aa132d6a5",
+    "tools/espnow_protocol.py": "90d806e472f54ab5d054629ab92162157064d461f34164f7b73bc5dde43176f9",
+    "firmware/main/espnow.cpp": "e6bb15589048ff7d8cc6c7dff91336845819a9b21e6533444d681d3f21cfd0f1",
+    "firmware/main/engine_service.cpp": "1f705e8d81f4728aec7b4d1e4a8d82624d1ff64e5022182915c5ef4715117905",
+    "firmware/main/engine_target.cpp": "5c5f76b8eed55158caa200538869ed0c56d32570dd324bf25cd8242b3d5b5de7",
+    "firmware/main/app.cpp": "b00afe666c83d9391530a53b495279d4b5bdb3323495a75f0e0b633047283c44"
+  },
+  "resolved_findings": [
+    {
+      "id": "TELEM-01",
+      "priority": "P2",
+      "title": "Clock allowance did not cover source ages accumulated before the timed query",
+      "original_location": "tools/engine_receiver.py:125",
+      "reproduction": "Native encoded and signed ENGINE232: relative source clock 0.98, zero-RTT enabled capability reply at receiver time 0 with ECU time 1000000 us, frame at receiver 10 ms with ECU time 1009800 us and sample/control/worker ages 990 ms. Actual source age 1010 ms was presented as bounded age 994 ms and fresh=true.",
+      "evidence": "implementation-probe/slow-clock-age.json",
+      "fix": "Implementation agent now rounds each sender sample/control/worker age upward by 100/98 before adding the conservative transit-age bound; repeated snapshots preserve their earlier age floors and unknown status.",
+      "independent_revalidation": "Same packet now produces 1015 ms sample/control/worker age bounds and fresh=false. A deterministic 4000-case timing grid covering 0.98..1.02 clock rates, request/processing/reply delays, frame delay and source ages found no under-bound.",
+      "status": "resolved and independently revalidated"
+    },
+    {
+      "id": "TELEM-02",
+      "priority": "P3",
+      "title": "First-frame receive path contradicted its one-second initial gap policy",
+      "original_location": "tools/engine_receiver.py:120",
+      "reproduction": "After a valid enabled reply at receiver 20 ms but no data, status(1021) requested a fresh query while receive(frame,1021) still accepted its first frame and could return fresh=true.",
+      "evidence": "implementation-probe/results.json:first_frame_gap_policy",
+      "fix": "Implementation agent applies the same one-second initial-data gap to receive() as status().",
+      "independent_revalidation": "A first frame at receiver 1021 ms is now rejected as Stale gap, leaving latest and the sequence floor unchanged.",
+      "status": "resolved and independently revalidated"
+    },
+    {
+      "id": "TELEM-03",
+      "priority": "P2",
+      "title": "Submitted-sequence ACK windows also needed an age limit",
+      "attribution": "Raised by implementation agent during review and independently corroborated/revalidated by reviewer.",
+      "original_location": "firmware/include/ecu/engine_radio.hpp:47",
+      "reproduction": "An eight-entry sensor window spans about four seconds at the opted-in 2 Hz legacy cadence; after transmission stops either window can retain unused authenticated sequences indefinitely. A previously unseen old ACK could therefore refresh connected status.",
+      "fix": "Each submitted sensor/engine sequence now records its ESP timestamp; ACK acceptance requires a real submitted packet no older than one second, rejects reversed time and only then advances its serial high-water mark.",
+      "independent_revalidation": "ASan/UBSan C++ harness passed both widths, one-second expiry boundary, expiration without ACK state advance, time reversal, ring overwrite/reset, legacy rollover including sequence 0 and exact 64-bit sequences above 2^53. All four production submit/ACK call sites pass ESP timestamps.",
+      "status": "resolved and independently revalidated"
+    }
+  ],
+  "validation": {
+    "current_receiver_results": {
+      "source_clock_2_percent_slow_corrected": {
+        "actual_age_ms": 1010,
+        "bounded_sample_age_ms": 1015,
+        "bounded_control_age_ms": 1015,
+        "bounded_worker_age_ms": 1015,
+        "fresh": false
+      },
+      "initial_gap_after_1_second_rejected": "pass",
+      "authentication_before_mutation": {
+        "byte_mutations": 232,
+        "passed": true
+      },
+      "repeated_source_age_floor": "pass",
+      "repeated_unknown_does_not_recover": "pass",
+      "timed_clock_grid": {
+        "cases": 4000,
+        "source_rate_min": 0.98,
+        "source_rate_max": 1.02,
+        "minimum_bound_margin_ms": 18.339342556515987,
+        "passed": true
+      }
+    },
+    "capability_mutations": {
+      "request_single_byte_mutations": 76,
+      "reply_single_byte_mutations": 108,
+      "unchanged_state_on_rejection": true,
+      "valid_original_recovers": true
+    },
+    "original_probe_results": {
+      "native_encoder_python_receiver": "pass",
+      "single_byte_authentication": {
+        "mutations": 232,
+        "passed": true
+      },
+      "duplicate_order_clock_mac": "pass",
+      "same_snapshot_cannot_rejuvenate": "pass",
+      "query_floor_blocks_same_boot_recordings": "pass",
+      "expired_reply": "pass",
+      "same_session_new_boot_nonce_rejects_old_data": "pass",
+      "first_frame_gap_policy": {
+        "status_query_required_before": true,
+        "accepted_without_new_query": true,
+        "fresh_after": true
+      },
+      "sample_age_bound_ms": 113
+    },
+    "native_ack_harness": {
+      "source": "implementation-probe/ack_current.cpp",
+      "flags": "g++ -std=c++17 -O1 -g -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer",
+      "result": "passed",
+      "RuntimeSample_bytes": 200
+    },
+    "legacy_native_test": {
+      "source": "firmware/tests/espnow_test.cpp",
+      "binary": "implementation-probe/legacy_radio_current",
+      "flags": "g++ -std=c++17 -O1 -g -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -lcrypto",
+      "result": "passed framing, endianness, pairing HMAC golden vectors, MAC validation and button timing"
+    },
+    "legacy_nvs": {
+      "Peer_and_Store_source_definitions_identical_to_HEAD": true,
+      "target_Store_static_assert_bytes": 204
+    },
+    "static_stack_observation": {
+      "target_object": "firmware/.pio/build/compact_n16r8_web/main/espnow.cpp.o",
+      "tool": "xtensa-esp32s3-elf-objdump -d -C",
+      "task_prologue_bytes": 512,
+      "handle_prologue_bytes": 512,
+      "receive_callback_prologue_bytes": 304,
+      "radio_task_allocated_bytes": 6144,
+      "note": "Function prologues are only local/static observations. No runtime stack high-water or worst-call-chain measurement was performed."
+    }
+  },
+  "positive_design_observations": [
+    "ECN1 version 1 type values 1..6 and legacy payload layouts remain unchanged. New types only reach a saved peer after that peer submits an authenticated capability request; engine streaming requires explicit feature enable.",
+    "Capability requests and replies use full-length HMAC-SHA256. Nonce echo and deadline bind a reply to a fresh request; query counter 0 recovers volatile capability state after receiver restart. Exact duplicate update requests are idempotent and conflicting/replayed counters do not change state.",
+    "The per-boot 128-bit engine nonce plus session binds a 32-byte derived engine data/ACK MAC key. The nonce query reply supplies a 64-bit sequence floor, preventing recorded pre-query engine frames from becoming current after a screen restart, including a 32-bit session collision across ECU boots.",
+    "Engine packet authentication precedes receiver sequence, payload and age state mutation. All 232 engine, 108 capability-reply and 76 capability-request single-byte mutations were rejected by independent host probes.",
+    "Engine data is one complete 232-byte packet below the pinned 250-byte ESP-NOW limit. All eight bound inputs and fourteen proposal values come from one controller observation, carry their own physical validity/revision/source identifiers, and are not joined with legacy generic sensor metadata.",
+    "Worker command sequence/epoch/revisions/masks are copied atomically from an explicitly earlier worker observation. Submission is queue acceptance and the policy flag is compile policy; neither is described as GPIO execution evidence.",
+    "Source GP ages are calculated as durations at publication and subsequent ESP elapsed durations are added at transmit. There is no subtraction of the different clock epochs.",
+    "The receive SDK callback performs bounded copying and queueing only; HMAC and JSON work remain in tasks. Per-peer state is cleared on unpair and slot reuse. Pinned Espressif headers explicitly permit the send buffer to be discarded after esp_now_send returns.",
+    "No new received packet changes calibration, logging, actuator configuration, outputs or interlock state. The selected N16R8 configuration remains physically inhibited."
+  ],
+  "limits_and_follow_up": [
+    "The reference freshness bound depends on the explicit relative clock-rate assumption for sender source-age durations and timed ESP timestamps. It is not a guarantee under arbitrary oscillator faults, time jumps or RF behavior.",
+    "Connected means a recent valid application ACK for a recent submitted packet. It does not establish fresh engine samples, healthy sensors, actuator execution or a functioning engine.",
+    "Unmodified legacy packets retain their original 32-bit session and link-encryption assumptions. The new per-boot HMAC protection and timed receiver rules apply to the negotiated engine protocol, not retroactively to all legacy traffic.",
+    "No physical two-ESP pairing/reboot/RF/channel/AP-coexistence, packet capture, real SDK callback stress, LED timing, electrical output, stack high-water, printed-fit, EMI/surge, thermal or vehicle testing was performed in this independent review."
+  ],
+  "final_contract_recheck": {
+    "completed_utc": "2026-11-03T19:19:10.851938+00:00",
+    "status": "passed; no unresolved contract/documentation finding",
+    "document": "docs/espnow-engine.md",
+    "document_sha256": "dc8ae84a73f16c4ab0079a3ccf875f9e48a96f16ffc2f99c3dc8d8e47957a810",
+    "selected_elf": "firmware/.pio/build/compact_n16r8_web/firmware.elf",
+    "selected_elf_sha256": "de3b045c7bbbd6e8578c57498c32a8dc37a9b1ffe0f59771e0c7647e58259a9f",
+    "delta_since_initial_implementation_read": "Packet helpers reject zero current ECU session in capability request acceptance and engine encoding; query packet session=0 remains valid against a nonzero current ECU session. Sender/receiver production code is unchanged. The zero-session guard was already included in the original report hash captured after the initial source read; this recheck explicitly validates it.",
+    "validation": "ASan/UBSan final_delta.cpp passed packet-size constants 76/108/232/56, reply session/counter/nonce/schema/floor/send-time offsets, engine packet core offsets, and zero-current-session rejection with valid zero-query-session behavior.",
+    "harness": "implementation-probe/final_delta.cpp",
+    "wire_contract": "All request/reply/engine/ACK lengths, listed offsets and HMAC-covered byte ranges match current helpers and Python reference codec.",
+    "age_contract": "Documented GP/ESP duration bridge, unknown/saturated ages, source/control/worker scaling ceil(age*100/98), transit bound +2 ms/+2 percent, receiver elapsed time, repeated-observation age floors, one-second first/subsequent gap and five-second query refresh match the reference receiver.",
+    "ack_contract": "Documented one-second send-age ceiling plus last eight submissions per peer and packet family matches both native ACK windows. Final wording correctly recommends promptly acknowledging the newest processed engine frame, ideally every frame, notes the approximately 0.5 second eight-frame span at 16 Hz, and warns against holding an older engine ACK for one second.",
+    "scope_limit": "No physical RF/engine/vehicle validation; final ELF hash recorded for provenance, not as evidence of electrical qualification."
+  }
+}

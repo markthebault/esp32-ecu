@@ -4,6 +4,7 @@
 #include "ecu/espnow.hpp"
 #include "ecu/engine_service.hpp"
 #include "ecu/engine_target.hpp"
+#include "ecu/engine_log_service.hpp"
 #include "driver/gpio.h"
 #include "driver/gptimer.h"
 #include "driver/mcpwm_cap.h"
@@ -143,6 +144,7 @@ extern "C" void app_main() {
 #endif
     ecu::web::init();
     ecu::engine_service::init();
+    ecu::engine_log_service::init();
     init_adc();
     init_can();
     init_bench_timer();
@@ -157,6 +159,7 @@ extern "C" void app_main() {
     bool watchdog_high = false;
     std::uint64_t can_frames = 0;
     std::int64_t last_print = 0, last_heartbeat = 0, last_publish = 0;
+    ecu::engine::RuntimeSample last_engine;
 #if ECU_BENCH_PULSES
     std::int64_t last_pulse = 0;
     unsigned next_channel = 0;
@@ -183,10 +186,19 @@ extern "C" void app_main() {
     live.phase_synced=edge_state.phase_synced;
     live.phase_tune_revision=edge_state.tune_revision;live.phase_sensor_revision=edge_state.sensor_revision;
     live.phase_epoch=edge_state.phase_epoch;
+    live.phase_losses=static_cast<std::uint32_t>(std::min<std::uint64_t>(edge_state.phase_losses,UINT32_MAX));
+    live.cam_rejected=static_cast<std::uint32_t>(std::min<std::uint64_t>(edge_state.cam_rejected,UINT32_MAX));
+    live.phase_reason=static_cast<std::uint8_t>(edge_state.phase_reason);live.cam_error_deg=edge_state.cam_error_deg;
+    live.timing_cause=edge_state.timing_cause;live.last_timing_cause=edge_state.last_timing_cause;
+    live.worker_sequence=edge_state.worker_sequence;live.worker_observed_us=edge_state.worker_observed_us;live.worker_epoch=edge_state.worker_epoch;
+    live.worker_tune_revision=edge_state.worker_tune_revision;live.worker_sensor_revision=edge_state.worker_sensor_revision;
+    live.virtual_high_mask=edge_state.virtual_high_mask;live.physical_command_mask=edge_state.physical_command_mask;
     live.can_frames=can_frames; live.cam_edges=edge_state.cam_edges; live.crank_edges=edge_state.crank_edges;
     live.crank_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::crank));
     live.cam_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::cam));
-        ecu::engine_service::observe(live,profile,ecu::engine_target::clock_us(),sampled_us);
+        (void)ecu::engine_service::observe(live,profile,ecu::engine_target::clock_us(),sampled_us,last_engine);
+        live.engine=last_engine;
+        ecu::engine_log_service::observe(last_engine);
         const bool monitor_healthy = adc_ok && !edge_state.overflow && esp_timer_get_time()-now < 10000;
         [[maybe_unused]] const bool healthy = edge_state.synced && monitor_healthy;
 #if !ECU_ENGINE_DUMMY_LOADS

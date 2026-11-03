@@ -34,7 +34,7 @@ def load_target_bridge():
                     'engine_cut':([P],None),'engine_timing_reason':([P],S),'engine_next_time':([P],U),
                     'engine_progress':([P,U],None),
                     'engine_pop':([P],I),'engine_event_dwell':([P],U),'engine_event_advance':([P],ctypes.c_double),
-                    'engine_plan':([P],S)}
+                    'engine_data_json':([P],S),'engine_plan':([P],S)}
         for name,(args,result) in signatures.items():
             fn=getattr(bridge,name);fn.argtypes=args;fn.restype=result
         return bridge

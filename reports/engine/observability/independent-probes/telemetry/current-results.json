@@ -1,0 +1,23 @@
+{
+  "source_clock_2_percent_slow_corrected": {
+    "actual_age_ms": 1010,
+    "bounded_sample_age_ms": 1015,
+    "bounded_control_age_ms": 1015,
+    "bounded_worker_age_ms": 1015,
+    "fresh": false
+  },
+  "initial_gap_after_1_second_rejected": "pass",
+  "authentication_before_mutation": {
+    "byte_mutations": 232,
+    "passed": true
+  },
+  "repeated_source_age_floor": "pass",
+  "repeated_unknown_does_not_recover": "pass",
+  "timed_clock_grid": {
+    "cases": 4000,
+    "source_rate_min": 0.98,
+    "source_rate_max": 1.02,
+    "minimum_bound_margin_ms": 18.339342556515987,
+    "passed": true
+  }
+}

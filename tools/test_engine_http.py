@@ -100,6 +100,29 @@ class IntegrationTests(unittest.TestCase):
     os.write(fd,frame[:-1]+bytes([frame[-1]^1]));self.assertEqual(read(7),envelope(b'\x82'))
    finally:os.close(fd)
   self.assertFalse(path.is_symlink())
+ def test_bounded_engine_log_auth_boot_guards_paging_and_historical_sample(self):
+  base='/api/engine/data-log';sample=json.loads(self.request('/api/engine/sample')[1]);self.assertFalse(sample['available']);self.assertFalse(sample['display_fresh'])
+  self.assertEqual(self.request(base,headers={'X-ECU-Token':'wrong'})[0],403)
+  h=json.loads(self.request(base)[1]);boot={'X-ECU-Log-Boot':h['boot_id']}
+  start=json.dumps(dict(action='start',period_ms=20,duration_s=12))
+  self.assertEqual(self.request(base,'POST',start)[0],409)
+  self.assertEqual(self.request(base,'POST',start,boot)[0],409)
+  self.assertEqual(self.request('/api/engine/run','POST',json.dumps(dict(scenario='warm_start',duration_s=8)))[0],200)
+  code,body=self.request(base,'POST',start,boot);self.assertEqual(code,200);h=json.loads(body)
+  self.assertTrue(h['historical']);self.assertEqual(h['state'],'timeout');self.assertGreater(h['overwritten'],0)
+  query=base+f'?log_id={h["log_id"]}&after=0'
+  self.assertEqual(self.request(query)[0],409);self.assertEqual(self.request(query,headers={**boot,'Origin':'http://foreign.invalid'})[0],403)
+  code,body=self.request(query,headers=boot);self.assertEqual(code,200);page=json.loads(body)
+  self.assertEqual(len(page['records']),16);self.assertEqual(page['gap_first'],1);self.assertEqual(page['gap_last'],h['first_sequence']-1)
+  self.assertEqual(page['records'][0]['sample']['data_source'],'synthetic_control_observation')
+  retained=base+f'.msl?log_id={h["log_id"]}&after=0';code,body=self.request(retained,headers=boot);self.assertEqual(code,200);self.assertIn(b'SYNTHETIC ENGINE REPLAY',body)
+  self.assertEqual(self.request(base+'?log_id=1&after=4294967296',headers=boot)[0],422)
+  self.assertEqual(self.request(base+'?log_id=1&after=4294967295',headers=boot)[0],409)
+  self.assertEqual(self.request(base,'POST',start,boot)[0],200)
+  self.assertEqual(self.request(query,headers=boot)[0],409)
+  self.assertEqual(self.request(base,'POST',b'{"action":"stop","log_id":1}',boot)[0],409)
+  sample=json.loads(self.request('/api/engine/sample')[1]);self.assertTrue(sample['available']);self.assertTrue(sample['historical']);self.assertFalse(sample['display_fresh'])
+  self.assertEqual(self.request('/engine_logger.js')[0],200)
 
 
 if __name__=='__main__':unittest.main(verbosity=2)

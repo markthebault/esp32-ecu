@@ -3,6 +3,10 @@
 #include "ecu/pins.hpp"
 #include "ecu/engine_service.hpp"
 #include "ecu/engine_target.hpp"
+#include "ecu/engine_log_service.hpp"
+#include "ecu/engine_log_json.hpp"
+#include "ecu/engine_log_msl.hpp"
+#include "ecu/heap_object.hpp"
 #include "ecu/trigger_log_json.hpp"
 #include "config_json.hpp"
 #include "web_assets.hpp"
@@ -18,6 +22,7 @@
 #include <cstdio>
 #include <cstring>
 #include <string>
+#include <memory>
 #ifndef ECU_CONFIG_WEB
 #define ECU_CONFIG_WEB 0
 #endif
@@ -76,6 +81,7 @@ esp_err_t index_get(httpd_req_t*r){
  return httpd_resp_send(r,assets::index,HTTPD_RESP_USE_STRLEN);
 }
 esp_err_t trigger_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");httpd_resp_set_hdr(r,"Cache-Control","no-store");return httpd_resp_send(r,assets::trigger_js,HTTPD_RESP_USE_STRLEN);}
+esp_err_t engine_log_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");httpd_resp_set_hdr(r,"Cache-Control","no-store");return httpd_resp_send(r,assets::engine_log_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t manual_get(httpd_req_t*r){httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,assets::manual,HTTPD_RESP_USE_STRLEN);}
 esp_err_t guide_get(httpd_req_t*r){httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,assets::guide,HTTPD_RESP_USE_STRLEN);}
 esp_err_t defaults_get(httpd_req_t*r){httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,assets::defaults,HTTPD_RESP_USE_STRLEN);}
@@ -146,6 +152,94 @@ esp_err_t radio_post(httpd_req_t*r){
 esp_err_t engine_defaults_get(httpd_req_t*r){httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,assets::engine_defaults,HTTPD_RESP_USE_STRLEN);}
 esp_err_t engine_config_get(httpd_req_t*r){auto s=engine_service::tune_json();httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,s.c_str(),s.size());}
 esp_err_t engine_status_get(httpd_req_t*r){return send_json(r,engine_service::snapshot());}
+esp_err_t engine_sample_get(httpd_req_t*r){return send_json(r,engine_service::sample());}
+bool log_boot(httpd_req_t*r){
+ char value[33]{};return httpd_req_get_hdr_value_str(r,"X-ECU-Log-Boot",value,sizeof(value))==ESP_OK&&engine_log_service::same_boot(value);
+}
+bool log_query(httpd_req_t*r,std::uint32_t&id,std::uint32_t&after){
+ char query[64]{};return httpd_req_get_url_query_len(r)<sizeof(query)&&
+  httpd_req_get_url_query_str(r,query,sizeof(query))==ESP_OK&&engine_log::parse_query(query,id,after);
+}
+bool log_fields(cJSON*j){
+ return j&&cJSON_AddStringToObject(j,"boot_id",engine_log_service::boot_id())&&
+  cJSON_AddNumberToObject(j,"producer_lock_contention_attempts",engine_log_service::contention_attempts())&&
+  cJSON_AddBoolToObject(j,"export_busy",engine_log_service::exporting())&&
+  cJSON_AddStringToObject(j,"scope","Bounded RAM observations; proposals and earlier worker command masks are not electrical execution measurements");
+}
+esp_err_t engine_data_log_get(httpd_req_t*r){
+ if(!authorized(r))return message(r,"Session token or origin rejected.","403 Forbidden");
+ if(!httpd_req_get_url_query_len(r)){
+  auto*j=engine_log::header_json(engine_log_service::header());
+  if(!log_fields(j)){cJSON_Delete(j);return message(r,"Allocation failed.","500 Internal Server Error");}
+  return send_json(r,j);
+ }
+ std::uint32_t id=0,after=0;
+ if(!log_query(r,id,after))return message(r,"Use log_id and after for a bounded row page.","422 Unprocessable Entity");
+ if(!log_boot(r))return message(r,"Device boot changed; reload log metadata.","409 Conflict");
+ auto page=heap_object<engine_log::Page>();
+ if(!page)return message(r,"Log page allocation failed.","500 Internal Server Error");
+ engine_log_service::page(id,after,*page);
+ if(page->superseded||page->future_cursor||page->invalid_row)return message(r,"Log changed or row cursor is invalid; retain collected rows and reload metadata.","409 Conflict");
+ auto*j=engine_log::header_json(page->header);
+ const bool ok=log_fields(j)&&cJSON_AddBoolToObject(j,"snapshot_superseded",false)&&cJSON_AddBoolToObject(j,"future_cursor",false)&&
+  cJSON_AddBoolToObject(j,"invalid_row",false)&&cJSON_AddBoolToObject(j,"copied_page",true)&&
+  cJSON_AddNumberToObject(j,"next_after",page->next_after)&&cJSON_AddNumberToObject(j,"gap_first",page->gap_first)&&cJSON_AddNumberToObject(j,"gap_last",page->gap_last);
+ char*text=ok?cJSON_PrintUnformatted(j):nullptr;cJSON_Delete(j);
+ if(!text)return message(r,"Allocation failed.","500 Internal Server Error");
+ const auto length=std::strlen(text);text[length-1]=0;
+ httpd_resp_set_type(r,"application/json");httpd_resp_set_hdr(r,"Cache-Control","no-store");httpd_resp_set_hdr(r,"X-Content-Type-Options","nosniff");
+ auto result=httpd_resp_send_chunk(r,text,length-1);cJSON_free(text);
+ if(result!=ESP_OK||httpd_resp_send_chunk(r,",\"records\":[",HTTPD_RESP_USE_STRLEN)!=ESP_OK)return ESP_FAIL;
+ for(unsigned i=0;i<page->count;++i){
+  auto*row=engine_log::row_json(page->rows[i]);text=row?cJSON_PrintUnformatted(row):nullptr;cJSON_Delete(row);
+  // A truncated response is rejected as a whole by the collector. No partial
+  // cursor advance or synthetic replacement row is sent on allocation failure.
+  if(!text)return ESP_FAIL;
+  result=i?httpd_resp_send_chunk(r,",",1):ESP_OK;
+  if(result==ESP_OK)result=httpd_resp_send_chunk(r,text,HTTPD_RESP_USE_STRLEN);
+  cJSON_free(text);if(result!=ESP_OK)return result;
+  // HTTPD runs above the ADC/control task. Yield a tick after each bounded row,
+  // even when the network is writable, so serialization cannot monopolize it.
+  vTaskDelay(1);
+ }
+ if(httpd_resp_send_chunk(r,"]}",2)!=ESP_OK)return ESP_FAIL;
+ return httpd_resp_send_chunk(r,nullptr,0);
+}
+esp_err_t engine_data_log_post(httpd_req_t*r){
+ if(!authorized(r))return message(r,"Session token or origin rejected.","403 Forbidden");
+ if(httpd_req_get_url_query_len(r))return message(r,"Log commands do not accept a query string.","422 Unprocessable Entity");
+ if(!log_boot(r))return message(r,"Device boot changed; reload log metadata.","409 Conflict");
+ if(r->content_len<=0||r->content_len>256)return message(r,"Log command must be 1-256 bytes.","413 Content Too Large");
+ char type[80]{};httpd_req_get_hdr_value_str(r,"Content-Type",type,sizeof(type));
+ if(std::strcmp(type,"application/json"))return message(r,"Use application/json.","415 Unsupported Media Type");
+ char body[257]{};int received=0;
+ while(received<r->content_len){const int n=httpd_req_recv(r,body+received,r->content_len-received);if(n<=0)return ESP_FAIL;received+=n;}
+ engine_log::Request request;
+ if(!engine_log::parse_request(body,received,request))return message(r,"Invalid log command.","422 Unprocessable Entity");
+ const bool ok=request.start?engine_log_service::start(request.period_ms,request.duration_s):engine_log_service::stop(request.log_id);
+ if(!ok)return message(r,"Log is recording, exporting, or its identity changed; reload before retrying.","409 Conflict");
+ return engine_data_log_get(r);
+}
+esp_err_t engine_data_log_msl_get(httpd_req_t*r){
+ if(!authorized(r))return message(r,"Session token or origin rejected.","403 Forbidden");
+ if(!log_boot(r))return message(r,"Device boot changed; reload log metadata.","409 Conflict");
+ std::uint32_t id=0,after=0;
+ if(!log_query(r,id,after)||after)return message(r,"Use log_id and after=0 for a retained-window export.","422 Unprocessable Entity");
+ engine_log::Header h;
+ if(!engine_log_service::begin_export(id,h))return message(r,"Stop recording and select a nonempty current log before exporting.","409 Conflict");
+ struct Lease {~Lease(){engine_log_service::end_export();}}lease;
+ char buffer[2048];
+ if(!engine_log::msl_header(h,buffer,sizeof(buffer),engine_log_service::boot_id()))return message(r,"Log formatter limit exceeded.","500 Internal Server Error");
+ httpd_resp_set_type(r,"text/plain; charset=utf-8");httpd_resp_set_hdr(r,"Cache-Control","no-store");
+ httpd_resp_set_hdr(r,"Content-Disposition","attachment; filename=ecu-retained-engine.msl");
+ if(httpd_resp_send_chunk(r,buffer,HTTPD_RESP_USE_STRLEN)!=ESP_OK)return ESP_FAIL;
+ engine_log::Row row;
+ for(std::uint64_t sequence=h.first_sequence();sequence<=h.total;++sequence){
+  if(!engine_log_service::export_row(id,static_cast<std::uint32_t>(sequence),row)||!engine_log::msl_row(h,row,buffer,sizeof(buffer))||httpd_resp_send_chunk(r,buffer,HTTPD_RESP_USE_STRLEN)!=ESP_OK)return ESP_FAIL;
+  vTaskDelay(1);
+ }
+ return httpd_resp_send_chunk(r,nullptr,0);
+}
 esp_err_t engine_timing_get(httpd_req_t*r){return send_json(r,engine_target::trace_json());}
 esp_err_t engine_trigger_get(httpd_req_t*r){
  std::uint32_t id=0;unsigned offset=0;const auto query_length=httpd_req_get_url_query_len(r);
@@ -190,11 +284,14 @@ void service_task(){
  wifi.ap.ssid_len=std::strlen(reinterpret_cast<char*>(wifi.ap.ssid));wifi.ap.channel=6;wifi.ap.authmode=WIFI_AUTH_WPA2_PSK;wifi.ap.max_connection=2;wifi.ap.pmf_cfg.required=true;
  ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP,&wifi));ESP_ERROR_CHECK(esp_wifi_start());
  for(unsigned i=0;i<4;++i)std::snprintf(token+i*8,9,"%08lX",static_cast<unsigned long>(esp_random()));
- httpd_config_t http=HTTPD_DEFAULT_CONFIG();http.stack_size=16384;http.max_uri_handlers=20;http.lru_purge_enable=true;http.recv_wait_timeout=5;http.send_wait_timeout=5;
+ httpd_config_t http=HTTPD_DEFAULT_CONFIG();http.stack_size=16384;http.max_uri_handlers=32;http.lru_purge_enable=true;http.recv_wait_timeout=5;http.send_wait_timeout=5;
  httpd_handle_t server{};ESP_ERROR_CHECK(httpd_start(&server,&http));
  const httpd_uri_t routes[]={
   {"/api/engine/defaults",HTTP_GET,engine_defaults_get,nullptr},{"/api/engine/config",HTTP_GET,engine_config_get,nullptr},{"/api/engine/config",HTTP_PUT,engine_config_put,nullptr},{"/api/engine/status",HTTP_GET,engine_status_get,nullptr},
   {"/api/engine/timing",HTTP_GET,engine_timing_get,nullptr},
+  {"/api/engine/sample",HTTP_GET,engine_sample_get,nullptr},
+  {"/api/engine/data-log",HTTP_GET,engine_data_log_get,nullptr},{"/api/engine/data-log",HTTP_POST,engine_data_log_post,nullptr},
+  {"/api/engine/data-log.msl",HTTP_GET,engine_data_log_msl_get,nullptr},{"/engine_logger.js",HTTP_GET,engine_log_script_get,nullptr},
   {"/api/engine/trigger-log",HTTP_GET,engine_trigger_get,nullptr},{"/api/engine/trigger-log",HTTP_POST,engine_trigger_post,nullptr},
   {"/api/radio",HTTP_GET,radio_get,nullptr},{"/api/radio",HTTP_POST,radio_post,nullptr},
   {"/",HTTP_GET,index_get,nullptr},{"/trigger_logger.js",HTTP_GET,trigger_script_get,nullptr},{"/api/session",HTTP_GET,session_get,nullptr},{"/api/guide",HTTP_GET,guide_get,nullptr},{"/api/manual",HTTP_GET,manual_get,nullptr},

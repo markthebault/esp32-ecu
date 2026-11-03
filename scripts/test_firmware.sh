@@ -41,3 +41,15 @@ task_cjson="${PLATFORMIO_CORE_DIR:-$HOME/.platformio}/packages/framework-espidf/
     "$task_root/firmware/tests/trigger_log_json_test.cpp" "$task_root/build/trigger-cjson.o" \
     -o "$task_root/build/trigger-log-json-test"
 "$task_root/build/trigger-log-json-test"
+"${CXX:-clang++}" -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic \
+    -fsanitize=address,undefined -fno-omit-frame-pointer \
+    -I "$task_cjson" -I "$task_root/firmware/include" \
+    "$task_root/firmware/tests/engine_observability_test.cpp" "$task_root/build/trigger-cjson.o" \
+    -o "$task_root/build/engine-observability-test"
+"$task_root/build/engine-observability-test"
+"${CXX:-clang++}" -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic \
+    -fsanitize=address,undefined -fno-omit-frame-pointer -pthread \
+    -I "$task_cjson" -I "$task_root/firmware/tests/log_fakes" -I "$task_root/firmware/include" \
+    "$task_root/firmware/tests/engine_log_service_test.cpp" "$task_root/firmware/main/engine_log_service.cpp" \
+    -o "$task_root/build/engine-log-service-test"
+"$task_root/build/engine-log-service-test"

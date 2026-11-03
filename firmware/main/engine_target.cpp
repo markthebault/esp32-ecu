@@ -339,7 +339,13 @@ void init(Wheel wheel,bool interlock_at_boot){
  xSemaphoreTake(started,portMAX_DELAY);vSemaphoreDelete(started);started=nullptr;
 }
 std::uint64_t clock_us(){return now_locked();}
-Measurement measurement(){portENTER_CRITICAL(&lock);auto copy=measured;copy.timing_fault=executor.stats().fault!=timing::Cause::None;portEXIT_CRITICAL(&lock);return copy;}
+Measurement measurement(){
+ portENTER_CRITICAL(&lock);auto copy=measured;const auto&stats=executor.stats();const auto&cmd=executor.current_command();
+ copy.timing_fault=stats.fault!=timing::Cause::None;copy.timing_cause=static_cast<std::uint8_t>(stats.fault);copy.last_timing_cause=static_cast<std::uint8_t>(stats.last_fault);
+ copy.worker_sequence=cmd.sequence;copy.worker_tune_revision=cmd.tune_revision;copy.worker_sensor_revision=cmd.sensor_revision;copy.worker_epoch=stats.epoch;
+ copy.worker_observed_us=now_locked();copy.virtual_high_mask=stats.high_mask;copy.physical_command_mask=output.physical_mask;
+ portEXIT_CRITICAL(&lock);return copy;
+}
 bool submit(const timing::Command& command){
  if(!commands)return false;
  TaggedCommand tagged;tagged.command=command;

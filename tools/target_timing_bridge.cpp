@@ -1,6 +1,7 @@
 // Native execution of the same fixed-storage dispatcher used by GPTimer ISR.
 // CPU execution cost is zero here. Peripheral/CPU latency needs target/HIL tests.
 #include "ecu/engine_json.hpp"
+#include "ecu/engine_data_json.hpp"
 #include "ecu/engine_phase.hpp"
 #include "ecu/timing_executor.hpp"
 #include <string>
@@ -13,6 +14,7 @@ struct IO {
  void all_low();bool write(unsigned ch,bool high);
 };
 struct Context {
+ ecu::engine::RuntimeSample data;std::uint64_t data_sequence=0;
  ecu::engine::Tune tune;ecu::engine::Controller controller;ecu::engine::PhaseDecoder decoder{{60,2,8000}};
  ecu::timing::Executor core;ecu::engine::Output last;IO io;
  std::array<Event,32> events{};unsigned event_begin=0,event_count=0;
@@ -48,7 +50,7 @@ extern "C" int engine_configure(void*p,const char* text){
  auto*j=cJSON_ParseWithOpts(text,nullptr,true);ecu::engine::Tune candidate;
  const bool ok=j&&ecu::engine::parse_tune(j,candidate);cJSON_Delete(j);if(!ok)return 0;
  auto&c=*static_cast<Context*>(p);c.tune=candidate;c.controller.reset();c.core=ecu::timing::Executor{};
- c.decoder=ecu::engine::PhaseDecoder({c.slots,c.missing,c.max_rpm},ecu::engine::angle_config(c.tune));c.last={};c.io.mask=0;c.event_count=0;c.event_begin=0;c.now=c.command_us=c.sampled_us=c.sequence=0;c.have_control=false;return 1;
+ c.decoder=ecu::engine::PhaseDecoder({c.slots,c.missing,c.max_rpm},ecu::engine::angle_config(c.tune));c.last={};c.data={};c.data_sequence=0;c.io.mask=0;c.event_count=0;c.event_begin=0;c.now=c.command_us=c.sampled_us=c.sequence=0;c.have_control=false;return 1;
 }
 extern "C" int engine_wheel(void*p,unsigned slots,unsigned missing,unsigned max_rpm){
  auto&c=*static_cast<Context*>(p);ecu::engine::PhaseDecoder decoder({slots,missing,max_rpm},ecu::engine::angle_config(c.tune));if(!decoder.valid())return 0;
@@ -103,8 +105,12 @@ extern "C" const char* engine_step(void*p,const char*text,std::uint64_t now,std:
  if(c.core.recover(now,wheel&&!in.synced&&c.last.state==ecu::engine::State::Stopped&&!c.last.faults))c.decoder.reset();
  const auto& stats=c.core.stats();
  if(stats.fault!=ecu::timing::Cause::None){c.last.faults|=ecu::engine::Timing;c.last.state=ecu::engine::State::Faulted;c.last.fuel_cut=c.last.spark_cut=true;}
+ c.data=ecu::engine::synthetic_data(c.tune,in,c.last,++c.data_sequence,now);c.data.phase_reason=static_cast<std::uint8_t>(c.decoder.reason());c.data.phase_losses=c.decoder.losses();c.data.cam_rejected=c.decoder.rejected();c.data.cam_error_deg=c.decoder.cam_error_deg();c.data.virtual_high_mask=c.io.mask;
+ c.data.worker_sequence=c.core.current_command().sequence;c.data.worker_observed_us=now;c.data.worker_epoch=stats.epoch;c.data.worker_tune_revision=c.core.current_command().tune_revision;c.data.worker_sensor_revision=c.core.current_command().sensor_revision;c.data.timing_fault=static_cast<std::uint8_t>(stats.fault);c.data.last_timing_fault=static_cast<std::uint8_t>(stats.last_fault);
  j=ecu::engine::output_json(c.last);cJSON_AddBoolToObject(j,"synced",in.synced&&(!c.decoder.required()||in.phase_synced));cJSON_AddBoolToObject(j,"crank_synced",in.synced);cJSON_AddBoolToObject(j,"phase_synced",in.phase_synced);cJSON_AddBoolToObject(j,"phase_required",c.decoder.required());cJSON_AddStringToObject(j,"phase_reason",ecu::engine::PhaseDecoder::reason_name(c.decoder.reason()));cJSON_AddNumberToObject(j,"phase_losses",c.decoder.losses());cJSON_AddNumberToObject(j,"cam_rejected",c.decoder.rejected());cJSON_AddNumberToObject(j,"cam_error_deg",c.decoder.cam_error_deg());cJSON_AddNumberToObject(j,"time_us",now);cJSON_AddNumberToObject(j,"gap_us",c.gap);
  cJSON_AddNumberToObject(j,"timing_stops",stats.faults);cJSON_AddNumberToObject(j,"timing_recoveries",stats.recoveries);
  cJSON_AddNumberToObject(j,"executor_high_mask",c.io.mask);cJSON_AddStringToObject(j,"timing_stop_reason",ecu::timing::cause_name(stats.last_fault));return encode(j);
 }
 extern "C" const char* engine_plan(void*){return "{\"valid\":false,\"edges\":[]}";}
+
+extern "C" const char* engine_data_json(void*p){auto&c=*static_cast<Context*>(p);return encode(ecu::engine::data_json(c.data,c.now));}

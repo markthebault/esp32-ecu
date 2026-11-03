@@ -115,7 +115,7 @@ class Simulation:
      if result['faults'] or result['state']=='stopped':
       cut_outputs(round(t*1e6),'control_inhibit')
      if int(round(t*1000))%20==0:
-      trace.append(dict(time=round(t,4),plant_rpm=plant.rpm,map_kpa=plant.map_kpa,tps=plant.tps,lambda_measured=plant.lambda_sensor,actual_lambda=latest_lambda,fuel_mg=plant.fuel_mg,**result))
+      trace.append(dict(time=round(t,4),plant_rpm=plant.rpm,map_kpa=plant.map_kpa,tps=plant.tps,lambda_measured=plant.lambda_sensor,actual_lambda=latest_lambda,fuel_mg=plant.fuel_mg,engine_sample=runtime.data(),**result))
     # Trigger crossings are timestamped inside the integration step. Integrate
     # to queued output edges first, then provide every actual 60-2 tooth.
     until_tooth=(tooth_index*6-plant.angle)/(plant.rpm*6) if plant.rpm>1e-6 else dt

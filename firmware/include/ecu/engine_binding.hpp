@@ -2,7 +2,7 @@
 #include "ecu/engine.hpp"
 #include "ecu/web_config.hpp"
 namespace ecu::engine {
-struct BoundInputs {Inputs input;const char* reason="physical inputs converted; proposals only";};
+struct BoundInputs {Inputs input;std::uint8_t qualified=0;const char* reason="physical inputs converted; proposals only";};
 inline bool named_unit(const char*s,const char*a,const char*b=""){return !std::strcmp(s,a)||(*b&&!std::strcmp(s,b));}
 inline BoundInputs bind_inputs(const web::Sample&s,const config::Config&c,std::uint64_t now){
  BoundInputs bound;auto&in=bound.input;const double supply=s.raw[7]*c.adc_reference_v/4095/.6;
@@ -14,6 +14,12 @@ inline BoundInputs bind_inputs(const web::Sample&s,const config::Config&c,std::u
   if(!valid[i]){in.sensors_valid=false;bound.reason="MAP/TPS/CLT/IAT conversions must be valid and independently confirmed";}
   if(c.sensors[i].mode==config::Mode::Voltage){in.sensors_valid=false;bound.reason="Raw-voltage readings cannot be relabelled as engine physical quantities";}
  }
- in.map_kpa=values[0];in.tps_pct=values[1];in.clt_c=values[2];in.iat_c=values[3];in.lambda=values[4];in.lambda_ready=valid[4]&&c.sensors[4].mode!=config::Mode::Voltage&&named_unit(c.sensors[4].unit,"lambda","λ");return bound;
+ in.map_kpa=values[0];in.tps_pct=values[1];in.clt_c=values[2];in.iat_c=values[3];in.lambda=values[4];in.lambda_ready=valid[4]&&c.sensors[4].mode!=config::Mode::Voltage&&named_unit(c.sensors[4].unit,"lambda","λ");
+ const char* units[]={"kPa","%","C","C","lambda"};const char* alternate[]={"","","°C","°C","λ"};
+ if(s.adc_ok){
+  bound.qualified=(1U<<6)|(1U<<7);
+  for(unsigned i=0;i<5;++i)if(valid[i]&&c.sensors[i].mode!=config::Mode::Voltage&&named_unit(c.sensors[i].unit,units[i],alternate[i]))bound.qualified|=1U<<(i+1);
+ }
+ return bound;
 }
 }
