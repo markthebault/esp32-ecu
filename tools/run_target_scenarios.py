@@ -74,8 +74,8 @@ def audit(result,target):
                 replayed_max_high_us=widths,all_virtual_channels_exercised=channels==set(range(8)))
 
 
-def validate(compare=True,convergence=True):
-    root=Path(__file__).resolve().parents[1];output=root/'.cache/engine/target-scenarios';output.mkdir(parents=True,exist_ok=True)
+def validate(compare=True,convergence=True,output_dir=None):
+    root=Path(__file__).resolve().parents[1];output=Path(output_dir) if output_dir else root/'.cache/engine/target-scenarios';output.mkdir(parents=True,exist_ok=True)
     original=benchmark.OurController;benchmark.OurController=TargetController;rows=[];checks=[];failures=[];start=time.monotonic()
     try:
         for controller in ('ours','speeduino') if compare else ('ours',):
@@ -103,7 +103,7 @@ def validate(compare=True,convergence=True):
                     if not passed:failures.append(dict(controller=label,scenario=scenario,errors=['coupling convergence or fine edge audit']))
         paths=['tools/run_target_scenarios.py','tools/target_runtime.py','tools/target_timing_bridge.cpp',
                'tools/compare_engine_controllers.py','tools/engine_research_plant.py','tools/speeduino_runtime.py',
-               'tools/speeduino_sim.cpp','tools/speeduino_sim_hal.cpp','simulation/modelica/EngineAirPath.mo','config/engine/defaults.json']
+               'tools/speeduino_sim.cpp','tools/speeduino_sim_hal.cpp','tools/speeduino_sim_native.hpp','simulation/modelica/EngineAirPath.mo','config/engine/defaults.json']
         paths+=sorted(str(p.relative_to(root)) for p in (root/'firmware/include/ecu').glob('*.hpp'))
         report=dict(scope='Shared ESP32 dispatcher/angle scheduler/decoder/controller on external uncalibrated MVEM air path + local empirical combustion/free shaft',
                     control_period_us=5000,producer_period_us=1000,cpu_latency_model='zero; no physical jitter qualification',
@@ -116,7 +116,7 @@ def validate(compare=True,convergence=True):
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--target-only',action='store_true');parser.add_argument('--no-convergence',action='store_true')
-    args=parser.parse_args();report=validate(not args.target_only,not args.no_convergence)
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--target-only',action='store_true');parser.add_argument('--no-convergence',action='store_true');parser.add_argument('--output-dir',type=Path)
+    args=parser.parse_args();report=validate(not args.target_only,not args.no_convergence,args.output_dir)
     print('Target/reference comparison:',report['controller_cases'],'cases;',report['convergence_cases'],'convergence checks; passed',report['passed'],flush=True)
     if not report['passed']:raise SystemExit(1)

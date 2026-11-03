@@ -6,6 +6,7 @@
 struct EngineContext {ecu::engine::Tune tune;ecu::engine::Controller controller;ecu::MissingTooth decoder{{60,2,8000}};ecu::engine::Output last;ecu::engine::AngleScheduler scheduler;unsigned slots=60;std::uint64_t gap=0,control_us=0,sampled_us=0,last_trigger_us=UINT64_MAX;bool have_control=false;std::uint8_t virtual_high_mask=0;std::uint64_t stopped_since=UINT64_MAX;unsigned timing_recoveries=0,timing_stops=0;ecu::engine::AngleScheduler::StopReason last_timing_reason=ecu::engine::AngleScheduler::StopReason::None;};
 thread_local std::string engine_reply;
 static const char* encode(cJSON*j){char*s=cJSON_PrintUnformatted(j);cJSON_Delete(j);engine_reply=s?s:"{}";cJSON_free(s);return engine_reply.c_str();}
+#include "trigger_capture_bridge.hpp"
 extern "C" void* engine_create(){return new EngineContext{};}
 extern "C" void engine_destroy(void*p){delete static_cast<EngineContext*>(p);}
 extern "C" int engine_validate(const char*text){if(!ecu::web::safe_json(text,std::strlen(text)))return 0;auto*j=cJSON_ParseWithOpts(text,nullptr,true);ecu::engine::Tune t;bool ok=j&&ecu::engine::parse_tune(j,t);cJSON_Delete(j);return ok;}

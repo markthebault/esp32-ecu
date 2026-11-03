@@ -1,0 +1,36 @@
+{
+  "application": "MegaLogViewer HD Lite 4.6.14",
+  "unchanged_jar_sha256": "18205c30686de499d722a3244d4e8dab01a64dce868c986bfc54a05d0f2afc4c",
+  "input_file": "ui-trigger-capture.msl",
+  "input_sha256": "15294a4a95d413bdcc77d3b4dd9e9e1075aca7c31bc92b3db781dcf4fd81491d",
+  "export_rows": 512,
+  "export_fields": [
+    "Time",
+    "CrankEdge",
+    "CamEdge",
+    "CrankLevel",
+    "CamLevel",
+    "ToothTime",
+    "CallbackDelay",
+    "RawCounter",
+    "Epoch",
+    "Sequence"
+  ],
+  "source": "Actual browser export of completed synthetic SIL rising crank data",
+  "graph_field": "ToothTime",
+  "export_finite_min_us": 727.0,
+  "export_finite_max_us": 2434.0,
+  "observed_graph_min_us": 727,
+  "observed_graph_max_us": 2434,
+  "source_label_visible_in_log_header": true,
+  "unknown_values_preserved_as_nan": true,
+  "registration": "Free/unregistered GUI; no purchase, patch or identity spoof",
+  "workflow": [
+    "Launch unchanged installed application copy in own Xvfb and isolated Java user.home",
+    "Decline optional update using Update Later",
+    "Select ToothTime field and playback",
+    "View Log Header to inspect synthetic provenance"
+  ],
+  "scope": "Actual desktop opens/plots source log; no hardware capture or target timing qualification",
+  "passed": true
+}

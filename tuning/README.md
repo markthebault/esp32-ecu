@@ -43,7 +43,11 @@ The output block identifies completed historical SIL data, source, tune revision
 
 MegaLogViewer HD Lite 4.6.14 was installed unchanged from the official archive. It opens and plots an actual UI-exported MSL: 600 rows, 13 source fields plus its calculated field. The [desktop check](../reports/engine/megalogviewer-sil-log.png) shows synthetic data.
 
-Run a SIL scenario and choose **Export MSL log**. Logs include a simulation warning and Time, RPM, MAP, TPS, lambda, pulse width, advance, dwell, VE, lambda target, EGO, faults and synchronization. Raw trigger/output edge JSON and timing metrics are in cached scenario evidence. These are simulation records, not physical ECU measurements. Real target logging and TunerStudio high-speed tooth/composite logger integration remain missing.
+Run a SIL scenario and choose **Export MSL log**. Logs include a simulation warning and Time, RPM, MAP, TPS, lambda, pulse width, advance, dwell, VE, lambda target, EGO, faults and synchronization. These are simulation records, not physical ECU measurements.
+
+**Trigger logging → Export trigger MSL** now exports finite raw crank/cam captures. The selected target build implements separate MCPWM diagnostic capture channels; physical capture behavior remains unmeasured. The host replays only rising crank events from a completed SIL run. Unknown levels, callback delays and raw counters remain `NaN`. JSON keeps callback order; MSL sorts by capture time and preserves sequence numbers. The actual unchanged MegaLogViewer HD Lite 4.6.14 application opens the browser-exported trigger log and plots `ToothTime`. [Trigger guide and viewer evidence](../docs/engine-trigger-debug.md) document this workflow and its limits.
+
+Target engine RPM/MAP/MSL streaming, physical binary tuning transport and TunerStudio high-speed logger integration remain missing. Raw tooth intervals are diagnostic measurements, not necessarily Speeduino's decoder-filtered tooth-logger values. This does not resolve TunerStudio's rejection of the own live controller identity.
 
 [Source/download checksums](../reports/engine/sources.json) record installed versions. Commercial binaries are outside this repository. No registration was purchased and optional commercial features have not been tested.
 

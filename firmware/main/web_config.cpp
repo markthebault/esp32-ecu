@@ -3,6 +3,7 @@
 #include "ecu/pins.hpp"
 #include "ecu/engine_service.hpp"
 #include "ecu/engine_target.hpp"
+#include "ecu/trigger_log_json.hpp"
 #include "config_json.hpp"
 #include "web_assets.hpp"
 #include "driver/gpio.h"
@@ -74,6 +75,7 @@ esp_err_t index_get(httpd_req_t*r){
  httpd_resp_set_hdr(r,"Content-Security-Policy","default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'");
  return httpd_resp_send(r,assets::index,HTTPD_RESP_USE_STRLEN);
 }
+esp_err_t trigger_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");httpd_resp_set_hdr(r,"Cache-Control","no-store");return httpd_resp_send(r,assets::trigger_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t manual_get(httpd_req_t*r){httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,assets::manual,HTTPD_RESP_USE_STRLEN);}
 esp_err_t guide_get(httpd_req_t*r){httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,assets::guide,HTTPD_RESP_USE_STRLEN);}
 esp_err_t defaults_get(httpd_req_t*r){httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,assets::defaults,HTTPD_RESP_USE_STRLEN);}
@@ -145,6 +147,29 @@ esp_err_t engine_defaults_get(httpd_req_t*r){httpd_resp_set_type(r,"application/
 esp_err_t engine_config_get(httpd_req_t*r){auto s=engine_service::tune_json();httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,s.c_str(),s.size());}
 esp_err_t engine_status_get(httpd_req_t*r){return send_json(r,engine_service::snapshot());}
 esp_err_t engine_timing_get(httpd_req_t*r){return send_json(r,engine_target::trace_json());}
+esp_err_t engine_trigger_get(httpd_req_t*r){
+ std::uint32_t id=0;unsigned offset=0;const auto query_length=httpd_req_get_url_query_len(r);
+ if(query_length){
+  char query[64]{};
+  if(query_length>=sizeof(query)||httpd_req_get_url_query_str(r,query,sizeof(query))!=ESP_OK||!trigger_log::parse_query(query,id,offset))
+   return message(r,"Use frame_id and offset for a bounded record page.","422 Unprocessable Entity");
+ }
+ auto* j=engine_target::trigger_json(id,offset,query_length!=0);
+ const bool superseded=j&&cJSON_IsTrue(cJSON_GetObjectItemCaseSensitive(j,"snapshot_superseded"));
+ return send_json(r,j,superseded?"409 Conflict":"200 OK");
+}
+esp_err_t engine_trigger_post(httpd_req_t*r){
+ if(!authorized(r))return message(r,"Session token or origin rejected.","403 Forbidden");
+ if(r->content_len<=0||r->content_len>256)return message(r,"Trigger command must be 1-256 bytes.","413 Content Too Large");
+ char type[80]{};httpd_req_get_hdr_value_str(r,"Content-Type",type,sizeof(type));
+ if(std::strcmp(type,"application/json"))return message(r,"Use application/json.","415 Unsupported Media Type");
+ std::string body(static_cast<std::size_t>(r->content_len),'\0');int received=0;
+ while(received<r->content_len){const int n=httpd_req_recv(r,body.data()+received,r->content_len-received);if(n<=0)return ESP_FAIL;received+=n;}
+ trigger_log::Request request;if(!trigger_log::parse_request(body.c_str(),body.size(),request))return message(r,"Invalid trigger command.","422 Unprocessable Entity");
+ const bool ok=request.start?engine_target::trigger_start(request.samples,request.timeout_ms):engine_target::trigger_stop(request.frame_id);
+ if(!ok)return message(r,"Capture is active or frame changed; reload before retrying.","409 Conflict");
+ return engine_trigger_get(r);
+}
 esp_err_t engine_config_put(httpd_req_t*r){
  if(!authorized(r))return message(r,"Session token or origin rejected.","403 Forbidden");
  if(r->content_len<=0||r->content_len>16384)return message(r,"Engine tune must be 1-16384 bytes.","413 Content Too Large");
@@ -170,8 +195,9 @@ void service_task(){
  const httpd_uri_t routes[]={
   {"/api/engine/defaults",HTTP_GET,engine_defaults_get,nullptr},{"/api/engine/config",HTTP_GET,engine_config_get,nullptr},{"/api/engine/config",HTTP_PUT,engine_config_put,nullptr},{"/api/engine/status",HTTP_GET,engine_status_get,nullptr},
   {"/api/engine/timing",HTTP_GET,engine_timing_get,nullptr},
+  {"/api/engine/trigger-log",HTTP_GET,engine_trigger_get,nullptr},{"/api/engine/trigger-log",HTTP_POST,engine_trigger_post,nullptr},
   {"/api/radio",HTTP_GET,radio_get,nullptr},{"/api/radio",HTTP_POST,radio_post,nullptr},
-  {"/",HTTP_GET,index_get,nullptr},{"/api/session",HTTP_GET,session_get,nullptr},{"/api/guide",HTTP_GET,guide_get,nullptr},{"/api/manual",HTTP_GET,manual_get,nullptr},
+  {"/",HTTP_GET,index_get,nullptr},{"/trigger_logger.js",HTTP_GET,trigger_script_get,nullptr},{"/api/session",HTTP_GET,session_get,nullptr},{"/api/guide",HTTP_GET,guide_get,nullptr},{"/api/manual",HTTP_GET,manual_get,nullptr},
   {"/api/defaults",HTTP_GET,defaults_get,nullptr},{"/api/config",HTTP_GET,config_get,nullptr},{"/api/config",HTTP_PUT,config_put,nullptr},{"/api/status",HTTP_GET,status_get,nullptr}};
  for(const auto&route:routes)ESP_ERROR_CHECK(httpd_register_uri_handler(server,&route));
  ESP_LOGW(tag,"BENCH ONLY. J3 open. No actuators. SSID=%s password=%s URL=http://192.168.4.1",wifi.ap.ssid,wifi.ap.password);

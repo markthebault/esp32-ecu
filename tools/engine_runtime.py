@@ -9,7 +9,7 @@ def load_engine_bridge():
   cjson=Path.home()/'.platformio/packages/framework-espidf/components/json/cJSON'
   if not (cjson/'cJSON.c').exists():raise RuntimeError('Build firmware with pinned PlatformIO framework first')
   # Include transitive headers: a scheduler-only fix must rebuild the SIL binary.
-  deps=[Path(__file__),R/'tools/engine_bridge.cpp',R/'firmware/main/config_json.hpp',cjson/'cJSON.c',cjson/'cJSON.h',*sorted((R/'firmware/include/ecu').glob('*.hpp'))]
+  deps=[Path(__file__),R/'tools/engine_bridge.cpp',R/'tools/trigger_capture_bridge.hpp',R/'firmware/main/config_json.hpp',cjson/'cJSON.c',cjson/'cJSON.h',*sorted((R/'firmware/include/ecu').glob('*.hpp'))]
   lib=out/'libengine.so'
   with (out/'build.lock').open('a+b') as lock:
    fcntl.flock(lock,fcntl.LOCK_EX)
@@ -72,6 +72,8 @@ class EngineStore:
     self.tune=json.loads(body);self.tune['revision']=int(self.tune['revision'])
    except (ValueError,OSError):self.storage_ok=False;self.error='Saved engine tune invalid; file preserved, defaults shadow-only'
   self.runtime=EngineRuntime(self.tune,self.bridge);self.latest=None;self.last_run=None
+  from trigger_capture import TriggerCapture
+  self.trigger_capture=TriggerCapture(self.bridge);self.trigger_metadata={}
  def save(self,body):
   if len(body)>16384:return 413,{'error':'Engine tune exceeds 16 KiB'}
   if b'\0' in body or not self.bridge.engine_validate(body):return 422,{'error':'Invalid engine tune: schema, axes or pulse limits'}
@@ -122,6 +124,36 @@ class EngineStore:
    rows=[dict(sequence=i+1,scheduled_us=e[0],actual_us=e[0],channel=e[1],high=e[2],
               cause=e[3] if len(e)>3 else 'scheduled',tune_revision=self.tune['revision']) for i,e in enumerate(source[start:],start)]
    return dict(timing=self.timing_status(),events=rows,missed_during_snapshot=0,data_source='completed_synthetic_sil')
+
+ def trigger_frame(self,expected=0,offset=0,records=False):
+  with self.lock:
+   frame=self.trigger_capture.frame(expected,offset,64 if records else 0)
+   for row in frame['records']:row['raw_counter']=None
+   frame.update(data_source='completed_sil_rising_crank',simulator=True,available=bool(self.last_run),
+                includes_falling_edges=False,includes_cam=False,clock_uncertainty_us=None,
+                diagnostic_interrupts_enabled=False,driver_error='not_applicable',
+                qualification='Completed synthetic SIL tooth stream, rising crank edges only. Cam and falling edges are not simulated; no hardware capture or voltage measurements.',**self.trigger_metadata)
+   return frame
+
+ def trigger_command(self,body):
+  if len(body)>256:return 413,{'error':'Trigger command exceeds 256 bytes'}
+  with self.lock:
+   if not self.trigger_capture.validate(body):return 422,{'error':'Invalid trigger command'}
+   request=json.loads(body)
+   if request['action']=='start':
+    if not self.last_run:return 409,{'error':'Run a SIL scenario before replaying a completed trigger window'}
+    end=round(self.last_run['summary']['duration_s']*1e6);start=max(0,end-request['timeout_ms']*1000)
+    code=self.trigger_capture.command(body,start)
+    if code!=200:return code,{'error':'Capture is active or frame changed'}
+    for edge in self.last_run['trigger_edges']:
+     if edge[0]>=start:self.trigger_capture.append(edge[0])
+    self.trigger_capture.expire(start+request['timeout_ms']*1000)
+    self.trigger_metadata=dict(source_scenario=self.last_run['summary']['scenario'],source_tune_revision=self.last_run['summary']['tune_revision'])
+   else:
+    frame=self.trigger_capture.frame();now=max(frame['ended_us'],frame['started_us'])
+    code=self.trigger_capture.command(body,now)
+    if code!=200:return code,{'error':'Frame changed; reload before stopping'}
+   return 200,self.trigger_frame()
 
  def run(self,request):
   from engine_sil import Simulation

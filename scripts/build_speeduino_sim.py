@@ -63,6 +63,8 @@ def build_locked(source: Path) -> Path:
              '-DNATIVE_BOARD', '-DEXTERNAL_BOARD_H="board_native.h"', '-DARDUINO=101',
              '-DUSBCON', '-DINJ_CHANNELS=8', '-DIGN_CHANNELS=8']
     flags += ['-I'+str(p) for p in includes]
+    native_header=ROOT/'tools/speeduino_sim_native.hpp'
+    flags += ['-include',str(native_header)]
     sources = sorted(copy/p for p in members if p.startswith('speeduino/') and p.endswith('.cpp'))
     sources += [copy/'speeduino/speeduino.ino', copy/'lib/ArduinoFake/FakeMega.cpp',
                 ROOT/'tools/speeduino_sim_hal.cpp', ROOT/'tools/speeduino_sim.cpp']
@@ -79,7 +81,9 @@ def build_locked(source: Path) -> Path:
     compiler_version = subprocess.check_output([compiler,'--version'],text=True)
     headers = {p:hashlib.sha256((copy/p).read_bytes()).hexdigest()
                for p in sorted(members) if Path(p).suffix in ('.h','.hpp','.tpp','.inc')}
-    common_hash = hashlib.sha256(json.dumps([flags,headers,dependency_hashes,compiler,compiler_version],sort_keys=True).encode()).hexdigest()
+    native_header_sha=hashlib.sha256(native_header.read_bytes()).hexdigest()
+    common_hash = hashlib.sha256(json.dumps([flags,headers,dependency_hashes,compiler,compiler_version,native_header_sha],sort_keys=True).encode()).hexdigest()
+    source_hashes['tools/speeduino_sim_native.hpp']=native_header_sha
     for src in sources:
         key = str(src.relative_to(copy)) if src.is_relative_to(copy) else str(src.relative_to(ROOT))
         obj = cache/'obj'/(key.replace('/', '_')+'.o')
@@ -109,11 +113,12 @@ def build_locked(source: Path) -> Path:
     manifest = {'speeduino_sha': sha, 'unit_test': False,
                 'execution': 'production setup, loop, decoder and schedulers in native process',
                 'hal_changes': ['SoftwareTimer.h TIMER_RESOLUTION 100us to 4us',
+                                'override Uno digitalPinToInterrupt macro with Arduino Mega mapping for native GPIO callbacks',
                                 'replace wall-clock timer implementation with deterministic single-thread HAL',
                                 'drive production oneMSInterval every 1000 virtual microseconds'],
                 'limits': ['not AVR emulation', 'native uint32 timer counters',
                            'zero CPU execution cost; explicit main-loop cadence', 'virtual GPIO only',
-                           'inject primary decoder callback directly; native fake interrupt wiring not tested',
+                           'benchmark tooth command injects primary decoder callback directly; diagnostic input command dispatches native attached callbacks by configured edge; physical wiring untested',
                            'timer callbacks before coincident tooth callback, then production loop',
                            'fast PORT outputs observed after each4us timer tick and loop call'],
                 'archive_sha256':archive_hash,'source_hashes': source_hashes,

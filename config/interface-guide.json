@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "guide_version": "1.0",
+  "guide_version": "1.1",
   "hardware_revision": "A3-120",
-  "scope": "Bench configuration and diagnostics. No engine scheduling or vehicle qualification.",
+  "scope": "Bench configuration and diagnostics. Physical engine outputs remain inhibited; no vehicle qualification.",
   "general": [
     "Board pin numbers refer to the PCB top view; pin 1 is the square pad. The mating plug view can be mirrored. Verify the actual harness with continuity tests.",
     "Disconnect power before resistance/continuity tests. Do not measure resistance on a live vehicle bus or use a megohmmeter on electronics.",
@@ -259,7 +259,7 @@
         "With ignition/injection disabled, turn the target safely or use an isolated bench signal generator. Do not connect a generator in parallel with an energized sensor."
       ],
       "expected": [
-        "Only rising edges are captured. Both signal paths use two Schmitt inversions, preserving the input polarity.",
+        "The decoder uses rising edges. Trigger logging records both polarities on separate diagnostic capture channels. Both Hall paths use two Schmitt inversions, preserving the input polarity.",
         "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Cam is counted but full 720-degree phase decoding is not implemented."
       ],
       "faults": [
@@ -290,7 +290,7 @@
         "With ignition/injection disabled, turn the target safely or use an isolated bench signal generator. Do not connect a generator in parallel with an energized sensor."
       ],
       "expected": [
-        "Only rising edges are captured. Both signal paths use two Schmitt inversions, preserving the input polarity.",
+        "The decoder uses rising edges. Trigger logging records both polarities on separate diagnostic capture channels. Both Hall paths use two Schmitt inversions, preserving the input polarity.",
         "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Cam is counted but full 720-degree phase decoding is not implemented."
       ],
       "faults": [
@@ -409,7 +409,7 @@
     "Table mode interpolates between 2-16 ascending voltage/value pairs. Values outside the table range are faults, not extrapolated measurements.",
     "NTC beta mode is for CLT/IAT only and requires the physical pull-up. It uses the measured sensor supply and compensates the 55 kohm divider load. A voltage table is preferable when the real curve is available.",
     "Filtering is for readout smoothing, not a substitute for fixing wiring/noise. Electrical fault checks use the instantaneous input.",
-    "A saved sensor profile changes diagnostic readout only. Engine scheduling, DBW, injector tuning, catalyst diagnostics and OEM protocols are not implemented.",
-    "Trigger geometry is applied to the bench decoder when configuration is saved. Crank synchronization is 360 degrees only."
+    "Saved calibration feeds readouts and shadow engine calculations. Physical engine outputs remain inhibited. DBW, catalyst diagnostics and OEM protocols are not implemented.",
+    "Saving trigger geometry cuts virtual timing and resets the decoder. Crank synchronization is 360 degrees only; raw cam logging does not establish 720-degree phase."
   ]
 }

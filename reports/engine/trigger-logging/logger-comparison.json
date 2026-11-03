@@ -1,0 +1,457 @@
+{
+  "scope": "Prescribed digital trigger streams; native recorder and production Speeduino logger/IRQ wrappers with virtual GPIO. No physical or engine-plant timing qualification.",
+  "passed": true,
+  "case_count": 10,
+  "cases": [
+    {
+      "mode": "composite",
+      "rpm": 200,
+      "case": "clean",
+      "passed": true,
+      "checks": {
+        "all_source_edges_preserved": true,
+        "production_composite_matches_raw_edges": true,
+        "both_frames_frozen_at127": true,
+        "reference_decoder_still_operates": true
+      },
+      "details": {
+        "maximum_rising_interval_us": 15000,
+        "cam_edges": 0
+      },
+      "reference_profile": {
+        "crank_pin": 19,
+        "cam_pin": 0,
+        "crank_edge": 3,
+        "cam_edge": 99,
+        "injection_layout": 1
+      },
+      "project_header": {
+        "schema_version": 1,
+        "state": "full",
+        "frame_id": 1,
+        "capacity": 512,
+        "requested": 127,
+        "count": 127,
+        "started_us": 900000,
+        "deadline_us": 5900000,
+        "ended_us": 1230000,
+        "prearm_ignored": 0,
+        "invalid_timebase_ignored": 0,
+        "offset": 0,
+        "page_capacity": 64,
+        "records": [],
+        "snapshot_superseded": false,
+        "returned": 0
+      },
+      "trace_sha256": "a3731a1241bf9fbe7a27c88cebae77e9665125eb7fba60b5d70cd7c4a5c69f6f"
+    },
+    {
+      "mode": "composite",
+      "rpm": 1000,
+      "case": "clean",
+      "passed": true,
+      "checks": {
+        "all_source_edges_preserved": true,
+        "production_composite_matches_raw_edges": true,
+        "both_frames_frozen_at127": true,
+        "reference_decoder_still_operates": true
+      },
+      "details": {
+        "maximum_rising_interval_us": 3000,
+        "cam_edges": 0
+      },
+      "reference_profile": {
+        "crank_pin": 19,
+        "cam_pin": 0,
+        "crank_edge": 3,
+        "cam_edge": 99,
+        "injection_layout": 1
+      },
+      "project_header": {
+        "schema_version": 1,
+        "state": "full",
+        "frame_id": 1,
+        "capacity": 512,
+        "requested": 127,
+        "count": 127,
+        "started_us": 180000,
+        "deadline_us": 5180000,
+        "ended_us": 246000,
+        "prearm_ignored": 0,
+        "invalid_timebase_ignored": 0,
+        "offset": 0,
+        "page_capacity": 64,
+        "records": [],
+        "snapshot_superseded": false,
+        "returned": 0
+      },
+      "trace_sha256": "14739b5adff4715a8726efa63b1b51ee3be36bef4e63d42b93401c61bb87b4a9"
+    },
+    {
+      "mode": "composite",
+      "rpm": 6000,
+      "case": "clean",
+      "passed": true,
+      "checks": {
+        "all_source_edges_preserved": true,
+        "production_composite_matches_raw_edges": true,
+        "both_frames_frozen_at127": true,
+        "reference_decoder_still_operates": true
+      },
+      "details": {
+        "maximum_rising_interval_us": 500,
+        "cam_edges": 0
+      },
+      "reference_profile": {
+        "crank_pin": 19,
+        "cam_pin": 0,
+        "crank_edge": 3,
+        "cam_edge": 99,
+        "injection_layout": 1
+      },
+      "project_header": {
+        "schema_version": 1,
+        "state": "full",
+        "frame_id": 1,
+        "capacity": 512,
+        "requested": 127,
+        "count": 127,
+        "started_us": 30000,
+        "deadline_us": 5030000,
+        "ended_us": 41000,
+        "prearm_ignored": 0,
+        "invalid_timebase_ignored": 0,
+        "offset": 0,
+        "page_capacity": 64,
+        "records": [],
+        "snapshot_superseded": false,
+        "returned": 0
+      },
+      "trace_sha256": "9a20152748118d3b0a831d8c0386f492722dd9b29310df3996dcb58fbdc5bfa7"
+    },
+    {
+      "mode": "composite",
+      "rpm": 1000,
+      "case": "jitter",
+      "passed": true,
+      "checks": {
+        "all_source_edges_preserved": true,
+        "production_composite_matches_raw_edges": true,
+        "both_frames_frozen_at127": true,
+        "reference_decoder_still_operates": true
+      },
+      "details": {
+        "maximum_rising_interval_us": 2970,
+        "cam_edges": 0
+      },
+      "reference_profile": {
+        "crank_pin": 19,
+        "cam_pin": 0,
+        "crank_edge": 3,
+        "cam_edge": 99,
+        "injection_layout": 1
+      },
+      "project_header": {
+        "schema_version": 1,
+        "state": "full",
+        "frame_id": 1,
+        "capacity": 512,
+        "requested": 127,
+        "count": 127,
+        "started_us": 180000,
+        "deadline_us": 5180000,
+        "ended_us": 246000,
+        "prearm_ignored": 0,
+        "invalid_timebase_ignored": 0,
+        "offset": 0,
+        "page_capacity": 64,
+        "records": [],
+        "snapshot_superseded": false,
+        "returned": 0
+      },
+      "trace_sha256": "57b3200d8f786145d11720d82642372ecf40455f54f00cc9b9d2e294f4160487"
+    },
+    {
+      "mode": "composite",
+      "rpm": 1000,
+      "case": "noise",
+      "passed": true,
+      "checks": {
+        "all_source_edges_preserved": true,
+        "production_composite_matches_raw_edges": true,
+        "both_frames_frozen_at127": true,
+        "three_microsecond_glitch_visible": true,
+        "reference_decoder_still_operates": true
+      },
+      "details": {
+        "maximum_rising_interval_us": 3000,
+        "cam_edges": 0
+      },
+      "reference_profile": {
+        "crank_pin": 19,
+        "cam_pin": 0,
+        "crank_edge": 3,
+        "cam_edge": 99,
+        "injection_layout": 1
+      },
+      "project_header": {
+        "schema_version": 1,
+        "state": "full",
+        "frame_id": 1,
+        "capacity": 512,
+        "requested": 127,
+        "count": 127,
+        "started_us": 180000,
+        "deadline_us": 5180000,
+        "ended_us": 244000,
+        "prearm_ignored": 0,
+        "invalid_timebase_ignored": 0,
+        "offset": 0,
+        "page_capacity": 64,
+        "records": [],
+        "snapshot_superseded": false,
+        "returned": 0
+      },
+      "trace_sha256": "83516b97238806143471ba3f632cbd4153d6fe477818c996137a7be58077fde5"
+    },
+    {
+      "mode": "composite",
+      "rpm": 1000,
+      "case": "dropout",
+      "passed": true,
+      "checks": {
+        "all_source_edges_preserved": true,
+        "production_composite_matches_raw_edges": true,
+        "both_frames_frozen_at127": true,
+        "declared_signal_gap_visible": true,
+        "reference_decoder_still_operates": true
+      },
+      "details": {
+        "maximum_rising_interval_us": 101000,
+        "cam_edges": 0
+      },
+      "reference_profile": {
+        "crank_pin": 19,
+        "cam_pin": 0,
+        "crank_edge": 3,
+        "cam_edge": 99,
+        "injection_layout": 1
+      },
+      "project_header": {
+        "schema_version": 1,
+        "state": "full",
+        "frame_id": 1,
+        "capacity": 512,
+        "requested": 127,
+        "count": 127,
+        "started_us": 180000,
+        "deadline_us": 5180000,
+        "ended_us": 346000,
+        "prearm_ignored": 0,
+        "invalid_timebase_ignored": 0,
+        "offset": 0,
+        "page_capacity": 64,
+        "records": [],
+        "snapshot_superseded": false,
+        "returned": 0
+      },
+      "trace_sha256": "e8a4a8fe38eeb5ea8ede945d602503d99dd1130d3aeba785f51d55865a12feac"
+    },
+    {
+      "mode": "composite",
+      "rpm": 1000,
+      "case": "cam",
+      "passed": true,
+      "checks": {
+        "all_source_edges_preserved": true,
+        "production_composite_matches_raw_edges": true,
+        "both_frames_frozen_at127": true,
+        "both_cam_polarities_visible": true,
+        "reference_decoder_still_operates": true
+      },
+      "details": {
+        "maximum_rising_interval_us": 3000,
+        "cam_edges": 2
+      },
+      "reference_profile": {
+        "crank_pin": 19,
+        "cam_pin": 18,
+        "crank_edge": 3,
+        "cam_edge": 3,
+        "injection_layout": 3
+      },
+      "project_header": {
+        "schema_version": 1,
+        "state": "full",
+        "frame_id": 1,
+        "capacity": 512,
+        "requested": 127,
+        "count": 127,
+        "started_us": 180000,
+        "deadline_us": 5180000,
+        "ended_us": 245000,
+        "prearm_ignored": 0,
+        "invalid_timebase_ignored": 0,
+        "offset": 0,
+        "page_capacity": 64,
+        "records": [],
+        "snapshot_superseded": false,
+        "returned": 0
+      },
+      "trace_sha256": "f51ea34d48f027bf29684b2df7a32d943d851e1cb8e6d26faa14e26a9aaf7a84"
+    },
+    {
+      "mode": "tooth",
+      "rpm": 200,
+      "case": "clean",
+      "passed": true,
+      "checks": {
+        "native_tooth_frame_full": true,
+        "common_complete_tooth_intervals_match": true,
+        "reference_decoder_still_operates": true
+      },
+      "details": {
+        "compared_complete_intervals": 126,
+        "first_reference_interval_excluded": 15000
+      },
+      "reference_profile": {
+        "crank_pin": 19,
+        "cam_pin": 0,
+        "crank_edge": 3,
+        "cam_edge": 99,
+        "injection_layout": 1
+      },
+      "project_header": {
+        "schema_version": 1,
+        "state": "timeout",
+        "frame_id": 1,
+        "capacity": 512,
+        "requested": 512,
+        "count": 504,
+        "started_us": 900000,
+        "deadline_us": 5900000,
+        "ended_us": 5900000,
+        "prearm_ignored": 0,
+        "invalid_timebase_ignored": 0,
+        "offset": 0,
+        "page_capacity": 64,
+        "records": [],
+        "snapshot_superseded": false,
+        "returned": 0
+      },
+      "trace_sha256": "309c25b78a1bc3ab425867c232a49ae7130c4edec46ceb744142b7c5db901625"
+    },
+    {
+      "mode": "tooth",
+      "rpm": 1000,
+      "case": "clean",
+      "passed": true,
+      "checks": {
+        "native_tooth_frame_full": true,
+        "common_complete_tooth_intervals_match": true,
+        "reference_decoder_still_operates": true
+      },
+      "details": {
+        "compared_complete_intervals": 126,
+        "first_reference_interval_excluded": 3000
+      },
+      "reference_profile": {
+        "crank_pin": 19,
+        "cam_pin": 0,
+        "crank_edge": 3,
+        "cam_edge": 99,
+        "injection_layout": 1
+      },
+      "project_header": {
+        "schema_version": 1,
+        "state": "timeout",
+        "frame_id": 1,
+        "capacity": 512,
+        "requested": 512,
+        "count": 504,
+        "started_us": 180000,
+        "deadline_us": 5180000,
+        "ended_us": 5180000,
+        "prearm_ignored": 0,
+        "invalid_timebase_ignored": 0,
+        "offset": 0,
+        "page_capacity": 64,
+        "records": [],
+        "snapshot_superseded": false,
+        "returned": 0
+      },
+      "trace_sha256": "e232ce6383004c4e89b732b8416247cc6c45e617d96ad8c102a3cfe583fd32c4"
+    },
+    {
+      "mode": "tooth",
+      "rpm": 6000,
+      "case": "clean",
+      "passed": true,
+      "checks": {
+        "native_tooth_frame_full": true,
+        "common_complete_tooth_intervals_match": true,
+        "reference_decoder_still_operates": true
+      },
+      "details": {
+        "compared_complete_intervals": 126,
+        "first_reference_interval_excluded": 500
+      },
+      "reference_profile": {
+        "crank_pin": 19,
+        "cam_pin": 0,
+        "crank_edge": 3,
+        "cam_edge": 99,
+        "injection_layout": 1
+      },
+      "project_header": {
+        "schema_version": 1,
+        "state": "timeout",
+        "frame_id": 1,
+        "capacity": 512,
+        "requested": 512,
+        "count": 504,
+        "started_us": 30000,
+        "deadline_us": 5030000,
+        "ended_us": 5030000,
+        "prearm_ignored": 0,
+        "invalid_timebase_ignored": 0,
+        "offset": 0,
+        "page_capacity": 64,
+        "records": [],
+        "snapshot_superseded": false,
+        "returned": 0
+      },
+      "trace_sha256": "863a50117c228524c5b3c2cd36adc9bbafa55fa4cc0d66c47a34583ff957638c"
+    }
+  ],
+  "source_hashes": {
+    "tools/compare_trigger_loggers.py": "62add2645cc5dbd622904e157bb03bb9144d16cabf8f72a48d49d6b0b9d38498",
+    "tools/speeduino_sim.cpp": "9fe0c3499b24d49d7bfb847fe5c383b4f3770e1fc1b8e875485cd3a150e2e71f",
+    "tools/speeduino_sim_hal.cpp": "155e13433b6568c22577bce9a9a7023c51ca27b14420ae703eeae1b4f31bedad",
+    "tools/speeduino_sim_native.hpp": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9",
+    "tools/speeduino_runtime.py": "abf2d1429fb74f264d7309312b6b69d75949770de1df3133c4d3ff7fda60f30b",
+    "tools/trigger_capture.py": "11765a063924b1ef7eac9a71c3cefa7c53af0cb93854336aa1984cf48f10447c",
+    "tools/trigger_capture_bridge.hpp": "15c809a38a2832da57ddaa8319dc0b10c9b623b6e8ad02beac472145641a957f",
+    "firmware/include/ecu/trigger_log.hpp": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451",
+    "firmware/include/ecu/trigger_log_json.hpp": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58",
+    "scripts/build_speeduino_sim.py": "1fc5defc8adb96c926bd055a7b0373cedb8307a3657af71f9160c6648c8b4d66"
+  },
+  "reference_build": {
+    "speeduino_sha": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+    "unit_test": false,
+    "binary_sha256": "e111651ef29980fa05d0aa7c8911ccdb7b18b67019ab07a682ab45ff51b33aab",
+    "hal_changes": [
+      "SoftwareTimer.h TIMER_RESOLUTION 100us to 4us",
+      "override Uno digitalPinToInterrupt macro with Arduino Mega mapping for native GPIO callbacks",
+      "replace wall-clock timer implementation with deterministic single-thread HAL",
+      "drive production oneMSInterval every 1000 virtual microseconds"
+    ]
+  },
+  "limits": [
+    "No MCU capture latch overwrite, interrupt latency, analog conditioning or electrical test",
+    "Reference cam fixture enables sequential injection solely to configure a real secondary decoder pin; this project still has no720degree phase/sequential strategy",
+    "Compare timestamps, source channel and reported edge level; Speeduino sync/cycle flags are retained but not asserted equivalent",
+    "Reads actual production history buffers; does not establish TunerStudio online acceptance or serial logger framing",
+    "Clean tooth comparison excludes the first reference interval whose start precedes the project window"
+  ]
+}

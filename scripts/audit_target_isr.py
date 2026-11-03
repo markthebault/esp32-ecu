@@ -71,7 +71,7 @@ for l in syms.splitlines():
 addresses=sorted(functions)
 for i,a in enumerate(addresses[:-1]):
  if not functions[a]['size']:functions[a]['size']=addresses[i+1]-a
-roots=[a for a,f in functions.items() if f['name'].startswith('ecu::engine_target::') and ('::on_capture(' in f['name'] or '::on_alarm(' in f['name']) or f['name'] in ('gptimer_default_isr','mcpwm_capture_default_isr')]
+roots=[a for a,f in functions.items() if f['name'].startswith('ecu::engine_target::') and any('::'+name+'(' in f['name'] for name in ('on_capture','on_alarm','on_trigger_capture')) or f['name'] in ('gptimer_default_isr','mcpwm_capture_default_isr')]
 instructions={};audit=[];queue=list(roots);seen=set();external=[];indirect=[];bad_lit=[];bad_loaded=[];dumps=[]
 def section_for(a):
  for n,h in sections.items():
@@ -152,7 +152,9 @@ print(json.dumps({'elf_sha256':report['elf_sha256'],'functions':len(audit),'exte
  'assertion_argument_only':len(metadata),'unclassified_flash_pointers':unclassified},indent=2))
 
 failures=[]
-if len(roots)!=4:failures.append('Expected both application callbacks and both registered driver ISR roots')
+if len(roots) not in (4,5):failures.append('Expected two timing callbacks, optional diagnostic callback and both registered driver ISR roots')
+for required in ('::on_capture(','::on_alarm(','gptimer_default_isr','mcpwm_capture_default_isr'):
+ if not any(required in functions[a]['name'] for a in roots):failures.append('Missing required ISR root: '+required)
 for function in audit:
  if function['section'] not in ('.iram0.text','ROM'):failures.append('Reachable code outside IRAM/ROM: '+function['name'])
 for function in external:
@@ -170,6 +172,9 @@ for line in syms.splitlines():
  m=re.match(r'^([0-9a-f]+) ([0-9a-f]+) ([bBdDrR]) (.*)$',line)
  if m and m[4] in ('ecu::engine_target::(anonymous namespace)::executor',
                     'ecu::engine_target::(anonymous namespace)::capture_clock',
+                    'ecu::engine_target::(anonymous namespace)::trigger_capture',
+                    'ecu::engine_target::(anonymous namespace)::trigger_clock',
+                    'ecu::engine_target::(anonymous namespace)::cam_context',
                     'ecu::engine_target::(anonymous namespace)::output',
                     'ecu::engine_target::(anonymous namespace)::output_pins',
                     'ecu::engine_target::(anonymous namespace)::lock',
@@ -183,7 +188,10 @@ for line in syms.splitlines():
   address=int(m[1],16);section=section_for(address)
   data.append(dict(name=m[4],address=hex(address),section=section))
   if not section.startswith('.dram'):failures.append('ISR state outside internal DRAM: '+m[4])
-if len(data)<11:failures.append('Required dispatcher state symbols not found')
+required_state={'executor','capture_clock','output','lock','external_epoch','installed_alarm','measured','configuration_hold','commands','captures','timer','cam_context'}
+if any('::on_trigger_capture(' in functions[a]['name'] for a in roots):required_state|={'trigger_capture','trigger_clock'}
+present={row['name'].split('::')[-1] for row in data}
+for missing in sorted(required_state-present):failures.append('Required ISR state symbol not found: '+missing)
 report.update(passed_static_placement=not failures,failures=failures,data_symbols=data,
  qualification='Static placement assistance only; assertion-only metadata is separately classified, not hidden. Driver callback targets matched to source registration. Heap allocation, indirect data accesses and physical timing require separate review/evidence.')
 (out/'closure.json').write_text(json.dumps(report,indent=2)+'\n')

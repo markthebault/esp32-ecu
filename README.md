@@ -12,7 +12,7 @@ A 120 × 120 mm, six-layer, through-hole ECU development board with a plug-in ES
 
 [Bill of materials](hardware/a3-compact/BOM.md) · [Shopping CSV](hardware/a3-compact/bom-shopping.csv) · [KiCad project](hardware/a3-compact/esp32-ecu.kicad_pro) · [26-page manual](output/pdf/esp32-ecu-a3-build-calibration-debug-manual.pdf) · [Print files](enclosure/a3/) · [Complete package](build/esp32-ecu-a3-120-web-manual-case.zip)
 
-Engine development: [core, target timing and simulator assessment](docs/engine-development.md) · [Speeduino feature coverage](docs/engine-feature-coverage.md) · [TunerStudio/MSL status](tuning/README.md). Physical outputs remain inhibited.
+Engine development: [core, target timing and simulator assessment](docs/engine-development.md) · [Speeduino feature coverage](docs/engine-feature-coverage.md) · [TunerStudio/MSL status](tuning/README.md) · [trigger logging](docs/engine-trigger-debug.md). Physical outputs remain inhibited.
 
 New development: [ESP-NOW pairing, screen management and sealed button wiring](docs/espnow.md). The UI can open pairing, approve a screen and unpair saved screens. Selected module: **44-pin Type-C N16R8**, with its [supplier PDF](hardware/references/esp32-s3-44pin-aliexpress.pdf) preserved. [A4 module-fit draft](hardware/a4-n16r8/README.md) has provisional socket dimensions; A3 manufacturing files and the old ZIP remain historical.
 

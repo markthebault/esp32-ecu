@@ -1,5 +1,6 @@
 #pragma once
 #include "ecu/timing_executor.hpp"
+#include "ecu/trigger_log.hpp"
 #include "cJSON.h"
 namespace ecu::engine_target {
 struct Wheel {unsigned slots=60,missing=2,max_rpm=8000;};
@@ -16,4 +17,7 @@ void begin_configuration();
 void finish_configuration(std::uint32_t tune_revision,std::uint32_t sensor_revision);
 cJSON* snapshot();
 cJSON* trace_json();
+cJSON* trigger_json(std::uint32_t expected_frame=0,unsigned offset=0,bool records=false);
+bool trigger_start(unsigned samples,unsigned timeout_ms);
+bool trigger_stop(std::uint32_t frame_id);
 }

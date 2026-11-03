@@ -37,8 +37,8 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | Supervision/recovery | Target independent command/producer/tooth/high-time deadlines, transactional scheduling and configuration holds | Reasons/counters/bounded traces/revisions/storage | Target timing/watchdog/restart policy needs physical HIL |
 | TunerStudio offline | Own definition/MSQ exchange | Settings/curve/map editors, strict identity/revision import | Files only, no physical binary transport |
 | TunerStudio online | Local MS-envelope prototype | Wire read/write/burn tests; app rejects own identity | Vendor integration and dedicated transport required |
-| MegaLogViewer HD | MSL export, actual application opens/plots | Labelled simulation log download | Real target logging not implemented |
-| Tooth/composite/ignition logging | Native full traces; target 128-record edge/cut ring | Timing JSON export, faults/overwrite counts; no TS high-speed logger | Dispatcher timestamps implemented; raw composite/per-pin measurements remain |
+| MegaLogViewer HD | Engine MSL and raw-trigger MSL; actual application opens/plots both | Source-labelled downloads; unknown trigger values retained | Physical target capture/logging behavior unmeasured |
+| Tooth/composite/ignition logging | Target finite512-edge crank/cam recorder, raw intervals and128-record output/cut ring | Trigger charts/zoom, JSON/MSL export, bounded paging and fault counts; no TS high-speed logger | Independent capture channels implemented; capture integrity/per-pin timing need HIL |
 | Autotune / VE Analyze Live | Missing | No button implies working autotune | Integration, calibrated data and suitable license |
 | ESP-NOW screens | Existing authenticated read-only sensor telemetry | Button/UI pair, approve/unpair, LED | Sealed buttons/LED fit remains provisional |
 | New engine telemetry to screens | New engine-specific schema missing | Current protocol is sensor-monitor telemetry | Versioned receiver compatibility work |
@@ -59,3 +59,5 @@ DBW/OEM integration remain outside the current bench scope.
 [External benchmark scope, configuration and reproduction](engine-research-benchmark.md) keeps simulator coverage separate from missing physical and control features.
 
 [Target timing implementation and evidence](engine-target-timing.md) describes the selected build's inhibited policy, native dispatcher comparison and outstanding physical tests.
+
+[Trigger debugging](engine-trigger-debug.md) covers raw capture, the Speeduino logger comparison and the source-labelled MegaLogViewer workflow.

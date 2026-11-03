@@ -1,0 +1,124 @@
+{
+  "scope": "Independent read-only architecture review of raw trigger diagnostics. No production edits, child agents, firmware flashing, connected ESP32 execution, or physical qualification.",
+  "reviewed_at": "2026-11-03T15:42:04.800232+00:00",
+  "baseline_commit": "0a9a08cab8ae7336a5273c45193436116c4379ce",
+  "result": "Early review complete. Concrete findings and reproductions were sent to parent during implementation. Group1 isolation resolves the initial decoder-front-end design regression. Remaining fixes are in progress; this artifact is not final-source or final-ELF approval.",
+  "source_sha256_at_report": {
+    "firmware/include/ecu/trigger_log.hpp": "4cc5570ad57e89d96784974f9875bdf746be84fe5e6ed14b5cf0206121e47df0",
+    "firmware/include/ecu/trigger_log_json.hpp": "9116376673ab44234e3f85f8e381fe09e3210e814c9e062220dfb73b7f6cc73b",
+    "firmware/include/ecu/engine_target.hpp": "bd2144c3ec5a897241bc4a7f6e8f3eec6035a73a0ed9659ce4e713cffdbdb2a7",
+    "firmware/main/engine_target.cpp": "3467c3d8846e2ca9d084059c004600200a2274a8afc0f165bebd6a16fd3f7966",
+    "firmware/main/web_config.cpp": "08466b2831379902b6d31987f263afddd0716c65106c59cdff6ab126181c423e",
+    "firmware/main/CMakeLists.txt": "727fc7e89d4506975ff1d13929c64667e4c9eacf55a7b9106c169ad6f41ee918",
+    "firmware/include/ecu/capture_clock.hpp": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "scripts/audit_target_isr.py": "afedebd9f2d99fc6b6b2d20425da983870845e2afc31d7f884df3da358e70078"
+  },
+  "pinned_sdk": {
+    "version": "5.5.0",
+    "path": "/home/mark/.platformio/packages/framework-espidf",
+    "primary_sources": [
+      "components/esp_driver_mcpwm/src/mcpwm_cap.c",
+      "components/esp_driver_mcpwm/src/mcpwm_sync.c",
+      "components/esp_driver_mcpwm/include/driver/mcpwm_sync.h",
+      "components/hal/esp32s3/include/hal/mcpwm_ll.h",
+      "components/soc/esp32s3/register/soc/mcpwm_struct.h",
+      "components/esp_hw_support/intr_alloc.c"
+    ]
+  },
+  "findings": [
+    {
+      "id": "AR1",
+      "severity": "high",
+      "status": "Architecture reworked by parent; final build review pending",
+      "location": "engine_target.cpp: capture channel polarity configuration and on_capture",
+      "finding": "Enabling positive and negative capture on the existing decoder channels changes the decoder front end despite queuing only positive callbacks. A negative edge can overwrite a pending positive-edge latch. SDK also reads timestamp and polarity in separate MMIO operations, allowing a mixed pair if another edge arrives between reads. Both-edge ISR load persists even when recorder is idle in the initial design.",
+      "evidence": "mcpwm_capture_default_isr clears status and reads cap_value then cap_edge. S3 cap_chn register is documented as last capture; cap_status stores last edge, without a FIFO.",
+      "resolution_review": "Dedicated group1 capture timer plus independent CaptureClock and two diagnostic channels is appropriate. Preserve group0 rising-only configuration and baseline decoder callback. Diagnostic mapping errors must not trip the executor. Do not allocate/enable group1 in dummy-load or legacy-pulse physical builds."
+    },
+    {
+      "id": "AR2",
+      "severity": "medium",
+      "status": "Parent implementing final frame-ID check",
+      "location": "trigger_log_json.hpp: frame_json",
+      "finding": "Per-row frame-ID checks miss a rearm immediately after the last row read, before row serialization completes. Old rows are returned with snapshot_superseded=false despite frame change during snapshot.",
+      "reproduction": "architecture-probe.cpp re-arms inside the reader immediately after successfully reading row16/16. Result: returned_id=1,current_id=2,returned_rows=16,snapshot_superseded=false. Rearming after row4 is correctly detected and all rows discarded.",
+      "resolution_review": "Final frame-ID validation after the last record copy/serialization establishes a clear snapshot boundary. Apply it to zero-row metadata reads as appropriate. UI must gather only a frozen same-ID frame."
+    },
+    {
+      "id": "AR3",
+      "severity": "medium",
+      "status": "Parent implementing64-row paging, metadata-only default and checked JSON allocation",
+      "location": "trigger_log_json.hpp: frame_json and web_config.cpp: engine_trigger_get",
+      "finding": "Unchecked cJSON allocation failure can return a partially built frame as a successful JSON response. Initial full512-row tree also has substantial transient heap cost.",
+      "reproduction": "With cJSON hooks denying allocations after400 attempts, declared_count=512 but only21 rows return, one incomplete, and snapshot_superseded is absent. Native full512 frame is76532 encoded bytes and peaks at560474 requested heap bytes including encoding.",
+      "target_layout": "Pinned Xtensa compilation confirms Record=32 bytes,Capture=16432 bytes,cJSON=40 bytes; native cJSON=64 bytes. Native peak is not a target measurement. Target ABI reduces tree cost but full-frame peak remains material, especially non-PSRAM web builds.",
+      "resolution_review": "Metadata-only default and bounded64-row pages avoid full-frame construction. Check every required JSON allocation/attachment and return an explicit error instead of partial records; bound encoding memory too."
+    },
+    {
+      "id": "AR4",
+      "severity": "medium",
+      "status": "Parent implementing invalid-map drop/count and considering explicit group1 pending-status clear",
+      "location": "trigger_log.hpp: Capture::append; engine_target.cpp: diagnostic start/disable lifecycle",
+      "finding": "SDK channel disable disables capture and interrupt service but does not clear pending capture status. Re-enable may deliver a previous-session latch. Current prearm guard checks only valid mapped timestamps; an invalid old mapping is accepted as a new invalid row. After a full32-bit wrap an arbitrarily old latch can alias a recent valid time.",
+      "reproduction": "architecture-probe.cpp passes an invalid-time candidate after arming; returned_rows=1 and prearm_ignored=0. Source inspection confirms mcpwm_capture_channel_disable does not clear status.",
+      "resolution_review": "Drop/count invalid mappings. Clearing only group1 capture status bits immediately before new frame start is appropriate while both diagnostic channels and both interrupt handles are confirmed disabled, serialized by trigger_mutex. Keep valid-time prearm filtering because an already in-flight SDK callback can survive a clear. Do not hold target portMUX across driver enable/disable."
+    },
+    {
+      "id": "AR5",
+      "severity": "build blocker",
+      "status": "Parent acknowledged extraction to ecu/json.hpp; rerun compile when landed",
+      "location": "trigger_log_json.hpp include dependency",
+      "finding": "New public header includes config_json.hpp from firmware/main, which is not a configured component include directory. Pinned target compilation of engine_target.cpp fails to resolve it.",
+      "evidence": "architecture-object-compile.log records fatal error: config_json.hpp: No such file or directory. Native probe deliberately adds -I firmware/main, so it does not disprove target failure.",
+      "resolution_review": "Extract shared helpers to a proper include location or separate request parsing from frame serialization."
+    },
+    {
+      "id": "AR6",
+      "severity": "build blocker",
+      "status": "Parent reported fix; final compilation pending",
+      "location": "engine_target.cpp: init_trigger_logger",
+      "finding": "Pinned IDF mcpwm_soft_sync_config_t is empty; assigning software.group_id=1 is invalid.",
+      "resolution_review": "Remove assignment. mcpwm_capture_timer_set_phase_on_sync binds a soft-sync source to the capture timer group."
+    },
+    {
+      "id": "AR7",
+      "severity": "validation gap",
+      "status": "Reported to parent for ISR audit update",
+      "location": "scripts/audit_target_isr.py: root discovery and root-count assertion",
+      "finding": "Existing audit discovers on_capture/on_alarm plus two driver handlers and expects4 roots. It omits new on_trigger_capture, allowing the new callback closure to go unaudited.",
+      "resolution_review": "Add diagnostic callback as explicit fifth root in selected builds; keep4 roots and verify diagnostic callback absence in physical builds. Audit its functions, literal loads, record/clock/context DRAM placement, and allocation/math closure in the final linked image."
+    }
+  ],
+  "positive_design_findings": [
+    "Capture frame is finite and never overwrites frozen rows. Header reset does not clear the16KiB data array under the target lock.",
+    "Record copies and header access use bounded short locks. JSON allocation/formatting happens outside the target portMUX.",
+    "Stop is bound to an explicit frame ID and is idempotent for the same frozen current frame; stale stop cannot stop a newer frame.",
+    "Configuration epoch is stored per record; saves need not rearm or discard a diagnostic frame. Epoch should be described as callback-time configuration epoch.",
+    "Proposed diagnostic task mutex serializes enable/disable/start/stop. Current worker takes it nonblocking, then re-reads the frame state; this avoids disabling a newer frame based on an older observation.",
+    "Pinned esp_intr_enable/disable support cross-core control of these muxed peripheral interrupts; core1 allocation with HTTP-task control is permitted."
+  ],
+  "required_lifecycle_contract": [
+    "Keep diagnostic capture timer running between sessions, with channels disabled; if stopped/reset, re-synchronize the independent CaptureClock before accepting records.",
+    "Allocate/register diagnostic resources once on the intended core. Group1 priority1 is independent of group0/timer priority3 and reduces timing interference.",
+    "Driver controls and blocking task mutex waits must remain outside target portMUX and outside ISR.",
+    "Before rearm: acquire trigger_mutex, confirm prior frame not armed, disable both old diagnostic channels, clear their pending status while disabled, then establish new frame start and enable channels.",
+    "On stop/full/timeout: freeze frame under target lock; worker or HTTP task disables channels under task mutex and rechecks current frame state after acquiring it.",
+    "On diagnostic allocation/sync/control failure: expose availability/error and preserve group0 operation; never enable physical outputs or clear an executor fault."
+  ],
+  "remaining_hardware_measurement_limits": [
+    "No ESP32 was connected or flashed. Target ISR latency, lock hold time, cross-core timing and cleanup latency are unmeasured.",
+    "Dedicated group1 isolates decoder latches but does not make the diagnostic latch a FIFO or atomically pair timestamp/polarity. Capture overwrite, coalescing, timestamp/polarity mismatch and missed edges remain unmeasured.",
+    "A finite buffer bounds record storage, not interrupt load or time to disable under arbitrary noisy/high-frequency input. Physical builds must omit diagnostic interrupt allocation.",
+    "Software-sync bracket uncertainty, shared APB rate behavior and32-bit counter wrap need hardware validation with independent stimulus/timestamps.",
+    "Records show SDK-reported conditioned digital input events, not analog waveform levels or actual injector/coil output edges. Cam phase is not decoded.",
+    "Raw web diagnostics are progress toward logger coverage, not TunerStudio high-speed logger protocol compatibility or complete Speeduino feature parity."
+  ],
+  "artifacts": {
+    "native_probe": "architecture-probe.cpp",
+    "native_results": "architecture-probe.json",
+    "target_layout": "architecture-target-layout.json",
+    "compile_log": "architecture-object-compile.log"
+  },
+  "next_validation": "Re-run portable recorder/JSON tests including final-read rearm, invalid stale latches, every allocation failure point and page assembly. Build selected and physical modes; inspect final ELF callback roots and diagnostic resource exclusion. These remain pending implementation completion."
+}

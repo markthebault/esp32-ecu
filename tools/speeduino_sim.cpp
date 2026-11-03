@@ -10,6 +10,7 @@
 #include "decoder_init.h"
 #include "timers.h"
 #include "init.h"
+#include "logger.h"
 #include "scheduler_fuel_controller.h"
 #include "scheduler_ignition_controller.h"
 #include <SimpleArduinoFake.h>
@@ -32,8 +33,11 @@ EarlySetup early_setup __attribute__((init_priority(65534)));
 int adc[256]{};
 int pins[256]{};
 void (*interrupts_by_pin[256])(){};
+int interrupt_modes[256]{};
+std::string log_kind="none";
 bool record_edges = false;
 bool use_per_tooth = false;
+bool logger_cam = false;
 volatile uint8_t* output_ports[8]{};
 uint8_t output_masks[8]{};
 uint8_t output_pins[8]{};
@@ -52,7 +56,7 @@ void prepare_hal() {
         auto port=portOutputRegister(digitalPinToPort(pin));auto mask=digitalPinToBitMask(pin);
         if(value) *port |= mask; else *port &= ~mask;
     });
-    When(Method(mock, attachInterrupt)).AlwaysDo([](uint8_t pin, void (*cb)(), int) { interrupts_by_pin[pin] = cb; });
+    When(Method(mock, attachInterrupt)).AlwaysDo([](uint8_t pin, void (*cb)(), int mode) { interrupts_by_pin[pin] = cb;interrupt_modes[pin]=mode; });
     When(Method(mock, detachInterrupt)).AlwaysDo([](uint8_t pin) { interrupts_by_pin[pin] = nullptr; });
 }
 void configure() {
@@ -63,7 +67,7 @@ void configure() {
     configPage2.nInjectors = 4;
     configPage2.strokes = FOUR_STROKE;
     configPage2.injType = INJ_TYPE_PORT;
-    configPage2.injLayout = INJ_SEMISEQUENTIAL;
+    configPage2.injLayout = logger_cam?INJ_SEQUENTIAL:INJ_SEMISEQUENTIAL;
     configPage2.divider = 2;
     configPage2.injTiming = 0;
     configPage2.reqFuel = 107; // 2L/4cyl,300cc/min,14.7 AFR,25C rounded to0.1ms
@@ -170,8 +174,12 @@ int main(int argc,char** argv) {
         if(length<=0) throw std::runtime_error("cannot locate native executable");
         binary[length]='\0';std::string path(binary);auto parent=path.substr(0,path.find_last_of('/'));
         if(setenv("GCOV_PREFIX",(parent+"/gcov").c_str(),1)!=0)throw std::runtime_error("cannot isolate coverage artifacts");
-        if(argc==2 && std::string(argv[1])=="--per-tooth") use_per_tooth=true;
-        else if(argc!=1) throw std::runtime_error("only --per-tooth is supported");
+        for(int arg=1;arg<argc;++arg){
+            const std::string flag(argv[arg]);
+            if(flag=="--per-tooth")use_per_tooth=true;
+            else if(flag=="--logger-cam")logger_cam=true;
+            else throw std::runtime_error("unsupported native profile flag");
+        }
         prepare_hal(); configure();
         // Pin numbers are resolved by setup. Prime the standard v0.4 sensors.
         setPinMapping(3);
@@ -194,6 +202,36 @@ int main(int argc,char** argv) {
         while (std::cin >> command) {
             if (command == "advance") { uint64_t us; std::cin>>us; speeduino_sim_advance(us); loop(); }
             else if (command == "tooth") { uint64_t us; std::cin>>us; speeduino_sim_advance(us); auto cb=currentStatus.decoder.primary.callback; if(!cb) throw std::runtime_error("primary ISR missing"); pins[pinNumbers.pinTrigger]=HIGH; cb(); pins[pinNumbers.pinTrigger]=LOW; loop(); }
+            else if (command == "input") {
+                uint64_t us=0;unsigned channel=0,high=0;
+                if(!(std::cin>>us>>channel>>high)||channel>1||high>1)throw std::runtime_error("invalid virtual trigger input");
+                speeduino_sim_advance(us);auto pin=channel?pinNumbers.pinTrigger2:pinNumbers.pinTrigger;
+                if(pin==NOT_A_PIN||digitalPinToInterrupt(pin)==NOT_AN_INTERRUPT)throw std::runtime_error("trigger pin has no configured native interrupt");
+                const bool changed=pins[pin]!=int(high);pins[pin]=high;
+                const auto interrupt=digitalPinToInterrupt(pin);auto cb=interrupts_by_pin[interrupt];const auto mode=interrupt_modes[interrupt];
+                if(changed&&cb&&(mode==CHANGE||(mode==RISING&&high)||(mode==FALLING&&!high)))cb();
+                loop();
+            }
+            else if (command == "logger") {
+                std::string action;std::cin>>action;
+                if(action=="composite"){startCompositeLogger();log_kind=action;}
+                else if(action=="tooth"){startToothLogger();log_kind=action;}
+                else if(action=="stop"){
+                    if(currentStatus.toothLogEnabled)stopToothLogger();
+                    if(currentStatus.compositeTriggerUsed)stopCompositeLogger();
+                }else throw std::runtime_error("invalid logger mode");
+            }
+            else if (command == "logread") {
+                const unsigned count=currentStatus.isToothLog1Full?TOOTH_LOG_SIZE:toothHistoryIndex;
+                if(count>TOOTH_LOG_SIZE)throw std::runtime_error("invalid production logger count");
+                std::cout<<"loginfo "<<log_kind<<' '<<count<<' '<<unsigned(TOOTH_LOG_SIZE)<<' '<<currentStatus.isToothLog1Full<<'\n';
+                for(unsigned i=0;i<count;++i)std::cout<<"logrow "<<i<<' '<<toothHistory[i]<<' '<<unsigned(compositeLogHistory[i])<<'\n';
+            }
+            else if (command == "loggerprofile") {
+                std::cout<<"loggerprofile "<<unsigned(pinNumbers.pinTrigger)<<' '<<unsigned(pinNumbers.pinTrigger2)<<' '
+                         <<unsigned(currentStatus.decoder.primary.edge)<<' '<<unsigned(currentStatus.decoder.secondary.edge)<<' '
+                         <<unsigned(configPage2.injLayout)<<'\n';
+            }
             else if (command == "sensors") { double m,t,c,i,b,a;std::cin>>m>>t>>c>>i>>b>>a;set_sensors(m,t,c,i,b,a); }
             else if (command == "status") status();
             else if (command == "profile") {

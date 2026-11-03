@@ -22,3 +22,17 @@ mkdir -p "$task_root/build"
     -I "$task_root/firmware/include" "$task_root/firmware/tests/timing_executor_test.cpp" \
     -o "$task_root/build/timing-executor-test"
 "$task_root/build/timing-executor-test"
+"${CXX:-clang++}" -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic \
+    -fsanitize=address,undefined -fno-omit-frame-pointer \
+    -I "$task_root/firmware/include" "$task_root/firmware/tests/trigger_log_test.cpp" \
+    -o "$task_root/build/trigger-log-test"
+"$task_root/build/trigger-log-test"
+task_cjson="${PLATFORMIO_CORE_DIR:-$HOME/.platformio}/packages/framework-espidf/components/json/cJSON"
+"${CC:-cc}" -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer \
+    -c "$task_cjson/cJSON.c" -o "$task_root/build/trigger-cjson.o"
+"${CXX:-clang++}" -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic \
+    -fsanitize=address,undefined -fno-omit-frame-pointer \
+    -I "$task_cjson" -I "$task_root/firmware/include" \
+    "$task_root/firmware/tests/trigger_log_json_test.cpp" "$task_root/build/trigger-cjson.o" \
+    -o "$task_root/build/trigger-log-json-test"
+"$task_root/build/trigger-log-json-test"

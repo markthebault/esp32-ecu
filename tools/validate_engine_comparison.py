@@ -44,7 +44,7 @@ def validate():
             convergence.append(dict(controller=controller,scenario=scenario,steps_us=[250,125],relative_differences=metrics,tolerance=.03,passed=passed))
             if not passed:failures.append(dict(controller=controller,scenario=scenario,errors=['coupling step convergence']))
     source_paths=['tools/compare_engine_controllers.py','tools/engine_research_plant.py','tools/speeduino_runtime.py',
-                  'tools/speeduino_sim.cpp','tools/speeduino_sim_hal.cpp','simulation/modelica/EngineAirPath.mo',
+                  'tools/speeduino_sim.cpp','tools/speeduino_sim_hal.cpp','tools/speeduino_sim_native.hpp','simulation/modelica/EngineAirPath.mo',
                   'tools/validate_engine_comparison.py','config/engine/defaults.json',
                   'tools/engine_runtime.py','tools/engine_bridge.cpp','firmware/main/config_json.hpp',
                   'tools/test_research_plant.py','tools/test_speeduino_runtime.py',

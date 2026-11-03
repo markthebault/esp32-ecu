@@ -9,9 +9,9 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 class SpeeduinoRuntime:
-    def __init__(self,per_tooth=False):
+    def __init__(self,per_tooth=False,logger_cam=False):
         executable=ROOT/'.cache/engine/speeduino-sim/speeduino-sim'
-        self.process=subprocess.Popen([str(executable),*(['--per-tooth'] if per_tooth else [])],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
+        self.process=subprocess.Popen([str(executable),*(['--per-tooth'] if per_tooth else []),*(['--logger-cam'] if logger_cam else [])],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
                                       stderr=subprocess.PIPE,bufsize=0)
         self.buffer=b'';self.now=0
         try:self._initialize(per_tooth)
@@ -32,6 +32,13 @@ class SpeeduinoRuntime:
             raise RuntimeError('Native setup did not preserve the declared benchmark protection/tune profile')
         self.profile=dict(zip(('reqFuel_point1ms','hard_limit_rpm100','soft_limit_rpm100',
                               'protection_type','hard_limit_mode','per_tooth'),expected))
+
+    def logger_profile(self):
+        lines=self.command('loggerprofile')
+        if len(lines)!=1 or not lines[0].startswith('loggerprofile '):raise RuntimeError('Missing logger configuration')
+        values=list(map(int,lines[0].split()[1:]))
+        if len(values)!=5:raise RuntimeError('Incomplete logger configuration')
+        return dict(zip(('crank_pin','cam_pin','crank_edge','cam_edge','injection_layout'),values))
 
     def _line(self):
         while b'\n' not in self.buffer:
@@ -64,6 +71,9 @@ class SpeeduinoRuntime:
             raise ValueError('Native benchmark time must be monotonic0..60s')
         self.now=time_us
         lines=self.command(('tooth' if tooth else 'advance')+' '+str(time_us))
+        return self._edges(lines)
+
+    def _edges(self,lines):
         edges=[]
         for line in lines:
             fields=line.split()
@@ -71,6 +81,28 @@ class SpeeduinoRuntime:
             timestamp,pin,high=map(int,fields[1:])
             if pin in self.pin_map:edges.append((timestamp,self.pin_map[pin],bool(high),None,None))
         return edges
+
+    def input_edge(self,time_us,channel,high):
+        if isinstance(time_us,bool) or not isinstance(time_us,int) or not self.now<=time_us<=60_000_000 or type(channel) is not int or channel not in (0,1) or type(high) is not bool:
+            raise ValueError('Invalid virtual trigger edge')
+        self.now=time_us
+        return self._edges(self.command(f'input {time_us} {channel} {int(high)}'))
+
+    def logger(self,mode):
+        if mode not in ('composite','tooth','stop'):raise ValueError('Invalid production logger mode')
+        if self.command('logger '+mode):raise RuntimeError('Unexpected logger-start response')
+
+    def trigger_log(self):
+        lines=self.command('logread')
+        if not lines or not lines[0].startswith('loginfo '):raise RuntimeError('Missing native logger header')
+        _,kind,count,capacity,full=lines[0].split();count,capacity,full=map(int,(count,capacity,full))
+        if not 0<=count<=capacity or capacity!=127 or len(lines)!=count+1:raise RuntimeError('Invalid native logger length')
+        rows=[]
+        for index,line in enumerate(lines[1:]):
+            tag,number,value,flags=line.split()
+            if tag!='logrow' or int(number)!=index:raise RuntimeError('Invalid native logger record')
+            rows.append(dict(sequence=index+1,value=int(value),flags=int(flags)))
+        return dict(mode=kind,count=count,capacity=capacity,full=bool(full),records=rows)
 
     def status(self):
         lines=self.command('status')

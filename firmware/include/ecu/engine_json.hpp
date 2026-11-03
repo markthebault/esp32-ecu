@@ -1,6 +1,6 @@
 #pragma once
 #include "ecu/engine.hpp"
-#include "config_json.hpp"
+#include "ecu/json.hpp"
 namespace ecu::engine {
 // Strict schema shared by target service and host SIL; separate from sensor
 // calibration schema v1 to preserve existing saved profiles without migration.

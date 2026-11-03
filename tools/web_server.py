@@ -3,6 +3,7 @@
 Requires a C++ compiler and ESP-IDF's cJSON source installed by PlatformIO.
 """
 import argparse,ctypes,json,math,os,secrets,signal,subprocess,sys,tempfile,threading,time
+import re
 from contextlib import ExitStack
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
@@ -77,6 +78,7 @@ class Handler(BaseHTTPRequestHandler):
  def do_GET(self):
   d=self.server.device
   if self.path in ('/','/index.html'):return self.reply(200,(R/'web/index.html').read_bytes(),'text/html; charset=utf-8')
+  if self.path=='/trigger_logger.js':return self.reply(200,(R/'web/trigger_logger.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/api/session':return self.reply(200,dict(token=d.token,simulator=True))
   if self.path=='/api/config':
    with d.lock:return self.reply(200,d.profile)
@@ -92,6 +94,13 @@ class Handler(BaseHTTPRequestHandler):
   if self.path=='/api/engine/defaults':return self.reply(200,d.engine.defaults)
   if self.path=='/api/engine/status':return self.reply(200,d.engine.status())
   if self.path=='/api/engine/timing':return self.reply(200,d.engine.timing_trace())
+  if self.path.split('?',1)[0]=='/api/engine/trigger-log':
+   query=self.path.partition('?')[2];frame_id=offset=0
+   if query:
+    match=re.fullmatch(r'frame_id=([0-9]{1,10})&offset=([0-9]{1,3})',query)
+    if not match or not 1<=int(match[1])<=4294967295 or int(match[2])>512:return self.reply(422,{'error':'Use frame_id and offset for a bounded record page'})
+    frame_id,offset=map(int,match.groups())
+   frame=d.engine.trigger_frame(frame_id,offset,bool(query));return self.reply(409 if frame['snapshot_superseded'] else 200,frame)
   if self.path=='/api/engine/log':
    try:return self.reply(200,d.engine.msl().encode(),'text/plain; charset=utf-8')
    except ValueError as e:return self.reply(409,{'error':str(e)})
@@ -113,6 +122,7 @@ class Handler(BaseHTTPRequestHandler):
     return self.reply(*result)
    except (ValueError,KeyError,TypeError):return self.reply(422,{'error':'Invalid radio command.'})
   if self.command=='PUT' and self.path=='/api/engine/config':return self.reply(*d.engine.save(body))
+  if self.command=='POST' and self.path=='/api/engine/trigger-log':return self.reply(*d.engine.trigger_command(body))
   if self.command=='POST' and self.path=='/api/engine/run':
    try:return self.reply(*d.engine.run(json.loads(body)))
    except ValueError:return self.reply(422,{'error':'Invalid simulation JSON'})

@@ -18,6 +18,12 @@ def constant_speed(runtime,rpm,until_us=300000):
 
 
 class ProductionSpeeduinoAcceptance(unittest.TestCase):
+    def test_bad_input_channel_rejected_before_mutating_live_child(self):
+        runtime=SpeeduinoRuntime();self.addCleanup(runtime.close)
+        for channel in (False,True,0.0,1.0,'0',2,-1,None):
+            with self.assertRaises(ValueError):runtime.input_edge(1000,channel,True)
+            self.assertEqual(runtime.now,0);self.assertIsNone(runtime.process.poll())
+        runtime.input_edge(1000,0,True);self.assertEqual(runtime.now,1000);self.assertIsNone(runtime.process.poll())
     def runtime(self,per_tooth=False):
         runtime=SpeeduinoRuntime(per_tooth);self.addCleanup(runtime.close);return runtime
 

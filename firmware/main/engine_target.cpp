@@ -1,11 +1,13 @@
 #include "ecu/engine_target.hpp"
 #include "ecu/capture_clock.hpp"
+#include "ecu/trigger_log_json.hpp"
 #include "ecu/control.hpp"
 #include "ecu/pins.hpp"
 #include "driver/gptimer.h"
 #include "driver/mcpwm_cap.h"
 #include "driver/mcpwm_sync.h"
 #include "hal/gpio_ll.h"
+#include "hal/mcpwm_ll.h"
 #include "soc/gpio_struct.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
@@ -25,6 +27,8 @@ namespace ecu::engine_target {
 namespace {
 DRAM_ATTR timing::Executor executor;
 DRAM_ATTR timing::CaptureClock capture_clock;
+DRAM_ATTR trigger_log::Capture trigger_capture;
+DRAM_ATTR timing::CaptureClock trigger_clock;
 DRAM_ATTR portMUX_TYPE lock=portMUX_INITIALIZER_UNLOCKED;
 #if ECU_ENGINE_DUMMY_LOADS
 DRAM_ATTR const unsigned output_pins[8]={pins::inj1_cmd,pins::inj2_cmd,pins::inj3_cmd,pins::inj4_cmd,
@@ -66,6 +70,11 @@ gptimer_handle_t timer;
 mcpwm_cap_timer_handle_t cap_timer;
 QueueHandle_t captures,commands;
 SemaphoreHandle_t started,configuration_mutex;
+SemaphoreHandle_t trigger_mutex;
+std::array<mcpwm_cap_channel_handle_t,2> trigger_channels{};
+bool trigger_available=false;
+std::array<bool,2> trigger_channel_enabled{};
+esp_err_t trigger_error=ESP_OK;
 TaskHandle_t timing_task;
 Wheel initial_wheel;
 DRAM_ATTR std::uint32_t external_epoch=1;
@@ -122,6 +131,70 @@ bool IRAM_ATTR on_capture(mcpwm_cap_channel_handle_t,const mcpwm_capture_event_d
  }
  portEXIT_CRITICAL_ISR(&lock);return wake==pdTRUE;
 }
+bool IRAM_ATTR on_trigger_capture(mcpwm_cap_channel_handle_t,const mcpwm_capture_event_data_t* event,void* context){
+ portENTER_CRITICAL_ISR(&lock);
+ const auto now=now_locked();const auto stamp=trigger_clock.map(event->cap_value,now);
+ trigger_capture.append({stamp.time_us,now,event->cap_value,external_epoch,context!=nullptr,
+  event->cap_edge==MCPWM_CAP_EDGE_POS,stamp.error==timing::CaptureClock::Error::None});
+ portEXIT_CRITICAL_ISR(&lock);return false;
+}
+bool disable_trigger_channels(){
+ bool ok=true;
+ for(unsigned i=0;i<trigger_channels.size();++i)if(trigger_channel_enabled[i]){
+  const auto result=mcpwm_capture_channel_disable(trigger_channels[i]);
+  if(result==ESP_OK)trigger_channel_enabled[i]=false;
+  else{if(trigger_error==ESP_OK)trigger_error=result;ok=false;}
+ }
+ return ok;
+}
+void service_trigger_logger(){
+ if(xSemaphoreTake(trigger_mutex,0)!=pdTRUE)return;
+ portENTER_CRITICAL(&lock);const auto state=trigger_capture.header().state;portEXIT_CRITICAL(&lock);
+ if(state!=trigger_log::State::Armed)disable_trigger_channels();
+ xSemaphoreGive(trigger_mutex);
+}
+void init_trigger_logger(){
+#if !ECU_ENGINE_DUMMY_LOADS && !(defined(ECU_BENCH_PULSES) && ECU_BENCH_PULSES)
+ // Dedicated latches: both-edge diagnostics must not replace group0 decoder
+ // captures. Driver allocation/registration stays on the core1 timing task.
+ mcpwm_cap_timer_handle_t diagnostic_timer=nullptr;mcpwm_sync_handle_t sync=nullptr;
+ bool enabled=false,running=false;
+ auto setup=[&]()->esp_err_t{
+  mcpwm_capture_timer_config_t cfg{};cfg.group_id=1;cfg.clk_src=MCPWM_CAPTURE_CLK_SRC_APB;
+  auto result=mcpwm_new_capture_timer(&cfg,&diagnostic_timer);if(result!=ESP_OK)return result;
+  std::uint32_t hz=0;result=mcpwm_capture_timer_get_resolution(diagnostic_timer,&hz);if(result!=ESP_OK)return result;
+  result=mcpwm_capture_timer_enable(diagnostic_timer);if(result!=ESP_OK)return result;enabled=true;
+  result=mcpwm_capture_timer_start(diagnostic_timer);if(result!=ESP_OK)return result;running=true;
+  mcpwm_soft_sync_config_t software{};
+  result=mcpwm_new_soft_sync_src(&software,&sync);if(result!=ESP_OK)return result;
+  mcpwm_capture_timer_sync_phase_config_t phase{};phase.sync_src=sync;phase.direction=MCPWM_TIMER_DIRECTION_UP;
+  result=mcpwm_capture_timer_set_phase_on_sync(diagnostic_timer,&phase);if(result!=ESP_OK)return result;
+  std::uint64_t before=0,after=0;
+  portENTER_CRITICAL(&lock);gptimer_get_raw_count(timer,&before);result=mcpwm_soft_sync_activate(sync);gptimer_get_raw_count(timer,&after);
+  const bool synced=result==ESP_OK&&trigger_clock.sync(hz,before,after);portEXIT_CRITICAL(&lock);
+  if(!synced)return result==ESP_OK?ESP_ERR_INVALID_STATE:result;
+  for(unsigned i=0;i<2;++i){
+   mcpwm_capture_channel_config_t channel{};channel.gpio_num=i?pins::cam:pins::crank;channel.intr_priority=1;
+   channel.prescale=1;channel.flags.pos_edge=true;channel.flags.neg_edge=true;
+   result=mcpwm_new_capture_channel(diagnostic_timer,&channel,&trigger_channels[i]);if(result!=ESP_OK)return result;
+   mcpwm_capture_event_callbacks_t cb{};cb.on_cap=on_trigger_capture;
+   result=mcpwm_capture_channel_register_event_callbacks(trigger_channels[i],&cb,i?&cam_context:nullptr);if(result!=ESP_OK)return result;
+  }
+  return ESP_OK;
+ };
+ trigger_error=setup();trigger_available=trigger_error==ESP_OK;
+ if(!trigger_available){
+  for(auto& channel:trigger_channels)if(channel){mcpwm_del_capture_channel(channel);channel=nullptr;}
+  if(diagnostic_timer){
+   if(running)mcpwm_capture_timer_stop(diagnostic_timer);
+   if(enabled)mcpwm_capture_timer_disable(diagnostic_timer);
+   mcpwm_del_capture_timer(diagnostic_timer);
+  }
+  if(sync)mcpwm_del_sync_src(sync);
+  ESP_LOGW("ecu_timing","Trigger diagnostics unavailable: %s; decoder channels retained",esp_err_to_name(trigger_error));
+ }
+#endif
+}
 void init_peripherals(){
  gptimer_config_t cfg{};cfg.clk_src=GPTIMER_CLK_SRC_APB;cfg.direction=GPTIMER_COUNT_UP;
  cfg.resolution_hz=1000000;cfg.intr_priority=3;
@@ -152,6 +225,7 @@ void init_peripherals(){
   ESP_ERROR_CHECK(mcpwm_capture_channel_register_event_callbacks(handle,&cb,i?&cam_context:nullptr));
   ESP_ERROR_CHECK(mcpwm_capture_channel_enable(handle));
  }
+ init_trigger_logger();
  portENTER_CRITICAL(&lock);measured.ready=synced;portEXIT_CRITICAL(&lock);
  ESP_LOGI("ecu_timing","APB capture=%luHz; epoch bracket=%llu..%llu us; physical policy=%s",
   static_cast<unsigned long>(hz),static_cast<unsigned long long>(before),static_cast<unsigned long long>(after),
@@ -223,7 +297,7 @@ void run(void*){
   }
   const auto now=clock_us();decoder.tick(now);
   const auto rpm=decoder.rpm();const bool synced=decoder.synced();
-  portENTER_CRITICAL(&lock);const auto checked_now=now_locked();executor.progress(checked_now,output);
+  portENTER_CRITICAL(&lock);const auto checked_now=now_locked();executor.progress(checked_now,output);trigger_capture.expire(checked_now);
   measured.rpm=accepted_epoch==external_epoch&&!configuration_hold?rpm:0;
   measured.synced=accepted_epoch==external_epoch&&!configuration_hold&&synced;
   const bool healthy=have_command&&accepted_epoch==external_epoch&&synced&&checked_now>=latest.sampled_us&&
@@ -232,14 +306,14 @@ void run(void*){
   if(output.failed&&ECU_ENGINE_DUMMY_LOADS)executor.trip(checked_now,timing::Cause::Gate,output);
   executor.recover(checked_now,capture_clock.ready()&&!output.failed&&!configuration_hold&&
    accepted_epoch==external_epoch&&have_command&&!synced&&latest.output.state==engine::State::Stopped&&!latest.output.faults);
-  alarm_locked();portEXIT_CRITICAL(&lock);
+  alarm_locked();portEXIT_CRITICAL(&lock);service_trigger_logger();
  }
 }
 }
 void init(Wheel wheel,bool interlock_at_boot){
  initial_wheel=wheel;output.boot_allowed=interlock_at_boot;
- captures=xQueueCreate(64,sizeof(Capture));commands=xQueueCreate(1,sizeof(TaggedCommand));started=xSemaphoreCreateBinary();configuration_mutex=xSemaphoreCreateMutex();
- configASSERT(captures&&commands&&started&&configuration_mutex);
+ captures=xQueueCreate(64,sizeof(Capture));commands=xQueueCreate(1,sizeof(TaggedCommand));started=xSemaphoreCreateBinary();configuration_mutex=xSemaphoreCreateMutex();trigger_mutex=xSemaphoreCreateMutex();
+ configASSERT(captures&&commands&&started&&configuration_mutex&&trigger_mutex);
  configASSERT(xTaskCreatePinnedToCore(run,"ecu_timing",16384,nullptr,20,&timing_task,1)==pdPASS);
  xSemaphoreTake(started,portMAX_DELAY);vSemaphoreDelete(started);started=nullptr;
 }
@@ -306,5 +380,54 @@ cJSON* trace_json(){
   cJSON_AddNumberToObject(row,"tune_revision",e.tune_revision);cJSON_AddStringToObject(row,"cause",timing::cause_name(e.cause));cJSON_AddItemToArray(events,row);
  }
  cJSON_AddNumberToObject(j,"missed_during_snapshot",missed);return j;
+}
+bool trigger_start(unsigned samples,unsigned timeout_ms){
+ xSemaphoreTake(trigger_mutex,portMAX_DELAY);
+ bool ok=false;
+ if(trigger_available&&trigger_error==ESP_OK){
+  portENTER_CRITICAL(&lock);trigger_capture.expire(now_locked());const bool idle=trigger_capture.header().state!=trigger_log::State::Armed;portEXIT_CRITICAL(&lock);
+  if(idle&&disable_trigger_channels()){
+   // This group1 capture timer is exclusively diagnostic. SDK disable leaves
+   // pending status set; clear all capture bits while its channels are off.
+   mcpwm_ll_intr_clear_status(MCPWM_LL_GET_HW(1),MCPWM_LL_EVENT_CAPTURE(0)|MCPWM_LL_EVENT_CAPTURE(1)|MCPWM_LL_EVENT_CAPTURE(2));
+   portENTER_CRITICAL(&lock);ok=trigger_capture.start(samples,timeout_ms,now_locked());portEXIT_CRITICAL(&lock);
+  }
+  if(ok){
+   for(unsigned i=0;i<trigger_channels.size();++i){
+    const auto result=mcpwm_capture_channel_enable(trigger_channels[i]);
+    if(result!=ESP_OK){trigger_error=result;ok=false;break;}trigger_channel_enabled[i]=true;
+   }
+   if(!ok){
+    disable_trigger_channels();
+    portENTER_CRITICAL(&lock);trigger_capture.stop(trigger_capture.header().frame_id,now_locked());portEXIT_CRITICAL(&lock);
+   }
+  }
+ }
+ xSemaphoreGive(trigger_mutex);return ok;
+}
+bool trigger_stop(std::uint32_t frame_id){
+ xSemaphoreTake(trigger_mutex,portMAX_DELAY);
+ portENTER_CRITICAL(&lock);const bool ok=trigger_capture.stop(frame_id,now_locked());portEXIT_CRITICAL(&lock);
+ if(ok)disable_trigger_channels();
+ xSemaphoreGive(trigger_mutex);return ok;
+}
+cJSON* trigger_json(std::uint32_t expected_frame,unsigned offset,bool records){
+ xSemaphoreTake(trigger_mutex,portMAX_DELAY);const auto available=trigger_available&&trigger_error==ESP_OK;const auto error=trigger_error;
+ const bool interrupts_enabled=trigger_channel_enabled[0]||trigger_channel_enabled[1];xSemaphoreGive(trigger_mutex);
+ portENTER_CRITICAL(&lock);const auto header=trigger_capture.header();const auto uncertainty=trigger_clock.uncertainty_us();portEXIT_CRITICAL(&lock);
+ auto* j=trigger_log::frame_json(header,[](std::uint32_t id,unsigned index,trigger_log::Record& record){
+  portENTER_CRITICAL(&lock);const bool ok=trigger_capture.read(id,index,record);portEXIT_CRITICAL(&lock);return ok;
+ },[&](std::uint32_t id){
+  portENTER_CRITICAL(&lock);const bool current=trigger_capture.header().frame_id==id;portEXIT_CRITICAL(&lock);
+  return current&&(!expected_frame||expected_frame==id);
+ },offset,records?trigger_log::page_capacity:0);
+ if(!j)return nullptr;
+ const bool ok=cJSON_AddStringToObject(j,"data_source","mcpwm_reported_capture_edges")&&cJSON_AddBoolToObject(j,"simulator",false)&&
+  cJSON_AddBoolToObject(j,"available",available)&&cJSON_AddStringToObject(j,"driver_error",esp_err_to_name(error))&&
+  cJSON_AddBoolToObject(j,"diagnostic_interrupts_enabled",interrupts_enabled)&&
+  cJSON_AddBoolToObject(j,"includes_falling_edges",true)&&cJSON_AddBoolToObject(j,"includes_cam",true)&&
+  cJSON_AddNumberToObject(j,"clock_uncertainty_us",uncertainty)&&
+  cJSON_AddStringToObject(j,"qualification","SDK-reported edge polarity and capture latch, not analog voltage or per-pin output measurements. Capture overwrite/loss and timing remain unmeasured on hardware. Cam phase is not decoded.");
+ if(!ok){cJSON_Delete(j);return nullptr;}return j;
 }
 }
