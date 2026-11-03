@@ -54,7 +54,9 @@ docker pull openmodelica/openmodelica@sha256:ac9a0223e69b8055d444b42f58ccb968034
 python3 scripts/probe_engine_modelica.py
 ```
 
-The script uses the existing Docker service, task cache mounts and no published ports. It verifies the Modelica library commit. [Feasibility results](../reports/engine/modelica-feasibility.json) retain initialization, unit and species-mass warnings. Stock engine examples force speed and calculate fuel internally; one turbo example also develops pressure far outside our NA range. They do not demonstrate either ECU controlling that engine. An actuation/FMI adapter, constrained operating envelope and calibration remain required.
+The script uses the existing Docker service, task cache mounts and no published ports. [Feasibility results](../reports/engine/modelica-feasibility.json) retain initialization, unit and species-mass warnings. Stock examples force speed and calculate fuel internally; one turbo example also develops pressure far outside our NA range. They do not demonstrate either ECU controlling that stock engine.
+
+A separate [external research benchmark](engine-research-benchmark.md) now reuses verified, unchanged air-path components through FMI/CVODE and adds explicit local pulse-driven fuel/combustion/free-shaft states. It runs both controller implementations against independent copies of the same constrained NA plant. Its combustion and actuator assumptions remain empirical and uncalibrated; calibration is still required.
 
 The peer-reviewed [TCSI testbed](https://github.com/nkymark/TCSISimTestbed), a 1.8 L turbo SI model, is another candidate: Ng et al., IEEE Control Systems Magazine 40(2), 2020, [DOI 10.1109/MCS.2019.2961793](https://doi.org/10.1109/MCS.2019.2961793). It requires MATLAB/Simulink and adaptation of stock speed/AFR inputs. MATLAB/Simulink is not installed here. No commercial simulator/tuning license has been purchased.
 
@@ -72,7 +74,7 @@ python3 tools/compare_speeduino.py
 
 The adapter links actual production Speeduino objects. Its upstream native fuel/table tests pass 236 cases. The [75-case comparison](../reports/engine/speeduino-fuel-comparison.json) covers steady-state batch fuel under explicitly mapped required-fuel, MAP, dead-time and correction settings, including documented integer quantization.
 
-This does not execute both full ECUs against one plant or compare trigger/ISR/startup/transient behavior. That remains a next stage. No formula clone is presented as Speeduino. External GPL source stays in its own checkout; linked executables are not distributed here.
+That original 75-case comparison covers the fuel kernel only. The new [full controller-source comparison](engine-research-benchmark.md) executes Speeduino's production loop/decoder/schedulers and our shared portable core/decoder/scheduler with virtual edges, startup, transients and faults. Native execution does not validate either target's physical ISR timing. No formula clone is presented as Speeduino. External GPL source stays in its own checkout; linked executables are not distributed here.
 
 ## Evidence, tuning and reviews
 

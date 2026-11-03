@@ -4,12 +4,13 @@
     "url": "https://github.com/speeduino/speeduino",
     "commit": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
     "local_checkout": "../speeduino",
-    "license": "GPL-2.0 source in external checkout; linked executable not distributed"
+    "license": "GPL-2.0 source in external checkout; linked executable not distributed",
+    "scope": "Production non-UNIT_TEST setup/loop/decoder/schedulers in a deterministic native HAL, plus earlier fuel-kernel reference; not AVR emulation"
   },
   "modelica_mvem": {
     "url": "https://github.com/modelica-3rdparty/Modelica-MVEM",
     "commit": "57c7aa394d70bffe6106afb2703b92bc532a05d1",
-    "scope": "Upstream examples only; no ECU actuation adapter"
+    "scope": "Verified unchanged air-path components through FMI/CVODE; local empirical pulse/fuel/ignition/free-shaft closure; uncalibrated research comparison"
   },
   "tcsi": {
     "url": "https://github.com/nkymark/TCSISimTestbed",

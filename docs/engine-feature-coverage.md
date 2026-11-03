@@ -7,7 +7,7 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | Capability | Firmware / simulation | Configuration, UI and debugging | PCB / remaining work |
 | --- | --- | --- | --- |
 | VE, spark, lambda maps | Shared 16×16 interpolation/validation | Axes/cells editable, JSON/own MSQ | Target timed execution pending |
-| Speed-density fuel | Shared mass/flow core; production Speeduino fuel comparison | Engine/injector settings and correction readouts | Four high-Z saturated drivers, electrical behavior unmeasured |
+| Speed-density fuel | Shared core; fuel-kernel and external-plant controller comparisons | Engine/injector settings and correction readouts | Four high-Z saturated drivers, electrical behavior unmeasured |
 | Batch/wasted four-cylinder | Native virtual executor | Explicit fixed strategy, inhibited-output labels | Four injector/four smart-coil commands |
 | Other cylinder counts | Missing; Speeduino publishes 1–8 support | Validator rejects other counts | Channel/strategy review required |
 | Sequential/semi-sequential | Missing 720-degree cam phase/scheduler | No enable option | Cam capture exists but does not establish phase |
@@ -43,6 +43,7 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | ESP-NOW screens | Existing authenticated read-only sensor telemetry | Button/UI pair, approve/unpair, LED | Sealed buttons/LED fit remains provisional |
 | New engine telemetry to screens | New engine-specific schema missing | Current protocol is sensor-monitor telemetry | Versioned receiver compatibility work |
 | Hand assembly / enclosure | A3 sources and A4 fit draft retained | Existing build/manual/guides | Module geometry, antenna RF and sealed fit checks pending |
+| External engine benchmark | Verified MVEM air path, pulse-driven empirical combustion/free shaft; production Speeduino loop compared | Declared neutral profiles, edge/ledger/fault logs, step convergence | Uncalibrated research plant; native HAL is not target/HIL qualification |
 | Vehicle electrical/environment | Not established | Software never implies qualification | Surge/EMI/current/thermal/splash/fit tests undone |
 
 ## Hardware sequence
@@ -54,3 +55,5 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 5. Release new Gerbers/case/BOM only with matching electrical contracts and fresh native CAD checks. This increment does not update or qualify those artifacts.
 
 DBW/OEM integration remain outside the current bench scope.
+
+[External benchmark scope, configuration and reproduction](engine-research-benchmark.md) keeps simulator coverage separate from missing physical and control features.

@@ -1,0 +1,259 @@
+{
+  "review": "Independent scientific, conservation and clock/coupling review",
+  "created_utc": "2026-11-03T13:31:38.068355+00:00",
+  "scope": [
+    "simulation/modelica/EngineAirPath.mo",
+    "scripts/build_engine_airpath.py",
+    "scripts/verify_modelica_sources.py",
+    "tools/engine_research_plant.py",
+    "tools/compare_engine_controllers.py",
+    "tools/speeduino_runtime.py",
+    "tools/speeduino_sim.cpp",
+    "tools/speeduino_sim_hal.cpp"
+  ],
+  "production_or_upstream_files_edited_by_reviewer": false,
+  "assessment": "Tested research-plant coupling is causal at the declared communication boundaries and conservative to numerical precision. Baseline scenario outputs and explicit termination can be audited independently. All coupling findings are resolved or explicitly scoped; final enabled-protection threshold-crossing evidence remains parent work. Baseline overrev is not hard-cut coverage.",
+  "findings": [
+    {
+      "id": "R1",
+      "status": "resolved and independently tested",
+      "topic": "Air trapped before ignition",
+      "original": "Combustion inferred cylinder air from manifold state at spark, after intake closing.",
+      "resolution": "Air charge is now frozen at intake closing from unchanged upstream total cylinder pumping divided by cylinder-event rate. Actual manifold transient changed MAP72.128656 to72.132319kPa without changing the four stored air charges."
+    },
+    {
+      "id": "R2",
+      "status": "resolved and independently tested",
+      "topic": "Termination output evidence",
+      "original": "Unconditional plant cut made final_outputs_high tautologically zero.",
+      "resolution": "Harness records pre-stop highs and native production halt GPIO falls. Independent halt tests exercised four high injectors at70000us and four injectors plus two coils at71000us; every active output fell at the requested halt time. This remains an explicit stop, separate from natural dropout shutdown."
+    },
+    {
+      "id": "R3",
+      "status": "resolved and independently verified",
+      "topic": "Pinned research-source provenance",
+      "original": "Builder trusted a hardcoded upstream commit and MSL metadata without checking cached source bytes.",
+      "resolution": "Verifier reconstructs pinned Git tree hashes and verifies cached blobs; independently passed71 MVEM files and1438 MSL/ModelicaServices/Complex files."
+    },
+    {
+      "id": "R4",
+      "status": "resolved and independently tested",
+      "topic": "Exhaust measurement freshness",
+      "original": "lambda_ready could stay true indefinitely after ignition/trigger loss and no fresh exhaust.",
+      "resolution": "Successful burn timestamp,0.3s maximum age, RPM and pumping qualify validity. Last actual exhaust3.071127s remained valid at3.3s and was invalid by3.4s despite continued shaft rotation."
+    },
+    {
+      "id": "R5",
+      "status": "resolved and independently retested",
+      "topic": "Expired combustion pulses retain floating point work",
+      "evidence": "After ignition ended at3.1s, all40 retained pulses had already ended by3.5s. Their total remaining work was5.648252343268267e-10J.",
+      "impact": "Negligible energy error, but inactive list entries can accumulate and increase integration cost.",
+      "recommendation": "Settle the entire final remaining work balance at each pulse end and remove expired entries.",
+      "resolution": "Final pulse-end step now releases its exact remaining balance. Repeated actual-burn/ignition-stop test retained zero expired pulses and zero pending work by3.5s."
+    },
+    {
+      "id": "R6",
+      "status": "reporting limitation communicated to parent",
+      "topic": "Spark-error demand reference",
+      "evidence": "Project edges carry event-latched advance. Native edges use most recent sampled advance status.",
+      "impact": "Error references differ during cranking and limit transitions. Actual spark angle is independently measurable; comparisons to a constant steady map are clearer. Native transient errors around9.73deg persisted under step halving."
+    },
+    {
+      "id": "R7",
+      "status": "profile correction implemented; threshold-crossing rerun pending",
+      "topic": "Hard-limit coverage",
+      "evidence": "Baseline adapter writes HardRevLim65 but does not enable configPage6.engineProtectType; baseline overrev equilibrium is about6200RPM.",
+      "impact": "That scenario does not establish native hard-limit operation. Use enabled explicit cut policy and verified threshold crossing/cut status; disclose differing soft-limit and hysteresis semantics.",
+      "resolution": "Latest adapter explicitly enables PROTECT_CUT_BOTH, relative soft-limit retard and engineProtectMaxRPM. Parent is rebuilding/rerunning the actual crossing scenario."
+    },
+    {
+      "id": "R8",
+      "status": "baseline failed expectation preserved",
+      "topic": "Trigger restoration after rotor stop",
+      "evidence": "All three baseline trigger_dropout cases end at0RPM. The0.7s trigger gap can consume this rotor coast-down time. All three explicit stall_restart cases recover near915-918RPM.",
+      "impact": "A stopped rotor cannot generate new teeth merely because signal availability returns. Distinguish physical shutdown from starter-assisted recovery rather than treating every dropout as an autonomous-idle recovery test."
+    }
+  ],
+  "independent_checks": {
+    "rest": {
+      "rpm": 0.0,
+      "map_kpa": 100.0,
+      "ledger": {
+        "fuel_in_mg": 0.0,
+        "burned_mg": 0.0,
+        "unburned_mg": 0.0,
+        "stored_mg": 0.0,
+        "fuel_residual_mg": 0.0,
+        "burned_chemical_j": 0.0,
+        "combustion_shaft_j": 0.0,
+        "heat_j": 0.0,
+        "pending_work_j": 0,
+        "chemical_residual_j": 0.0,
+        "kinetic_j": 0.0,
+        "starter_j": 0.0,
+        "friction_j": 0.0,
+        "load_j": 0.0,
+        "shaft_residual_j": 0.0,
+        "air_residual_kg": 0.0,
+        "air_energy_residual_j": 0.0
+      }
+    },
+    "actual_fuel_without_spark": {
+      "rpm": 0.0,
+      "expected_fuel_mg": 33.8975,
+      "port_mg": [
+        32.861390625687655,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "charge_mg": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "wall_mg": [
+        1.0361093743123837,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "ledger": {
+        "fuel_in_mg": 33.897500000000036,
+        "burned_mg": 0.0,
+        "unburned_mg": 0.0,
+        "stored_mg": 33.897500000000036,
+        "fuel_residual_mg": 0.0,
+        "burned_chemical_j": 0.0,
+        "combustion_shaft_j": 0.0,
+        "heat_j": 0.0,
+        "pending_work_j": 0,
+        "chemical_residual_j": 0.0,
+        "kinetic_j": 0.0,
+        "starter_j": 0.0,
+        "friction_j": 0.0,
+        "load_j": 0.0,
+        "shaft_residual_j": 0.0,
+        "air_residual_kg": 0.0,
+        "air_energy_residual_j": 0.0
+      }
+    },
+    "missed_ignition_cycles": "33.666312749mg old charge moved to unburned at the next intake closing; fuel residual remained about1e-14mg. No several-cycle combustion bank appeared.",
+    "domain_errors": {
+      "throttle_outside_domain": {
+        "raised": true,
+        "type": "FMICallException",
+        "message": "fmi2DoStep failed with status 3 (error)."
+      },
+      "speed_outside_domain": {
+        "raised": true,
+        "type": "FMICallException",
+        "message": "fmi2DoStep failed with status 3 (error)."
+      }
+    },
+    "native_convergence": {
+      "speeduino": {
+        "duration_s": 4,
+        "steps_us": [
+          250,
+          125
+        ],
+        "final_rpm": [
+          917.9407216988473,
+          915.9813368744557
+        ],
+        "delivered_fuel_mg": [
+          987.3931999998391,
+          987.3932000004864
+        ],
+        "shaft_work_j": [
+          8534.874551027247,
+          8532.582624845862
+        ],
+        "nonmonotonic_or_noninteger_trigger_timestamps": 0
+      },
+      "speeduino_per_tooth": {
+        "duration_s": 4,
+        "steps_us": [
+          250,
+          125
+        ],
+        "final_rpm": [
+          917.7737787852683,
+          917.876177723851
+        ],
+        "delivered_fuel_mg": [
+          987.3931999998491,
+          987.3932000004406
+        ],
+        "shaft_work_j": [
+          8535.580506189921,
+          8538.175330148135
+        ],
+        "nonmonotonic_or_noninteger_trigger_timestamps": 0
+      }
+    },
+    "matrix_edge_audit": {
+      "cases": 18,
+      "errors": [],
+      "checks": [
+        "integer monotonic edge timestamps",
+        "strict per-channel rise/fall alternation",
+        "maximum pulse widths recomputed from actual edges",
+        "explicit all-low termination"
+      ],
+      "natural_dropout_outputs": "All six baseline dropout/restart case outputs were already low by4.2s. Last absolute post-gap edge: project4.000244s, native4.112940s, native per-tooth4.112848s.",
+      "largest_recorded_trigger_quantization_deg": 0.03754471329739317
+    },
+    "source_verification": {
+      "mvem": {
+        "commit": "57c7aa394d70bffe6106afb2703b92bc532a05d1",
+        "tree_sha": "84f70c58f44316f440f9133beeb23b0ee19a1551",
+        "files_verified": 71,
+        "content_manifest_sha256": "a93662c7fa86680f83c3920b5ca93c490889e62d92dd9a7288bd26489e915b07"
+      },
+      "msl": {
+        "commit": "72bc91df9d48f91525651ed8d1fc7bceeec67661",
+        "tree_sha": "02fd40876199909c0fd5b79a3d022097b66552cf",
+        "files_verified": 1438,
+        "content_manifest_sha256": "c7f73499bdc4729304e2d2c930e033917d6dcc8dcbda0a361c83cba661c5e89e"
+      }
+    },
+    "final_targeted_checks": "final-targeted.json"
+  },
+  "limitations": [
+    "Upstream contribution is manifold thermodynamics, throttle flow and mean-value pumping; combustion, ignition response, fuel film and free shaft are local empirical states.",
+    "Conservation establishes bookkeeping consistency, not engine calibration, torque accuracy, mixture safety or physical qualification.",
+    "Cylinder charges use a simplified intake-closing event and instantaneous mean-value pumping estimate; fixed exhaust pressure, no cylinder pressure/compression ripple, exhaust filling, knock or emissions dynamics.",
+    "Native uint32 four-microsecond timers are not AVR timer emulation. Primary callback injection does not test interrupt wiring or trigger edge selection.",
+    "Both controllers have zero execution cost. Native main loop follows communication points and tooth calls; project control updates at1ms. Conclusions do not measure target CPU/ISR latency.",
+    "Electrical inhibit intentionally removes drive without adding a normal modeled spark; this explicit virtual-stop abstraction does not establish physical ignition shutdown behavior.",
+    "Evidence files record the hashes active for each check. Baseline18-case audit predates the forthcoming protection-profile correction and must not be relabelled as its final run."
+  ],
+  "evidence_files": [
+    "probe.py",
+    "probe.json",
+    "probe.log",
+    "convergence.py",
+    "convergence.json",
+    "convergence.log",
+    "final_targeted.py",
+    "final-targeted.json",
+    "final-targeted.log",
+    "audit_matrix.py",
+    "matrix-audit.json",
+    "matrix-audit.log",
+    "source-verification.json"
+  ],
+  "reviewed_sources_latest_static_hashes": {
+    "tools/engine_research_plant.py": "29fdcdcc5d45459b9ea0ccba14b8bb50323b9bc0ed08404b0fa248c619dfbe10",
+    "tools/compare_engine_controllers.py": "b13a89d34e6c10b57e1fbcaa5189202b7c523b04b82c0a373683601c03abbafe",
+    "tools/speeduino_runtime.py": "cd12e83b78661cc509a60c863c3ecb6bb82faa555417c73b3c32abc9be019235",
+    "tools/speeduino_sim.cpp": "3d049a99243adb48e4764f5debd761cbe2210c184968abadaa4cab68c6bf4b4e",
+    "tools/speeduino_sim_hal.cpp": "35a16b8433b5657da7f431adcf1cd1b4bf273599e9d03b7c2c8f9062f9c24504",
+    "scripts/build_engine_airpath.py": "d63b2f9adc129ff23045440fb9e7455d319abe8f3e3acf7818b061897a7180cc",
+    "scripts/verify_modelica_sources.py": "c56aed8fa5763e31dfe146eea5ad25b8df878f9b8ba53638eee0c4b9f48dde18",
+    "simulation/modelica/EngineAirPath.mo": "303df3396c660d1c4f8da48f19c698a6f63c46d1050c7964b92fba56be653c3c"
+  }
+}
