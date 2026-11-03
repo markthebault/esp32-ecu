@@ -390,6 +390,7 @@ cJSON* snapshot(){
  FIELD(max_producer_gap_us);FIELD(max_injector_high_us);FIELD(max_coil_high_us);FIELD(last_fault_us);FIELD(generation);FIELD(epoch);
 #undef FIELD
  cJSON_AddStringToObject(j,"fault",timing::cause_name(stats.fault));cJSON_AddStringToObject(j,"last_fault",timing::cause_name(stats.last_fault));
+ cJSON_AddStringToObject(j,"angle_stop_reason",engine::AngleScheduler::reason_name(stats.angle_reason));
  cJSON_AddNumberToObject(j,"producer_age_us",stats.last_progress_us&&now>=stats.last_progress_us?now-stats.last_progress_us:-1.);
  cJSON_AddNumberToObject(j,"command_sequence",command.sequence);cJSON_AddNumberToObject(j,"tune_revision",command.tune_revision);
  cJSON_AddNumberToObject(j,"trace_sequence",sequence);cJSON_AddNumberToObject(j,"trace_overwritten",sequence>timing::Executor::trace_capacity?sequence-timing::Executor::trace_capacity:0);

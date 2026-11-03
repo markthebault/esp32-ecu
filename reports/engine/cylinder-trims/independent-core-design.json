@@ -1,0 +1,189 @@
+{
+  "reviewed_at_utc": "2026-11-03T19:52:20.932945+00:00",
+  "reviewer": "independent /root/target_executor_architecture_review",
+  "scope": "Read-only design review of proposed four-cylinder sequential fuel/spark trims; no implementation edits, no subagents, no connected/flashed target.",
+  "verdict": "Architecture is reasonable if the contracts below are enforced. Retain physical pulse/duty/dwell limits and selected N16R8 output inhibition. Increase matched tune-size/parser/storage limits or canonicalize legacy documents compactly; increase only the explicit logger RAM budget to accommodate the retained256 rows. Final implementation, ELFs and actual hardware remain separate validation.",
+  "review_basis": {
+    "pre_trim_git_head": "ed2a231547402581d438a7a11a2c09d8b0242cc9",
+    "proposed_increment": "four independent6x6 RPM/load fuel percentage maps, four signed spark offsets, common sequential-only enable, schema3/own003 tuning, per-cylinder task snapshots and fixed256-row logger; immutable type9 schema1 base-demand frame",
+    "implementation_state": "Root implementation was in progress during review. Early draft native layout values are observations, not a final source or target qualification.",
+    "pre_trim_header_hashes": {
+      ".cache/engine/cylinder-review/pre-trim/include/ecu/engine_json.hpp": "9a40e4b413a23be91f62d9cc9d0e811e2b574e6f41aa06a1c55eb47049ae43ac",
+      ".cache/engine/cylinder-review/pre-trim/include/ecu/engine.hpp": "9b71f61fe63d1d87c6514a6a79540811f7e4affd87dd720266c52ad5cae07039",
+      ".cache/engine/cylinder-review/pre-trim/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+      ".cache/engine/cylinder-review/pre-trim/include/ecu/timing_executor.hpp": "477ba7cbf1e5db59d7bbe57b45eda819b60265ed9920a5911ac019594c8123fb",
+      ".cache/engine/cylinder-review/pre-trim/include/ecu/config.hpp": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39",
+      ".cache/engine/cylinder-review/pre-trim/include/ecu/engine_scheduler.hpp": "4b3a80b870025f354a331bf5b0334f076b568adf33df3608c782327a3068aec0",
+      ".cache/engine/cylinder-review/pre-trim/include/ecu/json.hpp": "3330c7a4fa23042c5c38332737b08843b111b39bf31f6a87bf2b16a8af88a5df"
+    },
+    "legacy_fixture_sha256": "aae06cf5c684837cd533d957bac536a972ee053a0e626b2a7cebaceb297fcbc6"
+  },
+  "required_contracts": [
+    {
+      "id": "CYL-01",
+      "priority": "high",
+      "topic": "Cylinder identity and enable policy",
+      "recommendation": "Index every map, offset, Output array, GPIO pair and telemetry row by physical cylinder1..4: index0 means INJ1/IGN1. Firing order maps that cylinder to its720-degree phase and must never permute the tune arrays. Require enabled=>sequential and data available. When disabled, ignore stored nonneutral corrections; validate those stored values anyway. Reject malformed command combinations rather than silently applying per-cylinder data in batch mode. If arrays remain available for batch diagnostics, they must not bypass the common enable policy."
+    },
+    {
+      "id": "CYL-02",
+      "priority": "high",
+      "topic": "Fuel mass, deadtime and complete-command capacity",
+      "recommendation": "For each cylinder compute effective mass=base full-cycle fuel mass*trim_pct/100, then PW=effective mass/(openings*flow)+one unchanged deadtime. In sequential mode openings=1 per720 degrees. Apply warmup/afterstart/acceleration/globalEGO consistently before that trim. Check all four actual channel PWs and duties before arming any channel; one failing cylinder sets Capacity and cuts all eight commands. Preserve a capacity mask for diagnosis. Do not clip individual fuel pulses or scale deadtime. Exclude zero/negative fuel percentages unless a separate explicit cylinder-cut semantic is implemented."
+    },
+    {
+      "id": "CYL-03",
+      "priority": "high",
+      "topic": "Base fields and fresh-speed duty enforcement",
+      "recommendation": "Define scalar Output/14 radio proposals as untrimmed base demand, not cylinder1, max or mean. Judge trim-enabled capacity on actual channel demands: a base16ms pulse with1ms deadtime and80% trims yields13ms actual pulses and can be safe. Conversely base14ms with110% trim yields15.3ms and must cut all channels. Candidate::calculate replaces rpm with latest decoded speed; scheduler/core must recompute actual PW duty at that RPM and honor the configured duty limit carried into the bounded command. Do not trust only previously calculated duty arrays or hardcode85% when tune max_duty is smaller."
+    },
+    {
+      "id": "CYL-04",
+      "priority": "high",
+      "topic": "Spark ordering and bounded latching",
+      "recommendation": "Use pre-retard base advance + that physical cylinder offset - global soft-limit retard, then clamp the final channel demand to-5..40 degrees and expose the per-cylinder clamp mask. Applying an offset after the existing base-5-degree floor can undo soft-limit retard near the lower bound. Preserve raw/base semantics separately for immutable telemetry. Latch the selected channel advance at its dwell start; later tune/control updates must not change that charged coil target. Pending updates that cannot supply full dwell retain the already committed bounded event. Dwell remains common and independently bounded to configured<=3.5ms."
+    },
+    {
+      "id": "CYL-05",
+      "priority": "high",
+      "topic": "Scheduler, cuts and configuration epochs",
+      "recommendation": "Use pulse_for(cylinder) and advance_for(cylinder) consistently in validation, target phase calculation, requested width and latching. Validate all effective channel fields for finite values, pulse range, advance range, strategy and duty before constructing a schedulable candidate. An injector already high retains its fixed closing deadline on normal demand changes. Fault/global Capacity cuts still use executor all-low. Save/reconfiguration must retain revision/external-epoch fences, clear pending work, reset phase acquisition and reject stale candidate generations. Trims must not clear cam-loss faults or introduce a batch fallback."
+    },
+    {
+      "id": "CYL-06",
+      "priority": "high",
+      "topic": "Legacy-neutral migration and document bounds",
+      "recommendation": "Schema1 and2 must parse their exact historical keys, preserve all existing timing/strategy behavior, and explicitly initialize the entire new trim section to disabled/100%/zero even if a Tune object is reused. Schema3 must require exact new fields and reject malformed/unknown arrays. MSQ001/002 imports must reset trims even when importing into an already enabled/nonneutral003 browser template. A measured near-limit legacy tune exceeds16KiB after neutral expansion: use matched24KiB engine bounds (including safe_json, targetHTTP, canonical/store, hostHTTP/runtime) or reconstruct round-trip-safe float canonical values. Keep the sensor API bound separate. Repeated near-maximum blob saves need NVS capacity/GC validation; existing native storage fakes do not simulate partition capacity."
+    },
+    {
+      "id": "CYL-07",
+      "priority": "high",
+      "topic": "Immutable type9 radio and flag domains",
+      "recommendation": "Keep input_count=8, proposal_count=14, engine_body_size=200, packet size232 and existing type9 schema1 offsets/MAC transcript immutable. New cylinder arrays and enable/clamp/capacity metadata belong in separate RuntimeSample fields and JSON/MSL. All16 DataFlag bits are already assigned; do not reuse or widen the transmitted uint16 flags. Add compile-time guards for fixed counts/body offsets. Keep base pulse/advance/duty meanings explicit in receiver UI/docs. Native observation-fixture parsing and replay must copy new per-cylinder data rather than silently dropping it while retaining only14 base proposals."
+    },
+    {
+      "id": "CYL-08",
+      "priority": "medium",
+      "topic": "Own003 fifth tuning page and table orientation",
+      "recommendation": "Keep pages1..4 layouts unchanged where possible and append page5 under own003 identity. Four independent6x6 maps with their own axes require4*(6+6+36)*4=768 bytes; enableU32 + fourF32 spark offsets adds20 bytes, so explicit payload is788 bytes before reserved padding. Define offsets/endianness/row-major load rows and RPM columns once and generate INI/MSQ/browser/native tooling from it. Match own001/002 four-page imports and003 five-page imports exactly; reject wrong signature/page numbers/duplicates/unknown constants/counts. Require increasing finite axes after float conversion. Use stable trim interpolation so a constant100% surface is exactly neutral at fractional bins, without unnecessarily changing existing base map arithmetic."
+    },
+    {
+      "id": "CYL-09",
+      "priority": "medium",
+      "topic": "RAM, stack, locking and ISR closure",
+      "recommendation": "Keep interpolation, trimming, clipping and validation in controller/candidate tasks. ISR pop/dispatch must remain fixed-storage integer scheduling plus copies of already latched values. New Output/Command copies enlarge task critical sections, queue items, candidate stack and executorDRAM: recheck actual target frames and portMUX duration, not only ring size. Keep producer logger try-lock and immutable16-row copied pages; never JSON/IO under logger or target lock. Raise sample/recorder static_assert budgets deliberately with measured target sizes (e.g. RuntimeSample<=288, recorder<=80KiB), retaining256 rows. Re-run actual ELF IRAM/literal/data placement audits on every target build."
+    },
+    {
+      "id": "CYL-10",
+      "priority": "medium",
+      "topic": "Observable per-cylinder proposal semantics",
+      "recommendation": "Publish four PW/advance/fuelPct/duty arrays, data-available/enabled status, clamp and capacity masks atomically with the same controller sequence/revisions/timestamps. Name them proposals, separate from earlier worker command state and electrical execution. Make unavailable/fault/stopped array semantics explicit; do not present zero/default arrays as measured trims. MSL must include matching column names/units/rows and mask fields; test maximum counters/new field labels still fit fixed formatter buffers. One-row JSON streaming/allocation failures must retain whole-response rejection and per-row task delays. Browser full-session memory also grows and remains bounded by existing session/period limits."
+    }
+  ],
+  "limits_and_policy_recommendation": {
+    "physical_policy": "No physical enable or driver change; retain selected N16R8 compile-time inhibition. No physical qualification inferred.",
+    "fuel_trim_pct": "Use explicit finite positive bounds, e.g.50..150 percent;100 neutral. Range selection is a calibration contract, not a reason to relax downstream limits.",
+    "spark_offset_deg": "Finite signed range such as-10..10 degrees, with final channel demand clamped-5..40 and visible clamp mask.",
+    "unchanged_limits": "Configured max_injection_ms<=15, max_duty<=0.85, max_dwell_ms<=3.5, existing stale/late/phase/watchdog gates. Per-channel changes do not justify increasing them.",
+    "tune_document_bound": "24KiB is a reasonable bounded candidate after measuring canonical fixtures and NVS repeated-update behavior. Change all engine-specific parser/storage/API/host limits together; preserve existing sensor limits.",
+    "logger_capacity": 256,
+    "logger_budget_candidate_bytes": 81920
+  },
+  "quantified_evidence": {
+    "legacy_migration_probe": {
+      "baseline_frozen_source_sha256": {
+        ".cache/engine/cylinder-review/baseline/include/ecu/engine_json.hpp": "9a40e4b413a23be91f62d9cc9d0e811e2b574e6f41aa06a1c55eb47049ae43ac",
+        ".cache/engine/cylinder-review/baseline/include/ecu/engine.hpp": "b3304b92feb1daa0c0967a1114c4845fa12516737c2c62db2976972ae9af73bf",
+        ".cache/engine/cylinder-review/baseline/include/ecu/json.hpp": "3330c7a4fa23042c5c38332737b08843b111b39bf31f6a87bf2b16a8af88a5df"
+      },
+      "legacy_fixture_input_bytes": 15842,
+      "legacy_fixture_cjson_canonical_bytes": 16384,
+      "legacy_fixture_parses_and_canonicalizes": true,
+      "long_precision_cell_count": 694,
+      "illustrative_neutral_trim_section_added_bytes": 942,
+      "illustrative_schema3_json_bytes": 16784,
+      "exceeds_existing_16KiB_cap_after_neutral_upgrade": true,
+      "qualification": "Fixture independently revalidated against cache copies of git HEAD pre-trim parser, Tune and executor headers: canonical length exactly16KiB. Early-draft sizes were captured while root implementation was in progress and are not final. Neutral section names/layout illustrative. NVS capacity not simulated.",
+      "native_early_draft_sizes_bytes": {
+        "Tune": 4548,
+        "Output": 264,
+        "Command": 392,
+        "Candidate": 968,
+        "Executor": 5368,
+        "RuntimeSample": 200,
+        "Recorder": 55384,
+        "Page": 3544
+      },
+      "native_pre_trim_sizes_bytes": {
+        "Tune": 3760,
+        "Output": 128,
+        "Command": 256,
+        "Candidate": 832,
+        "Executor": 5232
+      },
+      "strict_pre_trim_schema2_canonical_bytes": 16384,
+      "pre_trim_source_sha256": {
+        ".cache/engine/cylinder-review/pre-trim/include/ecu/engine_json.hpp": "9a40e4b413a23be91f62d9cc9d0e811e2b574e6f41aa06a1c55eb47049ae43ac",
+        ".cache/engine/cylinder-review/pre-trim/include/ecu/engine.hpp": "9b71f61fe63d1d87c6514a6a79540811f7e4affd87dd720266c52ad5cae07039",
+        ".cache/engine/cylinder-review/pre-trim/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+        ".cache/engine/cylinder-review/pre-trim/include/ecu/timing_executor.hpp": "477ba7cbf1e5db59d7bbe57b45eda819b60265ed9920a5911ac019594c8123fb",
+        ".cache/engine/cylinder-review/pre-trim/include/ecu/config.hpp": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39",
+        ".cache/engine/cylinder-review/pre-trim/include/ecu/engine_scheduler.hpp": "4b3a80b870025f354a331bf5b0334f076b568adf33df3608c782327a3068aec0",
+        ".cache/engine/cylinder-review/pre-trim/include/ecu/json.hpp": "3330c7a4fa23042c5c38332737b08843b111b39bf31f6a87bf2b16a8af88a5df"
+      }
+    },
+    "forecast_if_RuntimeSample_is272_bytes": {
+      "RuntimeSample": 272,
+      "Row": 288,
+      "Recorder": 73816,
+      "Page": 4696,
+      "Recorder_delta_from_55384": 18432,
+      "minimum_selected_static_data_bss_with_ring_delta_only": 143860,
+      "notes": "These are layout forecasts from previous Recorder/Page overheads and proposed sample size, not compiled final sizes. Additional Tune/Output/executor/global copies increase static and dynamic usage further. The prior selected linked static data+bss was125428 bytes; that percentage is not free internal heap."
+    },
+    "early_draft_native_observation": {
+      "Tune": 4548,
+      "Output": 264,
+      "Command": 392,
+      "Candidate": 968,
+      "Executor": 5368,
+      "notes": "Captured early draft; pre-trim values are in migration-probe artifact. Current root changes may already add duty-limit fields. No final compile or final ELF bound here."
+    }
+  },
+  "critical_verification": [
+    "Disabled nonneutral maps/offsets reproduce legacy scalar control and scheduling; enabled all100%/zero is neutral at fractional table positions and exact boundaries.",
+    "Known bilinear6x6 surface, edge clamping, row-major orientation, unequal axes and all physical cylinders verified with distinct corner values.",
+    "All six cylinder1-first firing-order permutations keep each numbered cylinder attached to its own map and IGN/INJ channel.",
+    "Fuel mass reconstruction (PW-deadtime)*flow sums once per720 degrees with exactly one deadtime. Test cranking, warmup, afterstart, acceleration, EGO and DFCO interactions.",
+    "All safe negative trims can reduce an over-limit base demand; a single excessive pulse/duty produces whole-command Capacity with the correct cylinder mask and no new highs.",
+    "Check actual rounded pulse widths at configured limits, current-RPM duty on acceleration/deceleration, configured duty limits below default, stale/future samples and faults.",
+    "Offsets at both clamp boundaries and soft-limit-floor example; full requested dwell and advance latched independently for each coil while later commands change all offsets.",
+    "Active injector retains its old off edge; ordinary demand updates, selective fuel cuts and global faults behave as existing contracts. Phase loss while any channel is high cuts globally and remains sticky.",
+    "Reject enabled batch mode, enabled-without-data, NaN/Inf/out-of-range arrays and disabled-data paths that would apply nonneutral values.",
+    "Schema1/2 JSON and MSQ001/002 migration neutral even when parser/template contains previous nonneutral values; exact schema3/003 round trips, strict page/count/signature/unknown-key rejection.",
+    "Near-limit16KiB legacy fixture upgrades successfully within new common bound; maximum-length new documents, oversized bodies, allocator failures and repeated24KiB NVS updates preserve previous data on failure.",
+    "Type9 fixed frame golden bytes remain identical for identical base fields, lengths/offsets/MAC transcript unchanged; JSON/MSL/native replay preserve full per-cylinder values and matched masks.",
+    "Worst-case MSL header/row, one-row streaming allocation failures, immutable16-row pages,256-row overwrite/gap accounting and browser maximum-session bounds remain valid.",
+    "All selected/generic/dummy builds, actual target sizeof/staticRAM/task-frame checks and ISR closure/data/literal audits; do not infer runtime heap/stack high-water or latency from static passes."
+  ],
+  "validation_performed_this_review": [
+    "Read existing controller, scheduler, core command/candidate/ISR paths, target handoff, logger snapshots, parsers/store, own002 protocol/MSQ/INI generator and relevant tests.",
+    "Cache-only native parser probe independently validates a15,842-byte input against pre-trim HEAD schema2/validator/canonicalizer; emitted canonical text is exactly16,384 bytes.",
+    "Neutral four-map illustrative expansion adds942 bytes to input representation and exceeds existing16KiB cap. Existing NVS fake explicitly documents that partition capacity/flash algorithms are not simulated.",
+    "Read pinned IDF NVS page-manager source: new pages/GC require free-page reserve and can return not-enough-space. No flash-capacity simulation performed.",
+    "Compared previous independently bound final telemetry target sizes/frames and current early-draft native sizeof values to quantify growth. No production edits, subagents, board execution or final trim implementation validation."
+  ],
+  "remaining_measurement_limits": [
+    "No connected target, flashed image or electrical qualification.",
+    "Physical ISR/lock duration, capture latency/jitter/latch behavior, task stack high-water, minimum internal heap and NVS flash update/power-loss behavior remain unmeasured.",
+    "This is a design review; implementation was changing concurrently. Each requirement needs recheck against final source and final ELFs."
+  ],
+  "artifacts": [
+    ".cache/engine/cylinder-review/legacy-near-limit-v2.json",
+    ".cache/engine/cylinder-review/baseline-migration-probe.json",
+    ".cache/engine/cylinder-review/pre-trim-probe.cpp",
+    ".cache/engine/cylinder-review/pre-trim-probe.so",
+    ".cache/engine/cylinder-review/pre-trim/include/ecu/engine.hpp",
+    ".cache/engine/cylinder-review/pre-trim/include/ecu/engine_json.hpp"
+  ]
+}

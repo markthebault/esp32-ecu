@@ -38,6 +38,17 @@ inline cJSON* data_json(const RuntimeSample&r,std::uint64_t observed_us){
  for(unsigned i=0;ok&&i<input_count;++i)ok=json_value(inputs,input_names[i],present&&(r.input_valid&(1U<<i))?r.inputs[i]:NAN);
  auto*proposals=ok?cJSON_AddObjectToObject(j,"proposals"):nullptr;if(!proposals)ok=false;
  for(unsigned i=0;ok&&i<proposal_count;++i)ok=json_value(proposals,proposal_names[i],present?r.proposals[i]:NAN);
+ if(ok)ok=cJSON_AddStringToObject(j,"scalar_proposal_basis","untrimmed_base_demand");
+ auto*cyl=ok?cJSON_AddObjectToObject(j,"cylinders"):nullptr;if(!cyl)ok=false;
+ if(ok)ok=cJSON_AddNumberToObject(cyl,"valid_mask",r.cylinder_valid)&&cJSON_AddBoolToObject(cyl,"enabled",r.cylinder_enabled)&&
+  cJSON_AddNumberToObject(cyl,"capacity_mask",r.cylinder_capacity_mask)&&cJSON_AddNumberToObject(cyl,"spark_clamp_mask",r.cylinder_spark_clamp_mask)&&cJSON_AddNumberToObject(cyl,"retard_floor_mask",r.cylinder_retard_floor_mask);
+ auto*channels=ok?cJSON_AddArrayToObject(cyl,"proposals"):nullptr;if(!channels)ok=false;
+ for(unsigned i=0;ok&&i<4;++i){
+  auto*row=cJSON_CreateObject();if(!row){ok=false;break;}
+  const bool known=present&&(r.cylinder_valid&(1U<<i));
+  ok=cJSON_AddNumberToObject(row,"cylinder",i+1)&&json_value(row,"pulse_ms",known?r.cylinder_pulse_ms[i]:NAN)&&json_value(row,"advance_deg",known?r.cylinder_advance_deg[i]:NAN)&&json_value(row,"fuel_pct",known?r.cylinder_fuel_pct[i]:NAN)&&json_value(row,"duty_pct",known?r.cylinder_duty_pct[i]:NAN)&&cJSON_AddItemToArray(channels,row);
+  if(!ok)cJSON_Delete(row);
+ }
  auto*raw=ok?cJSON_AddArrayToObject(j,"raw_adc"):nullptr;if(!raw)ok=false;
  for(unsigned i=0;ok&&i<8;++i){auto*value=present&&(r.board_flags&1)?cJSON_CreateNumber(r.raw_adc[i]):cJSON_CreateNull();if(!value||!cJSON_AddItemToArray(raw,value)){cJSON_Delete(value);ok=false;}}
  auto*worker=ok?cJSON_AddObjectToObject(j,"worker_observation"):nullptr;if(!worker)ok=false;

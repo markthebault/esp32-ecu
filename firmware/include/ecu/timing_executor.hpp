@@ -33,6 +33,7 @@ struct TimingStats {
  std::uint32_t generation=0,epoch=0;
  std::uint8_t high_mask=0;
  Cause fault=Cause::None,last_fault=Cause::None,last_cut=Cause::None;
+ engine::AngleScheduler::StopReason angle_reason=engine::AngleScheduler::StopReason::None;
 };
 struct TimingEvent {
  std::uint64_t sequence=0,scheduled_us=0,actual_us=0;
@@ -68,12 +69,19 @@ public:
    c.slots!=command_.slots||c.missing!=command_.missing||c.max_rpm!=command_.max_rpm||
    c.angle.strategy!=command_.angle.strategy||c.angle.firing_order!=command_.angle.firing_order||
    c.angle.tooth1_btdc_deg!=command_.angle.tooth1_btdc_deg||c.angle.cam_sync_deg!=command_.angle.cam_sync_deg||
-   c.angle.cam_window_deg!=command_.angle.cam_window_deg||c.angle.injection_end_deg!=command_.angle.injection_end_deg;
+   c.angle.cam_window_deg!=command_.angle.cam_window_deg||c.angle.injection_end_deg!=command_.angle.injection_end_deg||
+   c.angle.max_duty!=command_.angle.max_duty||c.angle.max_injection_ms!=command_.angle.max_injection_ms||c.angle.max_dwell_ms!=command_.angle.max_dwell_ms||
+   c.max_injector_high_us!=command_.max_injector_high_us||c.max_coil_high_us!=command_.max_coil_high_us||c.output.cylinder_trims_enabled!=command_.output.cylinder_trims_enabled;
   if(changed){stop(now,Cause::Configuration,io);phase_known_=false;phase_deadline_=none;++stats_.epoch;}
   ++stats_.generation;
   if(!c.sequence||c.sequence<=command_.sequence||c.command_us>now||c.sampled_us>now||
      now-c.command_us>=20000||now-c.sampled_us>=20000){trip(now,Cause::CommandTimeout,io);return;}
   if(c.max_injector_high_us<1000||c.max_injector_high_us>15000||c.max_coil_high_us<500||c.max_coil_high_us>3500){trip(now,Cause::Plan,io);return;}
+  if(!engine::demand_valid(c.angle,c.output,c.output.rpm)){trip(now,Cause::Plan,io);return;}
+  if(c.output.proposed_enabled()){
+   if(!c.output.spark_cut&&std::llround(c.output.dwell_ms*1000)>c.max_coil_high_us){trip(now,Cause::Plan,io);return;}
+   for(unsigned cylinder=0;cylinder<4;++cylinder)if(!c.output.fuel_cut&&std::llround(c.output.pulse_for(cylinder)*1000)>c.max_injector_high_us){trip(now,Cause::Plan,io);return;}
+  }
   command_=c;
   command_deadline_=std::min(c.command_us,c.sampled_us)+20000;
   if(phase_required()&&c.phase_epoch!=c.configuration_epoch){
@@ -108,7 +116,7 @@ public:
   if(stats_.fault!=Cause::None)return Commit::Fault;
   if(now<c.capture_us||now-c.capture_us>1000){trip(now,Cause::CaptureAge,io);return Commit::Fault;}
   stats_.max_capture_age_us=std::max(stats_.max_capture_age_us,now-c.capture_us);
-  if(!c.valid||c.scheduler.failed()){trip(now,Cause::Plan,io);return Commit::Fault;}
+  if(!c.valid||c.scheduler.failed()){stats_.angle_reason=c.scheduler.stop_reason();trip(now,Cause::Plan,io);return Commit::Fault;}
   if(!active_)return Commit::Accepted;
   const auto expired=expiry(now);if(expired!=Cause::None){trip(now,expired,io);return Commit::Fault;}
   if(now>=command_deadline_||now>=c.stall_deadline){trip(now,Cause::CommandTimeout,io);return Commit::Fault;}

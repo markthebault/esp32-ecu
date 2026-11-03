@@ -19,7 +19,7 @@ engine::Tune active;engine::Controller controller;engine::Output latest;
 engine::RuntimeSample latest_data;
 std::string document;bool storage_ok=false;std::uint64_t stamp=0;const char* binding="waiting for sensor sample";
 std::uint64_t command_sequence=0;std::uint32_t sensor_revision=0;
-bool parse_text(const char*s,engine::Tune&t){if(!web::safe_json(s,std::strlen(s)))return false;auto*j=cJSON_ParseWithOpts(s,nullptr,true);bool ok=j&&engine::parse_tune(j,t);cJSON_Delete(j);return ok;}
+bool parse_text(const char*s,engine::Tune&t){if(!web::safe_json(s,std::strlen(s),engine::tune_maximum))return false;auto*j=cJSON_ParseWithOpts(s,nullptr,true);bool ok=j&&engine::parse_tune(j,t);cJSON_Delete(j);return ok;}
 }
 void init(){
  mutex=xSemaphoreCreateMutex();configASSERT(mutex);document=web::assets::engine_defaults;
@@ -76,7 +76,7 @@ int save(const char*text,std::string&reason){
  auto*j=cJSON_Parse(text);if(!j||!engine::upgrade_tune_document(j)){cJSON_Delete(j);reason="Allocation failed";xSemaphoreGive(mutex);return 500;}
  candidate->revision++;cJSON_SetNumberValue(cJSON_GetObjectItemCaseSensitive(j,"revision"),candidate->revision);char*encoded=cJSON_PrintUnformatted(j);cJSON_Delete(j);
  if(!encoded){reason="Allocation failed";xSemaphoreGive(mutex);return 500;}
- if(std::strlen(encoded)>16384){reason="Encoded engine tune exceeds 16 KiB; previous data retained";cJSON_free(encoded);xSemaphoreGive(mutex);return 413;}
+ if(std::strlen(encoded)>engine::tune_maximum){reason="Encoded engine tune exceeds 24 KiB; previous data retained";cJSON_free(encoded);xSemaphoreGive(mutex);return 413;}
  std::string next_document(encoded);cJSON_free(encoded);
  engine_target::begin_configuration();
  const auto err=engine_storage::save(next_document);
@@ -89,7 +89,7 @@ cJSON* sample(){
 }
 cJSON* snapshot(){
  xSemaphoreTake(mutex,portMAX_DELAY);const auto output=latest;const auto revision=active.revision;const bool stored=storage_ok;const auto sample_stamp=stamp;const auto* reason=binding;xSemaphoreGive(mutex);
- auto*j=engine::output_json(output);const auto now=engine_target::clock_us();cJSON_AddNumberToObject(j,"revision",revision);cJSON_AddBoolToObject(j,"storage_ok",stored);cJSON_AddStringToObject(j,"binding",reason);cJSON_AddNumberToObject(j,"sample_age_ms",sample_stamp&&now>=sample_stamp?(now-sample_stamp)/1000.0:-1);cJSON_AddBoolToObject(j,"simulator",false);cJSON_AddBoolToObject(j,"fresh",sample_stamp&&now>=sample_stamp&&now-sample_stamp<50000);cJSON_AddItemToObject(j,"timing",engine_target::snapshot());
+ auto*j=engine::output_json(output);if(!j)return nullptr;const auto now=engine_target::clock_us();cJSON_AddNumberToObject(j,"revision",revision);cJSON_AddBoolToObject(j,"storage_ok",stored);cJSON_AddStringToObject(j,"binding",reason);cJSON_AddNumberToObject(j,"sample_age_ms",sample_stamp&&now>=sample_stamp?(now-sample_stamp)/1000.0:-1);cJSON_AddBoolToObject(j,"simulator",false);cJSON_AddBoolToObject(j,"fresh",sample_stamp&&now>=sample_stamp&&now-sample_stamp<50000);auto*timing=engine_target::snapshot();if(!timing||!cJSON_AddItemToObject(j,"timing",timing)){cJSON_Delete(timing);cJSON_Delete(j);return nullptr;}
  const auto phase=engine_target::measurement();cJSON_AddBoolToObject(j,"crank_synced",phase.synced);cJSON_AddBoolToObject(j,"phase_synced",phase.phase_synced);cJSON_AddBoolToObject(j,"phase_required",phase.phase_required);
  cJSON_AddStringToObject(j,"phase_reason",engine::PhaseDecoder::reason_name(phase.phase_reason));cJSON_AddNumberToObject(j,"phase_losses",phase.phase_losses);cJSON_AddNumberToObject(j,"cam_rejected",phase.cam_rejected);cJSON_AddNumberToObject(j,"cam_error_deg",phase.cam_error_deg);return j;
 }

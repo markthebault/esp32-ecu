@@ -1,0 +1,187 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "case": "balance/ours-corrected.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true,
+        "combustions": true
+      }
+    },
+    {
+      "case": "balance/ours-disabled.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true,
+        "combustions": true
+      }
+    },
+    {
+      "case": "balance/ours-neutral.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true,
+        "combustions": true
+      }
+    },
+    {
+      "case": "balance/ours-swapped.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true,
+        "combustions": true
+      }
+    },
+    {
+      "case": "balance/speeduino-corrected.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true,
+        "combustions": true
+      }
+    },
+    {
+      "case": "balance/speeduino-disabled.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true,
+        "combustions": true
+      }
+    },
+    {
+      "case": "balance/speeduino-neutral.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true,
+        "combustions": true
+      }
+    },
+    {
+      "case": "balance/speeduino-swapped.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true,
+        "combustions": true
+      }
+    },
+    {
+      "case": "balance/speeduino-total_pw_adjusted.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true,
+        "combustions": true
+      }
+    },
+    {
+      "case": "transients/ours-cam_dropout-250-sequential-timer16.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true
+      }
+    },
+    {
+      "case": "transients/ours-throttle_step-250-batch-timer16.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true
+      }
+    },
+    {
+      "case": "transients/ours-throttle_step-250-sequential-timer16.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true
+      }
+    },
+    {
+      "case": "transients/ours-warm_start-125-sequential-timer16.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true
+      }
+    },
+    {
+      "case": "transients/ours-warm_start-250-batch-timer16.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true
+      }
+    },
+    {
+      "case": "transients/speeduino-cam_dropout-250-sequential-timer16.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true
+      }
+    },
+    {
+      "case": "transients/speeduino-throttle_step-250-sequential-timer16.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true
+      }
+    },
+    {
+      "case": "transients/speeduino-warm_start-125-sequential-timer16.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true
+      }
+    },
+    {
+      "case": "transients/speeduino-warm_start-250-sequential-timer32.json",
+      "checks": {
+        "summary": true,
+        "edges": true,
+        "trace": true,
+        "spark_timing": true
+      }
+    }
+  ],
+  "harness_changes": {
+    "tools/run_cylinder_scenarios.py": {
+      "current_sha256": "4602b36f946a7048e4ada6755b601e306497b813b8601289d10a7c81342bb54d",
+      "changes": "Record/check live reference executable and runtime artifact digests; require successful combustion and stronger swapped baseline in balance harness. No controller or plant algorithm changes."
+    },
+    "tools/run_cylinder_transients.py": {
+      "current_sha256": "cfff13ddaa75135c26f11b8c699e5bf2a0f2a39f9234e3217ce92a9f3f2cc528",
+      "changes": "Record/check live reference executable and runtime artifact digests; require successful combustion and stronger swapped baseline in balance harness. No controller or plant algorithm changes."
+    }
+  },
+  "scope": "Fresh publication executions vs independently reviewed original timelines; reviewed-execution archive retains original sources and traces. Additional provenance/acceptance checks do not retroactively attest the original runs."
+}

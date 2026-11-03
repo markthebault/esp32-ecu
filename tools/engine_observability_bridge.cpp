@@ -45,6 +45,17 @@ bool sample(const char*text,ecu::engine::RuntimeSample&out){
   integer(j,"phase_reason_code",r.phase_reason,9)&&integer(j,"phase_losses",r.phase_losses)&&integer(j,"cam_rejected",r.cam_rejected)&&value(j,"cam_error_deg",r.cam_error_deg);
  r.source=static_cast<ecu::engine::DataSource>(source);
  ok=ok&&(available==(r.has(ecu::engine::Present)&&r.sequence!=0))&&(!available||source);
+ const auto*cyl=cJSON_GetObjectItemCaseSensitive(j,"cylinders");
+ if(cyl){
+  bool enabled=false;ok=ok&&cJSON_IsObject(cyl)&&integer(cyl,"valid_mask",r.cylinder_valid,15)&&ecu::web::boolean(cyl,"enabled",enabled)&&
+   integer(cyl,"capacity_mask",r.cylinder_capacity_mask,15)&&integer(cyl,"spark_clamp_mask",r.cylinder_spark_clamp_mask,15)&&integer(cyl,"retard_floor_mask",r.cylinder_retard_floor_mask,15);
+  r.cylinder_enabled=enabled;const auto*channels=cJSON_GetObjectItemCaseSensitive(cyl,"proposals");ok=ok&&cJSON_IsArray(channels)&&cJSON_GetArraySize(channels)==4;
+  for(unsigned i=0;ok&&i<4;++i){
+   const auto*row=cJSON_GetArrayItem(channels,i);unsigned id=0;
+   ok=integer(row,"cylinder",id,4)&&id==i+1&&value(row,"pulse_ms",r.cylinder_pulse_ms[i])&&value(row,"advance_deg",r.cylinder_advance_deg[i])&&value(row,"fuel_pct",r.cylinder_fuel_pct[i])&&value(row,"duty_pct",r.cylinder_duty_pct[i]);
+   if(ok&&(r.cylinder_valid&(1U<<i)))ok=std::isfinite(r.cylinder_pulse_ms[i])&&std::isfinite(r.cylinder_advance_deg[i])&&std::isfinite(r.cylinder_fuel_pct[i])&&std::isfinite(r.cylinder_duty_pct[i]);
+  }
+ }
  const auto*inputs=cJSON_GetObjectItemCaseSensitive(j,"inputs");const auto*proposals=cJSON_GetObjectItemCaseSensitive(j,"proposals");
  ok=ok&&cJSON_IsObject(inputs)&&cJSON_IsObject(proposals);
  for(unsigned i=0;ok&&i<ecu::engine::input_count;++i)ok=value(inputs,ecu::engine::input_names[i],r.inputs[i])&&(!(r.input_valid&(1U<<i))||std::isfinite(r.inputs[i]));

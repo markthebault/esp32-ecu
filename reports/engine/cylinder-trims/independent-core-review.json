@@ -1,0 +1,327 @@
+{
+  "reviewed_at_utc": "2026-11-03T20:24:11.956795+00:00",
+  "reviewer": "independent /root/target_executor_architecture_review",
+  "scope": "Read-only core/schema/storage/coherent observer review of current four-cylinder trim increment. No production edits, subagents, flashing or connected target execution. Simulator/browser integration and final firmware source/image binding remain separate.",
+  "verdict": "Three concrete findings were reproduced and fixed by root; independent rechecks pass. No unresolved source blocker found in reviewed paths. Draft layout/frame inspection does not establish final-image equivalence or physical timing/heap/stack qualification.",
+  "source_sha256_at_report": {
+    "firmware/include/ecu/engine.hpp": "6a79cf871a54d264e461960a49e8702fd45f29cc3387bec8a001748c6f1bc44c",
+    "firmware/include/ecu/engine_limits.hpp": "aaaa07e76744f92cbf03f7ba07b5a297d813ffdceb7d5d5a68a8d6328d2dce14",
+    "firmware/include/ecu/engine_scheduler.hpp": "edd49807f513b7fe74fa3f829ee5f9d4e8d394b7533faede505e8b47769c3816",
+    "firmware/include/ecu/timing_executor.hpp": "59d0b60133f6075135aabf3893fee7baecd6c8b2951e465f2dbdbb18fd8f6992",
+    "firmware/include/ecu/engine_json.hpp": "cbea06329fb2c4ffcd461bd56c5d714162fcf06a420d32e605767ae832aa8c3d",
+    "firmware/include/ecu/json.hpp": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+    "firmware/include/ecu/engine_storage.hpp": "c1b0fc6e756d4c1e08ddf76cc0338cf6f65c4eaf0dd37bae8ccd818fdba7b820",
+    "firmware/include/ecu/engine_data.hpp": "10ab0f9d99100e6d2cc00334010a054e4bd0cb15e6e69bfdc90a8c2c6c30625c",
+    "firmware/include/ecu/engine_data_json.hpp": "ef7947dd545d372c197007c75992aaedbecc926d5c59893f1cf4d0e127c2ba03",
+    "firmware/include/ecu/engine_log.hpp": "c2705fa3581f60cc5a67c7701fa3c382945a88febafea293b039a638f17a3e08",
+    "firmware/include/ecu/engine_log_json.hpp": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6",
+    "firmware/include/ecu/engine_log_msl.hpp": "cda7a1b9b4a53b19ea95f1b9a45cdc655453e5fd02758e940abb46c295d6fd91",
+    "firmware/include/ecu/engine_radio.hpp": "2f0751fb9253229eb31bc0464bf95f4f5797f0ae2f00913773052e9ccdba2b97",
+    "firmware/include/ecu/heap_object.hpp": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51",
+    "firmware/main/engine_service.cpp": "6eced54805c76e1e17cf0b9959138498914c970bdd25c708dda5b86ed224d25f",
+    "firmware/main/engine_target.cpp": "25a5288710aa4987402ff20769a204b260b558f8925faaa561e20040ed6f4cf9",
+    "firmware/main/engine_log_service.cpp": "05666d7be694be72719515709a083b0cf65701ebcd410fdb32fc0aa0e9fbbd53",
+    "firmware/main/app.cpp": "b00afe666c83d9391530a53b495279d4b5bdb3323495a75f0e0b633047283c44",
+    "firmware/main/web_config.cpp": "d2cf41541621cb8255b60545525c92cb7e36b40093191e3f4a18269cf9670926",
+    "tools/engine_bridge.cpp": "b35a32f6ca4e0b26eeead46d97a7bd00ddfc0ab715d4641c5fd5c07598a81c7c",
+    "tools/engine_runtime.py": "e9359ad4f2a0c27182400dbbca46f9025896b94c6b0015e4f50bc9ca18b3fc9b",
+    "tools/engine_observability_bridge.cpp": "669557e117ebb2b2d21b27f7ddb69664eca542048838ed309eca49bb81bdb376",
+    "firmware/tests/engine_cylinder_test.cpp": "dc80e06433ed50df2ddeea017e68bbc4ef7fa88d9b56963efd71d44d50d181b9"
+  },
+  "resolved_findings": [
+    {
+      "id": "CYL-IMPL-01",
+      "severity": "high",
+      "issue": "Executor::command originally accepted an active malformed cylinder demand without validation. The previous pending schedule could emit old high edges before another tooth validated the new command. Newly added configured limits were also missing from configuration-change cuts.",
+      "before_repro": {
+        "invalid_enabled_without_data_accepted_by_core": true,
+        "old_pending_high_edges_after_invalid_command": 2,
+        "first_old_event_us": 3125
+      },
+      "resolution": "Shared demand_valid now runs before accepting/renewing active core commands and again in fresh-RPM candidate planning. Changes to duty/injection/dwell limits, independent high limits and common trim enable cut existing work. Rounded requested widths are checked against independent integer high-time bounds.",
+      "after_repro": {
+        "invalid_enabled_without_data_accepted_by_core": false,
+        "old_pending_high_edges_after_invalid_command": 0,
+        "first_old_event_us": 3125
+      },
+      "additional_matrix": {
+        "core_gate_cases": 9,
+        "invalid_demands_cut_old_plan": true,
+        "independent_integer_high_limit_checked": true,
+        "valid_limit_change_cancels_old_plan": true,
+        "disabled_arrays_ignored": true,
+        "inactive_controller_fault_cuts_without_extra_plan_latch": true
+      }
+    },
+    {
+      "id": "CYL-IMPL-02",
+      "severity": "medium",
+      "issue": "Checked output_json failure could return null to legacy engine_service::snapshot, which then allocated a timing child and attempted adoption into a null parent. Failed timing-key adoption could also leak an unattached child.",
+      "before_repro": {
+        "single_failed_allocation_positions": 400,
+        "positions_leaking_children": 109,
+        "null_parent_leak_positions": 108,
+        "maximum_leaked_allocations": 3
+      },
+      "resolution": "Immediate null return after output_json and explicit checked timing-child adoption/delete on failure.",
+      "after_repro": {
+        "single_failed_allocation_positions": 400,
+        "positions_leaking_children": 0,
+        "null_parent_leak_positions": 0,
+        "maximum_leaked_allocations": 0
+      },
+      "probe_scope": "Exact snapshot body copied into a host harness with minimal mutex/time/measurement/timing-child fixtures. Tests ownership/leak handling, not real HTTPD, SDK allocation or completeness of every legacy optional metadata field."
+    },
+    {
+      "id": "CYL-IMPL-03",
+      "severity": "high",
+      "issue": "Legal Tune.max_duty=.85f passed float-domain tune validation but widened to double0.85000002384185791 and failed the new strict double upper bound. Even a tiny demand could become Plan fault.",
+      "before_repro": {
+        "valid_tune_at_max_duty_0_85": true,
+        "converted_max_duty": 0.8500000238418579,
+        "demand_valid": false
+      },
+      "resolution": "Command demand maximum validation now uses the same float-domain upper value, double(.85f). Configured duty checking at actual tooth RPM remains enforced.",
+      "after_repro": {
+        "valid_tune_at_max_duty_0_85": true,
+        "converted_max_duty": 0.8500000238418579,
+        "demand_valid": true
+      },
+      "extra_check": "Next representable double above the float-domain upper bound is rejected in the independent probe."
+    }
+  ],
+  "reviewed_contracts": [
+    "Physical cylinder indexing is consistent: map/offset index0 is INJ1/IGN1, with firing order used only to select phase. Six firing orders independently tested.",
+    "Fuel trim multiplies effective mass contribution before adding one unchanged deadtime. Actual four-channel PWs/duties determine Capacity, including safe negative trims of otherwise excessive base demand; a failing channel records a mask and cuts the whole command. Scalars retain untrimmed base-demand semantics.",
+    "Signed spark offset is included before nominal clamp, using a15-degree cranking ceiling and40-degree running ceiling; soft-limit retard follows, with separate lower-floor mask. This preserves retard at the upper nominal boundary. Per-coil advance latches during charged dwell; open injectors retain their original closing edge.",
+    "pulse_for/advance_for use arrays only when both available and enabled. Disabled nonneutral arrays are ignored; active enabled-without-data or enabled batch demands are rejected. Inactive controller faults still cut without unnecessarily adding a Plan latch.",
+    "Schema1/2 parse paths explicitly reset all four trim maps, axes, offsets and common enable even when Tune is reused. Exact legacy schema keys and physical_outputs=inhibited remain enforced. Schema3 requires full strict trims and arrays; invalid latent disabled maps remain rejected.",
+    "The same24KiB engine maximum now covers canonicalization, engine target pre-parser, HTTP body, NVS blob helper, native bridge validation/configure and host EngineStore. Shared safe_json retains the16KiB sensor default and takes explicit engine maximum. Near-limit old16KiB canonical data upgrades successfully to17331 bytes.",
+    "New Output/RuntimeSample channel arrays are copied in the same controller observation and command transaction; no later tune interpolation is mixed into old sample arrays. Queue/candidate copies retain sequence/revision/epoch/generation fences. No mutable trim-array references escape task ownership.",
+    "Type9 schema1 still encodes8 inputs and14 base proposals into a200-byte authenticated body/232-byte frame. Compile-time count assertions prevent growth into its HMAC. New arrays/masks/enable are separate RuntimeSample fields, outside existing16-bit DataFlag bits. Identical base fields produce byte-identical encoded bodies when all cylinder fields change.",
+    "Native observation-fixture parser copies optional per-cylinder fields and preserves unknown legacy per-cylinder availability instead of inventing neutral measurements. Receiver explicitly labels base demand and per_cylinder_available=false for type9.",
+    "Checked new JSON builders discard incomplete trees. Existing one-row HTTP streaming remains outside task locks, with whole-response parse rejection on truncation and per-row task delays.79-column MSL includes per-cylinder validity/enable/capacity/clamp/floor masks and four channel vectors.",
+    "ISR scheduling continues to consume fixed precomputed state and latched advance; interpolation and shared demand math occur in controller/candidate/command tasks. New demand validation/llround in Executor::command executes under the target task portMUX, so its bounded extra lock duration still requires physical measurement. No JSON/allocation/I/O was added to ISR roots.",
+    "Storage changes retain private validated candidates, revision checks, configuration cuts before NVS commit and preserved previous records/runtime on failure. No erase path or physical-output-policy change was added."
+  ],
+  "independent_validation": {
+    "sanitizers": "Native probes compiled with g++ -std=c++17 -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined and leak detection; pinned ESP-IDF cJSON sanitizer object linked for JSON probes.",
+    "migration_and_json_builders": {
+      "reuse_schema1_neutral": true,
+      "reuse_schema2_neutral": true,
+      "legacy_upgrade_bytes": 17331,
+      "same_legacy_base_float_cells": true,
+      "radio_frame_unchanged_by_cylinder_fields": true,
+      "allocation_positions_per_builder": 700,
+      "upgrade_failure_positions": 246,
+      "output_failure_positions": 108,
+      "data_failure_positions": 215,
+      "row_failure_positions": 224,
+      "no_cjson_leaks": true,
+      "runtime_sample_bytes": 272,
+      "row_bytes": 288,
+      "page_bytes": 4696,
+      "recorder_bytes": 73816
+    },
+    "physical_channel_latching": {
+      "firing_orders": 6,
+      "latch_cases": 12,
+      "physical_channel_mapping": true,
+      "charged_coil_advance_preserved": true,
+      "full_dwell_preserved": true,
+      "open_injector_closing_edge_preserved": true,
+      "next_cycle_uses_new_channel_demand": true
+    },
+    "core_gate_matrix": {
+      "core_gate_cases": 9,
+      "invalid_demands_cut_old_plan": true,
+      "independent_integer_high_limit_checked": true,
+      "valid_limit_change_cancels_old_plan": true,
+      "disabled_arrays_ignored": true,
+      "inactive_controller_fault_cuts_without_extra_plan_latch": true
+    },
+    "msl_formatter": {
+      "msl_columns": 79,
+      "input_valid_mask_column": 27,
+      "input_valid_mask_value": 165,
+      "maximum_counter_header_bytes": 1642,
+      "stress_row_bytes": 759,
+      "bounded_buffer_failures_rejected": true,
+      "zero_session_rejected_without_writes": true
+    },
+    "streaming_oom_model": {
+      "allocation_positions": 4500,
+      "header_failures_before_response": 56,
+      "truncated_invalid_json_responses": 3664,
+      "complete_valid_pages": 780,
+      "peak_cjson_server_bytes_native": 12633,
+      "all_partial_responses_rejected_by_json_parse": true,
+      "no_cjson_leaks": true,
+      "qualification": "Host model of one-row DOM/header streaming, not real ESP HTTPD/socket execution. Header includes a subset of target metadata. Native cJSON peak excludes Page, socket buffers, allocator overhead, client strings and target pointer-size differences."
+    },
+    "repository_native_cylinder_test": {
+      "log": ".cache/engine/cylinder-review/engine-cylinder-test.log",
+      "scope": "Core neutral/mass/deadtime/clamp/capacity/fresh-RPM tests compiled against shared headers. Root performs full suite and integration tests separately.",
+      "result": "pass"
+    },
+    "target_layout": {
+      "method": "Pinned xtensa-esp32s3-elf-g++14.2.0 cache-only sizeof arrays, nm symbol sizes; native sizes agree.",
+      "RuntimeSample": 272,
+      "Row": 288,
+      "Page": 4696,
+      "Recorder": 73816,
+      "Command": 408,
+      "Candidate": 984
+    },
+    "target_stack_cache_compilation": {
+      "method": "Reused selected CMake compiler include/options with explicit PlatformIO ECU_COMPACT_A3=1 ECU_CONFIG_WEB=1 ECU_SELECTED_N16R8=1, gnu++17 and-fstack-usage. Objects/depfiles only in review cache. engine_target recompiled after boundary fix.",
+      "frames_bytes": {
+        "ecu::engine::parse_tune(const cJSON*, Tune&)::<lambda(const cJSON*, const char*, float&)>": 48,
+        "ecu::engine::Output ecu::engine::Controller::step(const ecu::engine::Tune&, const ecu::engine::Inputs&, uint64_t)": 160,
+        "bool ecu::engine_service::observe(const ecu::web::Sample&, const ecu::config::Config&, uint64_t, uint64_t, ecu::engine::RuntimeSample&)": 1184,
+        "bool ecu::engine::parse_tune(const cJSON*, Tune&)": 896,
+        "bool ecu::engine::canonical_tune(const char*, Tune&, std::string&)": 32,
+        "bool ecu::engine::demand_valid(const AngleConfig&, const Output&, double)": 96,
+        "ecu::engine_target::{anonymous}::run(void*)::<lambda()>": 2336,
+        "void ecu::timing::Executor::command(const ecu::timing::Command&, uint64_t, IO&) [with IO = ecu::engine_target::{anonymous}::OutputIO]": 64,
+        "void ecu::engine_target::{anonymous}::run(void*)": 3520,
+        "void app_main()": 6736,
+        "void ecu::engine_log::Recorder::page(uint32_t, uint32_t, ecu::engine_log::Page&) const": 32,
+        "bool ecu::engine_log::Recorder::append(const ecu::engine::RuntimeSample&, uint64_t)": 320,
+        "esp_err_t ecu::web::{anonymous}::engine_data_log_msl_get(httpd_req_t*)": 2448,
+        "esp_err_t ecu::web::{anonymous}::engine_data_log_get(httpd_req_t*)": 112
+      },
+      "limits": "Individual function frames, not complete recursive/system call-stack bound. Main/timing/HTTP stacks configured16KiB; ISR stack1536. Runtime high-water not measured."
+    },
+    "draft_linked_image": {
+      "elf": "firmware/.pio/build/compact_n16r8_web/firmware.elf",
+      "elf_sha256": "128355c3616199aed30cab100f5d282d5716fce20b91e7d8bebca1d0193ef683",
+      "mtime_utc": "2026-11-03T19:56:02.096641+00:00",
+      "status": "draft image; final source/ELF binding deferred to root final builds",
+      "static_ram_data_bss": 145156,
+      "linked_sizes": [
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::latest",
+          "size": 264
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::executor",
+          "size": 5384
+        },
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::latest_data",
+          "size": 272
+        },
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::active",
+          "size": 4548
+        },
+        {
+          "name": "ecu::engine_log_service::(anonymous namespace)::recorder",
+          "size": 73816
+        }
+      ],
+      "entry_frames": [
+        {
+          "name": "app_main",
+          "frame_bytes": 6736,
+          "entry_bytes": "36a134"
+        },
+        {
+          "name": "ecu::web::(anonymous namespace)::engine_data_log_msl_get(httpd_req*)",
+          "frame_bytes": 2448,
+          "entry_bytes": "362113"
+        },
+        {
+          "name": "std::unique_ptr<ecu::engine_log::Page, ecu::HeapObjectDelete<ecu::engine_log::Page> > ecu::heap_object<ecu::engine_log::Page>()",
+          "frame_bytes": 32,
+          "entry_bytes": "364100"
+        },
+        {
+          "name": "ecu::web::(anonymous namespace)::engine_data_log_get(httpd_req*)",
+          "frame_bytes": 112,
+          "entry_bytes": "36e100"
+        },
+        {
+          "name": "std::unique_ptr<ecu::engine::Tune, ecu::HeapObjectDelete<ecu::engine::Tune> > ecu::heap_object<ecu::engine::Tune>()",
+          "frame_bytes": 32,
+          "entry_bytes": "364100"
+        },
+        {
+          "name": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+          "frame_bytes": 1184,
+          "entry_bytes": "364109"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+          "frame_bytes": 32,
+          "entry_bytes": "364100"
+        },
+        {
+          "name": "ecu::engine_target::measurement()",
+          "frame_bytes": 48,
+          "entry_bytes": "366100"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+          "frame_bytes": 2336,
+          "entry_bytes": "364112"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::run(void*)",
+          "frame_bytes": 3520,
+          "entry_bytes": "36811b"
+        },
+        {
+          "name": "ecu::engine_log::Recorder::page(unsigned long, unsigned long, ecu::engine_log::Page&) const",
+          "frame_bytes": 32,
+          "entry_bytes": "364100"
+        },
+        {
+          "name": "ecu::engine_log_service::observe(ecu::engine::RuntimeSample const&)",
+          "frame_bytes": 48,
+          "entry_bytes": "366100"
+        }
+      ]
+    }
+  },
+  "remaining_limits": [
+    "Final source and selected/generic/dummy image hashes, actual final frame sizes, checked malloc helper paths and ISR closure/literal/data placement must be rebound after root final builds. Draft selected image128355c3... predates the latest command/OOM/float-bound fixes.",
+    "No physical IRQ/capture/portMUX duration, timer jitter, callback/latch races, task/ISR stack high-water or minimum internal heap measurement. New command math/copies and74KiB ring must be measured under realistic AP/radio/log/tune workflows.",
+    "Real NVS repeated maximum24KiB blob update/GC and power-loss behavior remain unmeasured; existing storage API fakes explicitly do not model partition capacity/flash algorithms. The64KiB partition remains unchanged.",
+    "Checked cJSON failure behavior does not prove global OOM tolerance of existing std::string/NVS/HTTPD/SDK allocation paths in no-exceptions firmware. Legacy status metadata still includes unchecked optional additions; the checked coherent sample builders are separately tested.",
+    "This report does not certify the still-changing browser, own003 protocol/MSQ/INI or simulator integration. No new PCB driver or physical enable was implemented or physically qualified by this review."
+  ],
+  "artifacts": [
+    ".cache/engine/cylinder-review/implementation-core-probe.cpp",
+    ".cache/engine/cylinder-review/implementation-core-before.json",
+    ".cache/engine/cylinder-review/implementation-core-probe.json",
+    ".cache/engine/cylinder-review/core-gate-matrix.cpp",
+    ".cache/engine/cylinder-review/core-gate-matrix.json",
+    ".cache/engine/cylinder-review/snapshot-oom-probe.cpp",
+    ".cache/engine/cylinder-review/snapshot-body-before.txt",
+    ".cache/engine/cylinder-review/snapshot-body-reviewed.txt",
+    ".cache/engine/cylinder-review/snapshot-oom-before.json",
+    ".cache/engine/cylinder-review/snapshot-oom-probe.json",
+    ".cache/engine/cylinder-review/duty-boundary-probe.cpp",
+    ".cache/engine/cylinder-review/duty-boundary-before.json",
+    ".cache/engine/cylinder-review/duty-boundary-probe.json",
+    ".cache/engine/cylinder-review/migration-observer-probe.cpp",
+    ".cache/engine/cylinder-review/migration-observer-probe.json",
+    ".cache/engine/cylinder-review/channel-latch-probe.cpp",
+    ".cache/engine/cylinder-review/channel-latch-probe.json",
+    ".cache/engine/cylinder-review/msl-format-probe.cpp",
+    ".cache/engine/cylinder-review/msl-format-probe.json",
+    ".cache/engine/cylinder-review/stream-oom-probe.cpp",
+    ".cache/engine/cylinder-review/stream-oom-probe.json",
+    ".cache/engine/cylinder-review/current-layout.cpp",
+    ".cache/engine/cylinder-review/current-layout.o",
+    ".cache/engine/cylinder-review/draft-image.json",
+    ".cache/engine/cylinder-review/engine-cylinder-test.log",
+    ".cache/engine/cylinder-review/app.cpp.review.su",
+    ".cache/engine/cylinder-review/engine_service.cpp.review.su",
+    ".cache/engine/cylinder-review/engine_target.cpp.review.su",
+    ".cache/engine/cylinder-review/web_config.cpp.review.su",
+    ".cache/engine/cylinder-review/engine_log_service.cpp.review.su"
+  ]
+}

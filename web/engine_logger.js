@@ -30,6 +30,7 @@ window.EcuEngineLogger=(()=>{
    const s=r?.sample;
    if(r.log_id!==identity.log_id||!uint(r.row_sequence)||r.row_sequence!==expected++||!u64(r.recorded_us)||!s||s.schema_version!==1||!s.available||!u64(s.sequence)||!u64(s.control_us)||!u64(s.sampled_us)||s.source_code!==p.source_code||!s.inputs||!s.proposals||!Array.isArray(s.raw_adc)||s.raw_adc.length!==8||!s.worker_observation||!u64(s.worker_observation.command_sequence))throw Error('Invalid or mixed engine row. Cursor unchanged.');
    const previous=staged.at(-1)||rows.at(-1);
+   if(s.cylinders&&(!uint(s.cylinders.valid_mask)||s.cylinders.valid_mask>15||!Array.isArray(s.cylinders.proposals)||s.cylinders.proposals.length!==4))throw Error('Invalid cylinder observation.');
    if(BigInt(s.sequence)===0n||BigInt(r.recorded_us)<BigInt(p.started_us)||BigInt(s.control_us)>BigInt(r.recorded_us)||BigInt(s.sampled_us)>BigInt(r.recorded_us)||
     (previous&&(BigInt(s.sequence)<=BigInt(previous.sample.sequence)||BigInt(r.recorded_us)<BigInt(previous.recorded_us))))throw Error('Invalid source sequence or observation clock. Cursor unchanged.');
    staged.push(r);
@@ -76,12 +77,12 @@ window.EcuEngineLogger=(()=>{
  const number=value=>typeof value==='number'&&Number.isFinite(value)?String(Number(value.toPrecision(9))):'NaN';
  function exportMsl(){
   if(!meta||!rows.length)throw Error('No collected engine rows.');
-  const lines=['"ESP32ECU ENGINE LOG 001"',`"BROWSER COLLECTED ${meta.source_code===1?'TARGET OBSERVATIONS':'SYNTHETIC REPLAY'} / boot ${identity.boot_id} / log ${identity.log_id} / period_ms=${meta.period_ms} duration_s=${meta.duration_s} / overwritten=${meta.overwritten} missed_periods=${meta.missed_periods} repeated=${meta.repeated_skipped} invalid=${meta.invalid_skipped} / missing row ranges ${gaps.map(x=>x.join('..')).join(',')||'none'} / PhaseEpoch=configuration context; WorkerEpoch=executor generation / proposals and software command masks; no electrical execution measurement"`,
-   [...PREFIX,...INPUT_LABELS,...PROPOSAL_LABELS,...Array.from({length:8},(_,i)=>'ADC'+i)].join('\t'),UNITS.join('\t')];
+  const lines=['"ESP32ECU ENGINE LOG 002"',`"BROWSER COLLECTED ${meta.source_code===1?'TARGET OBSERVATIONS':'SYNTHETIC REPLAY'} / boot ${identity.boot_id} / log ${identity.log_id} / period_ms=${meta.period_ms} duration_s=${meta.duration_s} / overwritten=${meta.overwritten} missed_periods=${meta.missed_periods} repeated=${meta.repeated_skipped} invalid=${meta.invalid_skipped} / missing row ranges ${gaps.map(x=>x.join('..')).join(',')||'none'} / PhaseEpoch=configuration context; WorkerEpoch=executor generation / proposals and software command masks; no electrical execution measurement"`,
+   [...PREFIX,...INPUT_LABELS,...PROPOSAL_LABELS,...Array.from({length:8},(_,i)=>'ADC'+i),'CylinderValidMask','CylinderTrimsEnabled','CylinderCapacityMask','CylinderSparkClampMask','CylinderRetardFloorMask',...Array.from({length:4},(_,i)=>['PW','Advance','FuelTrim','Duty'].map(k=>'C'+(i+1)+k)).flat()].join('\t'),[...UNITS,'bitfield','bool','bitfield','bitfield','bitfield',...Array(4).fill(['ms','deg','%','%']).flat()].join('\t')];
   for(const r of rows){
-   const s=r.sample,w=s.worker_observation;const elapsed=Number(BigInt(r.recorded_us)-BigInt(meta.started_us))/1e6;
+   const s=r.sample,w=s.worker_observation,c=s.cylinders;const extra=[c?.valid_mask||0,c?.enabled?1:0,c?.capacity_mask||0,c?.spark_clamp_mask||0,c?.retard_floor_mask||0,...Array.from({length:4},(_,i)=>['pulse_ms','advance_deg','fuel_pct','duty_pct'].map(k=>number(c?.valid_mask&(1<<i)?c.proposals[i][k]:null))).flat()];const elapsed=Number(BigInt(r.recorded_us)-BigInt(meta.started_us))/1e6;
    lines.push([elapsed.toFixed(6),r.row_sequence,s.sequence,number(s.control_age_ms),number(s.sample_age_ms),s.source_code,s.tune_revision,s.sensor_revision,s.phase_epoch,s.flags,s.controller_faults,s.state_code,s.strategy_code,s.phase_reason_code,s.phase_losses,s.cam_rejected,number(s.cam_error_deg),w.command_sequence,number(w.age_ms),w.epoch,w.tune_revision,w.sensor_revision,w.timing_fault_code,w.last_timing_fault_code,w.virtual_high_mask,w.physical_command_mask,s.board_flags,s.input_valid_mask,
-    ...INPUTS.map(k=>number(s.inputs[k])),...PROPOSALS.map(k=>number(s.proposals[k])),...s.raw_adc.map(number)].join('\t'));
+    ...INPUTS.map(k=>number(s.inputs[k])),...PROPOSALS.map(k=>number(s.proposals[k])),...s.raw_adc.map(number),...extra].join('\t'));
   }
   return lines.join('\n')+'\n';
  }

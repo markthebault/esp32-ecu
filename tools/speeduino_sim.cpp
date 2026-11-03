@@ -13,6 +13,7 @@
 #include "logger.h"
 #include "scheduler_fuel_controller.h"
 #include "scheduler_ignition_controller.h"
+#include "units.h"
 #include <SimpleArduinoFake.h>
 #include <sstream>
 #include <iostream>
@@ -124,8 +125,8 @@ void configure() {
         o2CalibrationTable.values[n] = std::min(255u,80+n*5);
     }
     for (unsigned n = 0; n < 16; ++n) {
-        fuelTable.axisX[n] = ignitionTable.axisX[n] = afrTable.axisX[n] = (16-n)*5;
-        fuelTable.axisY[n] = ignitionTable.axisY[n] = afrTable.axisY[n] = (16-n)*8;
+        fuelTable.axisX[n] = ignitionTable.axisX[n] = afrTable.axisX[n] = (n+1)*5;
+        fuelTable.axisY[n] = ignitionTable.axisY[n] = afrTable.axisY[n] = (n+1)*8;
     }
     fuelTable.values.fill(85);
     ignitionTable.values.fill(40+10);
@@ -238,6 +239,27 @@ int main(int argc,char** argv) {
             }
             else if (command == "sensors") { double m,t,c,i,b,a;std::cin>>m>>t>>c>>i>>b>>a;set_sensors(m,t,c,i,b,a); }
             else if (command == "status") status();
+            else if(command=="trimconfig"){
+                unsigned enabled=0;if(!(std::cin>>enabled))throw std::runtime_error("missing enable");
+                if(!sequential_profile||enabled>1)throw std::runtime_error("trim profile requires sequential mode");
+                configPage6.fuelTrimEnabled=enabled;
+                for(unsigned channel=0;channel<4;++channel){
+                    int spark=0;if(!(std::cin>>spark))throw std::runtime_error("missing spark trim");if(spark< -20||spark>20)throw std::runtime_error("spark trim range");
+                    configPage13.ignTrim[channel]=spark;auto&table=trimTables[channel];
+                    for(unsigned i=0;i<6;++i){unsigned value=0;if(!(std::cin>>value))throw std::runtime_error("missing trim axis");if(value>255||!value||(i&&value<=table.axisX[i-1]))throw std::runtime_error("trim RPM axis");table.axisX[i]=value;}
+                    for(unsigned i=0;i<6;++i){unsigned value=0;if(!(std::cin>>value))throw std::runtime_error("missing trim axis");if(value>255||!value||(i&&value<=table.axisY[i-1]))throw std::runtime_error("trim load axis");table.axisY[i]=value;}
+                    for(unsigned i=0;i<36;++i){int pct=0;if(!(std::cin>>pct))throw std::runtime_error("missing fuel trim");if(pct< -50||pct>50)throw std::runtime_error("fuel trim range");table.values[i]=FUEL_TRIM.toRaw(static_cast<int8_t>(pct));}
+                    invalidate_cache(&table.get_value_cache);
+                }
+            }
+            else if(command=="trimlookup"){
+                unsigned rpm=0,load=0;std::cin>>rpm>>load;std::cout<<"trimlookup";
+                for(unsigned channel=0;channel<4;++channel)std::cout<<' '<<int(FUEL_TRIM.toUser(get3DTableValue(&trimTables[channel],load,rpm)));
+                std::cout<<'\n';
+            }
+            else if(command=="channelpw"){
+                std::cout<<"channelpw "<<fuelSchedule1.pw<<' '<<fuelSchedule2.pw<<' '<<fuelSchedule3.pw<<' '<<fuelSchedule4.pw<<'\n';
+            }
             else if (command == "profile") {
                 std::cout << "profile " << unsigned(configPage2.reqFuel) << ' ' << unsigned(configPage4.HardRevLim) << ' '
                           << unsigned(configPage4.SoftRevLim) << ' ' << unsigned(configPage6.engineProtectType) << ' '

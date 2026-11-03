@@ -10,7 +10,7 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | Speed-density fuel | Shared core; fuel-kernel and external-plant controller comparisons | Engine/injector settings and correction readouts | Four high-Z saturated drivers, electrical behavior unmeasured |
 | Batch/wasted four-cylinder | Shared native and ESP32 MCPWM/GPTimer executor | Explicit strategy, inhibited-output labels, timing trace | Four injector/four smart-coil commands; selected N16R8 physical policy inhibited |
 | Other cylinder counts | Missing; Speeduino publishes 1–8 support | Validator rejects other counts | Channel/strategy review required |
-| Full sequential four-cylinder | Shared720° phase/scheduler; strict cam-loss cut,33 external-plant cases plus6 step checks | Strategy/order/injection/cam settings, phase reasons/logs, schema migration and own002 MSQ | Existing protected Hall cam/four injector/four smart-coil commands; N16R8 physical policy inhibited |
+| Full sequential four-cylinder | Shared720° phase/scheduler; strict cam-loss cut,33 external-plant cases plus6 step checks | Strategy/order/injection/cam settings, phase reasons/logs, schema migration and own003 MSQ | Existing protected Hall cam/four injector/four smart-coil commands; N16R8 physical policy inhibited |
 | Selectable semi-sequential | Missing as a separate selectable strategy | No misleading option | Strategy-specific timing/HIL remains |
 | Missing-tooth triggers | Existing generic decoder; SIL exercises 60-2 | Wheel geometry, sync/fault diagnostics | Protected Hall input, thresholds/noise unmeasured |
 | Other OEM trigger patterns | Missing decoder collection | No misleading selections | Pattern-specific HIL required |
@@ -29,7 +29,7 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | VVT | Missing | No controls | Phase sensing, driver, flyback and connector work |
 | Flex fuel | Missing | No ethanol blending/capture settings | Protected frequency input/pin allocation needed |
 | Secondary maps / blending | Missing | One map set | Switch input or authenticated strategy needed |
-| Per-cylinder trims | Missing | No trim controls | Phase/channel semantics and tests needed |
+| Per-cylinder trims | Four6×6 fuel maps and signed spark offsets; physical-channel capacity/duty, latched coil advance;18 new plant runs | Sequential enable, browser/own003 MSQ, strict legacy migration, per-channel JSON/79-field MSL and masks | Existing J9/J10 channels1–4; actual flow/deadtime/phase and electrical qualification pending |
 | Staged injection | Missing | No staging controls | Extra drivers and duty/flow qualification |
 | Launch / flat shift / nitrous | Missing | No enable options | Protected switch/speed/pressure inputs and output allocations |
 | Knock | Missing | No misleading protection indicator | Analog front end and processing required |
@@ -67,3 +67,5 @@ DBW/OEM integration remain outside the current bench scope.
 [Sequential configuration, supervision and comparison](engine-sequential.md) records the latest software increment and its physical limits.
 
 [Engine observability](engine-observability.md) covers coherent samples, target RAM logging, browser collection and the [opt-in screen protocol](espnow-engine.md), with independent review findings and declared clock assumptions.
+
+[Individual cylinder tuning and comparison](engine-cylinder-trims.md) describes physical mapping, trim/deadtime semantics, migration and the current evidence.

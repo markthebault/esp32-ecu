@@ -1,10 +1,10 @@
 # Tuning interoperability
 
-The project has its own identity: **ESP32ECU SIL 002 INHIBITED**. It does not identify as Speeduino or MegaSquirt. Their tunes and INIs are incompatible with this layout.
+The project has its own identity: **ESP32ECU SIL 003 INHIBITED**. It does not identify as Speeduino or MegaSquirt. Their tunes and INIs are incompatible with this layout.
 
 ## Supported file workflow
 
-TunerStudio MS Lite 3.3.01 was installed from the official archive and tested with the generated `esp32-ecu-sequential.ini` (own002 definition). Offline settings, curves and 16×16 maps load. An actual GUI edit from VE 85 to 86 was saved and read back through our native validator; nonuniform cells 92.5 and 90.1 verified map orientation. The [application-authored fixture](examples/tunerstudio-roundtrip.msq) is test data, not a physical engine tune.
+TunerStudio MS Lite 3.3.01 was installed from the official archive and tested with the generated `esp32-ecu-cylinder.ini` (own003 definition). Offline settings, curves and 16×16 maps load. An actual GUI edit from VE 85 to 86 was saved and read back through our native validator; nonuniform cells 92.5 and 90.1 verified map orientation. The [application-authored fixture](examples/tunerstudio-roundtrip.msq) is test data, not a physical engine tune.
 
 1. Export an MSQ from the web **Engine development** page.
 2. Create a TunerStudio test project with this INI, select **Work Offline**, then load that MSQ.
@@ -23,7 +23,7 @@ The converter refuses to overwrite an existing output. Import is limited to 64 K
 
 ## Online prototype and current limitation
 
-The local development transport implements CRC32 MS-envelope queries, capability/CAN-ID discovery, chunked page read/write, page CRC, transactional burn and historical output snapshots. [Protocol layout](protocol-layout.json) defines four pages and the100-byte snapshot with its unchanged76-byte prefix. Page values are little endian; envelope length/CRC are big endian.
+The local development transport implements CRC32 MS-envelope queries, capability/CAN-ID discovery, chunked page read/write, page CRC, transactional burn and historical output snapshots. [Protocol layout](protocol-layout.json) defines five pages and the184-byte snapshot with its unchanged100-byte prefix. Page values are little endian; envelope length/CRC are big endian.
 
 Calibration is pinned to each connection's snapshot. Another HTTP/tuning writer causes burn conflict, even if the stale client had not started editing yet. Reconnect after another writer. Live/status polling never advances the calibration base. All pages commit together through EngineStore's validator/revision/storage path.
 
@@ -47,7 +47,7 @@ Run a SIL scenario and choose **Export MSL log**. Logs include a simulation warn
 
 **Trigger logging → Export trigger MSL** now exports finite raw crank/cam captures. The selected target build implements separate MCPWM diagnostic capture channels; physical capture behavior remains unmeasured. The host replays rising crank events and, in sequential runs, generated rising cam events from a completed SIL run. Unknown levels, callback delays and raw counters remain `NaN`. JSON keeps callback order; MSL sorts by capture time and preserves sequence numbers. The actual unchanged MegaLogViewer HD Lite 4.6.14 application opens the browser-exported trigger log and plots `ToothTime`. [Trigger guide and viewer evidence](../docs/engine-trigger-debug.md) document this workflow and its limits.
 
-The [engine logger](../docs/engine-observability.md) adds coherent target RPM/MAP/control observations, a bounded256-row RAM ring, browser collection and58-field JSON/MSL exports with source, validity, age and loss information. The unchanged desktop application opens and plots the actual browser export. Its default calculated AFR graph can show extreme values at unavailable lambda samples; inspect the input-valid mask and source JSON. Physical target logging remains unmeasured. Physical binary tuning transport and TunerStudio high-speed logger integration remain missing. Raw tooth intervals are diagnostic measurements, not necessarily Speeduino's decoder-filtered tooth-logger values. TunerStudio's rejection of the own live controller identity remains unresolved.
+The [engine logger](../docs/engine-observability.md) adds coherent target RPM/MAP/control observations, a bounded256-row RAM ring, browser collection and79-field JSON/MSL exports with source, validity, age and loss information. The unchanged desktop application opens and plots the actual browser export. Its default calculated AFR graph can show extreme values at unavailable lambda samples; inspect the input-valid mask and source JSON. Physical target logging remains unmeasured. Physical binary tuning transport and TunerStudio high-speed logger integration remain missing. Raw tooth intervals are diagnostic measurements, not necessarily Speeduino's decoder-filtered tooth-logger values. TunerStudio's rejection of the own live controller identity remains unresolved.
 
 [Source/download checksums](../reports/engine/sources.json) record installed versions. Commercial binaries are outside this repository. No registration was purchased and optional commercial features have not been tested.
 
@@ -62,3 +62,5 @@ uv run --with playwright python3 tools/test_engine_ui.py
 These cover native validation, persistence, stale clean/dirty writers, TCP/PTY fragmentation/CRC, offline file exchange, UI saves/imports, delayed-response navigation and responsive layouts. [Independent review](../reports/engine/independent-stall-interop-review.md) and [UI results](../reports/engine/ui-tests.json) state the scope and limitations.
 
 The [sequential update](../docs/engine-sequential.md) adds strategy/order/injection/cam editors and phase diagnostics. Actual TunerStudio002 offline editing saved injection end540→530.5° in the [new application-authored fixture](examples/tunerstudio-sequential-roundtrip.msq). Exact001 MSQs migrate to fixed batch defaults; the original001 INI/MSQ are retained. Live vendor integration remains unresolved.
+
+The [cylinder update](../docs/engine-cylinder-trims.md) adds four6×6 fuel maps, signed spark offsets and channel diagnostics. Actual TunerStudio003 saved C2 spark−2.5° and its1600RPM/50kPa cell117.25% in [this application-authored fixture](examples/tunerstudio-cylinder-roundtrip.msq). Exact001/002 imports disable and neutralize absent trims. All earlier fixtures and definitions remain. This does not resolve the live identity or physical transport limitation.

@@ -5,7 +5,8 @@ import copy,json,struct,zlib,time
 from pathlib import Path
 from engine_runtime import R
 LEGACY_SIGNATURE=b'ESP32ECU SIL 001 INHIBITED'
-SIGNATURE=b'ESP32ECU SIL 002 INHIBITED'
+SEQUENTIAL_SIGNATURE=b'ESP32ECU SIL 002 INHIBITED'
+SIGNATURE=b'ESP32ECU SIL 003 INHIBITED'
 STRATEGIES=('batch_wasted_4cyl','sequential_4cyl')
 TIMING_FIELDS=(('injection_end_deg',276),('cam_sync_deg',280),('cam_window_deg',284))
 VERSION=b'ESP32ECU completed SIL snapshot; physical outputs inhibited'
@@ -14,7 +15,7 @@ NUMBERS=[('engine',k) for k,v in DEFAULT['engine'].items()]+[('settings',k) for 
 FLAGS=[k for k,v in DEFAULT['settings'].items() if isinstance(v,bool)]
 CURVES=[(k,len(v)) for k,v in DEFAULT['curves'].items()]
 REVISION_OFFSET=268
-PAGE_SIZES={1:512,2:1152,3:1152,4:1152}
+PAGE_SIZES={1:512,2:1152,3:1152,4:1152,5:800}
 LIVE_FIELDS=('time','rpm','map_kpa','tps','lambda_measured','pulse_ms','advance_deg','dwell_ms','ve_pct','target_lambda','ego')
 def field_units(name):
  special={'displacement_cc':'cc','injector_cc_min':'cc/min','fuel_density_g_cc':'g/cc','stoich_afr':'AFR','soft_limit_band':'RPM','rpm_hysteresis':'RPM','dfco_hysteresis':'RPM','dfco_tps':'%','afterstart_pct':'%','accel_threshold_pct_s':'%/s','accel_gain':'s/%','ego_min_clt':'C','max_duty':'ratio','ego_limit':'ratio'}
@@ -32,6 +33,9 @@ def pages(tune):
  struct.pack_into('<4B',p,288,*tune['timing']['firing_order'])
  for page,name in [(2,'ve'),(3,'spark'),(4,'lambda')]:
   m=tune['maps'][name];struct.pack_into('<288f',result[page],0,*(m['rpm']+m['load']+m['cells']))
+ for cylinder in range(4):
+  m=tune['cylinder_trims']['fuel_maps'][cylinder];struct.pack_into('<48f',result[5],192*cylinder,*(m['rpm']+m['load']+m['cells']))
+ struct.pack_into('<4fI',result[5],768,*tune['cylinder_trims']['spark_deg'],int(tune['cylinder_trims']['enabled']))
  return result
 
 def decode_pages(buffers,base):
@@ -49,11 +53,16 @@ def decode_pages(buffers,base):
  for name,n in CURVES:candidate['curves'][name]=list(struct.unpack_from('<'+str(n)+'f',p,offset));offset+=n*4
  strategy=struct.unpack_from('<I',p,272)[0]
  if strategy>=len(STRATEGIES):raise ValueError('Unknown engine strategy')
- candidate['schema_version']=2;candidate['strategy']=STRATEGIES[strategy]
+ candidate['schema_version']=3;candidate['strategy']=STRATEGIES[strategy]
  for name,offset in TIMING_FIELDS:candidate['timing'][name]=struct.unpack_from('<f',p,offset)[0]
  candidate['timing']['firing_order']=list(struct.unpack_from('<4B',p,288))
  for page,name in [(2,'ve'),(3,'spark'),(4,'lambda')]:
   v=list(struct.unpack('<288f',buffers[page]));candidate['maps'][name]=dict(rpm=v[:16],load=v[16:32],cells=v[32:])
+ for cylinder in range(4):
+  v=list(struct.unpack_from('<48f',buffers[5],192*cylinder));candidate['cylinder_trims']['fuel_maps'][cylinder]=dict(rpm=v[:6],load=v[6:12],cells=v[12:])
+ values=struct.unpack_from('<4fI',buffers[5],768)
+ if values[4] not in (0,1) or any(buffers[5][788:]):raise ValueError('Unknown cylinder trim flags/reserved bytes')
+ candidate['cylinder_trims']['spark_deg']=list(values[:4]);candidate['cylinder_trims']['enabled']=bool(values[4])
  return candidate
 
 def envelope(payload):return struct.pack('>H',len(payload))+payload+struct.pack('>I',zlib.crc32(payload)&0xffffffff)
@@ -70,7 +79,10 @@ def live_block(store):
  values=[float(data.get(k,0) or 0) for k in LIVE_FIELDS]
  prefix=struct.pack('<11f8I',*values,int(data.get('faults',0)),int(data.get('synced',False)),1,int(revision),1 if has_result else 0,age_ms,int(has_result),int(has_result))
  phase=struct.pack('<6I',int(data.get('crank_synced',False)),int(data.get('phase_synced',False)),int(data.get('phase_required',False)),int(data.get('phase_losses',0)),strategy,int(data.get('cam_rejected',0)))
- return prefix+phase
+ cyl=data.get('cylinders',{});proposals=cyl.get('proposals',[])
+ channels=[float(proposals[i].get(name,0) or 0) if i<len(proposals) else 0. for i in range(4) for name in ('pulse_ms','advance_deg','fuel_pct','duty_pct')]
+ extension=struct.pack('<16f5I',*channels,int(bool(cyl.get('available')))*15,int(bool(cyl.get('enabled'))),int(cyl.get('capacity_mask',0)),int(cyl.get('spark_clamp_mask',0)),int(cyl.get('retard_floor_mask',0)))
+ return prefix+phase+extension
 
 class Session:
  def __init__(self,store):
@@ -80,7 +92,7 @@ class Session:
  def command(self,payload):
   if payload==b'Q':return b'\0'+SIGNATURE
   if payload==b'S':return b'\0'+VERSION
-  if payload==b'F':return b'\0' + b'002'
+  if payload==b'F':return b'\0' + b'003'
   if payload==b'C':return b'\0\xff'
   if payload==b'I':return b'\0\0' # Local controller CAN identifier, no forwarding.
   if payload in (b'f\0',b'f\xff'):return b'\0\x02'+struct.pack('>HH',256,256)
@@ -122,7 +134,7 @@ class Stream:
   self.buffer.extend(data);responses=[]
   while self.buffer:
    if self.buffer[0] in b'QSF':
-    cmd=bytes(self.buffer[:1]);del self.buffer[:1];responses.append({b'Q':SIGNATURE,b'S':VERSION,b'F':b'002'}[cmd]);continue
+    cmd=bytes(self.buffer[:1]);del self.buffer[:1];responses.append({b'Q':SIGNATURE,b'S':VERSION,b'F':b'003'}[cmd]);continue
    if len(self.buffer)<2:break
    size=struct.unpack('>H',self.buffer[:2])[0]
    if not 1<=size<=4096:self.buffer.clear();responses.append(envelope(b'\x84'));break

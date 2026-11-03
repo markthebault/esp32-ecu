@@ -6,13 +6,13 @@ import math
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-from engine_protocol import DEFAULT,NUMBERS,FLAGS,CURVES,SIGNATURE,LEGACY_SIGNATURE,TIMING_FIELDS,STRATEGIES,PAGE_SIZES,field_units
+from engine_protocol import DEFAULT,NUMBERS,FLAGS,CURVES,SIGNATURE,LEGACY_SIGNATURE,SEQUENTIAL_SIGNATURE,TIMING_FIELDS,STRATEGIES,PAGE_SIZES,field_units
 
 NS='http://www.msefi.com/:msq'
 ET.register_namespace('',NS)
 def tag(name):return '{'+NS+'}'+name
 
-def constants(tune,legacy=False):
+def constants(tune,legacy=False,sequential=False):
  revision=tune['revision']
  if isinstance(revision,bool) or not isinstance(revision,(int,float)) or not math.isfinite(revision) or int(revision)!=revision or not 1<=revision<=4294967295:raise ValueError('Invalid MSQ base revision')
  result=[(0,'baseRevision',[int(revision)],None)]
@@ -25,6 +25,12 @@ def constants(tune,legacy=False):
   result += [(0,f'fireOrder{i+1}',[v],None) for i,v in enumerate(tune['timing']['firing_order'])]
  for page,name in enumerate(('ve','spark','lambda'),1):
   result += [(page,name+'Rpm',tune['maps'][name]['rpm'],(16,1)),(page,name+'Load',tune['maps'][name]['load'],(16,1)),(page,name+'Table',tune['maps'][name]['cells'],(16,16))]
+ if not legacy and not sequential:
+  result += [(4,'cylinderTrimsEnabled',['\"On\"' if tune['cylinder_trims']['enabled'] else '\"Off\"'],None)]
+  for i in range(4):
+   result += [(4,f'c{i+1}SparkTrim',[tune['cylinder_trims']['spark_deg'][i]],None)]
+   m=tune['cylinder_trims']['fuel_maps'][i]
+   result += [(4,f'c{i+1}FuelRpm',m['rpm'],(6,1)),(4,f'c{i+1}FuelLoad',m['load'],(6,1)),(4,f'c{i+1}FuelTable',m['cells'],(6,6))]
  return result
 
 def export_msq(tune):
@@ -32,10 +38,10 @@ def export_msq(tune):
  runtime=EngineRuntime(tune);tune=runtime.tune;runtime.close()
  root=ET.Element(tag('msq'))
  ET.SubElement(root,tag('bibliography'),author='ESP32ECU',tuneComment='SHADOW ONLY; physical outputs inhibited; illustrative development tune')
- ET.SubElement(root,tag('versionInfo'),fileFormat='5.0',firmwareInfo='ESP32ECU SIL',nPages='4',signature=SIGNATURE.decode())
- elements={i:ET.SubElement(root,tag('page'),number=str(i),size=str(PAGE_SIZES[i+1])) for i in range(4)}
+ ET.SubElement(root,tag('versionInfo'),fileFormat='5.0',firmwareInfo='ESP32ECU SIL',nPages='5',signature=SIGNATURE.decode())
+ elements={i:ET.SubElement(root,tag('page'),number=str(i),size=str(PAGE_SIZES[i+1])) for i in range(5)}
  for page,name,values,shape in constants(tune):
-  units=field_units(name) if page==0 and name not in dict(CURVES) else 'RPM' if name.endswith('Rpm') else 'kPa' if name.endswith('Load') else {'veTable':'%','sparkTable':'deg','lambdaTable':'lambda'}.get(name,'')
+  units=field_units(name) if page==0 and name not in dict(CURVES) else 'RPM' if name.endswith('Rpm') else 'kPa' if name.endswith('Load') else {'veTable':'%','sparkTable':'deg','lambdaTable':'lambda'}.get(name,'deg' if name.endswith('SparkTrim') else '%' if name.endswith('FuelTable') else '')
   element=ET.SubElement(elements[page],tag('constant'),name=name,units=units)
   if shape:element.set('rows',str(shape[0]));element.set('cols',str(shape[1]))
   formatted=[str(v) if isinstance(v,int) else format(v,'.9g') if isinstance(v,float) else v for v in values]
@@ -49,9 +55,9 @@ def import_msq(body):
  try:root=ET.fromstring(body)
  except ET.ParseError as error:raise ValueError('Malformed MSQ XML') from error
  info=root.find(tag('versionInfo'))
- if root.tag!=tag('msq') or info is None or info.get('signature') not in (SIGNATURE.decode(),LEGACY_SIGNATURE.decode()) or info.get('nPages')!='4':raise ValueError('MSQ must match this ESP32ECU definition; other ECU tunes are incompatible')
- legacy=info.get('signature')==LEGACY_SIGNATURE.decode()
- expected={name:(page,len(values),shape) for page,name,values,shape in constants(DEFAULT,legacy=legacy)}
+ if root.tag!=tag('msq') or info is None or info.get('signature') not in (SIGNATURE.decode(),LEGACY_SIGNATURE.decode(),SEQUENTIAL_SIGNATURE.decode()) or info.get('nPages')!=('5' if info.get('signature')==SIGNATURE.decode() else '4'):raise ValueError('MSQ must match this ESP32ECU definition; other ECU tunes are incompatible')
+ legacy=info.get('signature')==LEGACY_SIGNATURE.decode();sequential=info.get('signature')==SEQUENTIAL_SIGNATURE.decode()
+ expected={name:(page,len(values),shape) for page,name,values,shape in constants(DEFAULT,legacy=legacy,sequential=sequential)}
  values={}
  for page in root.findall(tag('page')):
   for element in page.findall(tag('constant')):
@@ -63,7 +69,7 @@ def import_msq(body):
    if name=='engineStrategy':
     if text not in ('"Batch / wasted"','"Sequential"','0','1'):raise ValueError('Invalid MSQ strategy')
     values[name]=1 if text in ('"Sequential"','1') else 0
-   elif name in FLAGS:
+   elif name in FLAGS or name=='cylinderTrimsEnabled':
     if text not in ('"Off"','"On"','0','1'):raise ValueError('Invalid MSQ flag')
     values[name]=text in ('"On"','1')
    else:
@@ -81,6 +87,11 @@ def import_msq(body):
   tune['strategy']=STRATEGIES[values['engineStrategy']]
   for name,_ in TIMING_FIELDS:tune['timing'][name]=values[name]
   tune['timing']['firing_order']=[values[f'fireOrder{i+1}'] for i in range(4)]
+ if not legacy and not sequential:
+  tune['cylinder_trims']['enabled']=values['cylinderTrimsEnabled']
+  for i in range(4):
+   tune['cylinder_trims']['spark_deg'][i]=values[f'c{i+1}SparkTrim']
+   tune['cylinder_trims']['fuel_maps'][i]=dict(rpm=values[f'c{i+1}FuelRpm'],load=values[f'c{i+1}FuelLoad'],cells=values[f'c{i+1}FuelTable'])
  for group,name in NUMBERS:tune[group][name]=values[name]
  for name in FLAGS:tune['settings'][name]=values[name]
  for name,n in CURVES:tune['curves'][name]=values[name]

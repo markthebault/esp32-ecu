@@ -5,8 +5,8 @@
 #include <cstring>
 namespace ecu::web {
 // Bound parser recursion before cJSON sees any untrusted body.
-inline bool safe_json(const char*text,std::size_t length){
- if(!text||!length||length>16384)return false;
+inline bool safe_json(const char*text,std::size_t length,std::size_t maximum=16384){
+ if(!text||!length||length>maximum)return false;
  unsigned depth=0;bool quoted=false,escaped=false;
  for(std::size_t i=0;i<length;++i){const char c=text[i];if(!c)return false;
   if(quoted){if(escaped){if(c=='u'&&i+4<length&&text[i+1]=='0'&&text[i+2]=='0'&&text[i+3]=='0'&&text[i+4]=='0')return false;escaped=false;continue;}if(c=='\\'){escaped=true;continue;}if(c=='"')quoted=false;}

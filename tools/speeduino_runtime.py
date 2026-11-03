@@ -12,7 +12,7 @@ class SpeeduinoRuntime:
     def __init__(self,per_tooth=False,logger_cam=False,sequential=False,timer_bits=32):
         if timer_bits not in (16,32):raise ValueError('Native timer width must be16or32')
         executable=ROOT/('.cache/engine/speeduino-sim/speeduino-sim' if timer_bits==32 else '.cache/engine/speeduino-sim16/speeduino-sim')
-        self.timer_bits=timer_bits;self.edge_modes={};self.sequential=sequential
+        self.timer_bits=timer_bits;self.edge_modes={};self.sequential=sequential;self.spark_trims=[0]*4;self.last_status={}
         self.process=subprocess.Popen([str(executable),*(['--per-tooth'] if per_tooth else []),*(['--logger-cam'] if logger_cam else []),*(['--sequential'] if sequential else [])],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
                                       stderr=subprocess.PIPE,bufsize=0)
         self.buffer=b'';self.now=0
@@ -74,6 +74,36 @@ class SpeeduinoRuntime:
         if not all(isinstance(v,(int,float)) and math.isfinite(v) for v in values):raise ValueError('Invalid sensor values')
         self.command('sensors '+' '.join(format(v,'.12g') for v in values))
 
+    def cylinder_trims(self,trims):
+        if not self.sequential:raise ValueError('Reference cylinder trims require sequential profile')
+        if not isinstance(trims,dict) or set(trims)!={'enabled','spark_deg','fuel_maps'} or type(trims['enabled']) is not bool or len(trims['spark_deg'])!=4 or len(trims['fuel_maps'])!=4:raise ValueError('Invalid reference trim configuration')
+        values=[int(trims['enabled'])];order=[0,2,3,1]
+        for physical in order:
+            spark=trims['spark_deg'][physical];m=trims['fuel_maps'][physical]
+            if type(spark) not in (int,float) or not math.isfinite(spark) or spark!=int(spark) or not -20<=spark<=20:raise ValueError('Reference spark trim uses integer degrees')
+            if not isinstance(m,dict) or set(m)!={'rpm','load','cells'} or len(m['rpm'])!=6 or len(m['load'])!=6 or len(m['cells'])!=36 or any(type(v) not in (int,float) or not math.isfinite(v) for values_ in m.values() for v in values_):raise ValueError('Reference six-by-six finite trim map expected')
+            if any(not 50<=v<=150 for v in m['cells']):raise ValueError('Reference fuel trim range')
+            rpm=[max(1,round(v/100)) for v in m['rpm']];load=[round(v/2) for v in m['load']];pct=[round(v-100) for v in m['cells']]
+            for original,quantized in [(m['rpm'],rpm),(m['load'],load)]:
+                if any(original[i]>=original[i+1] or quantized[i]>=quantized[i+1] for i in range(5)) or any(not 1<=v<=255 for v in quantized):raise ValueError('Reference axes cannot be represented after RPM/100 or load/2 quantization')
+            values += [int(spark) if trims['enabled'] else 0,*rpm,*load,*pct]
+        if self.command('trimconfig '+' '.join(map(str,values))):raise RuntimeError('Unexpected reference trim response')
+        self.spark_trims=[int(v) for v in trims['spark_deg']] if trims['enabled'] else [0]*4
+
+    def trim_lookup(self,rpm,load):
+        lines=self.command(f'trimlookup {int(rpm)} {int(load)}')
+        if len(lines)!=1 or not lines[0].startswith('trimlookup '):raise RuntimeError('Invalid trim lookup')
+        values=list(map(int,lines[0].split()[1:]));result=[0]*4
+        for native,physical in enumerate((0,2,3,1)):result[physical]=values[native]
+        return result
+
+    def channel_pulses(self):
+        lines=self.command('channelpw')
+        if len(lines)!=1 or not lines[0].startswith('channelpw '):raise RuntimeError('Invalid channel pulse response')
+        values=list(map(int,lines[0].split()[1:]));result=[0]*4
+        for native,physical in enumerate((0,2,3,1)):result[physical]=values[native]
+        return result
+
     def advance(self,time_us,tooth=False):
         if isinstance(time_us,bool) or not isinstance(time_us,int) or time_us<self.now or time_us>60_000_000:
             raise ValueError('Native benchmark time must be monotonic0..60s')
@@ -88,7 +118,9 @@ class SpeeduinoRuntime:
             if len(fields)!=6 or fields[0]!='edge':raise RuntimeError('Unexpected native response: '+line)
             timestamp,pin,high,sync,span=map(int,fields[1:])
             if pin in self.pin_map:
-                ch=self.pin_map[pin];edges.append((timestamp,ch,bool(high),None,None))
+                ch=self.pin_map[pin]
+                advance=self.last_status.get('advance_deg',0)+self.spark_trims[ch-4] if ch>=4 and self.sequential and sync==2 and any(self.spark_trims) else None
+                edges.append((timestamp,ch,bool(high),advance,None))
                 if self.sequential:self.edge_modes[(timestamp,ch,bool(high))]=dict(sync_status=sync,ignition_cycle_deg=span,effective_sequential=sync==2 and span==720)
         return edges
 
@@ -125,7 +157,7 @@ class SpeeduinoRuntime:
         result=dict(zip(keys,values));mode=list(map(int,lines[1].split()[1:]))
         if len(mode)!=11:raise RuntimeError('Incomplete native mode diagnostics')
         result.update(ignition_cycle_deg=mode[-3],injection_cycle_deg=mode[-2],squirts_per_cycle=mode[-1],crank_synced=result['sync']>=1,phase_synced=result['sync']==2)
-        return result
+        self.last_status=result;return result
 
     def close(self):
         if self.process:

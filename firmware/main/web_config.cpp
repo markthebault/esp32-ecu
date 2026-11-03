@@ -81,6 +81,7 @@ esp_err_t index_get(httpd_req_t*r){
  return httpd_resp_send(r,assets::index,HTTPD_RESP_USE_STRLEN);
 }
 esp_err_t trigger_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");httpd_resp_set_hdr(r,"Cache-Control","no-store");return httpd_resp_send(r,assets::trigger_js,HTTPD_RESP_USE_STRLEN);}
+esp_err_t cylinder_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::cylinder_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t engine_log_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");httpd_resp_set_hdr(r,"Cache-Control","no-store");return httpd_resp_send(r,assets::engine_log_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t manual_get(httpd_req_t*r){httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,assets::manual,HTTPD_RESP_USE_STRLEN);}
 esp_err_t guide_get(httpd_req_t*r){httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,assets::guide,HTTPD_RESP_USE_STRLEN);}
@@ -266,10 +267,10 @@ esp_err_t engine_trigger_post(httpd_req_t*r){
 }
 esp_err_t engine_config_put(httpd_req_t*r){
  if(!authorized(r))return message(r,"Session token or origin rejected.","403 Forbidden");
- if(r->content_len<=0||r->content_len>16384)return message(r,"Engine tune must be 1-16384 bytes.","413 Content Too Large");
+ if(r->content_len<=0||r->content_len>engine::tune_maximum)return message(r,"Engine tune must be 1-24576 bytes.","413 Content Too Large");
  char type[80]{};httpd_req_get_hdr_value_str(r,"Content-Type",type,sizeof(type));if(std::strncmp(type,"application/json",16))return message(r,"Use application/json.","415 Unsupported Media Type");
  std::string body(r->content_len,'\0');int n=0;while(n<r->content_len){int got=httpd_req_recv(r,body.data()+n,r->content_len-n);if(got<=0)return ESP_FAIL;n+=got;}
- if(!safe_json(body.data(),body.size()))return message(r,"Invalid engine JSON envelope.","400 Bad Request");
+ if(!safe_json(body.data(),body.size(),engine::tune_maximum))return message(r,"Invalid engine JSON envelope.","400 Bad Request");
  std::string reason;const int code=engine_service::save(body.c_str(),reason);if(code==200)return engine_config_get(r);
  const char*status=code==409?"409 Conflict":code==413?"413 Content Too Large":code==503?"503 Service Unavailable":code==507?"507 Insufficient Storage":code==500?"500 Internal Server Error":"422 Unprocessable Entity";
  return message(r,reason.c_str(),status);
@@ -291,7 +292,7 @@ void service_task(){
   {"/api/engine/timing",HTTP_GET,engine_timing_get,nullptr},
   {"/api/engine/sample",HTTP_GET,engine_sample_get,nullptr},
   {"/api/engine/data-log",HTTP_GET,engine_data_log_get,nullptr},{"/api/engine/data-log",HTTP_POST,engine_data_log_post,nullptr},
-  {"/api/engine/data-log.msl",HTTP_GET,engine_data_log_msl_get,nullptr},{"/engine_logger.js",HTTP_GET,engine_log_script_get,nullptr},
+  {"/api/engine/data-log.msl",HTTP_GET,engine_data_log_msl_get,nullptr},{"/cylinder_tuning.js",HTTP_GET,cylinder_script_get,nullptr},{"/engine_logger.js",HTTP_GET,engine_log_script_get,nullptr},
   {"/api/engine/trigger-log",HTTP_GET,engine_trigger_get,nullptr},{"/api/engine/trigger-log",HTTP_POST,engine_trigger_post,nullptr},
   {"/api/radio",HTTP_GET,radio_get,nullptr},{"/api/radio",HTTP_POST,radio_post,nullptr},
   {"/",HTTP_GET,index_get,nullptr},{"/trigger_logger.js",HTTP_GET,trigger_script_get,nullptr},{"/api/session",HTTP_GET,session_get,nullptr},{"/api/guide",HTTP_GET,guide_get,nullptr},{"/api/manual",HTTP_GET,manual_get,nullptr},

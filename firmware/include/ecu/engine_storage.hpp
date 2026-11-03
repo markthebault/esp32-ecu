@@ -4,10 +4,11 @@
 #include <cstring>
 #include <string>
 #include <utility>
+#include "ecu/engine_limits.hpp"
 namespace ecu::engine_storage {
 constexpr const char* partition="engine_nvs";
 constexpr const char* name_space="ecu_engine";
-constexpr std::size_t maximum=16384;
+constexpr std::size_t maximum=engine::tune_maximum;
 // Engine maps can exceed NVS's 4000-byte string limit. A dedicated 64 KiB
 // partition holds bounded blobs without moving existing sensor/peer storage.
 // This helper never requests erase/delete. NVS's own recovery can discard

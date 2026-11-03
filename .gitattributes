@@ -20,3 +20,6 @@ tuning/examples/tunerstudio-sequential-roundtrip.msq -whitespace
 reports/engine/sequential/*.log -whitespace
 # Keep raw tool output in the reviewed engine observability evidence.
 reports/engine/observability/*.log -whitespace
+# Preserve raw validation and application-export formatting for cylinder trims.
+reports/engine/cylinder-trims/*.log -whitespace
+tuning/examples/tunerstudio-cylinder-roundtrip.msq -whitespace

@@ -18,16 +18,20 @@ public:
 inline constexpr const char* input_msl[]={"RPM","MAP","TPS","CLT","IAT","Lambda","Battery","Sensor5V"};
 inline constexpr const char* proposal_msl[]={"ProposedRPM","VE","LambdaTarget","ProposedAdvance","ProposedPW","ProposedDwell","DeadTime","AirMass","Warmup","Afterstart","Accel","EGO","Duty","IdleProposal"};
 inline bool msl_header(const Header&h,char*buffer,unsigned size,const char*boot="not_recorded"){
- Text t(buffer,size);t.add("\"ESP32ECU ENGINE LOG 001\"\n\"%s / boot %s / log %u / period_ms=%u duration_s=%u / retained rows %u..%u of %u / overwritten=%u missed_periods=%u repeated=%u invalid=%u / PhaseEpoch=configuration context; WorkerEpoch=executor generation / proposals and software command masks; no electrical execution measurement\"\n",
+ Text t(buffer,size);t.add("\"ESP32ECU ENGINE LOG 002\"\n\"%s / boot %s / log %u / period_ms=%u duration_s=%u / retained rows %u..%u of %u / overwritten=%u missed_periods=%u repeated=%u invalid=%u / PhaseEpoch=configuration context; WorkerEpoch=executor generation / base scalars plus physical-cylinder proposals and software masks; no electrical execution measurement\"\n",
   h.source==engine::DataSource::Target?"TARGET CONTROL/SENSOR OBSERVATIONS":"SYNTHETIC ENGINE REPLAY",boot,h.log_id,h.period_ms,h.duration_s,h.retained?h.first_sequence():0,h.total,h.total,h.overwritten,h.missed_periods,h.repeated,h.invalid);
  t.add("Time\tRowSequence\tSnapshotSequence\tControlAge\tSensorAge\tSource\tTuneRevision\tSensorRevision\tPhaseEpoch\tFlags\tFaults\tState\tStrategy\tPhaseReason\tPhaseLosses\tCamRejected\tCamError\tWorkerCommand\tWorkerAge\tWorkerEpoch\tWorkerTuneRevision\tWorkerSensorRevision\tTimingFault\tLastTimingFault\tVirtualMask\tPhysicalCommandMask\tBoardFlags");
  t.add("\tInputValidMask");for(auto name:input_msl)t.add("\t%s",name);
  for(auto name:proposal_msl)t.add("\t%s",name);
  for(unsigned i=0;i<8;++i)t.add("\tADC%u",i);
+ t.add("\tCylinderValidMask\tCylinderTrimsEnabled\tCylinderCapacityMask\tCylinderSparkClampMask\tCylinderRetardFloorMask");
+ for(unsigned i=1;i<=4;++i)t.add("\tC%uPW\tC%uAdvance\tC%uFuelTrim\tC%uDuty",i,i,i,i);
  t.add("\ns\tcount\tcount\tms\tms\tcode\tcount\tcount\tcount\tbitfield\tbitfield\tcode\tcode\tcode\tcount\tcount\tdeg\tcount\tms\tcount\tcount\tcount\tcode\tcode\tbitfield\tbitfield\tbitfield");
  t.add("\tbitfield");for(auto unit:engine::input_units)t.add("\t%s",unit);
  for(auto unit:engine::proposal_units)t.add("\t%s",unit);
  for(unsigned i=0;i<8;++i)t.add("\tcount");
+ t.add("\tbitfield\tbool\tbitfield\tbitfield\tbitfield");
+ for(unsigned i=0;i<4;++i)t.add("\tms\tdeg\t%%\t%%");
  t.add("\n");return t.ok();
 }
 inline bool msl_row(const Header&h,const Row&row,char*buffer,unsigned size){
@@ -43,6 +47,8 @@ inline bool msl_row(const Header&h,const Row&row,char*buffer,unsigned size){
  t.add("\t%u",r.input_valid);for(unsigned i=0;i<engine::input_count;++i){if((r.input_valid&(1U<<i))&&engine::finite(r.inputs[i]))t.add("\t%.9g",double(r.inputs[i]));else t.add("\tNaN");}
  for(auto value:r.proposals){if(engine::finite(value))t.add("\t%.9g",double(value));else t.add("\tNaN");}
  for(auto value:r.raw_adc){if(r.board_flags&1)t.add("\t%u",value);else t.add("\tNaN");}
+ t.add("\t%u\t%u\t%u\t%u\t%u",r.cylinder_valid,r.cylinder_enabled,r.cylinder_capacity_mask,r.cylinder_spark_clamp_mask,r.cylinder_retard_floor_mask);
+ for(unsigned i=0;i<4;++i)for(auto value:{r.cylinder_pulse_ms[i],r.cylinder_advance_deg[i],r.cylinder_fuel_pct[i],r.cylinder_duty_pct[i]}){if((r.cylinder_valid&(1U<<i))&&engine::finite(value))t.add("\t%.9g",double(value));else t.add("\tNaN");}
  t.add("\n");return t.ok();
 }
 }

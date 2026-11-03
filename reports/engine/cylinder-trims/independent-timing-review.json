@@ -1,0 +1,224 @@
+{
+  "reviewer": "Independent agent /root/per_tooth_timing_review",
+  "reviewed_at_utc": "2026-11-03T20:29:32.130077+00:00",
+  "scope": "Independent read-only diagnosis and guard review for a charged-coil/tooth coincidence. No production edits or subagents. Public-API reproducers compiled with ASAN+UBSAN; root implemented the guard concurrently.",
+  "verdict": "Confirmed scheduler defect and exact reproduction. The reviewed bounded committed-edge guard fixes it without moving the discharge or relaxing existing dwell/timeout limits. Eight low-speed boundary cases and two8000RPM angular-bound cases behaved as intended. Full corrected external-plant validation remains root work.",
+  "diagnosis": {
+    "physical_cylinder": 4,
+    "coil_channel": 7,
+    "advance_deg": 6,
+    "raw_target_deg": 444,
+    "correction_to_initial_hypothesis": "The failed coil was C4/channel7, not C2. Saved rise1859412us and high_mask130 identify C4; crank tooth14 with phase offset60 is phase_tooth74/raw444degrees.",
+    "timeline": [
+      {
+        "time_us": 1859086,
+        "phase_tooth": 72,
+        "angle_deg": 432,
+        "prior_tooth_interval_us": 1563,
+        "predicted_end_us": 1862212,
+        "predicted_start_us": 1859412
+      },
+      {
+        "time_us": 1859412,
+        "event": "C4coil rise",
+        "latched_advance_deg": 6
+      },
+      {
+        "time_us": 1860641,
+        "phase_tooth": 73,
+        "angle_deg": 438,
+        "prior_tooth_interval_us": 1555,
+        "revised_committed_end_us": 1862196
+      },
+      {
+        "time_us": 1862190,
+        "phase_tooth": 74,
+        "angle_deg": 444,
+        "old_end_remaining_us": 6,
+        "old_result": "goal==angle makes reachablefalse while coilhigh; unreachable_deadline stops all outputs before old alarm"
+      }
+    ],
+    "actual_committed_dwell_us": 2784,
+    "requested_dwell_us": 2800,
+    "dwell_wording": "The prior per-tooth acceleration correction had already changed actual dwell from2800us to2784us. The fix preserves that existing2784us discharge; it does not guarantee requested dwell equality or shorten it further.",
+    "before_fix_public_api_probe": {
+      "scheduler_sha256": "f1b315959c6597774a4c15212c0c8b12cd47d04cf74bc4da74e6fcfc3de77905",
+      "fixture_tooth_times_us": [
+        1857523,
+        1859086,
+        1860641,
+        1862190
+      ],
+      "phase_tooth_indices": [
+        71,
+        72,
+        73,
+        74
+      ],
+      "coil_channel": 7,
+      "physical_cylinder": 4,
+      "latched_advance_deg": 6,
+      "rise_us": 1859412,
+      "committed_fall_us": 1862196,
+      "committed_actual_dwell_us": 2784,
+      "last_tooth_result": false,
+      "failed": true,
+      "stop_reason": "unreachable_deadline",
+      "pending_after_failure": "none",
+      "evidence": "Independently compiled temporary snapshot and exact public-API probe before the parent fix."
+    }
+  },
+  "guard_assessment": {
+    "source_location": "firmware/include/ecu/engine_scheduler.hpp:117-127",
+    "eligibility": "coil high, current target unreachable, committed pending future end, nonnegative committed duration and positive us_per_degree.",
+    "ahead_rounding": "target_offset_us<0.5 covers positive goals that round to now; larger positive goals use normal reachable scheduling rather than the exception.",
+    "time_budget": "Remaining old committed end must be at most25us.",
+    "combined_angle_budget": "late_deg=(remaining_us\u2212target_offset_us)/us_per_degree must be within[0,0.2]. This bounds past-target angle plus remaining predicted travel together.",
+    "dwell_budget": "Committed end\u2212start must remain at most the current configured max dwell.",
+    "action": "Restore the entire committed slot and continue, preserving exact low timestamp, latched advance, pulse metadata and cycle identity.",
+    "protections_unchanged": [
+      "No new pulse is started or shortened by the guard.",
+      "No old end is moved later or earlier.",
+      "Injector behavior is unchanged.",
+      "Stale control, phase watchdog, producer/capture age, IRQ lateness and high-time limits remain independently enforced.",
+      "Expired committed ends, larger time/angle errors and max-dwell violations still fault."
+    ],
+    "why_separate_angle_bounds_were_insufficient": "A goal0.19degrees behind plus0.19degrees future travel would have permitted0.38degrees total lateness under two independent0.2degree tests. The actual combined guard rejects that class.",
+    "latency_limit": "The0.2degree bound uses the software angle/speed estimate; it is not a claim of physical timing accuracy or measured target jitter."
+  },
+  "independent_validation": {
+    "before_fix_scheduler_sha256": "f1b315959c6597774a4c15212c0c8b12cd47d04cf74bc4da74e6fcfc3de77905",
+    "fixed_eight_case_scheduler_sha256": "edd49807f513b7fe74fa3f829ee5f9d4e8d394b7533faede505e8b47769c3816",
+    "eight_boundary_cases": [
+      {
+        "case": "exact",
+        "advance": 6,
+        "rise_us": 1859412,
+        "committed_end_us": 1862196,
+        "old_dwell_us": 2784,
+        "remaining_us": 6,
+        "combined_late_angle_deg": 0.0232408005164622,
+        "retained": true,
+        "reason": "none"
+      },
+      {
+        "case": "rounded_ahead",
+        "advance": 5.999999,
+        "rise_us": 1859412,
+        "committed_end_us": 1862196,
+        "old_dwell_us": 2784,
+        "remaining_us": 6,
+        "combined_late_angle_deg": 0.0232398005164621,
+        "retained": true,
+        "reason": "none"
+      },
+      {
+        "case": "slightly_behind",
+        "advance": 6.001,
+        "rise_us": 1859412,
+        "committed_end_us": 1862196,
+        "old_dwell_us": 2784,
+        "remaining_us": 6,
+        "combined_late_angle_deg": 0.0242408005164626,
+        "retained": true,
+        "reason": "none"
+      },
+      {
+        "case": "time_over25",
+        "advance": 6,
+        "rise_us": 1859412,
+        "committed_end_us": 1862196,
+        "old_dwell_us": 2784,
+        "remaining_us": 36,
+        "combined_late_angle_deg": 0.142198815009875,
+        "retained": false,
+        "reason": "unreachable_deadline"
+      },
+      {
+        "case": "time_exact25",
+        "advance": 6,
+        "rise_us": 1859412,
+        "committed_end_us": 1862196,
+        "old_dwell_us": 2784,
+        "remaining_us": 25,
+        "combined_late_angle_deg": 0.0980392156862745,
+        "retained": true,
+        "reason": "none"
+      },
+      {
+        "case": "combined_angle_over",
+        "advance": 6.19,
+        "rise_us": 1859363,
+        "committed_end_us": 1862147,
+        "old_dwell_us": 2784,
+        "remaining_us": 13,
+        "combined_late_angle_deg": 0.24224380442063,
+        "retained": false,
+        "reason": "unreachable_deadline"
+      },
+      {
+        "case": "expired_end",
+        "advance": 6,
+        "rise_us": 1859412,
+        "committed_end_us": 1862196,
+        "old_dwell_us": 2784,
+        "remaining_us": 0,
+        "combined_late_angle_deg": 0,
+        "retained": false,
+        "reason": "unreachable_deadline"
+      },
+      {
+        "case": "max_dwell_reduced",
+        "advance": 6,
+        "rise_us": 1859412,
+        "committed_end_us": 1862196,
+        "old_dwell_us": 2784,
+        "remaining_us": 6,
+        "combined_late_angle_deg": 0.0232408005164622,
+        "retained": false,
+        "reason": "unreachable_deadline"
+      }
+    ],
+    "high_rpm_cases": [
+      {
+        "rpm": 8000,
+        "remaining_us": 4,
+        "combined_late_angle_deg": 0.198347,
+        "retained": true,
+        "reason": "none"
+      },
+      {
+        "rpm": 8000,
+        "remaining_us": 5,
+        "combined_late_angle_deg": 0.25,
+        "retained": false,
+        "reason": "unreachable_deadline"
+      }
+    ],
+    "accepted_edge_assertion": "Every accepted case asserted the next popped event was channel7 low at exactly the old committed timestamp, with no new rise.",
+    "sanitizers": "Both reproducer sets compiled and ran successfully with ASAN+UBSAN and -Wall -Wextra -Werror.",
+    "reproducer": ".cache/engine/cylinder-review/charged-tooth-repro.cpp"
+  },
+  "followups": [
+    "Retain tooth-aligned advances0/6/12/18/24/30/36 and nearby fractional values as regression cases.",
+    "Keep batch/wasted coverage as well as Sequential because the guard applies to coils in both strategies.",
+    "Validate the corrected asymmetric plant through startup, acceleration/deceleration, rev cut, cam/crank faults and step convergence.",
+    "Keep actual dwell/energy and720degree spark error visible; do not relabel retained events as exact requested full dwell."
+  ],
+  "limits": [
+    "Read-only independent code/diagnostic review with virtual timing only.",
+    "The full asymmetric engine model rerun and target/HIL timing remain separate.",
+    "Physical outputs remain inhibited; no vehicle, electrical, EMI/surge, thermal/splash/fit or live tuning qualification follows."
+  ],
+  "source_sha256": {
+    "firmware/include/ecu/engine_scheduler.hpp": "edd49807f513b7fe74fa3f829ee5f9d4e8d394b7533faede505e8b47769c3816",
+    "firmware/include/ecu/engine.hpp": "6a79cf871a54d264e461960a49e8702fd45f29cc3387bec8a001748c6f1bc44c",
+    "firmware/include/ecu/timing_executor.hpp": "59d0b60133f6075135aabf3893fee7baecd6c8b2951e465f2dbdbb18fd8f6992"
+  },
+  "evidence_sha256": {
+    "charged-tooth-repro.cpp": "6be41e669157f1e3d26c4b7ae613c54902bfb85fc913b879e5b0520372a1e333",
+    "charged-tooth-before-fix.json": "37596e7f2e84d6fee073e0f98ba6671923980ed58514a15165f0f84802f7eed9",
+    "charged-tooth-fixed.log": "9994277cab3e2f9866171c74d8c0008d6c692bb5daa52fee2e6dee6e567f0c54",
+    "charged-tooth-high-rpm.log": "ce2904d1f2c70f71ad9cf529b1330466be8da47cb3fb0757d1130a7dc6e4f0bb"
+  }
+}

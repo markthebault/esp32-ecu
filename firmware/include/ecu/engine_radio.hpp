@@ -7,6 +7,7 @@ namespace ecu::radio::wire {
 constexpr unsigned capability_size=76,capability_reply_size=108,engine_size=232,engine_body_size=200,engine_ack_size=56;
 constexpr std::uint32_t engine_feature=1,engine_schema=1;
 static_assert(engine_size<=max_packet&&capability_reply_size<=max_packet);
+static_assert(engine::input_count==8&&engine::proposal_count==14,"Schema1 base frame must not grow into its HMAC");
 // Only call after verifying the request's full HMAC with the saved peer LMK.
 class PeerCapabilities {
  std::array<std::uint8_t,44> accepted_{};

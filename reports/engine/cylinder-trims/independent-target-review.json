@@ -1,0 +1,1142 @@
+{
+  "reviewed_at_utc": "2026-11-03T20:37:44.607885+00:00",
+  "reviewer": "Independent architecture agent /root/target_executor_architecture_review",
+  "verdict": "PASS for final source/image binding, static ISR placement, selected/generic engine-output inhibition and reviewed layout/stack frames. No new issue found. This is not physical timing, runtime heap/stack headroom or electrical qualification.",
+  "scope": "Read-only final-image followup to cylinder implementation review. No firmware rebuild, service restart, production edit, child agent or connected-target operation performed.",
+  "prior_implementation_review": {
+    "path": ".cache/engine/cylinder-review/implementation.json",
+    "sha256": "9d3610370abb40670b2e2fcd95c6409ace41487bf703e16375ee333b79a50ece",
+    "resolved_findings": 3,
+    "status": "All current reviewed production-source hashes match the recorded implementation review set; only the unit source differs in that set.",
+    "source_delta": {
+      "firmware/tests/engine_cylinder_test.cpp": {
+        "previous": "dc80e06433ed50df2ddeea017e68bbc4ef7fa88d9b56963efd71d44d50d181b9",
+        "final": "a07acf0093afa510389dfa05b609c7d4c3e0f59814c11349bb51990d95d449d9"
+      }
+    }
+  },
+  "charged_guard_review_binding": {
+    "path": ".cache/engine/cylinder-review/charged-tooth-review.json",
+    "sha256": "9b68ed79e098c5eebfea19df4773725cb6d3c6df120ff580c2e6a641dd360ee4",
+    "reviewer": "Independent agent /root/per_tooth_timing_review",
+    "reviewed_source_sha256": {
+      "firmware/include/ecu/engine_scheduler.hpp": "edd49807f513b7fe74fa3f829ee5f9d4e8d394b7533faede505e8b47769c3816",
+      "firmware/include/ecu/engine.hpp": "6a79cf871a54d264e461960a49e8702fd45f29cc3387bec8a001748c6f1bc44c",
+      "firmware/include/ecu/timing_executor.hpp": "59d0b60133f6075135aabf3893fee7baecd6c8b2951e465f2dbdbb18fd8f6992"
+    },
+    "all_match_current_source": true,
+    "guard_scope": "Independently reviewed narrow charged-coil committed-edge retention: same end/latched state, remaining<=25us, combined software angle lateness<=0.2deg and configured max-dwell bound. No injector behavior or hard watchdog/high-time relaxation. This report binds that review; it does not repeat the diagnosis or claim exact requested dwell under acceleration."
+  },
+  "final_source_sha256": {
+    "firmware/include/ecu/engine.hpp": "6a79cf871a54d264e461960a49e8702fd45f29cc3387bec8a001748c6f1bc44c",
+    "firmware/include/ecu/engine_limits.hpp": "aaaa07e76744f92cbf03f7ba07b5a297d813ffdceb7d5d5a68a8d6328d2dce14",
+    "firmware/include/ecu/engine_scheduler.hpp": "edd49807f513b7fe74fa3f829ee5f9d4e8d394b7533faede505e8b47769c3816",
+    "firmware/include/ecu/timing_executor.hpp": "59d0b60133f6075135aabf3893fee7baecd6c8b2951e465f2dbdbb18fd8f6992",
+    "firmware/include/ecu/engine_json.hpp": "cbea06329fb2c4ffcd461bd56c5d714162fcf06a420d32e605767ae832aa8c3d",
+    "firmware/include/ecu/json.hpp": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+    "firmware/include/ecu/engine_storage.hpp": "c1b0fc6e756d4c1e08ddf76cc0338cf6f65c4eaf0dd37bae8ccd818fdba7b820",
+    "firmware/include/ecu/engine_data.hpp": "10ab0f9d99100e6d2cc00334010a054e4bd0cb15e6e69bfdc90a8c2c6c30625c",
+    "firmware/include/ecu/engine_data_json.hpp": "ef7947dd545d372c197007c75992aaedbecc926d5c59893f1cf4d0e127c2ba03",
+    "firmware/include/ecu/engine_log.hpp": "c2705fa3581f60cc5a67c7701fa3c382945a88febafea293b039a638f17a3e08",
+    "firmware/include/ecu/engine_log_json.hpp": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6",
+    "firmware/include/ecu/engine_log_msl.hpp": "cda7a1b9b4a53b19ea95f1b9a45cdc655453e5fd02758e940abb46c295d6fd91",
+    "firmware/include/ecu/engine_radio.hpp": "2f0751fb9253229eb31bc0464bf95f4f5797f0ae2f00913773052e9ccdba2b97",
+    "firmware/include/ecu/heap_object.hpp": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51",
+    "firmware/main/engine_service.cpp": "6eced54805c76e1e17cf0b9959138498914c970bdd25c708dda5b86ed224d25f",
+    "firmware/main/engine_target.cpp": "25a5288710aa4987402ff20769a204b260b558f8925faaa561e20040ed6f4cf9",
+    "firmware/main/engine_log_service.cpp": "05666d7be694be72719515709a083b0cf65701ebcd410fdb32fc0aa0e9fbbd53",
+    "firmware/main/app.cpp": "b00afe666c83d9391530a53b495279d4b5bdb3323495a75f0e0b633047283c44",
+    "firmware/main/web_config.cpp": "d2cf41541621cb8255b60545525c92cb7e36b40093191e3f4a18269cf9670926",
+    "tools/engine_bridge.cpp": "b35a32f6ca4e0b26eeead46d97a7bd00ddfc0ab715d4641c5fd5c07598a81c7c",
+    "tools/engine_runtime.py": "e9359ad4f2a0c27182400dbbca46f9025896b94c6b0015e4f50bc9ca18b3fc9b",
+    "tools/engine_observability_bridge.cpp": "669557e117ebb2b2d21b27f7ddb69664eca542048838ed309eca49bb81bdb376",
+    "firmware/tests/engine_cylinder_test.cpp": "a07acf0093afa510389dfa05b609c7d4c3e0f59814c11349bb51990d95d449d9",
+    "firmware/platformio.ini": "a93018eb58131ff33e9b640873b544c4cc3e77b21f05adaa1f5c1ab5678f2338",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/main/CMakeLists.txt": "3604dff1258d4ea289a3beda20890861f55c2ad6f2160ecc238634e499f97337",
+    "firmware/main/web_assets.hpp": "eaf6771c35248798e6ad0394e97098d9cbebcb2a59f158e0ea2b6447edd866a1",
+    "scripts/embed_web.py": "b624a99a9a6c5b8c88577efb81a98fbb3ea643978b31e55762d9beafe482655f",
+    "scripts/audit_target_isr.py": "550781826ea29b6fe55f802278422cda70bb80cb61aab76c717904b26dd83f4d",
+    "firmware/sdkconfig.compact_n16r8_web": "5f70ef37d531d5c262738ad0b5df3bca52039b69668a555302243a97436950e8",
+    "firmware/sdkconfig.compact_a3_web": "b5cb80264f595019e6c879a6120e7ee9b8bc002c566d31fb1898bd48439af51d",
+    "firmware/sdkconfig.compact_a3_timing_bench": "b5cb80264f595019e6c879a6120e7ee9b8bc002c566d31fb1898bd48439af51d",
+    "config/engine/defaults.json": "9274e32ff7f0f0debe253f95304241a398b6b9c10fe04b868048fda4cf19d835",
+    "config/defaults.json": "84f8e35b714628c19e6ee7ba2fb7b05e8f2afffc5997087ba544430f27689f24",
+    "config/interface-guide.json": "393ba5fafdec3bc3a2713b9e19f7e0d400dc0f17e40f896d8707e5d1f0f0e1c2",
+    "web/index.html": "7da8c4917a95eb3a7ecb501ca22046f78271bf1066a319d28d7e85a8ce94ad6a",
+    "web/trigger_logger.js": "d9997905115af0cbecca5382b04694a4bd71c220e19e84b0b02bd9cd27e85c07",
+    "web/engine_logger.js": "d95c2c9391703428fde14e1cc46ecf9204793ffb88e8ec3351ce9e0269b9afd0",
+    "web/cylinder_tuning.js": "b62730556575c9a55f00bdbb0a379c14ae7135fc00d992cce4506ffa4994de3a",
+    "config/manual.json": "24d9eb07660ecb40e9ab0ab5ea76ec2aeb8ea7fe704d0abe90d00f6efc10f142"
+  },
+  "final_images": {
+    "compact_n16r8_web": {
+      "elf": "firmware/.pio/build/compact_n16r8_web/firmware.elf",
+      "sha256": "bb4fd1038aca0df168534990e4f06646b70be62462179ac3d42b1c5365d58e63",
+      "mtime_utc": "2026-11-03T20:30:03.391896+00:00",
+      "static_ram_data_bss_bytes": 145156,
+      "frames": [
+        {
+          "symbol": "(anonymous namespace)::pulse_done(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+          "address": "0x403757cc",
+          "size": 68,
+          "section": ".iram0.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_trigger_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x40375810",
+          "size": 554,
+          "section": ".iram0.text",
+          "entry_bytes": "36c100",
+          "frame_bytes": 96
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x40375a3c",
+          "size": 3237,
+          "section": ".iram0.text",
+          "entry_bytes": "360101",
+          "frame_bytes": 128
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+          "address": "0x403766e4",
+          "size": 10362,
+          "section": ".iram0.text",
+          "entry_bytes": "36e100",
+          "frame_bytes": 112
+        },
+        {
+          "symbol": "(anonymous namespace)::all_off()",
+          "address": "0x420034e0",
+          "size": 60,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "app_main",
+          "address": "0x420037b4",
+          "size": 2028,
+          "section": ".flash.text",
+          "entry_bytes": "36a134",
+          "frame_bytes": 6736
+        },
+        {
+          "symbol": "ecu::engine::data_json(ecu::engine::RuntimeSample const&, unsigned long long)",
+          "address": "0x42005fdc",
+          "size": 2206,
+          "section": ".flash.text",
+          "entry_bytes": "368100",
+          "frame_bytes": 64
+        },
+        {
+          "symbol": "ecu::engine_log::msl_row(ecu::engine_log::Header const&, ecu::engine_log::Row const&, char*, unsigned int)::{lambda(unsigned long long)#1}::operator()(unsigned long long) const",
+          "address": "0x42006d1c",
+          "size": 94,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_log::msl_row(ecu::engine_log::Header const&, ecu::engine_log::Row const&, char*, unsigned int)",
+          "address": "0x42006d7c",
+          "size": 1081,
+          "section": ".flash.text",
+          "entry_bytes": "362101",
+          "frame_bytes": 144
+        },
+        {
+          "symbol": "ecu::web::(anonymous namespace)::engine_data_log_msl_get(httpd_req*)",
+          "address": "0x420071b8",
+          "size": 372,
+          "section": ".flash.text",
+          "entry_bytes": "362113",
+          "frame_bytes": 2448
+        },
+        {
+          "symbol": "std::unique_ptr<ecu::engine_log::Page, ecu::HeapObjectDelete<ecu::engine_log::Page> > ecu::heap_object<ecu::engine_log::Page>()",
+          "address": "0x42007e40",
+          "size": 30,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::web::(anonymous namespace)::engine_data_log_get(httpd_req*)",
+          "address": "0x42007e60",
+          "size": 688,
+          "section": ".flash.text",
+          "entry_bytes": "36e100",
+          "frame_bytes": 112
+        },
+        {
+          "symbol": "ecu::engine::parse_tune(cJSON const*, ecu::engine::Tune&)::{lambda(cJSON const*, char const*, float&)#1}::operator()(cJSON const*, char const*, float&) const",
+          "address": "0x4200cad8",
+          "size": 62,
+          "section": ".flash.text",
+          "entry_bytes": "366100",
+          "frame_bytes": 48
+        },
+        {
+          "symbol": "std::unique_ptr<ecu::engine::Tune, ecu::HeapObjectDelete<ecu::engine::Tune> > ecu::heap_object<ecu::engine::Tune>()",
+          "address": "0x4200f800",
+          "size": 30,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine::Controller::step(ecu::engine::Tune const&, ecu::engine::Inputs const&, unsigned long long)",
+          "address": "0x4200fce8",
+          "size": 5658,
+          "section": ".flash.text",
+          "entry_bytes": "364101",
+          "frame_bytes": 160
+        },
+        {
+          "symbol": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+          "address": "0x42011304",
+          "size": 1253,
+          "section": ".flash.text",
+          "entry_bytes": "364109",
+          "frame_bytes": 1184
+        },
+        {
+          "symbol": "ecu::engine::parse_tune(cJSON const*, ecu::engine::Tune&)",
+          "address": "0x42011af0",
+          "size": 1786,
+          "section": ".flash.text",
+          "entry_bytes": "360107",
+          "frame_bytes": 896
+        },
+        {
+          "symbol": "ecu::engine::demand_valid(ecu::engine::AngleConfig const&, ecu::engine::Output const&, double)",
+          "address": "0x42014048",
+          "size": 1171,
+          "section": ".flash.text",
+          "entry_bytes": "36c100",
+          "frame_bytes": 96
+        },
+        {
+          "symbol": "ecu::engine::AngleScheduler::tooth(ecu::engine::AngleConfig const&, ecu::engine::Output const&, unsigned long long, unsigned int, unsigned int, unsigned long long, unsigned long long)::{lambda(double, unsigned long long&)#1}::operator()(double, unsigned long long&) const",
+          "address": "0x420145b8",
+          "size": 197,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine::AngleScheduler::tooth(ecu::engine::AngleConfig const&, ecu::engine::Output const&, unsigned long long, unsigned int, unsigned int, unsigned long long, unsigned long long)",
+          "address": "0x42014680",
+          "size": 3700,
+          "section": ".flash.text",
+          "entry_bytes": "360102",
+          "frame_bytes": 256
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+          "address": "0x42015e30",
+          "size": 75,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_target::measurement()",
+          "address": "0x420176c4",
+          "size": 143,
+          "section": ".flash.text",
+          "entry_bytes": "366100",
+          "frame_bytes": 48
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+          "address": "0x42019d0c",
+          "size": 1507,
+          "section": ".flash.text",
+          "entry_bytes": "364112",
+          "frame_bytes": 2336
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)",
+          "address": "0x4201a2f0",
+          "size": 11206,
+          "section": ".flash.text",
+          "entry_bytes": "36811b",
+          "frame_bytes": 3520
+        },
+        {
+          "symbol": "ecu::engine_log::Recorder::page(unsigned long, unsigned long, ecu::engine_log::Page&) const",
+          "address": "0x4201cf40",
+          "size": 199,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_log::Recorder::append(ecu::engine::RuntimeSample const&, unsigned long long)",
+          "address": "0x4201d1b4",
+          "size": 405,
+          "section": ".flash.text",
+          "entry_bytes": "368102",
+          "frame_bytes": 320
+        },
+        {
+          "symbol": "ecu::engine_log_service::observe(ecu::engine::RuntimeSample const&)",
+          "address": "0x4201d3d8",
+          "size": 110,
+          "section": ".flash.text",
+          "entry_bytes": "366100",
+          "frame_bytes": 48
+        },
+        {
+          "symbol": "ecu::engine_log_service::page(unsigned long, unsigned long, ecu::engine_log::Page&)",
+          "address": "0x4201d568",
+          "size": 50,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        }
+      ],
+      "layout": [
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::latest",
+          "size_bytes": 264,
+          "section": ".dram0.data",
+          "address": "0x3fca4008"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::measured",
+          "size_bytes": 112,
+          "section": ".dram0.data",
+          "address": "0x3fca5dd0"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::output",
+          "size_bytes": 4,
+          "section": ".dram0.data",
+          "address": "0x3fca5e4c"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::executor",
+          "size_bytes": 5384,
+          "section": ".dram0.data",
+          "address": "0x3fca9ec0"
+        },
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::latest_data",
+          "size_bytes": 272,
+          "section": ".dram0.bss",
+          "address": "0x3fcaf398"
+        },
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::active",
+          "size_bytes": 4548,
+          "section": ".dram0.bss",
+          "address": "0x3fcaf4a8"
+        },
+        {
+          "name": "ecu::engine_log_service::(anonymous namespace)::recorder",
+          "size_bytes": 73816,
+          "section": ".dram0.bss",
+          "address": "0x3fcb06f0"
+        }
+      ],
+      "output_pins_symbol_present": false,
+      "cylinder_js_asset": {
+        "symbol": "ecu::web::assets::cylinder_js",
+        "bytes": 5719,
+        "section": ".flash.rodata",
+        "sha256": "1156e567b3fc13310463d1226c0a2cd562c1bd28509316b21d186fd0fab24409",
+        "matches_current_js_plus_nul": true
+      },
+      "allocation_and_low_disassembly": ".cache/engine/cylinder-review/final-selected-allocation-and-low.txt",
+      "independent_isr_audit": {
+        "path": ".cache/engine/cylinder-review/final-isr-selected/closure.json",
+        "sha256": "fd52049e75b865437c6ca4e858a9a61ce2e2288755bdf132bbd42ebb23b743bd",
+        "functions": 30,
+        "roots": 5,
+        "external": [],
+        "literals_outside_iram": 0,
+        "assertion_argument_only": 63,
+        "unclassified_flash_pointers": 0,
+        "passed": true
+      }
+    },
+    "compact_a3_web": {
+      "elf": "firmware/.pio/build/compact_a3_web/firmware.elf",
+      "sha256": "34b3f57ba5388cbfcfefb7d959737d3414f4e0c7bfca638a78fcf1c00b0a3c80",
+      "mtime_utc": "2026-11-03T20:29:58.076099+00:00",
+      "static_ram_data_bss_bytes": 143904,
+      "frames": [
+        {
+          "symbol": "(anonymous namespace)::pulse_done(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+          "address": "0x4037567c",
+          "size": 68,
+          "section": ".iram0.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_trigger_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x403756c0",
+          "size": 554,
+          "section": ".iram0.text",
+          "entry_bytes": "36c100",
+          "frame_bytes": 96
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x403758ec",
+          "size": 3237,
+          "section": ".iram0.text",
+          "entry_bytes": "360101",
+          "frame_bytes": 128
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+          "address": "0x40376594",
+          "size": 10362,
+          "section": ".iram0.text",
+          "entry_bytes": "36e100",
+          "frame_bytes": 112
+        },
+        {
+          "symbol": "(anonymous namespace)::all_off()",
+          "address": "0x42003444",
+          "size": 60,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "app_main",
+          "address": "0x42003718",
+          "size": 2028,
+          "section": ".flash.text",
+          "entry_bytes": "36a134",
+          "frame_bytes": 6736
+        },
+        {
+          "symbol": "ecu::engine::data_json(ecu::engine::RuntimeSample const&, unsigned long long)",
+          "address": "0x42005f40",
+          "size": 2206,
+          "section": ".flash.text",
+          "entry_bytes": "368100",
+          "frame_bytes": 64
+        },
+        {
+          "symbol": "ecu::engine_log::msl_row(ecu::engine_log::Header const&, ecu::engine_log::Row const&, char*, unsigned int)::{lambda(unsigned long long)#1}::operator()(unsigned long long) const",
+          "address": "0x42006c80",
+          "size": 94,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_log::msl_row(ecu::engine_log::Header const&, ecu::engine_log::Row const&, char*, unsigned int)",
+          "address": "0x42006ce0",
+          "size": 1081,
+          "section": ".flash.text",
+          "entry_bytes": "362101",
+          "frame_bytes": 144
+        },
+        {
+          "symbol": "ecu::web::(anonymous namespace)::engine_data_log_msl_get(httpd_req*)",
+          "address": "0x4200711c",
+          "size": 372,
+          "section": ".flash.text",
+          "entry_bytes": "362113",
+          "frame_bytes": 2448
+        },
+        {
+          "symbol": "std::unique_ptr<ecu::engine_log::Page, ecu::HeapObjectDelete<ecu::engine_log::Page> > ecu::heap_object<ecu::engine_log::Page>()",
+          "address": "0x42007da4",
+          "size": 30,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::web::(anonymous namespace)::engine_data_log_get(httpd_req*)",
+          "address": "0x42007dc4",
+          "size": 688,
+          "section": ".flash.text",
+          "entry_bytes": "36e100",
+          "frame_bytes": 112
+        },
+        {
+          "symbol": "ecu::engine::parse_tune(cJSON const*, ecu::engine::Tune&)::{lambda(cJSON const*, char const*, float&)#1}::operator()(cJSON const*, char const*, float&) const",
+          "address": "0x4200cab0",
+          "size": 62,
+          "section": ".flash.text",
+          "entry_bytes": "366100",
+          "frame_bytes": 48
+        },
+        {
+          "symbol": "std::unique_ptr<ecu::engine::Tune, ecu::HeapObjectDelete<ecu::engine::Tune> > ecu::heap_object<ecu::engine::Tune>()",
+          "address": "0x4200f7d8",
+          "size": 30,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine::Controller::step(ecu::engine::Tune const&, ecu::engine::Inputs const&, unsigned long long)",
+          "address": "0x4200fcc0",
+          "size": 5658,
+          "section": ".flash.text",
+          "entry_bytes": "364101",
+          "frame_bytes": 160
+        },
+        {
+          "symbol": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+          "address": "0x420112dc",
+          "size": 1253,
+          "section": ".flash.text",
+          "entry_bytes": "364109",
+          "frame_bytes": 1184
+        },
+        {
+          "symbol": "ecu::engine::parse_tune(cJSON const*, ecu::engine::Tune&)",
+          "address": "0x42011ac8",
+          "size": 1786,
+          "section": ".flash.text",
+          "entry_bytes": "360107",
+          "frame_bytes": 896
+        },
+        {
+          "symbol": "ecu::engine::demand_valid(ecu::engine::AngleConfig const&, ecu::engine::Output const&, double)",
+          "address": "0x42014020",
+          "size": 1171,
+          "section": ".flash.text",
+          "entry_bytes": "36c100",
+          "frame_bytes": 96
+        },
+        {
+          "symbol": "ecu::engine::AngleScheduler::tooth(ecu::engine::AngleConfig const&, ecu::engine::Output const&, unsigned long long, unsigned int, unsigned int, unsigned long long, unsigned long long)::{lambda(double, unsigned long long&)#1}::operator()(double, unsigned long long&) const",
+          "address": "0x42014590",
+          "size": 197,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine::AngleScheduler::tooth(ecu::engine::AngleConfig const&, ecu::engine::Output const&, unsigned long long, unsigned int, unsigned int, unsigned long long, unsigned long long)",
+          "address": "0x42014658",
+          "size": 3700,
+          "section": ".flash.text",
+          "entry_bytes": "360102",
+          "frame_bytes": 256
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+          "address": "0x42015e08",
+          "size": 75,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_target::measurement()",
+          "address": "0x4201769c",
+          "size": 143,
+          "section": ".flash.text",
+          "entry_bytes": "366100",
+          "frame_bytes": 48
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+          "address": "0x42019ce4",
+          "size": 1507,
+          "section": ".flash.text",
+          "entry_bytes": "364112",
+          "frame_bytes": 2336
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)",
+          "address": "0x4201a2c8",
+          "size": 11206,
+          "section": ".flash.text",
+          "entry_bytes": "36811b",
+          "frame_bytes": 3520
+        },
+        {
+          "symbol": "ecu::engine_log::Recorder::page(unsigned long, unsigned long, ecu::engine_log::Page&) const",
+          "address": "0x4201cf18",
+          "size": 199,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_log::Recorder::append(ecu::engine::RuntimeSample const&, unsigned long long)",
+          "address": "0x4201d18c",
+          "size": 405,
+          "section": ".flash.text",
+          "entry_bytes": "368102",
+          "frame_bytes": 320
+        },
+        {
+          "symbol": "ecu::engine_log_service::observe(ecu::engine::RuntimeSample const&)",
+          "address": "0x4201d3b0",
+          "size": 104,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_log_service::page(unsigned long, unsigned long, ecu::engine_log::Page&)",
+          "address": "0x4201d538",
+          "size": 50,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        }
+      ],
+      "layout": [
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::latest",
+          "size_bytes": 264,
+          "section": ".dram0.data",
+          "address": "0x3fca2908"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::measured",
+          "size_bytes": 112,
+          "section": ".dram0.data",
+          "address": "0x3fca46c0"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::output",
+          "size_bytes": 4,
+          "section": ".dram0.data",
+          "address": "0x3fca473c"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::executor",
+          "size_bytes": 5384,
+          "section": ".dram0.data",
+          "address": "0x3fca87b0"
+        },
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::latest_data",
+          "size_bytes": 272,
+          "section": ".dram0.bss",
+          "address": "0x3fcad830"
+        },
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::active",
+          "size_bytes": 4548,
+          "section": ".dram0.bss",
+          "address": "0x3fcad940"
+        },
+        {
+          "name": "ecu::engine_log_service::(anonymous namespace)::recorder",
+          "size_bytes": 73816,
+          "section": ".dram0.bss",
+          "address": "0x3fcaeb88"
+        }
+      ],
+      "output_pins_symbol_present": false,
+      "cylinder_js_asset": {
+        "symbol": "ecu::web::assets::cylinder_js",
+        "bytes": 5719,
+        "section": ".flash.rodata",
+        "sha256": "1156e567b3fc13310463d1226c0a2cd562c1bd28509316b21d186fd0fab24409",
+        "matches_current_js_plus_nul": true
+      },
+      "allocation_and_low_disassembly": ".cache/engine/cylinder-review/final-generic-allocation-and-low.txt",
+      "independent_isr_audit": {
+        "path": ".cache/engine/cylinder-review/final-isr-generic/closure.json",
+        "sha256": "01430757e826db131774872d45258bd7037630e0a815151f54afa924c7dad8c8",
+        "functions": 30,
+        "roots": 5,
+        "external": [],
+        "literals_outside_iram": 0,
+        "assertion_argument_only": 63,
+        "unclassified_flash_pointers": 0,
+        "passed": true
+      }
+    },
+    "compact_a3_timing_bench": {
+      "elf": "firmware/.pio/build/compact_a3_timing_bench/firmware.elf",
+      "sha256": "7eb61c976caa8e7d2a9039d146958459e4e6113cff0a803eb7a61ecfa23deb27",
+      "mtime_utc": "2026-11-03T20:30:27.310985+00:00",
+      "static_ram_data_bss_bytes": 118904,
+      "frames": [
+        {
+          "symbol": "(anonymous namespace)::pulse_done(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+          "address": "0x40375430",
+          "size": 68,
+          "section": ".iram0.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x40375474",
+          "size": 3573,
+          "section": ".iram0.text",
+          "entry_bytes": "360101",
+          "frame_bytes": 128
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+          "address": "0x4037626c",
+          "size": 13173,
+          "section": ".iram0.text",
+          "entry_bytes": "36e100",
+          "frame_bytes": 112
+        },
+        {
+          "symbol": "(anonymous namespace)::all_off()",
+          "address": "0x42002390",
+          "size": 60,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "app_main",
+          "address": "0x42002654",
+          "size": 1912,
+          "section": ".flash.text",
+          "entry_bytes": "36a134",
+          "frame_bytes": 6736
+        },
+        {
+          "symbol": "ecu::engine::parse_tune(cJSON const*, ecu::engine::Tune&)::{lambda(cJSON const*, char const*, float&)#1}::operator()(cJSON const*, char const*, float&) const",
+          "address": "0x420052c4",
+          "size": 62,
+          "section": ".flash.text",
+          "entry_bytes": "366100",
+          "frame_bytes": 48
+        },
+        {
+          "symbol": "std::unique_ptr<ecu::engine::Tune, ecu::HeapObjectDelete<ecu::engine::Tune> > ecu::heap_object<ecu::engine::Tune>()",
+          "address": "0x420078d4",
+          "size": 30,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine::Controller::step(ecu::engine::Tune const&, ecu::engine::Inputs const&, unsigned long long)",
+          "address": "0x42007c90",
+          "size": 5646,
+          "section": ".flash.text",
+          "entry_bytes": "364101",
+          "frame_bytes": 160
+        },
+        {
+          "symbol": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+          "address": "0x420092a0",
+          "size": 1261,
+          "section": ".flash.text",
+          "entry_bytes": "364109",
+          "frame_bytes": 1184
+        },
+        {
+          "symbol": "ecu::engine::parse_tune(cJSON const*, ecu::engine::Tune&)",
+          "address": "0x42009a0c",
+          "size": 1770,
+          "section": ".flash.text",
+          "entry_bytes": "360107",
+          "frame_bytes": 896
+        },
+        {
+          "symbol": "ecu::engine::demand_valid(ecu::engine::AngleConfig const&, ecu::engine::Output const&, double)",
+          "address": "0x4200bf74",
+          "size": 1172,
+          "section": ".flash.text",
+          "entry_bytes": "36c100",
+          "frame_bytes": 96
+        },
+        {
+          "symbol": "ecu::engine::AngleScheduler::tooth(ecu::engine::AngleConfig const&, ecu::engine::Output const&, unsigned long long, unsigned int, unsigned int, unsigned long long, unsigned long long)::{lambda(double, unsigned long long&)#1}::operator()(double, unsigned long long&) const",
+          "address": "0x4200c49c",
+          "size": 189,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine::AngleScheduler::tooth(ecu::engine::AngleConfig const&, ecu::engine::Output const&, unsigned long long, unsigned int, unsigned int, unsigned long long, unsigned long long)",
+          "address": "0x4200c55c",
+          "size": 3688,
+          "section": ".flash.text",
+          "entry_bytes": "360102",
+          "frame_bytes": 256
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+          "address": "0x4200dc7c",
+          "size": 75,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_target::measurement()",
+          "address": "0x4200ee3c",
+          "size": 143,
+          "section": ".flash.text",
+          "entry_bytes": "366100",
+          "frame_bytes": 48
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+          "address": "0x42010a60",
+          "size": 1591,
+          "section": ".flash.text",
+          "entry_bytes": "364112",
+          "frame_bytes": 2336
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)",
+          "address": "0x42011098",
+          "size": 12734,
+          "section": ".flash.text",
+          "entry_bytes": "36a11b",
+          "frame_bytes": 3536
+        },
+        {
+          "symbol": "ecu::engine_log::Recorder::append(ecu::engine::RuntimeSample const&, unsigned long long)",
+          "address": "0x4201430c",
+          "size": 405,
+          "section": ".flash.text",
+          "entry_bytes": "368102",
+          "frame_bytes": 320
+        },
+        {
+          "symbol": "ecu::engine_log_service::observe(ecu::engine::RuntimeSample const&)",
+          "address": "0x420144f0",
+          "size": 104,
+          "section": ".flash.text",
+          "entry_bytes": "364100",
+          "frame_bytes": 32
+        }
+      ],
+      "layout": [
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::latest",
+          "size_bytes": 264,
+          "section": ".dram0.data",
+          "address": "0x3fc9aa58"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::measured",
+          "size_bytes": 112,
+          "section": ".dram0.data",
+          "address": "0x3fc9b640"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::output",
+          "size_bytes": 4,
+          "section": ".dram0.data",
+          "address": "0x3fc9b6bc"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::executor",
+          "size_bytes": 5384,
+          "section": ".dram0.data",
+          "address": "0x3fc9f738"
+        },
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::latest_data",
+          "size_bytes": 272,
+          "section": ".dram0.bss",
+          "address": "0x3fca30a8"
+        },
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::active",
+          "size_bytes": 4548,
+          "section": ".dram0.bss",
+          "address": "0x3fca31b8"
+        },
+        {
+          "name": "ecu::engine_log_service::(anonymous namespace)::recorder",
+          "size_bytes": 73816,
+          "section": ".dram0.bss",
+          "address": "0x3fca43f8"
+        }
+      ],
+      "output_pins_symbol_present": true,
+      "cylinder_js_asset": null,
+      "allocation_and_low_disassembly": ".cache/engine/cylinder-review/final-dummy-allocation-and-low.txt",
+      "independent_isr_audit": {
+        "path": ".cache/engine/cylinder-review/final-isr-dummy/closure.json",
+        "sha256": "ce01012482bb3d9fcc655e99b0711053192d0a6fa4551ed1dc3a53189cd06332",
+        "functions": 29,
+        "roots": 4,
+        "external": [],
+        "literals_outside_iram": 0,
+        "assertion_argument_only": 63,
+        "unclassified_flash_pointers": 0,
+        "passed": true
+      }
+    }
+  },
+  "embedded_assets_binding": {
+    "compact_n16r8_web": [
+      {
+        "symbol": "engine_defaults",
+        "source": "config/engine/defaults.json",
+        "compiled_size_with_nul": 6302,
+        "source_sha256": "9274e32ff7f0f0debe253f95304241a398b6b9c10fe04b868048fda4cf19d835",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "defaults",
+        "source": "config/defaults.json",
+        "compiled_size_with_nul": 3653,
+        "source_sha256": "84f8e35b714628c19e6ee7ba2fb7b05e8f2afffc5997087ba544430f27689f24",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "guide",
+        "source": "config/interface-guide.json",
+        "compiled_size_with_nul": 25001,
+        "source_sha256": "393ba5fafdec3bc3a2713b9e19f7e0d400dc0f17e40f896d8707e5d1f0f0e1c2",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "index",
+        "source": "web/index.html",
+        "compiled_size_with_nul": 71835,
+        "source_sha256": "7da8c4917a95eb3a7ecb501ca22046f78271bf1066a319d28d7e85a8ce94ad6a",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "trigger_js",
+        "source": "web/trigger_logger.js",
+        "compiled_size_with_nul": 15199,
+        "source_sha256": "d9997905115af0cbecca5382b04694a4bd71c220e19e84b0b02bd9cd27e85c07",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "engine_log_js",
+        "source": "web/engine_logger.js",
+        "compiled_size_with_nul": 15088,
+        "source_sha256": "d95c2c9391703428fde14e1cc46ecf9204793ffb88e8ec3351ce9e0269b9afd0",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "cylinder_js",
+        "source": "web/cylinder_tuning.js",
+        "compiled_size_with_nul": 5719,
+        "source_sha256": "b62730556575c9a55f00bdbb0a379c14ae7135fc00d992cce4506ffa4994de3a",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "manual",
+        "source": "config/manual.json",
+        "compiled_size_with_nul": 45022,
+        "source_sha256": "24d9eb07660ecb40e9ab0ab5ea76ec2aeb8ea7fe704d0abe90d00f6efc10f142",
+        "matches_source_plus_nul": true
+      }
+    ],
+    "compact_a3_web": [
+      {
+        "symbol": "engine_defaults",
+        "source": "config/engine/defaults.json",
+        "compiled_size_with_nul": 6302,
+        "source_sha256": "9274e32ff7f0f0debe253f95304241a398b6b9c10fe04b868048fda4cf19d835",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "defaults",
+        "source": "config/defaults.json",
+        "compiled_size_with_nul": 3653,
+        "source_sha256": "84f8e35b714628c19e6ee7ba2fb7b05e8f2afffc5997087ba544430f27689f24",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "guide",
+        "source": "config/interface-guide.json",
+        "compiled_size_with_nul": 25001,
+        "source_sha256": "393ba5fafdec3bc3a2713b9e19f7e0d400dc0f17e40f896d8707e5d1f0f0e1c2",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "index",
+        "source": "web/index.html",
+        "compiled_size_with_nul": 71835,
+        "source_sha256": "7da8c4917a95eb3a7ecb501ca22046f78271bf1066a319d28d7e85a8ce94ad6a",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "trigger_js",
+        "source": "web/trigger_logger.js",
+        "compiled_size_with_nul": 15199,
+        "source_sha256": "d9997905115af0cbecca5382b04694a4bd71c220e19e84b0b02bd9cd27e85c07",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "engine_log_js",
+        "source": "web/engine_logger.js",
+        "compiled_size_with_nul": 15088,
+        "source_sha256": "d95c2c9391703428fde14e1cc46ecf9204793ffb88e8ec3351ce9e0269b9afd0",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "cylinder_js",
+        "source": "web/cylinder_tuning.js",
+        "compiled_size_with_nul": 5719,
+        "source_sha256": "b62730556575c9a55f00bdbb0a379c14ae7135fc00d992cce4506ffa4994de3a",
+        "matches_source_plus_nul": true
+      },
+      {
+        "symbol": "manual",
+        "source": "config/manual.json",
+        "compiled_size_with_nul": 45022,
+        "source_sha256": "24d9eb07660ecb40e9ab0ab5ea76ec2aeb8ea7fe704d0abe90d00f6efc10f142",
+        "matches_source_plus_nul": true
+      }
+    ]
+  },
+  "output_policy": {
+    "source": "ECU_ENGINE_DUMMY_LOADS defaults0. Selected/generic web build flags omit dummy/legacy pulse enables; selected N16R8+dummy combination is a compile-time error. Target OutputIO physical writes and arming gate exist only under dummy conditional. Source hash, final code/data symbols and engine ISR disassembly corroborate that separation.",
+    "binary_observations": {
+      "compact_n16r8_web": {
+        "isr_gpio_symbol_references": 0,
+        "isr_gpio_symbol_references_scope": "References in independently audited engine capture/alarm/diagnostic closure. This is not a whole-firmware GPIO prohibition.",
+        "app_main_has_gptimer_start_reference": false,
+        "app_main_all_off_references": 2,
+        "heap_helpers": [
+          {
+            "symbol": "42007e40 <std::unique_ptr<ecu::engine_log::Page, ecu::HeapObjectDelete<ecu::engine_log::Page> > ecu::heap_object<ecu::engine_log::Page>()>:",
+            "calls_malloc": true,
+            "checks_null_after_malloc": true,
+            "calls_allocating_operator_new": false
+          },
+          {
+            "symbol": "4200f800 <std::unique_ptr<ecu::engine::Tune, ecu::HeapObjectDelete<ecu::engine::Tune> > ecu::heap_object<ecu::engine::Tune>()>:",
+            "calls_malloc": true,
+            "checks_null_after_malloc": true,
+            "calls_allocating_operator_new": false
+          }
+        ],
+        "app_main_disassembly": ".cache/engine/cylinder-review/final-selected-app-main.txt"
+      },
+      "compact_a3_web": {
+        "isr_gpio_symbol_references": 0,
+        "isr_gpio_symbol_references_scope": "References in independently audited engine capture/alarm/diagnostic closure. This is not a whole-firmware GPIO prohibition.",
+        "app_main_has_gptimer_start_reference": false,
+        "app_main_all_off_references": 2,
+        "heap_helpers": [
+          {
+            "symbol": "42007da4 <std::unique_ptr<ecu::engine_log::Page, ecu::HeapObjectDelete<ecu::engine_log::Page> > ecu::heap_object<ecu::engine_log::Page>()>:",
+            "calls_malloc": true,
+            "checks_null_after_malloc": true,
+            "calls_allocating_operator_new": false
+          },
+          {
+            "symbol": "4200f7d8 <std::unique_ptr<ecu::engine::Tune, ecu::HeapObjectDelete<ecu::engine::Tune> > ecu::heap_object<ecu::engine::Tune>()>:",
+            "calls_malloc": true,
+            "checks_null_after_malloc": true,
+            "calls_allocating_operator_new": false
+          }
+        ],
+        "app_main_disassembly": ".cache/engine/cylinder-review/final-generic-app-main.txt"
+      },
+      "compact_a3_timing_bench": {
+        "isr_gpio_symbol_references": 93,
+        "isr_gpio_symbol_references_scope": "References in independently audited engine capture/alarm/diagnostic closure. This is not a whole-firmware GPIO prohibition.",
+        "app_main_has_gptimer_start_reference": false,
+        "app_main_all_off_references": 0,
+        "heap_helpers": [
+          {
+            "symbol": "420078d4 <std::unique_ptr<ecu::engine::Tune, ecu::HeapObjectDelete<ecu::engine::Tune> > ecu::heap_object<ecu::engine::Tune>()>:",
+            "calls_malloc": true,
+            "checks_null_after_malloc": true,
+            "calls_allocating_operator_new": false
+          }
+        ],
+        "app_main_disassembly": ".cache/engine/cylinder-review/final-dummy-app-main.txt"
+      }
+    },
+    "manual_disassembly_check": "Selected/generic app all_off uses level0 for ARM, injector/coil outputs, pump and fan. App watchdog WDI GPIO toggles and startup low writes remain; the inhibit claim is specific to engine actuator-high commands, not a whole-firmware GPIO prohibition. No legacy pulse-timer start reference is present in final app_main.",
+    "dummy_scope": "The dummy image intentionally retains eight output-pin references and GPIO writes guarded by existing boot/SAFE/interlock policy; it is not classified as physically inhibited."
+  },
+  "static_budget_assessment": {
+    "linked_sizes_bytes": {
+      "Tune": 4548,
+      "Output": 264,
+      "RuntimeSample": 272,
+      "Recorder": 73816,
+      "Executor": 5384,
+      "Measurement": 112
+    },
+    "layout_limits": "RuntimeSample<=280; Recorder<74*1024=75776;256 retained rows;16-row page. Prior independent pinned-target sizeof probe: Row288, Page4696, Command408, Candidate984. Final linked global sizes and Page/Tune malloc-size literals agree; no struct-layout-changing source was introduced by the charged-edge guard.",
+    "final_local_frames_bytes": {
+      "app_main_all_images": 6736,
+      "engine_service_observe_all_images": 1184,
+      "timing_worker_web": 3520,
+      "timing_worker_dummy": 3536,
+      "timing_command_service_helper_all_images": 2336,
+      "demand_valid_all_images": 96,
+      "controller_step": 160,
+      "parse_tune": 896,
+      "http_msl_web": 2448,
+      "http_json_page_web": 112,
+      "recorder_page_web": 32,
+      "capture_callback_all_images": 128,
+      "alarm_callback_all_images": 112,
+      "diagnostic_capture_callback_web": 96,
+      "legacy_unstarted_pulse_callback": 32
+    },
+    "frame_method": "Actual3-byte Xtensa ENTRY opcode/immediate decoded from each final ELF section. This records local compiler frame size, not a complete system/library/recursion bound. Detailed symbols/entry bytes in final-elf-binding.json.",
+    "configured_stacks_bytes": {
+      "main": 16384,
+      "timing_worker": 16384,
+      "http_web": 16384,
+      "isr": 1536
+    },
+    "static_data_bss_bytes": {
+      "compact_n16r8_web": 145156,
+      "compact_a3_web": 143904,
+      "compact_a3_timing_bench": 118904
+    },
+    "ram_interpretation": "Linker data+bss totals fit their327680-byte reported region. This is not free internal heap: IRAM aliases, stacks, queues, WiFi/network buffers, transient tune JSON and fragmentation also consume resources. Runtime minimum heap and high-water unmeasured."
+  },
+  "independent_final_validation": [
+    "SHA256 each current selected/generic/dummy ELF; root-provided ISR report hashes and independent rerun reports agree with the same images.",
+    "Independently reran scripts/audit_target_isr.py against all three exact ELFs into review-cache directories: selected30 functions/5 roots, generic30/5, dummy29/4; allPASS, no external non-ROM target, no non-IRAM literal fetch or unclassified flash pointer.63 separately classified pinned SDK assertion argument pointers per image remain disclosed.",
+    "Checked internal DRAM placement of required ISR state via auditor plus linked executor/output/measurement globals, and fixed ring/RuntimeSample/Tune/Output symbol sizes.",
+    "Disassembled every linked heap_object<Page/Tune> helper: malloc call, null-result branch before non-allocating constructor; no allocating operator-new call in helper. All three no-exceptions sdkconfigs disable heap-abort-on-allocation-failure. Dummy has no linked Page HTTP helper.",
+    "Compared all eight compiled embedded assets in both web ELFs to current source bytes plus terminator, including5719-byte cylinder_js. Current index loads/correct target URI serves that module. This is asset/source binding, not a new browser usability run.",
+    "Read final build/native logs as parent validation evidence; no rebuild or test-suite restart performed. Prior independent gate/OOM/migration/channel-latching/formatter probes remain in implementation.json; charged-edge boundary tests have their separate independent report."
+  ],
+  "parent_validation_evidence": {
+    ".cache/engine/cylinder-firmware-final.log": "0e151ed191c5eec5d0d4f4bf8499743dd13eca8ddd9535ed051bff893787b616",
+    ".cache/engine/cylinder-native-final.log": "38e0c6378648016e135ac4cc31bad7ad37c5cc3a1de6d1d19581cbf11b41f1df",
+    ".cache/engine/cylinder-python-final.log": "f7f12d561afc391927ff5df0b536f6bd40b4ab7eb10922a9b4fb384a7fa5e816",
+    ".cache/engine/cylinder-radio-final.log": "d81d3f1941b2e82230d968b731ad4d0b5370a7e9da68f65e2137778443a6976e",
+    ".cache/engine/cylinder-scenarios-final.log": "ac0322d44690e6fe8ed7a02854d512bd04189c2b9072bad284dfe32c64b5a6ec"
+  },
+  "remaining_limits": [
+    "Actual hardware GPIO edges, physical IRQ/portMUX duration, jitter, capture latch overwrite/polarity races, electrical behavior and acceleration/dwell energy remain unmeasured.",
+    "Task/ISR stack high-water and minimum internal heap under AP/radio/maximum tune/log workflows remain unmeasured. Local frame/static placement checks do not replace these measurements.",
+    "Real NVS repeated maximum24KiB blob GC/power-failure behavior is not proved by native API fakes or final linking.",
+    "Fatal SDK assertion/panic fail-low behavior is not physically established by the IRAM audit.63 argument-only pointers are explicitly classified rather than hidden.",
+    "This pass applies to the exact hashes recorded here. Any subsequent source or ELF change needs an appropriate delta review/rebind."
+  ],
+  "artifacts": [
+    ".cache/engine/cylinder-review/final-elf-binding.json",
+    ".cache/engine/cylinder-review/final-output-policy.json",
+    ".cache/engine/cylinder-review/final-selected-allocation-and-low.txt",
+    ".cache/engine/cylinder-review/final-generic-allocation-and-low.txt",
+    ".cache/engine/cylinder-review/final-dummy-allocation-and-low.txt",
+    ".cache/engine/cylinder-review/final-selected-app-main.txt",
+    ".cache/engine/cylinder-review/final-generic-app-main.txt",
+    ".cache/engine/cylinder-review/final-dummy-app-main.txt",
+    ".cache/engine/cylinder-review/final-isr-selected/closure.json",
+    ".cache/engine/cylinder-review/final-isr-generic/closure.json",
+    ".cache/engine/cylinder-review/final-isr-dummy/closure.json"
+  ]
+}

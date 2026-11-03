@@ -39,14 +39,14 @@ ecu::timing::Command command(Context& c){
 }
 extern "C" const char* engine_canonicalize(const char*text){ecu::engine::Tune tune;static thread_local std::string canonical;if(!ecu::engine::canonical_tune(text,tune,canonical))return nullptr;return canonical.c_str();}
 extern "C" int engine_validate(const char* text){
- if(!ecu::web::safe_json(text,std::strlen(text)))return 0;
+ if(!ecu::web::safe_json(text,std::strlen(text),ecu::engine::tune_maximum))return 0;
  auto* j=cJSON_ParseWithOpts(text,nullptr,true);ecu::engine::Tune tune;
  const bool ok=j&&ecu::engine::parse_tune(j,tune);cJSON_Delete(j);return ok;
 }
 extern "C" void* engine_create(){return new Context;}
 extern "C" void engine_destroy(void*p){delete static_cast<Context*>(p);}
 extern "C" int engine_configure(void*p,const char* text){
- if(!text||!ecu::web::safe_json(text,std::strlen(text)))return 0;
+ if(!text||!ecu::web::safe_json(text,std::strlen(text),ecu::engine::tune_maximum))return 0;
  auto*j=cJSON_ParseWithOpts(text,nullptr,true);ecu::engine::Tune candidate;
  const bool ok=j&&ecu::engine::parse_tune(j,candidate);cJSON_Delete(j);if(!ok)return 0;
  auto&c=*static_cast<Context*>(p);c.tune=candidate;c.controller.reset();c.core=ecu::timing::Executor{};
@@ -107,7 +107,7 @@ extern "C" const char* engine_step(void*p,const char*text,std::uint64_t now,std:
  if(stats.fault!=ecu::timing::Cause::None){c.last.faults|=ecu::engine::Timing;c.last.state=ecu::engine::State::Faulted;c.last.fuel_cut=c.last.spark_cut=true;}
  c.data=ecu::engine::synthetic_data(c.tune,in,c.last,++c.data_sequence,now);c.data.phase_reason=static_cast<std::uint8_t>(c.decoder.reason());c.data.phase_losses=c.decoder.losses();c.data.cam_rejected=c.decoder.rejected();c.data.cam_error_deg=c.decoder.cam_error_deg();c.data.virtual_high_mask=c.io.mask;
  c.data.worker_sequence=c.core.current_command().sequence;c.data.worker_observed_us=now;c.data.worker_epoch=stats.epoch;c.data.worker_tune_revision=c.core.current_command().tune_revision;c.data.worker_sensor_revision=c.core.current_command().sensor_revision;c.data.timing_fault=static_cast<std::uint8_t>(stats.fault);c.data.last_timing_fault=static_cast<std::uint8_t>(stats.last_fault);
- j=ecu::engine::output_json(c.last);cJSON_AddBoolToObject(j,"synced",in.synced&&(!c.decoder.required()||in.phase_synced));cJSON_AddBoolToObject(j,"crank_synced",in.synced);cJSON_AddBoolToObject(j,"phase_synced",in.phase_synced);cJSON_AddBoolToObject(j,"phase_required",c.decoder.required());cJSON_AddStringToObject(j,"phase_reason",ecu::engine::PhaseDecoder::reason_name(c.decoder.reason()));cJSON_AddNumberToObject(j,"phase_losses",c.decoder.losses());cJSON_AddNumberToObject(j,"cam_rejected",c.decoder.rejected());cJSON_AddNumberToObject(j,"cam_error_deg",c.decoder.cam_error_deg());cJSON_AddNumberToObject(j,"time_us",now);cJSON_AddNumberToObject(j,"gap_us",c.gap);
+ j=ecu::engine::output_json(c.last);cJSON_AddStringToObject(j,"angle_stop_reason",ecu::engine::AngleScheduler::reason_name(stats.angle_reason));cJSON_AddBoolToObject(j,"synced",in.synced&&(!c.decoder.required()||in.phase_synced));cJSON_AddBoolToObject(j,"crank_synced",in.synced);cJSON_AddBoolToObject(j,"phase_synced",in.phase_synced);cJSON_AddBoolToObject(j,"phase_required",c.decoder.required());cJSON_AddStringToObject(j,"phase_reason",ecu::engine::PhaseDecoder::reason_name(c.decoder.reason()));cJSON_AddNumberToObject(j,"phase_losses",c.decoder.losses());cJSON_AddNumberToObject(j,"cam_rejected",c.decoder.rejected());cJSON_AddNumberToObject(j,"cam_error_deg",c.decoder.cam_error_deg());cJSON_AddNumberToObject(j,"time_us",now);cJSON_AddNumberToObject(j,"gap_us",c.gap);
  cJSON_AddNumberToObject(j,"timing_stops",stats.faults);cJSON_AddNumberToObject(j,"timing_recoveries",stats.recoveries);
  cJSON_AddNumberToObject(j,"executor_high_mask",c.io.mask);cJSON_AddStringToObject(j,"timing_stop_reason",ecu::timing::cause_name(stats.last_fault));return encode(j);
 }

@@ -75,3 +75,5 @@ The UI reports each peer's negotiated engine schema, authenticated connectivity 
 ## Reproduce
 
 `tools/test_engine_observability.py` compares native C++ and independent Python packet bodies/full HMACs, key length, nonce/counter recovery, replay, clock bounds, stale gaps, unknown values and 64-bit IDs. Native tests cover both ACK widths and recorder limits. [The observability guide](engine-observability.md) links engine-plant, UI, viewer and independent review evidence. Future screen firmware can use `EngineReceiver` as an executable contract; it must implement ESP-NOW peer storage/transport and display behavior separately. No screen, actual RF exchange, range or sealed-enclosure qualification was performed here.
+
+The cylinder-trim update keeps this schema unchanged. Its fourteen proposal floats remain untrimmed base demands. Applied per-cylinder PW/advance/fuel/duty and masks are available through web/JSON/engine MSL002, not this radio frame. Receivers must not present the scalar PW/advance as the applied value for every cylinder.

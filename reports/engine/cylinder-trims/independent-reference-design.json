@@ -1,0 +1,285 @@
+{
+  "reviewer": "Independent agent /root/per_tooth_timing_review",
+  "reviewed_at_utc": "2026-11-03T19:51:38.893538+00:00",
+  "scope": "Read-only per-cylinder trim design/reference review. No source edits or subagents. Temporary probes compiled actual pinned conversion/interpolation code outside the repo. Root is implementing concurrently; this is not implementation signoff.",
+  "reference_sha": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+  "reference_tracked_source_clean": true,
+  "design_verdict": "Mass-before-deadtime fuel multipliers, physical-cylinder indexing, sequential-only enable and bounded signed spark offsets are a sound project design. They intentionally differ from pinned Speeduino total-PW trim, enable/fallback rules, offset encoding and wider spark limits. Declare those differences and validate actual per-cylinder events/dose rather than claiming byte-identical parity.",
+  "exact_pinned_fuel_semantics": {
+    "tables": "One6x6 table per primary injection schedule/channel, up to INJ_CHANNELS;36uint8 cells plus6RPM and6load bins each. It is not one global trim map. The reference supports8channels; this project increment has4 physical-cylinder maps.",
+    "lookup": "applyFuelTrim uses get3DTableValue(trimTable,current.fuelLoad,current.RPM), then FUEL_TRIM.toUser. RPM factor100 and load factor2. Load is the configured fuel-load source, not necessarily MAP on every Speeduino tune.",
+    "axes_and_serialization": "Actual native runtime axisX/axisY are ascending: lookup uses std::lower_bound, and upstream tests define minimum=front/maximum=back. Older table3d.h comments claiming inverted axes are stale. storage.cpp serializes Y in reverse for backward compatibility; native table population should use ascending axes and verify corner orientation.",
+    "formula": "For pw!=0 and page6.fuelTrimEnabled, decoded trimPct!=0 gives pw=percentageApprox(uint8_t(100+trimPct),pw). This scales the entire already-computed primary pulse, including injector opening/dead time. Zero trim returns the original PW without percentage rounding.",
+    "enable": "Setup clears fuelTrimEnabled unless configured page2.injLayout is Sequential. At runtime applyFuelTrim checks only the retained flag and nonzeroPW, not current effective layout or Full sync. Configured Sequential can fall back to Semi during Partial sync without clearing this flag; trim then still affects the active primary/bank schedules.",
+    "staging": "Only primary schedules use trimTables[index-1]. Staged secondary schedules receive pulse_widths.secondary without individual trim in assignSecondaryPws.",
+    "limits": "The INI exposes relative percentages\u221250..+50. applyFuelTrim itself does not clamp to that UI range. Per-channel trim occurs after computePulseWidths applied base PW/duty limits; there is no corresponding post-trim duty check in this assignment path. Large malformed raw values and uint16 narrowing are not behavior to copy.",
+    "locations": [
+      "speeduino/scheduler_fuel_controller.cpp:295-311",
+      "speeduino/scheduler_fuel_controller.cpp:365-371",
+      "speeduino/scheduler_fuel_controller.cpp:814-820",
+      "speeduino/scheduler_fuel_controller.cpp:848-918",
+      "speeduino/fuel_calcs.cpp:247-261",
+      "speeduino/table3d_axes.h:24-27",
+      "reference/speeduino.ini:800-830"
+    ]
+  },
+  "upstream_offset_mismatch": {
+    "finding": "Pinned INI declares raw\u2212128 for the fuel trim table; pinned firmware FUEL_TRIM translate is\u2212127 despite its comment saying128. Thus UI zero raw128 decodes as+1percent in this source.",
+    "locations": [
+      "speeduino/units.h:158-159",
+      "reference/speeduino.ini:800-828",
+      "test/test_fuel_controller/test_pw_applyPwToInjectorChannels.cpp:92-102"
+    ],
+    "why_existing_tests_miss_it": "The tests initialize tables with FUEL_TRIM.toRaw(percent), so their zero is127 and they do not compare the INI encoding.",
+    "actual_conversion_probe": [
+      {
+        "raw": 78,
+        "decoded_pct": -49
+      },
+      {
+        "raw": 118,
+        "decoded_pct": -9
+      },
+      {
+        "raw": 127,
+        "decoded_pct": 0
+      },
+      {
+        "raw": 128,
+        "decoded_pct": 1
+      },
+      {
+        "raw": 138,
+        "decoded_pct": 11
+      },
+      {
+        "raw": 178,
+        "decoded_pct": 51
+      }
+    ],
+    "actual_percent_probe_pw5000us": [
+      {
+        "intended_pct": -50,
+        "encoded_raw": 77,
+        "output_us": 2500
+      },
+      {
+        "intended_pct": -20,
+        "encoded_raw": 107,
+        "output_us": 4004
+      },
+      {
+        "intended_pct": 0,
+        "encoded_raw": 127,
+        "output_us": 5000
+      },
+      {
+        "intended_pct": 10,
+        "encoded_raw": 137,
+        "output_us": 5498
+      },
+      {
+        "intended_pct": 20,
+        "encoded_raw": 147,
+        "output_us": 5996
+      },
+      {
+        "intended_pct": 50,
+        "encoded_raw": 177,
+        "output_us": 7500
+      }
+    ],
+    "benchmark_rule": "Record raw cell bytes, intended project multiplier and actual decoded reference percentage. For desired project multiplierPpercent, use FUEL_TRIM.toRaw(P\u2212100) to configure an intended reference relative trim. Do not blindly use128 as neutral or add128 to desired relative trims. Preserve the pinned source unchanged and document the INI discrepancy."
+  },
+  "actual_table_probe": {
+    "method": "Compiled actual table3d.h/get3DTableValue plus the pinned production table3d_interpolate.cpp object; no replacement interpolation formula.",
+    "axisX_raw_rpm100": [
+      5,
+      10,
+      20,
+      30,
+      40,
+      60
+    ],
+    "axisY_raw_load2": [
+      5,
+      15,
+      25,
+      35,
+      45,
+      55
+    ],
+    "cells": "row-major intended decoded percentage=\u221220+4*y+2*x, encoded with FUEL_TRIM.toRaw",
+    "lookups": [
+      {
+        "rpm": 500,
+        "load": 10,
+        "raw": 107,
+        "decoded_pct": -20
+      },
+      {
+        "rpm": 1500,
+        "load": 40,
+        "raw": 116,
+        "decoded_pct": -11
+      },
+      {
+        "rpm": 6000,
+        "load": 110,
+        "raw": 137,
+        "decoded_pct": 10
+      },
+      {
+        "rpm": 0,
+        "load": 0,
+        "raw": 107,
+        "decoded_pct": -20
+      },
+      {
+        "rpm": 9000,
+        "load": 200,
+        "raw": 137,
+        "decoded_pct": 10
+      }
+    ]
+  },
+  "exact_pinned_spark_semantics": {
+    "shape": "Eight signed int8 scalar ignition offsets, not6x6 ignition trim tables. INI UI bounds are\u221220..+20degrees with zero neutral.",
+    "sign": "Positive offsets add advance; negative offsets retard. Each ignition schedule n uses ignTrim[n\u22121].",
+    "enable": "Nonsequential setup zeroes ignTrim[]. During calculations offsets apply only when configured sparkMode is Sequential AND decoder sync is Full. Partial/wasted fallback ignores ignition trim, unlike the retained fuel flag behavior.",
+    "formula_and_limit": "getIgnitionTrimmedAdvance sums int16(baseAdvance)+int16(ignTrim), then clamps to int8 bounds\u2212128..127. It does not impose the project\u22125..40degree range. The resulting per-schedule advance is converted into discharge/charge angles.",
+    "locations": [
+      "speeduino/scheduler_ignition_controller.cpp:33-40",
+      "speeduino/scheduler_ignition_controller.cpp:393-397",
+      "speeduino/scheduler_ignition_controller.cpp:508-512",
+      "speeduino/scheduler_ignition_controller.cpp:587-638",
+      "speeduino/config_pages.h:854",
+      "reference/speeduino.ini:1444-1451"
+    ]
+  },
+  "comparison_with_project": {
+    "fuel": "Project multiplierP in50..150percent applies to metered fuel mass before one opening deadtime: PW=q*(P/100)+D, where q is base effective fuel-on duration. Speeduino equivalent relative trim scales PW=(q+D)*(P/100), plus documented fixed-point rounding. Difference is D*(P/100\u22121), not an implementation error.",
+    "numerical_example": {
+      "effective_fuel_on_ms": 2,
+      "deadtime_ms": 1,
+      "base_total_ms": 3,
+      "project_120pct_ms": 3.4,
+      "speeduino_20pct_ideal_ms": 3.6,
+      "project_80pct_ms": 2.6,
+      "speeduino_minus20pct_ideal_ms": 2.4
+    },
+    "spark": "Project planned/draft offset range\u00b110degrees is a deliberate subset of Speeduino UI\u00b120. Final running totals remain\u22125..40; cranking totals should retain\u22125..15, with visible clamp flags.",
+    "protection_order": "Clamp the cylinder nominal advance first, then subtract mandatory soft-limit retard and enforce its lower bound. Clamping raw+trim\u2212retard only once can make a positive trim cancel the entire soft retard while the nominal was already saturated.",
+    "observed_parent_response": "Latest draft now uses clamp(demand,\u22125,cranking?15:40) before retard, separate spark-clamp/retard-floor masks, per-cylinder PW/duty capacity checks, and physical-cylinder demand arrays. These were inspected, not fully implementation-tested in this design review.",
+    "scope_of_enable": "Reject enabling cylinder trims in batch/wasted. Keep stored calibration neutral/disabled or preserved explicitly. Strict project phase gating means no Partial-sync trimmed actuator events; reference fallback behavior should be classified separately.",
+    "capacity": "Check every applied cylinder PW and duty after trim. One channel crossing the carrier limit should inhibit all outputs before a pulse starts. A safe negative trim may reduce an excessive untrimmed base, so scheduler/executor validation must use actual channel demands rather than the old scalar alone."
+  },
+  "physical_channel_mapping": {
+    "project_arrays": "PhysicalC1,C2,C3,C4. Changing firing order changes phases, not the meaning/index of a stored trim.",
+    "default_reference_schedules": "Speeduino schedules1,2,3,4 are firing-order channels corresponding to physicalC1,C3,C4,C2 for this benchmark. Configure reference trimTables/ignTrim in[C1,C3,C4,C2] order.",
+    "physical_phases_deg_c1_to_c4": [
+      0,
+      540,
+      180,
+      360
+    ],
+    "cam": "Trims must not change cam_sync_deg, phase parity or firing order. The independent benchmark physical cam remains450ATDC C1/raw shaft540 with triggerAngle\u221290. Wrong-stroke events remain negative controls; trim must never mask them in timing metrics.",
+    "event_latching": "Once injector high, retain its original low timestamp despite new trim/table lookups. Once coil charging, latch the final physical-cylinder advance. A trim/config revision should follow the existing epoch/global-low path, not mutate live pending events."
+  },
+  "decisive_native_tests": [
+    {
+      "name": "neutral_and_disabled",
+      "test": "Disabled tables and enabled100percent/0degree trims preserve baseline outputs exactly. Enabling with batch/wasted is rejected. Invalid axes, sizes, nonfinite values, bools/fractions, out-of-range cells/offsets and unknown JSON keys are rejected without mutating saved/runtime tune."
+    },
+    {
+      "name": "one_physical_cylinder",
+      "test": "Set physicalC2 fuel120percent and spark\u22123degrees only. Check actual INJ2 width and COIL2 phase;C1/C3/C4 remain baseline. Repeat with a different valid firing order to expose order-slot indexing. Independently compute expected physical phases and demand from fixture inputs, not solely exported event metadata."
+    },
+    {
+      "name": "deadtime_is_not_trimmed",
+      "test": "Use effective fuel-on2ms and deadtime1ms: project120percent produces3.4ms,80percent2.6ms. Repeat across battery/deadtime values; compare against expected pinned total-PW semantics rather than requiring false parity."
+    },
+    {
+      "name": "real_lookup_map",
+      "test": "Four asymmetric corners and midpoint, nonuniform RPM/load axes, endpoint clamping, and only one cylinder varied. Compare physical locations against actual pinned get3DTableValue; declare RPM100/load2 quantization and percentageApprox tolerance."
+    },
+    {
+      "name": "individual_capacity",
+      "test": "One trimmed channel crosses15ms or allowed720period duty while all others/scalar mean remain below; all outputs inhibited and the correct cylinder bit reported. Also test all negative trims reducing an excessive base to legal actual channels."
+    },
+    {
+      "name": "spark_protection",
+      "test": "Base40+trim10 near soft limit still receives mandatory retard after nominal clipping. Crank15+trim10 remains15. Negative trim near\u22125 reports the clamp/floor. Trims must not defeat rev/sensor/cam cuts."
+    },
+    {
+      "name": "commit_and_cut",
+      "test": "Changes in lookup demand near scheduled start preserve or explicitly skip complete fuel shots, open injector low remains fixed, final per-cylinder advance latches at dwell start, and a tune-epoch change or cam fault while high uses global-low with no stale event."
+    },
+    {
+      "name": "actual_reference",
+      "test": "Configure actual production6x6 tables with known raw encodings and signed ignTrim values. Assert configured and effective Sequential/Full modes plus per-channel PW/discharge angles; retain neutral and Partial fallback controls. No formula clone or patched production trim function."
+    },
+    {
+      "name": "configuration_and_debug",
+      "test": "Atomic save/reload, migration to neutral fields, own-signature protocol/MSQ roundtrip, and UI/MSL display physical-cylinder applied fuel%, final PW/duty/advance and capacity/clamp masks. Distinguish base legacy scalars from applied cylinder values."
+    }
+  ],
+  "decisive_external_plant_tests": {
+    "independent_unequal_flow": {
+      "physical_injector_flow_factors": [
+        1,
+        0.9,
+        1.08,
+        0.95
+      ],
+      "common_deadtime_first": true,
+      "project_mass_correction_percent": [
+        100,
+        111.11111111111111,
+        92.59259259259258,
+        105.26315789473685
+      ],
+      "test": "Use fixed plant factors independent of controller trim data. Compare untrimmed and corrected per-cylinder delivered mass/lambda/combustion work at multiple loads. Deliberately swapC2/C3 corrections as a negative control.",
+      "reference_mapping": "For identical desired delivered dose, Speeduino total-PW correction depends on base q and D: P_ref=(D+q/f)/(D+q), not simply1/f. Either map/declaratively calibrate that table or apply identical displayed trim values and document the expected dosing difference."
+    },
+    "unequal_air_distribution": "Use independent cylinder air factors that average1, e.g[.97,1.04,.92,1.07], so the shared manifold mass accounting remains consistent. Applied fuel multipliers matching those factors should reduce per-cylinder lambda spread. Preserve and report air/fuel/energy ledgers.",
+    "unequal_combustion_timing": "Give the empirical plant fixed per-cylinder optimum-advance offsets, e.g[\u22123,+2,+5,\u22124]degrees. Keep physical compression TDCs unchanged. Test known offset trims using a declared steady dynamometer point first, then free-shaft transients/convergence.",
+    "required_metrics": [
+      "actual per-cylinder electrical PW and inferred effective fuel-on",
+      "per-cylinder delivered fuel and trapped charge",
+      "per-cylinder synthetic lambda and misfire/work distribution",
+      "actual720degree spark angle versus independently known final cylinder demand",
+      "global RPM and lambda only as supplementary aggregate metrics",
+      "energy/fuel/air residuals and step convergence"
+    ],
+    "limits": "The existing single wideband/aggregate lambda cannot identify opposing cylinder errors. Synthetic per-cylinder lambda/work are plant oracle data, not newly measured physical sensors. Deadtime mismatch should be a separate limitation case; constant fuel trim cannot calibrate unequal injector latency across all loads."
+  },
+  "limits": [
+    "This is a design/reference review, not completed trim implementation acceptance.",
+    "The production reference remains pinned and unmodified. Offset and fallback observations apply to that SHA.",
+    "Native/empirical plant tests do not establish real injector calibration, combustion safety, physical ECU timing, automotive qualification or live TunerStudio compatibility."
+  ],
+  "reference_source_sha256": {
+    "speeduino/scheduler_fuel_controller.cpp": "625be32b39e521f4dad30495fab907bb5fa1cc2aad89e8c29df666d3ee09389a",
+    "speeduino/scheduler_ignition_controller.cpp": "6b97559534a04e70baeb2dd6cd7b4daf907e33b56d97cd827f854dc6655c156b",
+    "speeduino/fuel_calcs.cpp": "f5c6d867e995a8269fa3071e9719387052e1cfe0acaae350c865aa7f8fa59bb1",
+    "speeduino/units.h": "d6a215c440fd941e8fdfacc7436cb6758d879975bd14d8c02ab095249f0a266c",
+    "speeduino/table3d.h": "7584c1cceaa9d522c6e6a964c2b9fc2ceb9b0ebc7857180c5e05265819c739af",
+    "speeduino/table3d_axes.h": "89039a90cfc081db453ee809a9f4848e065f92e1c4bb8516c2ad722239d39373",
+    "speeduino/table3d_interpolate.h": "d6070388447232bc6e1ce0b9fcb36e9079c7d4f679b2050e1950bd6f7deb6f3f",
+    "speeduino/table3d_interpolate.cpp": "cce925d15f8ea9b3019846ef0ef0a2204ecb08fdd60e6c6d4641c54bf1a684bf",
+    "speeduino/table2d.h": "63341db5c4fb19d561b17ae3ff7d53635bbba81b7b4e8031c80137c9df226f54",
+    "speeduino/storage.cpp": "0719ca79ed7f9ce483c5127af327d0a9613fbb89e4c84e5530f6829bd93a0bac",
+    "speeduino/maths.h": "71c073c1818bd981eeff1f457a9fb9ce8220ce6003a7ff232280e205c295b570",
+    "reference/speeduino.ini": "60bb12a911281255667953a087c0ddd7ef8e69e1c250f5172d74eeb2752d298a",
+    "test/test_fuel_controller/test_pw_applyPwToInjectorChannels.cpp": "dbf100251569d6c32e7293c333a9d9b7ceb9dfa9adbbcc30e3c04ff7b8d0efaa",
+    "test/test_ign_controller/test_controller_calcs.cpp": "d75f091f405991c42aba629fa3653e25638e931385f4b4689a23860593e2959a"
+  },
+  "project_snapshot_sha256": {
+    "firmware/include/ecu/engine.hpp": "6a79cf871a54d264e461960a49e8702fd45f29cc3387bec8a001748c6f1bc44c",
+    "firmware/include/ecu/engine_scheduler.hpp": "a1840aaf611b3169a9fdbd4167dc2ae82b69d42aef1ed4eecd2bebe986dd15de",
+    "tools/engine_research_plant.py": "d2730e3d21a172e008879b836988c5ab815cd926dc97fc7ef752284c0339397e",
+    "tools/speeduino_sim.cpp": "9df8f262fb8c8e74a41ce74a40c2d207f38c255d7fe3d32a5f84d5c465998304",
+    "tools/speeduino_runtime.py": "9e694a3b39e9c1bdb6f85a2a15a9f255ec89a64a43fe8746c3e436776fa154d9"
+  }
+}

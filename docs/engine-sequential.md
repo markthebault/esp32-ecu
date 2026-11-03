@@ -4,6 +4,8 @@ The shared firmware/native core supports batch injection with wasted COP, or seq
 
 The existing carrier already has four injector commands, four smart-coil commands and a protected Hall cam input at J18. Crank is J17. This software increment does not change the PCB, BOM, module footprint, case or manufacturing records. Their electrical, mechanical and environmental qualification remains undone.
 
+The current [cylinder update](engine-cylinder-trims.md) advances JSON to schema3 and offline tuning to own003. Exact older documents migrate with neutral trims; the002 files and evidence below are retained history.
+
 ## Configuration
 
 Engine JSON schema2 adds `timing` and permits `strategy: sequential_4cyl`. Batch/wasted remains the default. The UI exposes strategy, firing order, injection end angle and cam reference/window, together with phase status, reason, rejection count and loss count.

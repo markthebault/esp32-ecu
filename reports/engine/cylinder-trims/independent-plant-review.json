@@ -1,0 +1,473 @@
+{
+  "reviewer": "Independent per-tooth/reference reviewer; no production edits or children",
+  "review_scope": "Nine unequal-cylinder baseline cases, nine transient/convergence cases, six independently generated recaptures/isolated controls; saved raw pulse streams, physical-cylinder angle oracle and mass/energy accounting.",
+  "verdict": "No blocking implementation/reference defect found in this bounded comparison. Current balancing claims are supported. This does not establish a calibrated engine, numerical ranking of controllers, target electrical/IRQ behavior, live TunerStudio integration or physical qualification.",
+  "source_and_binary_attestation": {
+    "baseline_recorded_sources": 10,
+    "transient_recorded_sources": 43,
+    "all_current_sources_match": true,
+    "pinned_speeduino_commit": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+    "pinned_speeduino_worktree_clean": true,
+    "reference_binaries": {
+      "16": {
+        "manifest_sha256": "e83907069ca03ac11aa6733f5eafa282590ff2f93c4c5d265f69b54071ebeffa",
+        "actual_executable_sha256": "a6764176badcc7ef78ed86446ea36635bfcc6700ab94e2d8b1f639ab26bb7a06",
+        "manifest_matches": true,
+        "speeduino_commit": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+        "unit_test": false
+      },
+      "32": {
+        "manifest_sha256": "e87fff745cb4e8b4be83d58aa1f0ddd37c370f449f08cebb23e90e2d57b3f1fc",
+        "actual_executable_sha256": "78bb71def3f62598e75c9a6b1d5ccf4450cb95d2f36f018ba78283b0dde118ae",
+        "manifest_matches": true,
+        "speeduino_commit": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+        "unit_test": false
+      }
+    },
+    "fmu": {
+      "fmu_sha256": "8f8ca49be7c658ba0ef531b4ae6cd3f0095176fd46a3fafc930181d7716abff7",
+      "manifest_sha256": "0ce4c20e58961bdf380999654a3a0562e0711d5111aa0b8873b96258f2807fc7",
+      "wrapper_sha256": "303df3396c660d1c4f8da48f19c698a6f63c46d1050c7964b92fba56be653c3c"
+    },
+    "current_target_library_sha256": "0cd29c01db20a385258714591e89313eb8912ddd69db4f6883a3b166fdc620e2",
+    "limitation": "Original nine baseline cases did not record live executable digests at creation. Current binary/source consistency, later live attestations and independently rerun matching fine/isolated fixtures support reproducibility but do not retroactively prove a runtime binary identity absent that original attestation."
+  },
+  "checks": {
+    "baseline_replay_passed": true,
+    "transient_replay_passed": true,
+    "independent_factorial_passed": true,
+    "independent_extra_edge_replay": [
+      {
+        "case": "ours-both_fine",
+        "passed": true,
+        "errors": [],
+        "fuel_pulse_ledger_difference_mg": -5.125002644490451e-10,
+        "max_high_us": [
+          7431,
+          7217,
+          6936,
+          7438,
+          2804,
+          2805,
+          2805,
+          2806
+        ],
+        "sha256": "fd962b2fc31be1634249504519060040b2ba7a3f30fea61297cc2684db8267e4"
+      },
+      {
+        "case": "ours-fuel_only",
+        "passed": true,
+        "errors": [],
+        "fuel_pulse_ledger_difference_mg": 2.0054358174093068e-10,
+        "max_high_us": [
+          7431,
+          7205,
+          6936,
+          7452,
+          2805,
+          2804,
+          2804,
+          2805
+        ],
+        "sha256": "6ba5c65e74dfc30d3aa30dd7c8a24f1e3e9b473a5e3054a8e99362f4012b0d36"
+      },
+      {
+        "case": "ours-spark_only",
+        "passed": true,
+        "errors": [],
+        "fuel_pulse_ledger_difference_mg": 6.548361852765083e-11,
+        "max_high_us": [
+          7431,
+          6580,
+          7419,
+          7110,
+          2803,
+          2804,
+          2804,
+          2806
+        ],
+        "sha256": "e50404fee21252450749ba868978c0a10e896f405d658e286e91a9c47f66f4be"
+      },
+      {
+        "case": "speeduino-both_fine",
+        "passed": true,
+        "errors": [],
+        "fuel_pulse_ledger_difference_mg": -6.598384061362594e-10,
+        "max_high_us": [
+          5088,
+          5956,
+          6312,
+          6320,
+          2800,
+          2800,
+          2800,
+          2800
+        ],
+        "sha256": "e40f93509c6cb499091776d6ca6c6251f7c878a9efb03efbfa05d5bd598d1338"
+      },
+      {
+        "case": "speeduino-fuel_only",
+        "passed": true,
+        "errors": [],
+        "fuel_pulse_ledger_difference_mg": 5.6843418860808015e-11,
+        "max_high_us": [
+          5088,
+          5956,
+          6312,
+          6320,
+          2800,
+          2800,
+          2800,
+          2800
+        ],
+        "sha256": "6e81134258f7706b3bc1d8b370a8cdebc1392b600ec2e3d7eb46ae6a0048b37f"
+      },
+      {
+        "case": "speeduino-spark_only",
+        "passed": true,
+        "errors": [],
+        "fuel_pulse_ledger_difference_mg": 2.7557689463719726e-10,
+        "max_high_us": [
+          5088,
+          5516,
+          6652,
+          6152,
+          2800,
+          2800,
+          2800,
+          2800
+        ],
+        "sha256": "eb75cf2714b3979fa7da71cce38c21c03685ce70d22e69a39c1abe05a74adc59"
+      }
+    ],
+    "disabled_neutral_execution_exact": {
+      "ours": {
+        "edges": true,
+        "combustions": true,
+        "spark_timing": true,
+        "metrics": true,
+        "summary": true
+      },
+      "speeduino": {
+        "edges": true,
+        "combustions": true,
+        "spark_timing": true,
+        "metrics": true,
+        "summary": true
+      }
+    },
+    "reference_policy_calibration": {
+      "neutral_base_pw_us": 3101,
+      "expected_full_pw_percent": [
+        100.0,
+        107.88634490666094,
+        94.74243672889268,
+        103.73563706104991
+      ],
+      "recorded_percent": [
+        100.0,
+        107.88634490666094,
+        94.74243672889268,
+        103.73563706104991
+      ],
+      "integer_percent_after_quantization": [
+        100,
+        108,
+        95,
+        104
+      ]
+    }
+  },
+  "scientific_assessment": [
+    "Physical flow factors and spark optimum offsets are fixed plant inputs, independent of controller outputs. Their use to derive known inverse compensation is an explicit oracle fixture, not blind tuning.",
+    "The plant advances a free shaft from actual delivered pulse mass and actual coil fall angle/dwell. Controller demand is diagnostic metadata and does not substitute for those delivered actuations. External Modelica MVEM is used for the hash-verified air path; combustion/free shaft are local empirical closures.",
+    "The same inverse-flow percentages deliberately expose a semantic difference: the project scales effective fuel time before deadtime, while pinned production Speeduino scales the complete PW with integer percentageApprox. Keeping that case and separately labeling total-PW calibration is fair; differing arbitrary reduction thresholds are behavior assertions rather than a common performance score.",
+    "Reference total-PW calibration is exactly derived from measured neutral PW3101us and fixed900us deadtime. Physical percentages [100,107.8863449,94.7424367,103.7356371] quantize to [100,108,95,104]. It is valid only at the declared operating point until separately tested elsewhere.",
+    "All original late-window attempted combustion records have positive modeled work, and lambda means/CVs and physical cylinder timing independently match. Raw pulse integration agrees with per-cylinder fuel ledgers within1.2e-10mg. No late duplicate/skipped720 coil cycle was found in the new sequential runs.",
+    "The rich final mixtures around0.77-0.78 establish balancing only. Both controllers use an uncalibrated common fixture, so this is not engine calibration, safe-tune validation or superiority evidence.",
+    "Event metadata differs: project spark demand is latched at dwell start; reference metadata is last sampled production demand. Startup/transient error maxima must not be compared as equivalent timing-quality scores. Independently checking immutable physical TDC plus fixed late running demand gives baseline peaks0.01025deg project and0.83282deg reference."
+  ],
+  "remaining_nonblocking_gaps": [
+    {
+      "where": "tools/run_cylinder_scenarios.py:34",
+      "issue": "The field named burns counts non-null-lambda attempts before the plant success filter. All current final-window attempts are successful, so current results are unaffected. Future scenarios should retain attempt/success/misfire counts separately."
+    },
+    {
+      "where": "tools/run_cylinder_scenarios.py:66",
+      "issue": "Baseline runner itself omits full edge alternation, all-channel, injector-bound and ledger assertions. The subsequent transient suite and this independent arithmetic replay cover all current cases. Preserve those dependencies when publishing a nine-case-only claim."
+    },
+    {
+      "where": "tools/run_cylinder_scenarios.py:83",
+      "issue": "Swapped negative control requires only >3x corrected spread, which becomes weak when corrected spread is tiny. Actual swapped cases are worse than disabled baseline (project0.28438 vs0.14382; reference0.34021 vs0.14456), so current negative controls are decisive. A future assertion should also compare with disabled and verify physical direction."
+    },
+    {
+      "where": "tools/run_cylinder_transients.py:55",
+      "issue": "Existing convergence metrics check final speed, total fuel and released work, not cylinder-balance metrics. Independent recaptures confirm balance at125us, but reference work CV changes from0.000984 to0.002112. Both are small; do not extend the reported<0.9% aggregate convergence claim to precise residual cylinder-spread/CV values."
+    },
+    {
+      "where": "tools/run_cylinder_scenarios.py:87",
+      "issue": "Baseline ten-source digest list does not bind all transitive parsing/phase/HAL dependencies or raw artifacts. The later43-source report and planned final artifact manifest address much of this. Keep runtime/live digest limitations explicit."
+    },
+    {
+      "where": "tools/run_cylinder_scenarios.py:63",
+      "issue": "Flat correction maps at one warm idle point do not validate an entire load/RPM trim surface or physically unequal cylinder filling. Prior gradient/native mapper tests help implementation coverage; future out-of-sample load/temperature/deadtime and independent unequal-air tests remain useful."
+    }
+  ],
+  "independent_factorial_results": [
+    {
+      "controller": "ours",
+      "fixture": "both_fine",
+      "step_us": 125,
+      "lambda_spread": 0.0001352777558912832,
+      "work_cv": 7.587510006673699e-05,
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.7737108518582537,
+          "mean_work_j": 70.73751946765776,
+          "mean_advance_deg": 6.997458646000693
+        },
+        {
+          "cylinder": 2,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.773846129614145,
+          "mean_work_j": 70.73249149830424,
+          "mean_advance_deg": 11.996614269222967
+        },
+        {
+          "cylinder": 3,
+          "attempts": 16,
+          "successes": 16,
+          "mean_lambda": 0.7737127276276291,
+          "mean_work_j": 70.733142314544,
+          "mean_advance_deg": 14.997436840586033
+        },
+        {
+          "cylinder": 4,
+          "attempts": 16,
+          "successes": 16,
+          "mean_lambda": 0.7737407536600025,
+          "mean_work_j": 70.7459471685953,
+          "mean_advance_deg": 6.005135044925737
+        }
+      ]
+    },
+    {
+      "controller": "ours",
+      "fixture": "fuel_only",
+      "step_us": 250,
+      "lambda_spread": 0.00018919873620160121,
+      "work_cv": 0.0396612922248163,
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.7758358886190043,
+          "mean_work_j": 72.98486783665204,
+          "mean_advance_deg": 9.999120086375235
+        },
+        {
+          "cylinder": 2,
+          "attempts": 16,
+          "successes": 16,
+          "mean_lambda": 0.7756631495610143,
+          "mean_work_j": 69.86368884286506,
+          "mean_advance_deg": 9.998306379631686
+        },
+        {
+          "cylinder": 3,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.7757189175750073,
+          "mean_work_j": 66.26943189327412,
+          "mean_advance_deg": 9.996941303418135
+        },
+        {
+          "cylinder": 4,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.7756466898828027,
+          "mean_work_j": 73.11970870962388,
+          "mean_advance_deg": 9.99653000319037
+        }
+      ]
+    },
+    {
+      "controller": "ours",
+      "fixture": "spark_only",
+      "step_us": 250,
+      "lambda_spread": 0.14347324374528003,
+      "work_cv": 0.02346547477832717,
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.7732751354551679,
+          "mean_work_j": 70.50511405960515,
+          "mean_advance_deg": 6.998016265118592
+        },
+        {
+          "cylinder": 2,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.859386147199306,
+          "mean_work_j": 72.69188982221401,
+          "mean_advance_deg": 11.998644101932102
+        },
+        {
+          "cylinder": 3,
+          "attempts": 16,
+          "successes": 16,
+          "mean_lambda": 0.7159129034540259,
+          "mean_work_j": 68.24593952927219,
+          "mean_advance_deg": 14.997277916671464
+        },
+        {
+          "cylinder": 4,
+          "attempts": 16,
+          "successes": 16,
+          "mean_lambda": 0.8139360651033867,
+          "mean_work_j": 71.7211420206055,
+          "mean_advance_deg": 6.005373897191021
+        }
+      ]
+    },
+    {
+      "controller": "speeduino",
+      "fixture": "both_fine",
+      "step_us": 125,
+      "lambda_spread": 0.0036444068547183406,
+      "work_cv": 0.0021115899468252173,
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.7773159180820746,
+          "mean_work_j": 70.60720065201762,
+          "mean_advance_deg": 6.261757780611515
+        },
+        {
+          "cylinder": 2,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.7783574808844367,
+          "mean_work_j": 70.85761388528607,
+          "mean_advance_deg": 11.596873788852827
+        },
+        {
+          "cylinder": 3,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.7747130740297183,
+          "mean_work_j": 70.48066298485219,
+          "mean_advance_deg": 14.226581658225525
+        },
+        {
+          "cylinder": 4,
+          "attempts": 16,
+          "successes": 16,
+          "mean_lambda": 0.7759512690353824,
+          "mean_work_j": 70.79228197091895,
+          "mean_advance_deg": 5.554777227161594
+        }
+      ]
+    },
+    {
+      "controller": "speeduino",
+      "fixture": "fuel_only",
+      "step_us": 250,
+      "lambda_spread": 0.0027157346873321053,
+      "work_cv": 0.04316131962460163,
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "attempts": 16,
+          "successes": 16,
+          "mean_lambda": 0.7829364969671108,
+          "mean_work_j": 73.19724810808196,
+          "mean_advance_deg": 9.623404569610557
+        },
+        {
+          "cylinder": 2,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.7818691349455321,
+          "mean_work_j": 69.72883522044022,
+          "mean_advance_deg": 9.608428561107333
+        },
+        {
+          "cylinder": 3,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.7802207622797787,
+          "mean_work_j": 65.90622761735372,
+          "mean_advance_deg": 9.59312066705849
+        },
+        {
+          "cylinder": 4,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.7814351991038858,
+          "mean_work_j": 73.3495192756909,
+          "mean_advance_deg": 9.624422868530383
+        }
+      ]
+    },
+    {
+      "controller": "speeduino",
+      "fixture": "spark_only",
+      "step_us": 250,
+      "lambda_spread": 0.1435489710515334,
+      "work_cv": 0.02362223529045286,
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "attempts": 16,
+          "successes": 16,
+          "mean_lambda": 0.7760981889573658,
+          "mean_work_j": 70.47889432008348,
+          "mean_advance_deg": 6.308682452998255
+        },
+        {
+          "cylinder": 2,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.8620556079841146,
+          "mean_work_j": 72.58225582309782,
+          "mean_advance_deg": 11.267965155538695
+        },
+        {
+          "cylinder": 3,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.7185066369325812,
+          "mean_work_j": 68.10802439117379,
+          "mean_advance_deg": 14.132912205608834
+        },
+        {
+          "cylinder": 4,
+          "attempts": 15,
+          "successes": 15,
+          "mean_lambda": 0.8168399647987542,
+          "mean_work_j": 71.61971268513132,
+          "mean_advance_deg": 5.2455706718576645
+        }
+      ]
+    }
+  ],
+  "evidence_sha256": {
+    ".cache/engine/cylinder-review/comparison-independent-audit.py": "2a25ee9038cca7522265e6fc8bbc4dc30f11f8e6189f1e43ff3157b33377df72",
+    ".cache/engine/cylinder-review/comparison-independent-replay.json": "670497f77ed415c29e1b2210daee3daab2dd8c4a569fe6febd5e0305758f9d76",
+    ".cache/engine/cylinder-review/comparison-transient-replay.json": "4d724ac523ac9aef889382aecb99c197a29ef16aefb81f8341aa7cbe1243eb0d",
+    ".cache/engine/cylinder-review/comparison-factorial-probe.py": "8566fbf12f69010ab5217c402833199bd721dfdb893af84794c87d1d27592be8",
+    ".cache/engine/cylinder-review/comparison-factorial-probe.json": "7692c72cf845f94b71aa113dde5046c09f992ee55d8f31f09fb6f014b2e45c0b"
+  },
+  "production_files_edited": false,
+  "all_review_checks_passed": true
+}

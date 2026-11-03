@@ -67,7 +67,11 @@ class ResearchPlant:
     One positive shaft direction; no compression ripple, knock, emissions or
     exhaust gas dynamics. Spark timing response and cold behavior are empirical.
     """
-    def __init__(self,cold=False):
+    def __init__(self,cold=False,injector_flow_factors=None,optimum_spark_offsets=None):
+        self.injector_flow_factors=list(injector_flow_factors or [1]*4)
+        self.optimum_spark_offsets=list(optimum_spark_offsets or [0]*4)
+        if len(self.injector_flow_factors)!=4 or any(not math.isfinite(v) or not .5<=v<=1.5 for v in self.injector_flow_factors):raise ValueError('Four bounded independent injector flow factors required')
+        if len(self.optimum_spark_offsets)!=4 or any(not math.isfinite(v) or not -10<=v<=10 for v in self.optimum_spark_offsets):raise ValueError('Four bounded independent spark optimum offsets required')
         self.air=AirPath();self.air_state=self.air.initial
         self.rpm=0.;self.angle=0.;self.tps=0.;self.clt=0. if cold else 85.
         self.iat=25.;self.battery=14.;self.map_kpa=100.;self.lambda_sensor=1.
@@ -81,6 +85,7 @@ class ResearchPlant:
         self.combustions=[];self.sparks=0;self.dwell_events=[];self.spark_errors=[]
         self.burned_chemical_j=0.;self.combustion_shaft_j=0.;self.heat_j=0.
         self.starter_j=0.;self.friction_j=0.;self.load_j=0.
+        self.cylinder_fuel_mg=[0.]*4;self.cylinder_burned_mg=[0.]*4;self.cylinder_scheduled_work_j=[0.]*4;self.cylinder_shaft_j=[0.]*4;self.cylinder_combustions=[]
 
     def edge(self,ch,high,t,commanded_advance=10,latest_demand=10,requested_dwell_us=2800):
         if not 0<=ch<8:raise ValueError('Virtual channel outside0..7')
@@ -109,19 +114,22 @@ class ResearchPlant:
         # manifold pressure after the valve closes cannot alter trapped air.
         air_mg=self.air_charge_mg[index];self.air_charge_mg[index]=0.
         lam=air_mg/(14.7*fuel) if fuel>1e-9 and air_mg>1e-9 else None
+        record=dict(time_s=t,cylinder=index+1,air_mg=air_mg,fuel_mg=fuel,lambda_value=lam,advance_deg=advance,scheduled_work_j=0.)
+        self.cylinder_combustions.append(record)
         self.lambda_valid=False
         if lam is not None:self.exhaust_lambda=min(3.,max(.2,lam))
         if lam is None or not .55<lam<1.65 or self.rpm<40 or energy<.002:
             self.unburned_mg+=fuel;return
         self.lambda_valid=True;self.last_exhaust_t=t
         burned=min(fuel,air_mg/14.7);self.burned_mg+=burned;self.unburned_mg+=fuel-burned
-        optimum=12+min(20,self.rpm/250)-5*(self.map_kpa/100)
+        optimum=12+min(20,self.rpm/250)-5*(self.map_kpa/100)+self.optimum_spark_offsets[index]
         efficiency=.27*math.exp(-((advance-optimum)/30)**2)*max(0,1-1.3*(lam-.95)**2)
         efficiency*=min(1,energy/.04)*(.75 if self.clt<30 else 1)
         chemical=burned*44.;work=chemical*efficiency
+        self.cylinder_burned_mg[index]+=burned;self.cylinder_scheduled_work_j[index]+=work;record['scheduled_work_j']=work
         self.burned_chemical_j+=chemical;self.heat_j+=chemical-work
         duration=max(.005,30/max(self.rpm,80))
-        self.combustions.append(dict(start=t,end=t+duration,rate=work/duration,remaining=work))
+        self.combustions.append(dict(start=t,end=t+duration,rate=work/duration,remaining=work,cylinder=index))
 
     def cut(self):
         # External removal of electrical drive is an inhibit, no fabricated
@@ -142,7 +150,7 @@ class ResearchPlant:
         dead_s=.9e-3  # fixed benchmark actuator; not a real injector calibration
         for cylinder,start in enumerate(self.injector_on):
             if start is not None:
-                mass=flow*max(0,t+dt-max(t,start+dead_s));self.fuel_mg+=mass
+                mass=flow*self.injector_flow_factors[cylinder]*max(0,t+dt-max(t,start+dead_s));self.fuel_mg+=mass;self.cylinder_fuel_mg[cylinder]+=mass
                 fraction=.45 if self.clt<30 else .05
                 self.wall_mg[cylinder]+=mass*fraction;self.port_mg[cylinder]+=mass*(1-fraction)
         tau=1.5 if self.clt<30 else .05
@@ -153,7 +161,7 @@ class ResearchPlant:
         for pulse in self.combustions:
             released=(pulse['remaining'] if t+dt>=pulse['end'] else
                       min(pulse['remaining'],pulse['rate']*max(0,min(t+dt,pulse['end'])-max(t,pulse['start']))))
-            pulse['remaining']-=released;available+=released
+            pulse['remaining']-=released;available+=released;self.cylinder_shaft_j[pulse['cylinder']]+=released*min(1,omega/20)
         self.combustions=[p for p in self.combustions if p['remaining']>1e-12]
         work=available*min(1,omega/20)
         self.heat_j+=available-work;self.combustion_shaft_j+=work

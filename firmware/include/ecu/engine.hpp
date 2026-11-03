@@ -7,12 +7,18 @@
 #include <cstdint>
 #include <cstring>
 #include <limits>
+#include "ecu/engine_limits.hpp"
 namespace ecu::engine {
 constexpr unsigned bins=16;
 struct Map {
  std::array<float,bins> rpm{80,200,400,600,800,1000,1200,1600,2000,2500,3000,3500,4000,5000,6000,8000};
  std::array<float,bins> load{10,15,20,25,30,35,40,45,50,55,60,70,80,90,100,110};
  std::array<float,bins*bins> cells{}; // row=load, column=RPM; values in physical units.
+};
+struct TrimMap {
+ std::array<float,6> rpm{80,800,1600,3000,5000,8000},load{10,30,50,70,90,110};
+ std::array<float,36> cells{}; // percent of effective fuel,100 is neutral.
+ TrimMap(){cells.fill(100);}
 };
 inline bool finite(double x){return std::isfinite(x);}
 inline bool range(double x,double lo,double hi){return finite(x)&&x>=lo&&x<=hi;}
@@ -22,11 +28,20 @@ template<std::size_t N>unsigned segment(const std::array<float,N>& a,double x){u
 template<std::size_t N>double interpolate(const std::array<float,N>& x,const std::array<float,N>& y,double v){
  auto i=segment(x,v);double f=std::clamp((v-x[i])/(x[i+1]-x[i]),0.0,1.0);return y[i]+(y[i+1]-y[i])*f;
 }
-inline double lookup(const Map&m,double rpm,double load){
+template<class Grid>inline double lookup(const Grid&m,double rpm,double load){
  unsigned x=segment(m.rpm,rpm),y=segment(m.load,load);
+ const auto width=m.rpm.size();
  const double fx=std::clamp((rpm-m.rpm[x])/(m.rpm[x+1]-m.rpm[x]),0.0,1.0),fy=std::clamp((load-m.load[y])/(m.load[y+1]-m.load[y]),0.0,1.0);
- auto a=m.cells[y*bins+x]*(1-fx)+m.cells[y*bins+x+1]*fx;
- auto b=m.cells[(y+1)*bins+x]*(1-fx)+m.cells[(y+1)*bins+x+1]*fx;return a*(1-fy)+b*fy;
+ auto a=m.cells[y*width+x]*(1-fx)+m.cells[y*width+x+1]*fx;
+ auto b=m.cells[(y+1)*width+x]*(1-fx)+m.cells[(y+1)*width+x+1]*fx;return a*(1-fy)+b*fy;
+}
+inline double lookup(const TrimMap&m,double rpm,double load){
+ const auto x=segment(m.rpm,rpm),y=segment(m.load,load);
+ const double fx=std::clamp((rpm-m.rpm[x])/(m.rpm[x+1]-m.rpm[x]),0.0,1.0),fy=std::clamp((load-m.load[y])/(m.load[y+1]-m.load[y]),0.0,1.0);
+ // Difference-form interpolation keeps a constant100% surface exactly neutral.
+ const double a=m.cells[y*6+x]+(m.cells[y*6+x+1]-m.cells[y*6+x])*fx;
+ const double b=m.cells[(y+1)*6+x]+(m.cells[(y+1)*6+x+1]-m.cells[(y+1)*6+x])*fx;
+ return a+(b-a)*fy;
 }
 enum class Strategy : std::uint8_t {BatchWasted,Sequential};
 inline const char* strategy_name(Strategy s){return s==Strategy::Sequential?"sequential_4cyl":"batch_wasted_4cyl";}
@@ -49,11 +64,22 @@ struct Tune {
  std::array<float,6> coolant_c{-40,0,20,40,70,110},warmup_pct{180,150,130,115,100,100},crank_pct{250,210,180,160,140,130};
  std::array<float,5> battery_v{8,10,12,14,16},deadtime_ms{2,1.5f,1.15f,.9f,.7f},dwell_ms{3.5f,3.3f,3,2.8f,2.5f};
  Map ve{},spark{},lambda{};
+ bool cylinder_trims_enabled=false;
+ std::array<TrimMap,4> cylinder_fuel{};
+ std::array<float,4> cylinder_spark_deg{}; // Physical cylinders1..4, not order slots.
  Tune(){ve.cells.fill(85);spark.cells.fill(15);lambda.cells.fill(1);}
 };
 inline const char* validate(const Tune&t){
  if(!t.revision||t.cylinders!=4)return "Only four-cylinder, four-stroke, even-fire profiles are implemented";
  if((t.strategy!=Strategy::BatchWasted&&t.strategy!=Strategy::Sequential)||!firing_order_valid(t.firing_order)||!range(t.injection_end_deg,0,719)||!range(t.cam_sync_deg,0,719)||!range(t.cam_window_deg,5,45))return "Invalid strategy, firing order or cam/injection reference";
+ if(t.cylinder_trims_enabled&&t.strategy!=Strategy::Sequential)return "Cylinder trims require the sequential four-cylinder strategy";
+ for(unsigned cylinder=0;cylinder<4;++cylinder){
+  const auto&m=t.cylinder_fuel[cylinder];
+  if(!range(t.cylinder_spark_deg[cylinder],-10,10)||!ascending(m.rpm)||!ascending(m.load))return "Invalid cylinder trim or axes";
+  for(auto v:m.rpm)if(!range(v,50,10000))return "Cylinder trim RPM axis out of range";
+  for(auto v:m.load)if(!range(v,5,110))return "Cylinder trim load axis out of range";
+  for(auto v:m.cells)if(!range(v,50,150))return "Cylinder fuel trim must be50-150percent";
+ }
  if(!range(t.displacement_cc,500,4000)||!range(t.injector_cc_min,100,1500)||!range(t.fuel_density_g_cc,.6,.9)||!range(t.stoich_afr,9,16))return "Invalid engine or injector specification";
  if(!range(t.cranking_rpm,100,800)||!range(t.crank_advance_deg,-5,15)||!range(t.rpm_limit,1500,8000)||!range(t.rpm_hysteresis,50,500)||!range(t.soft_limit_band,0,500)||t.cranking_rpm>=t.rpm_limit-t.rpm_hysteresis)return "Invalid starting/rev limit settings";
  if(!range(t.max_duty,.1,.85)||!range(t.max_injection_ms,1,15)||!range(t.max_dwell_ms,.5,3.5)||!range(t.tooth1_btdc_deg,0,359))return "Pulse limits exceed the current carrier contract";
@@ -84,6 +110,13 @@ struct Output {
  double rpm=0,ve_pct=0,target_lambda=1,advance_deg=0,pulse_ms=0,dwell_ms=0,deadtime_ms=0,air_mg=0;
  double warmup=1,afterstart=1,accel=1,ego=1,duty_pct=0,idle_pct=0;
  bool fuel_cut=false,spark_cut=false,pump=false,fan=false;
+ // Scalars retain the untrimmed base demand for compatible consumers. The
+ // scheduler uses these physical-cylinder demands when cylinder_data is true.
+ std::array<double,4> cylinder_pulse_ms{},cylinder_advance_deg{},cylinder_fuel_pct{100,100,100,100},cylinder_duty_pct{};
+ bool cylinder_data=false,cylinder_trims_enabled=false;
+ std::uint8_t cylinder_capacity_mask=0,cylinder_spark_clamp_mask=0,cylinder_retard_floor_mask=0;
+ double pulse_for(unsigned cylinder)const{return cylinder_data&&cylinder_trims_enabled?cylinder_pulse_ms[cylinder]:pulse_ms;}
+ double advance_for(unsigned cylinder)const{return cylinder_data&&cylinder_trims_enabled?cylinder_advance_deg[cylinder]:advance_deg;}
  // Any proposed edge belongs to the virtual/shadow executor, never GPIO.
  bool proposed_enabled()const{return faults==0&&state!=State::Stopped;}
 };
@@ -94,7 +127,7 @@ class Controller {
 public:
  void reset(){*this=Controller{};}
  Output step(const Tune&t,const Inputs&s,std::uint64_t now){
-  Output o;o.rpm=s.rpm;
+  Output o;o.rpm=s.rpm;o.cylinder_trims_enabled=t.cylinder_trims_enabled;
   const double dt=seen_&&now>=last_?(now-last_)/1e6:0;
   const bool timing=(!seen_||now>last_)&&dt<=.1;
   if(!seen_)boot_=now;
@@ -121,8 +154,9 @@ public:
   was_crank_=cranking;
   o.state=cranking?State::Cranking:(s.clt_c<70?State::Warmup:State::Running);
   o.ve_pct=lookup(t.ve,s.rpm,s.map_kpa);o.target_lambda=lookup(t.lambda,s.rpm,s.map_kpa);
-  o.advance_deg=cranking?t.crank_advance_deg:lookup(t.spark,s.rpm,s.map_kpa);
-  if(!cranking&&t.soft_limit_band>0&&s.rpm>t.rpm_limit-t.soft_limit_band)o.advance_deg=std::max(-5.0,o.advance_deg-10*(s.rpm-(t.rpm_limit-t.soft_limit_band))/t.soft_limit_band);
+  const double raw_advance=cranking?t.crank_advance_deg:lookup(t.spark,s.rpm,s.map_kpa);
+  const double retard=!cranking&&t.soft_limit_band>0&&s.rpm>t.rpm_limit-t.soft_limit_band?10*(s.rpm-(t.rpm_limit-t.soft_limit_band))/t.soft_limit_band:0;
+  o.advance_deg=std::max(-5.0,raw_advance-retard);
   o.deadtime_ms=interpolate(t.battery_v,t.deadtime_ms,s.battery_v);
   o.dwell_ms=interpolate(t.battery_v,t.dwell_ms,s.battery_v);
   o.warmup=interpolate(t.coolant_c,cranking?t.crank_pct:t.warmup_pct,s.clt_c)/100;
@@ -142,8 +176,25 @@ public:
   const double openings=t.strategy==Strategy::Sequential?1:2;
   o.pulse_ms=fuel_mg/(openings*flow_mg_ms)+o.deadtime_ms;
   const double rev_ms=60000/s.rpm,interval_ms=rev_ms*(t.strategy==Strategy::Sequential?2:1);o.duty_pct=o.pulse_ms/interval_ms*100;
-  if(!finite(o.pulse_ms)||o.pulse_ms>t.max_injection_ms||o.duty_pct>t.max_duty*100||o.dwell_ms>t.max_dwell_ms||o.dwell_ms>=rev_ms){o.faults|=Capacity;o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;o.pulse_ms=o.dwell_ms=0;return o;}
-  if(dfco_){o.state=State::Overrun;o.fuel_cut=true;o.pulse_ms=0;o.duty_pct=0;}
+  o.cylinder_data=true;o.cylinder_trims_enabled=t.cylinder_trims_enabled;
+  for(unsigned cylinder=0;cylinder<4;++cylinder){
+   const double pct=t.cylinder_trims_enabled?lookup(t.cylinder_fuel[cylinder],s.rpm,s.map_kpa):100;
+   const double demand=raw_advance+(t.cylinder_trims_enabled?t.cylinder_spark_deg[cylinder]:0);
+   const double nominal=std::clamp(demand,-5.0,cranking?15.0:40.0);
+   const double advance=nominal-retard;
+   o.cylinder_fuel_pct[cylinder]=pct;
+   o.cylinder_advance_deg[cylinder]=std::clamp(advance,-5.0,40.0);
+   if(demand!=nominal)o.cylinder_spark_clamp_mask|=1U<<cylinder;
+   if(advance!=o.cylinder_advance_deg[cylinder])o.cylinder_retard_floor_mask|=1U<<cylinder;
+   const double pulse=fuel_mg/(openings*flow_mg_ms)*(pct/100)+o.deadtime_ms;
+   const double duty=pulse/interval_ms*100;
+   o.cylinder_pulse_ms[cylinder]=pulse;o.cylinder_duty_pct[cylinder]=duty;
+   if(!finite(pulse)||pulse>t.max_injection_ms||duty>t.max_duty*100)o.cylinder_capacity_mask|=1U<<cylinder;
+  }
+  // Judge capacity on actual channel demand, so safe negative trims can reduce
+  // an otherwise excessive base demand. One failed channel inhibits all eight.
+  if(o.cylinder_capacity_mask||o.dwell_ms>t.max_dwell_ms||o.dwell_ms>=rev_ms){o.faults|=Capacity;o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;o.pulse_ms=o.dwell_ms=0;o.cylinder_pulse_ms.fill(0);o.cylinder_duty_pct.fill(0);return o;}
+  if(dfco_){o.state=State::Overrun;o.fuel_cut=true;o.pulse_ms=0;o.duty_pct=0;o.cylinder_pulse_ms.fill(0);o.cylinder_duty_pct.fill(0);}
   if(t.idle_enabled&&!cranking&&s.tps_pct<2){const double error=t.idle_target_rpm-s.rpm;idle_i_=std::clamp(idle_i_+error*t.idle_ki*dt,-20.0,40.0);o.idle_pct=std::clamp(20+error*t.idle_kp+idle_i_,0.0,100.0);}else idle_i_=0;
   return o;
  }
@@ -161,10 +212,10 @@ inline Plan plan_revolution(const Tune&t,const Output&o,std::uint64_t gap_us){
   const auto start=gap_us+offset;
   p.edges[p.count++]={start,channel,true};p.edges[p.count++]={start+width,channel,false};return true;
  };
- for(unsigned ch=0;ch<4;++ch)if(!o.fuel_cut&&!add(ch,t.tooth1_btdc_deg+180,o.pulse_ms*1000))return Plan{};
+ for(unsigned ch=0;ch<4;++ch)if(!o.fuel_cut&&!add(ch,t.tooth1_btdc_deg+180,o.pulse_for(ch)*1000))return Plan{};
  // Firing order 1-3-4-2; four smart coils fire once/revolution in wasted mode.
  constexpr double phase[4]={0,180,180,0};
- for(unsigned ch=0;ch<4;++ch)if(!o.spark_cut&&!add(ch+4,t.tooth1_btdc_deg+phase[ch]-o.advance_deg-o.dwell_ms*1000/rev_us*360,o.dwell_ms*1000))return Plan{};
+ for(unsigned ch=0;ch<4;++ch)if(!o.spark_cut&&!add(ch+4,t.tooth1_btdc_deg+phase[ch]-o.advance_for(ch)-o.dwell_ms*1000/rev_us*360,o.dwell_ms*1000))return Plan{};
  std::sort(p.edges.begin(),p.edges.begin()+p.count,[](const Edge&a,const Edge&b){return a.time_us<b.time_us||(a.time_us==b.time_us&&a.high<b.high);});p.valid=true;return p;
 }
 }

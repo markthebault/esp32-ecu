@@ -116,9 +116,13 @@ void recovery_tests(){
 void independent_high_and_short_pulse_tests(){
  for(bool tiny:{false,true}){
   Executor core;IO io;auto cmd=running();cmd.output.spark_cut=true;
-  cmd.output.pulse_ms=tiny?.001:3;cmd.max_injector_high_us=1000;
+  cmd.output.pulse_ms=tiny?.001:1;cmd.max_injector_high_us=1000;
   core.progress(1,io);core.command(cmd,1,io);
-  Executor::Candidate candidate;core.prepare(candidate,1000,100000);candidate.calculate(0,1000);
+  Executor::Candidate candidate;core.prepare(candidate,1000,100000);
+  // Inject a planner overshoot AFTER a valid command was accepted. The
+  // independent ISR high-time limit must still cut a faulty candidate plan.
+  if(!tiny)candidate.command.output.pulse_ms=3;
+  candidate.calculate(0,1000);
   assert(core.commit(candidate,1000,io)==Executor::Commit::Accepted);
   for(unsigned now=1000;now<48000;++now){
    if(now%1000==0)core.progress(now,io);

@@ -61,7 +61,7 @@ def engine_telemetry(packet,data_key):
     if any(math.isinf(value) for value in proposals) or math.isinf(cam_error):raise ValueError('Infinite engine value')
     age=lambda n:None if n==UINT32_MAX else n
     return dict(session=session,packet_sequence=packet_sequence,schema_version=schema,flags=flags,
-                source='target_control_observation' if source==1 else 'synthetic_control_observation',source_code=source,
+                source='target_control_observation' if source==1 else 'synthetic_control_observation',source_code=source,scalar_proposal_basis='untrimmed_base_demand',per_cylinder_available=False,
                 sample_age_ms=age(sample_age),control_age_ms=age(control_age),source_display_fresh=bool(flags&DISPLAY_FRESH),
                 tune_revision=tune,sensor_revision=sensors,proposal_sequence=proposal_sequence,phase_epoch=phase_epoch,phase_epoch_domain='external_configuration_context',
                 state_code=state,strategy_code=strategy,phase_reason_code=phase_reason,input_valid_mask=valid,

@@ -11,9 +11,9 @@ static const char* encode(cJSON*j){char*s=cJSON_PrintUnformatted(j);cJSON_Delete
 extern "C" void* engine_create(){return new EngineContext{};}
 extern "C" void engine_destroy(void*p){delete static_cast<EngineContext*>(p);}
 extern "C" const char* engine_canonicalize(const char*text){ecu::engine::Tune tune;static thread_local std::string canonical;if(!ecu::engine::canonical_tune(text,tune,canonical))return nullptr;return canonical.c_str();}
-extern "C" int engine_validate(const char*text){if(!ecu::web::safe_json(text,std::strlen(text)))return 0;auto*j=cJSON_ParseWithOpts(text,nullptr,true);ecu::engine::Tune t;bool ok=j&&ecu::engine::parse_tune(j,t);cJSON_Delete(j);return ok;}
+extern "C" int engine_validate(const char*text){if(!ecu::web::safe_json(text,std::strlen(text),ecu::engine::tune_maximum))return 0;auto*j=cJSON_ParseWithOpts(text,nullptr,true);ecu::engine::Tune t;bool ok=j&&ecu::engine::parse_tune(j,t);cJSON_Delete(j);return ok;}
 extern "C" int engine_configure(void*p,const char*text){
- if(!text||!ecu::web::safe_json(text,std::strlen(text)))return 0;
+ if(!text||!ecu::web::safe_json(text,std::strlen(text),ecu::engine::tune_maximum))return 0;
  auto*j=cJSON_ParseWithOpts(text,nullptr,true);ecu::engine::Tune candidate;
  const bool ok=j&&ecu::engine::parse_tune(j,candidate);cJSON_Delete(j);if(!ok)return 0;
  auto*c=static_cast<EngineContext*>(p);c->tune=candidate;c->decoder=ecu::engine::PhaseDecoder({c->slots,c->missing,c->max_rpm},ecu::engine::angle_config(c->tune));

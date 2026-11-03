@@ -7,8 +7,19 @@ struct AngleConfig {
  Strategy strategy=Strategy::BatchWasted;
  std::array<unsigned,4> firing_order{1,3,4,2};
  double injection_end_deg=540,cam_sync_deg=450,cam_window_deg=20;
+ double max_duty=.8,max_injection_ms=15;
 };
-inline AngleConfig angle_config(const Tune&t){return {t.tooth1_btdc_deg,t.max_dwell_ms,t.strategy,t.firing_order,t.injection_end_deg,t.cam_sync_deg,t.cam_window_deg};}
+inline AngleConfig angle_config(const Tune&t){return {t.tooth1_btdc_deg,t.max_dwell_ms,t.strategy,t.firing_order,t.injection_end_deg,t.cam_sync_deg,t.cam_window_deg,t.max_duty,t.max_injection_ms};}
+inline bool demand_valid(const AngleConfig&t,const Output&o,double rpm){
+ const bool sequential=t.strategy==Strategy::Sequential;
+ if((!sequential&&t.strategy!=Strategy::BatchWasted)||!range(t.max_injection_ms,1,15)||!range(t.max_duty,.1,double(.85f))||!range(t.max_dwell_ms,.5,3.5))return false;
+ if(!o.proposed_enabled())return true;
+ if(!range(rpm,50,8000)||!range(o.dwell_ms,.5,t.max_dwell_ms)||!finite(o.advance_deg)||
+    (o.cylinder_trims_enabled&&(!sequential||!o.cylinder_data)))return false;
+ const double interval_ms=60000/rpm*(sequential?2:1);
+ for(unsigned cylinder=0;cylinder<4;++cylinder)if((!o.fuel_cut&&(!range(o.pulse_for(cylinder),.001,t.max_injection_ms)||o.pulse_for(cylinder)/interval_ms>std::min(t.max_duty,.85)))||!range(o.advance_for(cylinder),-5,40))return false;
+ return true;
+}
 // Portable crank-angle event scheduler for native SIL. It has no GPIO writes.
 // Every decoded tooth refreshes pending deadlines. Injector close deadlines are
 // fixed once opened; advance latches at dwell start and phase/speed corrections
@@ -65,7 +76,7 @@ public:
   refresh_control(command_us,sampled_us);
   const bool sequential=t.strategy==Strategy::Sequential;
   const unsigned cycle_slots=slots*(sequential?2:1);const double span=sequential?720:360;
-  if(!slots||slots>120||index>=cycle_slots||!range(o.rpm,50,8000)||!range(t.max_dwell_ms,.5,3.5)||!range(o.dwell_ms,.5,t.max_dwell_ms)||(!o.fuel_cut&&!range(o.pulse_ms,.001,15))||!finite(o.advance_deg)||!range(t.tooth1_btdc_deg,0,359)||!firing_order_valid(t.firing_order)||!range(t.injection_end_deg,0,719)||(t.strategy!=Strategy::BatchWasted&&!sequential))return fail(StopReason::BadCommand);
+  if(!slots||slots>120||index>=cycle_slots||!demand_valid(t,o,o.rpm)||!range(t.tooth1_btdc_deg,0,359)||!firing_order_valid(t.firing_order)||!range(t.injection_end_deg,0,719))return fail(StopReason::BadCommand);
   const double step=360.0/slots;
   if(!initialized_){revolution_=0;angle_=index*step;us_per_degree_=60000000/o.rpm/360;}
   else{
@@ -84,7 +95,7 @@ public:
    if(!enabled){if(s.high)s.inhibited=true;else s=Slot{};continue;}
    if(s.inhibited)continue;
    const auto committed=s;
-   double phase=std::fmod(t.tooth1_btdc_deg+(coil?cylinder_phase[ch-4]-(s.high?s.advance:o.advance_deg):sequential?cylinder_phase[ch]+t.injection_end_deg:180),span);if(phase<0)phase+=span;
+   double phase=std::fmod(t.tooth1_btdc_deg+(coil?cylinder_phase[ch-4]-(s.high?s.advance:o.advance_for(ch-4)):sequential?cylinder_phase[ch]+t.injection_end_deg:180),span);if(phase<0)phase+=span;
    if(!s.phase_known){
     s.cycle=static_cast<std::int64_t>(std::floor((angle_-phase)/span))+1;s.phase_known=true;
    }else{
@@ -96,13 +107,25 @@ public:
    s.previous_phase=phase;
    double goal=s.cycle*span+phase;
    if(coil||sequential){
-    const auto requested=std::uint64_t(std::llround((coil?o.dwell_ms:o.pulse_ms)*1000));
+    const auto requested=std::uint64_t(std::llround((coil?o.dwell_ms:o.pulse_for(ch))*1000));
     if(!coil&&s.high)continue; // An open injector always retains its low edge.
     std::uint64_t end;
     // A new advance demand can arrive too late to charge a full dwell. Keep
     // the previously committed full-dwell firing for this cycle. Applying
     // an impossible update would either undercharge or skip a normal firing.
     const bool reachable=goal>angle_&&deadline(goal,end)&&end>now;
+    // Acceleration can bring the target tooth just ahead of a discharge
+    // already committed while charging. Retain that exact low edge only for
+    // bounded prediction/rounding error, including a <0.5us future goal whose
+    // deadline rounds to now. Never move the edge or relax maximum dwell.
+    if(coil&&s.high&&!reachable&&committed.pending&&committed.end>now&&
+       committed.end>=committed.start&&us_per_degree_>0){
+     const double target_offset_us=(goal-angle_)*us_per_degree_;
+     const auto remaining=committed.end-now;
+     const double late_deg=(double(remaining)-target_offset_us)/us_per_degree_;
+     if(target_offset_us<.5&&remaining<=25&&late_deg>=0&&late_deg<=.2&&
+        committed.end-committed.start<=std::uint64_t(std::llround(t.max_dwell_ms*1000))){s=committed;continue;}
+    }
     if(!s.high&&(!reachable||end-now<requested)&&committed.pending&&committed.start>=now&&committed.end>now){s=committed;continue;}
     if(!s.high&&(!reachable||end-now<requested)){
      ++s.cycle;goal+=span;++skipped_initial_;if(!deadline(goal,end))return fail(StopReason::Deadline);
@@ -118,9 +141,9 @@ public:
      if(start<now){s.start=now;++shortened_;}else s.start=start;
      s.end=end;s.pending=true;
     }
-    if(!s.high)s.advance=o.advance_deg;
+    if(!s.high)s.advance=coil?o.advance_for(ch-4):0;
    }else if(!s.high){
-    const auto width=std::uint64_t(std::llround(o.pulse_ms*1000));
+    const auto width=std::uint64_t(std::llround(o.pulse_for(ch)*1000));
     if(!width||width>15000)return fail(StopReason::BadCommand);
     if(goal<=angle_)s.start=now;else if(!deadline(goal,s.start))return fail(StopReason::Deadline);
     if(s.start>UINT64_MAX-width)return fail(StopReason::Deadline);

@@ -79,6 +79,7 @@ class Handler(BaseHTTPRequestHandler):
   d=self.server.device
   if self.path in ('/','/index.html'):return self.reply(200,(R/'web/index.html').read_bytes(),'text/html; charset=utf-8')
   if self.path=='/trigger_logger.js':return self.reply(200,(R/'web/trigger_logger.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/cylinder_tuning.js':return self.reply(200,(R/'web/cylinder_tuning.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/engine_logger.js':return self.reply(200,(R/'web/engine_logger.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/api/session':return self.reply(200,dict(token=d.token,simulator=True))
   if self.path=='/api/config':
@@ -126,7 +127,8 @@ class Handler(BaseHTTPRequestHandler):
   if self.headers.get('Content-Type','').split(';')[0]!='application/json':return self.reply(415,{'error':'Use application/json.'})
   try:length=int(self.headers.get('Content-Length','0'))
   except ValueError:return self.reply(400,{'error':'Invalid length'})
-  if not 0<length<=16384:return self.reply(413,{'error':'Body must be 1-16384 bytes.'})
+  limit=24576 if self.path=='/api/engine/config' else 16384
+  if not 0<length<=limit:return self.reply(413,{'error':f'Body must be 1-{limit} bytes.'})
   body=self.rfile.read(length)
   if self.command=='POST' and self.path=='/api/radio':
    if len(body)>256:return self.reply(413,{'error':'Radio command exceeds 256 bytes.'})
