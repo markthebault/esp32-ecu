@@ -1,6 +1,7 @@
 #include "ecu/web_config.hpp"
 #include "ecu/espnow.hpp"
 #include "ecu/pins.hpp"
+#include "ecu/engine_service.hpp"
 #include "config_json.hpp"
 #include "web_assets.hpp"
 #include "driver/gpio.h"
@@ -137,6 +138,19 @@ esp_err_t radio_post(httpd_req_t*r){
  cJSON_Delete(j);if(!ok)return message(r,"Invalid radio command or queue busy.","422 Unprocessable Entity");
  auto*out=cJSON_CreateObject();cJSON_AddBoolToObject(out,"queued",true);return send_json(r,out,"202 Accepted");
 }
+esp_err_t engine_defaults_get(httpd_req_t*r){httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,assets::engine_defaults,HTTPD_RESP_USE_STRLEN);}
+esp_err_t engine_config_get(httpd_req_t*r){auto s=engine_service::tune_json();httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,s.c_str(),s.size());}
+esp_err_t engine_status_get(httpd_req_t*r){return send_json(r,engine_service::snapshot());}
+esp_err_t engine_config_put(httpd_req_t*r){
+ if(!authorized(r))return message(r,"Session token or origin rejected.","403 Forbidden");
+ if(r->content_len<=0||r->content_len>16384)return message(r,"Engine tune must be 1-16384 bytes.","413 Content Too Large");
+ char type[80]{};httpd_req_get_hdr_value_str(r,"Content-Type",type,sizeof(type));if(std::strncmp(type,"application/json",16))return message(r,"Use application/json.","415 Unsupported Media Type");
+ std::string body(r->content_len,'\0');int n=0;while(n<r->content_len){int got=httpd_req_recv(r,body.data()+n,r->content_len-n);if(got<=0)return ESP_FAIL;n+=got;}
+ if(!safe_json(body.data(),body.size()))return message(r,"Invalid engine JSON envelope.","400 Bad Request");
+ std::string reason;const int code=engine_service::save(body.c_str(),reason);if(code==200)return engine_config_get(r);
+ const char*status=code==409?"409 Conflict":code==413?"413 Content Too Large":code==503?"503 Service Unavailable":code==507?"507 Insufficient Storage":code==500?"500 Internal Server Error":"422 Unprocessable Entity";
+ return message(r,reason.c_str(),status);
+}
 void service_task(){
  if(gpio_get_level(static_cast<gpio_num_t>(pins::interlock))){ESP_LOGE(tag,"Service AP refused: open J3, then reboot.");return;}
  ESP_ERROR_CHECK(esp_netif_init());ESP_ERROR_CHECK(esp_event_loop_create_default());esp_netif_create_default_wifi_ap();esp_netif_create_default_wifi_sta();
@@ -147,9 +161,10 @@ void service_task(){
  wifi.ap.ssid_len=std::strlen(reinterpret_cast<char*>(wifi.ap.ssid));wifi.ap.channel=6;wifi.ap.authmode=WIFI_AUTH_WPA2_PSK;wifi.ap.max_connection=2;wifi.ap.pmf_cfg.required=true;
  ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP,&wifi));ESP_ERROR_CHECK(esp_wifi_start());
  for(unsigned i=0;i<4;++i)std::snprintf(token+i*8,9,"%08lX",static_cast<unsigned long>(esp_random()));
- httpd_config_t http=HTTPD_DEFAULT_CONFIG();http.stack_size=12288;http.max_uri_handlers=10;http.lru_purge_enable=true;http.recv_wait_timeout=5;http.send_wait_timeout=5;
+ httpd_config_t http=HTTPD_DEFAULT_CONFIG();http.stack_size=16384;http.max_uri_handlers=16;http.lru_purge_enable=true;http.recv_wait_timeout=5;http.send_wait_timeout=5;
  httpd_handle_t server{};ESP_ERROR_CHECK(httpd_start(&server,&http));
  const httpd_uri_t routes[]={
+  {"/api/engine/defaults",HTTP_GET,engine_defaults_get,nullptr},{"/api/engine/config",HTTP_GET,engine_config_get,nullptr},{"/api/engine/config",HTTP_PUT,engine_config_put,nullptr},{"/api/engine/status",HTTP_GET,engine_status_get,nullptr},
   {"/api/radio",HTTP_GET,radio_get,nullptr},{"/api/radio",HTTP_POST,radio_post,nullptr},
   {"/",HTTP_GET,index_get,nullptr},{"/api/session",HTTP_GET,session_get,nullptr},{"/api/guide",HTTP_GET,guide_get,nullptr},{"/api/manual",HTTP_GET,manual_get,nullptr},
   {"/api/defaults",HTTP_GET,defaults_get,nullptr},{"/api/config",HTTP_GET,config_get,nullptr},{"/api/config",HTTP_PUT,config_put,nullptr},{"/api/status",HTTP_GET,status_get,nullptr}};

@@ -2,6 +2,7 @@
 #include "ecu/pins.hpp"
 #include "ecu/web_config.hpp"
 #include "ecu/espnow.hpp"
+#include "ecu/engine_service.hpp"
 #include "driver/gpio.h"
 #include "driver/gptimer.h"
 #include "driver/mcpwm_cap.h"
@@ -167,7 +168,11 @@ void init_can() {
 
 extern "C" void app_main() {
     init_gpio();
+#if ECU_BENCH_PULSES
+    ecu::BenchGate bench_gate(gpio_get_level(static_cast<gpio_num_t>(ecu::pins::interlock)) != 0);
+#endif
     ecu::web::init();
+    ecu::engine_service::init();
     init_adc();
     init_capture();
     init_can();
@@ -187,7 +192,6 @@ extern "C" void app_main() {
 #if ECU_BENCH_PULSES
     std::int64_t last_pulse = 0;
     unsigned next_channel = 0;
-    bool pulse_latched_fault = false;
 #endif
     TickType_t wake = xTaskGetTickCount();
     while (true) {
@@ -224,14 +228,21 @@ extern "C" void app_main() {
         twai_message_t message{};
         // Bound background work so a busy bus cannot starve supervision.
         for (unsigned i=0; i<16 && twai_receive(&message,0) == ESP_OK; ++i) ++can_frames;
+    ecu::web::Sample live;
+    live.raw=raw; live.adc_ok=adc_ok; live.safe=safe; live.interlock=interlock;
+    live.overflow=capture_overflow; live.synced=decoder.synced(); live.rpm=decoder.rpm();
+    live.can_frames=can_frames; live.cam_edges=cam_edges; live.crank_edges=crank_edges;
+    live.crank_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::crank));
+    live.cam_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::cam));
+        ecu::engine_service::observe(live,profile,now);
         const bool monitor_healthy = adc_ok && !capture_overflow && esp_timer_get_time()-now < 10000;
-        const bool healthy = decoder.valid() && monitor_healthy;
+        const bool healthy = decoder.synced() && monitor_healthy;
         if (!healthy || !safe || !interlock) all_off();
         // The watchdog is fed by the supervised loop, not a free-running ISR.
         // An inhibited monitor must stay available without a crank source.
         // Pulse builds still require valid trigger decoding to feed supervision.
 #if ECU_BENCH_PULSES
-        const bool feed_watchdog = healthy;
+        const bool feed_watchdog = bench_gate.state()==ecu::BenchGate::State::Waiting ? monitor_healthy : healthy && bench_gate.state()==ecu::BenchGate::State::Armed;
 #else
         const bool feed_watchdog = monitor_healthy;
 #endif
@@ -241,10 +252,10 @@ extern "C" void app_main() {
             last_heartbeat = now;
         }
 #if ECU_BENCH_PULSES
-        if (!healthy || !safe || !interlock) pulse_latched_fault = true;
-        // A power cycle with J3 closed is needed after a bench inhibit.
+        const bool bench_armed = bench_gate.update(healthy,safe,interlock);
+        // J3 must be closed at MCU boot; any inhibit after arming latches until reset.
         // MAIN_LS follows ARM, so NEVER connect actuator power in this mode.
-        if (!pulse_latched_fault && healthy && safe && interlock && now-last_pulse >= 1000000 && bench_channel < 0) {
+        if (bench_armed && healthy && safe && interlock && now-last_pulse >= 1000000 && bench_channel < 0) {
             all_off();
             ESP_ERROR_CHECK(gptimer_set_raw_count(pulse_timer,0));
             gptimer_alarm_config_t alarm{};
@@ -268,12 +279,6 @@ extern "C" void app_main() {
         (void)interlock;
 #endif
         if (now-last_publish >= 50000) {
-            ecu::web::Sample live;
-            live.raw=raw; live.adc_ok=adc_ok; live.safe=safe; live.interlock=interlock;
-            live.overflow=capture_overflow; live.synced=decoder.synced(); live.rpm=decoder.rpm();
-            live.can_frames=can_frames; live.cam_edges=cam_edges; live.crank_edges=crank_edges;
-            live.crank_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::crank));
-            live.cam_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::cam));
             ecu::web::publish(live); last_publish=now;
         }
         if (now-last_print >= 1000000) {

@@ -1,0 +1,57 @@
+{
+  "scope": "Unmodified upstream research-model feasibility and conservation examples only. Fuel internally commanded; engine speed forced. Neither our ECU nor Speeduino controls these runs.",
+  "source": "https://github.com/modelica-3rdparty/Modelica-MVEM",
+  "source_commit": "57c7aa394d70bffe6106afb2703b92bc532a05d1",
+  "openmodelica_image": "openmodelica/openmodelica@sha256:ac9a0223e69b8055d444b42f58ccb9680342b56848c68b81385bf83d7c0ba824",
+  "modelica_library_commit": "72bc91df9d48f91525651ed8d1fc7bceeec67661",
+  "license_note": "Repository root LICENSE says GPL-2.0; Modelica source headers say GPL-3.0-or-later. Do not redistribute derived source without resolving this upstream inconsistency.",
+  "completed_with_warnings": true,
+  "log_warning_count": 14,
+  "numerical_assertion_messages": 36,
+  "limitations": [
+    "Stock SIEngine computes fuel from air flow and has no ignition-angle/pulse interface.",
+    "Needs a reviewed actuation/FMI adapter before ECU closed-loop comparisons.",
+    "Initialization, unit annotations and small negative species-mass assertions need investigation.",
+    "No calibration for the intended engine, no hardware timing or physical qualification."
+  ],
+  "rows": [
+    {
+      "example": "SIEngineTest",
+      "case": "si1500",
+      "stop_s": 15,
+      "samples": 1510,
+      "completed": true,
+      "forced_rpm": 1500,
+      "min_rpm": 1499.9999999999993,
+      "max_rpm": 1500.0000000000002,
+      "final_manifold_kpa": 138.2625480824054
+    },
+    {
+      "example": "SIEngineTest",
+      "case": "si2500",
+      "stop_s": 15,
+      "samples": 1546,
+      "completed": true,
+      "forced_rpm": 2500,
+      "min_rpm": 2499.999999999999,
+      "max_rpm": 2500.0000000000005,
+      "final_manifold_kpa": 675.822330825323
+    },
+    {
+      "example": "energyPreservationTest",
+      "case": "energy",
+      "stop_s": 2,
+      "samples": 208,
+      "completed": true,
+      "totalMass_relative_span": 4.902874290908339e-16,
+      "totalEnergy_relative_span": 2.9947620307054e-16
+    },
+    {
+      "example": "throttleSanityCheck",
+      "case": "throttle",
+      "stop_s": 2,
+      "samples": 204,
+      "completed": true
+    }
+  ]
+}

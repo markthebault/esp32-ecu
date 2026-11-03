@@ -171,6 +171,23 @@ inline Demand demand(const Calibration& c, const Sensors& s, double rpm, double 
     return {pw, c.max_dwell_ms, advance_deg, true};
 }
 
+// Dedicated dummy-load bench gate. Waiting never enables an output; loss of
+// health after arming latches until MCU reset. A closed interlock at boot is
+// required, so closing it later cannot start a bench session unexpectedly.
+class BenchGate {
+public:
+ enum class State { Waiting, Armed, Faulted };
+ explicit BenchGate(bool interlock_at_boot):state_(interlock_at_boot?State::Waiting:State::Faulted){}
+ bool update(bool healthy,bool power_good,bool interlock){
+  if(!interlock)state_=State::Faulted;
+  else if(state_==State::Waiting&&healthy&&power_good)state_=State::Armed;
+  else if(state_==State::Armed&&(!healthy||!power_good))state_=State::Faulted;
+  return state_==State::Armed;
+ }
+ State state()const{return state_;}
+private:State state_;
+};
+
 struct Edge { std::uint64_t time_us; unsigned channel; bool high; };
 
 // A bounded monotonic edge queue, independent of hardware drivers. Target

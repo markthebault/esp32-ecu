@@ -2,10 +2,12 @@
 """Offline ECU UI simulator. Never connects to, or drives, vehicle hardware.
 Requires a C++ compiler and ESP-IDF's cJSON source installed by PlatformIO.
 """
-import argparse,ctypes,json,math,os,secrets,subprocess,sys,tempfile,threading,time
+import argparse,ctypes,json,math,os,secrets,signal,subprocess,sys,tempfile,threading,time
+from contextlib import ExitStack
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
 from radio_simulator import RadioSimulator
+from engine_runtime import EngineStore
 R=Path(__file__).resolve().parents[1]
 class Reading(ctypes.Structure):
  _fields_=[('value',ctypes.c_double),('sensor_v',ctypes.c_double),('adc_v',ctypes.c_double),('valid',ctypes.c_int),('fault',ctypes.c_char*64)]
@@ -23,7 +25,7 @@ def load_bridge():
  return bridge
 class Device:
  def __init__(self,path,bridge):
-  self.radio=RadioSimulator(path.with_name(path.name+'.peers'));self.path=path;self.bridge=bridge;self.lock=threading.Lock();self.started=time.monotonic();self.token=secrets.token_hex(16);self.faults={};self.filtered=None;self.last=0;self.storage_ok=True;self.storage='defaults; no saved profile'
+  self.engine=EngineStore(path.with_name(path.name+'.engine'));self.radio=RadioSimulator(path.with_name(path.name+'.peers'));self.path=path;self.bridge=bridge;self.lock=threading.Lock();self.started=time.monotonic();self.token=secrets.token_hex(16);self.faults={};self.filtered=None;self.last=0;self.storage_ok=True;self.storage='defaults; no saved profile'
   self.defaults=json.loads((R/'config/defaults.json').read_text());self.profile=self.defaults
   if path.exists():
    try:
@@ -85,6 +87,13 @@ class Handler(BaseHTTPRequestHandler):
    origin=self.headers.get('Origin');host=self.headers.get('Host','')
    if self.headers.get('X-ECU-Token')!=d.token or (origin and origin!='http://'+host):return self.reply(403,{'error':'Session token or origin rejected.'})
    with d.lock:return self.reply(200,d.radio.status())
+  if self.path=='/api/engine/config':
+   with d.engine.lock:return self.reply(200,d.engine.tune)
+  if self.path=='/api/engine/defaults':return self.reply(200,d.engine.defaults)
+  if self.path=='/api/engine/status':return self.reply(200,d.engine.status())
+  if self.path=='/api/engine/log':
+   try:return self.reply(200,d.engine.msl().encode(),'text/plain; charset=utf-8')
+   except ValueError as e:return self.reply(409,{'error':str(e)})
   if self.path=='/api/status':return self.reply(200,d.status())
   return self.reply(404,{'error':'Not found'})
  def mutate(self):
@@ -102,6 +111,10 @@ class Handler(BaseHTTPRequestHandler):
     with d.lock:result=d.radio.command(data)
     return self.reply(*result)
    except (ValueError,KeyError,TypeError):return self.reply(422,{'error':'Invalid radio command.'})
+  if self.command=='PUT' and self.path=='/api/engine/config':return self.reply(*d.engine.save(body))
+  if self.command=='POST' and self.path=='/api/engine/run':
+   try:return self.reply(*d.engine.run(json.loads(body)))
+   except ValueError:return self.reply(422,{'error':'Invalid simulation JSON'})
   if self.command=='PUT' and self.path=='/api/config':return self.reply(*d.save(body))
   if self.command=='POST' and self.path=='/api/simulate':
    try:
@@ -114,9 +127,17 @@ class Handler(BaseHTTPRequestHandler):
  do_PUT=mutate;do_POST=mutate
  def setup(self):super().setup();self.connection.settimeout(5)
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--host',default='127.0.0.1');parser.add_argument('--port',type=int,default=8765);parser.add_argument('--state',type=Path,default=R/'.cache/web/profile.json');args=parser.parse_args()
+ parser=argparse.ArgumentParser();parser.add_argument('--host',default='127.0.0.1');parser.add_argument('--port',type=int,default=8765);parser.add_argument('--state',type=Path,default=R/'.cache/web/profile.json');parser.add_argument('--tuner-port',type=int);parser.add_argument('--tuner-pty',type=Path);args=parser.parse_args()
  server=ThreadingHTTPServer((args.host,args.port),Handler);server.device=Device(args.state,load_bridge());print(f'ECU simulator: http://{args.host}:{args.port} (no hardware)',flush=True)
- try:server.serve_forever()
- except KeyboardInterrupt:pass
- finally:server.server_close()
+ def stop(signum,frame):raise KeyboardInterrupt
+ signal.signal(signal.SIGTERM,stop)
+ with ExitStack() as endpoints:
+  from tuning_server import TcpEndpoint,PtyEndpoint
+  if args.tuner_port is not None:
+   endpoint=endpoints.enter_context(TcpEndpoint(server.device.engine,args.tuner_port));print(f'Shared tuning TCP: 127.0.0.1:{endpoint.port}',flush=True)
+  if args.tuner_pty:
+   endpoint=endpoints.enter_context(PtyEndpoint(server.device.engine,args.tuner_pty));print(f'Shared tuning PTY: {endpoint.link}',flush=True)
+  try:server.serve_forever()
+  except KeyboardInterrupt:pass
+  finally:server.server_close()
 if __name__=='__main__':main()

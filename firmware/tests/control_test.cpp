@@ -127,6 +127,17 @@ int main() {
         CHECK(!q.dispatch(3000,write)); CHECK(state==0 && q.size()==0);
         ++cases;
     }
+    {
+        ecu::BenchGate gate(true);
+        CHECK(!gate.update(false,false,true)); // Startup rails/trigger not ready.
+        CHECK(!gate.update(false,true,true));  // Valid wheel config is not sync.
+        CHECK(gate.update(true,true,true));    // Actual synchronization arms.
+        CHECK(!gate.update(false,true,true)); // Lost sync immediately inhibits.
+        CHECK(!gate.update(true,true,true));  // Recovery cannot clear the latch.
+        ecu::BenchGate open_boot(false);
+        CHECK(!open_boot.update(true,true,true));
+        ++cases;
+    }
     // Deterministic fault/noise sweep. A corrupted stream never leaves an
     // actuator on: the decoder only reports phase and the queue owns edges.
     for (unsigned seed=1;seed<=100;++seed) {

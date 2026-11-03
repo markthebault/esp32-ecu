@@ -1,0 +1,162 @@
+#pragma once
+// Engine-development core shared by the ESP32 shadow monitor and native SIL.
+// Independent implementation. Physical outputs are NOT enabled by this module.
+#include <algorithm>
+#include <array>
+#include <cmath>
+#include <cstdint>
+#include <cstring>
+#include <limits>
+namespace ecu::engine {
+constexpr unsigned bins=16;
+struct Map {
+ std::array<float,bins> rpm{80,200,400,600,800,1000,1200,1600,2000,2500,3000,3500,4000,5000,6000,8000};
+ std::array<float,bins> load{10,15,20,25,30,35,40,45,50,55,60,70,80,90,100,110};
+ std::array<float,bins*bins> cells{}; // row=load, column=RPM; values in physical units.
+};
+inline bool finite(double x){return std::isfinite(x);}
+inline bool range(double x,double lo,double hi){return finite(x)&&x>=lo&&x<=hi;}
+inline bool range(float x,double lo,double hi){return finite(x)&&x>=static_cast<float>(lo)&&x<=static_cast<float>(hi);}
+template<std::size_t N>bool ascending(const std::array<float,N>& a){for(unsigned i=0;i<N;++i)if(!finite(a[i])||(i&&a[i]<=a[i-1]))return false;return true;}
+template<std::size_t N>unsigned segment(const std::array<float,N>& a,double x){unsigned i=0;while(i<N-2&&x>a[i+1])++i;return i;}
+template<std::size_t N>double interpolate(const std::array<float,N>& x,const std::array<float,N>& y,double v){
+ auto i=segment(x,v);double f=std::clamp((v-x[i])/(x[i+1]-x[i]),0.0,1.0);return y[i]+(y[i+1]-y[i])*f;
+}
+inline double lookup(const Map&m,double rpm,double load){
+ unsigned x=segment(m.rpm,rpm),y=segment(m.load,load);
+ const double fx=std::clamp((rpm-m.rpm[x])/(m.rpm[x+1]-m.rpm[x]),0.0,1.0),fy=std::clamp((load-m.load[y])/(m.load[y+1]-m.load[y]),0.0,1.0);
+ auto a=m.cells[y*bins+x]*(1-fx)+m.cells[y*bins+x+1]*fx;
+ auto b=m.cells[(y+1)*bins+x]*(1-fx)+m.cells[(y+1)*bins+x+1]*fx;return a*(1-fy)+b*fy;
+}
+struct Tune {
+ unsigned revision=1;
+ // This first profile is explicitly four-cylinder, four-stroke, batch fuel /
+ // wasted COP. Sequential and other cylinder counts require separate work.
+ unsigned cylinders=4;
+ float displacement_cc=2000,injector_cc_min=300,fuel_density_g_cc=.745f,stoich_afr=14.7f;
+ float cranking_rpm=450,crank_advance_deg=5,rpm_limit=6500,rpm_hysteresis=200,soft_limit_band=300;
+ float max_duty=.8f,max_injection_ms=15,max_dwell_ms=3.5f,tooth1_btdc_deg=90;
+ float afterstart_pct=15,afterstart_s=20,accel_threshold_pct_s=40,accel_gain=.002f,accel_decay_s=.4f;
+ bool ego_enabled=false,dfco_enabled=true,idle_enabled=false;
+ float ego_kp=.15f,ego_ki=.08f,ego_limit=.1f,ego_min_clt=70;
+ float dfco_rpm=2000,dfco_hysteresis=300,dfco_tps=1,dfco_delay_s=.5f;
+ float idle_target_rpm=900,idle_kp=.03f,idle_ki=.02f,fan_on_c=95,fan_off_c=90,pump_prime_s=2;
+ std::array<float,6> coolant_c{-40,0,20,40,70,110},warmup_pct{180,150,130,115,100,100},crank_pct{250,210,180,160,140,130};
+ std::array<float,5> battery_v{8,10,12,14,16},deadtime_ms{2,1.5f,1.15f,.9f,.7f},dwell_ms{3.5f,3.3f,3,2.8f,2.5f};
+ Map ve{},spark{},lambda{};
+ Tune(){ve.cells.fill(85);spark.cells.fill(15);lambda.cells.fill(1);}
+};
+inline const char* validate(const Tune&t){
+ if(!t.revision||t.cylinders!=4)return "Only the four-cylinder batch/wasted profile is implemented";
+ if(!range(t.displacement_cc,500,4000)||!range(t.injector_cc_min,100,1500)||!range(t.fuel_density_g_cc,.6,.9)||!range(t.stoich_afr,9,16))return "Invalid engine or injector specification";
+ if(!range(t.cranking_rpm,100,800)||!range(t.crank_advance_deg,-5,15)||!range(t.rpm_limit,1500,8000)||!range(t.rpm_hysteresis,50,500)||!range(t.soft_limit_band,0,500)||t.cranking_rpm>=t.rpm_limit-t.rpm_hysteresis)return "Invalid starting/rev limit settings";
+ if(!range(t.max_duty,.1,.85)||!range(t.max_injection_ms,1,15)||!range(t.max_dwell_ms,.5,3.5)||!range(t.tooth1_btdc_deg,0,359))return "Pulse limits exceed the current carrier contract";
+ if(!range(t.afterstart_pct,0,100)||!range(t.afterstart_s,0,120)||!range(t.accel_threshold_pct_s,1,1000)||!range(t.accel_gain,0,.02)||!range(t.accel_decay_s,.05,2))return "Invalid enrichment settings";
+ if(!range(t.ego_kp,0,1)||!range(t.ego_ki,0,1)||!range(t.ego_limit,0,.25)||!range(t.ego_min_clt,0,110))return "Invalid closed-loop lambda settings";
+ if(!range(t.dfco_rpm,1200,5000)||!range(t.dfco_hysteresis,50,1000)||!range(t.dfco_tps,0,5)||!range(t.dfco_delay_s,.1,5)||t.dfco_rpm-t.dfco_hysteresis<=t.cranking_rpm)return "Invalid overrun settings";
+ if(!range(t.idle_target_rpm,600,1500)||!range(t.idle_kp,0,.2)||!range(t.idle_ki,0,.2)||!range(t.fan_on_c,70,110)||!range(t.fan_off_c,60,105)||t.fan_off_c>=t.fan_on_c||!range(t.pump_prime_s,0,5))return "Invalid auxiliary settings";
+ if(!ascending(t.coolant_c)||!ascending(t.battery_v))return "Curve axes must increase strictly";
+ for(unsigned i=0;i<6;++i)if(!range(t.coolant_c[i],-40,140)||!range(t.warmup_pct[i],80,300)||!range(t.crank_pct[i],100,400))return "Invalid coolant enrichment curve";
+ for(unsigned i=0;i<5;++i)if(!range(t.battery_v[i],7,18)||!range(t.deadtime_ms[i],.1,3)||!range(t.dwell_ms[i],.5,t.max_dwell_ms))return "Invalid battery compensation curve";
+ const Map*maps[]={&t.ve,&t.spark,&t.lambda};
+ for(unsigned k=0;k<3;++k){const auto&m=*maps[k];if(!ascending(m.rpm)||!ascending(m.load))return "Map axes must increase strictly";
+  for(auto v:m.rpm)if(!range(v,50,10000))return "RPM axis out of range";
+  for(auto v:m.load)if(!range(v,5,110))return "This carrier profile is naturally aspirated: load axis 5-110 kPa";
+  for(auto v:m.cells)if(!range(v,k==0?20:k==1?-5:.75,k==0?120:k==1?40:1.2))return "Map cell outside supported range";
+ }
+ return nullptr;
+}
+enum Fault:std::uint32_t { BadTune=1,NoSync=2,BadSensor=4,Stale=8,OverTemp=16,OverRev=32,Capacity=64,Timing=128 };
+enum class State {Stopped,Cranking,Warmup,Running,Overrun,Faulted};
+inline const char* state_name(State s){switch(s){case State::Stopped:return "stopped";case State::Cranking:return "cranking";case State::Warmup:return "warmup";case State::Running:return "running";case State::Overrun:return "overrun";default:return "fault";}}
+struct Inputs {
+ double rpm=0,map_kpa=0,tps_pct=0,clt_c=0,iat_c=0,lambda=1,battery_v=0,sensor_v=0;
+ std::uint64_t sampled_us=0;bool synced=false,sensors_valid=false,lambda_ready=false;
+};
+struct Output {
+ State state=State::Stopped;std::uint32_t faults=0;
+ double rpm=0,ve_pct=0,target_lambda=1,advance_deg=0,pulse_ms=0,dwell_ms=0,deadtime_ms=0,air_mg=0;
+ double warmup=1,afterstart=1,accel=1,ego=1,duty_pct=0,idle_pct=0;
+ bool fuel_cut=false,spark_cut=false,pump=false,fan=false;
+ // Any proposed edge belongs to the virtual/shadow executor, never GPIO.
+ bool proposed_enabled()const{return faults==0&&state!=State::Stopped;}
+};
+class Controller {
+ bool seen_=false,was_crank_=true,rev_cut_=false,dfco_=false,fan_=false;
+ std::uint64_t last_=0,started_=0,dfco_since_=0,boot_=0;
+ double previous_tps_=0,ae_=1,ego_i_=0,idle_i_=0;
+public:
+ void reset(){*this=Controller{};}
+ Output step(const Tune&t,const Inputs&s,std::uint64_t now){
+  Output o;o.rpm=s.rpm;
+  const double dt=seen_&&now>=last_?(now-last_)/1e6:0;
+  const bool timing=(!seen_||now>last_)&&dt<=.1;
+  if(!seen_)boot_=now;
+  const double rate=dt>0?(s.tps_pct-previous_tps_)/dt:0;
+  previous_tps_=s.tps_pct;last_=now;seen_=true;
+  if(validate(t)){o.faults=BadTune;o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;return o;}
+  if(!timing)o.faults|=Timing;
+  const bool sensor_ok=s.sensors_valid&&range(s.rpm,0,12000)&&range(s.map_kpa,10,110)&&range(s.tps_pct,0,100)&&range(s.clt_c,-40,140)&&range(s.iat_c,-40,110)&&range(s.battery_v,7,18)&&range(s.sensor_v,4.75,5.25);
+  if(!sensor_ok)o.faults|=BadSensor;
+  if(now<s.sampled_us||now-s.sampled_us>20000)o.faults|=Stale;
+  if(s.clt_c>=115)o.faults|=OverTemp;
+  if(s.clt_c>=t.fan_on_c)fan_=true;else if(s.clt_c<=t.fan_off_c)fan_=false;o.fan=fan_;
+  if(sensor_ok&&s.rpm>=t.rpm_limit)rev_cut_=true;
+  if(sensor_ok&&s.rpm<t.rpm_limit-t.rpm_hysteresis)rev_cut_=false;
+  if(rev_cut_)o.faults|=OverRev;
+  const bool stopped=finite(s.rpm)&&s.rpm<=0;
+  o.pump=((o.faults&~std::uint32_t(OverRev))==0)&&((now>=boot_&&(now-boot_)/1e6<t.pump_prime_s)||(s.synced&&s.rpm>0));
+  if(!stopped&&!s.synced)o.faults|=NoSync;
+  if(o.faults){o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;ego_i_=idle_i_=0;ae_=1;dfco_=false;dfco_since_=0;return o;}
+  if(stopped){o.state=State::Stopped;o.fuel_cut=o.spark_cut=true;ego_i_=idle_i_=0;ae_=1;was_crank_=true;dfco_=false;dfco_since_=0;return o;}
+  const bool cranking=was_crank_?s.rpm<t.cranking_rpm+100:s.rpm<t.cranking_rpm;
+  if(was_crank_&&!cranking)started_=now;
+  was_crank_=cranking;
+  o.state=cranking?State::Cranking:(s.clt_c<70?State::Warmup:State::Running);
+  o.ve_pct=lookup(t.ve,s.rpm,s.map_kpa);o.target_lambda=lookup(t.lambda,s.rpm,s.map_kpa);
+  o.advance_deg=cranking?t.crank_advance_deg:lookup(t.spark,s.rpm,s.map_kpa);
+  if(!cranking&&t.soft_limit_band>0&&s.rpm>t.rpm_limit-t.soft_limit_band)o.advance_deg=std::max(-5.0,o.advance_deg-10*(s.rpm-(t.rpm_limit-t.soft_limit_band))/t.soft_limit_band);
+  o.deadtime_ms=interpolate(t.battery_v,t.deadtime_ms,s.battery_v);
+  o.dwell_ms=interpolate(t.battery_v,t.dwell_ms,s.battery_v);
+  o.warmup=interpolate(t.coolant_c,cranking?t.crank_pct:t.warmup_pct,s.clt_c)/100;
+  if(!cranking&&t.afterstart_s>0&&now>=started_){const double elapsed=(now-started_)/1e6;o.afterstart=1+t.afterstart_pct/100*std::clamp(1-elapsed/t.afterstart_s,0.0,1.0);}
+  if(!cranking&&dt>0){ae_=1+(ae_-1)*std::exp(-dt/t.accel_decay_s);if(rate>t.accel_threshold_pct_s)ae_=std::max(ae_,1+std::min(.5,rate*t.accel_gain));}else ae_=1;o.accel=ae_;
+  const bool want_dfco=t.dfco_enabled&&!cranking&&s.clt_c>=60&&s.tps_pct<=t.dfco_tps&&s.rpm>=t.dfco_rpm;
+  if(!dfco_&&!want_dfco)dfco_since_=0;
+  if(want_dfco){if(!dfco_since_)dfco_since_=now;if(now>=dfco_since_&&(now-dfco_since_)/1e6>=t.dfco_delay_s)dfco_=true;}
+  else if(s.tps_pct>t.dfco_tps+.5||s.rpm<t.dfco_rpm-t.dfco_hysteresis||cranking||s.clt_c<60||!t.dfco_enabled){dfco_=false;dfco_since_=0;}
+  const bool ego=t.ego_enabled&&s.lambda_ready&&range(s.lambda,.65,1.5)&&s.clt_c>=t.ego_min_clt&&!cranking&&!dfco_&&s.tps_pct<60&&o.afterstart<=1.001&&ae_<1.02;
+  if(ego){const double e=s.lambda/o.target_lambda-1;ego_i_=std::clamp(ego_i_+e*t.ego_ki*dt,-double(t.ego_limit),double(t.ego_limit));o.ego=std::clamp(1+e*t.ego_kp+ego_i_,1-double(t.ego_limit),1+double(t.ego_limit));}else ego_i_=0;
+  // Ideal-gas speed-density trapped mass per cylinder and four-stroke cycle.
+  o.air_mg=s.map_kpa*1000*(t.displacement_cc/t.cylinders*1e-6)*(o.ve_pct/100)/(287.05*(s.iat_c+273.15))*1e6;
+  const double fuel_mg=o.air_mg/(t.stoich_afr*o.target_lambda)*o.warmup*o.afterstart*o.accel*o.ego;
+  const double flow_mg_ms=t.injector_cc_min*t.fuel_density_g_cc/60;
+  // Batch injection: one opening per 360 degrees, half the 720-degree mass.
+  o.pulse_ms=fuel_mg/(2*flow_mg_ms)+o.deadtime_ms;
+  const double rev_ms=60000/s.rpm;o.duty_pct=o.pulse_ms/rev_ms*100;
+  if(!finite(o.pulse_ms)||o.pulse_ms>t.max_injection_ms||o.duty_pct>t.max_duty*100||o.dwell_ms>t.max_dwell_ms||o.dwell_ms>=rev_ms){o.faults|=Capacity;o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;o.pulse_ms=o.dwell_ms=0;return o;}
+  if(dfco_){o.state=State::Overrun;o.fuel_cut=true;o.pulse_ms=0;o.duty_pct=0;}
+  if(t.idle_enabled&&!cranking&&s.tps_pct<2){const double error=t.idle_target_rpm-s.rpm;idle_i_=std::clamp(idle_i_+error*t.idle_ki*dt,-20.0,40.0);o.idle_pct=std::clamp(20+error*t.idle_kp+idle_i_,0.0,100.0);}else idle_i_=0;
+  return o;
+ }
+};
+struct Edge {std::uint64_t time_us=0;unsigned channel=0;bool high=false;};
+struct Plan {std::array<Edge,16> edges{};unsigned count=0;bool valid=false;};
+inline Plan plan_revolution(const Tune&t,const Output&o,std::uint64_t gap_us){
+ Plan p;if(!o.proposed_enabled()||!range(o.rpm,50,8000)||validate(t))return p;
+ const double rev_us=60000000/o.rpm;
+ auto add=[&](unsigned channel,double start_deg,double width_us){
+  start_deg=std::fmod(start_deg,360.0);if(start_deg<0)start_deg+=360;
+  const auto offset=std::uint64_t(std::llround(start_deg/360*rev_us));
+  const auto width=std::uint64_t(std::llround(width_us));
+  if(!width||gap_us>std::numeric_limits<std::uint64_t>::max()-offset-width)return false;
+  const auto start=gap_us+offset;
+  p.edges[p.count++]={start,channel,true};p.edges[p.count++]={start+width,channel,false};return true;
+ };
+ for(unsigned ch=0;ch<4;++ch)if(!o.fuel_cut&&!add(ch,t.tooth1_btdc_deg+180,o.pulse_ms*1000))return Plan{};
+ // Firing order 1-3-4-2; four smart coils fire once/revolution in wasted mode.
+ constexpr double phase[4]={0,180,180,0};
+ for(unsigned ch=0;ch<4;++ch)if(!o.spark_cut&&!add(ch+4,t.tooth1_btdc_deg+phase[ch]-o.advance_deg-o.dwell_ms*1000/rev_us*360,o.dwell_ms*1000))return Plan{};
+ std::sort(p.edges.begin(),p.edges.begin()+p.count,[](const Edge&a,const Edge&b){return a.time_us<b.time_us||(a.time_us==b.time_us&&a.high<b.high);});p.valid=true;return p;
+}
+}
