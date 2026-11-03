@@ -1,0 +1,149 @@
+{
+  "scope": "Independent read-only review of target executor implementation; no production source edits, no child agents, no hardware execution.",
+  "baseline_commit": "93f3a039ca1cf7215805e2ff08915a9959b6c38c",
+  "result": "No remaining concrete blocker found in the final source hashes and audited ELF files. This is source/native/build review, not physical or vehicle qualification.",
+  "provenance": {
+    "source_sha256": {
+      "firmware/include/ecu/timing_executor.hpp": "5824d5bf90fc3ecc28ae004a082e9323c59172d0cc77807fbbfb70bb125c83b5",
+      "firmware/include/ecu/capture_clock.hpp": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+      "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+      "firmware/include/ecu/engine_scheduler.hpp": "28026597acc3af2e2141c9afdad82fc360410bf4576524a1e2b2761bee23d0f8",
+      "firmware/include/ecu/engine_target.hpp": "cbf529ec1e5389db92f124189352e93fd93a3ce262e44b3c0057713e8774d0a3",
+      "firmware/main/engine_target.cpp": "bf37e46ae92e3f5c5466f6ea67ed1024de93052ac8b8baa107b2928ad815e0bb",
+      "firmware/main/app.cpp": "302759188e88b433dbf8913ec7cf31e25b091e43a7b7cc6211f437266b7f31f9",
+      "firmware/main/engine_service.cpp": "b14d1f1da0413ea1d571a6429e4e3a5b86afe51abaa387b6e062c2fab1814abb",
+      "firmware/main/espnow.cpp": "a312a81d6ef88f9b5cb8e7581017789825e094179251362aeaa0af63e726bb46",
+      "firmware/main/web_config.cpp": "82e77c6c73beb4c9de933bfc8ed01e051ac45175eeb4ec395e189f7f7f4d7e30",
+      "firmware/platformio.ini": "a93018eb58131ff33e9b640873b544c4cc3e77b21f05adaa1f5c1ab5678f2338",
+      "firmware/tests/timing_executor_test.cpp": "c9f42475b7e06f4ac46f7494b2fe722d79365df7627faa68905bd3b375376ded"
+    },
+    "elfs": {
+      "virtual-final": {
+        "environment": "compact_n16r8_web",
+        "sha256": "f5e5b5b53ca910760cb61c79ea3517558136a6dc62a6376bb3c272e9a84acd32",
+        "mtime_ns": 1793717183999022734
+      },
+      "dummy-final": {
+        "environment": "compact_a3_timing_bench",
+        "sha256": "c6350eabc0cd603c582d2f088c3fd28198720dc79f19e4472a4f773aadbae582",
+        "mtime_ns": 1793717205388208845
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "R1",
+      "severity": "high",
+      "status": "fixed in target worker",
+      "finding": "A newer command consumed before an already queued crank edge caused AngleScheduler::tooth to reject the older capture timestamp and Executor::commit to latch an invalid-angle-plan fault during normal command/capture interleaving.",
+      "initial_repro": "queued-command-probe.cpp: capture 1000 us, command 1010 us, commit 1012 us => valid=0, Commit::Fault, invalid_angle_plan. Compiled with -O2 -fsanitize=address,undefined against initial-source hashes.",
+      "fix_location": "firmware/main/engine_target.cpp:200",
+      "fix_review": "Worker still decodes each current capture, counts captures older than latest command/sample as superseded, and schedules only eligible captures. The independent 1000 us capture-age rejection remains active."
+    },
+    {
+      "id": "R2",
+      "severity": "high",
+      "status": "fixed",
+      "finding": "One-shot epoch invalidation around sensor-profile persistence allowed the application to tag a cached old profile with the new epoch and reactivate while persistence was still underway.",
+      "repro": "Interleaving: invalidate epoch; application retains old Config; submit old-profile command with new epoch before config_put publishes the changed profile.",
+      "fix_location": "firmware/main/engine_target.cpp:261",
+      "fix_review": "Configuration hold spans persistence and active publication, rejects submits and queued commands, increments epoch on release, and enforces tune/sensor revision floors. Captures are epoch-tagged, held/old captures are ignored, and the decoder resets on epoch change."
+    },
+    {
+      "id": "R3",
+      "severity": "medium",
+      "status": "fixed",
+      "finding": "A latched OutputIO Gate failure could be periodically cleared by Executor recovery and re-tripped on the next supervision iteration, briefly reporting timing_fault=false despite a reset-only physical failure. An unready initial capture clock could similarly lose its timing fault.",
+      "fix_location": "firmware/main/engine_target.cpp:233",
+      "fix_review": "Recovery now requires capture_clock.ready(), !output.failed, no configuration hold, and matching accepted/current epochs in addition to fresh stopped/quiet inputs."
+    },
+    {
+      "id": "R4",
+      "severity": "medium",
+      "status": "fixed",
+      "finding": "The dummy-load environment claimed to omit radio service, but ECU_COMPACT_A3 still selected the full ESP-NOW/Wi-Fi/pairing task and its uncoordinated NVS writes.",
+      "fix_location": "firmware/main/espnow.cpp:26",
+      "fix_review": "Dummy-load builds select no-op radio functions. Audited dummy ELF has a 5-byte radio::start no-op and no radio task implementation."
+    },
+    {
+      "id": "R5",
+      "severity": "low",
+      "status": "fixed",
+      "finding": "Decoder-loss shutdown reused time sampled before decoding outside the target lock. An intervening compare ISR could make cut actual_us precede the just-recorded rise and report a zero high width.",
+      "fix_location": "firmware/main/engine_target.cpp:198",
+      "fix_review": "The shutdown now samples now_locked() after taking the target lock."
+    },
+    {
+      "id": "R6",
+      "severity": "build blocker",
+      "status": "fixed",
+      "finding": "IRAM_ATTR on outlined class/COMDAT methods produced Xtensa dangerous l32r literal-pool relocations, preventing the selected target link.",
+      "fix_location": "firmware/include/ecu/realtime.hpp:7",
+      "fix_review": "Header ISR helpers are forced inline into explicitly IRAM callback roots; both final ELF files pass the call/literal/data audit below."
+    }
+  ],
+  "validation": {
+    "native": "firmware/tests/timing_executor_test.cpp compiled with c++ -std=c++17 -O2 -Wall -Wextra -Werror -fsanitize=address,undefined -I firmware/include and passed. See final-native-tests.log.",
+    "target_builds": "Parent build log .cache/engine/target-build-final.log reports compact_n16r8_web and compact_a3_timing_bench successful; this reviewer independently inspected their actual final ELF files.",
+    "elf_audit_method": "audit_elf.py recursively follows direct calls from both application callbacks and both IDF driver ISR roots, checks literal locations/loaded flash pointers, and resolves application callx targets to ROM. It follows actual branch/fall-through PCs and re-decodes incomplete instructions because GNU linear Xtensa disassembly can misdecode jump-over padding. Driver callback indirections were manually matched to source registrations.",
+    "elf_audits": {
+      "virtual-final": {
+        "sha256": "f5e5b5b53ca910760cb61c79ea3517558136a6dc62a6376bb3c272e9a84acd32",
+        "function_count": 29,
+        "all_functions_iram": true,
+        "flash_calls": [],
+        "literals_outside_iram": [],
+        "application_flash_pointers": [],
+        "unresolved_indirect_calls": [
+          {
+            "caller": "mcpwm_capture_default_isr",
+            "pc": "0x4037e9f9",
+            "instruction": "callx8\ta8",
+            "resolved": null,
+            "resolved_section": null
+          },
+          {
+            "caller": "gptimer_default_isr",
+            "pc": "0x4037e672",
+            "instruction": "callx8\ta6",
+            "resolved": null,
+            "resolved_section": null
+          }
+        ],
+        "callback_indirections_review": "The two unresolved indirect calls are the IDF driver invocations of the registered on_capture/on_alarm callbacks, which point to the audited IRAM roots."
+      },
+      "dummy-final": {
+        "sha256": "c6350eabc0cd603c582d2f088c3fd28198720dc79f19e4472a4f773aadbae582",
+        "function_count": 29,
+        "all_functions_iram": true,
+        "flash_calls": [],
+        "literals_outside_iram": [],
+        "application_flash_pointers": [],
+        "unresolved_indirect_calls": [
+          {
+            "caller": "mcpwm_capture_default_isr",
+            "pc": "0x4037cffd",
+            "instruction": "callx8\ta8",
+            "resolved": null,
+            "resolved_section": null
+          },
+          {
+            "caller": "gptimer_default_isr",
+            "pc": "0x4037cc76",
+            "instruction": "callx8\ta6",
+            "resolved": null,
+            "resolved_section": null
+          }
+        ],
+        "callback_indirections_review": "The two unresolved indirect calls are the IDF driver invocations of the registered on_capture/on_alarm callbacks, which point to the audited IRAM roots."
+      }
+    },
+    "queue_storage": "Pinned IDF FreeRTOS pvPortMalloc uses MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT. Queues are created with xQueueCreate and target ISR objects are in internal DRAM.",
+    "diff_check": "git diff --check passed."
+  },
+  "limits": [
+    "No physical hardware, engine or vehicle qualification was performed.",
+    "actual_us/max_lateness/high-duration software counters use one dispatch timestamp for sequential writes; these are not per-pin electrical edge measurements.",
+    "Interrupt latency and ISR duration, cache-disabled behavior on hardware, capture-latch overwrite/lost-edge behavior, electrical gate response and physical pulse width/jitter remain unmeasured."
+  ]
+}

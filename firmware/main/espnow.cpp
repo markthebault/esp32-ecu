@@ -23,7 +23,7 @@
 #if defined(ECU_SELECTED_N16R8) && ECU_BENCH_PULSES
 #error Selected supplier module must never use bench output pulses
 #endif
-#ifndef ECU_COMPACT_A3
+#if !defined(ECU_COMPACT_A3) || (defined(ECU_ENGINE_DUMMY_LOADS) && ECU_ENGINE_DUMMY_LOADS)
 namespace ecu::radio {
 void start(){}
 void publish(const web::Sample&,const config::Config&,const std::array<double,6>&){}
@@ -212,7 +212,7 @@ void start(){
 }
 void publish(const web::Sample&s,const config::Config&c,const std::array<double,6>&filtered){
  if(!samples)return;
- Live l;l.stamp=now();l.fault=!s.adc_ok||s.overflow;
+ Live l;l.stamp=now();l.fault=!s.adc_ok||s.overflow||s.timing_fault;
  header(l.data,Telemetry,88);u32(l.data+20,c.revision);
  // Always bit 4: outputs inhibited. No received packet can change it.
  u16(l.data+24,(s.adc_ok?1:0)|(s.safe?2:0)|(s.interlock?4:0)|(s.synced?8:0)|16|(s.overflow?32:0));

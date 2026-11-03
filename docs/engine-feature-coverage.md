@@ -6,9 +6,9 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 
 | Capability | Firmware / simulation | Configuration, UI and debugging | PCB / remaining work |
 | --- | --- | --- | --- |
-| VE, spark, lambda maps | Shared 16×16 interpolation/validation | Axes/cells editable, JSON/own MSQ | Target timed execution pending |
+| VE, spark, lambda maps | Shared 16×16 interpolation/validation; target timer source/native dispatcher | Axes/cells editable, JSON/own MSQ | Target pulse/jitter measurements pending |
 | Speed-density fuel | Shared core; fuel-kernel and external-plant controller comparisons | Engine/injector settings and correction readouts | Four high-Z saturated drivers, electrical behavior unmeasured |
-| Batch/wasted four-cylinder | Native virtual executor | Explicit fixed strategy, inhibited-output labels | Four injector/four smart-coil commands |
+| Batch/wasted four-cylinder | Shared native and ESP32 MCPWM/GPTimer executor | Explicit fixed strategy, inhibited-output labels, timing trace | Four injector/four smart-coil commands; selected N16R8 physical policy inhibited |
 | Other cylinder counts | Missing; Speeduino publishes 1–8 support | Validator rejects other counts | Channel/strategy review required |
 | Sequential/semi-sequential | Missing 720-degree cam phase/scheduler | No enable option | Cam capture exists but does not establish phase |
 | Missing-tooth triggers | Existing generic decoder; SIL exercises 60-2 | Wheel geometry, sync/fault diagnostics | Protected Hall input, thresholds/noise unmeasured |
@@ -34,11 +34,11 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | Knock | Missing | No misleading protection indicator | Analog front end and processing required |
 | Sensor calibration | Persistent linear/table/NTC with loading compensation | Guides, units, confirmation and raw diagnostics | Six analog inputs plus battery/5V; physical verification pending |
 | Engine sensor binding | Confirmed physical units; raw-voltage relabelling rejected | Binding/fault status | Fast raw samples, display filter cannot hide faults |
-| Supervision/recovery | Stale/sync/sensor/capacity checks and SIL shutdown | Reasons/counters/traces/revisions/storage | Target timing/watchdog/restart policy needs HIL |
+| Supervision/recovery | Target independent command/producer/tooth/high-time deadlines, transactional scheduling and configuration holds | Reasons/counters/bounded traces/revisions/storage | Target timing/watchdog/restart policy needs physical HIL |
 | TunerStudio offline | Own definition/MSQ exchange | Settings/curve/map editors, strict identity/revision import | Files only, no physical binary transport |
 | TunerStudio online | Local MS-envelope prototype | Wire read/write/burn tests; app rejects own identity | Vendor integration and dedicated transport required |
 | MegaLogViewer HD | MSL export, actual application opens/plots | Labelled simulation log download | Real target logging not implemented |
-| Tooth/composite/ignition logging | Native trigger/edge/timing records | JSON/MSL; no TS high-speed logger | Target timestamps/bounded buffers required |
+| Tooth/composite/ignition logging | Native full traces; target 128-record edge/cut ring | Timing JSON export, faults/overwrite counts; no TS high-speed logger | Dispatcher timestamps implemented; raw composite/per-pin measurements remain |
 | Autotune / VE Analyze Live | Missing | No button implies working autotune | Integration, calibrated data and suitable license |
 | ESP-NOW screens | Existing authenticated read-only sensor telemetry | Button/UI pair, approve/unpair, LED | Sealed buttons/LED fit remains provisional |
 | New engine telemetry to screens | New engine-specific schema missing | Current protocol is sensor-monitor telemetry | Versioned receiver compatibility work |
@@ -57,3 +57,5 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 DBW/OEM integration remain outside the current bench scope.
 
 [External benchmark scope, configuration and reproduction](engine-research-benchmark.md) keeps simulator coverage separate from missing physical and control features.
+
+[Target timing implementation and evidence](engine-target-timing.md) describes the selected build's inhibited policy, native dispatcher comparison and outstanding physical tests.

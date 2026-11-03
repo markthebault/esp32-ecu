@@ -101,7 +101,27 @@ class EngineStore:
    result['sample_age_ms']=int(max(0,time.monotonic()-self.completed_monotonic)*1000) if self.last_run else None
    result['fresh']=False
    if self.last_run:result['last_run']=self.last_run['summary']
+   result['timing']=self.timing_status()
    return result
+
+ def timing_status(self):
+  # Host data comes from a completed SIL trace, never from a target timer.
+  edges=self.last_run.get('edges',[]) if self.last_run else []
+  summary=self.last_run.get('summary',{}) if self.last_run else {}
+  return dict(available=False,mode='completed_native_sil' if self.last_run else 'host_no_timing_run',
+              physical_policy_enabled=False,physical_high_mask=0,virtual_high_mask=0,
+              dispatched=len(edges),trace_sequence=len(edges),trace_overwritten=max(0,len(edges)-128),
+              max_coil_high_us=summary.get('max_dwell_high_us'),max_injector_high_us=summary.get('max_injector_high_us'),
+              fault='none',last_fault=self.latest.get('timing_stop_reason','none') if self.latest else 'none',
+              qualification='Completed synthetic SIL only; no target clock, IRQ or GPIO measurements')
+
+ def timing_trace(self):
+  with self.lock:
+   source=self.last_run.get('edges',[]) if self.last_run else []
+   start=max(0,len(source)-128)
+   rows=[dict(sequence=i+1,scheduled_us=e[0],actual_us=e[0],channel=e[1],high=e[2],
+              cause=e[3] if len(e)>3 else 'scheduled',tune_revision=self.tune['revision']) for i,e in enumerate(source[start:],start)]
+   return dict(timing=self.timing_status(),events=rows,missed_during_snapshot=0,data_source='completed_synthetic_sil')
 
  def run(self,request):
   from engine_sil import Simulation

@@ -72,6 +72,18 @@ class IntegrationTests(unittest.TestCase):
   with TcpEndpoint(self.device.engine,0) as endpoint,socket.create_connection(('127.0.0.1',endpoint.port),timeout=2) as client:
    block=self.frame(client,b'r'+struct.pack('<BBHH',0,0x30,0,76));self.assertEqual(block[0],0)
    data=struct.unpack('<11f8I',block[1:]);self.assertEqual(data[13],1);self.assertEqual(data[14],1);self.assertEqual(data[15],1);self.assertEqual(data[-2:],(1,1))
+ def test_timing_export_is_bounded_and_identifies_completed_synthetic_data(self):
+  code,body=self.request('/api/engine/timing');self.assertEqual(code,200);empty=json.loads(body)
+  self.assertEqual(empty['events'],[]);self.assertFalse(empty['timing']['available'])
+  code,body=self.request('/api/engine/run','POST',json.dumps(dict(scenario='warm_start',duration_s=3)))
+  self.assertEqual(code,200)
+  code,body=self.request('/api/engine/timing');self.assertEqual(code,200);trace=json.loads(body)
+  self.assertEqual(trace['data_source'],'completed_synthetic_sil');self.assertEqual(trace['timing']['mode'],'completed_native_sil')
+  self.assertEqual(len(trace['events']),128);self.assertEqual(trace['timing']['physical_high_mask'],0)
+  self.assertFalse(trace['timing']['physical_policy_enabled']);self.assertFalse(trace['timing']['available'])
+  sequence=[row['sequence'] for row in trace['events']];self.assertEqual(sequence,list(range(sequence[0],sequence[0]+128)))
+  self.assertEqual(sequence[-1],trace['timing']['trace_sequence']);self.assertEqual(trace['timing']['trace_overwritten'],sequence[0]-1)
+  status=json.loads(self.request('/api/engine/status')[1]);self.assertEqual(status['timing'],trace['timing']);self.assertFalse(status['fresh'])
  def test_pty_fragments_and_crc_rejection(self):
   path=self.root/'tuner-serial'
   with PtyEndpoint(self.device.engine,path):

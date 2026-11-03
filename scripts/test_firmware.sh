@@ -17,3 +17,8 @@ mkdir -p "$task_root/build"
     -I "$task_root/firmware/tests/fakes" -I "$task_root/firmware/include" \
     "$task_root/firmware/tests/engine_storage_test.cpp" -o "$task_root/build/engine-storage-test"
 "$task_root/build/engine-storage-test"
+"${CXX:-clang++}" -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic \
+    -fsanitize=address,undefined -fno-omit-frame-pointer \
+    -I "$task_root/firmware/include" "$task_root/firmware/tests/timing_executor_test.cpp" \
+    -o "$task_root/build/timing-executor-test"
+"$task_root/build/timing-executor-test"

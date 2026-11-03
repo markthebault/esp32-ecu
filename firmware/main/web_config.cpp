@@ -2,6 +2,7 @@
 #include "ecu/espnow.hpp"
 #include "ecu/pins.hpp"
 #include "ecu/engine_service.hpp"
+#include "ecu/engine_target.hpp"
 #include "config_json.hpp"
 #include "web_assets.hpp"
 #include "driver/gpio.h"
@@ -96,10 +97,12 @@ esp_err_t config_put(httpd_req_t*r){
  if(candidate.revision!=revision||revision==UINT32_MAX){cJSON_Delete(j);return message(r,"Profile revision changed. Export edits, reload, then reapply them.","409 Conflict");}
  candidate.revision++;cJSON_SetNumberValue(cJSON_GetObjectItemCaseSensitive(j,"revision"),candidate.revision);
  char*encoded=cJSON_PrintUnformatted(j);cJSON_Delete(j);if(!encoded)return message(r,"Allocation failed.","500 Internal Server Error");
+ engine_target::begin_configuration();
  nvs_handle_t store{};auto err=nvs_open("ecu_config",NVS_READWRITE,&store);
  if(err==ESP_OK){err=nvs_set_str(store,"profile",encoded);if(err==ESP_OK)err=nvs_commit(store);nvs_close(store);}
- if(err!=ESP_OK){cJSON_free(encoded);ESP_LOGE(tag,"Profile commit failed: %s",esp_err_to_name(err));return message(r,"Flash commit failed. Previous runtime profile remains active.","507 Insufficient Storage");}
+ if(err!=ESP_OK){cJSON_free(encoded);engine_target::finish_configuration(0,revision);ESP_LOGE(tag,"Profile commit failed: %s",esp_err_to_name(err));return message(r,"Flash commit failed. Previous runtime profile remains active.","507 Insufficient Storage");}
  xSemaphoreTake(mutex,portMAX_DELAY);active=candidate;document=encoded;storage_message="saved";xSemaphoreGive(mutex);cJSON_free(encoded);
+ engine_target::finish_configuration(0,candidate.revision);
  return config_get(r);
 }
 esp_err_t status_get(httpd_req_t*r){
@@ -109,7 +112,7 @@ esp_err_t status_get(httpd_req_t*r){
  auto*j=cJSON_CreateObject();cJSON_AddBoolToObject(j,"simulator",false);cJSON_AddStringToObject(j,"firmware","A3 configuration monitor");
  numeric(j,"uptime_s",(now-started)/1e6);numeric(j,"sample_age_ms",stamp?(now-stamp)/1000.0:-1);cJSON_AddBoolToObject(j,"fresh",fresh);numeric(j,"revision",c.revision);
  cJSON_AddBoolToObject(j,"storage_ok",storage_ok);cJSON_AddStringToObject(j,"storage",storage);cJSON_AddBoolToObject(j,"adc_ok",s.adc_ok);cJSON_AddBoolToObject(j,"safe",s.safe);cJSON_AddBoolToObject(j,"interlock",s.interlock);
- cJSON_AddBoolToObject(j,"overflow",s.overflow);cJSON_AddBoolToObject(j,"synced",s.synced);numeric(j,"rpm",s.rpm);numeric(j,"can_frames",s.can_frames);numeric(j,"cam_edges",s.cam_edges);numeric(j,"crank_edges",s.crank_edges);numeric(j,"crank_level",s.crank_level);numeric(j,"cam_level",s.cam_level);
+ cJSON_AddBoolToObject(j,"overflow",s.overflow);cJSON_AddBoolToObject(j,"timing_fault",s.timing_fault);cJSON_AddBoolToObject(j,"synced",s.synced);numeric(j,"rpm",s.rpm);numeric(j,"can_frames",s.can_frames);numeric(j,"cam_edges",s.cam_edges);numeric(j,"crank_edges",s.crank_edges);numeric(j,"crank_level",s.crank_level);numeric(j,"cam_level",s.cam_level);
  cJSON_AddBoolToObject(j,"arm",false);cJSON_AddStringToObject(j,"output_state","All outputs OFF");
  const double supply=s.raw[7]*c.adc_reference_v/4095.0/.6;
  numeric(j,"sensor_5v",supply);numeric(j,"battery_v",s.raw[6]*c.adc_reference_v/4095.0*13);
@@ -141,6 +144,7 @@ esp_err_t radio_post(httpd_req_t*r){
 esp_err_t engine_defaults_get(httpd_req_t*r){httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,assets::engine_defaults,HTTPD_RESP_USE_STRLEN);}
 esp_err_t engine_config_get(httpd_req_t*r){auto s=engine_service::tune_json();httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,s.c_str(),s.size());}
 esp_err_t engine_status_get(httpd_req_t*r){return send_json(r,engine_service::snapshot());}
+esp_err_t engine_timing_get(httpd_req_t*r){return send_json(r,engine_target::trace_json());}
 esp_err_t engine_config_put(httpd_req_t*r){
  if(!authorized(r))return message(r,"Session token or origin rejected.","403 Forbidden");
  if(r->content_len<=0||r->content_len>16384)return message(r,"Engine tune must be 1-16384 bytes.","413 Content Too Large");
@@ -161,10 +165,11 @@ void service_task(){
  wifi.ap.ssid_len=std::strlen(reinterpret_cast<char*>(wifi.ap.ssid));wifi.ap.channel=6;wifi.ap.authmode=WIFI_AUTH_WPA2_PSK;wifi.ap.max_connection=2;wifi.ap.pmf_cfg.required=true;
  ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP,&wifi));ESP_ERROR_CHECK(esp_wifi_start());
  for(unsigned i=0;i<4;++i)std::snprintf(token+i*8,9,"%08lX",static_cast<unsigned long>(esp_random()));
- httpd_config_t http=HTTPD_DEFAULT_CONFIG();http.stack_size=16384;http.max_uri_handlers=16;http.lru_purge_enable=true;http.recv_wait_timeout=5;http.send_wait_timeout=5;
+ httpd_config_t http=HTTPD_DEFAULT_CONFIG();http.stack_size=16384;http.max_uri_handlers=20;http.lru_purge_enable=true;http.recv_wait_timeout=5;http.send_wait_timeout=5;
  httpd_handle_t server{};ESP_ERROR_CHECK(httpd_start(&server,&http));
  const httpd_uri_t routes[]={
   {"/api/engine/defaults",HTTP_GET,engine_defaults_get,nullptr},{"/api/engine/config",HTTP_GET,engine_config_get,nullptr},{"/api/engine/config",HTTP_PUT,engine_config_put,nullptr},{"/api/engine/status",HTTP_GET,engine_status_get,nullptr},
+  {"/api/engine/timing",HTTP_GET,engine_timing_get,nullptr},
   {"/api/radio",HTTP_GET,radio_get,nullptr},{"/api/radio",HTTP_POST,radio_post,nullptr},
   {"/",HTTP_GET,index_get,nullptr},{"/api/session",HTTP_GET,session_get,nullptr},{"/api/guide",HTTP_GET,guide_get,nullptr},{"/api/manual",HTTP_GET,manual_get,nullptr},
   {"/api/defaults",HTTP_GET,defaults_get,nullptr},{"/api/config",HTTP_GET,config_get,nullptr},{"/api/config",HTTP_PUT,config_put,nullptr},{"/api/status",HTTP_GET,status_get,nullptr}};

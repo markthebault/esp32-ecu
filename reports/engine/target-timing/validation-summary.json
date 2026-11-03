@@ -1,0 +1,147 @@
+{
+  "date": "2026-11-03",
+  "milestone": "ESP32 capture/compare executor and shared-dispatcher external-plant regression; feature parity remains incomplete",
+  "base_commit": "93f3a039ca1cf7215805e2ff08915a9959b6c38c",
+  "physical_board_flashed": false,
+  "selected_physical_outputs_enabled": false,
+  "pcb_or_enclosure_changed": false,
+  "passed": true,
+  "test_counts": {
+    "existing_python_tests": 53,
+    "latest_http_integration_tests": 5,
+    "new_http_test_added": 1,
+    "distinct_python_tests": 54,
+    "control_scenarios": 117,
+    "target_dispatcher_adversarial_groups": 7,
+    "browser_checks": 10,
+    "controller_scenario_cases": 14,
+    "coupling_convergence_cases": 4,
+    "assertion_classifier_fixtures": 6,
+    "target_builds": 2,
+    "expected_negative_selected_actuation_build": 1
+  },
+  "builds": {
+    "compact_n16r8_web": {
+      "passed": true,
+      "elf_sha256": "54283d2003a92574114a71c4eb1e597de39425fcef83399715cdfcac9e712c94",
+      "ram_bytes": 50948,
+      "app_flash_bytes": 1174505,
+      "physical_policy": "inhibited",
+      "isr_audit": {
+        "reachable_functions": 29,
+        "literal_fetches_outside_iram": 0,
+        "assertion_metadata_references": 63,
+        "unclassified_flash_pointers": 0,
+        "internal_data_symbols": 11
+      }
+    },
+    "compact_a3_timing_bench": {
+      "passed": true,
+      "elf_sha256": "c6350eabc0cd603c582d2f088c3fd28198720dc79f19e4472a4f773aadbae582",
+      "ram_bytes": 26728,
+      "app_flash_bytes": 405929,
+      "physical_policy": "explicit generic dummy-load GPIO sink; no hardware run",
+      "isr_audit": {
+        "reachable_functions": 29,
+        "literal_fetches_outside_iram": 0,
+        "assertion_metadata_references": 63,
+        "unclassified_flash_pointers": 0,
+        "internal_data_symbols": 12
+      }
+    }
+  },
+  "production_source_hashes_match_independent_review": {
+    "firmware/include/ecu/timing_executor.hpp": true,
+    "firmware/include/ecu/capture_clock.hpp": true,
+    "firmware/include/ecu/realtime.hpp": true,
+    "firmware/include/ecu/engine_scheduler.hpp": true,
+    "firmware/include/ecu/engine_target.hpp": true,
+    "firmware/main/engine_target.cpp": true,
+    "firmware/main/app.cpp": true,
+    "firmware/main/engine_service.cpp": true,
+    "firmware/main/espnow.cpp": true,
+    "firmware/main/web_config.cpp": true,
+    "firmware/platformio.ini": true
+  },
+  "source_hashes": {
+    "config/engine/defaults.json": "0c5ada5d5cce8ce812169ca3ce4e8bde92043a22abadecac7534342dc2eb0dac",
+    "firmware/include/ecu/capture_clock.hpp": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+    "firmware/include/ecu/config.hpp": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39",
+    "firmware/include/ecu/control.hpp": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b",
+    "firmware/include/ecu/engine.hpp": "1ebbc91dfc975b4f09ef81bc88453bd53a9ab930ab3f887c429f4328d2672768",
+    "firmware/include/ecu/engine_binding.hpp": "3f254ebd37519c6a1713f3a108d72c9986c2b4a6a77218db1529b074fe0bcf37",
+    "firmware/include/ecu/engine_json.hpp": "100ae79f328784d787bbd3b889f1899c1dbce34e1e9413176ea3a0c38f451f78",
+    "firmware/include/ecu/engine_scheduler.hpp": "28026597acc3af2e2141c9afdad82fc360410bf4576524a1e2b2761bee23d0f8",
+    "firmware/include/ecu/engine_service.hpp": "bf61d567f94c03354c8ab25855ffb706e723196b27d0ef4014e550001e71f112",
+    "firmware/include/ecu/engine_storage.hpp": "1d9a6d15142a50428d33ff97e175f83a6d2f1e94c88f3328d6ca4d12f30e7a6c",
+    "firmware/include/ecu/engine_target.hpp": "cbf529ec1e5389db92f124189352e93fd93a3ce262e44b3c0057713e8774d0a3",
+    "firmware/include/ecu/espnow.hpp": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc",
+    "firmware/include/ecu/espnow_protocol.hpp": "a5b1053ce8552267b60af309ca8458c23c7a2d54797aed5553b348bdefeab011",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/include/ecu/timing_executor.hpp": "5824d5bf90fc3ecc28ae004a082e9323c59172d0cc77807fbbfb70bb125c83b5",
+    "firmware/include/ecu/web_config.hpp": "89e9a7c62ace6b2c8f2d20b1b3e4a2683c50f7bb922ba3cf346c23d3c905c8f8",
+    "firmware/main/CMakeLists.txt": "727fc7e89d4506975ff1d13929c64667e4c9eacf55a7b9106c169ad6f41ee918",
+    "firmware/main/app.cpp": "302759188e88b433dbf8913ec7cf31e25b091e43a7b7cc6211f437266b7f31f9",
+    "firmware/main/engine_service.cpp": "b14d1f1da0413ea1d571a6429e4e3a5b86afe51abaa387b6e062c2fab1814abb",
+    "firmware/main/engine_target.cpp": "bf37e46ae92e3f5c5466f6ea67ed1024de93052ac8b8baa107b2928ad815e0bb",
+    "firmware/main/espnow.cpp": "a312a81d6ef88f9b5cb8e7581017789825e094179251362aeaa0af63e726bb46",
+    "firmware/main/web_assets.hpp": "a57087f0a05965e41588b345600c66e5b2fdffa637a0f23058a6522a99659e3e",
+    "firmware/main/web_config.cpp": "82e77c6c73beb4c9de933bfc8ed01e051ac45175eeb4ec395e189f7f7f4d7e30",
+    "firmware/platformio.ini": "a93018eb58131ff33e9b640873b544c4cc3e77b21f05adaa1f5c1ab5678f2338",
+    "firmware/sdkconfig.defaults": "12f41037edc0bb14ace73a9ad55461716003d988c2482b2c9de1f7f37f2bb4b8",
+    "firmware/sdkconfig.n16r8.defaults": "e619ebabdf335beea32766d7a75f6026a63841cfff18357c5d59829af344b68e",
+    "firmware/tests/timing_executor_test.cpp": "b00443e19be9adb8b049f38cd7d57f7db42b414e9b893fc5059e36395aefe788",
+    "scripts/audit_target_isr.py": "afedebd9f2d99fc6b6b2d20425da983870845e2afc31d7f884df3da358e70078",
+    "scripts/test_firmware.sh": "358117fe3a2768c99944aa25b12d7ee24421ec692f85f1f1f31b6130c08ce0bf",
+    "simulation/modelica/EngineAirPath.mo": "303df3396c660d1c4f8da48f19c698a6f63c46d1050c7964b92fba56be653c3c",
+    "tools/compare_engine_controllers.py": "960ad1277192e1a84cabf924fa59ba4a51539de8eae383876f7a1f904161f6ab",
+    "tools/engine_research_plant.py": "29fdcdcc5d45459b9ea0ccba14b8bb50323b9bc0ed08404b0fa248c619dfbe10",
+    "tools/engine_runtime.py": "b251aa594696e1850df9d1e7779632c50fc05c250712b7d0eb18ef5159992f80",
+    "tools/plot_target_timing.py": "67c4c1f309ef54573f79f0d9d2fe6440a2a75763689d9a8a48f32ec8fa25e7d4",
+    "tools/run_target_scenarios.py": "4520c10e723120f35b31b41173a6a465238d634aa98ce89c7a71de1fb33dd48b",
+    "tools/speeduino_runtime.py": "7fee614722b53d80e8af9c635fdc9d876ffe698c7eccc04ac294375731663a66",
+    "tools/speeduino_sim.cpp": "d887489c343a8e245d73e45766e089a41ffcf304d5c82240d534736ecdb1aba0",
+    "tools/speeduino_sim_hal.cpp": "155e13433b6568c22577bce9a9a7023c51ca27b14420ae703eeae1b4f31bedad",
+    "tools/target_runtime.py": "3611627c2e4a68359bc3011352342c8d525c934dca0d447bc101d072736c17d2",
+    "tools/target_timing_bridge.cpp": "97497bf9005050ef27151e904955a54879e0f54b366a507719738eaca59dc72f",
+    "tools/test_engine_http.py": "a5e8686838f235371697024861d97d59c091a78ddb5adb465dcb8c6812f5113b",
+    "tools/test_engine_ui.py": "6ae9479fb31c2bbc99fafe2d009a7643746fb16052e616750444e6435c0fab15",
+    "tools/web_server.py": "83d621e1aa69e96b5373ba54656ef606f5fe683ca8f42fee2d185eb4ea41bbbc",
+    "web/index.html": "a67226d58c00892c4598c0d75d7fe94a058e4b97e07de70d1bf6a7ed9b3e6b58"
+  },
+  "chart_checks": [
+    {
+      "width_px": 728,
+      "height_px": 596,
+      "appearance": "light",
+      "console_messages": 0
+    },
+    {
+      "width_px": 390,
+      "height_px": 1178,
+      "appearance": "dark",
+      "console_messages": 0
+    }
+  ],
+  "evidence": {
+    "matrix": "controller-comparison.json",
+    "implementation_review": "independent-implementation-review.json",
+    "assertion_review": "independent-assertion-review.json",
+    "build_guard": "selected-output-build-guard.json",
+    "native": "native-tests.txt",
+    "python": "python-tests.txt",
+    "http": "http-tests.txt",
+    "browser": "ui-tests.json",
+    "charts": "comparison.html"
+  },
+  "not_established": [
+    "Full Speeduino feature parity",
+    "Actual MCU interrupt/lock timing, capture loss, GPIO edge jitter or electrical pulse widths",
+    "Cache-disabled execution on physical hardware or fail-low behavior during an SDK panic",
+    "Calibrated engine/plant, injector/coil or combustion model",
+    "Physical dummy-load, crank/cam/ADC HIL, watchdog/interlock/reset/power-loss tests",
+    "Online TunerStudio acceptance of own controller identity; physical binary tuning transport",
+    "Module/carrier fit, antenna/RGB-pin verification, vehicle/EMI/surge/thermal/splash qualification"
+  ]
+}

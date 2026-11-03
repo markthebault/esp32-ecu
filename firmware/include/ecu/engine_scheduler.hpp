@@ -1,6 +1,8 @@
 #pragma once
 #include "ecu/engine.hpp"
+#include "ecu/realtime.hpp"
 namespace ecu::engine {
+struct AngleConfig {double tooth1_btdc_deg=90,max_dwell_ms=3.5;};
 // Portable crank-angle event scheduler for native SIL. It has no GPIO writes.
 // Every decoded tooth refreshes pending deadlines. Injector close deadlines are
 // fixed once opened; advance latches at dwell start and phase/speed corrections
@@ -21,19 +23,23 @@ private:
  bool fail(StopReason reason){reason_=reason;failed_=true;cut();return false;}
 public:
  void reset(){*this=AngleScheduler{};}
- void cut(){for(auto&s:slots_)s=Slot{};initialized_=false;}
+ ECU_ISR_CODE void cut(){for(auto&s:slots_)s=Slot{};initialized_=false;}
  bool failed()const{return failed_;}
  StopReason stop_reason()const{return reason_;}
- bool event_forced_cut()const{return forced_cut_;}
+ ECU_ISR_CODE bool event_forced_cut()const{return forced_cut_;}
  void refresh_control(std::uint64_t command_us,std::uint64_t sampled_us){const auto base=std::min(command_us,sampled_us);expires_=base>UINT64_MAX-20000?UINT64_MAX:base+20000;}
  std::uint64_t shortened_starts()const{return shortened_;}
- double event_advance()const{return popped_advance_;}
- std::uint64_t event_requested_dwell_us()const{return popped_dwell_;}
+ ECU_ISR_CODE double event_advance()const{return popped_advance_;}
+ ECU_ISR_CODE std::uint64_t event_requested_dwell_us()const{return popped_dwell_;}
  std::uint64_t skipped_initial()const{return skipped_initial_;}
- std::uint64_t next_time()const{
+ ECU_ISR_CODE std::uint64_t next_time()const{
   auto next=std::numeric_limits<std::uint64_t>::max();for(const auto&s:slots_)if(s.pending)next=std::min(next,s.high?s.end:s.start);return next==UINT64_MAX?next:std::min(next,expires_);
  }
- bool pop(Edge&edge){
+ ECU_ISR_CODE bool expired_unstarted(std::uint64_t now)const{
+  for(const auto& s:slots_)if(s.pending&&!s.high&&s.start<=now&&s.end<=now)return true;
+  return false;
+ }
+ ECU_ISR_CODE bool pop(Edge&edge){
   unsigned channel=8;auto time=next_time();if(time==std::numeric_limits<std::uint64_t>::max())return false;
   forced_cut_=false;
   if(time==expires_){cut();forced_cut_=true;edge={time,0,false};return true;}
@@ -43,6 +49,9 @@ public:
   s.high=!s.high;if(!s.high){if(s.inhibited)s=Slot{};else{s.pending=false;s.fired=true;++s.cycle;}}return true;
  }
  bool tooth(const Tune&t,const Output&o,std::uint64_t now,unsigned index,unsigned slots,std::uint64_t command_us,std::uint64_t sampled_us){
+  return tooth(AngleConfig{t.tooth1_btdc_deg,t.max_dwell_ms},o,now,index,slots,command_us,sampled_us);
+ }
+ bool tooth(const AngleConfig&t,const Output&o,std::uint64_t now,unsigned index,unsigned slots,std::uint64_t command_us,std::uint64_t sampled_us){
   if(failed_)return false;
   if(now<command_us||now-command_us>20000||now<sampled_us||now-sampled_us>20000){cut();return false;}
   if(!o.proposed_enabled()){cut();return true;}

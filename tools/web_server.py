@@ -91,6 +91,7 @@ class Handler(BaseHTTPRequestHandler):
    with d.engine.lock:return self.reply(200,d.engine.tune)
   if self.path=='/api/engine/defaults':return self.reply(200,d.engine.defaults)
   if self.path=='/api/engine/status':return self.reply(200,d.engine.status())
+  if self.path=='/api/engine/timing':return self.reply(200,d.engine.timing_trace())
   if self.path=='/api/engine/log':
    try:return self.reply(200,d.engine.msl().encode(),'text/plain; charset=utf-8')
    except ValueError as e:return self.reply(409,{'error':str(e)})

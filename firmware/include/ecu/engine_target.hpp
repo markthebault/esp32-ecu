@@ -1,0 +1,19 @@
+#pragma once
+#include "ecu/timing_executor.hpp"
+#include "cJSON.h"
+namespace ecu::engine_target {
+struct Wheel {unsigned slots=60,missing=2,max_rpm=8000;};
+struct Measurement {
+ double rpm=0;bool synced=false,overflow=false,ready=false,timing_fault=false;
+ std::uint64_t crank_edges=0,cam_edges=0;
+};
+void init(Wheel wheel,bool interlock_at_boot);
+std::uint64_t clock_us();
+Measurement measurement();
+bool submit(const timing::Command&);
+void inhibit(timing::Cause);
+void begin_configuration();
+void finish_configuration(std::uint32_t tune_revision,std::uint32_t sensor_revision);
+cJSON* snapshot();
+cJSON* trace_json();
+}

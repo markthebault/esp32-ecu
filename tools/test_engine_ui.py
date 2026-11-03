@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Actual Chrome UI regression. Run: uv run --with playwright python tools/test_engine_ui.py"""
 import asyncio
+import argparse
 import json
 from pathlib import Path
 import tempfile
@@ -12,7 +13,7 @@ from engine_runtime import R
 from web_server import Device,Handler,load_bridge
 
 
-async def check(url,device):
+async def check(url,device,report_dir):
  errors=[];checks=[]
  async with async_playwright() as playwright:
   browser=await playwright.chromium.launch(channel='chrome',headless=True,args=['--no-sandbox'])
@@ -71,7 +72,26 @@ async def check(url,device):
    msl=R/'.cache/engine/ui-export.msl';await (await download.value).save_as(msl)
    assert 'UNVALIDATED REDUCED-ORDER SIMULATION' in msl.read_text()
    checks.append('SIL runs through UI, historical status is explicit, MSL downloads')
-   await page.screenshot(path=R/'reports/engine/engine-ui-desktop.png')
+   await page.locator('#engine-timing').filter(has_text='completed_native_sil').wait_for()
+   async with page.expect_download() as timing_download:
+    await page.locator('#engine-timing-export').click()
+   timing_file=report_dir/'ui-timing-export.json';await (await timing_download.value).save_as(timing_file)
+   timing=json.loads(timing_file.read_text())
+   assert timing['data_source']=='completed_synthetic_sil' and timing['timing']['physical_high_mask']==0
+   assert 0<len(timing['events'])<=128
+   assert all(a['sequence']<b['sequence'] for a,b in zip(timing['events'],timing['events'][1:]))
+   checks.append('Timing trace export is bounded, ordered and explicitly synthetic on host')
+   async def target_fault(route):
+    response=await route.fetch();body=await response.json()
+    body['timing'].update(available=True,mode='hardware_timer_virtual_outputs',fault='late_interrupt',physical_high_mask=0)
+    await route.fulfill(response=response,json=body)
+   await page.route('**/api/engine/status',target_fault)
+   await page.locator('#engine-timing [role="alert"]').filter(has_text='late_interrupt').wait_for()
+   await page.screenshot(path=report_dir/'target-timing-fault.png')
+   await page.unroute('**/api/engine/status',target_fault)
+   checks.append('Target timer fault is visible while physical output mask stays zero')
+
+   await page.screenshot(path=report_dir/'engine-ui-desktop.png')
    for width in (320,390,768,1440):
     await page.set_viewport_size({'width':width,'height':1000})
     await page.evaluate('() => new Promise(requestAnimationFrame)')
@@ -83,13 +103,14 @@ async def check(url,device):
    assert not errors,errors
   finally:await browser.close()
  report=dict(browser='Installed Google Chrome via Playwright',checks=checks,page_errors=errors,passed=True)
- (R/'reports/engine/ui-tests.json').write_text(json.dumps(report,indent=2)+'\n')
+ (report_dir/'ui-tests.json').write_text(json.dumps(report,indent=2)+'\n')
  print(json.dumps(report,indent=2))
 
 
 if __name__=='__main__':
+ parser=argparse.ArgumentParser();parser.add_argument('--report-dir',type=Path,default=R/'reports/engine');args=parser.parse_args();args.report_dir.mkdir(parents=True,exist_ok=True)
  with tempfile.TemporaryDirectory() as directory,ThreadingHTTPServer(('127.0.0.1',0),Handler) as server:
   server.device=Device(Path(directory)/'profile.json',load_bridge())
   thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
-  try:asyncio.run(check(f'http://127.0.0.1:{server.server_address[1]}',server.device))
+  try:asyncio.run(check(f'http://127.0.0.1:{server.server_address[1]}',server.device,args.report_dir))
   finally:server.shutdown();thread.join(2)

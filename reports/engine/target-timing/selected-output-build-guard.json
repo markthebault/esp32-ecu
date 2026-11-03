@@ -1,0 +1,13 @@
+{
+  "expected_exit_code": 1,
+  "passed": true,
+  "reason": "Selected supplier module remains output-inhibited pending its hardware pin/fit checks",
+  "command": "pio run -d firmware -c /home/mark/persospace/esp32-ecu/.cache/engine/target-negative-platformio.ini -e compact_n16r8_web",
+  "configuration": "Selected N16R8 environment plus ECU_ENGINE_DUMMY_LOADS=1; isolated negative build directory",
+  "full_log_sha256": "b3793b76222a8b38128da0ffa79c250e05a29c78734719af86125c80a9f8b5d0",
+  "excerpt": [
+    "main/app.cpp:30:2: error: #error Selected supplier module remains output-inhibited pending its hardware pin/fit checks",
+    "   30 | #error Selected supplier module remains output-inhibited pending its hardware pin/fit checks"
+  ],
+  "isolated_platformio_config": "[platformio]\nsrc_dir = /home/mark/persospace/esp32-ecu/firmware/main\nbuild_dir = /home/mark/persospace/esp32-ecu/.cache/engine/target-negative-build\nboards_dir = /home/mark/persospace/esp32-ecu/firmware/boards\ndefault_envs = compact_n16r8_web\n\n[env:esp32s3]\nplatform = espressif32@6.12.0\nboard = esp32-s3-devkitc-1\nframework = espidf\nmonitor_speed = 115200\nboard_build.flash_size = 8MB\nboard_build.partitions = partitions.csv\nboard_upload.flash_size = 8MB\nbuild_flags = -std=gnu++17\n\n[env:bench]\nextends = env:esp32s3\nbuild_flags = -std=gnu++17 -DECU_BENCH_PULSES=1\n\n\n[env:hand_solder_a1]\nextends = env:esp32s3\nbuild_flags = -std=gnu++17 -DECU_HAND_SOLDER_A1=1\n\n[env:through_hole_a2]\nextends = env:esp32s3\nbuild_flags = -std=gnu++17 -DECU_THROUGH_HOLE_A2=1\n\n[env:compact_a3]\nextends = env:esp32s3\nbuild_flags = -std=gnu++17 -DECU_COMPACT_A3=1\n\n[env:compact_a3_web]\nextends = env:compact_a3\nbuild_flags = -std=gnu++17 -DECU_COMPACT_A3=1 -DECU_CONFIG_WEB=1\n\n# Selected AliExpress board. Same electrical pin order; socket dimensions still provisional.\n# Status LED is a separate WS2812 on GPIO38 because listing RGB47/RGB48 references conflict.\n[env:compact_n16r8_web]\nextends = env:compact_a3_web\nboard = esp32-s3-44pin-n16r8\nboard_build.cmake_extra_args = -DSDKCONFIG_DEFAULTS=sdkconfig.n16r8.defaults\nboard_build.flash_size = 16MB\nboard_upload.flash_size = 16MB\nbuild_flags = -std=gnu++17 -DECU_COMPACT_A3=1 -DECU_CONFIG_WEB=1 -DECU_SELECTED_N16R8=1 -DECU_ENGINE_DUMMY_LOADS=1\n\n# Explicit dummy loads only. AP/radio service is omitted. J3 must be closed at\n# boot; first gate/supervision fault after arming latches until reset.\n[env:compact_a3_timing_bench]\nextends = env:compact_a3\nbuild_flags = -std=gnu++17 -DECU_COMPACT_A3=1 -DECU_ENGINE_DUMMY_LOADS=1\n"
+}

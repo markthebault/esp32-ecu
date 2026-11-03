@@ -59,9 +59,10 @@ class OurController:
     def close(self):self.runtime.close()
 
 
-def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None):
+def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000):
     if controller not in ('ours','speeduino','speeduino_per_tooth') or scenario not in SCENARIOS:raise ValueError('Unknown benchmark case')
     if step_us not in (100,125,250,500) or not 1<=duration<=30:raise ValueError('Invalid benchmark duration/step')
+    if control_period_us not in (1000,5000):raise ValueError('Unsupported control sampling period')
     if tune is not None and controller!='ours':raise ValueError('Custom tune is supported only by the project controller')
     plant=ResearchPlant()
     try:ecu=OurController(tune) if controller=='ours' else SpeeduinoRuntime(per_tooth=controller=='speeduino_per_tooth')
@@ -95,7 +96,7 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                     ecu.sensors(sample);state=ecu.status()
                 if (controller=='ours' and state.get('faults',0)&32) or (controller!='ours' and state.get('rpm',0)>=6450 and state.get('fuel_channels',255)==0 and state.get('ignition_channels',255)==0):
                     hard_cut_samples+=1
-                next_sample=now+1000
+                next_sample=now+control_period_us
                 if now%20000<1000:
                     trace.append(dict(time=t,plant_rpm=plant.rpm,map_kpa=plant.map_kpa,
                                       tps=plant.tps,lambda_measured=plant.lambda_sensor,
@@ -154,6 +155,7 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
         else:ecu.runtime.cut()
         inhibit(now,'simulation_end')
         summary=dict(controller=controller,scenario=scenario,duration_s=duration,step_us=step_us,
+                     control_period_us=control_period_us,
                      plant='MVEMLib air path + local empirical combustion/free shaft, uncalibrated',
                      physical_outputs_enabled=False,final_rpm=final_rpm,max_rpm=max((r['plant_rpm'] for r in trace),default=0),
                      sparks=plant.sparks,edges=len(edges_all),trigger_edges=len(trigger_edges),

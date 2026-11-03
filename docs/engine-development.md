@@ -2,7 +2,7 @@
 
 This first increment moves toward Speeduino feature coverage. The project remains an inhibited bench monitor. No tune, MSQ, API or button enables physical engine outputs. A3 manufacturing records and the A4 N16R8 fit draft are unchanged.
 
-The shared C++ core computes four-cylinder, four-stroke batch fuel and wasted smart-coil commands. The ESP32 runs shadow calculations. Only the native simulator executes virtual timed edges. A target timer/ISR executor is still missing. The old constant-speed revolution planner is a diagnostic helper.
+The shared C++ core computes four-cylinder, four-stroke batch fuel and wasted smart-coil commands. The ESP32 now has a [MCPWM/GPTimer timing executor](engine-target-timing.md), with virtual outputs in the selected N16R8 build. Its shared dispatcher also runs on the external research plant through a native ABI. Physical target timing remains unmeasured. The old constant-speed revolution planner is a diagnostic helper.
 
 [Feature coverage](engine-feature-coverage.md) distinguishes implemented software from missing features and hardware. This is not full ECU parity.
 
@@ -35,7 +35,7 @@ The core implements speed-density mass/flow fuelling, bilinear/clamped maps, cra
 
 MAP/TPS/CLT/IAT require confirmed physical conversions in kPa, %, C or °C. Relabelling raw voltage is rejected. Lambda feedback needs a confirmed lambda conversion and external wideband controller. Fast raw samples feed the core; display smoothing cannot hide an electrical fault.
 
-The native scheduler updates deadlines per decoded tooth and latches advance at dwell start. Injector close deadlines remain fixed. An unachievable late advance change retains the committed full-dwell firing for that cycle. Reports separately measure angle error to the latched event and newest demand. Selective cuts suppress new starts and retain active closing edges. Fault/stale cuts emit explicit global-low trace events. Injector high time is capped at 15 ms and coil high time at 3.5 ms.
+The shared scheduler updates deadlines per decoded tooth and latches advance at dwell start. Injector close deadlines remain fixed. An unachievable late advance change retains the committed full-dwell firing for that cycle. Reports separately measure angle error to the latched event and newest demand. Selective cuts suppress new starts and retain active closing edges. Fault/stale cuts emit explicit global-low trace events. Injector high time is capped at 15 ms and coil high time at 3.5 ms.
 
 A protected stall can recover in SIL only after at least 150 ms without raw crank edges, fresh valid decoder-derived stopped samples, acknowledged virtual outputs low, and a further continuous 20 ms interval. Invalid/stale samples, activity and control gaps restart the interval. Stop reasons/counters survive recovery. This is absence-of-signal logic, not proof that a physical rotor is stationary; target restart policy needs HIL review.
 
@@ -84,4 +84,4 @@ That original 75-case comparison covers the fuel kernel only. The new [full cont
 
 Independent reviews found and drove fixes for synchronization/bench arming, whole-revolution timing drift, phase-wrap skipped firings, stale command events, lost closing edges, trace truncation, late advance updates, physical-unit binding, enrichment state, asynchronous UI navigation, build-cache dependencies, stopped-state recovery and stale-client tune overwrites. The [scheduler recheck](../reports/engine/independent-scheduler-review.md) and [stall/interoperability review](../reports/engine/independent-stall-interop-review.md) record reproductions.
 
-Before engine actuation, required work includes target timer/ISR integration under Wi-Fi/ESP-NOW/flash load, reviewed fault/restart behavior, calibrated plant and full reference comparison, crank/cam/ADC HIL, electrically measured dummy loads, driver energy/thermal tests, module/carrier fit and physical power/wiring/EMI/surge/environment testing. CAD, SIL and compilation do not qualify a car, printed fit or enclosure splash resistance.
+Before engine actuation, required work includes physical target timer/ISR measurements under Wi-Fi/ESP-NOW/flash load, HIL fault/restart validation, calibrated plant and remaining feature comparisons, crank/cam/ADC HIL, electrically measured dummy loads, driver energy/thermal tests, module/carrier fit and physical power/wiring/EMI/surge/environment testing. CAD, SIL and compilation do not qualify a car, printed fit or enclosure splash resistance.
