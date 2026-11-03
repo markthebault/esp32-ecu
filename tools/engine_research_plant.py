@@ -102,7 +102,7 @@ class ResearchPlant:
         advance=(tdc-self.angle%720+360)%720-360
         error=((tdc%360-self.angle%360+180)%360-180-commanded_advance+180)%360-180
         self.spark_errors.append(dict(time_s=t,channel=ch,actual_deg=(tdc%360-self.angle%360+180)%360-180,
-                                      requested_deg=commanded_advance,error_deg=error,rpm=self.rpm))
+                                      requested_deg=commanded_advance,error_deg=error,phase_error_deg=(advance-commanded_advance+360)%720-360,shaft_angle_deg=self.angle,rpm=self.rpm))
         if abs(advance)>90:return  # wasted spark on exhaust stroke
         fuel=self.charge_mg[index];self.charge_mg[index]=0.
         # Charge was frozen at intake closing using upstream pumping. Changing

@@ -38,6 +38,7 @@ std::string log_kind="none";
 bool record_edges = false;
 bool use_per_tooth = false;
 bool logger_cam = false;
+bool sequential_profile = false;
 volatile uint8_t* output_ports[8]{};
 uint8_t output_masks[8]{};
 uint8_t output_pins[8]{};
@@ -67,9 +68,10 @@ void configure() {
     configPage2.nInjectors = 4;
     configPage2.strokes = FOUR_STROKE;
     configPage2.injType = INJ_TYPE_PORT;
-    configPage2.injLayout = logger_cam?INJ_SEQUENTIAL:INJ_SEMISEQUENTIAL;
+    configPage2.injLayout = (logger_cam||sequential_profile)?INJ_SEQUENTIAL:INJ_SEMISEQUENTIAL;
     configPage2.divider = 2;
-    configPage2.injTiming = 0;
+    configPage2.injTiming = sequential_profile?1:0;
+    if(sequential_profile){for(unsigned n=0;n<4;++n){configPage2.injAng[n]=540;configPage2.injAngRPM[n]=5+20*n;}}
     configPage2.reqFuel = 107; // 2L/4cyl,300cc/min,14.7 AFR,25C rounded to0.1ms
     configPage2.injOpen = 9;
     configPage2.multiplyMAP = MULTIPLY_MAP_MODE_100;
@@ -88,7 +90,8 @@ void configure() {
     configPage4.triggerAngle = -90;
     configPage4.crankRPM = 45;
     configPage4.CrankAng = 5;
-    configPage4.sparkMode = IGN_MODE_WASTEDCOP;
+    configPage4.sparkMode = sequential_profile?IGN_MODE_SEQUENTIAL:IGN_MODE_WASTEDCOP;
+    configPage4.TrigSpeed=CRANK_SPEED;configPage4.trigPatternSec=SEC_TRIGGER_SINGLE;
     configPage4.IgInv = 0; // virtual active-high charging
     configPage4.dwellRun = 28; configPage4.dwellCrank = 28;
     configPage4.useDwellLim = 1; configPage4.dwellLimit = 4;
@@ -153,7 +156,7 @@ void status() {
               << unsigned(currentStatus.softLimitActive) << '\n';
     std::cout << "diagnostic " << unsigned(fuelSchedule1._status) << ' ' << fuelSchedule1._counter.load() << ' ' << fuelSchedule1._compare.load() << ' ' << currentStatus.decoder.getCrankAngle() << ' '
               << unsigned(currentStatus.schedulerCutState.fuelChannels) << ' ' << unsigned(currentStatus.schedulerCutState.ignitionChannels) << ' '
-              << unsigned(ignitionSchedule1._status) << ' ' << currentStatus.dwell << '\n';
+              << unsigned(ignitionSchedule1._status) << ' ' << currentStatus.dwell << ' ' << CRANK_ANGLE_MAX_IGN << ' ' << CRANK_ANGLE_MAX_INJ << ' ' << unsigned(currentStatus.nSquirts) << '\n';
 }
 }
 extern "C" void speeduino_sim_observe() {
@@ -162,7 +165,7 @@ extern "C" void speeduino_sim_observe() {
         bool high=(*output_ports[n]&output_masks[n]) != 0;
         if(high!=output_high[n]) {
             output_high[n]=high;
-            std::cout << "edge " << speeduino_sim_micros() << ' ' << unsigned(output_pins[n]) << ' ' << unsigned(high) << '\n';
+            std::cout << "edge " << speeduino_sim_micros() << ' ' << unsigned(output_pins[n]) << ' ' << unsigned(high) << ' ' << unsigned(currentStatus.decoder.getStatus().syncStatus) << ' ' << CRANK_ANGLE_MAX_IGN << '\n';
         }
     }
 }
@@ -178,6 +181,7 @@ int main(int argc,char** argv) {
             const std::string flag(argv[arg]);
             if(flag=="--per-tooth")use_per_tooth=true;
             else if(flag=="--logger-cam")logger_cam=true;
+            else if(flag=="--sequential")sequential_profile=true;
             else throw std::runtime_error("unsupported native profile flag");
         }
         prepare_hal(); configure();
@@ -238,6 +242,10 @@ int main(int argc,char** argv) {
                 std::cout << "profile " << unsigned(configPage2.reqFuel) << ' ' << unsigned(configPage4.HardRevLim) << ' '
                           << unsigned(configPage4.SoftRevLim) << ' ' << unsigned(configPage6.engineProtectType) << ' '
                           << unsigned(configPage9.hardRevMode) << ' ' << unsigned(configPage2.perToothIgn) << '\n';
+            }
+            else if(command=="cycleprofile"){
+                std::cout<<"cycleprofile "<<unsigned(configPage2.injLayout)<<' '<<unsigned(configPage4.sparkMode)<<' '<<unsigned(configPage4.TrigSpeed)<<' '<<unsigned(configPage4.trigPatternSec)<<' '<<unsigned(configPage2.injTiming);
+                for(unsigned n=0;n<4;++n)std::cout<<' '<<configPage2.injAng[n];std::cout<<'\n';
             }
             else if (command == "halt") { stopFuelSchedulers();stopIgnitionSchedulers();closeAllInjectors();stopAllCoilsCharging(); }
             else if (command == "quit") break;

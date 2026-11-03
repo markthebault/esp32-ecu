@@ -8,9 +8,10 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | --- | --- | --- | --- |
 | VE, spark, lambda maps | Shared 16×16 interpolation/validation; target timer source/native dispatcher | Axes/cells editable, JSON/own MSQ | Target pulse/jitter measurements pending |
 | Speed-density fuel | Shared core; fuel-kernel and external-plant controller comparisons | Engine/injector settings and correction readouts | Four high-Z saturated drivers, electrical behavior unmeasured |
-| Batch/wasted four-cylinder | Shared native and ESP32 MCPWM/GPTimer executor | Explicit fixed strategy, inhibited-output labels, timing trace | Four injector/four smart-coil commands; selected N16R8 physical policy inhibited |
+| Batch/wasted four-cylinder | Shared native and ESP32 MCPWM/GPTimer executor | Explicit strategy, inhibited-output labels, timing trace | Four injector/four smart-coil commands; selected N16R8 physical policy inhibited |
 | Other cylinder counts | Missing; Speeduino publishes 1–8 support | Validator rejects other counts | Channel/strategy review required |
-| Sequential/semi-sequential | Missing 720-degree cam phase/scheduler | No enable option | Cam capture exists but does not establish phase |
+| Full sequential four-cylinder | Shared720° phase/scheduler; strict cam-loss cut,33 external-plant cases plus6 step checks | Strategy/order/injection/cam settings, phase reasons/logs, schema migration and own002 MSQ | Existing protected Hall cam/four injector/four smart-coil commands; N16R8 physical policy inhibited |
+| Selectable semi-sequential | Missing as a separate selectable strategy | No misleading option | Strategy-specific timing/HIL remains |
 | Missing-tooth triggers | Existing generic decoder; SIL exercises 60-2 | Wheel geometry, sync/fault diagnostics | Protected Hall input, thresholds/noise unmeasured |
 | Other OEM trigger patterns | Missing decoder collection | No misleading selections | Pattern-specific HIL required |
 | VR crank/cam | Raw VR conditioning missing | Hall-specific guides | External conditioned module or reviewed new front end |
@@ -34,7 +35,7 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | Knock | Missing | No misleading protection indicator | Analog front end and processing required |
 | Sensor calibration | Persistent linear/table/NTC with loading compensation | Guides, units, confirmation and raw diagnostics | Six analog inputs plus battery/5V; physical verification pending |
 | Engine sensor binding | Confirmed physical units; raw-voltage relabelling rejected | Binding/fault status | Fast raw samples, display filter cannot hide faults |
-| Supervision/recovery | Target independent command/producer/tooth/high-time deadlines, transactional scheduling and configuration holds | Reasons/counters/bounded traces/revisions/storage | Target timing/watchdog/restart policy needs physical HIL |
+| Supervision/recovery | Target independent command/producer/tooth/cam/high-time deadlines, transactional scheduling and configuration holds | Reasons/counters/bounded traces/revisions/storage | Target timing/watchdog/restart policy needs physical HIL |
 | TunerStudio offline | Own definition/MSQ exchange | Settings/curve/map editors, strict identity/revision import | Files only, no physical binary transport |
 | TunerStudio online | Local MS-envelope prototype | Wire read/write/burn tests; app rejects own identity | Vendor integration and dedicated transport required |
 | MegaLogViewer HD | Engine MSL and raw-trigger MSL; actual application opens/plots both | Source-labelled downloads; unknown trigger values retained | Physical target capture/logging behavior unmeasured |
@@ -61,3 +62,5 @@ DBW/OEM integration remain outside the current bench scope.
 [Target timing implementation and evidence](engine-target-timing.md) describes the selected build's inhibited policy, native dispatcher comparison and outstanding physical tests.
 
 [Trigger debugging](engine-trigger-debug.md) covers raw capture, the Speeduino logger comparison and the source-labelled MegaLogViewer workflow.
+
+[Sequential configuration, supervision and comparison](engine-sequential.md) records the latest software increment and its physical limits.

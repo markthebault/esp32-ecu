@@ -9,7 +9,7 @@ inline bool safe_json(const char*text,std::size_t length){
  if(!text||!length||length>16384)return false;
  unsigned depth=0;bool quoted=false,escaped=false;
  for(std::size_t i=0;i<length;++i){const char c=text[i];if(!c)return false;
-  if(quoted){if(escaped){escaped=false;continue;}if(c=='\\'){escaped=true;continue;}if(c=='"')quoted=false;}
+  if(quoted){if(escaped){if(c=='u'&&i+4<length&&text[i+1]=='0'&&text[i+2]=='0'&&text[i+3]=='0'&&text[i+4]=='0')return false;escaped=false;continue;}if(c=='\\'){escaped=true;continue;}if(c=='"')quoted=false;}
   else if(c=='"')quoted=true;
   else if(c=='{'||c=='['){if(++depth>8)return false;}
   else if(c=='}'||c==']'){if(!depth)return false;--depth;}

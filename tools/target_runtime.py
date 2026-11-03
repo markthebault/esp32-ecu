@@ -29,8 +29,8 @@ def load_target_bridge():
         bridge=ctypes.CDLL(str(library))
         P=ctypes.c_void_p;U=ctypes.c_uint64;S=ctypes.c_char_p;I=ctypes.c_uint
         signatures={'engine_create':([],P),'engine_destroy':([P],None),'engine_validate':([S],ctypes.c_int),
-                    'engine_configure':([P,S],ctypes.c_int),'engine_wheel':([P,I,I,I],ctypes.c_int),
-                    'engine_trigger':([P,U],ctypes.c_int),'engine_step':([P,S,U,U],S),
+                    'engine_canonicalize':([S],S),'engine_configure':([P,S],ctypes.c_int),'engine_wheel':([P,I,I,I],ctypes.c_int),
+                    'engine_cam':([P,U],ctypes.c_int),'engine_trigger':([P,U],ctypes.c_int),'engine_step':([P,S,U,U],S),
                     'engine_cut':([P],None),'engine_timing_reason':([P],S),'engine_next_time':([P],U),
                     'engine_progress':([P,U],None),
                     'engine_pop':([P],I),'engine_event_dwell':([P],U),'engine_event_advance':([P],ctypes.c_double),

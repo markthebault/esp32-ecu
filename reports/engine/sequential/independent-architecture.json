@@ -1,0 +1,100 @@
+{
+  "scope": "Independent read-only design/draft review of four-cylinder even-fire sequential fuel/spark using unchanged MissingTooth crank decoding plus one rising cam edge per720 degrees. No production edits, child agents, target execution or physical qualification.",
+  "reviewed_at": "2026-11-03T17:21:09.639006+00:00",
+  "baseline_commit": "fa9627dbfd3d3ce0dac37b2c95d9d2e4f9d4bc71",
+  "reviewed_source_sha256": {
+    "firmware/include/ecu/engine_phase.hpp": "ed64cee63597e6d917d8d9b78cefbfc521de96f451da38fbeee309a052652b9c",
+    "firmware/include/ecu/engine_scheduler.hpp": "4b3a80b870025f354a331bf5b0334f076b568adf33df3608c782327a3068aec0",
+    "firmware/include/ecu/timing_executor.hpp": "4d98d9c173b6c8f0f3d2704cb9ecc392f160f0dd2164d5483196d0a3c4a06c9d",
+    "firmware/include/ecu/engine.hpp": "9b71f61fe63d1d87c6514a6a79540811f7e4affd87dd720266c52ad5cae07039",
+    "firmware/include/ecu/engine_json.hpp": "9a40e4b413a23be91f62d9cc9d0e811e2b574e6f41aa06a1c55eb47049ae43ac",
+    "firmware/main/engine_target.cpp": "7b62d842448bf644de795e8d1c2684e52c89cca261dd5505358e97db8271ccec",
+    "firmware/main/engine_service.cpp": "bad5e91abea0fdee23bb742ae80f570ca601b46d2f3b33b558da9859c870912b",
+    "firmware/tests/engine_phase_test.cpp": "17ee9359be5ea53ee90753a953c13d47a4225ecb76ad4a6595e35dabd11be0a6"
+  },
+  "result": "The current portable design is a sound minimal direction after the pending-cam and inactive-phase-watchdog fixes. Target integration remains in progress and requires the explicit contracts below. This is not final implementation or physical-engine approval.",
+  "verified_draft_improvements": [
+    "Wrapper-owned phase_tooth0..2*slots carries720 parity into AngleScheduler; scheduler.cut reset therefore cannot silently select the opposite revolution.",
+    "Crank history retains64 decoded timestamp/angle samples. Pending cam retry preserves immediate crank scheduling instead of delaying the entire trigger stream by1ms.",
+    "One pending cam is sufficient for the specified1ms reorder interval: a second real cam cannot arrive that soon at the supported RPM, so another pulse is a duplicate/error.",
+    "Both acquisition pulses must be consecutive cycle matches (shift+2), so a360-degree extra pulse cannot be ignored while accepting the next720 pulse.",
+    "PhaseDecoder faults remain sticky until reset. Cam window, cycle, order, mapping, timeout and crank-loss reasons are separately observable.",
+    "Executor now retains cam alarm/expiry while inactive, checks old expiry before accepting deadline extensions and preserves CamPhase fault after attempted renewal.",
+    "Sequential controller mass divides by one opening per720, adds dead time once, and computes injector duty on the720 interval. Batch retains two openings and per-opening dead time.",
+    "Sequential injection is scheduled by its end-angle target before start; an already high injector retains its low edge. Full dwell and latched spark advance follow existing semantics."
+  ],
+  "independent_native_probe": {
+    "source": "architecture-probe.cpp",
+    "snapshot_hashes": "draft-source-hashes.json",
+    "snapshot_directory": "draft-review/include/ecu",
+    "result_file": "architecture-probe.json",
+    "method": "Fresh -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined build against a copied draft header snapshot.",
+    "observed": {
+      "crank_lag_during_acquisition": {
+        "ever_locked": true,
+        "locked": true,
+        "faulted": false,
+        "accepted": 4,
+        "rejected": 0,
+        "reason": "phase_locked"
+      },
+      "crank_lag_after_lock": {
+        "ever_locked": true,
+        "locked": true,
+        "faulted": false,
+        "accepted": 4,
+        "rejected": 0,
+        "reason": "phase_locked"
+      },
+      "inactive_cam_guard": {
+        "alarm": 3001,
+        "fault_after_expiry_and_renewal": "cam_phase_lost"
+      }
+    },
+    "interpretation": "At120slots/8000RPM, delaying every crank callback by1000us while cam is timely acquires phase. Introducing that skew after lock retains phase. Inactive sequential phase arms3001us and dispatch/renewal at3001/3002 latches cam_phase_lost. These confirm fixes that landed before the independent probe snapshot."
+  },
+  "required_target_contracts": [
+    "Keep the legacy MissingTooth decoder implementation and group0 rising-edge capture contract. PhaseDecoder owns crank revolution/history/parity in task context; no floating-point phase mapping enters the capture ISR.",
+    "Publish crank_synced separately from phase_synced/phase state. Sequential outputs stay globally low while acquiring. Absence of phase before first acquisition must not create a bootstrap fault that prevents acquisition.",
+    "Validate cam ingress age with fresh GPTimer now, as for crank. Distinguish ingress delay from bounded pending-mapping delay. Do not use a captured timestamp as a proxy for current processing time.",
+    "Process every current-epoch crank/cam for phase/history even when a capture is too old relative to the latest control command to schedule from it. Command/sample freshness does not invalidate mechanical phase observations by itself.",
+    "Never build a scheduling candidate using cam capture time paired with the latest crank phase_tooth. Wait for the next eligible crank or use an explicitly stored matching crank timestamp/position sample.",
+    "The executor must enforce phase expiry before a fresh phase update, command update or candidate commit. PhaseDecoder.cam and pending acceptance should either receive/check fresh processing time or have an explicit caller precondition preventing wrapper deadline renewal before expiry is checked.",
+    "A cam phase guard remains armed after acquisition through selective fuel/spark cuts and inactive/OverRev control states. A missing/duplicate/out-of-window/unmappable/late cam after acquisition cuts and latches; never automatically switch to batch or reacquire while moving.",
+    "Commit generation/epoch validation covers phase acquisition/loss, guard changes, global cuts, ISR expiry, controller command sequence and configuration changes. A stale candidate must not restore a cleared phase flag or extend an expired deadline.",
+    "Publish phase validity with its accepted configuration/phase epoch. A cached old phase_synced=true must not make the first new-revision active command trip a permanent CamPhase fault before new phase can be acquired.",
+    "Use existing configuration hold around persistence/publication. Changes to strategy, wheel, tooth reference, firing order, cam center/window or injection reference invalidate phase/history/pending records and scheduler generations. A configuration edit must not clear a latched timing/phase fault while moving.",
+    "Stopped recovery requires raw quiet on both crank and cam, fresh valid stopped samples, acknowledged global-low outputs and continuous20ms supervision. Cam-only activity must prevent recovery. After recovery, clear history/pending/parity and require two fresh cam pulses again.",
+    "Keep selected N16R8 physical output writes compiled out. Strategy configuration changes logical scheduling only."
+  ],
+  "angle_and_event_contract": {
+    "cylinder_identity": "GPIO injector1..4 and coil1..4 remain cylinder identities. For a cylinder1-first firing order, cylinder compression phases are180*position_in_order. A general permutation can be cyclically rotated around cylinder1; current draft instead explicitly validates cylinder1 first.",
+    "reference": "With tooth zero at configured tooth1_btdc_deg before cylinder1 TDC, spark goal is tooth1_btdc_deg+cylinder_phase-latched_advance modulo720. Injector end goal is tooth1_btdc_deg+cylinder_phase+injection_end_deg modulo720.",
+    "fuel_mass": "Sequential width is full-cycle fuel mass/flow + one dead time; it is not twice the complete batch width. One injector opening and one coil firing occur per cylinder per720 after startup skips.",
+    "injection_end": "End angle is a pre-start target. After start, fixed pulse duration/closing deadline preserves fuel mass; actual end angle may move under acceleration. Late unreachable starts retain a committed full pulse or skip one complete720 cycle, never issue a partial injection.",
+    "advance": "Advance is latched at dwell start. Subsequent tooth correction can move the off time for that latched angle only within maximum physical high-time guards."
+  },
+  "deadline_policy_assessment": [
+    "The next expected cam center must be a fixed angular-cycle identity, not recomputed from each arriving command or from an arbitrary latest cam. Per-tooth speed updates may reproject the same center/window close; expiry must be checked before extending.",
+    "A1ms allowance accounts for software timing, not uncertain future shaft acceleration. An absolute wall-clock deadline cannot be guaranteed to equal angular closure under arbitrary changing RPM while the worker has no fresh angle information.",
+    "Bounded extrapolation near a missing-tooth gap can reject a physically valid cam during speed ripple. Either quantify a supported acceleration/phase-uncertainty envelope or explicitly accept conservative phase inhibition. The draft comment accepts this limitation; it should remain visible in evidence and UI qualification.",
+    "Independent producer/tooth/high-time watchdogs remain essential. They protect output shutdown when phase-worker progress stops, alongside the separately armed cam deadline.",
+    "Define boundary semantics for a cam at the latest allowed window angle with maximum processing delay. Timer expiry and validation racing at exactly the same microsecond must have an explicit fail-closed ordering and adequate quantization/clock uncertainty padding."
+  ],
+  "minimum_next_tests": [
+    "Both starting revolution parities, all supported cam centers including0/360/720 wrap and missing gaps, multiple wheel geometries and all six cylinder1-first firing orders.",
+    "Cam callback late, crank callbacks late, alternating skew, ties and reversed callback order through the1ms bound; history eviction and pending-overflow/error cases.",
+    "Independently angle-generated acceleration, deceleration and compression-speed ripple, with cam angle fixed mechanically. Include narrow windows in long missing-tooth gaps and qualify conservative false faults.",
+    "Missing cam, extra360-degree cam, same-timestamp and near-window duplicates, out-of-order/late/unmappable cam, crank sync loss after acquisition and no moving fallback/reacquisition.",
+    "Cam timeout during inactive control, selective cuts and OverRev; old deadline versus cam refresh/command refresh/candidate commit races; stale phase epoch across tune/trigger changes.",
+    "Raw cam activity while crank is quiet prevents stopped recovery. Old queued cam records cannot seed acquisition after configuration/recovery.",
+    "Full-cycle delivered fuel mass and per-opening dead-time accounting; injector end target versus fixed closing time under RPM changes; spark once720 with latched advance/full dwell; first-cycle skip behavior.",
+    "Legacy batch regressions and old tune imports remain valid; invalid strategy/order/angles rejected; selected physical outputs stay inhibited.",
+    "After target integration, rebuild selected/dummy images and audit complete ISR code/literal/data closure, including new integer guard fields. No native test substitutes for hardware capture/output timing measurements."
+  ],
+  "qualification_limits": [
+    "Two repeatable cam pulses establish parity relative to the configured reference, not the correctness of the physical cylinder1 compression calibration. A360-degree calibration error is undetectable from this single cam pattern alone.",
+    "Existing MCPWM capture overwrite, separate timestamp/polarity register behavior, physical input conditioning and timer/IRQ latency remain unmeasured.",
+    "This review makes no engine, electrical or vehicle qualification claim. No hardware was connected or flashed."
+  ]
+}

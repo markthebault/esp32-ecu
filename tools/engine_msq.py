@@ -6,24 +6,30 @@ import math
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-from engine_protocol import DEFAULT,NUMBERS,FLAGS,CURVES,SIGNATURE,PAGE_SIZES,field_units
+from engine_protocol import DEFAULT,NUMBERS,FLAGS,CURVES,SIGNATURE,LEGACY_SIGNATURE,TIMING_FIELDS,STRATEGIES,PAGE_SIZES,field_units
 
 NS='http://www.msefi.com/:msq'
 ET.register_namespace('',NS)
 def tag(name):return '{'+NS+'}'+name
 
-def constants(tune):
+def constants(tune,legacy=False):
  revision=tune['revision']
  if isinstance(revision,bool) or not isinstance(revision,(int,float)) or not math.isfinite(revision) or int(revision)!=revision or not 1<=revision<=4294967295:raise ValueError('Invalid MSQ base revision')
  result=[(0,'baseRevision',[int(revision)],None)]
  result += [(0,k,[tune[group][k]],None) for group,k in NUMBERS]
  result += [(0,k,['"On"' if tune['settings'][k] else '"Off"'],None) for k in FLAGS]
  result += [(0,k,tune['curves'][k],(n,1)) for k,n in CURVES]
+ if not legacy:
+  result += [(0,'engineStrategy',['"Sequential"' if tune['strategy']=='sequential_4cyl' else '"Batch / wasted"'],None)]
+  result += [(0,k,[tune['timing'][k]],None) for k,_ in TIMING_FIELDS]
+  result += [(0,f'fireOrder{i+1}',[v],None) for i,v in enumerate(tune['timing']['firing_order'])]
  for page,name in enumerate(('ve','spark','lambda'),1):
   result += [(page,name+'Rpm',tune['maps'][name]['rpm'],(16,1)),(page,name+'Load',tune['maps'][name]['load'],(16,1)),(page,name+'Table',tune['maps'][name]['cells'],(16,16))]
  return result
 
 def export_msq(tune):
+ from engine_runtime import EngineRuntime
+ runtime=EngineRuntime(tune);tune=runtime.tune;runtime.close()
  root=ET.Element(tag('msq'))
  ET.SubElement(root,tag('bibliography'),author='ESP32ECU',tuneComment='SHADOW ONLY; physical outputs inhibited; illustrative development tune')
  ET.SubElement(root,tag('versionInfo'),fileFormat='5.0',firmwareInfo='ESP32ECU SIL',nPages='4',signature=SIGNATURE.decode())
@@ -43,8 +49,9 @@ def import_msq(body):
  try:root=ET.fromstring(body)
  except ET.ParseError as error:raise ValueError('Malformed MSQ XML') from error
  info=root.find(tag('versionInfo'))
- if root.tag!=tag('msq') or info is None or info.get('signature')!=SIGNATURE.decode() or info.get('nPages')!='4':raise ValueError('MSQ must match this ESP32ECU definition; other ECU tunes are incompatible')
- expected={name:(page,len(values),shape) for page,name,values,shape in constants(DEFAULT)}
+ if root.tag!=tag('msq') or info is None or info.get('signature') not in (SIGNATURE.decode(),LEGACY_SIGNATURE.decode()) or info.get('nPages')!='4':raise ValueError('MSQ must match this ESP32ECU definition; other ECU tunes are incompatible')
+ legacy=info.get('signature')==LEGACY_SIGNATURE.decode()
+ expected={name:(page,len(values),shape) for page,name,values,shape in constants(DEFAULT,legacy=legacy)}
  values={}
  for page in root.findall(tag('page')):
   for element in page.findall(tag('constant')):
@@ -53,7 +60,10 @@ def import_msq(body):
    page_number,count,shape=expected[name]
    if page.get('number')!=str(page_number):raise ValueError('MSQ constant on wrong page')
    text=(element.text or '').strip()
-   if name in FLAGS:
+   if name=='engineStrategy':
+    if text not in ('"Batch / wasted"','"Sequential"','0','1'):raise ValueError('Invalid MSQ strategy')
+    values[name]=1 if text in ('"Sequential"','1') else 0
+   elif name in FLAGS:
     if text not in ('"Off"','"On"','0','1'):raise ValueError('Invalid MSQ flag')
     values[name]=text in ('"On"','1')
    else:
@@ -65,12 +75,18 @@ def import_msq(body):
  revision=values['baseRevision']
  if revision!=int(revision) or not 1<=revision<=4294967295:raise ValueError('Invalid MSQ base revision')
  tune=copy.deepcopy(DEFAULT);tune['revision']=int(revision)
+ if legacy:
+  tune['strategy']='batch_wasted_4cyl';tune['timing']=dict(firing_order=[1,3,4,2],injection_end_deg=540,cam_sync_deg=450,cam_window_deg=20)
+ if not legacy:
+  tune['strategy']=STRATEGIES[values['engineStrategy']]
+  for name,_ in TIMING_FIELDS:tune['timing'][name]=values[name]
+  tune['timing']['firing_order']=[values[f'fireOrder{i+1}'] for i in range(4)]
  for group,name in NUMBERS:tune[group][name]=values[name]
  for name in FLAGS:tune['settings'][name]=values[name]
  for name,n in CURVES:tune['curves'][name]=values[name]
  for name in ('ve','spark','lambda'):tune['maps'][name]=dict(rpm=values[name+'Rpm'],load=values[name+'Load'],cells=values[name+'Table'])
  from engine_runtime import EngineRuntime
- runtime=EngineRuntime(tune);runtime.close()
+ runtime=EngineRuntime(tune);tune=runtime.tune;runtime.close()
  return tune
 
 if __name__=='__main__':

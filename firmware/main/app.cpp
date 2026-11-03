@@ -180,6 +180,9 @@ extern "C" void app_main() {
     ecu::web::Sample live;
     live.raw=raw; live.adc_ok=adc_ok; live.safe=safe; live.interlock=interlock;
     live.overflow=edge_state.overflow; live.synced=edge_state.synced; live.rpm=edge_state.rpm; live.timing_fault=edge_state.timing_fault;
+    live.phase_synced=edge_state.phase_synced;
+    live.phase_tune_revision=edge_state.tune_revision;live.phase_sensor_revision=edge_state.sensor_revision;
+    live.phase_epoch=edge_state.phase_epoch;
     live.can_frames=can_frames; live.cam_edges=edge_state.cam_edges; live.crank_edges=edge_state.crank_edges;
     live.crank_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::crank));
     live.cam_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::cam));

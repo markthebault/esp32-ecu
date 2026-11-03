@@ -1,8 +1,8 @@
 # Engine development and simulation
 
-This first increment moves toward Speeduino feature coverage. The project remains an inhibited bench monitor. No tune, MSQ, API or button enables physical engine outputs. A3 manufacturing records and the A4 N16R8 fit draft are unchanged.
+This development branch moves toward Speeduino feature coverage. The project remains an inhibited bench monitor. No tune, MSQ, API or button enables physical engine outputs. A3 manufacturing records and the A4 N16R8 fit draft are unchanged.
 
-The shared C++ core computes four-cylinder, four-stroke batch fuel and wasted smart-coil commands. The ESP32 now has a [MCPWM/GPTimer timing executor](engine-target-timing.md), with virtual outputs in the selected N16R8 build. Its shared dispatcher also runs on the external research plant through a native ABI. Physical target timing remains unmeasured. The old constant-speed revolution planner is a diagnostic helper.
+The shared C++ core computes four-cylinder, four-stroke batch/wasted or [cam-synchronized sequential fuel and spark](engine-sequential.md). The ESP32 now has a [MCPWM/GPTimer timing executor](engine-target-timing.md), with virtual outputs in the selected N16R8 build. Its shared dispatcher also runs on the external research plant through a native ABI. Physical target timing remains unmeasured. The old constant-speed revolution planner is a diagnostic helper.
 
 [Feature coverage](engine-feature-coverage.md) distinguishes implemented software from missing features and hardware. This is not full ECU parity.
 
@@ -37,9 +37,9 @@ MAP/TPS/CLT/IAT require confirmed physical conversions in kPa, %, C or °C. Rela
 
 The shared scheduler updates deadlines per decoded tooth and latches advance at dwell start. Injector close deadlines remain fixed. An unachievable late advance change retains the committed full-dwell firing for that cycle. Reports separately measure angle error to the latched event and newest demand. Selective cuts suppress new starts and retain active closing edges. Fault/stale cuts emit explicit global-low trace events. Injector high time is capped at 15 ms and coil high time at 3.5 ms.
 
-A protected stall can recover in SIL only after at least 150 ms without raw crank edges, fresh valid decoder-derived stopped samples, acknowledged virtual outputs low, and a further continuous 20 ms interval. Invalid/stale samples, activity and control gaps restart the interval. Stop reasons/counters survive recovery. This is absence-of-signal logic, not proof that a physical rotor is stationary; target restart policy needs HIL review.
+A protected stall can recover in SIL only after at least 150 ms without raw crank or cam edges, fresh valid decoder-derived stopped samples, acknowledged virtual outputs low, and a further continuous 20 ms interval. Invalid/stale samples, activity and control gaps restart the interval. Stop reasons/counters survive recovery. This is absence-of-signal logic, not proof that a physical rotor is stationary; target restart policy needs HIL review.
 
-Defaults describe an illustrative 2 L, four-cylinder, 300 cc/min model. They are not a physical engine base tune. This profile is naturally aspirated, limited to 8000 RPM and batch/wasted operation.
+Defaults describe an illustrative 2 L, four-cylinder, 300 cc/min model. They are not a physical engine base tune. This profile is naturally aspirated, limited to 8000 RPM. Batch/wasted is the default; sequential operation requires the explicit cam/timing configuration and retains all pulse limits.
 
 ## Simulator assessment
 

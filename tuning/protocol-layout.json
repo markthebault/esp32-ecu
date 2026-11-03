@@ -1,5 +1,5 @@
 {
-  "signature": "ESP32ECU SIL 001 INHIBITED",
+  "signature": "ESP32ECU SIL 002 INHIBITED",
   "pages": {
     "1": 512,
     "2": 1152,
@@ -184,6 +184,23 @@
     "target_lambda",
     "ego"
   ],
-  "live_block_bytes": 76,
+  "live_block_bytes": 100,
+  "timing_fields": [
+    [
+      "injection_end_deg",
+      276
+    ],
+    [
+      "cam_sync_deg",
+      280
+    ],
+    [
+      "cam_window_deg",
+      284
+    ]
+  ],
+  "strategy_offset": 272,
+  "firing_order_offset": 288,
+  "revision_offset": 268,
   "scope": "native SIL transport only; physical UART is not implemented"
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "guide_version": "1.1",
+  "guide_version": "1.2",
   "hardware_revision": "A3-120",
   "scope": "Bench configuration and diagnostics. Physical engine outputs remain inhibited; no vehicle qualification.",
   "general": [
@@ -260,7 +260,7 @@
       ],
       "expected": [
         "The decoder uses rising edges. Trigger logging records both polarities on separate diagnostic capture channels. Both Hall paths use two Schmitt inversions, preserving the input polarity.",
-        "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Cam is counted but full 720-degree phase decoding is not implemented."
+        "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Batch/wasted mode uses crank sync only. Sequential mode requires one rising cam pulse per720 degrees and two repeatable cam observations; loss after acquisition inhibits and latches until a supervised stop. Mechanical cylinder1 compression reference remains essential."
       ],
       "faults": [
         "No edges: inspect supply, missing pull-up, wrong sensor type, target gap, signal/ground pin order and U7 conditioning.",
@@ -291,7 +291,7 @@
       ],
       "expected": [
         "The decoder uses rising edges. Trigger logging records both polarities on separate diagnostic capture channels. Both Hall paths use two Schmitt inversions, preserving the input polarity.",
-        "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Cam is counted but full 720-degree phase decoding is not implemented."
+        "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Batch/wasted mode uses crank sync only. Sequential mode requires one rising cam pulse per720 degrees and two repeatable cam observations; loss after acquisition inhibits and latches until a supervised stop. Mechanical cylinder1 compression reference remains essential."
       ],
       "faults": [
         "No edges: inspect supply, missing pull-up, wrong sensor type, target gap, signal/ground pin order and U7 conditioning.",

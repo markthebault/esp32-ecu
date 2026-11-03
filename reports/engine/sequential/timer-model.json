@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "scope": "16bit/4us/equality native timer HAL only; not CPU/register/IRQ emulation",
+  "checks": [
+    "wrap",
+    "compare behind count",
+    "zero-tick delay",
+    "disabled count and re-enable"
+  ],
+  "stdout": "16bit timer wrap, compare equality, zero-tick delay and disabled/re-enable tests passed\n",
+  "source_hashes": {
+    "tools/speeduino_sim_hal.cpp": "0c6887b38f663cb76fbe451044b6e48dc4cc6849e110b44b3b9d67643bfd9224",
+    "tools/speeduino_timer_model_test.cpp": "fa24d40df2cef36139b2df39e2c5d3d3f6553fd5dbafaf1f6c5029fee30488cf"
+  },
+  "reference_manifest_sha256": "5da7384f70435c4c5f90bac65a5699d333ba2047568018763a37398c19e07913"
+}

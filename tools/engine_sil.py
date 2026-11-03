@@ -29,7 +29,9 @@ class Plant:
    self.sparks+=1
    tdc_mod=(90,270,270,90)[ch-4];actual=(tdc_mod-self.angle%360+180)%360-180
    error=(actual-commanded_advance+180)%360-180
-   self.spark_errors.append(dict(time_s=time_s,channel=ch,requested_deg=commanded_advance,actual_deg=actual,error_deg=error,latest_demand_deg=latest_demand,demand_error_deg=(actual-latest_demand+180)%360-180,rpm=self.rpm))
+   phase_advance=((90,630,270,450)[ch-4]-self.angle%720+360)%720-360
+   phase_error=(phase_advance-commanded_advance+360)%720-360
+   self.spark_errors.append(dict(time_s=time_s,channel=ch,requested_deg=commanded_advance,actual_deg=actual,error_deg=error,phase_error_deg=phase_error,shaft_angle_deg=self.angle,latest_demand_deg=latest_demand,demand_error_deg=(actual-latest_demand+180)%360-180,rpm=self.rpm))
    cyl=ch-4;tdc=(90,630,270,450)[cyl];advance=(tdc-self.angle%720+360)%720-360
    if abs(advance)>90:return # wasted spark on exhaust stroke
    self.advance=advance;self.spk_errors.append(advance)
@@ -88,7 +90,7 @@ class Simulation:
   self.tune=copy.deepcopy(tune);self.scenario=scenario;self.duration=duration_s;self.seed=seed
  def run(self):
   runtime=EngineRuntime(self.tune);runtime.wheel();plant=Plant(self.scenario=='cold_start',self.seed)
-  states=[False]*8;trace=[];edge_trace=[];trigger_trace=[];timing_stops=[];failure_recorded=False;fault_or=0;sync_seen=False;late=0;max_high=[0]*8;rise=[0]*8
+  states=[False]*8;trace=[];edge_trace=[];trigger_trace=[];cam_trace=[];timing_stops=[];failure_recorded=False;fault_or=0;sync_seen=False;late=0;max_high=[0]*8;rise=[0]*8
   def cut_outputs(time_us,cause):
    nonlocal states
    for ch,high in enumerate(states):
@@ -96,6 +98,7 @@ class Simulation:
      max_high[ch]=max(max_high[ch],max(0,time_us-rise[ch]))
      edge_trace.append([time_us,ch,False,'cut:'+cause])
    runtime.cut();plant.cut();states=[False]*8
+  sequential=self.tune['strategy']=='sequential_4cyl';cam_angle=540.
   dt=.00025;t=0.;next_sample=0.;tooth_index=1;proposals=0;sample={};result={};latest_lambda=1.
   try:
    while t<self.duration-1e-10:
@@ -116,7 +119,8 @@ class Simulation:
     # Trigger crossings are timestamped inside the integration step. Integrate
     # to queued output edges first, then provide every actual 60-2 tooth.
     until_tooth=(tooth_index*6-plant.angle)/(plant.rpm*6) if plant.rpm>1e-6 else dt
-    end=min(self.duration,t+max(1e-7,min(dt,until_tooth)),next_sample)
+    until_cam=(cam_angle-plant.angle)/(plant.rpm*6) if sequential and plant.rpm>1e-6 else dt
+    end=min(self.duration,t+max(1e-7,min(dt,until_tooth,until_cam)),next_sample)
     # Trigger and timer timestamps share integer microseconds. Drain all
     # deadlines at the rounded crossing before delivering a tooth at that
     # same timestamp; fractional integration endpoints can differ by <0.5us.
@@ -143,8 +147,12 @@ class Simulation:
        late+=1
        if not failure_recorded:timing_stops.append(dict(time_us=edge_us,reason=runtime.timing_reason(),plant_rpm=plant.rpm));failure_recorded=True
      if trigger_result==1:proposals+=1
+    while sequential and cam_angle<=plant.angle:
+     cam_angle+=720
+     cam_us=round(t*1e6);cam_result=runtime.cam(cam_us);cam_trace.append([cam_us,cam_result])
+     if cam_result in (2,3):cut_outputs(cam_us,'cam_inhibit')
    before_stop=sum(states);cut_outputs(round(t*1e6),'simulation_end')
    errors=sorted(abs(e['error_deg']) for e in plant.spark_errors);warm_errors=[abs(e['error_deg']) for e in plant.spark_errors if e['time_s']>=3]
-   summary=dict(scenario=self.scenario,duration_s=self.duration,seed=self.seed,model='unvalidated reduced-order SI plant v1',ecu='native production engine.hpp + MissingTooth decoder',physical_outputs_enabled=False,plant_parameters=dict(injector_flow_cc_min=plant.injector_flow_cc_min,rotor_inertia_kg_m2=plant.rotor_inertia),sync_acquired=sync_seen,max_rpm=max((p['plant_rpm'] for p in trace),default=0),final_rpm=plant.rpm,fuel_mg=plant.fuel_mg,sparks=plant.sparks,planned_revolutions=proposals,rejected_plans=late,max_injector_high_us=max(max_high[:4]),max_dwell_high_us=max(max_high[4:]),min_completed_dwell_us=min((d['dwell_us'] for d in plant.dwell_events),default=0),max_dwell_shortfall_us=max((d['requested_us']-d['dwell_us'] for d in plant.dwell_events),default=0),max_spark_error_deg=max(errors,default=0),max_spark_error_to_latest_demand_deg=max((abs(e['demand_error_deg']) for e in plant.spark_errors),default=0),p95_spark_error_deg=errors[int(.95*(len(errors)-1))] if errors else 0,max_spark_error_after_3s_deg=max(warm_errors,default=0),fault_mask_seen=fault_or,final_state=result.get('state'),final_faults=result.get('faults'),outputs_high_before_stop=before_stop,executor_stopped=True,final_outputs_high=sum(states),timing_recoveries=result.get('timing_recoveries',0),timing_protection_stops=result.get('timing_stops',0))
-   return dict(summary=summary,trace=trace,edges=edge_trace,trigger_edges=trigger_trace,timing_stops=timing_stops,spark_timing=plant.spark_errors,dwell_events=plant.dwell_events,final=result)
+   summary=dict(strategy=self.tune['strategy'],wrong_stroke_sparks=sum(abs(e['phase_error_deg'])>180 for e in plant.spark_errors) if sequential else None,max_spark_720_error_deg=max((abs(e['phase_error_deg']) for e in plant.spark_errors),default=0) if sequential else None,scenario=self.scenario,duration_s=self.duration,seed=self.seed,model='unvalidated reduced-order SI plant v1',ecu='native production engine.hpp + MissingTooth decoder',physical_outputs_enabled=False,plant_parameters=dict(injector_flow_cc_min=plant.injector_flow_cc_min,rotor_inertia_kg_m2=plant.rotor_inertia),sync_acquired=sync_seen,max_rpm=max((p['plant_rpm'] for p in trace),default=0),final_rpm=plant.rpm,fuel_mg=plant.fuel_mg,sparks=plant.sparks,planned_revolutions=proposals,rejected_plans=late,max_injector_high_us=max(max_high[:4]),max_dwell_high_us=max(max_high[4:]),min_completed_dwell_us=min((d['dwell_us'] for d in plant.dwell_events),default=0),max_dwell_shortfall_us=max((d['requested_us']-d['dwell_us'] for d in plant.dwell_events),default=0),max_spark_error_deg=max(errors,default=0),max_spark_error_to_latest_demand_deg=max((abs(e['demand_error_deg']) for e in plant.spark_errors),default=0),p95_spark_error_deg=errors[int(.95*(len(errors)-1))] if errors else 0,max_spark_error_after_3s_deg=max(warm_errors,default=0),fault_mask_seen=fault_or,final_state=result.get('state'),final_faults=result.get('faults'),outputs_high_before_stop=before_stop,executor_stopped=True,final_outputs_high=sum(states),timing_recoveries=result.get('timing_recoveries',0),timing_protection_stops=result.get('timing_stops',0))
+   return dict(summary=summary,trace=trace,edges=edge_trace,trigger_edges=trigger_trace,cam_edges=cam_trace,timing_stops=timing_stops,spark_timing=plant.spark_errors,dwell_events=plant.dwell_events,final=result)
   finally:runtime.close()

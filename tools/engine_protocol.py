@@ -4,7 +4,10 @@ The calibration validator/store is shared with HTTP; no physical GPIO path.
 import copy,json,struct,zlib,time
 from pathlib import Path
 from engine_runtime import R
-SIGNATURE=b'ESP32ECU SIL 001 INHIBITED'
+LEGACY_SIGNATURE=b'ESP32ECU SIL 001 INHIBITED'
+SIGNATURE=b'ESP32ECU SIL 002 INHIBITED'
+STRATEGIES=('batch_wasted_4cyl','sequential_4cyl')
+TIMING_FIELDS=(('injection_end_deg',276),('cam_sync_deg',280),('cam_window_deg',284))
 VERSION=b'ESP32ECU completed SIL snapshot; physical outputs inhibited'
 DEFAULT=json.loads((R/'config/engine/defaults.json').read_text())
 NUMBERS=[('engine',k) for k,v in DEFAULT['engine'].items()]+[('settings',k) for k,v in DEFAULT['settings'].items() if not isinstance(v,bool)]
@@ -24,6 +27,9 @@ def pages(tune):
  for name,n in CURVES:struct.pack_into('<'+str(n)+'f',p,offset,*tune['curves'][name]);offset+=n*4
  assert offset==REVISION_OFFSET
  struct.pack_into('<I',p,REVISION_OFFSET,tune['revision'])
+ struct.pack_into('<I',p,272,STRATEGIES.index(tune['strategy']))
+ for name,offset in TIMING_FIELDS:struct.pack_into('<f',p,offset,tune['timing'][name])
+ struct.pack_into('<4B',p,288,*tune['timing']['firing_order'])
  for page,name in [(2,'ve'),(3,'spark'),(4,'lambda')]:
   m=tune['maps'][name];struct.pack_into('<288f',result[page],0,*(m['rpm']+m['load']+m['cells']))
  return result
@@ -41,6 +47,11 @@ def decode_pages(buffers,base):
   candidate[group][name]=value
  offset=4+4*len(NUMBERS)
  for name,n in CURVES:candidate['curves'][name]=list(struct.unpack_from('<'+str(n)+'f',p,offset));offset+=n*4
+ strategy=struct.unpack_from('<I',p,272)[0]
+ if strategy>=len(STRATEGIES):raise ValueError('Unknown engine strategy')
+ candidate['schema_version']=2;candidate['strategy']=STRATEGIES[strategy]
+ for name,offset in TIMING_FIELDS:candidate['timing'][name]=struct.unpack_from('<f',p,offset)[0]
+ candidate['timing']['firing_order']=list(struct.unpack_from('<4B',p,288))
  for page,name in [(2,'ve'),(3,'spark'),(4,'lambda')]:
   v=list(struct.unpack('<288f',buffers[page]));candidate['maps'][name]=dict(rpm=v[:16],load=v[16:32],cells=v[32:])
  return candidate
@@ -51,12 +62,15 @@ def live_block(store):
  # One lock protects the result, revision and completion clock. This endpoint
  # exposes a completed historical SIL snapshot, not a stream from a real ECU.
  with store.lock:
+  strategy=STRATEGIES.index(store.tune['strategy'])
   last=store.last_run;has_result=bool(last and last['trace'])
   data=copy.deepcopy(last['trace'][-1]) if has_result else {}
   revision=last['summary']['tune_revision'] if has_result else store.tune['revision']
   age_ms=min(4294967295,int(max(0,time.monotonic()-getattr(store,'completed_monotonic',time.monotonic()))*1000)) if has_result else 4294967295
  values=[float(data.get(k,0) or 0) for k in LIVE_FIELDS]
- return struct.pack('<11f8I',*values,int(data.get('faults',0)),int(data.get('synced',False)),1,int(revision),1 if has_result else 0,age_ms,int(has_result),int(has_result))
+ prefix=struct.pack('<11f8I',*values,int(data.get('faults',0)),int(data.get('synced',False)),1,int(revision),1 if has_result else 0,age_ms,int(has_result),int(has_result))
+ phase=struct.pack('<6I',int(data.get('crank_synced',False)),int(data.get('phase_synced',False)),int(data.get('phase_required',False)),int(data.get('phase_losses',0)),strategy,int(data.get('cam_rejected',0)))
+ return prefix+phase
 
 class Session:
  def __init__(self,store):

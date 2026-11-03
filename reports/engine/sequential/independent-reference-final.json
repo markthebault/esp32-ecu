@@ -1,0 +1,792 @@
+{
+  "reviewer": "Independent agent /root/per_tooth_timing_review",
+  "reviewed_at_utc": "2026-11-03T17:39:07.500839+00:00",
+  "scope": "Independent read-only sequential core, phase decoder, scheduler and pinned native production Speeduino adapter review. Sources were not edited, no children were spawned; temporary probes were compiled outside the repo. Parent is validating concurrently.",
+  "verdict": "No unresolved blocking defect found in the reviewed sequential core/scheduler/phase implementation. Reference characterization is credible within the stated native HAL scope. Full matrix rebaseline and final documentation remain parent work; this report does not approve physical use or claim Speeduino hardware equivalence.",
+  "open_blocking_findings": [],
+  "review_findings_addressed_during_review": [
+    {
+      "severity": "medium",
+      "location": "tools/compare_engine_controllers.py:192-204",
+      "finding": "Original configured-sequential summaries counted deliberate Partial-sync wastedCOP exhaust discharges as wrong-stroke sequential faults and treated Partial as first full sync. A fixed after2s cutoff also misclassified restart fallback.",
+      "evidence": "In the original32bit draft, all292 missing-cam wrong-stroke entries occurred near syncPartial; warm-start6 were Partial; stall/restart16 split12Partial and4None. Warm first primary sync0.38s preceded firstFull1.08s; missing-cam never reachedFull.",
+      "resolution": "Parent added per-event sync/ignition-span metadata, separate wasted and unsynced counters, Full720-only wrong-stroke/720error metrics, and distinct crank/full sync acquisition. Updated source inspected and new metadata verified by independent prescribed probes."
+    },
+    {
+      "severity": "medium",
+      "location": "tools/speeduino_sim_hal.cpp; pinned board_native.h/board_avr2560.h and scheduler.cpp:93-110",
+      "finding": "Original native32bit timer range admitted long future ignition schedules after coast-down that a16bit/4us Mega timer would reject. Such results cannot be attributed directly to Mega hardware.",
+      "evidence": "Draft load-step coil falls at5.360256/5.923688/6.487120s occurred with plantRPM0 and up to1.922s since the last crank edge. Native MAX_TIMER_PERIOD is4294967292us; Mega-like16bit is262140us.",
+      "resolution": "Parent implemented a separate16bit/equality/modulo timer profile. Source inspected. Independent short-dropout probes are identical in16bit and32bit profiles. Longer stall/coast results still require separate classification and rebaseline, not a physical hardware conclusion."
+    }
+  ],
+  "core_implementation_assessment": {
+    "fuel_math": "Sequential uses full720cycle fuel divided by flow plus exactly one deadtime; duty uses120000/RPMms. The independent unit mass test and sequential integration tests passed. Cold capacity inhibit is retained.",
+    "cylinder_phases": "Order is validated as a four-cylinder permutation anchored atC1; default physicalC1..4 phases are0/540/180/360. Batch retains the previous wasted pairing modulo360.",
+    "injector_event_identity": "The phase target is EOI; cycle state is independent of pulse-derived SOI. Start reachability selects a complete shot or explicitly skips to a future EOI. Once high, injector low is retained unchanged.",
+    "ignition": "Pending reachable full-dwell event survives impossible late advance changes. Advance remains latched while charging; actual dwell still varies under speed correction and must remain separately measured.",
+    "phase_decoder": "Separate crank history plus two consistent720cam observations establish parity. Bounded timestamp mapping, duplicate/order/window/cycle rejection, projected deadline and latched phase-loss state are implemented. Reacquisition requires the declared quiet recovery path.",
+    "ordinary_cut": "Scheduler state can be discarded and reinitialized from phase_tooth without losing720parity. Independent50/1000/8000RPM constant-speed cut/rearm probes passed.",
+    "legacy_preview": "plan_revolution now rejects Sequential rather than returning misleading360degree events."
+  },
+  "independent_core_probes": {
+    "temporary_cpp_scheduler_probe": {
+      "fixture": "60-2; physical shaft angle=(time_us-1)*.006deg; start at104001us/624deg, C1EOI630deg, PW5ms, dwell2.8ms, initial advance10deg. All scheduled falls checked against independent physical-cylinder phase constants.",
+      "initial_full_shot_skip": {
+        "first_c1_injector_fall_us": 225001,
+        "missed_initial_eoi_us": 105001,
+        "skipped_initial_count": 1,
+        "partial_shot_started": false
+      },
+      "fixed_injector_low": "PW changes to7ms at221001us while the firstC1 injector is already open; firstC1 still closes225001us after exactly5ms.",
+      "advance_commitment": "At130001us request40deg when its target has passed but the old10deg full-dwell start remains reachable; then request-5deg after charging begins. FirstC1 coil still falls133334us with latched10deg and requested2800us dwell.",
+      "all_event_phase_assertions_passed": true,
+      "event_count": 64,
+      "c1_injector_falls": 4,
+      "c1_coil_falls": 4,
+      "ordinary_cut_rearm": [
+        {
+          "rpm": 50,
+          "falls": 24,
+          "falls_after_cut_rearm": 14,
+          "phase_preserved": true
+        },
+        {
+          "rpm": 1000,
+          "falls": 24,
+          "falls_after_cut_rearm": 14,
+          "phase_preserved": true
+        },
+        {
+          "rpm": 8000,
+          "falls": 21,
+          "falls_after_cut_rearm": 13,
+          "phase_preserved": true
+        }
+      ],
+      "scope": "Portable scheduled-deadline probe, not ISR-latency emulation."
+    },
+    "phase_native_unit_suite": "Independently compiled firmware/tests/engine_phase_test.cpp with ASAN+UBSAN, -Wall -Wextra -Werror and ran successfully. Includes36/60/120slots,80/1000/8000RPM,0/750/1000us callback delays, alternate initial revolution, cam boundary positions, modest speed ramps, duplicate cam, acquisition noise, timeout, fuel mass, sequential pulses and executor phase watchdog.",
+    "python_integration_suite": "PYTHONPATH=tools python3 -m unittest tools.test_engine_sequential -v:7tests PASS, including phase-latch recovery for both portable and target adapters, schema/storage/MSQ/protocol and warm sequential SIL/cold capacity."
+  },
+  "reference_provenance": {
+    "speeduino_sha": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+    "external_tracked_source_clean": true,
+    "native_models": [
+      {
+        "timer_bits": 32,
+        "binary_sha256": "cb32d0dac783d4de621cf5bc34a245dfcb612e03d17f054b396ee5abad6b6260",
+        "source_archive_sha256": "91957f646a2707d7afee362807b14688bd113f1dfbbe004c0efca0cfa65e3140",
+        "archived_files_verified": 254,
+        "unexpected_cache_source_changes": [],
+        "unit_test": false,
+        "declared_hal_changes": [
+          "SoftwareTimer.h TIMER_RESOLUTION 100us to 4us",
+          "override Uno digitalPinToInterrupt macro with Arduino Mega mapping for native GPIO callbacks",
+          "replace wall-clock timer implementation with deterministic single-thread HAL",
+          "drive production oneMSInterval every 1000 virtual microseconds"
+        ]
+      },
+      {
+        "timer_bits": 16,
+        "binary_sha256": "3bcddc941c10de93543ee01fed9e15391c9cd45d3d3a32a826ee71b2386a1944",
+        "source_archive_sha256": "91957f646a2707d7afee362807b14688bd113f1dfbbe004c0efca0cfa65e3140",
+        "archived_files_verified": 254,
+        "unexpected_cache_source_changes": [],
+        "unit_test": false,
+        "declared_hal_changes": [
+          "SoftwareTimer.h TIMER_RESOLUTION 100us to 4us",
+          "override Uno digitalPinToInterrupt macro with Arduino Mega mapping for native GPIO callbacks",
+          "replace wall-clock timer implementation with deterministic single-thread HAL",
+          "drive production oneMSInterval every 1000 virtual microseconds",
+          "SoftwareTimer.h counter_t uint32 to uint16, modulo tick, equality compare"
+        ]
+      }
+    ],
+    "configuration": "--sequential supplies production injLayout3, sparkMode3, crank primary speed0, single cam pattern0, injTiming1, all4EOI540 tables, reqFuel107. setup reads the persisted tune through production storage. Production source is archived unchanged apart from the declared native timer header substitutions.",
+    "effective_mode_verified": "Independent full-sync status at500000us: ignition720, injection720, one squirt/cycle, RPM1000, pulse9991us, syncFull2. Configured cycleprofile is also asserted by Runtime.",
+    "channel_mapping": "Speeduino firing-order outputs1/2/3/4 map to physicalC1/C3/C4/C2 for injectors and coils.",
+    "cam_fixture": "Primary shaft origin is gap at0, C1 compression TDC90. Physical cam450ATDCC1 is raw shaft540, consistent with triggerAngle-90 and the production revolutionOne=true cam convention.",
+    "source_behavior_explaining_observations": [
+      "pinned missingTooth.cpp:107 toggles revolution parity at a primary gap;215 resets it true on single-cam edge.",
+      "pinned speeduino.ino:214-239 clears decoder/RPM after stall without cancelling existing ignition timers.",
+      "pinned scheduler.cpp:93-110 admits future schedules below platform MAX_TIMER_PERIOD; callback execution later continues without a new primary edge.",
+      "pinned scheduler_ignition_controller.cpp:501-543 deliberately switches between Partial360wasted and Full720sequential."
+    ]
+  },
+  "independent_prescribed_reference_probe": {
+    "fixture": "Static1000RPM digital wheel, primary60-2 tooth command at n*1000us for n%60<58, production loop every250us, correct cam at90000+120000n us. Stop primary before530000us; either also stop cam or continue it. Independent physical angle=time_us*.006deg, fixed physical cylinder TDCs90/630/270/450, requested10deg.",
+    "conclusion": "The short primary-loss/cam-continuation360degree error reproduces without the research plant and identically under16bit and32bit timer profiles. With cam also lost, pending events retain about0.73degree error. With cam continuing at570000us, the583212us C3 discharge is about-359.272degrees wrong while still reported Full720; later pending events are explicitly unsynced720. This is pinned source behavior in these two native models, not proof of physical hardware behavior.",
+    "profiles_and_records": [
+      {
+        "timer_bits": 32,
+        "cam_continues_after_crank_loss": false,
+        "configured_profile": {
+          "reqFuel_point1ms": 107,
+          "hard_limit_rpm100": 65,
+          "soft_limit_rpm100": 62,
+          "protection_type": 3,
+          "hard_limit_mode": 1,
+          "per_tooth": 0,
+          "cycle_profile": [
+            3,
+            3,
+            0,
+            0,
+            1,
+            540,
+            540,
+            540,
+            540
+          ]
+        },
+        "post_loss_sparks": [
+          {
+            "time_us": 553212,
+            "channel": 7,
+            "physical_720_error_deg": 0.7280000000000655,
+            "sync_status": 2,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": true
+          },
+          {
+            "time_us": 583212,
+            "channel": 5,
+            "physical_720_error_deg": 0.7280000000000655,
+            "sync_status": 2,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": true
+          },
+          {
+            "time_us": 613212,
+            "channel": 4,
+            "physical_720_error_deg": 0.7280000000000655,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          },
+          {
+            "time_us": 643212,
+            "channel": 6,
+            "physical_720_error_deg": 0.7280000000000655,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          },
+          {
+            "time_us": 673212,
+            "channel": 7,
+            "physical_720_error_deg": 0.7280000000000655,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          },
+          {
+            "time_us": 703216,
+            "channel": 5,
+            "physical_720_error_deg": 0.7039999999997235,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          }
+        ],
+        "status_samples": [
+          {
+            "time_us": 500000,
+            "rpm": 1000,
+            "pulse_us": 9991,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 139,
+            "sync": 2,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": true,
+            "phase_synced": true
+          },
+          {
+            "time_us": 570000,
+            "rpm": 1000,
+            "pulse_us": 9991,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 139,
+            "sync": 2,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": true,
+            "phase_synced": true
+          },
+          {
+            "time_us": 590000,
+            "rpm": 0,
+            "pulse_us": 0,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 125,
+            "sync": 0,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": false,
+            "phase_synced": false
+          },
+          {
+            "time_us": 800000,
+            "rpm": 0,
+            "pulse_us": 0,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 125,
+            "sync": 0,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": false,
+            "phase_synced": false
+          }
+        ]
+      },
+      {
+        "timer_bits": 32,
+        "cam_continues_after_crank_loss": true,
+        "configured_profile": {
+          "reqFuel_point1ms": 107,
+          "hard_limit_rpm100": 65,
+          "soft_limit_rpm100": 62,
+          "protection_type": 3,
+          "hard_limit_mode": 1,
+          "per_tooth": 0,
+          "cycle_profile": [
+            3,
+            3,
+            0,
+            0,
+            1,
+            540,
+            540,
+            540,
+            540
+          ]
+        },
+        "post_loss_sparks": [
+          {
+            "time_us": 553212,
+            "channel": 7,
+            "physical_720_error_deg": 0.7280000000000655,
+            "sync_status": 2,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": true
+          },
+          {
+            "time_us": 583212,
+            "channel": 6,
+            "physical_720_error_deg": -359.27199999999993,
+            "sync_status": 2,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": true
+          },
+          {
+            "time_us": 613212,
+            "channel": 7,
+            "physical_720_error_deg": -359.27199999999993,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          },
+          {
+            "time_us": 643212,
+            "channel": 5,
+            "physical_720_error_deg": -359.27199999999993,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          },
+          {
+            "time_us": 673212,
+            "channel": 4,
+            "physical_720_error_deg": -359.27199999999993,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          },
+          {
+            "time_us": 703216,
+            "channel": 6,
+            "physical_720_error_deg": -359.2960000000003,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          }
+        ],
+        "status_samples": [
+          {
+            "time_us": 500000,
+            "rpm": 1000,
+            "pulse_us": 9991,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 139,
+            "sync": 2,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": true,
+            "phase_synced": true
+          },
+          {
+            "time_us": 570000,
+            "rpm": 1000,
+            "pulse_us": 9991,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 139,
+            "sync": 2,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": true,
+            "phase_synced": true
+          },
+          {
+            "time_us": 590000,
+            "rpm": 0,
+            "pulse_us": 0,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 125,
+            "sync": 0,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": false,
+            "phase_synced": false
+          },
+          {
+            "time_us": 800000,
+            "rpm": 0,
+            "pulse_us": 0,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 125,
+            "sync": 0,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": false,
+            "phase_synced": false
+          }
+        ]
+      },
+      {
+        "timer_bits": 16,
+        "cam_continues_after_crank_loss": false,
+        "configured_profile": {
+          "reqFuel_point1ms": 107,
+          "hard_limit_rpm100": 65,
+          "soft_limit_rpm100": 62,
+          "protection_type": 3,
+          "hard_limit_mode": 1,
+          "per_tooth": 0,
+          "cycle_profile": [
+            3,
+            3,
+            0,
+            0,
+            1,
+            540,
+            540,
+            540,
+            540
+          ]
+        },
+        "post_loss_sparks": [
+          {
+            "time_us": 553212,
+            "channel": 7,
+            "physical_720_error_deg": 0.7280000000000655,
+            "sync_status": 2,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": true
+          },
+          {
+            "time_us": 583212,
+            "channel": 5,
+            "physical_720_error_deg": 0.7280000000000655,
+            "sync_status": 2,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": true
+          },
+          {
+            "time_us": 613212,
+            "channel": 4,
+            "physical_720_error_deg": 0.7280000000000655,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          },
+          {
+            "time_us": 643212,
+            "channel": 6,
+            "physical_720_error_deg": 0.7280000000000655,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          },
+          {
+            "time_us": 673212,
+            "channel": 7,
+            "physical_720_error_deg": 0.7280000000000655,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          },
+          {
+            "time_us": 703216,
+            "channel": 5,
+            "physical_720_error_deg": 0.7039999999997235,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          }
+        ],
+        "status_samples": [
+          {
+            "time_us": 500000,
+            "rpm": 1000,
+            "pulse_us": 9991,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 139,
+            "sync": 2,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": true,
+            "phase_synced": true
+          },
+          {
+            "time_us": 570000,
+            "rpm": 1000,
+            "pulse_us": 9991,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 139,
+            "sync": 2,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": true,
+            "phase_synced": true
+          },
+          {
+            "time_us": 590000,
+            "rpm": 0,
+            "pulse_us": 0,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 125,
+            "sync": 0,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": false,
+            "phase_synced": false
+          },
+          {
+            "time_us": 800000,
+            "rpm": 0,
+            "pulse_us": 0,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 125,
+            "sync": 0,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": false,
+            "phase_synced": false
+          }
+        ]
+      },
+      {
+        "timer_bits": 16,
+        "cam_continues_after_crank_loss": true,
+        "configured_profile": {
+          "reqFuel_point1ms": 107,
+          "hard_limit_rpm100": 65,
+          "soft_limit_rpm100": 62,
+          "protection_type": 3,
+          "hard_limit_mode": 1,
+          "per_tooth": 0,
+          "cycle_profile": [
+            3,
+            3,
+            0,
+            0,
+            1,
+            540,
+            540,
+            540,
+            540
+          ]
+        },
+        "post_loss_sparks": [
+          {
+            "time_us": 553212,
+            "channel": 7,
+            "physical_720_error_deg": 0.7280000000000655,
+            "sync_status": 2,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": true
+          },
+          {
+            "time_us": 583212,
+            "channel": 6,
+            "physical_720_error_deg": -359.27199999999993,
+            "sync_status": 2,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": true
+          },
+          {
+            "time_us": 613212,
+            "channel": 7,
+            "physical_720_error_deg": -359.27199999999993,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          },
+          {
+            "time_us": 643212,
+            "channel": 5,
+            "physical_720_error_deg": -359.27199999999993,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          },
+          {
+            "time_us": 673212,
+            "channel": 4,
+            "physical_720_error_deg": -359.27199999999993,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          },
+          {
+            "time_us": 703216,
+            "channel": 6,
+            "physical_720_error_deg": -359.2960000000003,
+            "sync_status": 0,
+            "ignition_cycle_deg": 720,
+            "effective_sequential": false
+          }
+        ],
+        "status_samples": [
+          {
+            "time_us": 500000,
+            "rpm": 1000,
+            "pulse_us": 9991,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 139,
+            "sync": 2,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": true,
+            "phase_synced": true
+          },
+          {
+            "time_us": 570000,
+            "rpm": 1000,
+            "pulse_us": 9991,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 139,
+            "sync": 2,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": true,
+            "phase_synced": true
+          },
+          {
+            "time_us": 590000,
+            "rpm": 0,
+            "pulse_us": 0,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 125,
+            "sync": 0,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": false,
+            "phase_synced": false
+          },
+          {
+            "time_us": 800000,
+            "rpm": 0,
+            "pulse_us": 0,
+            "advance_deg": 10,
+            "map_kpa": 100,
+            "ve_pct": 85,
+            "correction_pct": 100,
+            "clt_c": 85,
+            "iat_c": 24,
+            "battery_01v": 125,
+            "sync": 0,
+            "fuel_channels": 15,
+            "ignition_channels": 15,
+            "soft_limit_active": 0,
+            "ignition_cycle_deg": 720,
+            "injection_cycle_deg": 720,
+            "squirts_per_cycle": 1,
+            "crank_synced": false,
+            "phase_synced": false
+          }
+        ]
+      }
+    ]
+  },
+  "negative_control_and_limits": [
+    "The independently fixed physical cam90ATDCC1 fixture is deliberately360degrees inconsistent with configured450. The project can lock to that internally consistent signal and fire on the wrong stroke. This is an intended negative control for the720oracle, not a sensor condition detectable from a360period crank wheel alone. Mechanical cam-angle commissioning remains necessary.",
+    "Default reference startup and missing-cam operation may intentionally be Partial360wasted; those exhaust discharges are not sequential timing failures. Conversely, syncNone720pending events must stay visible even when excluded from Full720precision metrics.",
+    "A16bit/equality timer model bounds one important Mega-like scheduling property. It does not emulate AVR CPU cost, vector priority, peripheral/register atomicity, interrupt masking/jitter, shared counter details or electrical behavior.",
+    "The uncalibrated MVEM air path plus empirical combustion/free shaft is an independent pulse-driven research plant, not a calibrated real engine. Zero native CPU latency remains explicit.",
+    "Root is rebaselining closed-loop cases after metadata/timer changes. The original22case native32drafts are review records, not automatically current-source validation evidence.",
+    "No physical outputs are enabled by this work. No MCU timing, injector/coil electrical qualification, actual engine/vehicle, EMI/surge, thermal/splash/printed-fit or live TunerStudio acceptance is established."
+  ],
+  "nonblocking_followups": [
+    "If wasted_fallback_discharges is described as intentional Partial fallback, require sync_status==1 as well as span360; otherwise label it all360mode discharges and separately count syncNone events for both spans.",
+    "Persist the independent scheduler and prescribed cam/primary-dropout probes as regression fixtures, with their independent physical phase constants.",
+    "Finalize source-bound matrices and convergence evidence for the chosen timer model; preserve prior artifacts with their original fingerprints."
+  ],
+  "source_sha256": {
+    "firmware/include/ecu/engine.hpp": "9b71f61fe63d1d87c6514a6a79540811f7e4affd87dd720266c52ad5cae07039",
+    "firmware/include/ecu/engine_scheduler.hpp": "4b3a80b870025f354a331bf5b0334f076b568adf33df3608c782327a3068aec0",
+    "firmware/include/ecu/engine_phase.hpp": "ed64cee63597e6d917d8d9b78cefbfc521de96f451da38fbeee309a052652b9c",
+    "firmware/include/ecu/control.hpp": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b",
+    "firmware/include/ecu/timing_executor.hpp": "477ba7cbf1e5db59d7bbe57b45eda819b60265ed9920a5911ac019594c8123fb",
+    "tools/engine_bridge.cpp": "0922c39e1f417a682243f52a583d45b5cc0afc93c88b32e14f42e3dce9a081b3",
+    "tools/target_timing_bridge.cpp": "52db958c4b3bd64f7148258ea03e6f1b3497c0b28709f022ede5f32b8b35ba58",
+    "tools/target_runtime.py": "930be5d7d769ac36f8be34302db04141087a226467023413da9d41857a4297bb",
+    "tools/engine_runtime.py": "09753140284f6c0d52590cc761b7f33805c4085af5a13ddeca8a45e1e05717f9",
+    "tools/speeduino_runtime.py": "9e694a3b39e9c1bdb6f85a2a15a9f255ec89a64a43fe8746c3e436776fa154d9",
+    "tools/speeduino_sim.cpp": "9df8f262fb8c8e74a41ce74a40c2d207f38c255d7fe3d32a5f84d5c465998304",
+    "tools/speeduino_sim_hal.cpp": "0c6887b38f663cb76fbe451044b6e48dc4cc6849e110b44b3b9d67643bfd9224",
+    "tools/speeduino_sim_native.hpp": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9",
+    "scripts/build_speeduino_sim.py": "e3b9a8b6795b0e818246584c930fe0949a947ed9a217886fa787eec41c466535",
+    "tools/compare_engine_controllers.py": "9995e7fbc5d03eb53772aa5fb30d7ed9e67ba4b688f8624c97ecb02c81c2f544",
+    "tools/engine_research_plant.py": "d2730e3d21a172e008879b836988c5ab815cd926dc97fc7ef752284c0339397e",
+    "firmware/tests/engine_phase_test.cpp": "1b9485b170ec1bedd8a73022d294e87bdc83c74be726da78de43ac0dea816d72",
+    "tools/test_engine_sequential.py": "abee53a1ffba4221ddb2176714eb71774310c9810dc195a53fe7c7a80187a9ce"
+  }
+}

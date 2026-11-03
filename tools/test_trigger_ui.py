@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Actual Chrome tests for input recording, paging, exports and navigation."""
+import argparse
 import asyncio
 import json
 from pathlib import Path
@@ -98,7 +99,7 @@ async def check(url,device,out):
  (out/'ui-tests.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
 
 def main():
- out=R/'reports/engine/trigger-logging';out.mkdir(parents=True,exist_ok=True)
+ parser=argparse.ArgumentParser();parser.add_argument('--report-dir',type=Path,default=R/'.cache/engine/trigger-ui');args=parser.parse_args();out=args.report_dir;out.mkdir(parents=True,exist_ok=True)
  with tempfile.TemporaryDirectory() as directory:
   server=ThreadingHTTPServer(('127.0.0.1',0),Handler);server.device=Device(Path(directory)/'profile.json',load_bridge())
   thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()

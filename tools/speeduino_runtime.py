@@ -9,12 +9,20 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 class SpeeduinoRuntime:
-    def __init__(self,per_tooth=False,logger_cam=False):
-        executable=ROOT/'.cache/engine/speeduino-sim/speeduino-sim'
-        self.process=subprocess.Popen([str(executable),*(['--per-tooth'] if per_tooth else []),*(['--logger-cam'] if logger_cam else [])],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
+    def __init__(self,per_tooth=False,logger_cam=False,sequential=False,timer_bits=32):
+        if timer_bits not in (16,32):raise ValueError('Native timer width must be16or32')
+        executable=ROOT/('.cache/engine/speeduino-sim/speeduino-sim' if timer_bits==32 else '.cache/engine/speeduino-sim16/speeduino-sim')
+        self.timer_bits=timer_bits;self.edge_modes={};self.sequential=sequential
+        self.process=subprocess.Popen([str(executable),*(['--per-tooth'] if per_tooth else []),*(['--logger-cam'] if logger_cam else []),*(['--sequential'] if sequential else [])],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
                                       stderr=subprocess.PIPE,bufsize=0)
         self.buffer=b'';self.now=0
-        try:self._initialize(per_tooth)
+        try:
+            self._initialize(per_tooth)
+            if sequential:
+                lines=self.command("cycleprofile")
+                expected=[3,3,0,0,1,540,540,540,540]
+                if len(lines)!=1 or lines[0].split()[0]!="cycleprofile" or list(map(int,lines[0].split()[1:]))!=expected:raise RuntimeError("Sequential reference profile was not preserved by production setup")
+                self.profile["cycle_profile"]=expected
         except BaseException:self.close();raise
 
     def _initialize(self,per_tooth):
@@ -77,9 +85,11 @@ class SpeeduinoRuntime:
         edges=[]
         for line in lines:
             fields=line.split()
-            if len(fields)!=4 or fields[0]!='edge':raise RuntimeError('Unexpected native response: '+line)
-            timestamp,pin,high=map(int,fields[1:])
-            if pin in self.pin_map:edges.append((timestamp,self.pin_map[pin],bool(high),None,None))
+            if len(fields)!=6 or fields[0]!='edge':raise RuntimeError('Unexpected native response: '+line)
+            timestamp,pin,high,sync,span=map(int,fields[1:])
+            if pin in self.pin_map:
+                ch=self.pin_map[pin];edges.append((timestamp,ch,bool(high),None,None))
+                if self.sequential:self.edge_modes[(timestamp,ch,bool(high))]=dict(sync_status=sync,ignition_cycle_deg=span,effective_sequential=sync==2 and span==720)
         return edges
 
     def input_edge(self,time_us,channel,high):
@@ -112,7 +122,10 @@ class SpeeduinoRuntime:
         keys=('time_us','rpm','pulse_us','advance_deg','map_kpa','ve_pct','correction_pct','clt_c','iat_c','battery_01v','sync',
               'fuel_channels','ignition_channels','soft_limit_active')
         if len(values)!=len(keys):raise RuntimeError('Incomplete native status')
-        return dict(zip(keys,values))
+        result=dict(zip(keys,values));mode=list(map(int,lines[1].split()[1:]))
+        if len(mode)!=11:raise RuntimeError('Incomplete native mode diagnostics')
+        result.update(ignition_cycle_deg=mode[-3],injection_cycle_deg=mode[-2],squirts_per_cycle=mode[-1],crank_synced=result['sync']>=1,phase_synced=result['sync']==2)
+        return result
 
     def close(self):
         if self.process:
@@ -127,7 +140,7 @@ class SpeeduinoRuntime:
         lines=self.command('halt');edges=[]
         for line in lines:
             fields=line.split()
-            if len(fields)!=4 or fields[0]!='edge':raise RuntimeError('Unexpected halt response')
-            timestamp,pin,high=map(int,fields[1:])
+            if len(fields)!=6 or fields[0]!='edge':raise RuntimeError('Unexpected halt response')
+            timestamp,pin,high,sync,span=map(int,fields[1:])
             if pin in self.pin_map:edges.append((timestamp,self.pin_map[pin],bool(high)))
         return edges

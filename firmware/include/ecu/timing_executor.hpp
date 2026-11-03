@@ -6,7 +6,7 @@
 
 namespace ecu::timing {
 enum class Cause : std::uint8_t {None,Control,Configuration,Clock,Timebase,CaptureAge,CaptureOverflow,
- ProducerTimeout,CommandTimeout,ToothTimeout,LateInterrupt,HighLimit,Plan,Contention,Gate,TraceBudget};
+ ProducerTimeout,CommandTimeout,ToothTimeout,LateInterrupt,HighLimit,Plan,Contention,Gate,TraceBudget,CamPhase};
 inline const char* cause_name(Cause c){switch(c){
  case Cause::Control:return "control_inhibit";case Cause::Configuration:return "configuration_change";
  case Cause::Clock:return "clock_reversed";case Cause::Timebase:return "capture_timebase";
@@ -15,13 +15,14 @@ inline const char* cause_name(Cause c){switch(c){
  case Cause::ToothTimeout:return "tooth_timeout";case Cause::LateInterrupt:return "late_interrupt";
  case Cause::HighLimit:return "maximum_high_time";case Cause::Plan:return "invalid_angle_plan";
  case Cause::Contention:return "commit_contention";case Cause::Gate:return "hardware_gate";
- case Cause::TraceBudget:return "interrupt_budget";default:return "none";}}
+ case Cause::TraceBudget:return "interrupt_budget";case Cause::CamPhase:return "cam_phase_lost";default:return "none";}}
 
 struct Command {
  engine::AngleConfig angle;
  engine::Output output;
  std::uint64_t sequence=0,command_us=0,sampled_us=0;
  std::uint32_t tune_revision=0,sensor_revision=0;
+ std::uint32_t phase_epoch=0,configuration_epoch=0;
  unsigned max_injector_high_us=15000,max_coil_high_us=3500;
  unsigned slots=60,missing=2,max_rpm=8000;
 };
@@ -63,18 +64,40 @@ public:
 
  template<class IO> void command(const Command& c,std::uint64_t now,IO& io){
   const auto expired=expiry(now);if(expired!=Cause::None)trip(now,expired,io);
-  const bool changed=c.tune_revision!=command_.tune_revision||c.sensor_revision!=command_.sensor_revision||
-   c.slots!=command_.slots||c.missing!=command_.missing||c.max_rpm!=command_.max_rpm;
-  if(changed){stop(now,Cause::Configuration,io);++stats_.epoch;}
+  const bool changed=c.tune_revision!=command_.tune_revision||c.sensor_revision!=command_.sensor_revision||c.configuration_epoch!=command_.configuration_epoch||
+   c.slots!=command_.slots||c.missing!=command_.missing||c.max_rpm!=command_.max_rpm||
+   c.angle.strategy!=command_.angle.strategy||c.angle.firing_order!=command_.angle.firing_order||
+   c.angle.tooth1_btdc_deg!=command_.angle.tooth1_btdc_deg||c.angle.cam_sync_deg!=command_.angle.cam_sync_deg||
+   c.angle.cam_window_deg!=command_.angle.cam_window_deg||c.angle.injection_end_deg!=command_.angle.injection_end_deg;
+  if(changed){stop(now,Cause::Configuration,io);phase_known_=false;phase_deadline_=none;++stats_.epoch;}
   ++stats_.generation;
   if(!c.sequence||c.sequence<=command_.sequence||c.command_us>now||c.sampled_us>now||
      now-c.command_us>=20000||now-c.sampled_us>=20000){trip(now,Cause::CommandTimeout,io);return;}
   if(c.max_injector_high_us<1000||c.max_injector_high_us>15000||c.max_coil_high_us<500||c.max_coil_high_us>3500){trip(now,Cause::Plan,io);return;}
   command_=c;
   command_deadline_=std::min(c.command_us,c.sampled_us)+20000;
+  if(phase_required()&&c.phase_epoch!=c.configuration_epoch){
+   // A sample copied before a configuration fence cannot activate the new
+   // execution epoch. Waiting for fresh evidence is not a latched cam loss.
+   command_.output.faults|=engine::CamPhase;command_.output.state=engine::State::Faulted;
+   command_.output.fuel_cut=command_.output.spark_cut=true;stop(now,Cause::Control,io);return;
+  }
+  if(c.output.proposed_enabled()&&phase_required()&&(!phase_known_||now>=phase_deadline_)){trip(now,Cause::CamPhase,io);return;}
   active_=c.output.proposed_enabled();
   if(!active_)stop(now,Cause::Control,io);
   else scheduler_.refresh_control(c.command_us,c.sampled_us);
+ }
+ template<class IO> void phase(bool known,std::uint64_t deadline,std::uint64_t now,IO&io){
+  // Run expiry before accepting a later projected deadline. Command refreshes
+  // cannot renew phase; only the validated task-side decoder calls this.
+  const auto expired=expiry(now);if(expired!=Cause::None)trip(now,expired,io);
+  ++stats_.generation;
+  if(stats_.fault!=Cause::None){phase_known_=false;phase_deadline_=none;return;}
+  if(!known||deadline<=now||deadline-now>3000000){
+   if(phase_required()&&(phase_known_||active_))trip(now,Cause::CamPhase,io);
+   phase_known_=false;phase_deadline_=none;return;
+  }
+  phase_known_=true;phase_deadline_=deadline;
  }
  void prepare(Candidate& c,std::uint64_t capture_us,std::uint64_t stall_timeout)const{
   c.scheduler=scheduler_;c.command=command_;c.generation=stats_.generation;c.epoch=stats_.epoch;
@@ -87,6 +110,7 @@ public:
   stats_.max_capture_age_us=std::max(stats_.max_capture_age_us,now-c.capture_us);
   if(!c.valid||c.scheduler.failed()){trip(now,Cause::Plan,io);return Commit::Fault;}
   if(!active_)return Commit::Accepted;
+  const auto expired=expiry(now);if(expired!=Cause::None){trip(now,expired,io);return Commit::Fault;}
   if(now>=command_deadline_||now>=c.stall_deadline){trip(now,Cause::CommandTimeout,io);return Commit::Fault;}
   const auto next=c.scheduler.next_time();
   if(next!=none&&next<now&&now-next>lateness_limit_us){trip(now,Cause::LateInterrupt,io);return Commit::Fault;}
@@ -100,11 +124,13 @@ public:
  }
  ECU_ISR_CODE void raw_capture(std::uint64_t us){capture_seen_=true;if(us>stats_.last_capture_us)stats_.last_capture_us=us;}
  ECU_ISR_CODE std::uint64_t next_alarm()const{
-  if(stats_.fault!=Cause::None||!active_)return none;
+  if(stats_.fault!=Cause::None)return none;
+  if(!active_)return phase_required()&&phase_known_?phase_deadline_:none;
   auto next=scheduler_.next_time();
   if(command_deadline_<next)next=command_deadline_;
   if(tooth_deadline_<next)next=tooth_deadline_;
   if(producer_deadline_<next)next=producer_deadline_;
+  if(phase_required()&&phase_deadline_<next)next=phase_deadline_;
   for(unsigned ch=0;ch<8;++ch)if((stats_.high_mask&(1U<<ch))&&high_deadlines_[ch]<next)next=high_deadlines_[ch];
   return next;
  }
@@ -113,6 +139,7 @@ public:
   for(unsigned ch=0;ch<8;++ch)if(stats_.high_mask&(1U<<ch))record_low(ch,now);
   if(stats_.high_mask||scheduler_.next_time()!=none){++stats_.cuts;record(now,now,255,false,cause);}
   stats_.high_mask=0;scheduler_.cut();tooth_deadline_=none;active_=false;
+  if(cause==Cause::Configuration){phase_known_=false;phase_deadline_=none;}
   stats_.last_cut=cause;++stats_.generation;
  }
  template<class IO> ECU_ISR_CODE void trip(std::uint64_t now,Cause cause,IO& io){
@@ -122,10 +149,13 @@ public:
  template<class IO> ECU_ISR_CODE void dispatch(std::uint64_t now,IO& io){
   if(now<last_dispatch_us_){trip(now,Cause::Clock,io);return;}
   last_dispatch_us_=now;
-  if(stats_.fault!=Cause::None||!active_)return;
+  if(stats_.fault!=Cause::None)return;
+  if(phase_required()&&phase_known_&&now>=phase_deadline_){trip(now,Cause::CamPhase,io);return;}
+  if(!active_)return;
   if(now>=command_deadline_){trip(now,Cause::CommandTimeout,io);return;}
   if(now>=producer_deadline_){trip(now,Cause::ProducerTimeout,io);return;}
   if(now>=tooth_deadline_){trip(now,Cause::ToothTimeout,io);return;}
+  if(phase_required()&&(!phase_known_||now>=phase_deadline_)){trip(now,Cause::CamPhase,io);return;}
   for(unsigned ch=0;ch<8;++ch)if((stats_.high_mask&(1U<<ch))&&now>high_deadlines_[ch]){trip(now,Cause::HighLimit,io);return;}
   if(scheduler_.expired_unstarted(now)){trip(now,Cause::LateInterrupt,io);return;}
   for(unsigned count=0;count<interrupt_budget;++count){
@@ -159,7 +189,7 @@ public:
   if(!continuous)quiet_since_=none;
   if(quiet_since_==none||now<quiet_since_)quiet_since_=now;
   if(now-quiet_since_<20000)return false;
-  scheduler_.reset();stats_.fault=Cause::None;++stats_.recoveries;++stats_.epoch;++stats_.generation;
+  scheduler_.reset();phase_known_=false;phase_deadline_=none;stats_.fault=Cause::None;++stats_.recoveries;++stats_.epoch;++stats_.generation;
   active_=false;quiet_since_=none;return true;
  }
  const TimingStats& stats()const{return stats_;}
@@ -175,12 +205,16 @@ public:
  std::uint64_t event_requested_dwell_us()const{return scheduler_.event_requested_dwell_us();}
 private:
  ECU_ISR_CODE Cause expiry(std::uint64_t now)const{
-  if(stats_.fault!=Cause::None||!active_)return Cause::None;
+  if(stats_.fault!=Cause::None)return Cause::None;
+  if(phase_required()&&phase_known_&&now>=phase_deadline_)return Cause::CamPhase;
+  if(!active_)return Cause::None;
   if(now>=command_deadline_)return Cause::CommandTimeout;
   if(now>=producer_deadline_)return Cause::ProducerTimeout;
   if(now>=tooth_deadline_)return Cause::ToothTimeout;
+  if(phase_required()&&(!phase_known_||now>=phase_deadline_))return Cause::CamPhase;
   return Cause::None;
  }
+ ECU_ISR_CODE bool phase_required()const{return command_.angle.strategy==engine::Strategy::Sequential;}
  ECU_ISR_CODE void record_low(unsigned ch,std::uint64_t now){
   const auto width=now>=rise_us_[ch]?now-rise_us_[ch]:0;
   auto& maximum=ch<4?stats_.max_injector_high_us:stats_.max_coil_high_us;
@@ -198,7 +232,7 @@ private:
  std::array<std::uint64_t,8> rise_us_{},high_deadlines_{};
  std::array<TimingEvent,trace_capacity> trace_{};
  std::uint64_t trace_sequence_=0,command_deadline_=none,producer_deadline_=none,
-  tooth_deadline_=none,last_dispatch_us_=0,quiet_since_=none,last_recovery_check_us_=0;
- bool active_=false,capture_seen_=false;
+  tooth_deadline_=none,phase_deadline_=none,last_dispatch_us_=0,quiet_since_=none,last_recovery_check_us_=0;
+ bool active_=false,capture_seen_=false,phase_known_=false;
 };
 }

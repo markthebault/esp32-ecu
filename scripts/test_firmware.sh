@@ -24,6 +24,11 @@ mkdir -p "$task_root/build"
 "$task_root/build/timing-executor-test"
 "${CXX:-clang++}" -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic \
     -fsanitize=address,undefined -fno-omit-frame-pointer \
+    -I "$task_root/firmware/include" "$task_root/firmware/tests/engine_phase_test.cpp" \
+    -o "$task_root/build/engine-phase-test"
+"$task_root/build/engine-phase-test"
+"${CXX:-clang++}" -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic \
+    -fsanitize=address,undefined -fno-omit-frame-pointer \
     -I "$task_root/firmware/include" "$task_root/firmware/tests/trigger_log_test.cpp" \
     -o "$task_root/build/trigger-log-test"
 "$task_root/build/trigger-log-test"

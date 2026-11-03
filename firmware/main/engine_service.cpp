@@ -24,7 +24,7 @@ void init(){
  auto candidate=std::make_unique<engine::Tune>();
  const auto result=engine_storage::load(saved,[&](const std::string&s){return parse_text(s.c_str(),*candidate);},error);
  if(result==engine_storage::Load::Missing){storage_ok=true;return;}
- if(result==engine_storage::Load::Loaded||result==engine_storage::Load::Migrated){active=*candidate;document=std::move(saved);storage_ok=true;}
+ if(result==engine_storage::Load::Loaded||result==engine_storage::Load::Migrated){std::string canonical;if(engine::canonical_tune(saved.c_str(),*candidate,canonical)){active=*candidate;document=std::move(canonical);storage_ok=true;}else error=ESP_ERR_NO_MEM;}
  if(result==engine_storage::Load::Migrated)ESP_LOGI("ecu_engine","Legacy engine tune copied to dedicated blob partition; old record retained");
  if(!storage_ok)ESP_LOGE("ecu_engine","Engine storage unavailable or invalid (%s); no application erase requested, defaults shadow-only",esp_err_to_name(error));
 }
@@ -32,12 +32,14 @@ void observe(const web::Sample&s,const config::Config&c,std::uint64_t now,std::u
  if(!mutex||xSemaphoreTake(mutex,0)!=pdTRUE)return;
  auto bound=engine::bind_inputs(s,c,now);binding=bound.reason;auto&in=bound.input;
  in.sampled_us=sampled;
+ in.phase_synced=in.phase_synced&&s.phase_tune_revision==active.revision&&s.phase_sensor_revision==c.revision;
  if(sensor_revision!=c.revision){controller.reset();sensor_revision=c.revision;}
  latest=controller.step(active,in,now);stamp=now;
  if(!storage_ok){latest.faults|=engine::BadTune;latest.state=engine::State::Faulted;latest.fuel_cut=latest.spark_cut=true;}
- timing::Command command;command.angle={active.tooth1_btdc_deg,active.max_dwell_ms};command.output=latest;
+ timing::Command command;command.angle=engine::angle_config(active);command.output=latest;
  command.sequence=++command_sequence;command.command_us=now;command.sampled_us=sampled;
  command.tune_revision=active.revision;command.sensor_revision=c.revision;
+ command.phase_epoch=s.phase_epoch;
  command.max_injector_high_us=std::llround(active.max_injection_ms*1000);command.max_coil_high_us=std::llround(active.max_dwell_ms*1000);
  command.slots=c.slots;command.missing=c.missing;command.max_rpm=c.max_rpm;
  engine_target::submit(command);xSemaphoreGive(mutex);
@@ -48,15 +50,19 @@ int save(const char*text,std::string&reason){
  xSemaphoreTake(mutex,portMAX_DELAY);
  if(!storage_ok){reason="Engine NVS storage unavailable; previous data preserved";xSemaphoreGive(mutex);return 503;}
  if(candidate->revision!=active.revision||active.revision==UINT32_MAX){reason="Engine tune revision changed; reload before saving";xSemaphoreGive(mutex);return 409;}
- auto*j=cJSON_Parse(text);candidate->revision++;cJSON_SetNumberValue(cJSON_GetObjectItemCaseSensitive(j,"revision"),candidate->revision);char*encoded=cJSON_PrintUnformatted(j);cJSON_Delete(j);
+ auto*j=cJSON_Parse(text);if(!j||!engine::upgrade_tune_document(j)){cJSON_Delete(j);reason="Allocation failed";xSemaphoreGive(mutex);return 500;}
+ candidate->revision++;cJSON_SetNumberValue(cJSON_GetObjectItemCaseSensitive(j,"revision"),candidate->revision);char*encoded=cJSON_PrintUnformatted(j);cJSON_Delete(j);
  if(!encoded){reason="Allocation failed";xSemaphoreGive(mutex);return 500;}
  if(std::strlen(encoded)>16384){reason="Encoded engine tune exceeds 16 KiB; previous data retained";cJSON_free(encoded);xSemaphoreGive(mutex);return 413;}
+ std::string next_document(encoded);cJSON_free(encoded);
  engine_target::begin_configuration();
- const auto err=engine_storage::save(encoded);
- if(err!=ESP_OK){storage_ok=false;reason="Engine persistence failed; runtime retained, saves blocked until restart and inspection";cJSON_free(encoded);engine_target::finish_configuration(active.revision,0);xSemaphoreGive(mutex);return 507;}
- active=*candidate;document=encoded;cJSON_free(encoded);controller.reset();stamp=0;latest=engine::Output{};engine_target::finish_configuration(active.revision,0);xSemaphoreGive(mutex);return 200;
+ const auto err=engine_storage::save(next_document);
+ if(err!=ESP_OK){storage_ok=false;reason="Engine persistence failed; runtime retained, saves blocked until restart and inspection";engine_target::finish_configuration(active.revision,0);xSemaphoreGive(mutex);return 507;}
+ active=*candidate;document.swap(next_document);controller.reset();stamp=0;latest=engine::Output{};engine_target::finish_configuration(active.revision,0);xSemaphoreGive(mutex);return 200;
 }
 cJSON* snapshot(){
- xSemaphoreTake(mutex,portMAX_DELAY);auto*j=engine::output_json(latest);const auto now=engine_target::clock_us();cJSON_AddNumberToObject(j,"revision",active.revision);cJSON_AddBoolToObject(j,"storage_ok",storage_ok);cJSON_AddStringToObject(j,"binding",binding);cJSON_AddNumberToObject(j,"sample_age_ms",stamp&&now>=stamp?(now-stamp)/1000.0:-1);cJSON_AddBoolToObject(j,"simulator",false);cJSON_AddBoolToObject(j,"fresh",stamp&&now>=stamp&&now-stamp<50000);xSemaphoreGive(mutex);cJSON_AddItemToObject(j,"timing",engine_target::snapshot());return j;
+ xSemaphoreTake(mutex,portMAX_DELAY);auto*j=engine::output_json(latest);const auto now=engine_target::clock_us();cJSON_AddNumberToObject(j,"revision",active.revision);cJSON_AddBoolToObject(j,"storage_ok",storage_ok);cJSON_AddStringToObject(j,"binding",binding);cJSON_AddNumberToObject(j,"sample_age_ms",stamp&&now>=stamp?(now-stamp)/1000.0:-1);cJSON_AddBoolToObject(j,"simulator",false);cJSON_AddBoolToObject(j,"fresh",stamp&&now>=stamp&&now-stamp<50000);xSemaphoreGive(mutex);cJSON_AddItemToObject(j,"timing",engine_target::snapshot());
+ const auto phase=engine_target::measurement();cJSON_AddBoolToObject(j,"crank_synced",phase.synced);cJSON_AddBoolToObject(j,"phase_synced",phase.phase_synced);cJSON_AddBoolToObject(j,"phase_required",phase.phase_required);
+ cJSON_AddStringToObject(j,"phase_reason",engine::PhaseDecoder::reason_name(phase.phase_reason));cJSON_AddNumberToObject(j,"phase_losses",phase.phase_losses);cJSON_AddNumberToObject(j,"cam_rejected",phase.cam_rejected);cJSON_AddNumberToObject(j,"cam_error_deg",phase.cam_error_deg);return j;
 }
 }

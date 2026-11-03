@@ -28,10 +28,15 @@ inline double lookup(const Map&m,double rpm,double load){
  auto a=m.cells[y*bins+x]*(1-fx)+m.cells[y*bins+x+1]*fx;
  auto b=m.cells[(y+1)*bins+x]*(1-fx)+m.cells[(y+1)*bins+x+1]*fx;return a*(1-fy)+b*fy;
 }
+enum class Strategy : std::uint8_t {BatchWasted,Sequential};
+inline const char* strategy_name(Strategy s){return s==Strategy::Sequential?"sequential_4cyl":"batch_wasted_4cyl";}
+inline bool firing_order_valid(const std::array<unsigned,4>& order){unsigned mask=0;for(auto c:order){if(c<1||c>4||(mask&(1U<<c)))return false;mask|=1U<<c;}return order[0]==1;}
 struct Tune {
  unsigned revision=1;
- // This first profile is explicitly four-cylinder, four-stroke, batch fuel /
- // wasted COP. Sequential and other cylinder counts require separate work.
+ Strategy strategy=Strategy::BatchWasted;
+ // Four-stroke, even-fire only. The order starts at cylinder 1 compression TDC.
+ std::array<unsigned,4> firing_order{1,3,4,2};
+ float injection_end_deg=540,cam_sync_deg=450,cam_window_deg=20;
  unsigned cylinders=4;
  float displacement_cc=2000,injector_cc_min=300,fuel_density_g_cc=.745f,stoich_afr=14.7f;
  float cranking_rpm=450,crank_advance_deg=5,rpm_limit=6500,rpm_hysteresis=200,soft_limit_band=300;
@@ -47,7 +52,8 @@ struct Tune {
  Tune(){ve.cells.fill(85);spark.cells.fill(15);lambda.cells.fill(1);}
 };
 inline const char* validate(const Tune&t){
- if(!t.revision||t.cylinders!=4)return "Only the four-cylinder batch/wasted profile is implemented";
+ if(!t.revision||t.cylinders!=4)return "Only four-cylinder, four-stroke, even-fire profiles are implemented";
+ if((t.strategy!=Strategy::BatchWasted&&t.strategy!=Strategy::Sequential)||!firing_order_valid(t.firing_order)||!range(t.injection_end_deg,0,719)||!range(t.cam_sync_deg,0,719)||!range(t.cam_window_deg,5,45))return "Invalid strategy, firing order or cam/injection reference";
  if(!range(t.displacement_cc,500,4000)||!range(t.injector_cc_min,100,1500)||!range(t.fuel_density_g_cc,.6,.9)||!range(t.stoich_afr,9,16))return "Invalid engine or injector specification";
  if(!range(t.cranking_rpm,100,800)||!range(t.crank_advance_deg,-5,15)||!range(t.rpm_limit,1500,8000)||!range(t.rpm_hysteresis,50,500)||!range(t.soft_limit_band,0,500)||t.cranking_rpm>=t.rpm_limit-t.rpm_hysteresis)return "Invalid starting/rev limit settings";
  if(!range(t.max_duty,.1,.85)||!range(t.max_injection_ms,1,15)||!range(t.max_dwell_ms,.5,3.5)||!range(t.tooth1_btdc_deg,0,359))return "Pulse limits exceed the current carrier contract";
@@ -66,12 +72,12 @@ inline const char* validate(const Tune&t){
  }
  return nullptr;
 }
-enum Fault:std::uint32_t { BadTune=1,NoSync=2,BadSensor=4,Stale=8,OverTemp=16,OverRev=32,Capacity=64,Timing=128 };
+enum Fault:std::uint32_t { BadTune=1,NoSync=2,BadSensor=4,Stale=8,OverTemp=16,OverRev=32,Capacity=64,Timing=128,CamPhase=256 };
 enum class State {Stopped,Cranking,Warmup,Running,Overrun,Faulted};
 inline const char* state_name(State s){switch(s){case State::Stopped:return "stopped";case State::Cranking:return "cranking";case State::Warmup:return "warmup";case State::Running:return "running";case State::Overrun:return "overrun";default:return "fault";}}
 struct Inputs {
  double rpm=0,map_kpa=0,tps_pct=0,clt_c=0,iat_c=0,lambda=1,battery_v=0,sensor_v=0;
- std::uint64_t sampled_us=0;bool synced=false,sensors_valid=false,lambda_ready=false;
+ std::uint64_t sampled_us=0;bool synced=false,sensors_valid=false,lambda_ready=false,phase_synced=false;
 };
 struct Output {
  State state=State::Stopped;std::uint32_t faults=0;
@@ -107,6 +113,7 @@ public:
   const bool stopped=finite(s.rpm)&&s.rpm<=0;
   o.pump=((o.faults&~std::uint32_t(OverRev))==0)&&((now>=boot_&&(now-boot_)/1e6<t.pump_prime_s)||(s.synced&&s.rpm>0));
   if(!stopped&&!s.synced)o.faults|=NoSync;
+  if(!stopped&&t.strategy==Strategy::Sequential&&!s.phase_synced)o.faults|=CamPhase;
   if(o.faults){o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;ego_i_=idle_i_=0;ae_=1;dfco_=false;dfco_since_=0;return o;}
   if(stopped){o.state=State::Stopped;o.fuel_cut=o.spark_cut=true;ego_i_=idle_i_=0;ae_=1;was_crank_=true;dfco_=false;dfco_since_=0;return o;}
   const bool cranking=was_crank_?s.rpm<t.cranking_rpm+100:s.rpm<t.cranking_rpm;
@@ -131,9 +138,10 @@ public:
   o.air_mg=s.map_kpa*1000*(t.displacement_cc/t.cylinders*1e-6)*(o.ve_pct/100)/(287.05*(s.iat_c+273.15))*1e6;
   const double fuel_mg=o.air_mg/(t.stoich_afr*o.target_lambda)*o.warmup*o.afterstart*o.accel*o.ego;
   const double flow_mg_ms=t.injector_cc_min*t.fuel_density_g_cc/60;
-  // Batch injection: one opening per 360 degrees, half the 720-degree mass.
-  o.pulse_ms=fuel_mg/(2*flow_mg_ms)+o.deadtime_ms;
-  const double rev_ms=60000/s.rpm;o.duty_pct=o.pulse_ms/rev_ms*100;
+  // Dead time belongs to each opening, not to the four-stroke fuel mass.
+  const double openings=t.strategy==Strategy::Sequential?1:2;
+  o.pulse_ms=fuel_mg/(openings*flow_mg_ms)+o.deadtime_ms;
+  const double rev_ms=60000/s.rpm,interval_ms=rev_ms*(t.strategy==Strategy::Sequential?2:1);o.duty_pct=o.pulse_ms/interval_ms*100;
   if(!finite(o.pulse_ms)||o.pulse_ms>t.max_injection_ms||o.duty_pct>t.max_duty*100||o.dwell_ms>t.max_dwell_ms||o.dwell_ms>=rev_ms){o.faults|=Capacity;o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;o.pulse_ms=o.dwell_ms=0;return o;}
   if(dfco_){o.state=State::Overrun;o.fuel_cut=true;o.pulse_ms=0;o.duty_pct=0;}
   if(t.idle_enabled&&!cranking&&s.tps_pct<2){const double error=t.idle_target_rpm-s.rpm;idle_i_=std::clamp(idle_i_+error*t.idle_ki*dt,-20.0,40.0);o.idle_pct=std::clamp(20+error*t.idle_kp+idle_i_,0.0,100.0);}else idle_i_=0;
@@ -143,7 +151,7 @@ public:
 struct Edge {std::uint64_t time_us=0;unsigned channel=0;bool high=false;};
 struct Plan {std::array<Edge,16> edges{};unsigned count=0;bool valid=false;};
 inline Plan plan_revolution(const Tune&t,const Output&o,std::uint64_t gap_us){
- Plan p;if(!o.proposed_enabled()||!range(o.rpm,50,8000)||validate(t))return p;
+ Plan p;if(t.strategy==Strategy::Sequential||!o.proposed_enabled()||!range(o.rpm,50,8000)||validate(t))return p;
  const double rev_us=60000000/o.rpm;
  auto add=[&](unsigned channel,double start_deg,double width_us){
   start_deg=std::fmod(start_deg,360.0);if(start_deg<0)start_deg+=360;

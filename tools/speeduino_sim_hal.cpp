@@ -24,7 +24,7 @@ extern "C" void speeduino_sim_advance(uint64_t target) {
         auto next = ((now_us / software_timer_t::TIMER_RESOLUTION)+1)*software_timer_t::TIMER_RESOLUTION;
         now_us = next > target ? target : next;
         if (now_us % software_timer_t::TIMER_RESOLUTION == 0) {
-            for (const auto& item : callbacks()) item.second(now_us/software_timer_t::TIMER_RESOLUTION);
+            for (const auto& item : callbacks()) item.second(static_cast<Tick>(now_us/software_timer_t::TIMER_RESOLUTION));
             speeduino_sim_observe();
         }
         if (now_us % 1000 == 0) { oneMSInterval(); speeduino_sim_observe(); }
@@ -40,7 +40,11 @@ void software_timer_t::enableTimer() { enabled = true; }
 void software_timer_t::disableTimer() { enabled = false; }
 void software_timer_t::onNextTick(counter_t tick) {
     counter = tick;
+    #if ECU_SIM_TIMER_BITS == 16
+    if(enabled.load()&&callback&&counter.load()==compare.load())callback();
+#else
     if (enabled.load() && callback && counter.load() >= compare.load()) callback();
+#endif
 }
 TickEventGuard::TickEventGuard() noexcept {}
 TickEventGuard::~TickEventGuard() noexcept {}

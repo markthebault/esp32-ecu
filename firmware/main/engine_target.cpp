@@ -1,7 +1,7 @@
 #include "ecu/engine_target.hpp"
 #include "ecu/capture_clock.hpp"
 #include "ecu/trigger_log_json.hpp"
-#include "ecu/control.hpp"
+#include "ecu/engine_phase.hpp"
 #include "ecu/pins.hpp"
 #include "driver/gptimer.h"
 #include "driver/mcpwm_cap.h"
@@ -119,12 +119,13 @@ bool IRAM_ATTR on_alarm(gptimer_handle_t,const gptimer_alarm_event_data_t*,void*
 bool IRAM_ATTR on_capture(mcpwm_cap_channel_handle_t,const mcpwm_capture_event_data_t* event,void* context){
  BaseType_t wake=pdFALSE;
  portENTER_CRITICAL_ISR(&lock);
- const auto now=now_locked();const auto stamp=capture_clock.map(event->cap_value,now);
+ const auto now=now_locked();executor.raw_capture(now);const auto stamp=capture_clock.map(event->cap_value,now);
  if(stamp.error!=timing::CaptureClock::Error::None){
   executor.trip(now,timing::Cause::Timebase,output);alarm_locked();portEXIT_CRITICAL_ISR(&lock);return false;
  }
  Capture item{stamp.time_us,external_epoch,context!=nullptr};
- if(!item.cam){++measured.crank_edges;executor.raw_capture(item.time_us);}else ++measured.cam_edges;
+ if(!item.cam)++measured.crank_edges;else ++measured.cam_edges;
+ executor.raw_capture(item.time_us);
  if(configuration_hold){++configuration_captures;portEXIT_CRITICAL_ISR(&lock);return false;}
  if(xQueueSendFromISR(captures,&item,&wake)!=pdTRUE){
   measured.overflow=true;executor.trip(now,timing::Cause::CaptureOverflow,output);alarm_locked();
@@ -232,13 +233,13 @@ void init_peripherals(){
   ECU_ENGINE_DUMMY_LOADS?"DUMMY LOADS ONLY":"COMPILE-TIME INHIBITED");
 }
 void run(void*){
- init_peripherals();ecu::MissingTooth decoder({initial_wheel.slots,initial_wheel.missing,initial_wheel.max_rpm});
+ init_peripherals();engine::PhaseDecoder decoder({initial_wheel.slots,initial_wheel.missing,initial_wheel.max_rpm});
  xSemaphoreGive(started);
  timing::Command latest;std::uint32_t accepted_epoch=0,observed_epoch=0;bool have_command=false;
  auto refresh_epoch=[&](){
   portENTER_CRITICAL(&lock);const auto epoch=external_epoch;
   const bool changed=epoch!=observed_epoch;
-  if(changed){observed_epoch=epoch;have_command=false;measured.rpm=0;measured.synced=false;}
+  if(changed){observed_epoch=epoch;have_command=false;measured.rpm=0;measured.synced=false;measured.phase_synced=false;}
   portEXIT_CRITICAL(&lock);if(changed)decoder.reset();
  };
  auto service_command=[&](){
@@ -249,8 +250,8 @@ void run(void*){
      tagged.command.sensor_revision<required_sensor_revision){++rejected_commands;portEXIT_CRITICAL(&lock);return;}
   const auto now=now_locked();executor.progress(now,output);
   const auto& c=tagged.command;
-  if(!have_command||accepted_epoch!=tagged.epoch||c.slots!=latest.slots||c.missing!=latest.missing||c.max_rpm!=latest.max_rpm)
-   decoder=ecu::MissingTooth({c.slots,c.missing,c.max_rpm});
+  if(!have_command||accepted_epoch!=tagged.epoch||c.slots!=latest.slots||c.missing!=latest.missing||c.max_rpm!=latest.max_rpm||c.tune_revision!=latest.tune_revision)
+   decoder=engine::PhaseDecoder({c.slots,c.missing,c.max_rpm},c.angle);
   latest=c;have_command=true;accepted_epoch=tagged.epoch;observed_epoch=tagged.epoch;executor.command(latest,now,output);
   alarm_locked();portEXIT_CRITICAL(&lock);
  };
@@ -262,19 +263,32 @@ void run(void*){
     portENTER_CRITICAL(&lock);const bool current_capture=edge.epoch==external_epoch&&!configuration_hold;
     if(!current_capture)++configuration_captures;
     portEXIT_CRITICAL(&lock);
-    if(current_capture&&!edge.cam){
+    if(current_capture&&(!edge.cam||decoder.required())){
      const auto now=clock_us();
      if(now<edge.time_us||now-edge.time_us>1000){
-      portENTER_CRITICAL(&lock);executor.trip(now_locked(),timing::Cause::CaptureAge,output);alarm_locked();portEXIT_CRITICAL(&lock);
+      if(edge.cam&&decoder.phase_synced())decoder.invalidate(engine::PhaseDecoder::Reason::Unmapped);
+      portENTER_CRITICAL(&lock);
+      if(edge.epoch==external_epoch&&!configuration_hold)executor.trip(now_locked(),timing::Cause::CaptureAge,output);
+      alarm_locked();portEXIT_CRITICAL(&lock);
      }else{
-      const bool was_synced=decoder.synced();decoder.edge(edge.time_us);
-      if(was_synced&&!decoder.synced()){
-       portENTER_CRITICAL(&lock);executor.stop(now_locked(),timing::Cause::Control,output);alarm_locked();portEXIT_CRITICAL(&lock);
+      const bool was_synced=decoder.synced();
+      if(edge.cam)decoder.cam(edge.time_us,now);else decoder.edge(edge.time_us,now);
+      if(decoder.required()){
+       portENTER_CRITICAL(&lock);
+       if(have_command&&accepted_epoch==external_epoch&&edge.epoch==external_epoch&&!configuration_hold)
+        executor.phase(decoder.phase_synced(),decoder.deadline(),now_locked(),output);
+       const bool phase_fault=executor.stats().fault==timing::Cause::CamPhase;alarm_locked();portEXIT_CRITICAL(&lock);
+       if(phase_fault&&!decoder.faulted())decoder.invalidate(engine::PhaseDecoder::Reason::Timeout);
       }
-      if(decoder.synced()&&have_command&&(edge.time_us<latest.command_us||edge.time_us<latest.sampled_us)){
+      if(was_synced&&!decoder.synced()){
+       portENTER_CRITICAL(&lock);
+       if(edge.epoch==external_epoch&&!configuration_hold)executor.stop(now_locked(),timing::Cause::Control,output);
+       alarm_locked();portEXIT_CRITICAL(&lock);
+      }
+      if(!edge.cam&&decoder.synced()&&have_command&&(edge.time_us<latest.command_us||edge.time_us<latest.sampled_us)){
        portENTER_CRITICAL(&lock);++superseded_captures;portEXIT_CRITICAL(&lock);
       }
-      else if(decoder.synced()&&have_command){
+      else if(!edge.cam&&decoder.synced()&&have_command){
        bool committed=false,cancelled=false;
        const auto stall_timeout=decoder.stall_timeout();
        for(unsigned attempt=0;attempt<4;++attempt){
@@ -283,7 +297,7 @@ void run(void*){
         const bool valid_epoch=accepted_epoch==external_epoch;
         executor.prepare(candidate,edge.time_us,stall_timeout);portEXIT_CRITICAL(&lock);
         if(!valid_epoch){cancelled=true;break;}
-        candidate.calculate(decoder.tooth(),decoder.rpm());
+        candidate.calculate(decoder.required()?decoder.phase_tooth():decoder.tooth(),decoder.rpm());
         portENTER_CRITICAL(&lock);
         const auto result=executor.commit(candidate,now_locked(),output);alarm_locked();portEXIT_CRITICAL(&lock);
         if(result!=timing::Executor::Commit::Retry){committed=true;break;}
@@ -299,14 +313,21 @@ void run(void*){
   const auto rpm=decoder.rpm();const bool synced=decoder.synced();
   portENTER_CRITICAL(&lock);const auto checked_now=now_locked();executor.progress(checked_now,output);trigger_capture.expire(checked_now);
   measured.rpm=accepted_epoch==external_epoch&&!configuration_hold?rpm:0;
-  measured.synced=accepted_epoch==external_epoch&&!configuration_hold&&synced;
+  measured.synced=accepted_epoch==external_epoch&&!configuration_hold&&decoder.crank_synced();
+  measured.phase_synced=accepted_epoch==external_epoch&&!configuration_hold&&decoder.phase_synced();
+  measured.tune_revision=have_command?latest.tune_revision:0;measured.sensor_revision=have_command?latest.sensor_revision:0;
+  measured.phase_epoch=accepted_epoch==external_epoch&&!configuration_hold?external_epoch:0;
+  measured.phase_required=decoder.required();measured.phase_losses=decoder.losses();measured.cam_rejected=decoder.rejected();
+  measured.cam_error_deg=decoder.cam_error_deg();measured.phase_reason=decoder.reason();
+  if(decoder.required()&&have_command&&accepted_epoch==external_epoch&&!configuration_hold)
+   executor.phase(decoder.phase_synced(),decoder.deadline(),checked_now,output);
   const bool healthy=have_command&&accepted_epoch==external_epoch&&synced&&checked_now>=latest.sampled_us&&
    checked_now-latest.sampled_us<20000&&!(latest.output.faults&~std::uint32_t(engine::OverRev))&&executor.stats().fault==timing::Cause::None;
   output.supervise(healthy);
   if(output.failed&&ECU_ENGINE_DUMMY_LOADS)executor.trip(checked_now,timing::Cause::Gate,output);
-  executor.recover(checked_now,capture_clock.ready()&&!output.failed&&!configuration_hold&&
+  const bool recovered=executor.recover(checked_now,capture_clock.ready()&&!output.failed&&!configuration_hold&&
    accepted_epoch==external_epoch&&have_command&&!synced&&latest.output.state==engine::State::Stopped&&!latest.output.faults);
-  alarm_locked();portEXIT_CRITICAL(&lock);service_trigger_logger();
+  alarm_locked();portEXIT_CRITICAL(&lock);if(recovered)decoder.reset();service_trigger_logger();
  }
 }
 }
@@ -324,7 +345,7 @@ bool submit(const timing::Command& command){
  TaggedCommand tagged;tagged.command=command;
  portENTER_CRITICAL(&lock);
  if(configuration_hold||command.tune_revision<required_tune_revision||command.sensor_revision<required_sensor_revision){++rejected_commands;portEXIT_CRITICAL(&lock);return false;}
- tagged.epoch=external_epoch;portEXIT_CRITICAL(&lock);
+ tagged.epoch=external_epoch;tagged.command.configuration_epoch=external_epoch;portEXIT_CRITICAL(&lock);
  return xQueueOverwrite(commands,&tagged)==pdTRUE;
 }
 void inhibit(timing::Cause cause){

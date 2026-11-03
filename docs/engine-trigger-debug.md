@@ -13,7 +13,7 @@ This uses the existing protected Hall inputs. PCB, manufacturing and enclosure f
 5. Inspect both input traces and the raw rising-crank interval chart. Zoom and pan to inspect individual edges. Long intervals above 1.5 times the median are highlighted. Missing teeth, noise, capture loss and an interrupted signal can produce different or similar patterns; this highlight does not diagnose the cause or establish synchronization.
 6. Export JSON for callback-order records and counters, or MSL for plotting. Use **Raw recorded edges** to inspect individual timestamps, polarity and configuration epochs. A digital trace does not measure voltage, Hall thresholds, signal integrity or a manufacturer's required air gap.
 
-The host simulator uses **Replay SIL window**. Run a scenario in Engine development first. Replay takes the final window from a completed synthetic run and contains only the generated rising crank events. Cam and falling edges are not simulated. The UI draws rising-edge marks, leaves levels unknown and labels the source. It never presents this replay as a live MCU recording.
+The host simulator uses **Replay SIL window**. Run a scenario in Engine development first. Replay takes the final window from a completed synthetic run and contains only the generated rising crank events. Falling edges are not simulated. The UI draws rising-edge marks, leaves levels unknown and labels the source. It never presents this replay as a live MCU recording.
 
 ## Data and API contract
 
@@ -66,3 +66,5 @@ python3 scripts/audit_target_isr.py firmware/.pio/build/compact_n16r8_web/firmwa
 ```
 
 [Validation summary](../reports/engine/trigger-logging/validation-summary.json) records source/ELF hashes, native allocation-failure tests, HTTP/browser checks, independent target/reference reviews and the refreshed external engine-plant matrix. Manufacturing/physical qualification and remaining Speeduino features are still open.
+
+The continuous [sequential phase decoder](engine-sequential.md) is separate from raw recording. Engine diagnostics show its crank/phase status and fault reasons.
