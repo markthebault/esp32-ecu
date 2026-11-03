@@ -1,11 +1,7 @@
 {
-  "signature": "ESP32ECU SIL 003 INHIBITED",
+  "signature": "ESP32ECU DEV 004 INHIBITED",
   "pages": {
-    "1": 512,
-    "2": 1152,
-    "3": 1152,
-    "4": 1152,
-    "5": 800
+    "1": 4768
   },
   "numeric_fields": [
     [
@@ -185,7 +181,7 @@
     "target_lambda",
     "ego"
   ],
-  "live_block_bytes": 184,
+  "live_block_bytes": 216,
   "timing_fields": [
     [
       "injection_end_deg",
@@ -203,5 +199,15 @@
   "strategy_offset": 272,
   "firing_order_offset": 288,
   "revision_offset": 268,
-  "scope": "native SIL transport only; physical UART is not implemented"
+  "serial_protocol": "002",
+  "page_offsets": {
+    "header": 0,
+    "ve": 512,
+    "spark": 1664,
+    "lambda_target": 2816,
+    "cylinder": 3968
+  },
+  "origin_revision_read_only": true,
+  "commit_behavior": "whole-tune stage; burn persists/activates and resets control; stable session origin",
+  "scope": "shared native and inhibited target USB Serial/JTAG; UART0 diagnostics separate; physical USB unmeasured; TunerStudio own-identity online gate unresolved"
 }

@@ -19,7 +19,7 @@ async def check(url,device,out):
    async with page.expect_download() as download:await page.locator('#engine-msq').click()
    path=out/'ui-sequential.msq';await (await download.value).save_as(path);tune=import_msq(path.read_bytes());assert tune['strategy']=='sequential_4cyl' and tune['timing']['injection_end_deg']==535
    async with page.expect_download() as download:await page.locator('#engine-log').click()
-   path=out/'ui-sequential.msl';await (await download.value).save_as(path);assert 'PhaseSync' in path.read_text();checks.append('003 MSQ and phase-aware MSL exports retain source and configuration')
+   path=out/'ui-sequential.msl';await (await download.value).save_as(path);assert 'PhaseSync' in path.read_text();checks.append('004 MSQ and phase-aware MSL exports retain source and configuration')
    await page.screenshot(path=out/'sequential-ui-desktop.png')
    await page.locator('[data-page="triggers"]').click();await page.locator('#trigger-start').click();await page.locator('#trigger-json').wait_for(state='visible');await page.wait_for_function('()=>!document.querySelector("#trigger-json").disabled')
    async with page.expect_download() as download:await page.locator('#trigger-json').click()

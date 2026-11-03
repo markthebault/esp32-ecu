@@ -1,0 +1,316 @@
+{
+  "reviewed_at_utc": "2026-11-03T22:20:15.396897+00:00",
+  "reviewer": "Independent read-only /root/target_executor_architecture_review",
+  "scope": "Final narrow failed-host-observation fallback review plus read-only current3-image/ISR/USB binding. Cache-only probes and audits; no production edits, application patches, flashing, service restarts, hardware execution or child agents.",
+  "verdict": "PASS. Failed sample callbacks retain the inhibited policy and unknown age, clear all observation data/validity/source flags, and cannot commit or change the staged page. Current3 images match the root image manifest and independently rerun ISR closure checks; both binary USB builds pass independent ownership/driver placement audits.",
+  "fallback_probe": {
+    "raw_failed_callback_codes": 7,
+    "full_poisoned_callback_data_discarded": true,
+    "physical_inhibited": 1,
+    "unknown_age_ms": 4294967295,
+    "source_present_validity_flags_zero": true,
+    "r_reply_session_metadata_retained": true,
+    "valid_then_failed_observation_has_no_stale_fields": true,
+    "page_unchanged": true,
+    "commits": 0
+  },
+  "fallback_source": {
+    "tools/tuning_bridge.cpp": "e7911d379ef93f01e02487bfbcdc7bbcf6687436ef90e26752175db35b8b5ab3",
+    "source_copy_sha256": "e7911d379ef93f01e02487bfbcdc7bbcf6687436ef90e26752175db35b8b5ab3",
+    "change": "On nonzero sample callback result: discard the full buffer, set physicalInhibited at52 to1 and age_ms at64 toUINT32_MAX. Session then fills separate origin/base/active metadata.",
+    "unchanged_active_store_paths": true
+  },
+  "images": {
+    "compact_n16r8_web": {
+      "images": {
+        "firmware.elf": "bd4be31eea1e70ea38d6d570ff4de1d0c71d0de762578f4334c9f8c64c094b37",
+        "firmware.bin": "844c0f07596a97ec20444544cae281c5cfbac604a29451455e646aa72656574a",
+        "partitions.bin": "e9c73a95cfdf6d87218d65989c4a89982342a5032951b3b62d4b8c644c32e643"
+      },
+      "matches_root_image_manifest": true,
+      "static_internal_data_bss_bytes": 145252,
+      "entry_frames": [
+        {
+          "symbol": "4200c164 00000024 t std::unique_ptr<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text, ecu::HeapObjectDelete<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text> > ecu::heap_object<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text>()",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "420206a0 000001cf t ecu::engine_tuning::(anonymous namespace)::run(void*)",
+          "entry_frame_bytes": 304
+        },
+        {
+          "symbol": "4200d764 00000191 t ecu::engine_service::(anonymous namespace)::persist_prepared(ecu::engine::Tune const&, unsigned long, std::unique_ptr<char, void (*)(void*)>, char const*&)",
+          "entry_frame_bytes": 304
+        },
+        {
+          "symbol": "4201348c 000001d4 T ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)",
+          "entry_frame_bytes": 64
+        },
+        {
+          "symbol": "42020474 0000022a t void ecu::tuning::Stream::feed<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&>(unsigned char const*, unsigned int, unsigned long long, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "entry_frame_bytes": 336
+        },
+        {
+          "symbol": "4201e524 00000048 t void ecu::tuning::Stream::send<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(unsigned char const*, unsigned int, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "420203f8 00000026 t void ecu::tuning::Stream::error<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(unsigned char, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "entry_frame_bytes": 304
+        },
+        {
+          "symbol": "42020420 00000053 t void ecu::tuning::Stream::expire<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&>(unsigned long long, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "42020394 00000064 t void ecu::tuning::Stream::framed<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(ecu::tuning::Reply const&, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "entry_frame_bytes": 304
+        },
+        {
+          "symbol": "4201fd1c 00000678 W ecu::tuning::Session::command(unsigned char const*, unsigned int)",
+          "entry_frame_bytes": 608
+        },
+        {
+          "symbol": "4201e49c 00000088 t ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}::operator()(unsigned char const*, unsigned int) const",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "4201e714 00000040 W ecu::tuning::Session::command(unsigned char const*, unsigned int)::{lambda(char const*)#2}::operator()(char const*) const",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "4201e714 00000040 W ecu::tuning::Session::command(unsigned char const*, unsigned int)::{lambda(char const*)#1}::operator()(char const*) const",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "4201e6c8 0000004a W ecu::tuning::Session::command(unsigned char const*, unsigned int)::{lambda(unsigned char)#1}::operator()(unsigned char) const",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "42026fc8 000001a6 t usb_serial_jtag_isr_handler_default",
+          "entry_frame_bytes": 112
+        }
+      ],
+      "engine_ISR_closure": {
+        "artifact": ".cache/engine/live-tuning-review/fallback/isr-selected/closure.json",
+        "sha256": "5af1a283cf00117eb8e1df6d98d1410523d4684d4a16d4fc059a0e341437355d",
+        "passed_static_placement": true,
+        "roots": 5,
+        "functions": 30,
+        "flash_literals": 0,
+        "unclassified_flash_pointers": 0,
+        "assertion_metadata_arguments": 63,
+        "failures": []
+      },
+      "final_elf_hash_stable_through_inspection": true,
+      "USB_audit": {
+        "artifact": ".cache/engine/live-tuning-review/fallback/usb-selected-current.json",
+        "sha256": "ec95d4fb91fe8b81cb30c85860354e36e6e4180c75bef6375c6cd7428f5568ce",
+        "exclusive_usb": true,
+        "console": "UART0 only",
+        "local_patched_driver_sha256": "6316295b4776a662f0feea6117eab665877d7587f4bd5dce8d64ac1dd6cf0670",
+        "sdk_original_retained": true,
+        "isr_cache_safe": false,
+        "isr_flags": 0
+      }
+    },
+    "compact_a3_web": {
+      "images": {
+        "firmware.elf": "0e5606440942d6a7a2d18f0f3af0ae74314ad762608bd6f216afcc6451c4602f",
+        "firmware.bin": "b70e1fc971f3b656af4ce219df45fc8efb53e5c2cf18cc30d27b0808e0b3f66f",
+        "partitions.bin": "e9c73a95cfdf6d87218d65989c4a89982342a5032951b3b62d4b8c644c32e643"
+      },
+      "matches_root_image_manifest": true,
+      "static_internal_data_bss_bytes": 144000,
+      "entry_frames": [
+        {
+          "symbol": "4200c11c 00000024 t std::unique_ptr<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text, ecu::HeapObjectDelete<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text> > ecu::heap_object<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text>()",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "42020650 000001cf t ecu::engine_tuning::(anonymous namespace)::run(void*)",
+          "entry_frame_bytes": 304
+        },
+        {
+          "symbol": "4200d71c 00000191 t ecu::engine_service::(anonymous namespace)::persist_prepared(ecu::engine::Tune const&, unsigned long, std::unique_ptr<char, void (*)(void*)>, char const*&)",
+          "entry_frame_bytes": 304
+        },
+        {
+          "symbol": "42013444 000001d4 T ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)",
+          "entry_frame_bytes": 64
+        },
+        {
+          "symbol": "42020424 0000022a t void ecu::tuning::Stream::feed<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&>(unsigned char const*, unsigned int, unsigned long long, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "entry_frame_bytes": 336
+        },
+        {
+          "symbol": "4201e4d4 00000048 t void ecu::tuning::Stream::send<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(unsigned char const*, unsigned int, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "420203a8 00000026 t void ecu::tuning::Stream::error<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(unsigned char, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "entry_frame_bytes": 304
+        },
+        {
+          "symbol": "420203d0 00000053 t void ecu::tuning::Stream::expire<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&>(unsigned long long, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "42020344 00000064 t void ecu::tuning::Stream::framed<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(ecu::tuning::Reply const&, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "entry_frame_bytes": 304
+        },
+        {
+          "symbol": "4201fccc 00000678 W ecu::tuning::Session::command(unsigned char const*, unsigned int)",
+          "entry_frame_bytes": 608
+        },
+        {
+          "symbol": "4201e44c 00000088 t ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}::operator()(unsigned char const*, unsigned int) const",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "4201e6c4 00000040 W ecu::tuning::Session::command(unsigned char const*, unsigned int)::{lambda(char const*)#2}::operator()(char const*) const",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "4201e6c4 00000040 W ecu::tuning::Session::command(unsigned char const*, unsigned int)::{lambda(char const*)#1}::operator()(char const*) const",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "4201e678 0000004a W ecu::tuning::Session::command(unsigned char const*, unsigned int)::{lambda(unsigned char)#1}::operator()(unsigned char) const",
+          "entry_frame_bytes": 32
+        },
+        {
+          "symbol": "42026f78 000001a6 t usb_serial_jtag_isr_handler_default",
+          "entry_frame_bytes": 112
+        }
+      ],
+      "engine_ISR_closure": {
+        "artifact": ".cache/engine/live-tuning-review/fallback/isr-generic/closure.json",
+        "sha256": "3f5a7b4687295d522e076718f7ef8e69d4ee937f2ad3bc765c75ec56d2eae1c6",
+        "passed_static_placement": true,
+        "roots": 5,
+        "functions": 30,
+        "flash_literals": 0,
+        "unclassified_flash_pointers": 0,
+        "assertion_metadata_arguments": 63,
+        "failures": []
+      },
+      "final_elf_hash_stable_through_inspection": true,
+      "USB_audit": {
+        "artifact": ".cache/engine/live-tuning-review/fallback/usb-generic-current.json",
+        "sha256": "da773114ed163db5d1bdb731ee3b210af29543b861d571aa72b11475a2871e2f",
+        "exclusive_usb": true,
+        "console": "UART0 only",
+        "local_patched_driver_sha256": "6316295b4776a662f0feea6117eab665877d7587f4bd5dce8d64ac1dd6cf0670",
+        "sdk_original_retained": true,
+        "isr_cache_safe": false,
+        "isr_flags": 0
+      }
+    },
+    "compact_a3_timing_bench": {
+      "images": {
+        "firmware.elf": "a528eb899de4e82f6c38e2922dd4e2d400ba20bf5b7491e1c4087fa993f28336",
+        "firmware.bin": "9d780ad6208e260305777d91a8b4397b8a55fa4750c3e14ecbec42ef5423a8a6",
+        "partitions.bin": "e9c73a95cfdf6d87218d65989c4a89982342a5032951b3b62d4b8c644c32e643"
+      },
+      "matches_root_image_manifest": true,
+      "static_internal_data_bss_bytes": 118888,
+      "entry_frames": [],
+      "engine_ISR_closure": {
+        "artifact": ".cache/engine/live-tuning-review/fallback/isr-dummy/closure.json",
+        "sha256": "8b207e6e85e139ef8444cda180d33344b0de4c7a1ce10087f28ee4bdb58ba8f0",
+        "passed_static_placement": true,
+        "roots": 4,
+        "functions": 29,
+        "flash_literals": 0,
+        "unclassified_flash_pointers": 0,
+        "assertion_metadata_arguments": 63,
+        "failures": []
+      },
+      "final_elf_hash_stable_through_inspection": true,
+      "binary_tuning_task_absent": true
+    }
+  },
+  "source_sha256": {
+    "tools/tuning_bridge.cpp": "e7911d379ef93f01e02487bfbcdc7bbcf6687436ef90e26752175db35b8b5ab3",
+    "tools/tuning_runtime.py": "53ba65f91c3bca8e62c673f31ee0b73da044585073adb092d7e16f5d67619495",
+    "firmware/include/ecu/tuning_session.hpp": "6ddc1c495a3a0ef860bdd9b14267de37934e2578f61ad0557ba99f7d7dd22734",
+    "firmware/include/ecu/tuning_stream.hpp": "1725b24dbee3b9198ad8620c3d50851b36e1d34bfda9e2cac40e7bb5c3a721b5",
+    "firmware/include/ecu/tuning_live.hpp": "741d46645f5fb6ed887faea292421df06668bcd6272cf8d92454c3ed56abeb2c",
+    "firmware/main/engine_service.cpp": "87fc1f3a5ce1b2630425a439ee9c3d9bb6989b5cb54cffc91d3a5bec3aecdf30",
+    "firmware/include/ecu/engine_storage.hpp": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e",
+    "firmware/main/engine_tuning.cpp": "24b846ed8cc4a03c7b323afd4b58eea7f411b243e71e569f5b9c08c9343d851a",
+    "tools/test_tuning.py": "a55e84833951c8a43fd31a802c88fcf8b1f33bb3e6626a5db501f09c42bcce4f",
+    "scripts/audit_tuning_build.py": "ae3f3d4c3488e72460ee0dfc7bc20d91f6aed611c8e50454a093243ea331a23d",
+    "scripts/audit_target_isr.py": "550781826ea29b6fe55f802278422cda70bb80cb61aab76c717904b26dd83f4d"
+  },
+  "exact_commands": {
+    "compile": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I.cache/engine/live-tuning-review/fallback/include",
+      "-I/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+      ".cache/engine/live-tuning-review/fallback/probe.cpp",
+      ".cache/engine/live-tuning-review/pass1/cJSON.o",
+      "-o",
+      ".cache/engine/live-tuning-review/fallback/probe"
+    ],
+    "probe": [
+      ".cache/engine/live-tuning-review/fallback/probe",
+      "config/engine/defaults.json"
+    ],
+    "USB_audits": [
+      [
+        "python3",
+        "scripts/audit_tuning_build.py",
+        "compact_n16r8_web",
+        ".cache/engine/live-tuning-review/fallback/usb-selected-current.json"
+      ],
+      [
+        "python3",
+        "scripts/audit_tuning_build.py",
+        "compact_a3_web",
+        ".cache/engine/live-tuning-review/fallback/usb-generic-current.json"
+      ]
+    ],
+    "ISR_audits": [
+      [
+        "python3",
+        "scripts/audit_target_isr.py",
+        "firmware/.pio/build/compact_n16r8_web/firmware.elf",
+        ".cache/engine/live-tuning-review/fallback/isr-selected"
+      ],
+      [
+        "python3",
+        "scripts/audit_target_isr.py",
+        "firmware/.pio/build/compact_a3_web/firmware.elf",
+        ".cache/engine/live-tuning-review/fallback/isr-generic"
+      ],
+      [
+        "python3",
+        "scripts/audit_target_isr.py",
+        "firmware/.pio/build/compact_a3_timing_bench/firmware.elf",
+        ".cache/engine/live-tuning-review/fallback/isr-dummy"
+      ]
+    ]
+  },
+  "artifact_sha256": {
+    ".cache/engine/live-tuning-review/fallback/probe.cpp": "f3291459c1147f23beb16c0d91be616e33c3c9dc922fa866000935f075c79ac9",
+    ".cache/engine/live-tuning-review/fallback/probe.json": "accb30293e97ec8d8347d059f9f922cd9dad5380b9f164d88781a4c51a6148b8",
+    ".cache/engine/live-tuning-review/fallback/tuning_bridge.cpp": "e7911d379ef93f01e02487bfbcdc7bbcf6687436ef90e26752175db35b8b5ab3",
+    ".cache/engine/live-tuning-review/pass1/cJSON.o": "efcbf83d0675dc5ba5d2a69d0fff6d3be71fc9ee59170e07d6db957bf58e04e7"
+  },
+  "remaining_limits": [
+    "Native fallback tests and static source/ELF audits only. No USB enumeration, boot/panic traffic, RX drops, cache stalls, sustained load, stack/heap high-water, interrupt timing or physical output qualification.",
+    "SDK USB ISR remains flash with flags0; engine IRAM closure does not make USB cache-safe. Dummy build retains its diagnostic console and has no binary tuning task.",
+    "Root broad122-test/9-simulation reruns were still in progress; this report does not certify their outcome or final verification.json counters.",
+    "Older cache USB audit files bind earlier images; this report references freshly rerun current-image USB audits in the fallback directory."
+  ]
+}

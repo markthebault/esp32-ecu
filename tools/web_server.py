@@ -80,6 +80,7 @@ class Handler(BaseHTTPRequestHandler):
   if self.path in ('/','/index.html'):return self.reply(200,(R/'web/index.html').read_bytes(),'text/html; charset=utf-8')
   if self.path=='/trigger_logger.js':return self.reply(200,(R/'web/trigger_logger.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/cylinder_tuning.js':return self.reply(200,(R/'web/cylinder_tuning.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/tuning_diagnostics.js':return self.reply(200,(R/'web/tuning_diagnostics.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/engine_logger.js':return self.reply(200,(R/'web/engine_logger.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/api/session':return self.reply(200,dict(token=d.token,simulator=True))
   if self.path=='/api/config':
@@ -94,6 +95,11 @@ class Handler(BaseHTTPRequestHandler):
   if self.path=='/api/engine/config':
    with d.engine.lock:return self.reply(200,d.engine.tune)
   if self.path=='/api/engine/defaults':return self.reply(200,d.engine.defaults)
+  if self.path=='/api/engine/tuning':
+   origin=self.headers.get('Origin');host=self.headers.get('Host','')
+   if self.headers.get('X-ECU-Token')!=d.token or (origin and origin!='http://'+host):return self.reply(403,{'error':'Session token or origin rejected.'})
+   from tuning_runtime import status
+   return self.reply(200,status(d.engine))
   if self.path=='/api/engine/status':return self.reply(200,d.engine.status())
   if self.path=='/api/engine/sample':return self.reply(200,d.engine.coherent_sample())
   if self.path.split('?',1)[0] in ('/api/engine/data-log','/api/engine/data-log.msl'):

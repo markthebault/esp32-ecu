@@ -24,19 +24,18 @@ from engine_protocol import Stream, envelope
 
 class Handler(socketserver.BaseRequestHandler):
  def handle(self):
-  self.request.settimeout(2)
+  self.request.settimeout(.02)
   stream=Stream(self.server.store)
   try:
    while True:
     try:data=self.request.recv(4096)
     except socket.timeout:
-     if stream.buffer:
-      self.request.sendall(envelope(b'\x80'))
-      return
+     for response in stream.expire():self.request.sendall(response)
      continue
     if not data:return
     for response in stream.feed(data):self.request.sendall(response)
   except (ConnectionError,OSError):return
+  finally:stream.close()
 
 
 class Server(socketserver.ThreadingTCPServer):
@@ -91,7 +90,10 @@ class PtyEndpoint(AbstractContextManager):
   connected=False
   try:
    while not self.stop.is_set():
-    if not select.select([self.master],[],[],.1)[0]:continue
+    if not select.select([self.master],[],[],.01)[0]:
+     if connected:
+      for response in stream.expire():self.write(response)
+     continue
     try:
      data=os.read(self.master,4096)
      if data:
@@ -103,12 +105,13 @@ class PtyEndpoint(AbstractContextManager):
     except OSError as error:
      if error.errno==errno.EAGAIN:continue
      if error.errno!=errno.EIO:raise
-     if connected:stream=Stream(self.store);connected=False
+     if connected:stream.close();stream=Stream(self.store);connected=False
      self.stop.wait(.1)
   except (OSError,TimeoutError) as error:
    self.failure=str(error)
    print('Tuning PTY stopped: '+self.failure,flush=True)
   finally:
+   stream.close()
    os.close(self.master)
    if self.link.is_symlink() and os.readlink(self.link)==self.slave_name:self.link.unlink()
  def close(self):

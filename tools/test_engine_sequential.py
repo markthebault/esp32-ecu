@@ -50,7 +50,7 @@ class SequentialTests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as d:
    store=EngineStore(Path(d)/'tune.json');session=Session(store)
    data=p[1][272:292];self.assertEqual(session.command(b'M'+struct.pack('<BBHH',0,1,272,20)+data),b'\0');self.assertEqual(session.command(b'b\0\1'),b'\4');self.assertEqual(store.tune['strategy'],'sequential_4cyl')
-   block=live_block(store);self.assertEqual(len(block),184);self.assertEqual(struct.unpack_from('<I',block,92)[0],1);self.assertEqual(struct.unpack_from('<I',block,52)[0],1)
+   block=live_block(store);self.assertEqual(len(block),216);self.assertEqual(struct.unpack_from('<I',block,92)[0],1);self.assertEqual(struct.unpack_from('<I',block,52)[0],1)
  def test_prepare_failure_cannot_change_persistent_or_runtime_tune(self):
   with tempfile.TemporaryDirectory() as d:
    path=Path(d)/'tune.json';store=EngineStore(path);self.assertEqual(store.save(json.dumps(self.tune).encode())[0],200);before=path.read_bytes();runtime=store.runtime;self.seq['revision']=2

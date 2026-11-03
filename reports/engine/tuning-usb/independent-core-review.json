@@ -1,0 +1,331 @@
+{
+  "reviewed_at_utc": "2026-11-03T22:00:19.103291+00:00",
+  "reviewer": "Independent read-only /root/target_executor_architecture_review",
+  "scope": "Pass1 own004 shared typed core/session/stream/live, native bridge/callback, target engine_service commit helper and dedicated USB task. Cache-only snapshots/probes; no production edits, rebuild/restart of project services, app modification, vendor messages, hardware or subagents.",
+  "verdict": "No remaining blocker found in the reviewed shared transaction and project-side USB commit path after the recorded fixes. This is a pass1 source/native validation with a bound selected draft ELF, not final full application/INI/UI acceptance or physical USB qualification.",
+  "resolved_findings": [
+    {
+      "id": "004-I1",
+      "priority": "medium",
+      "issue": "Initial Stream consumed idleF0+rawF as invalid length0xF046, losing explicit session reset.",
+      "resolution": "Root now ignores F0 only at an empty idle parser and retains the idle boundary for following F. FramedF0 remains data and failedTX still requires idleF.",
+      "evidence": [
+        "core_probe.json idle_F0_then_F_recovers=false",
+        "core_recheck.json idle_F0_then_F_recovers=true and F0_inside_frame_preserved=true"
+      ]
+    },
+    {
+      "id": "004-I2",
+      "priority": "high",
+      "issue": "Initial target USB typed commit delegated to allocating std::string save path under no-exceptions IDF, outside checked OOM handling.",
+      "resolution": "Owned cJSON text replaces the live string; shared persist_prepared performs final lock/CAS/NVS/configuration fences with literal reasons and owned checked text. USB commit calls it directly, with no project-side string allocation after preparation.",
+      "evidence": [
+        "service_probe.json",
+        "recheck/engine_service.cpp",
+        "recheck/include/ecu/engine_storage.hpp"
+      ]
+    },
+    {
+      "id": "004-I3",
+      "priority": "low",
+      "issue": "A resolved Busy condition on clean burn left stateBusy; successful nontext inquiry/read replies left old last_code.",
+      "resolution": "Clean successful b setsReady; C/I/f/p/r/d clear the response status consistently.",
+      "evidence": [
+        "core_recheck.json diagnostics_recovery_and_last_code=true"
+      ]
+    },
+    {
+      "id": "004-I4",
+      "priority": "medium",
+      "issue": "Initial bridge load used strlen on a callback-owned fixed buffer; the callback contract could return a full nonterminated array.",
+      "resolution": "Root added bounded memchr before length-dependent parsing. Current direct C++ test fills the entire callback buffer withoutNUL and verifies Invalid/uninitialized and no burn.",
+      "evidence": [
+        "host_bounds_probe.json"
+      ]
+    },
+    {
+      "id": "004-I5",
+      "priority": "medium",
+      "issue": "The initial Python callback snapshot performed deepcopy after successful backend save, creating a possible postcommit85 without advancing SessionCAS. This was already removed while root progressed implementation, before current recheck.",
+      "resolution": "Current callback only writes the returned revision and returns status; no postcommit compatibility copy.",
+      "evidence": [
+        "callback_probe.json: injected deepcopy fails if called, but zero calls, one backend commit,04, origin1/base2"
+      ]
+    }
+  ],
+  "passed_checks": {
+    "framing": "270 split positions for a maximum269-byte M frame;267 payload/CRC corruptions leave active tune, writes and commits unchanged; bounded RX/TX sizes; explicit timeout/TX fault recovery in current native test.",
+    "transaction": "Staging does not activate;25 consecutive successful burns advance internalCAS while origin and page bytes remain stable. Cleanb checks external revision before idempotency. Reserved/read-only chunk violations reject before copying. Full-page cross-field strategy/trim transitions validate at burn.",
+    "bridge_cjson_oom": "2412 injected cJSON burn allocation failures each return85, retain active/staged state and free every cJSON allocation; retry succeeds. Two positions beyond the final allocation succeed. Initial/current bridge commit function is unchanged; bounded-load change is separately checked.",
+    "actual_service_failure_path": "The current real engine_service.cpp is included unchanged with fake RTOS/NVS/target boundaries.2412 cJSON allocation failures and the checked24577-byte copy malloc failure leave active/document/sample intact and enter no configuration fence. Successful retries persist correct revision2.",
+    "actual_service_race": "A competing real HTTP engine_service::save after the initial snapshot but during JSON preparation wins; final USBCAS returnsConflict with no second fence, preserving external revision2/VE90.",
+    "actual_service_storage": "Injected NVS error preserves active tune/document/sample, blocks further saves and finishes the existing configuration fence using the old revision. Initial mutex contention returnsBusy without blocking.",
+    "ownership": "Private parsed trees and prepared text are cleaned on every tested failure. Success swaps owned text under mutex and releases the old text after use. No task/ISR borrows the document pointer outside its lock in the reviewed paths.",
+    "driver": "All10 upstream manifest files match the pinned global SDK. Local component differs by exactly the TX-ring NULL-check line, plus LICENSE/upstream metadata. SDK global source remains untouched. Generated selected CMake uses the project-local driver source.",
+    "target_lifecycle": "Compile gates restrict USB tuning to inhibited builds and primary UART-default/no secondaryUSB-console ownership. One CPU0 task owns installation/use/cleanup,1024-byte rings,64-byte reads and mandatory one-tick yields at priority1. Session/CRC/JSON/NVS remain task-side."
+  },
+  "draft_selected_image": {
+    "sha256": "3825cddfee9c1b855be560a7e7294c233e1a2b06b720d456477d5b1d13b1456a",
+    "layout_artifact": "pass1/current-draft-layout.json",
+    "static_internal_dram_data_bss_bytes": 145252,
+    "usb_task_stack_bytes": 12288,
+    "linked_types": {
+      "State": 9760,
+      "Session": 9392,
+      "Stream": 360,
+      "Reply": 264,
+      "Tune": 4548
+    },
+    "linked_entry_frames": {
+      "USB_run": 304,
+      "Stream_feed": 336,
+      "Session_command": 608,
+      "tuning_commit": 64,
+      "persist_prepared": 304,
+      "USB_driver_ISR": 112,
+      "USB_SOF_tick_hook": 32
+    },
+    "placement": "Parser/service task code and SDK USB ISR are flash; SOF tick hook isIRAM. Engine ISR closure is separately audited by root. Static frame sizes do not prove call-chain high-water."
+  },
+  "remaining_limits": [
+    "No real targetUSB enumeration, open/close/bootROM/panic traffic, RX loss, sustained host throughput, cache-disabled flash behavior, jitter, physical output or stack/heap high-water measurement.",
+    "SDK USB ISR uses esp_intr_alloc flags0 and is flash. Engine IRAM audit does not establish USB cache-safety. SOF host_presence includes unopened PC serial ports; idle rawF is the explicit app-session reset.",
+    "Target NVS internals and RTOS/driver allocator failures are not fully covered by cJSON hooks. Project-side typedUSB commit checked allocations are covered; inherited boot legacy-load and HTTP read/error-string allocation paths remain separate.",
+    "Python protocol/INI/UI/MSQ migration was explicitly in progress when pass1 began. Only the reviewed tuning_runtime callback and bridge contract are qualified here; root owns broader app and browser tests.",
+    "The unchanged MS Lite3.3.01 own003 rejection remains established by the earlier audit. No own004 online acceptance claim follows from the transport changes.",
+    "Final selected/generic/dummy image binding, updated closure audits and current generated console settings should be rechecked after final builds; the copied selected image is a pass1 draft."
+  ],
+  "source_sha256": {
+    "firmware/include/ecu/tuning_layout.hpp": "ac9a14a2ca5c9edf5fb6611aaf7441446716c03abb6f3b36d95a17924d4ff8eb",
+    "firmware/include/ecu/tuning_document.hpp": "b3cddc4acace09b13a654a569d3ccf9d6c13b15d267f5ab765a0b0dd7ec04cf0",
+    "firmware/include/ecu/tuning_session.hpp": "6ddc1c495a3a0ef860bdd9b14267de37934e2578f61ad0557ba99f7d7dd22734",
+    "firmware/include/ecu/tuning_stream.hpp": "1725b24dbee3b9198ad8620c3d50851b36e1d34bfda9e2cac40e7bb5c3a721b5",
+    "firmware/include/ecu/tuning_live.hpp": "741d46645f5fb6ed887faea292421df06668bcd6272cf8d92454c3ed56abeb2c",
+    "firmware/include/ecu/engine_tuning.hpp": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6",
+    "firmware/include/ecu/engine_service.hpp": "d7b34562c70e0aa60d5b2e9eca0cf01aac3005ffed7924cccbea00ddccc71bbe",
+    "firmware/include/ecu/engine_storage.hpp": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e",
+    "firmware/main/engine_tuning.cpp": "568963f832c0eec4c775277e95c1c1b6f2c4c1fb82dc02fd40192435f82fa804",
+    "firmware/main/engine_service.cpp": "87fc1f3a5ce1b2630425a439ee9c3d9bb6989b5cb54cffc91d3a5bec3aecdf30",
+    "firmware/main/app.cpp": "a5d196a1e6140c1b5b68fdb2e2fdeab8048cb67eff6ef69799a6cddb5da4f272",
+    "firmware/main/CMakeLists.txt": "9ec05ee198e6fc3cb8c6d50f7c250d79fb097482054fc433e8c0641a8c6856d1",
+    "firmware/platformio.ini": "579f4075495f9c070a80d14cdcedf1ec4f9de13c4d233ebd1a48b97947e3f3d0",
+    "firmware/sdkconfig.defaults": "e6941fdfdd100c0e17806d94ad3d8d2af2bb56b76352f5eaeeda27e554570883",
+    "firmware/sdkconfig.n16r8.defaults": "37c991d9d77903dd35055cae02c765078ceb676234520f1a6db1800907932a48",
+    "scripts/tuning_sdkconfig.py": "e4b13ec816a09c15fa79c08521abeaa03e118f298439288f84feeac7fe663798",
+    "scripts/generate_tuning_wire.py": "7e4995da224c42be2d9a0eeec8d7aab5d5aa4e034d3765149ac22e7100a3bf4b",
+    "tools/tuning_bridge.cpp": "69a998b0855eeebe94f1164f29292bb6e4adc824ca17bb7f1eb052328a22784e",
+    "tools/tuning_runtime.py": "b87635c5062166c67d29a4d5c47fc05affb914b99c113d770b2f010833942abe",
+    "firmware/tests/tuning_test.cpp": "da0ca6a3eb4eda73074314c27291a67ec8cc737fc8355ade76a869952a5affca",
+    "firmware/components/esp_driver_usb_serial_jtag/upstream.json": "31e4a36bef01106a7655e98710a9b7a10490c3ebd6bdb25a5cf1545379409971"
+  },
+  "tested_service_source_matches_current": true,
+  "tested_session_stream_match_current": true,
+  "exact_probe_commands": [
+    {
+      "step": "Core before-fix snapshot compile/run",
+      "compile": [
+        "c++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I.cache/engine/live-tuning-review/pass1/snapshot/include",
+        ".cache/engine/live-tuning-review/pass1/core_probe.cpp",
+        "-o",
+        ".cache/engine/live-tuning-review/pass1/core_probe"
+      ],
+      "run": [
+        ".cache/engine/live-tuning-review/pass1/core_probe"
+      ]
+    },
+    {
+      "step": "Core final source recheck compile/run",
+      "compile": [
+        "c++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I.cache/engine/live-tuning-review/pass1/recheck/include",
+        ".cache/engine/live-tuning-review/pass1/recheck/core_recheck.cpp",
+        "-o",
+        ".cache/engine/live-tuning-review/pass1/core_recheck"
+      ],
+      "run": [
+        ".cache/engine/live-tuning-review/pass1/core_recheck"
+      ]
+    },
+    {
+      "step": "Current root native test independently compiled/run",
+      "compile": [
+        "c++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I.cache/engine/live-tuning-review/pass1/recheck/include",
+        ".cache/engine/live-tuning-review/pass1/recheck/tuning_test.cpp",
+        "-o",
+        ".cache/engine/live-tuning-review/pass1/current_native_test"
+      ],
+      "run": [
+        ".cache/engine/live-tuning-review/pass1/current_native_test"
+      ]
+    },
+    {
+      "step": "Pinned cJSON sanitizer object",
+      "compile": [
+        "cc",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+        "-c",
+        "/home/mark/.platformio/packages/framework-espidf/components/json/cJSON/cJSON.c",
+        "-o",
+        ".cache/engine/live-tuning-review/pass1/cJSON.o"
+      ]
+    },
+    {
+      "step": "Bridge commit OOM probe",
+      "compile": [
+        "c++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I.cache/engine/live-tuning-review/pass1/snapshot/include",
+        "-I/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+        ".cache/engine/live-tuning-review/pass1/oom_probe.cpp",
+        ".cache/engine/live-tuning-review/pass1/cJSON.o",
+        "-o",
+        ".cache/engine/live-tuning-review/pass1/oom_probe"
+      ],
+      "run": [
+        ".cache/engine/live-tuning-review/pass1/oom_probe",
+        "config/engine/defaults.json"
+      ]
+    },
+    {
+      "step": "Actual revised service OOM/CAS/storage probe with external boundaries faked",
+      "compile": [
+        "c++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-Wl,--wrap=malloc",
+        "-I.cache/engine/live-tuning-review/pass1/recheck/fakes",
+        "-I.cache/engine/live-tuning-review/pass1/recheck/include",
+        "-I/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+        ".cache/engine/live-tuning-review/pass1/service_probe.cpp",
+        ".cache/engine/live-tuning-review/pass1/cJSON.o",
+        "-pthread",
+        "-o",
+        ".cache/engine/live-tuning-review/pass1/service_probe"
+      ],
+      "run": [
+        ".cache/engine/live-tuning-review/pass1/service_probe",
+        "config/engine/defaults.json"
+      ]
+    },
+    {
+      "step": "Current bounded callback load probe",
+      "compile": [
+        "c++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I.cache/engine/live-tuning-review/pass1/recheck/include",
+        "-I/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+        ".cache/engine/live-tuning-review/pass1/host_bounds_probe.cpp",
+        ".cache/engine/live-tuning-review/pass1/cJSON.o",
+        "-o",
+        ".cache/engine/live-tuning-review/pass1/host_bounds_probe"
+      ],
+      "run": [
+        ".cache/engine/live-tuning-review/pass1/host_bounds_probe"
+      ]
+    },
+    {
+      "step": "Current Python callback no-postcommit-copy probe; native library read-only copied, no auto-builder used",
+      "run": [
+        "python3",
+        ".cache/engine/live-tuning-review/pass1/callback_probe.py"
+      ]
+    },
+    {
+      "step": "Linked draft type layout",
+      "read_only_commands": [
+        [
+          "xtensa-esp32s3-elf-nm",
+          "-C",
+          "-S",
+          ".cache/engine/live-tuning-review/pass1/selected-draft.elf"
+        ],
+        [
+          "xtensa-esp32s3-elf-size",
+          "-A",
+          ".cache/engine/live-tuning-review/pass1/selected-draft.elf"
+        ],
+        [
+          "readelf",
+          "--debug-dump=info",
+          ".cache/engine/live-tuning-review/pass1/selected-draft.elf"
+        ]
+      ],
+      "entry_decode": "ELF32 little-endian PT_LOAD address-to-file mapping; low12 bits0x136 identify entry a1 and (instruction>>12)*8 yields the linked frame size."
+    }
+  ],
+  "artifact_sha256": {
+    "pass1/snapshot.json": "14bf47c26ee0075629b92aab910c441607d4af191562eb50f9c2b2a0d386f18f",
+    "pass1/recheck/source-hashes.json": "a6f7762449cd04afe8f13bb7a881853511920b2ae7ba7e518a633d8423e5b4da",
+    "pass1/core_probe.cpp": "c571b9120992ba7695a1ecb8270816d2084b7c94b9a7e75a8b015d2c38a51463",
+    "pass1/core_probe.json": "8c6f88a2697a2d4101e67076d08cc85f9dde38ec22fb73625bebfb47d4b959f7",
+    "pass1/recheck/core_recheck.cpp": "4ca2198b494ff3850d035ff27d0d1a0d8abc5bb5cff8fa631a534d6240a8c264",
+    "pass1/core_recheck.json": "e249743d4efb60f7c24c8644280a72f2d714d4fb0505d40e9e76765e17106cc6",
+    "pass1/recheck/tuning_test.cpp": "da0ca6a3eb4eda73074314c27291a67ec8cc737fc8355ade76a869952a5affca",
+    "pass1/current_native_test.log": "7f70fc77f04a4963ce6ab233cb505c269940f5e83ea21ee8cfff973e5cedc2a8",
+    "pass1/oom_probe.cpp": "7c5e997a5b7b7b097b6ccc7e8cd0d1da37688bf3df61ad43ab84cc178d6fee3a",
+    "pass1/oom_probe.json": "ef07e88b4e0293fbf214fb6165bfa7e16ce20bc7fcc8d62baa9152246c0d4621",
+    "pass1/service_probe.cpp": "dd00b0479dd18ea4463f0fd82147b57f65fff175148d6d13745861bf15772796",
+    "pass1/service_probe.json": "b2b9f26f365ffb67f7334e78f46b770d24fcb6df97e1e764e129796f246e7b48",
+    "pass1/host_bounds_probe.cpp": "20310f4fbb432e769c0dd0bfdacbfd1d8c051e2b0411c300b285545ed57fd1b6",
+    "pass1/host_bounds_probe.json": "fa22c31a2cc645080f0ced19b7f627f8a6ab032b35c224b19edcf1ff5e776040",
+    "pass1/callback_probe.py": "71659bcdb21e8d0e2f9dbe78d6d00d55db5bebff882b9f50a4d0ef5a8f62653d",
+    "pass1/callback_probe.json": "ff18cdd312c97ef4ee4c4525a92910ee476359b34b77f8428425c2ec930fa072",
+    "pass1/driver_diff.json": "915eace96f5441d2dfcee5f3a0607672b89e78a1598f744efd3004f7b759b7fa",
+    "pass1/bridge-recheck-diff.json": "7320879f38579a6837f92b1a5263e81f7a8ea13527d0abe9c1cedcf9c214a0f8",
+    "pass1/current-draft-layout.json": "4b8a09977146125fe084745a44de40043123aa60c007f2160ddb1bcd1ef5415d"
+  },
+  "fixture_sha256": {
+    "config/engine/defaults.json": "9274e32ff7f0f0debe253f95304241a398b6b9c10fe04b868048fda4cf19d835",
+    "/home/mark/.platformio/packages/framework-espidf/components/json/cJSON/cJSON.c": "f892717f26cf3d21b7108de50cea95b6e48092950427615fe1d8d9c46ea09cca"
+  }
+}

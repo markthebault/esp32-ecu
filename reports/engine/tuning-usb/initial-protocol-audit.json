@@ -1,0 +1,207 @@
+{
+  "reviewed_at_utc": "2026-11-03T21:20:20.729327+00:00",
+  "reviewer": "Independent read-only /root/target_executor_architecture_review",
+  "scope": "Own003 TunerStudio INI/transport audit against official definitions and pinned Speeduino serial source. Cache-only probes; no production edits, native rebuild, application patch/decompilation, identity spoofing, service restart, child agents or vendor messages.",
+  "verdict": "Root fixed the transportF/layout identity defect and the reviewer independently rechecked it. Corrected actual TunerStudio MS Lite3.3.01 discovery explicitly rejects honest own003 before any read/edit/burn. One-page own004 with stable wire origin and separate internal CAS is a coherent proposed inhibited development contract, not a solution to this app-support boundary. Earlier own003 transaction/error/recovery findings remain recorded; implementation of own004 is outside this source review.",
+  "sources": {
+    "efi_definition": {
+      "url": "https://www.efianalytics.com/TunerStudio/docs/EFI%20Analytics%20ECU%20Definition%20files.pdf",
+      "sha256": "81ff3ebf1312f5963ece52749a84c0063fe872e451b036a13442c0a52cd52ea5",
+      "version": "1.16,2026-02-13",
+      "sections": [
+        "2.1.1 signature",
+        "3.2.1 identification",
+        "3.3.5 burnCommand",
+        "3.3.6-9 read/write/CRC",
+        "3.4.1 endian",
+        "3.4.7 envelope"
+      ],
+      "summary": "The signature/query response selects the definition; versionInfo supplies display/version text. Definitions specify logical pages, byte order, commands and block sizes. Burn initiates flash persistence. Default page-change automatic burns precede further-page writes. The envelope is selected by INI; its separate specification is linked."
+    },
+    "efi_supported_ecu_path": {
+      "url": "https://www.tunerstudio.com/index.php/support/faqs/24-faqs",
+      "sections": [
+        "What ECUs are supported?",
+        "How do I get support for my fuel injection controller?"
+      ],
+      "summary": "Official FAQ describes controller-specific adaptations and tells hardware vendors to work with EFI Analytics to add ECU support. This documents a vendor integration path, not a public promise that any own signature works in every TunerStudioMS edition."
+    },
+    "efi_developer_commands": {
+      "url": "https://tunerstudio.com/index.php/support/manuals/tsdevmanuals/80-command-buttons",
+      "scope": "Documents custom commands/buttons inside an ECU definition; it does not establish arbitrary controller identity acceptance."
+    },
+    "speeduino": {
+      "commit": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+      "comms_url": "https://github.com/speeduino/speeduino/blob/9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20/speeduino/comms.cpp",
+      "legacy_url": "https://github.com/speeduino/speeduino/blob/9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20/speeduino/comms_legacy.cpp",
+      "comms_sha256": "1ba91fd39434ec17e17f43655e8adf9bd0c685cac9a1d7d4fa5a7a1889484277",
+      "legacy_sha256": "3ccc358a58b383d281d178855ce133f0b629262721a66fb90c7e3d0046b74b08",
+      "remote_matches_local_pinned_files": true,
+      "summary": "F reports transport002; f reports protocol byte2 and block sizes. Framing is big-endian payload length, payload/status and CRC.84 means non-retry range error;85 requests retry. The receiver ignores an idleF0 reset byte and expires incomplete reception after400ms."
+    },
+    "linked_envelope_reference": {
+      "url": "https://www.msextra.com/doc/pdf/Megasquirt_Serial_Protocol-2014-10-28.pdf",
+      "scope": "EFI-linked document defines serial version separately from Q format identity and S display/version. Its cover limits stated applicability to listed MegaSquirt products; this audit uses verified pinned Speeduino behavior for comparison, not that document as a general controller-support authorization."
+    }
+  },
+  "findings": [
+    {
+      "id": "TS-01",
+      "priority": "high",
+      "status": "resolved_by_root_rechecked",
+      "finding": "Initial own003 reused its layout revision for raw/framedF while f returned2. These are separate protocol identities.",
+      "evidence": {
+        "before_source_sha256": "2479a7a9caacb5eed5b9816a23a372f0ddcb610de2c6bc036797997efed0d934",
+        "raw_F_before": "003",
+        "capabilities_before": "000201000100",
+        "after": {
+          "source_sha256": "2c2586685aac9946bdef6a597d24caaad54994ad5dd73306b3b4c2a8fbd390f0",
+          "raw_F": "002",
+          "enveloped_F_status_plus_payload_hex": "00303032",
+          "capabilities_protocol_byte": 2,
+          "Q_own_layout_identity": "ESP32ECU SIL 003 INHIBITED",
+          "S_version_info_bytes": 59,
+          "transport_revision_decoupled_from_layout": true
+        }
+      },
+      "recommendation": "Keep SERIAL_PROTOCOL002 separate from honest ESP32ECU SIL003 INHIBITED layout signature."
+    },
+    {
+      "id": "TS-02",
+      "priority": "high",
+      "status": "open_design_contract",
+      "finding": "M ACK/p/CRC refer to per-connection staged buffers; active EngineStore updates only at b. Every successful b then repacks all pages with a new revision at page1 byte268, altering mapped bytes without a write from the client. baseRevision is an ordinary generated U32, with no ConstantExtensions readOnly declaration.",
+      "evidence": {
+        "M_ACK": "00",
+        "readback_after_M": 86,
+        "active_before_b": 85,
+        "active_after_b": 86,
+        "unwritten_page1_offsets_changed": [
+          268
+        ],
+        "CRC_before": "465740ca",
+        "CRC_after": "2e278c8e",
+        "cached_revision_block_writeback_burn": "84"
+      },
+      "recommendation": "Define live RAM-apply versus persistence semantics explicitly. Keep server CAS revisions outside mutable page bytes or freeze/resynchronize them by a clear connection contract; do not silently renew a stale client snapshot."
+    },
+    {
+      "id": "TS-03",
+      "priority": "high",
+      "status": "open_integration_contract",
+      "finding": "Full-tune validation and automatic per-page burns can reject a valid multi-page transition midway.",
+      "evidence": {
+        "qualification": "Command ordering follows documented auto-burn-on-page-change; in-memory CAS store calls existing unchanged native engine_validate. No native rebuild or real app/session/flash use.",
+        "native_validator_sha256": "c21c009db3f8631508c23e8c53a967bcdad3c797fd0211576c8256d1e4a040ee",
+        "initial_sequential_with_trims_is_valid": true,
+        "desired_batch_without_trims_is_valid": true,
+        "page1_write_ack": "00",
+        "page1_automatic_burn_before_page5_code": "84",
+        "store_unchanged_after_failed_intermediate_burn": true,
+        "manually_staging_page5_then_final_burn_code": "04",
+        "final_batch_without_trims_committed": true
+      },
+      "recommendation": "Choose/document transaction ordering compatible with default app burns, or a documented firmware-development auto-burn configuration and one explicit final commit. Test wholeMSQ loads as well as single-cell edits; per-page byte correctness is insufficient."
+    },
+    {
+      "id": "TS-04",
+      "priority": "medium",
+      "status": "open_error_contract",
+      "finding": "StaleCAS409 and storage-blocked503/507 all become85. Repeating the same request cannot clear those states, but85 asks the client to wait/retry.",
+      "evidence": {
+        "CAS_retries": [
+          "85",
+          "85"
+        ],
+        "persistent_store_retries": {
+          "503": [
+            "85",
+            "85"
+          ],
+          "507": [
+            "85",
+            "85"
+          ]
+        }
+      },
+      "recommendation": "Reserve85 for conditions that can resolve transiently. Permanent/stale failures need a non-retry result and explicit resynchronization/reconnect behavior."
+    },
+    {
+      "id": "TS-05",
+      "priority": "medium",
+      "status": "open_serial_recovery_contract",
+      "finding": "PTY receiver lacks partial-frame expiry. A truncated frame retains later rawF as payload; idleF0 followed byF is consumed as an invalid large length and loses the discovery command. TCP has a2s partial-buffer timeout/close, while INI client timeout is also2s.",
+      "evidence": {
+        "F0_then_F_response_hex": [
+          "00018438d7a8b4"
+        ],
+        "partial_then_F_responses": [],
+        "partial_bytes_retained": 4,
+        "server_source": "tools/tuning_server.py PtyEndpoint.serve and Handler.handle"
+      },
+      "recommendation": "Use a bounded receive deadline shorter than client timeout; clear/recover incomplete state. Ignore reset bytes only at idle, preserving arbitrary binary payload bytes."
+    },
+    {
+      "id": "TS-06",
+      "priority": "high",
+      "status": "confirmed_current_app_rejection",
+      "finding": "CorrectedF002 discovery completes through I/f00/fFF/Q; unchanged TunerStudio MS Lite3.3.01 explicitly rejects honest ESP32ECU SIL003 INHIBITED before any page/read/edit/burn request.",
+      "evidence": {
+        "trace": ".cache/engine/tuner-serial.log",
+        "prefix": "rawF\u2192002; framedI\u2192local0; f00/fFF\u2192protocol2/256/256; Q\u2192own001; repeats",
+        "interpretation_limit": "Trace shows requests/replies, not app internal reason or a current own003 outcome.",
+        "current_app_reproduction": {
+          "artifact": "app-evidence.json",
+          "sha256": "b21880abf93f3ec6f89c7db7e196999aa8ff6cdf866e17545f54cc8b6a2fb57d",
+          "product": "TunerStudio MS Lite3.3.01",
+          "raw_F": "002",
+          "Q": "ESP32ECU SIL 003 INHIBITED",
+          "valid_request_response_pairs": 512,
+          "unsupported_warning_count": 102,
+          "read_edit_burn_requests": 0,
+          "debug_first_warning_line": 138,
+          "exact_warning": "Unsupported Controller Firmware: ESP32ECU SIL 003 INHIBITED"
+        }
+      },
+      "recommendation": "Retain honest identity and distinguish wire correctness from app support. The official reviewed support path is ECU vendor coordination with EFI Analytics. Do not describe own004 as a signature workaround; there is no reviewed arbitrary-identity self-service acceptance mechanism."
+    }
+  ],
+  "checks_that_passed": {
+    "identity": "Q is26-byte own signature matching INI exactly. S is59-byte display text; no general length fault was established. Keep these distinct from F.",
+    "wire": "Silent empty feed,14 split-frame boundaries, coalesced discovery/binary requests, status-inclusiveCRC, wrongCRC82, little-endian command fields and big-endian envelope/CRC pass in-memory probes.",
+    "INI": "Five logical pages and sizes match pages();256-byte blocking capabilities and184-byte output block match generated definition. Own layout signature is preserved; no vendor identity substitution.",
+    "source_snapshot": "Only root transportF decoupling changed between the initial copied protocol and current discovery recheck; other reproduced code paths remain unchanged."
+  },
+  "verification_limits": [
+    "In-memory fixtures model CAS/persistence results; no actual file/flash/live plant was exercised. Cross-page probe also calls the existing native validator byCDLL without rebuilding it.",
+    "Reviewer did not launch or modify the app. Root owns actual unchanged-app reproduction; reviewer parsed and CRC-validated all512 request/response pairs and bound debug log, INI and app JAR hashes.",
+    "No physical UART or target execution; current tuning_server is local TCP/PTY SIL and current live_block reports a completed historical snapshot."
+  ],
+  "source_sha256_at_report": {
+    "tools/engine_protocol.py": "2c2586685aac9946bdef6a597d24caaad54994ad5dd73306b3b4c2a8fbd390f0",
+    "tools/tuning_server.py": "a28625b11dade960f880b19a7f83786cb72e99621dc1b796342d7dca271d0a09",
+    "tools/engine_runtime.py": "e9359ad4f2a0c27182400dbbca46f9025896b94c6b0015e4f50bc9ca18b3fc9b",
+    "scripts/generate_tunerstudio_ini.py": "a3839d1448ea43c224991065ec7649b64b933c5142a30dde22eb850f7c693810",
+    "tuning/esp32-ecu-cylinder.ini": "cba711c6a25babf51bb6872385203e6f2322c8f2d4c0361f28e8288b3dc1c6b7",
+    "tuning/protocol-layout.json": "f6d15ba85a4f5eaba611573af58e63f547f65e6719e0b466fe84ec0e98236a58",
+    "config/engine/defaults.json": "9274e32ff7f0f0debe253f95304241a398b6b9c10fe04b868048fda4cf19d835"
+  },
+  "probe_artifacts": {
+    "wire-probe.py": "59e1697dbf8d56e8093c26db1683335cbb6511a40bd9881cb32e00317de65af2",
+    "wire-probe.json": "0b5d066855a151605a8dae176737f173822ff4069b5201367e83c9ad9bdced50",
+    "page-transition-probe.py": "721fd4ea55cce5ce40062e08c2ef9446f72ab4cfc3e44586de62b66294906c9a",
+    "page-transition-probe.json": "0064e64502628f56ff54a8080eeb530690f6a843200fbe6ef063083e4360c44c",
+    "discovery-recheck.json": "47850edb07bfe85c20959c71913c71e0a1dde09c19bdf94949566365b8ba0dab",
+    "reviewed-engine_protocol.py": "2479a7a9caacb5eed5b9816a23a372f0ddcb610de2c6bc036797997efed0d934",
+    "current-engine_protocol.py": "2c2586685aac9946bdef6a597d24caaad54994ad5dd73306b3b4c2a8fbd390f0",
+    "reviewed-tuning_server.py": "a28625b11dade960f880b19a7f83786cb72e99621dc1b796342d7dca271d0a09",
+    "source-downloads.json": "842a014fa597c584752b97b7f4a9a0b8c722c59d14605d6591ce02a0fa65323a",
+    "app-evidence.json": "b21880abf93f3ec6f89c7db7e196999aa8ff6cdf866e17545f54cc8b6a2fb57d",
+    "own004-design.json": "9c35648866e55f71a725e7d9de220071178ffac56374c85b0460e648a9740d07"
+  },
+  "next_revision_design_review": {
+    "artifact": "own004-design.json",
+    "sha256": "9c35648866e55f71a725e7d9de220071178ffac56374c85b0460e648a9740d07",
+    "assessment": "Conditionally coherent single-page staged transaction; explicit reset/automatic-burn/CAS contracts and target USB SDK lifecycle/OOM/cache limits are specified."
+  }
+}

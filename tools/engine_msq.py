@@ -6,15 +6,18 @@ import math
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-from engine_protocol import DEFAULT,NUMBERS,FLAGS,CURVES,SIGNATURE,LEGACY_SIGNATURE,SEQUENTIAL_SIGNATURE,TIMING_FIELDS,STRATEGIES,PAGE_SIZES,field_units
+from engine_protocol import DEFAULT,NUMBERS,FLAGS,CURVES,SIGNATURE,LEGACY_SIGNATURE,SEQUENTIAL_SIGNATURE,CYLINDER_SIGNATURE,TIMING_FIELDS,STRATEGIES,PAGE_SIZES,field_units
 
 NS='http://www.msefi.com/:msq'
 ET.register_namespace('',NS)
 def tag(name):return '{'+NS+'}'+name
 
-def constants(tune,legacy=False,sequential=False):
+def valid_revision(value):
+ return type(value) in (int,float) and 1<=value<=4294967295 and math.isfinite(value) and int(value)==value
+
+def constants(tune,legacy=False,sequential=False,whole=True):
  revision=tune['revision']
- if isinstance(revision,bool) or not isinstance(revision,(int,float)) or not math.isfinite(revision) or int(revision)!=revision or not 1<=revision<=4294967295:raise ValueError('Invalid MSQ base revision')
+ if not valid_revision(revision):raise ValueError('Invalid MSQ base revision')
  result=[(0,'baseRevision',[int(revision)],None)]
  result += [(0,k,[tune[group][k]],None) for group,k in NUMBERS]
  result += [(0,k,['"On"' if tune['settings'][k] else '"Off"'],None) for k in FLAGS]
@@ -31,17 +34,17 @@ def constants(tune,legacy=False,sequential=False):
    result += [(4,f'c{i+1}SparkTrim',[tune['cylinder_trims']['spark_deg'][i]],None)]
    m=tune['cylinder_trims']['fuel_maps'][i]
    result += [(4,f'c{i+1}FuelRpm',m['rpm'],(6,1)),(4,f'c{i+1}FuelLoad',m['load'],(6,1)),(4,f'c{i+1}FuelTable',m['cells'],(6,6))]
- return result
+ return [(0,name,values,shape) for _,name,values,shape in result] if whole and not legacy and not sequential else result
 
 def export_msq(tune):
  from engine_runtime import EngineRuntime
  runtime=EngineRuntime(tune);tune=runtime.tune;runtime.close()
  root=ET.Element(tag('msq'))
  ET.SubElement(root,tag('bibliography'),author='ESP32ECU',tuneComment='SHADOW ONLY; physical outputs inhibited; illustrative development tune')
- ET.SubElement(root,tag('versionInfo'),fileFormat='5.0',firmwareInfo='ESP32ECU SIL',nPages='5',signature=SIGNATURE.decode())
- elements={i:ET.SubElement(root,tag('page'),number=str(i),size=str(PAGE_SIZES[i+1])) for i in range(5)}
+ ET.SubElement(root,tag('versionInfo'),fileFormat='5.0',firmwareInfo='ESP32ECU development',nPages='1',signature=SIGNATURE.decode())
+ elements={i:ET.SubElement(root,tag('page'),number=str(i),size=str(PAGE_SIZES[i+1])) for i in range(1)}
  for page,name,values,shape in constants(tune):
-  units=field_units(name) if page==0 and name not in dict(CURVES) else 'RPM' if name.endswith('Rpm') else 'kPa' if name.endswith('Load') else {'veTable':'%','sparkTable':'deg','lambdaTable':'lambda'}.get(name,'deg' if name.endswith('SparkTrim') else '%' if name.endswith('FuelTable') else '')
+  units=field_units(name) if name in ({k for _,k in NUMBERS}|{k for k,_ in TIMING_FIELDS}) else 'RPM' if name.endswith('Rpm') else 'kPa' if name.endswith('Load') else {'veTable':'%','sparkTable':'deg','lambdaTable':'lambda'}.get(name,'deg' if name.endswith('SparkTrim') else '%' if name.endswith('FuelTable') else '')
   element=ET.SubElement(elements[page],tag('constant'),name=name,units=units)
   if shape:element.set('rows',str(shape[0]));element.set('cols',str(shape[1]))
   formatted=[str(v) if isinstance(v,int) else format(v,'.9g') if isinstance(v,float) else v for v in values]
@@ -49,15 +52,17 @@ def export_msq(tune):
  ET.indent(root,space='  ')
  return ET.tostring(root,encoding='utf-8',xml_declaration=True).decode()+'\n'
 
-def import_msq(body):
+def import_msq(body,base_revision=None):
+ # Own004 apps can omit readOnly origin. A caller may supply its already-loaded
+ # CAS base; otherwise 1 is an offline placeholder, never a discovered revision.
  if isinstance(body,str):body=body.encode()
  if len(body)>65536 or b'\0' in body or b'<!DOCTYPE' in body.upper() or b'<!ENTITY' in body.upper():raise ValueError('MSQ size or XML declarations rejected')
  try:root=ET.fromstring(body)
  except ET.ParseError as error:raise ValueError('Malformed MSQ XML') from error
  info=root.find(tag('versionInfo'))
- if root.tag!=tag('msq') or info is None or info.get('signature') not in (SIGNATURE.decode(),LEGACY_SIGNATURE.decode(),SEQUENTIAL_SIGNATURE.decode()) or info.get('nPages')!=('5' if info.get('signature')==SIGNATURE.decode() else '4'):raise ValueError('MSQ must match this ESP32ECU definition; other ECU tunes are incompatible')
+ if root.tag!=tag('msq') or info is None or info.get('signature') not in (SIGNATURE.decode(),LEGACY_SIGNATURE.decode(),SEQUENTIAL_SIGNATURE.decode(),CYLINDER_SIGNATURE.decode()) or info.get('nPages')!=('1' if info.get('signature')==SIGNATURE.decode() else '5' if info.get('signature')==CYLINDER_SIGNATURE.decode() else '4'):raise ValueError('MSQ must match this ESP32ECU definition; other ECU tunes are incompatible')
  legacy=info.get('signature')==LEGACY_SIGNATURE.decode();sequential=info.get('signature')==SEQUENTIAL_SIGNATURE.decode()
- expected={name:(page,len(values),shape) for page,name,values,shape in constants(DEFAULT,legacy=legacy,sequential=sequential)}
+ expected={name:(page,len(values),shape) for page,name,values,shape in constants(DEFAULT,legacy=legacy,sequential=sequential,whole=info.get('signature')==SIGNATURE.decode())}
  values={}
  for page in root.findall(tag('page')):
   for element in page.findall(tag('constant')):
@@ -77,9 +82,14 @@ def import_msq(body):
     except ValueError as error:raise ValueError('Non-numeric MSQ constant') from error
     if len(parsed)!=count or not all(math.isfinite(v) for v in parsed):raise ValueError('MSQ value count or non-finite number')
     values[name]=parsed if shape else parsed[0]
+ if info.get('signature')==SIGNATURE.decode() and 'baseRevision' not in values:
+  values['baseRevision']=1
  if set(values)!=set(expected):raise ValueError('Incomplete MSQ tune')
  revision=values['baseRevision']
- if revision!=int(revision) or not 1<=revision<=4294967295:raise ValueError('Invalid MSQ base revision')
+ if not valid_revision(revision):raise ValueError('Invalid MSQ base revision')
+ if base_revision is not None:
+  if not valid_revision(base_revision):raise ValueError('Invalid caller base revision')
+  if info.get('signature')==SIGNATURE.decode():revision=base_revision
  tune=copy.deepcopy(DEFAULT);tune['revision']=int(revision)
  if legacy:
   tune['strategy']='batch_wasted_4cyl';tune['timing']=dict(firing_order=[1,3,4,2],injection_end_deg=540,cam_sync_deg=450,cam_window_deg=20)

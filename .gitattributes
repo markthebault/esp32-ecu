@@ -23,3 +23,6 @@ reports/engine/observability/*.log -whitespace
 # Preserve raw validation and application-export formatting for cylinder trims.
 reports/engine/cylinder-trims/*.log -whitespace
 tuning/examples/tunerstudio-cylinder-roundtrip.msq -whitespace
+# Retain raw USB/application evidence and the own004 application export.
+reports/engine/tuning-usb/*.log -whitespace
+tuning/examples/tunerstudio-development-roundtrip.msq -whitespace

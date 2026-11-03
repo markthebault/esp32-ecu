@@ -12,6 +12,7 @@
 <script src="/trigger_logger.js"></script>
 <script src="/engine_logger.js"></script>
 <script src="/cylinder_tuning.js"></script>
+<script src="/tuning_diagnostics.js"></script>
 <script>
 'use strict';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -49,16 +50,16 @@ function renderDiagnostics(p){p.innerHTML=`<div class="metrics">${metric('ADC in
 
 
 
-const LEGACY_ENGINE_SIGNATURE='ESP32ECU SIL 001 INHIBITED',SEQUENTIAL_ENGINE_SIGNATURE='ESP32ECU SIL 002 INHIBITED',ENGINE_SIGNATURE='ESP32ECU SIL 003 INHIBITED',MSQ_NS='http://www.msefi.com/:msq';
+const LEGACY_ENGINE_SIGNATURE='ESP32ECU SIL 001 INHIBITED',SEQUENTIAL_ENGINE_SIGNATURE='ESP32ECU SIL 002 INHIBITED',CYLINDER_ENGINE_SIGNATURE='ESP32ECU SIL 003 INHIBITED',ENGINE_SIGNATURE='ESP32ECU DEV 004 INHIBITED',MSQ_NS='http://www.msefi.com/:msq';
 function engineTimingDefaults(){return {firing_order:[1,3,4,2],injection_end_deg:540,cam_sync_deg:450,cam_window_deg:20};}
-function engineConstants(t,legacy=false,sequential=false){
+function engineConstants(t,legacy=false,sequential=false,whole=true){
  const values=[{page:0,name:'baseRevision',value:t.revision}];
  for(const group of ['engine','settings'])for(const [name,value] of Object.entries(t[group]))values.push({page:0,name,value,flag:typeof value==='boolean',group});
  if(!legacy){values.push({page:0,name:'engineStrategy',value:t.strategy==='sequential_4cyl'?1:0,strategy:true});for(const key of ['injection_end_deg','cam_sync_deg','cam_window_deg'])values.push({page:0,name:key,value:t.timing[key],group:'timing'});t.timing.firing_order.forEach((value,i)=>values.push({page:0,name:'fireOrder'+(i+1),value,order:i}));}
  for(const [name,value] of Object.entries(t.curves))values.push({page:0,name,value,curve:true});
  for(const [i,key] of ['ve','spark','lambda'].entries())for(const [suffix,field] of [['Rpm','rpm'],['Load','load'],['Table','cells']])values.push({page:i+1,name:key+suffix,value:t.maps[key][field],map:key,field});
  if(!legacy&&!sequential)values.push(...window.EcuCylinderTuning.constants(t));
- return values;
+ return whole&&!legacy&&!sequential?values.map(x=>({...x,page:0})):values;
 }
 function engineFieldUnits(name){
  const special={displacement_cc:'cc',injector_cc_min:'cc/min',fuel_density_g_cc:'g/cc',stoich_afr:'AFR',soft_limit_band:'RPM',rpm_hysteresis:'RPM',dfco_hysteresis:'RPM',dfco_tps:'%',afterstart_pct:'%',accel_threshold_pct_s:'%/s',accel_gain:'s/%',ego_min_clt:'C',max_duty:'ratio',ego_limit:'ratio'};
@@ -68,8 +69,8 @@ function engineToMsq(t){
  const doc=document.implementation.createDocument(MSQ_NS,'msq'),root=doc.documentElement;
  function add(parent,name,attrs){const e=doc.createElementNS(MSQ_NS,name);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);parent.appendChild(e);return e;}
  add(root,'bibliography',{author:'ESP32ECU',tuneComment:'SHADOW ONLY; physical outputs inhibited; illustrative development tune'});
- add(root,'versionInfo',{fileFormat:'5.0',nPages:'5',signature:ENGINE_SIGNATURE});
- const ps=[512,1152,1152,1152,800].map((size,i)=>add(root,'page',{number:i,size}));
+ add(root,'versionInfo',{fileFormat:'5.0',nPages:'1',signature:ENGINE_SIGNATURE});
+ const ps=[4768].map((size,i)=>add(root,'page',{number:i,size}));
  for(const item of engineConstants(t)){
   const units=item.unit??(item.group?engineFieldUnits(item.name):item.field==='rpm'?'RPM':item.field==='load'?'kPa':item.field==='cells'?{ve:'%',spark:'deg',lambda:'lambda'}[item.map]:'');
   const attrs={name:item.name,units};if(Array.isArray(item.value)){attrs.rows=item.field==='cells'?(item.bins||16):item.value.length;attrs.cols=item.field==='cells'?(item.bins||16):1;}
@@ -81,9 +82,9 @@ function engineToMsq(t){
 function engineFromMsq(text,template){
  if(/<!DOCTYPE|<!ENTITY/i.test(text)||text.includes('\0'))throw Error('MSQ XML declarations rejected.');
  const doc=new DOMParser().parseFromString(text,'application/xml'),root=doc.documentElement,info=doc.getElementsByTagNameNS(MSQ_NS,'versionInfo')[0];
- if(doc.getElementsByTagName('parsererror').length||root.localName!=='msq'||root.namespaceURI!==MSQ_NS||!info||![ENGINE_SIGNATURE,LEGACY_ENGINE_SIGNATURE,SEQUENTIAL_ENGINE_SIGNATURE].includes(info.getAttribute('signature'))||info.getAttribute('nPages')!==(info.getAttribute('signature')===ENGINE_SIGNATURE?'5':'4'))throw Error('Use an MSQ for this ESP32ECU definition. Other ECU tunes are incompatible.');
+ if(doc.getElementsByTagName('parsererror').length||root.localName!=='msq'||root.namespaceURI!==MSQ_NS||!info||![ENGINE_SIGNATURE,CYLINDER_ENGINE_SIGNATURE,LEGACY_ENGINE_SIGNATURE,SEQUENTIAL_ENGINE_SIGNATURE].includes(info.getAttribute('signature'))||info.getAttribute('nPages')!==(info.getAttribute('signature')===ENGINE_SIGNATURE?'1':info.getAttribute('signature')===CYLINDER_ENGINE_SIGNATURE?'5':'4'))throw Error('Use an MSQ for this ESP32ECU definition. Other ECU tunes are incompatible.');
  const legacy=info.getAttribute('signature')===LEGACY_ENGINE_SIGNATURE,sequential=info.getAttribute('signature')===SEQUENTIAL_ENGINE_SIGNATURE,result=JSON.parse(JSON.stringify(template));result.schema_version=3;if(legacy||sequential)result.cylinder_trims=window.EcuCylinderTuning.defaults();if(legacy){result.strategy='batch_wasted_4cyl';result.timing=engineTimingDefaults();}
- const expected=new Map(engineConstants(result,legacy,sequential).map(x=>[x.name,x])),seen=new Set();
+ const expected=new Map(engineConstants(result,legacy,sequential,info.getAttribute('signature')===ENGINE_SIGNATURE).map(x=>[x.name,x])),seen=new Set();
  for(const e of doc.getElementsByTagNameNS(MSQ_NS,'constant')){
   const item=expected.get(e.getAttribute('name'));if(!item||seen.has(item.name)||e.parentNode.localName!=='page'||e.parentNode.getAttribute('number')!==String(item.page))throw Error('Unknown, duplicate or misplaced MSQ constant.');
   seen.add(item.name);const raw=e.textContent.trim();let value;
@@ -92,6 +93,7 @@ function engineFromMsq(text,template){
   else{const list=raw?raw.split(/\s+/).map(Number):[];if(list.some(x=>!Number.isFinite(x))||list.length!==(Array.isArray(item.value)?item.value.length:1))throw Error('MSQ value count or number invalid.');value=Array.isArray(item.value)?list:list[0];}
   if(item.trimFlag||item.trimSpark!==undefined||item.trimCylinder!==undefined)window.EcuCylinderTuning.apply(result,item,value);else if(item.name==='baseRevision')result.revision=value;else if(item.strategy)result.strategy=value?'sequential_4cyl':'batch_wasted_4cyl';else if(item.order!==undefined)result.timing.firing_order[item.order]=value;else if(item.group)result[item.group][item.name]=value;else if(item.curve)result.curves[item.name]=value;else result.maps[item.map][item.field]=value;
  }
+ if(info.getAttribute('signature')===ENGINE_SIGNATURE&&!seen.has('baseRevision'))seen.add('baseRevision');
  if(seen.size!==expected.size)throw Error('Incomplete MSQ tune.');
  return result;
 }
@@ -112,7 +114,7 @@ function upgradeLegacyEngine(value,template){
 }
 function engineFile(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
 
-let engineTune,engineDirty=false,engineStatusTimer,engineRun;
+let engineTune,engineDirty=false,engineStatusTimer,engineRun,engineImportOrigin=undefined;
 async function renderEngine(p){
  if(current!=='engine')return;
  clearTimeout(engineStatusTimer);
@@ -125,8 +127,8 @@ async function renderEngine(p){
  document.querySelectorAll('[data-eng-key]').forEach(i=>i.onchange=()=>{t[i.dataset.engGroup][i.dataset.engKey]=i.type==='checkbox'?i.checked:Number(i.value);engineDirty=true;set('engine-save-state','Unsaved engine tune');});
  $('#engine-curves').onchange=e=>{try{t.curves=JSON.parse(e.target.value);engineDirty=true;set('engine-save-state','Unsaved engine tune')}catch(err){toast('Invalid curve JSON: '+err.message,true)}};
  $('#engine-map-kind').onchange=()=>drawEngineMap();
- $('#engine-save').onclick=async()=>{try{const curves=JSON.parse($('#engine-curves').value);t.curves=curves;engineTune=await api('/api/engine/config',{method:'PUT',body:JSON.stringify(t)});engineDirty=false;toast('Engine tune validated and saved. Physical outputs remain inhibited.');renderEngine(p)}catch(e){toast(e.message,true)}};
- $('#engine-reload').onclick=async()=>{try{engineTune=await api('/api/engine/config');engineDirty=false;renderEngine(p)}catch(e){toast(e.message,true)}};
+ $('#engine-save').onclick=async()=>{try{const curves=JSON.parse($('#engine-curves').value);t.curves=curves;engineTune=await api('/api/engine/config',{method:'PUT',body:JSON.stringify(t)});engineDirty=false;engineImportOrigin=undefined;toast('Engine tune validated and saved. Physical outputs remain inhibited.');renderEngine(p)}catch(e){toast(e.message,true)}};
+ $('#engine-reload').onclick=async()=>{try{engineTune=await api('/api/engine/config');engineDirty=false;engineImportOrigin=undefined;renderEngine(p)}catch(e){toast(e.message,true)}};
  $('#engine-export').onclick=()=>download('ecu-shadow-engine-tune.json',t);
 
  $('#engine-msq').onclick=()=>engineFile('ecu-shadow-engine-tune.msq',engineToMsq(t),'application/xml');
@@ -134,8 +136,15 @@ async function renderEngine(p){
  $('#engine-import-file').onchange=async event=>{const file=event.target.files[0];if(!file)return;try{
   if(file.size>65536)throw Error('Engine tune file exceeds 64 KiB.');
   const text=await file.text(),candidate=file.name.toLowerCase().endsWith('.msq')?engineFromMsq(text,t):upgradeLegacyEngine(JSON.parse(text),t);engineImportShape(candidate,t);
-  if(!Number.isInteger(candidate.revision)||candidate.revision!==t.revision)throw Error('Tune base revision differs. Reload and export a current tune before editing it.');
-  engineTune=candidate;engineDirty=true;if(current==='engine'){await renderEngine(p);set('engine-save-state','Imported edits. Review, then save to validate.');}toast('Engine edits imported for review. Save validates them; outputs stay inhibited.');
+  if(!Number.isInteger(candidate.revision)||candidate.revision<1||candidate.revision>4294967295)throw Error('Invalid tune origin revision.');
+  const own004=file.name.toLowerCase().endsWith('.msq')&&new DOMParser().parseFromString(text,'application/xml').getElementsByTagNameNS(MSQ_NS,'versionInfo')[0]?.getAttribute('signature')===ENGINE_SIGNATURE;
+  if(!own004&&candidate.revision!==t.revision)throw Error('Tune base revision differs. Reload and export a current tune before editing it.');
+  const originElement=own004?[...new DOMParser().parseFromString(text,'application/xml').getElementsByTagNameNS(MSQ_NS,'constant')].find(e=>e.getAttribute('name')==='baseRevision'):null;
+  engineImportOrigin=own004?(originElement?candidate.revision:null):undefined;
+  // An offline file origin is metadata. Keep this loaded editor's CAS revision;
+  // never fetch/rebase a newer server revision while importing someone’s file.
+  if(own004)candidate.revision=t.revision;
+  engineTune=candidate;engineDirty=true;if(current==='engine'){await renderEngine(p);set('engine-save-state','Imported edits. '+(engineImportOrigin===undefined?'':'File origin '+(engineImportOrigin===null?'unavailable':engineImportOrigin)+', editor base '+t.revision+'. ')+'Review, then save to validate.');}toast('Engine edits imported for review. Save validates them; outputs stay inhibited.');
  }catch(e){toast(e.message,true)}};
 
  $('#engine-run').disabled=!session.simulator;$('#engine-log').disabled=!session.simulator;
@@ -144,6 +153,7 @@ async function renderEngine(p){
  $('#engine-timing-export').onclick=async()=>{try{download('ecu-timing-trace.json',await api('/api/engine/timing'))}catch(e){toast(e.message,true)}};
  const cylinderPane=document.createElement('div');cylinderPane.id='engine-cylinder-panel';p.append(cylinderPane);window.EcuCylinderTuning.attach(cylinderPane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune')},toast);
  const logPane=document.createElement('div');p.append(logPane);window.EcuEngineLogger?.attach(logPane,{api,file:engineFile,toast,simulator:session.simulator,token:session.token});
+ const tuningPane=document.createElement('div');p.append(tuningPane);window.EcuTuningDiagnostics?.attach(tuningPane,{api,file:engineFile,toast});
  drawEngineMap();pollEngine();
  }catch(e){if(current==='engine')p.innerHTML='<section class="panel panelbody"><p>'+esc(e.message)+'</p></section>';}
 }

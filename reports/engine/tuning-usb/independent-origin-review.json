@@ -1,0 +1,65 @@
+{
+  "reviewed_at_utc": "2026-11-03T22:11:34.074236+00:00",
+  "scope": "Supplemental read-only edge review of optional own004 baseRevision after actual TunerStudio Save As omitted the read-only field. No production edits, app changes, vendor messages, subagents or physical device actions.",
+  "status": "No reproducible blocker found in the final optional-origin implementation.",
+  "findings": [],
+  "source_hashes_sha256": {
+    "tools/engine_msq.py": "e3a753ec43c526cd7be7b81a95d7367f5c3498d05dbffeac9165e45b17ed5eb7",
+    "web/index.html": "6a156acd38046d42c40ed1c5163159a2eb478bedfba963ba99aa444610329efb",
+    "tuning/README.md": "704c8ae769e7fe901f9f459935cf7a70b5e0dacc5277662c4e588f3cf3366349",
+    "tuning/examples/tunerstudio-development-roundtrip.msq": "cfe1e6301911100615e6fc600841b53d898821a2eb4a454322e14e873b189c0e"
+  },
+  "actual_fixture_matches_retained_fixture": true,
+  "probes": {
+    "provided_origin": "Valid present99 preserved without caller base; explicit7 overrides;10 malformed present values reject with and without explicit7",
+    "caller_base": "10 invalid caller bases rejected with present and absent own004 origin",
+    "required_other_fields": 76,
+    "legacy_origins_required_and_not_overridden": [
+      "tunerstudio-roundtrip.msq",
+      "tunerstudio-sequential-roundtrip.msq",
+      "tunerstudio-cylinder-roundtrip.msq"
+    ],
+    "fixture": {
+      "sha256": "cfe1e6301911100615e6fc600841b53d898821a2eb4a454322e14e873b189c0e",
+      "missing_origin": true,
+      "default_placeholder": 1,
+      "explicit_caller_base": 7,
+      "c2_spark_deg": -2.5,
+      "c2_fuel_cells": [
+        120,
+        120
+      ]
+    },
+    "browser": {
+      "checks": [
+        "Every non-origin own004 field and every historical origin remains required by browser parser",
+        "Malformed present004 origins reject without changing the editor",
+        "Missing-origin application file preserves stale editor base1, displays origin unavailable, never fetches/rebases, and Save conflicts against USB revision2",
+        "Explicit reload followed by import/save commits complete application tune once,2\u21923"
+      ],
+      "page_errors": [],
+      "passed": true
+    }
+  },
+  "final_python_recheck": {
+    "python_matrix_rechecked_after_final_validation_change": true,
+    "arbitrarily_large_caller_ints_rejected": true,
+    "placeholder_remains_literal1_with_mutated_defaults": true
+  },
+  "semantics_verified": [
+    "Only own004 may omit baseRevision. Missing own004 origin defaults to literal offline placeholder1 without caller input, independent of mutable DEFAULT revision. An explicit already-loaded caller base overrides absent or valid present own004 origin.",
+    "A malformed present origin is rejected before a valid caller override can apply. Caller bases reject booleans, out-of-range/non-integral/non-finite values, nonnumeric objects and arbitrarily large integers. Valid provided origins remain lossless when no caller override is requested.",
+    "All76 other own004 constants are individually mandatory in both Python and browser. Historical001/002/003 origins remain mandatory, including when the Python caller supplies a base. Valid explicit caller base never overrides a historical origin.",
+    "The actual application file contains C2 spark trim -2.5 degrees and all36 C2 fuel trim cells120%; those values remain intact after native validation and browser save.",
+    "Browser import of a missing-origin004 file retains the loaded editor revision and displays File origin unavailable. A concurrent tuning writer advancing1\u21922 still causes browser Save409; import performs no hidden config fetch or rebase.",
+    "After explicit user reload to revision2, importing the same complete application file and saving commits exactly once to revision3. No malformed-origin import changed editor state.",
+    "The actual application fixture and committed-target retained fixture are byte-for-byte identical, with no manufactured origin field inserted."
+  ],
+  "reproduce": "uv run --offline --with playwright python .cache/engine/tuning-storage-review/optional_origin_probe.py",
+  "artifacts": [
+    "optional_origin_probe.py",
+    "optional-origin-results.json",
+    "optional-origin-recheck.json"
+  ],
+  "limits": "Chrome/local host and isolated native validation only; no physical USB/flash/power-loss qualification. Revision1 is an offline placeholder, not a discovered server revision. Caller-supplied bases must come from that caller's loaded snapshot; no network fetch/rebase was added. The unresolved TunerStudio live own-identity gate remains outside this successful offline import review."
+}

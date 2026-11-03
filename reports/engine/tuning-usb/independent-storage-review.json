@@ -1,0 +1,82 @@
+{
+  "reviewed_at_utc": "2026-11-03T22:03:52.443506+00:00",
+  "scope": "Current own004 increment: actual target save path, blob API refactor, typed tuning commit, private document ownership, browser/MSQ revision semantics. Read-only review; all artifacts are inside the requested tuning-storage-review directory. No production changes, vendor messages, external app changes, or subagents.",
+  "status": "No reproducible storage, failed-save activation, ownership, or revision-CAS blocker found in the inspected implementation.",
+  "findings": [],
+  "source_hashes_sha256": {
+    "firmware/main/engine_service.cpp": "87fc1f3a5ce1b2630425a439ee9c3d9bb6989b5cb54cffc91d3a5bec3aecdf30",
+    "firmware/include/ecu/engine_service.hpp": "d7b34562c70e0aa60d5b2e9eca0cf01aac3005ffed7924cccbea00ddccc71bbe",
+    "firmware/include/ecu/engine_storage.hpp": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e",
+    "firmware/include/ecu/tuning_document.hpp": "b3cddc4acace09b13a654a569d3ccf9d6c13b15d267f5ab765a0b0dd7ec04cf0",
+    "firmware/include/ecu/tuning_layout.hpp": "ac9a14a2ca5c9edf5fb6611aaf7441446716c03abb6f3b36d95a17924d4ff8eb",
+    "firmware/include/ecu/tuning_session.hpp": "6ddc1c495a3a0ef860bdd9b14267de37934e2578f61ad0557ba99f7d7dd22734",
+    "firmware/include/ecu/tuning_stream.hpp": "1725b24dbee3b9198ad8620c3d50851b36e1d34bfda9e2cac40e7bb5c3a721b5",
+    "firmware/include/ecu/engine_json.hpp": "cbea06329fb2c4ffcd461bd56c5d714162fcf06a420d32e605767ae832aa8c3d",
+    "firmware/include/ecu/engine_limits.hpp": "aaaa07e76744f92cbf03f7ba07b5a297d813ffdceb7d5d5a68a8d6328d2dce14",
+    "firmware/main/engine_tuning.cpp": "24b846ed8cc4a03c7b323afd4b58eea7f411b243e71e569f5b9c08c9343d851a",
+    "tools/engine_runtime.py": "d60e2a48cf2f243247ef1a8076e5e1ea46fb5bd5dad140fb99e0aaa0a97a4364",
+    "tools/engine_msq.py": "59bc699036302ee855c5ab40278965e5e7973e37500b0be5a5939900e0e2b94b",
+    "tools/engine_protocol.py": "6d6e7ffe9230a8d800c5e1315bc218421e764bd5868374675657089b96a65621",
+    "tools/engine_protocol_legacy.py": "2c2586685aac9946bdef6a597d24caaad54994ad5dd73306b3b4c2a8fbd390f0",
+    "tools/tuning_runtime.py": "58af34aa66e47a64d14c42ca6324a7015588a57f5b49402bb77cec86ec90e2bf",
+    "tools/tuning_bridge.cpp": "69a998b0855eeebe94f1164f29292bb6e4adc824ca17bb7f1eb052328a22784e",
+    "scripts/generate_tunerstudio_ini.py": "5d28f5b9fa256e0259f746cb39d27d7ad9ef2f5daa60f160cd52580ab119ef5a",
+    "web/index.html": "7a186fdf867416567f3263b3795cf404e96d995a96b078e8e86921ef49ad2bad",
+    "web/cylinder_tuning.js": "b62730556575c9a55f00bdbb0a379c14ae7135fc00d992cce4506ffa4994de3a",
+    "tuning/esp32-ecu-development.ini": "14d954168c248f3b92f008c0d68a885f39409d9ccc2a11c5195a2d7e6f1185b9"
+  },
+  "target_probe": {
+    "http_failure_positions": 2412,
+    "http_success_positions": 1088,
+    "typed_failure_positions": 2412,
+    "typed_success_positions": 1088,
+    "leaks": 0,
+    "nvs_open_set_commit_failures_retain_active": true,
+    "repeat_save_blocked": true,
+    "stale_prepared_cas_rejected": true
+  },
+  "browser_probe": {
+    "checks": [
+      "Stale004 import retains editor base1 and origin99; Save conflicts against USB revision2 without overwrite or hidden rebase",
+      "After explicit reload, same004 file saves with editor base2 and increments backend exactly once to3; origin metadata clears",
+      "Original USB session conflicts after HTTP change and cannot overwrite it",
+      "Historical001/002/003 files retain exact revision guard and leave the editor unchanged on mismatch",
+      "Out-of-range004 origin rejects before rebasing to editor CAS"
+    ],
+    "page_errors": [],
+    "passed": true,
+    "scope": "Installed Chrome against isolated native code and temporary host files; no target flash/device"
+  },
+  "units_probe": {
+    "passed": true,
+    "scalar_array_units_checked": 72,
+    "differences": {},
+    "missing": [],
+    "timing_units": {
+      "injection_end_deg": "deg",
+      "cam_sync_deg": "deg",
+      "cam_window_deg": "deg"
+    }
+  },
+  "reviewed_invariants": [
+    "prepare_and_save parses and validates a private Tune/tree, checks and owns the cJSON-allocated encoded text, and only then enters persist_prepared. The document revision is expected+1 while the candidate carries expected for CAS.",
+    "persist_prepared checks storage state and expected revision while holding the service mutex. Only successful NVS set/commit changes active Tune, revision, owned document, controller state, stamp and latest data. Failing NVS closes the configuration fence using the old revision and blocks subsequent saves.",
+    "tuning_commit copies the current canonical document while checking candidate revision under the same mutex, updates a private tree outside it, and repeats CAS inside persist_prepared. A concurrent HTTP/USB winner invalidates the prepared loser before its fence or persistence call.",
+    "unique_ptr ownership frees private cJSON strings on invalid, busy, stale and failed-storage paths. On success document.swap transfers the new buffer into active ownership; the previous document is freed after the fence/mutex operation finishes.",
+    "The new engine_storage const-char/size API rejects null, empty, oversized and embedded-NUL input before opening NVS. Its byte length excludes the terminator; nonterminated bounded input works. It closes every successfully opened handle and propagates open/set/commit errors.",
+    "Own004 files carry a connection origin at baseRevision. Browser imports preserve that value in editor-only origin metadata and keep the already loaded editor revision as the HTTP CAS base. Import never fetches a newer revision or silently rebases a stale editor.",
+    "Exact historical001/002/003 import revision matching remains active; mismatches leave the editor unchanged. Python import/export retains origin revision losslessly, while whole-page own004 constants are flattened to page0.",
+    "Current Python MSQ scalar/array units match all72 INI declarations, including injection_end_deg, cam_sync_deg and cam_window_deg after the parent units fix."
+  ],
+  "reproduce": [
+    "Build target-probe.cpp using the pinned cJSON.c object and the review fakes (compile command is in this review conversation); run .cache/engine/tuning-storage-review/target-probe.",
+    "uv run --offline --with playwright python .cache/engine/tuning-storage-review/browser_probe.py (loads isolated libengine-review.so/libtuning-review.so/libconfig-review.so; temporary host files only).",
+    "uv run --offline --with playwright python .cache/engine/tuning-storage-review/units_probe.py."
+  ],
+  "limits": [
+    "The fake-NVS/FreeRTOS harness compiles actual engine_service.cpp, but tests caller operations and activation ordering only. It does not establish physical flash capacity, wear, NVS recovery, power-loss atomicity, electrical behavior, USB enumeration or sustained target performance.",
+    "NVS commit/write failures can leave new flash bytes present despite an error. The tested guarantee is retained active in-memory state and blocked later saves, not physical rollback.",
+    "OOM injection covers cJSON allocation positions in both new preparation paths. Checked heap_object allocations were inspected; general C++ heap exhaustion, SDK internal allocation failures, and inherited boot-load/tune_json/HTTP-response string allocations are outside that OOM guarantee.",
+    "Actual TunerStudio own004 online identity acceptance remains unresolved as reported by the parent; no foreign ECU identity or vendor/application modification was used."
+  ]
+}

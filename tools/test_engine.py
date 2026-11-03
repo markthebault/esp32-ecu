@@ -3,7 +3,7 @@ from unittest import mock
 from pathlib import Path
 from engine_runtime import EngineRuntime,EngineStore,R
 from engine_sil import Simulation
-from engine_protocol import Session,pages,decode_pages,SIGNATURE
+from engine_protocol import Session,Stream,envelope,pages,decode_pages,SIGNATURE,SERIAL_PROTOCOL
 from engine_msq import export_msq,import_msq
 
 class EngineTests(unittest.TestCase):
@@ -30,20 +30,24 @@ class EngineTests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as d:
    path=Path(d)/'tune.json';store=EngineStore(path);session=Session(store)
    self.assertEqual(session.command(b'Q'),b'\0'+SIGNATURE)
-   request=b'p'+struct.pack('<BBHH',0,2,128,4)
+   self.assertEqual(session.command(b'F'),b'\0'+b'002')
+   self.assertEqual(session.command(b'f\0')[1],int(SERIAL_PROTOCOL))
+   stream=Stream(store);self.assertEqual(stream.feed(b'F'),[b'002'])
+   self.assertEqual(stream.feed(envelope(b'F')),[envelope(b'\0'+b'002')])
+   request=b'p'+struct.pack('<BBHH',0,1,640,4)
    self.assertAlmostEqual(struct.unpack('<f',session.command(request)[1:])[0],85)
-   write=b'M'+struct.pack('<BBHH',0,2,128,4)+struct.pack('<f',91)
+   write=b'M'+struct.pack('<BBHH',0,1,640,4)+struct.pack('<f',91)
    self.assertEqual(session.command(write),b'\0');self.assertEqual(store.tune['maps']['ve']['cells'][0],85)
-   self.assertEqual(session.command(b'b\0\2'),b'\x04');self.assertEqual(EngineStore(path).tune['maps']['ve']['cells'][0],91)
-   self.assertEqual(session.command(b'p'+struct.pack('<BBHH',0,2,1150,10)),b'\x84')
-   self.assertEqual(session.command(b'M'+struct.pack('<BBHH',0,2,128,4)+struct.pack('<f',999)),b'\0')
-   self.assertEqual(session.command(b'b\0\2'),b'\x84');self.assertEqual(store.tune['maps']['ve']['cells'][0],91)
+   self.assertEqual(session.command(b'b\0\1'),b'\x04');self.assertEqual(EngineStore(path).tune['maps']['ve']['cells'][0],91)
+   self.assertEqual(session.command(b'p'+struct.pack('<BBHH',0,1,4760,10)),b'\x84')
+   self.assertEqual(session.command(b'M'+struct.pack('<BBHH',0,1,640,4)+struct.pack('<f',999)),b'\0')
+   self.assertEqual(session.command(b'b\0\1'),b'\x84');self.assertEqual(store.tune['maps']['ve']['cells'][0],91)
  def test_tuner_and_http_writers_conflict_instead_of_overwriting(self):
   with tempfile.TemporaryDirectory() as d:
    store=EngineStore(Path(d)/'tune.json');s=Session(store)
-   self.assertEqual(s.command(b'M'+struct.pack('<BBHH',0,2,128,4)+struct.pack('<f',91)),b'\0')
+   self.assertEqual(s.command(b'M'+struct.pack('<BBHH',0,1,640,4)+struct.pack('<f',91)),b'\0')
    self.tune['maps']['ve']['cells'][0]=88;self.assertEqual(store.save(json.dumps(self.tune).encode())[0],200)
-   self.assertEqual(s.command(b'b\0\2'),b'\x85');self.assertEqual(store.tune['maps']['ve']['cells'][0],88)
+   self.assertEqual(s.command(b'b\0\1'),b'\x84');self.assertEqual(store.tune['maps']['ve']['cells'][0],88)
  def test_offline_msq_roundtrip_and_identity_rejection(self):
   self.tune['maps']['ve']['cells'][53]=93.75;self.tune['settings']['ego_enabled']=True
   body=export_msq(self.tune);decoded=import_msq(body)
@@ -54,22 +58,22 @@ class EngineTests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as d:
    store=EngineStore(Path(d)/'tune.json');session=Session(store)
    self.tune['maps']['ve']['cells'][0]=88;self.assertEqual(store.save(json.dumps(self.tune).encode())[0],200)
-   request=b'p'+struct.pack('<BBHH',0,2,128,4)
+   request=b'p'+struct.pack('<BBHH',0,1,640,4)
    self.assertEqual(struct.unpack('<f',session.command(request)[1:])[0],85)
    self.assertEqual(struct.unpack('<f',Session(store).command(request)[1:])[0],88)
-   self.assertEqual(session.command(b'M'+struct.pack('<BBHH',0,1,268,4)+struct.pack('<I',99)),b'\0')
+   self.assertEqual(session.command(b'M'+struct.pack('<BBHH',0,1,268,4)+struct.pack('<I',99)),b'\x84')
    self.assertEqual(session.command(b'b\0\1'),b'\x84');self.assertEqual(store.tune['revision'],2)
  def test_clean_cached_tuner_cannot_overwrite_an_http_edit(self):
   with tempfile.TemporaryDirectory() as d:
    store=EngineStore(Path(d)/'tune.json');session=Session(store)
-   before=session.command(b'p'+struct.pack('<BBHH',0,2,0,1152))[1:]
+   before=session.command(b'p'+struct.pack('<BBHH',0,1,512,256))[1:]
    self.tune['maps']['ve']['cells'][0]=88;self.assertEqual(store.save(json.dumps(self.tune).encode())[0],200)
    # Live polling and later chunks must not change the calibration base.
    session.command(b'r'+struct.pack('<BBHH',0,0x30,0,76))
-   self.assertEqual(session.command(b'p'+struct.pack('<BBHH',0,2,0,1152))[1:],before)
+   self.assertEqual(session.command(b'p'+struct.pack('<BBHH',0,1,512,256))[1:],before)
    cached=bytearray(before);struct.pack_into('<f',cached,132,90)
-   self.assertEqual(session.command(b'M'+struct.pack('<BBHH',0,2,0,1152)+cached),b'\0')
-   self.assertEqual(session.command(b'b\0\2'),b'\x85');self.assertEqual(store.tune['maps']['ve']['cells'][0],88)
+   self.assertEqual(session.command(b'M'+struct.pack('<BBHH',0,1,512,256)+cached),b'\x84')
+   self.assertEqual(session.command(b'b\0\1'),b'\x84');self.assertEqual(store.tune['maps']['ve']['cells'][0],88)
  def test_msq_revision_is_lossless_at_uint32_boundaries(self):
   for revision in (1,1.0,1000000001,1000000001.0,4294967295,4294967295.0):
    self.tune['revision']=revision;self.assertEqual(import_msq(export_msq(self.tune))['revision'],revision)

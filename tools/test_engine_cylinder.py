@@ -1,4 +1,4 @@
-"""Cylinder configuration/storage/observability and own003 tuning contract."""
+"""Cylinder configuration/storage/observability and own004 tuning contract and historical own003 imports."""
 import copy,csv,io,json,struct,tempfile,unittest
 from pathlib import Path
 from engine_runtime import EngineRuntime,EngineStore,R
@@ -41,14 +41,14 @@ class CylinderTests(unittest.TestCase):
   for mutate in [lambda t:t['cylinder_trims']['fuel_maps'][0]['cells'].__setitem__(0,49),lambda t:t['cylinder_trims']['spark_deg'].__setitem__(2,11),lambda t:t['cylinder_trims']['fuel_maps'][1]['rpm'].__setitem__(1,80),lambda t:t.__setitem__('strategy','batch_wasted_4cyl'),lambda t:t['cylinder_trims']['fuel_maps'].pop()]:
    bad=copy.deepcopy(self.tune);mutate(bad)
    with self.assertRaises(ValueError):EngineRuntime(bad)
- def test_003_msq_and_fifth_page_preserve_distinct_corners_and_cylinder_ids(self):
+ def test_004_msq_and_single_page_preserve_distinct_corners_and_cylinder_ids(self):
   self.tune['cylinder_trims']['fuel_maps'][1]['cells'][17]=113.25;self.tune['cylinder_trims']['spark_deg']=[1,-3,4,0]
   text=export_msq(self.tune);self.assertIn(SIGNATURE.decode(),text);decoded=import_msq(text);self.assertEqual(decoded,self.tune)
-  blocks=pages(decoded);self.assertEqual(len(blocks),5);self.assertEqual(len(blocks[5]),800)
-  self.assertEqual(struct.unpack_from('<f',blocks[5],192+48+17*4)[0],113.25)
-  self.assertEqual(struct.unpack_from('<4fI',blocks[5],768),(1,-3,4,0,1))
+  blocks=pages(decoded);self.assertEqual(len(blocks),1);self.assertEqual(len(blocks[1]),4768)
+  self.assertEqual(struct.unpack_from('<f',blocks[1],3968+192+48+17*4)[0],113.25)
+  self.assertEqual(struct.unpack_from('<4fI',blocks[1],4736),(1,-3,4,0,1))
   self.assertEqual(pages(decode_pages(blocks,decoded)),blocks)
-  broken=copy.deepcopy(blocks);broken[5][799]=1
+  broken=copy.deepcopy(blocks);broken[1][4767]=1
   with self.assertRaises(ValueError):decode_pages(broken,decoded)
  def test_old_application_msqs_migrate_to_disabled_neutral(self):
   for filename in ('tunerstudio-roundtrip.msq','tunerstudio-sequential-roundtrip.msq'):
@@ -59,12 +59,12 @@ class CylinderTests(unittest.TestCase):
   cells=tune['cylinder_trims']['fuel_maps'][1]['cells'];self.assertEqual(cells[14],117.25)
   self.assertEqual([v for i,v in enumerate(cells) if i!=14],[120]*35)
   for i in (0,2,3):self.assertEqual(tune['cylinder_trims']['fuel_maps'][i]['cells'],[100]*36)
- def test_fifth_page_burn_is_transactional_and_old_output_prefix_is_retained(self):
+ def test_whole_page_burn_is_transactional_and_old_output_prefix_is_retained(self):
   with tempfile.TemporaryDirectory() as directory:
    store=EngineStore(Path(directory)/'tune.json');session=Session(store);blocks=pages(self.tune)
-   for page in (1,5):
-    body=bytes(blocks[page]);self.assertEqual(session.command(b'M'+struct.pack('<BBHH',0,page,0,len(body))+body),b'\0')
-   self.assertEqual(session.command(b'b\0\5'),b'\4');self.assertTrue(store.tune['cylinder_trims']['enabled']);self.assertEqual(len(live_block(store)),184);self.assertEqual(struct.unpack_from('<I',live_block(store),52)[0],1)
-   revision=store.tune['revision'];self.assertEqual(session.command(b'b\0\5'),b'\4');self.assertEqual(store.tune['revision'],revision)
+   for offset in range(0,4768,256):
+    body=bytes(blocks[1][offset:offset+256]);self.assertEqual(session.command(b'M'+struct.pack('<BBHH',0,1,offset,len(body))+body),b'\0')
+   self.assertEqual(session.command(b'b\0\1'),b'\4');self.assertTrue(store.tune['cylinder_trims']['enabled']);self.assertEqual(len(live_block(store)),216);self.assertEqual(struct.unpack_from('<I',live_block(store),52)[0],1)
+   revision=store.tune['revision'];self.assertEqual(session.command(b'b\0\1'),b'\4');self.assertEqual(store.tune['revision'],revision)
 
 if __name__=='__main__':unittest.main(verbosity=2)

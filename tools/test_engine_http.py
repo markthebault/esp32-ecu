@@ -50,17 +50,23 @@ class IntegrationTests(unittest.TestCase):
   bad=dict(tune,physical_outputs='enabled');self.assertEqual(self.request('/api/engine/config','PUT',json.dumps(bad))[0],422)
   self.assertEqual(self.request('/api/engine/config','PUT',body)[0],200)
   self.assertEqual(self.request('/api/engine/config','PUT',body)[0],409)
+ def test_tuning_diagnostics_auth_and_real_session(self):
+  self.assertEqual(self.request('/api/engine/tuning',headers={'X-ECU-Token':'wrong'})[0],403)
+  self.assertEqual(self.request('/api/engine/tuning',headers={'Origin':'http://foreign.invalid'})[0],403)
+  self.assertEqual(json.loads(self.request('/api/engine/tuning')[1])['session_count'],0)
+  with TcpEndpoint(self.device.engine,0) as endpoint,socket.create_connection(('127.0.0.1',endpoint.port),timeout=2) as client:
+   self.frame(client,b'Q');data=json.loads(self.request('/api/engine/tuning')[1]);self.assertEqual(data['session_count'],1);self.assertEqual(data['identity'],SIGNATURE.decode());self.assertIsNone(data['driver_rx_drop_count']);self.assertIsNone(data['host_present'])
  def test_real_tcp_burn_updates_http_and_http_edit_requires_reconnect(self):
   with TcpEndpoint(self.device.engine,0) as endpoint,socket.create_connection(('127.0.0.1',endpoint.port),timeout=2) as client:
    self.assertEqual(self.frame(client,b'Q'),b'\0'+SIGNATURE)
    self.assertEqual(self.frame(client,b'I'),b'\0\0')
    self.assertEqual(self.frame(client,b'f\0'),b'\0\2'+struct.pack('>HH',256,256))
-   write=b'M'+struct.pack('<BBHH',0,2,128,4)+struct.pack('<f',91)
-   self.assertEqual(self.frame(client,write),b'\0');self.assertEqual(self.frame(client,b'b\0\2'),b'\4')
+   write=b'M'+struct.pack('<BBHH',0,1,640,4)+struct.pack('<f',91)
+   self.assertEqual(self.frame(client,write),b'\0');self.assertEqual(self.frame(client,b'b\0\1'),b'\4')
    code,body=self.request('/api/engine/config');tune=json.loads(body)
    self.assertEqual((code,tune['revision'],tune['maps']['ve']['cells'][0]),(200,2,91))
    tune['maps']['ve']['cells'][0]=87;self.assertEqual(self.request('/api/engine/config','PUT',json.dumps(tune))[0],200)
-   read=b'p'+struct.pack('<BBHH',0,2,128,4)
+   read=b'p'+struct.pack('<BBHH',0,1,640,4)
    self.assertEqual(struct.unpack('<f',self.frame(client,read)[1:])[0],91)
    with socket.create_connection(('127.0.0.1',endpoint.port),timeout=2) as reconnected:
     self.assertEqual(struct.unpack('<f',self.frame(reconnected,read)[1:])[0],87)

@@ -58,10 +58,11 @@ template<class Validate>Load load(std::string&out,Validate validate,esp_err_t&er
  }
  nvs_close(handle);return result;
 }
-inline esp_err_t save(const std::string&document){
- if(document.empty()||document.size()>maximum||std::strlen(document.c_str())!=document.size())return ESP_ERR_NVS_INVALID_LENGTH;
+inline esp_err_t save(const char*document,std::size_t size){
+ if(!document||!size||size>maximum||std::memchr(document,0,size))return ESP_ERR_NVS_INVALID_LENGTH;
  nvs_handle_t handle{};auto error=nvs_open_from_partition(partition,name_space,NVS_READWRITE,&handle);
- if(error==ESP_OK){error=nvs_set_blob(handle,"tune",document.data(),document.size());if(error==ESP_OK)error=nvs_commit(handle);nvs_close(handle);}
+ if(error==ESP_OK){error=nvs_set_blob(handle,"tune",document,size);if(error==ESP_OK)error=nvs_commit(handle);nvs_close(handle);}
  return error;
 }
+inline esp_err_t save(const std::string&document){return save(document.c_str(),document.size());}
 }

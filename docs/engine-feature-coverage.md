@@ -29,15 +29,15 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | VVT | Missing | No controls | Phase sensing, driver, flyback and connector work |
 | Flex fuel | Missing | No ethanol blending/capture settings | Protected frequency input/pin allocation needed |
 | Secondary maps / blending | Missing | One map set | Switch input or authenticated strategy needed |
-| Per-cylinder trims | Four6×6 fuel maps and signed spark offsets; physical-channel capacity/duty, latched coil advance;18 new plant runs | Sequential enable, browser/own003 MSQ, strict legacy migration, per-channel JSON/79-field MSL and masks | Existing J9/J10 channels1–4; actual flow/deadtime/phase and electrical qualification pending |
+| Per-cylinder trims | Four6×6 fuel maps and signed spark offsets; physical-channel capacity/duty, latched coil advance;18 new plant runs | Sequential enable, browser/own004 MSQ, strict legacy migration, per-channel JSON/79-field MSL and masks | Existing J9/J10 channels1–4; actual flow/deadtime/phase and electrical qualification pending |
 | Staged injection | Missing | No staging controls | Extra drivers and duty/flow qualification |
 | Launch / flat shift / nitrous | Missing | No enable options | Protected switch/speed/pressure inputs and output allocations |
 | Knock | Missing | No misleading protection indicator | Analog front end and processing required |
 | Sensor calibration | Persistent linear/table/NTC with loading compensation | Guides, units, confirmation and raw diagnostics | Six analog inputs plus battery/5V; physical verification pending |
 | Engine sensor binding | Confirmed physical units; raw-voltage relabelling rejected | Binding/fault status | Fast raw samples, display filter cannot hide faults |
 | Supervision/recovery | Target independent command/producer/tooth/cam/high-time deadlines, transactional scheduling and configuration holds | Reasons/counters/bounded traces/revisions/storage | Target timing/watchdog/restart policy needs physical HIL |
-| TunerStudio offline | Own definition/MSQ exchange | Settings/curve/map editors, strict identity/revision import | Files only, no physical binary transport |
-| TunerStudio online | Local MS-envelope prototype | Wire read/write/burn tests; app rejects own identity | Vendor integration and dedicated transport required |
+| TunerStudio offline | Own definition/MSQ exchange | Own004 complete-page settings/curve/map editing, origin metadata and stale-editor CAS | Actual offline application roundtrip; target USB hardware unmeasured |
+| TunerStudio online | Shared C++ whole-tune transport and dedicated inhibited USB service | Authenticated tuning diagnostics; bounded framing/CAS/storage tests; app rejects own identity | Vendor integration unresolved; physical USB/load/cache/timing tests pending |
 | MegaLogViewer HD | SIL, raw-trigger and bounded target engine MSL; actual application opens/plots browser engine/trigger exports | Source/loss/age/validity labels, collected versus retained downloads; derived missing-lambda display caveat | Physical target capture/logging behavior unmeasured |
 | Tooth/composite/ignition logging | Target finite512-edge crank/cam recorder, raw intervals and128-record output/cut ring | Trigger charts/zoom, JSON/MSL export, bounded paging and fault counts; no TS high-speed logger | Independent capture channels implemented; capture integrity/per-pin timing need HIL |
 | Autotune / VE Analyze Live | Missing | No button implies working autotune | Integration, calibrated data and suitable license |
@@ -69,3 +69,5 @@ DBW/OEM integration remain outside the current bench scope.
 [Engine observability](engine-observability.md) covers coherent samples, target RAM logging, browser collection and the [opt-in screen protocol](espnow-engine.md), with independent review findings and declared clock assumptions.
 
 [Individual cylinder tuning and comparison](engine-cylinder-trims.md) describes physical mapping, trim/deadtime semantics, migration and the current evidence.
+
+[USB tuning](engine-usb-tuning.md) covers the shared own004 codec, dedicated target transport, offline file workflow, diagnostics and unresolved online application gate.

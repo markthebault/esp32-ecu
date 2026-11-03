@@ -5,6 +5,7 @@
 #include "ecu/engine_service.hpp"
 #include "ecu/engine_target.hpp"
 #include "ecu/engine_log_service.hpp"
+#include "ecu/engine_tuning.hpp"
 #include "driver/gpio.h"
 #include "driver/gptimer.h"
 #include "driver/mcpwm_cap.h"
@@ -152,6 +153,7 @@ extern "C" void app_main() {
     ecu::config::Config profile;
     (void)ecu::web::try_config(profile);
     ecu::engine_target::init({profile.slots,profile.missing,profile.max_rpm},interlock_at_boot);
+    ecu::engine_tuning::start(interlock_at_boot);
     ecu::web::start_service();
     ecu::radio::start();
     ESP_LOGI(tag,"Bench trigger profile: %u-%u, capture ceiling %u RPM",

@@ -1,5 +1,5 @@
 """Shared native ECU core and persistent shadow-engine tune. No GPIO transport."""
-import copy, ctypes, fcntl, json, os, secrets, subprocess, tempfile, threading, time
+import copy, ctypes, fcntl, json, os, secrets, subprocess, tempfile, threading, time, weakref
 from pathlib import Path
 R=Path(__file__).resolve().parents[1]
 _build_lock=threading.Lock()
@@ -77,6 +77,7 @@ class EngineRuntime:
 class EngineStore:
  def __init__(self,path,bridge=None):
   self.path=path;self.bridge=bridge or load_engine_bridge();self.lock=threading.RLock();self.storage_ok=True
+  self.tuning_registry_lock=threading.Lock();self.tuning_sessions=weakref.WeakSet()
   self.defaults=json.loads((R/'config/engine/defaults.json').read_text());self.tune=copy.deepcopy(self.defaults);self.error=''
   if path.exists():
    try:
