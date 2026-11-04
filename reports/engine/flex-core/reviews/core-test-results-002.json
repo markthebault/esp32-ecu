@@ -1,0 +1,87 @@
+{
+  "utc": "2026-11-04T17:20:26.636386+00:00",
+  "freeze_manifest_sha256": "a635ff4f4c3489c285ba2015531ac0f5c8210b908ccef70216b9611b6d743266",
+  "tests": [
+    {
+      "name": "frozen-parent-core-002",
+      "command": [
+        "c++",
+        "-std=c++14",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/core-freeze-002/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/core-freeze-002/firmware/tests/flex_fuel_test.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/frozen-parent-core-002"
+      ],
+      "build_rc": 0,
+      "source_sha256": "f14554f6579e0da880243e40bb25ad966e80a30737ff283e27f17f491553661a",
+      "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/gcov",
+      "GCOV_PREFIX_STRIP": "0",
+      "run_rc": 0,
+      "stdout": "flex_fuel_checks 509\n",
+      "stderr": "",
+      "binary_sha256": "0d36b02df0b507ff62e2f52c8d1b7fd3be66e62821754cf491b159305770a8bd"
+    },
+    {
+      "name": "independent-core-002",
+      "command": [
+        "c++",
+        "-std=c++14",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/core-freeze-002/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/core-independent-001.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/independent-core-002"
+      ],
+      "build_rc": 0,
+      "source_sha256": "572b42156c2998e2f23188188a0c18fa2c3f9cd9ff1611bafbe7750819f19d6e",
+      "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/gcov",
+      "GCOV_PREFIX_STRIP": "0",
+      "run_rc": 0,
+      "stdout": "independent_core_checks 2101\n",
+      "stderr": "",
+      "binary_sha256": "62b02400ca19050c5b125dab091b0f8a68def650f1130ba95231e20fa746b935"
+    },
+    {
+      "name": "independent-boundary-002",
+      "command": [
+        "c++",
+        "-std=c++14",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/core-freeze-002/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/core-boundary-002.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/independent-boundary-002"
+      ],
+      "build_rc": 0,
+      "source_sha256": "cfc18dffbad3454752f508b9ae2e831cbec80ee0ae94935f8fbad320c7eff54c",
+      "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/gcov",
+      "GCOV_PREFIX_STRIP": "0",
+      "run_rc": 0,
+      "stdout": "independent_boundary_checks 21382\n",
+      "stderr": "",
+      "binary_sha256": "30d3334fcf8edd42befbdae1560729cbc6b50f92e493e7da27fcfe175bfebc6e"
+    }
+  ]
+}

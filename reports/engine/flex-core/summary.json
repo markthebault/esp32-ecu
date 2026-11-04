@@ -1,0 +1,146 @@
+{
+  "schema": 1,
+  "scope": "flex_raw_edge_groundwork",
+  "checks_passed": true,
+  "baseline_commit": "eb3ba08e8687b67c461dabd5545b14de78736260",
+  "full_flex_integration": false,
+  "target_capture_implemented": false,
+  "physical_qualification": false,
+  "online_tuner_accepted": false,
+  "full_speeduino_parity": false,
+  "sources": {
+    "docs/engine-feature-coverage.md": {
+      "snapshot": "sources/docs/engine-feature-coverage.md",
+      "sha256": "5218685b6d952df7319098c4c958a525f2f922dc240354ee95cb2d09d1017436"
+    },
+    "docs/engine-flex-fuel.md": {
+      "snapshot": "sources/docs/engine-flex-fuel.md",
+      "sha256": "cb841071d79801f8849d3b0a91fc31801a06af9c575c88a8eda30f293bd66297"
+    },
+    "firmware/include/ecu/flex_fuel.hpp": {
+      "snapshot": "sources/firmware/include/ecu/flex_fuel.hpp",
+      "sha256": "ec34a4c56171990253c3d82e9d040e8f12139c8048654e2b0ff59a74361cce8a"
+    },
+    "firmware/tests/flex_fuel_test.cpp": {
+      "snapshot": "sources/firmware/tests/flex_fuel_test.cpp",
+      "sha256": "f14554f6579e0da880243e40bb25ad966e80a30737ff283e27f17f491553661a"
+    },
+    "scripts/build_speeduino_flex.py": {
+      "snapshot": "sources/scripts/build_speeduino_flex.py",
+      "sha256": "6c4fa2b9a47d1f5d0b1efc0bd50cf9fd45fc3fc61380e318733aa64effe11dd7"
+    },
+    "scripts/build_speeduino_sim.py": {
+      "snapshot": "sources/scripts/build_speeduino_sim.py",
+      "sha256": "1c8c53bc55cb15cdbfb6186fd7b7fb4ed42058a99c3a1a70d943497af7f43e4a"
+    },
+    "scripts/test_firmware.sh": {
+      "snapshot": "sources/scripts/test_firmware.sh",
+      "sha256": "eb0244084dda87640cad0edae1cdedd003a0406164e9c0f787c968d47eddef91"
+    },
+    "tools/check_flex_experiments.py": {
+      "snapshot": "sources/tools/check_flex_experiments.py",
+      "sha256": "f46618aaee1eed30ce776095eeb8f262022fb7d509083ed8f747fc7df29720e8"
+    },
+    "tools/run_flex_scenarios.py": {
+      "snapshot": "sources/tools/run_flex_scenarios.py",
+      "sha256": "d16396e1abfcb9f0ec14ceb721fbfc9545368ddc5bd2c70bd907d54f0d34d51d"
+    },
+    "tools/speeduino_flex_sim.cpp": {
+      "snapshot": "sources/tools/speeduino_flex_sim.cpp",
+      "sha256": "08643250b83627befe34ad28c6aaed740a1edb788cca01b09c2749fb0e4d8eec"
+    },
+    "tools/speeduino_sim.cpp": {
+      "snapshot": "sources/tools/speeduino_sim.cpp",
+      "sha256": "dc5ef41e64539e18c21be2aa9cf748820969271117923569b592fc6ae3b42f50"
+    },
+    "tools/speeduino_sim_hal.cpp": {
+      "snapshot": "sources/tools/speeduino_sim_hal.cpp",
+      "sha256": "0d28c0c73308f8ac1333b0e3eefa38d9b6bef4fe0e7ca31e6342c7a9e8074409"
+    },
+    "tools/speeduino_sim_native.hpp": {
+      "snapshot": "sources/tools/speeduino_sim_native.hpp",
+      "sha256": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9"
+    },
+    "tools/verify_flex_core_evidence.py": {
+      "snapshot": "sources/tools/verify_flex_core_evidence.py",
+      "sha256": "be1fe41cc28367bd8e20e5f027ceab057564764f9bfd173eda1821446330949c"
+    }
+  },
+  "upstream": {
+    "LICENSE": {
+      "snapshot": "upstream/LICENSE",
+      "sha256": "4a3629ee51557e5ab3336227f77134207ab22be5e5f0e403d8d323de153b3081"
+    },
+    "speeduino/board_native.h": {
+      "snapshot": "upstream/speeduino/board_native.h",
+      "sha256": "75c011891838ef7d81b2acc2d895657c5904b0e2a741e2e7fb95847ff3317f2d"
+    },
+    "speeduino/config_pages.h": {
+      "snapshot": "upstream/speeduino/config_pages.h",
+      "sha256": "97eed771a7da0c3f357adf1034e484bf1ea6ba54c3c1346f637e9b9aac1a5da2"
+    },
+    "speeduino/corrections.cpp": {
+      "snapshot": "upstream/speeduino/corrections.cpp",
+      "sha256": "f4423734830aacd50b5d7172fbe08e057889b91f3fbd997ae81a7a6e44d5f276"
+    },
+    "speeduino/init.cpp": {
+      "snapshot": "upstream/speeduino/init.cpp",
+      "sha256": "c21311f2c5155789e371eb35d3480c1742a2c72be9253102bf481bb87f2d10ca"
+    },
+    "speeduino/maths.h": {
+      "snapshot": "upstream/speeduino/maths.h",
+      "sha256": "71c073c1818bd981eeff1f457a9fb9ce8220ce6003a7ff232280e205c295b570"
+    },
+    "speeduino/sensors.cpp": {
+      "snapshot": "upstream/speeduino/sensors.cpp",
+      "sha256": "bbd36fa91d5a432caf86b72fb58ad83750a7185d55b6b94b99ceb770ec531424"
+    },
+    "speeduino/src/pins/digitalPin.cpp": {
+      "snapshot": "upstream/speeduino/src/pins/digitalPin.cpp",
+      "sha256": "e3647bf309d5cb422d80387980b8ce9185dfea2916450b56e852f6d4b7fc79d6"
+    },
+    "speeduino/src/pins/pinMapping.cpp": {
+      "snapshot": "upstream/speeduino/src/pins/pinMapping.cpp",
+      "sha256": "5b9b08d434984a62089b14d17475ff3f9959c5aeba2457c80839c4664a8a9f2b"
+    },
+    "speeduino/statuses.h": {
+      "snapshot": "upstream/speeduino/statuses.h",
+      "sha256": "7898852cc8f062f56151e3b420ee459b6e604796a046b4c9424081c4dceb1eac"
+    },
+    "speeduino/table2d.cpp": {
+      "snapshot": "upstream/speeduino/table2d.cpp",
+      "sha256": "e67cac66f41cb3b07ebe3bc210025995dd38021f5ca510ab1ec81c20c57bac34"
+    },
+    "speeduino/table2d.h": {
+      "snapshot": "upstream/speeduino/table2d.h",
+      "sha256": "63341db5c4fb19d561b17ae3ff7d53635bbba81b7b4e8031c80137c9df226f54"
+    },
+    "speeduino/timers.cpp": {
+      "snapshot": "upstream/speeduino/timers.cpp",
+      "sha256": "5d5feb1dd21e7fa14c7f43d968674b412b3cc3f0a7d271e2ad68c9d0a89a087e"
+    },
+    "speeduino/units.h": {
+      "snapshot": "upstream/speeduino/units.h",
+      "sha256": "d6a215c440fd941e8fdfacc7436cb6758d879975bd14d8c02ab095249f0a266c"
+    }
+  },
+  "tests": {
+    "parent_core": 509,
+    "independent_core": 2101,
+    "independent_boundaries": 21382,
+    "declared_raw_cases": 25,
+    "rejected_corruptions": 11,
+    "full_native_firmware_harness_passed": true,
+    "toolchain": "CXX=g++"
+  },
+  "independent_review": "reviews/independent-review.json",
+  "coverage_side_effect_count": 16,
+  "limits": [
+    "Own helpers not connected to engine Tune/target/UI/config/PCB/logs/radio or running plant",
+    "No physical engine/USB/flash/electrical/boot/timing qualification or full parity",
+    "Genuine production fixture keeps deterministic native HAL and zero CPU cost; original benchmark changes are recorded in its saved manifest",
+    "Native startup cache finding is conditional; physical boot timing was not tested",
+    "356Hz is a synthetic robustness probe, not a qualified sensor fault or EMI waveform",
+    "Initial reviewer probe changed16 generated coverage counters; tracked production sources and numerical binaries/manifests are unchanged; generated counters excluded from unchanged-cache claims"
+  ]
+}

@@ -1,0 +1,268 @@
+{
+  "accepted": true,
+  "open_findings": [],
+  "scope": "Portable raw-edge acquisition/window/filter/fault-ACK and separate six-bin correction groundwork, plus genuine pinned native production raw-edge fixture and saved-capture audit only",
+  "source_hashes": {
+    "firmware/include/ecu/flex_fuel.hpp": "ec34a4c56171990253c3d82e9d040e8f12139c8048654e2b0ff59a74361cce8a",
+    "firmware/tests/flex_fuel_test.cpp": "f14554f6579e0da880243e40bb25ad966e80a30737ff283e27f17f491553661a",
+    "scripts/build_speeduino_flex.py": "6c4fa2b9a47d1f5d0b1efc0bd50cf9fd45fc3fc61380e318733aa64effe11dd7",
+    "tools/speeduino_flex_sim.cpp": "08643250b83627befe34ad28c6aaed740a1edb788cca01b09c2749fb0e4d8eec",
+    "tools/run_flex_scenarios.py": "d16396e1abfcb9f0ec14ceb721fbfc9545368ddc5bd2c70bd907d54f0d34d51d",
+    "tools/check_flex_experiments.py": "f46618aaee1eed30ce776095eeb8f262022fb7d509083ed8f747fc7df29720e8",
+    "docs/engine-flex-fuel.md": "cb841071d79801f8849d3b0a91fc31801a06af9c575c88a8eda30f293bd66297",
+    "docs/engine-feature-coverage.md": "5218685b6d952df7319098c4c958a525f2f922dc240354ee95cb2d09d1017436",
+    "scripts/test_firmware.sh": "eb0244084dda87640cad0edae1cdedd003a0406164e9c0f787c968d47eddef91",
+    "tools/verify_flex_core_evidence.py": "be1fe41cc28367bd8e20e5f027ceab057564764f9bfd173eda1821446330949c"
+  },
+  "reviewed_utc": "2026-11-04T17:39:47.304506+00:00",
+  "core_review": {
+    "parent_checks": 509,
+    "independent_checks": 2101,
+    "boundary_checks": 21382,
+    "strict_CXX14_ASan_UBSan": true,
+    "test_results_sha256": "c29bb8b47b8aaf8ecac723af2a8424d22d854250d6c8581f3213a83654e4fe1e",
+    "stale_completed_sample_ready_defect": "Found independently before freeze001, fixed and regression verified.",
+    "query_reversal_precedence": "Single TimeReversed classification verified.",
+    "reviewed_contracts": [
+      "coherent unequal rolling windows2/8/32",
+      "timestamp0,32-bit crossing and nearUINT64_MAX",
+      "source/config and filter history reset",
+      "malformed/unavailable edges and full reacquisition",
+      "hidden faults remain pending until exact observed generation ACK",
+      "unobserved/superseded ACK tickets denied",
+      "query-independent filtering and freshness",
+      "whole-us frequency-boundary uncertainty and conservative sensor-fault threshold",
+      "neutral defaults/Off, enabled fresh sample and six-bin factor bounds"
+    ],
+    "not_dynamically_exhausted": "2^64 event/fault/config counters; guards reviewed in source."
+  },
+  "production_execution_review": {
+    "accepted": true,
+    "actual_cases_reexecuted": 25,
+    "actual_snapshots_replayed": 3414,
+    "all_parent_stdout_byte_identical": true,
+    "independent_assertion_checks_including_expected_negative_rejections": 63773,
+    "independently_generated_raw_stimulus_bytes_match_all25": true,
+    "independent_expected_oracles": [
+      "changed raw levels/callback counts",
+      "one-second window plus modulo256 counter",
+      "reference low-pass filters and nearest-integer temperature conversion",
+      "source tags, completed-cycle windows and start/end/age timestamps",
+      "normalized ethanol and low-width temperature",
+      "six-bin correction factors and disabled neutrality",
+      "explicit invalid reason/pending/inhibition",
+      "startup cache,356Hz alias,40..160Hz span, dropout deadline and exact generation ACK"
+    ],
+    "no_production_ethanol_RPM_or_sync_status_injection": true,
+    "all_execution_sources_stable": true,
+    "raw_fixture_binary_sha256": "1f3b546e9d52ffb1defee63d870540b99579305c0a6566a638436d7905e71ff2",
+    "owned_ELF_copy": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/final-freeze-003/.cache/engine/speeduino-flex-sim/speeduino-flex-sim",
+    "owned_GCOV_PREFIX_before_startup": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/final-freeze-003/.cache/engine/speeduino-flex-sim/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "execution_result_sha256": "953523b067f5228fd6fc47943d90464e64f6136cc5cd15e65793eb31b76499ff",
+    "execution_script_sha256": "cec0006eb03d4f6bdcdf7700131faf9e5d772abbb25580e647f3239f6b139c90"
+  },
+  "controls": {
+    "neutral_vs_ramp_same_stimulus_causal": true,
+    "query_refinement": true,
+    "phase1us": true,
+    "parent_frozen_checker_replayed": true,
+    "parent_corruptions_rejected": 11,
+    "additional_independent_corruptions_rejected": [
+      {
+        "name": "counter_alias_erased",
+        "rejected": true,
+        "reason": "counter-wrap356:3200000 independent reference counter/filter/temperature oracle"
+      },
+      {
+        "name": "span_conversion_erased",
+        "rejected": true,
+        "reason": "custom40-160-span:3200000 independent reference counter/filter/temperature oracle"
+      },
+      {
+        "name": "wrong_fault_class",
+        "rejected": true,
+        "reason": "short-low-pulse final invalid class"
+      },
+      {
+        "name": "wrong_temperature_rounding",
+        "rejected": true,
+        "reason": "e50-ramp:3200000 independent reference counter/filter/temperature oracle"
+      },
+      {
+        "name": "forged_target_source",
+        "rejected": true,
+        "reason": "e50-ramp:3200000 source"
+      },
+      {
+        "name": "wrong_window_origin",
+        "rejected": true,
+        "reason": "e50-ramp:3200000 coherent window timestamps"
+      },
+      {
+        "name": "nonneutral_curves",
+        "rejected": true,
+        "reason": "e50-neutral:3200000 independent correction curves"
+      },
+      {
+        "name": "hidden_recovered_fault",
+        "rejected": true,
+        "reason": "hidden-width-fault-and-ack hidden fault survives reacquisition"
+      }
+    ]
+  },
+  "observed_native_differences": {
+    "startup": "At synced2000RPM before1s, neutral production E0 cache reports fuel0/spark-40/advance-30/pulse0; at1s fuel100/spark0/advance10/pulse5445. Own core ready160ms yields neutral100/0. Native fixture finding only.",
+    "counter_wrap": "Raw356Hz gives production one-second uint8 count100 and plausible E50; own correction remains invalid with sensor_fault_frequency.",
+    "custom_span": "40..160Hz endpoints with100Hz input yield productionE60 and ownE50.",
+    "temperature": "3ms low width yields own42.5C and production43C via DIV_ROUND_NEAREST. Earlier reviewer truncation wording was corrected, original note retained.",
+    "invalid_policy": "Own pending-fault inhibition intentionally differs from production filtered-zero/range/temperature clamping."
+  },
+  "provenance": {
+    "speeduino_sha": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+    "unit_test": false,
+    "original_inputs_before_after_verified": 565,
+    "original_objects_reused": 108,
+    "final_objects_verified": 109,
+    "exact109_object_numerical_relink_sha256": "046389d754c996c34cb7e7171b1e42088f5ae6c0615133a3c5e74743f9f6d52c",
+    "original_inputs_stable_after_review": true,
+    "final_objects_stable_after_review": true,
+    "reviewed_reference_source_hashes_unchanged": {
+      "speeduino/sensors.cpp": true,
+      "speeduino/timers.cpp": true,
+      "speeduino/corrections.cpp": true,
+      "speeduino/maths.h": true,
+      "speeduino/table2d.h": true,
+      "speeduino/table2d.cpp": true,
+      "speeduino/config_pages.h": true,
+      "speeduino/units.h": true,
+      "speeduino/init.cpp": true,
+      "speeduino/src/pins/pinMapping.cpp": true,
+      "speeduino/src/pins/digitalPin.cpp": true,
+      "speeduino/board_native.h": true,
+      "speeduino/statuses.h": true
+    },
+    "original_numerical_binary_manifest_hashes_unchanged": {
+      ".cache/engine/speeduino-sim/speeduino-sim": true,
+      ".cache/engine/speeduino-sim/build-manifest.json": true,
+      ".cache/engine/speeduino-sim16/speeduino-sim": true,
+      ".cache/engine/speeduino-sim16/build-manifest.json": true
+    },
+    "external_tracked_speeduino_lib_clean": true,
+    "native_limitations": [
+      "32-bit native software timers with single-thread virtual HAL",
+      "tick-before-input then loop convention",
+      "zero CPU cost; no AVR/ESP32 register/vector/ISR timing emulation",
+      "original60s virtual clock bound",
+      "synthetic raw pin transitions; no physical sensor or output execution"
+    ],
+    "generated_coverage_excluded_from_unchanged_cache_claims": true
+  },
+  "documentation_and_harness": {
+    "accepted_in_scope": true,
+    "no_claim_objections": true,
+    "harness_change": "Only appends flex_fuel to existing native sanitizer loop.",
+    "sh_syntax_checked": true,
+    "guide_final_delta_reviewed": "Explicitly labels virtual pin2/pin19 as fake-board fixture mapping, not ESP32 wiring.",
+    "parent_full_harness_log_reviewed": ".cache/engine/flex-core/firmware-tests-gcc-001.log",
+    "parent_full_harness_log_sha256": "3a5eb29c3c0c29f72cf2591b811246dee337d76532e23522c313904b2ec872f5",
+    "parent_full_harness_execution_independently_repeated": false,
+    "reason_no_repeat": "Parent supplied complete passed CXX=g++ harness log; this review independently executed scoped core/boundary and all25 raw cases.",
+    "verifier_static_audit_accepted": true,
+    "verifier_python_syntax_checked": true,
+    "assembled_archive_replay_performed": false,
+    "packaging_note": "Parent will run final assembled artifact/source/saved-audit/sanitizer verifier before publishing; this is a separate packaging check."
+  },
+  "coverage_side_effect_disclosure": {
+    "occurred": true,
+    "cause": "Earlier reviewer table-cache probe linked upstream instrumented archives and unintentionally flushed16 preexisting generated .gcda counters at exit before prefix isolation was applied.",
+    "exact_record": "coverage-side-effect.json",
+    "exact_record_sha256": "67e23bda6af687c8c37658016df138b70bb2cd09d3abfba39e1524d694f739df",
+    "generated_file_count": 16,
+    "generated_files": [
+      {
+        "path": ".pio/build/native_code_coverage/libcb2/ArduinoNativeFake/streamSetup.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.914592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/libcb2/ArduinoNativeFake/functionSetup.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/libcb2/ArduinoNativeFake/serialSetup.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.914592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/SimpleArduinoFake.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/PrintFake.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/EEPROMFake.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/SPIFake.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/FunctionFake.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/WireFake.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/ClientFake.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/SerialFake.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/StreamFake.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/arduino/noniso.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/arduino/IPAddress.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/arduino/WString.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+      },
+      {
+        "path": ".pio/build/native_code_coverage/libc1b/FastCRC/FastCRCsw.gcda",
+        "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+      }
+    ],
+    "restoration_or_reset_attempted": false,
+    "tracked_production_sources_changed": false,
+    "original_numerical_binaries_manifests_changed": false,
+    "excluded_from_all_unchanged_generated_cache_claims": true,
+    "subsequent_production_runs_owned_ELF_and_prefix_before_startup": true,
+    "external_and_parent_generated_coverage_unchanged_during_final25_replays": true
+  },
+  "out_of_scope_open_work": [
+    "engine Tune and correction ordering integration",
+    "target GPIO/timer/ISR/bounded queue/consumer ACK integration",
+    "config/schema/default/import migration and whole-tune persistence",
+    "browser/TunerStudio/runtime/log/radio/debug integration",
+    "pin ownership/protected input/BOOT-reset-download behavior and PCB/connector/enclosure",
+    "coupled own running-engine plant/fuel chemistry/calibration",
+    "physical HIL/electrical/environmental/vehicle qualification",
+    "supported online TunerStudio and full Speeduino parity"
+  ],
+  "physical_qualification": false,
+  "full_flex_integration": false,
+  "full_speeduino_parity": false
+}

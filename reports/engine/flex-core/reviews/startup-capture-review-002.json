@@ -1,0 +1,51 @@
+{
+  "scope": "Independent parsing and causal/source review of parent capture, not yet an independent production replay",
+  "input_sha256": "b97537ea9f18d16daae071dd27ab7ed0b6181f612f7105eb8d1c9b5f55a31a8c",
+  "log_sha256": "4fd4cb6e728ea678941587849d986e97f075931174189eeb17e0710085b6ed5d",
+  "stderr_empty": true,
+  "commands": {
+    "edge": 131,
+    "trigger": 5029,
+    "observe": 10,
+    "quit": 1
+  },
+  "changed_pin_levels": {
+    "edge": 131,
+    "trigger": 5029
+  },
+  "rising_edges": {
+    "edge": 66,
+    "trigger": 2515
+  },
+  "flex_frequency_hz": 50,
+  "low_pulse_us": 3000,
+  "last_time_us": 1300000,
+  "no_status_injection_commands": true,
+  "ready": {
+    "kind": "ready",
+    "time_us": 0,
+    "flex_pin": 2,
+    "flex_interrupt": 0,
+    "enabled": true,
+    "callback_is_flexPulse": true,
+    "low_hz": 50,
+    "high_hz": 150,
+    "reference_filter": 0,
+    "tick_before_input": true
+  },
+  "observes_us": [
+    0,
+    10000,
+    100000,
+    160000,
+    500000,
+    999999,
+    1000000,
+    1000001,
+    1200000,
+    1300000
+  ],
+  "all_startup_assertions_passed": true,
+  "rounding_correction": "Production div100 uses DIV_ROUND_NEAREST;3ms yields43C while own double core yields42.5C",
+  "physical_qualification": false
+}
