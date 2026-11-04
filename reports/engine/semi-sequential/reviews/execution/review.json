@@ -1,0 +1,507 @@
+{
+  "reviewed_at_utc": "2026-11-04T03:37:47.042627+00:00",
+  "reviewer": "Independent read-only /root/target_executor_architecture_review",
+  "scope": "Current implemented SemiSequential core/phase/scheduler, fences/faults and bounded native/reference/trace evidence, plus newly built3 final images/ISR/data/static frames. No production edits, build/services restart, physical writes, vendor contact or child agents. All isolated outputs under .cache/engine/semi-architecture-final-review.",
+  "verdict": "PASS for the inspected source/native/static scope; no concrete code blocker found. Preserved load-step dwell protection and predicted post-trigger-loss events are real limitations, not generalized engine success. Final physical inhibit/fit/RUN-loading holds remain and no physical qualification is inferred.",
+  "findings": [
+    {
+      "id": "SEMI-F1",
+      "classification": "explicit_existing_exposure_not_new_bug",
+      "finding": "Four already-predicted rises occur after the last crank edge in supplied trigger-dropout and stall-restart traces. Immediate zero-rise-after-loss was never an existing guarantee.",
+      "evidence": "Last accepted crank3999887us; applicable20ms tooth deadline4019887us. Final physical edge4016267us,16.38ms after last crank. Independent edge replay finds no event after that deadline before reacquisition and reconstructs final mask0.",
+      "requirement": "Anchor audit to the actual last accepted crank and computed timeout, plus control/producer expiry, rather than declaration time. General MissingTooth timeout is clamp(period*(missing+2)*2,20ms,150ms):20ms is scenario-specific while fresh controls/worker continue. Do not state a universal20ms crank-loss bound."
+    },
+    {
+      "id": "SEMI-F2",
+      "classification": "bounded_capability_limitation_not_limit_relaxation",
+      "finding": "The35Nm load step cannot be sustained and stops at4654304us. Hard deceleration makes an updated charged-coil target exceed maximum dwell; target records Plan/angle dwell_limit and portable records dwell_limit.",
+      "evidence": "Both original traces retain one stop/recovery, zero final mask, max coil high2967us<3500us. Independent toy deceleration hits DwellLimit while actual charge is2467us, demonstrating projected-limit protection before actual overrun.",
+      "requirement": "Keep maximum high/dwell bounds and narrow quantization exception unchanged. Any accepted regression exception must be restricted to this exact scenario/cause with a documented failure to sustain load. Do not permit arbitrary scheduler faults as successful operation."
+    }
+  ],
+  "checked_source_contracts": {
+    "fuel_and_phase": "Semi is appended enum2. Only Sequential uses720 degree span, one fuel opening/cycle and required cam phase. Semi uses360 degree end-scheduled pairs by firing order modulo360 and two half-effective-mass openings with one deadtime each. No silent trims: configuration and active demand reject nonsequential trims.",
+    "full_pulse_or_skip": "End-scheduled start planning retains a committed full-width start if an update is unreachable, otherwise skips an initial firing rather than shortening it. Once an injector opens its low deadline is held. Selective DFCO cancels future fuel starts while preserving an active bounded low; faults use common all-low.",
+    "fences": "Mode change is an angle configuration change. Independent test cuts actual charged outputs and rejects an old Candidate by generation/epoch. Existing latched CamPhase survives running Sequential\u2192Semi and clears only after stopped/quiet supervised recovery, as independently recompiled current native test checks.",
+    "limits": "Independent exact/nextafter duty85percent and15ms checks pass. Fresh toothRPM re-evaluates interval capacity; a previously acceptable8ms command at1000RPM rejects when planned at8000RPM. Injector/coil masks and hardware drivers remain separate and bounded.",
+    "radio_and_migration_source": "Current schema2 support is peer-specific and checks strategy plus current/last timing enum. Schema1 remains0/1 and0..16; schema2 supports2 and17. Unsupported engine observations route to sensors. Receiver enforces negotiated schema; capability equality includes schema. Schema4 upgrade preserves idle/trims and only advances private schema; older migrations retain their idle-off policy. Full radio/MSQ/UI test suites were not independently rerun in this pass.",
+    "native_owner_wrapper": "OurController carries target_dispatcher and a1ms worker progression independently of control cadence. run_target_scenarios TargetController delegates to the common implementation. Existing no-edge timer marker is skipped. Speeduino semi profile is explicitly read back after production setup."
+  },
+  "validation": {
+    "current_native_test": {
+      "artifact": "engine_semi_test.log",
+      "result": "252 pair/phase/width cases over all6 firing orders,3 wheel sizes,2RPMs and7 end angles, plus hot-mode latched fault retention; ASan/UBSan passes."
+    },
+    "independent_boundary_probe": {
+      "duty_exact_and_nextafter_boundaries": true,
+      "max15ms_boundary": true,
+      "trims_and_unknown_strategy_rejected": true,
+      "fresh_tooth_RPM_rechecks_duty": true,
+      "hot_mode_cuts_active_outputs": true,
+      "old_candidate_retries_after_mode_fence": true,
+      "hard_deceleration_dwell_limit": true,
+      "actual_charge_at_guard_us": 2467
+    },
+    "independent_trace_replay": {
+      "qualification": "Independent edge replay of root-preserved matrix inputs; not rerunning/calibrating a plant.20ms deadline applies to these traces, not allRPM.",
+      "rows": [
+        {
+          "mode": "target",
+          "scenario": "load_step",
+          "path": ".cache/engine/semi/matrix/target-load_step-250.json",
+          "sha256": "4b911ca7966d2e7595a24c075722a8636f9637ccaa5b0bd386af1ca44acde1a6",
+          "edge_count": 908,
+          "paired_edges_equal": true,
+          "max_high_us": [
+            4312,
+            4385,
+            4385,
+            4312,
+            2967,
+            2866,
+            2866,
+            2967
+          ],
+          "final_reconstructed_mask": 0,
+          "timing_reason": "invalid_angle_plan",
+          "angle_reason": "dwell_limit",
+          "timing_stops": 1,
+          "timing_recoveries": 1,
+          "protection_stops": [
+            {
+              "time_us": 4654304,
+              "reason": "invalid_angle_plan"
+            }
+          ],
+          "final_rpm": 0.0,
+          "unable_to_sustain_load": true
+        },
+        {
+          "mode": "target",
+          "scenario": "trigger_dropout",
+          "path": ".cache/engine/semi/matrix/target-trigger_dropout-250.json",
+          "sha256": "e8cea3ae6b1fdfe498c1f92d54294f77e6d039aa67d8cbd4b3b34af55d567c1a",
+          "edge_count": 832,
+          "paired_edges_equal": true,
+          "max_high_us": [
+            4312,
+            4385,
+            4385,
+            4312,
+            2805,
+            2804,
+            2804,
+            2805
+          ],
+          "final_reconstructed_mask": 0,
+          "timing_reason": "tooth_timeout",
+          "angle_reason": "none",
+          "timing_stops": 1,
+          "timing_recoveries": 1,
+          "last_actual_crank_us": 3999887,
+          "scenario_tooth_deadline_us": 4019887,
+          "post_loss_rises": 4,
+          "post_loss_last_edge_us": 4016267,
+          "post_loss_exposure_us": 16380,
+          "events_after_deadline_before_reacquisition": 0
+        },
+        {
+          "mode": "target",
+          "scenario": "stall_restart",
+          "path": ".cache/engine/semi/matrix/target-stall_restart-250.json",
+          "sha256": "9ff6e3811677a305a559527e705347e3fe7952bc41c62be141f8745e261d8393",
+          "edge_count": 1680,
+          "paired_edges_equal": true,
+          "max_high_us": [
+            4411,
+            4529,
+            4529,
+            4411,
+            2805,
+            2804,
+            2804,
+            2805
+          ],
+          "final_reconstructed_mask": 0,
+          "timing_reason": "tooth_timeout",
+          "angle_reason": "none",
+          "timing_stops": 1,
+          "timing_recoveries": 1,
+          "last_actual_crank_us": 3999887,
+          "scenario_tooth_deadline_us": 4019887,
+          "post_loss_rises": 4,
+          "post_loss_last_edge_us": 4016267,
+          "post_loss_exposure_us": 16380,
+          "events_after_deadline_before_reacquisition": 0
+        },
+        {
+          "mode": "portable",
+          "scenario": "load_step",
+          "path": ".cache/engine/semi/matrix/portable-load_step-250.json",
+          "sha256": "5bd5825c88f1ab8ca46d149b8ad480de805ee5cec635789b768cb7700f4d2f6b",
+          "edge_count": 908,
+          "paired_edges_equal": true,
+          "max_high_us": [
+            4312,
+            4385,
+            4385,
+            4312,
+            2967,
+            2866,
+            2866,
+            2967
+          ],
+          "final_reconstructed_mask": 0,
+          "timing_reason": "dwell_limit",
+          "angle_reason": null,
+          "timing_stops": 1,
+          "timing_recoveries": 1,
+          "protection_stops": [
+            {
+              "time_us": 4654304,
+              "reason": "dwell_limit"
+            }
+          ],
+          "final_rpm": 0.0,
+          "unable_to_sustain_load": true
+        },
+        {
+          "mode": "portable",
+          "scenario": "trigger_dropout",
+          "path": ".cache/engine/semi/matrix/portable-trigger_dropout-250.json",
+          "sha256": "af7902a48d0be08308944d3186098de79c21b063d9de073a81d9d9ac4c396f9e",
+          "edge_count": 832,
+          "paired_edges_equal": true,
+          "max_high_us": [
+            4312,
+            4385,
+            4385,
+            4312,
+            2805,
+            2804,
+            2804,
+            2805
+          ],
+          "final_reconstructed_mask": 0,
+          "timing_reason": "none",
+          "angle_reason": null,
+          "timing_stops": 0,
+          "timing_recoveries": 0,
+          "last_actual_crank_us": 3999887,
+          "scenario_tooth_deadline_us": 4019887,
+          "post_loss_rises": 4,
+          "post_loss_last_edge_us": 4016267,
+          "post_loss_exposure_us": 16380,
+          "events_after_deadline_before_reacquisition": 0
+        },
+        {
+          "mode": "portable",
+          "scenario": "stall_restart",
+          "path": ".cache/engine/semi/matrix/portable-stall_restart-250.json",
+          "sha256": "af5afc6f9f27114766a57cd70ccda555503f5a47a3732e88f0dffbd9b50ad141",
+          "edge_count": 1680,
+          "paired_edges_equal": true,
+          "max_high_us": [
+            4411,
+            4529,
+            4529,
+            4411,
+            2805,
+            2804,
+            2804,
+            2805
+          ],
+          "final_reconstructed_mask": 0,
+          "timing_reason": "none",
+          "angle_reason": null,
+          "timing_stops": 0,
+          "timing_recoveries": 0,
+          "last_actual_crank_us": 3999887,
+          "scenario_tooth_deadline_us": 4019887,
+          "post_loss_rises": 4,
+          "post_loss_last_edge_us": 4016267,
+          "post_loss_exposure_us": 16380,
+          "events_after_deadline_before_reacquisition": 0
+        }
+      ]
+    },
+    "actual_reference_readbacks": [
+      {
+        "timer_bits": 32,
+        "binary_sha256": "cb4be20ce7a22bb4093c782d559357577dd651d0f89de321567cb3015c14af2d",
+        "pinned_commit": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+        "cycle_profile": [
+          1,
+          2,
+          0,
+          0,
+          1,
+          180,
+          180,
+          180,
+          180
+        ],
+        "injector_profile": [
+          1,
+          1,
+          1,
+          0,
+          2,
+          360,
+          2,
+          2
+        ],
+        "canonical_physical_channels": [
+          0,
+          2,
+          3,
+          1,
+          4,
+          6,
+          7,
+          5
+        ]
+      },
+      {
+        "timer_bits": 16,
+        "binary_sha256": "7d8296269ac5f2afbdf270a170763c81939c2fe3b8bbdc87d9e4b38f20acf78c",
+        "pinned_commit": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+        "cycle_profile": [
+          1,
+          2,
+          0,
+          0,
+          1,
+          180,
+          180,
+          180,
+          180
+        ],
+        "injector_profile": [
+          1,
+          1,
+          1,
+          0,
+          2,
+          360,
+          2,
+          2
+        ],
+        "canonical_physical_channels": [
+          0,
+          2,
+          3,
+          1,
+          4,
+          6,
+          7,
+          5
+        ]
+      }
+    ],
+    "reference_qualification": "Existing pinned9ff5aae production binaries run only in bounded virtual nativeHAL; no UNIT_TEST substitution, board connection or source change.32/16bit profiles both return[1,1,1,0,2,360,2,2] and fixed canonical mapping. No full new plant run was started by reviewer."
+  },
+  "final_images": {
+    "compact_n16r8_web": {
+      "elf_sha256": "2feddce371d8629094629837c47004e2b61eac32a682d8499c1c82825e038675",
+      "binary_sha256": "9246203a112996e0d518bed6cf3834f4cf19fe7c90225ff910fdef60961f877c",
+      "static_internal_data_bss_bytes": 156308,
+      "IRAM_code_bytes": 133623,
+      "closure": {
+        "artifact": "isr-selected/closure.json",
+        "sha256": "43560ab2924e23cc306bd544ab06885300a2bc48342aefcb63a85b721e990e14",
+        "roots": 5,
+        "functions": 30,
+        "external": [],
+        "flash_literals": 0,
+        "unclassified_flash_pointers": 0,
+        "passed": true
+      },
+      "usb": {
+        "artifact": "usb-selected.json",
+        "sha256": "06975d6e1380d90b88ca2d5913824b90cbe62bbce82c635096debfe045f50fc7",
+        "exclusive_usb": true,
+        "console": "UART0 only",
+        "ISR_cache_safe": false,
+        "ISR_flags": 0
+      },
+      "idle_physical_default0_not_overridden": true
+    },
+    "compact_a3_web": {
+      "elf_sha256": "bfdee5dfeadcd9146f0a0829f54a3248cff091031edf5a7916f720cdc36dd1cf",
+      "binary_sha256": "6b4b56b2c079b92fe14526aa31b79fc063e49ed35fff99ae278196a8aedc4695",
+      "static_internal_data_bss_bytes": 155056,
+      "IRAM_code_bytes": 127683,
+      "closure": {
+        "artifact": "isr-generic/closure.json",
+        "sha256": "00ccf6a6148a28fdb9d76250def239a49d01e4ec769de11a46e876eb407fbff7",
+        "roots": 5,
+        "functions": 30,
+        "external": [],
+        "flash_literals": 0,
+        "unclassified_flash_pointers": 0,
+        "passed": true
+      },
+      "usb": {
+        "artifact": "usb-generic.json",
+        "sha256": "ccfd14b221d2a70ffb1f40f82e47afda9db81f578dae29b09b767b97e832b2d8",
+        "exclusive_usb": true,
+        "console": "UART0 only",
+        "ISR_cache_safe": false,
+        "ISR_flags": 0
+      },
+      "idle_physical_default0_not_overridden": true
+    },
+    "compact_a3_timing_bench": {
+      "elf_sha256": "1d84c8c19c27d83c205e6a6a585e935508e909d945c106d511854ce51fb7a00d",
+      "binary_sha256": "b7ab4cdab52312dda2823cc08f92793e139287a3446591038828b2e1ad378843",
+      "static_internal_data_bss_bytes": 129880,
+      "IRAM_code_bytes": 93695,
+      "closure": {
+        "artifact": "isr-dummy/closure.json",
+        "sha256": "955e98d3c477677ae31920bdf5998ef0ba3dd0c16b8164a4a3e7d0119d887444",
+        "roots": 4,
+        "functions": 29,
+        "external": [],
+        "flash_literals": 0,
+        "unclassified_flash_pointers": 0,
+        "passed": true
+      },
+      "usb": null,
+      "idle_physical_default0_not_overridden": true
+    }
+  },
+  "static_assessment": {
+    "data_placement": "Core/PWM executors, outputs, capture clocks/log state, lock, epoch, timer/installed alarm and measured state are all internal DRAM in every image. No new mutable ISR state is in flash/PSRAM.",
+    "frames": "Timer ISR112B; crank ISR128B; diagnostic capture ISR96B; timing worker3680B plus nested command helper2416B versus16KiB allocation; app6816B plus observe1360B versus16KiB allocation. Same prologue sizes as prior idle images. Descendant/context/physical high-water are not proved.",
+    "IRAM": "Independent audits all pass: selected/generic30functions/5roots; dummy29functions/4roots. No external closure function, flash literal or unclassified flash pointer. New mode does not add ISR floating point or heap work.",
+    "physical_policy": "Generated compile commands do not override ECU_IDLE_DUMMY_LOADS default0. Selected/generic engine physical writes remain off; dummy keeps only its explicit existing engine policy. Selected idle physical compile block remains.",
+    "USB": "Fresh web-image audits pass UART0-only binary ownership and project-local patched driver selection; SDK USB ISR stays flash/flags0, outside cache-safe engine closure."
+  },
+  "source_sha256": {
+    "firmware/include/ecu/engine.hpp": "0c7d2a92cb3fb2f3db673a66b72f3407bbc0754bc4a3cad7d12db4ec3e17b87b",
+    "firmware/include/ecu/engine_scheduler.hpp": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a",
+    "firmware/include/ecu/engine_phase.hpp": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27",
+    "firmware/include/ecu/timing_executor.hpp": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db",
+    "firmware/include/ecu/engine_json.hpp": "3267a037f7f0ff636a4376a622f324cd998bfefc6a1f010c9870f3001b667ab1",
+    "firmware/include/ecu/engine_radio.hpp": "c9835cd575b8a24ba0c6969e6f7adcf860b0e1ed7eac1bd80442e821acc8adb2",
+    "firmware/include/ecu/idle_command.hpp": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+    "firmware/include/ecu/tuning_layout.hpp": "cc3bcce84363f58208de0dd406c14292baca4d0369a17cdf57f54ab632e7bbf7",
+    "firmware/include/ecu/tuning_document.hpp": "4ba03e0fbb7a104088882e167a625ac1af4f2ad1f4ed1572d3c40a01305b43bc",
+    "firmware/include/ecu/engine_storage.hpp": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e",
+    "firmware/main/engine_target.cpp": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738",
+    "firmware/main/engine_service.cpp": "b48c5a7a77f7d03505fb3e6898ad0ab76ae09171c59d84eafaf1f7eb0b7245dd",
+    "firmware/main/espnow.cpp": "948891c0b2f6d11e82ef01ba67dd4899d363671f77e3ebb1466980ce391f36e2",
+    "firmware/tests/engine_semi_test.cpp": "728a90d92b9ba9320b6adeaf85d6791d960bc55d62ce3663e55594521b134fd4",
+    "tools/target_timing_bridge.cpp": "45004577761bd958566e200f29d4b203684266e6bc6deeff53a8424d6631fa05",
+    "tools/target_runtime.py": "9e2c3c38ebacc31e9c01b246da3cb17371257c14b53b27aeec41614f5ad79aed",
+    "tools/compare_engine_controllers.py": "d49d921f256b7b0954bfacccb30be3d8ca884bb37c44efceedca5234ad41025c",
+    "tools/run_target_scenarios.py": "042cf2d7e9f7c181594c9c4212d757461a697ab1b83ec9bf7dddd133e3bd6aa6",
+    "tools/speeduino_runtime.py": "c5fd6ffbbedce4d37d6a2ad07dc9304f7469f47892b256e37e60db4b3b129de8",
+    "tools/speeduino_sim.cpp": "f1bed09132343df035b4de54a92b5c88c427e5d7121db8b58821171f9531d806",
+    "tools/test_engine_semi.py": "9e219dcb3051936edc4795e5acd5a48f9e9841cf3723b4edcaab3df2f9d32b92"
+  },
+  "tested_snapshot_matches_current": {
+    "firmware/include/ecu/engine.hpp": true,
+    "firmware/include/ecu/engine_scheduler.hpp": true,
+    "firmware/include/ecu/engine_phase.hpp": true,
+    "firmware/include/ecu/timing_executor.hpp": true,
+    "firmware/include/ecu/engine_json.hpp": true,
+    "firmware/include/ecu/engine_radio.hpp": true,
+    "firmware/include/ecu/idle_command.hpp": true,
+    "firmware/include/ecu/idle_hardware.hpp": true,
+    "firmware/include/ecu/tuning_layout.hpp": true,
+    "firmware/include/ecu/tuning_document.hpp": true,
+    "firmware/include/ecu/engine_storage.hpp": true,
+    "firmware/tests/engine_semi_test.cpp": true
+  },
+  "artifact_sha256": {
+    "snapshot-hashes.json": "fb3596aa4219c33bfafd3150e5419c6f77937bd105e3d15196cae27940b0e3d6",
+    "engine_semi_test.log": "045bd3657c16327e8511cc028b7877571d2ce9aefe3088671d957771dc950216",
+    "boundary_probe.cpp": "19cb0b25113d35f0910a6e4a178646d767ed3f7f4a7562415c123a35d5a86ff1",
+    "boundary_probe.json": "3e9054a335d777569c57baf0fa2597f2aedd4cf7aa8e66ec1b6cf6b5e2a81ae7",
+    "trace-audit.json": "1a9b326534847ffc41e07f4d84a92503b14c2f2956fb9c07bdab0f9649e2b240",
+    "reference-readback.json": "e2d9f8ba752bc2b86ac0ab7ab1caeb938526b0d658a36167e064ef771494f70e",
+    "images.json": "57472dbed574bebdfe95a8c4622eb84d86aea4a27c0f0437ae59b0b39e312bb5",
+    "usb-selected.json": "06975d6e1380d90b88ca2d5913824b90cbe62bbce82c635096debfe045f50fc7",
+    "usb-generic.json": "ccfd14b221d2a70ffb1f40f82e47afda9db81f578dae29b09b767b97e832b2d8"
+  },
+  "exact_commands": {
+    "native_test_compile": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I.cache/engine/semi-architecture-final-review/snapshot/include",
+      ".cache/engine/semi-architecture-final-review/snapshot/firmware/tests/engine_semi_test.cpp",
+      "-o",
+      ".cache/engine/semi-architecture-final-review/engine_semi_test"
+    ],
+    "native_test_run": [
+      ".cache/engine/semi-architecture-final-review/engine_semi_test"
+    ],
+    "boundary_compile": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I.cache/engine/semi-architecture-final-review/snapshot/include",
+      ".cache/engine/semi-architecture-final-review/boundary_probe.cpp",
+      "-o",
+      ".cache/engine/semi-architecture-final-review/boundary_probe"
+    ],
+    "boundary_run": [
+      ".cache/engine/semi-architecture-final-review/boundary_probe"
+    ],
+    "ISR_audits": [
+      [
+        "python3",
+        "scripts/audit_target_isr.py",
+        "firmware/.pio/build/compact_n16r8_web/firmware.elf",
+        ".cache/engine/semi-architecture-final-review/isr-selected"
+      ],
+      [
+        "python3",
+        "scripts/audit_target_isr.py",
+        "firmware/.pio/build/compact_a3_web/firmware.elf",
+        ".cache/engine/semi-architecture-final-review/isr-generic"
+      ],
+      [
+        "python3",
+        "scripts/audit_target_isr.py",
+        "firmware/.pio/build/compact_a3_timing_bench/firmware.elf",
+        ".cache/engine/semi-architecture-final-review/isr-dummy"
+      ]
+    ],
+    "USB_audits": [
+      [
+        "python3",
+        "scripts/audit_tuning_build.py",
+        "compact_n16r8_web",
+        ".cache/engine/semi-architecture-final-review/usb-selected.json"
+      ],
+      [
+        "python3",
+        "scripts/audit_tuning_build.py",
+        "compact_a3_web",
+        ".cache/engine/semi-architecture-final-review/usb-generic.json"
+      ]
+    ]
+  },
+  "limits": [
+    "No target execution, GPIO activation, ISR timing/jitter, heap minimum, task high-water or physical board/valve/engine qualification.",
+    "Native target dispatch has zero CPU/peripheral latency; retained predicted events after trigger loss and hard-load stalling are stated explicitly.",
+    "Schema/UI/reference/plant integration is still owned by root broader verification; this report does not certify unrun test suites or reinterpret an unsupported physical controller/app path."
+  ]
+}

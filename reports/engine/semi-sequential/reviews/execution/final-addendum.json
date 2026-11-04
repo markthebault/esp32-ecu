@@ -1,0 +1,198 @@
+{
+  "reviewed_at_utc": "2026-11-04T03:52:56.021087+00:00",
+  "scope": "Final bounded independent read-only prepublication addendum. No source edits, target rebuild, service/hardware action, new plant runs, vendor contact or subagents.",
+  "verdict": "PASS. Final source/ELF policy and placement match the prior review. Diagnostic-only timeout getter and evidence binding are sound for inspected cases. Two narrow wording/test precision findings are closed. No new code blocker found.",
+  "previous_review_sha256": "0d9b469e0f10481cdc719f6b42e73b7a85de39dde0f9eb61811293be4cb9ae38",
+  "production_core_source_unchanged": true,
+  "unchanged_core_sha256": {
+    "firmware/include/ecu/engine.hpp": "0c7d2a92cb3fb2f3db673a66b72f3407bbc0754bc4a3cad7d12db4ec3e17b87b",
+    "firmware/include/ecu/engine_scheduler.hpp": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a",
+    "firmware/include/ecu/engine_phase.hpp": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27",
+    "firmware/include/ecu/timing_executor.hpp": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db",
+    "firmware/include/ecu/engine_json.hpp": "3267a037f7f0ff636a4376a622f324cd998bfefc6a1f010c9870f3001b667ab1",
+    "firmware/include/ecu/engine_radio.hpp": "c9835cd575b8a24ba0c6969e6f7adcf860b0e1ed7eac1bd80442e821acc8adb2",
+    "firmware/include/ecu/idle_command.hpp": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+    "firmware/include/ecu/tuning_layout.hpp": "cc3bcce84363f58208de0dd406c14292baca4d0369a17cdf57f54ab632e7bbf7",
+    "firmware/include/ecu/tuning_document.hpp": "4ba03e0fbb7a104088882e167a625ac1af4f2ad1f4ed1572d3c40a01305b43bc",
+    "firmware/include/ecu/engine_storage.hpp": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e",
+    "firmware/main/engine_target.cpp": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738",
+    "firmware/main/engine_service.cpp": "b48c5a7a77f7d03505fb3e6898ad0ab76ae09171c59d84eafaf1f7eb0b7245dd",
+    "firmware/main/espnow.cpp": "948891c0b2f6d11e82ef01ba67dd4899d363671f77e3ebb1466980ce391f36e2"
+  },
+  "final_images": {
+    "compact_n16r8_web": {
+      "elf_sha256": "a0c2c85c501a849de57b1db962e9a413aff5114dca16520aaaa11ac0a0a204b5",
+      "binary_sha256": "627b538efca50e49d0dd4a6b8ae75beb5005b66182755fec4380a99d8f2fc924",
+      "bench_image_unchanged": null,
+      "static_internal_data_bss_bytes": 156308,
+      "frames_equal_previous_review": true,
+      "checked_frame_count": 8,
+      "internal_owner_state_count": 14,
+      "idle_physical_default0_retained": true,
+      "engine_dummy_policy": false,
+      "ISR_audit": {
+        "artifact": ".cache/engine/semi-architecture-final-review/addendum/isr-selected/closure.json",
+        "sha256": "32d38d8e13ba764feb3b12f507b216bff80da252ab7210b5331a8c4facc7f9ed",
+        "passed": true,
+        "roots": 5,
+        "functions": 30,
+        "flash_literals": 0,
+        "unclassified_flash_pointers": 0
+      },
+      "USB_audit": {
+        "artifact": ".cache/engine/semi-architecture-final-review/addendum/usb-selected.json",
+        "sha256": "ddf4268c26665856d9374f7787252c623153184f94111a0b24446fefd40c3646",
+        "exclusive_USB": true,
+        "console": "UART0 only",
+        "cache_safe": false,
+        "ISR_flags": 0
+      }
+    },
+    "compact_a3_web": {
+      "elf_sha256": "a3e5afe5bf208d5b4347f5c02844c6938a3b12c432807a0d55d5faf1c19e1fb4",
+      "binary_sha256": "2d24edcbb85579f0ca4f3ad130f02b49f7895351ce00c7607bd35a06821fd396",
+      "bench_image_unchanged": null,
+      "static_internal_data_bss_bytes": 155056,
+      "frames_equal_previous_review": true,
+      "checked_frame_count": 8,
+      "internal_owner_state_count": 14,
+      "idle_physical_default0_retained": true,
+      "engine_dummy_policy": false,
+      "ISR_audit": {
+        "artifact": ".cache/engine/semi-architecture-final-review/addendum/isr-generic/closure.json",
+        "sha256": "53b7b9ec8aa12d69c20fdbaa2864c24a80662ff0d6adaddc3a1a4e77322bdba8",
+        "passed": true,
+        "roots": 5,
+        "functions": 30,
+        "flash_literals": 0,
+        "unclassified_flash_pointers": 0
+      },
+      "USB_audit": {
+        "artifact": ".cache/engine/semi-architecture-final-review/addendum/usb-generic.json",
+        "sha256": "20d72ec13c2f2c6a36544eb9b19de974498803ecaf9a9e8e3bcefa864097f42e",
+        "exclusive_USB": true,
+        "console": "UART0 only",
+        "cache_safe": false,
+        "ISR_flags": 0
+      }
+    },
+    "compact_a3_timing_bench": {
+      "elf_sha256": "1d84c8c19c27d83c205e6a6a585e935508e909d945c106d511854ce51fb7a00d",
+      "binary_sha256": "b7ab4cdab52312dda2823cc08f92793e139287a3446591038828b2e1ad378843",
+      "bench_image_unchanged": true,
+      "static_internal_data_bss_bytes": 129880,
+      "frames_equal_previous_review": true,
+      "checked_frame_count": 7,
+      "internal_owner_state_count": 13,
+      "idle_physical_default0_retained": true,
+      "engine_dummy_policy": false,
+      "ISR_audit": {
+        "artifact": ".cache/engine/semi-architecture-final-review/addendum/isr-dummy/closure.json",
+        "sha256": "955e98d3c477677ae31920bdf5998ef0ba3dd0c16b8164a4a3e7d0119d887444",
+        "passed": true,
+        "roots": 4,
+        "functions": 29,
+        "flash_literals": 0,
+        "unclassified_flash_pointers": 0
+      }
+    }
+  },
+  "diagnostic_helper": {
+    "assessment": "Both native getters only read decoder crank_synced/stall_timeout and return0 while unsynced. Python ABI binds uint64. Benchmark records a timeout after a non-stopping crank call and uses its actual capture timestamp. No production ECU behavior is changed.",
+    "probe": {
+      "getter_cases": 3,
+      "rpm": [
+        50,
+        200,
+        1200
+      ],
+      "timeouts_us": [
+        150000,
+        40000,
+        20000
+      ],
+      "unsynced_returns_zero": true,
+      "repeated_reads_do_not_mutate_decoder_or_core": true
+    },
+    "diff_artifact": "addendum/diagnostic-diffs.json",
+    "qualification": "The getter exposes decoder timeout; matrix records it at accepted stable crank calls. It is diagnostic evidence and does not alter or extend an executor deadline."
+  },
+  "closed_findings": [
+    {
+      "id": "SEMI-P1",
+      "issue": "Docs implied old peers receive a new upgrade-needed radio status.",
+      "resolution": "Docs now correctly distinguish ECU peer diagnostics from unchanged legacy frames/capability-reply status."
+    },
+    {
+      "id": "SEMI-P2",
+      "issue": "200RPM test originally bounded from declared dropout, leaving15ms beyond the actual last-crank deadline unchecked.",
+      "resolution": "Now records last actual accepted(1685000,40000), derives1725000, rejects rises at/after and edges after that deadline."
+    }
+  ],
+  "matrix_binding": {
+    "summary": ".cache/engine/semi/matrix-current/summary.json",
+    "sha256": "61b8101e119a2d0669c9f7ea7a9dd661dfdeb237309a1b92c59fd41428894f60",
+    "source_hash_count": 55,
+    "source_mismatches": [],
+    "runs_replayed": 36,
+    "coarse_runs": 28,
+    "refinement_runs": 8,
+    "recorded_coarse_trace_hashes_match": true,
+    "equal_injector_pairs_all_traces": true,
+    "final_reconstructed_masks_zero": true,
+    "own_pulse_bounds_passed": true,
+    "actual_watchdog_horizons_checked": true,
+    "maximum_refinement_fraction": 0.00032490051558933277,
+    "artifact": "addendum/matrix-binding.json",
+    "artifact_sha256": "d313c2f274c9fab1e54b3fe23f9969341aea6bb52b351b442ba779a203f600ef"
+  },
+  "docs_claims": {
+    "path": "docs/engine-semi-sequential.md",
+    "sha256": "c7f34a258f6f9339ecd5bd5eb6fecd2ce1849e8bb88d0b54cedb4954c917bfb4",
+    "checked": "Numerical warm/throttle observations agree with source-bound rows; refinement max0.03249percent is consistent with the stated approximate0.033percent.35Nm stall,4 predicted rises/16.38ms,20..150ms timeout,200RPM40ms case, zero CPU latency, reference/non-AVR scope and selected-vs-dummy policies are explicit. Offline application checks remain clearly separated from online/physical support.",
+    "qualification": "No offline GUI workflow was repeated in this bounded addendum; earlier root application evidence is retained rather than reclassified as target operation."
+  },
+  "source_sha256": {
+    "tools/target_timing_bridge.cpp": "45004577761bd958566e200f29d4b203684266e6bc6deeff53a8424d6631fa05",
+    "tools/engine_bridge.cpp": "2dba5632c0a3b40e9eceeea66e60a631e4f61a619ab2d22875dad7b1dbbfdd21",
+    "tools/target_runtime.py": "9e2c3c38ebacc31e9c01b246da3cb17371257c14b53b27aeec41614f5ad79aed",
+    "tools/engine_runtime.py": "804a0aae598b0e39c8e713bcbf0e8f57fa06480909e4d6d6549ea5419ddc015e",
+    "tools/compare_engine_controllers.py": "d49d921f256b7b0954bfacccb30be3d8ca884bb37c44efceedca5234ad41025c",
+    "tools/run_semi_scenarios.py": "38fe49ab24450af9140073d2d60e13708a9c655f277058a06f95cc8f9fa547b8",
+    "tools/test_engine_semi.py": "05be573fcd12db064cd99eb076f1fe6ef415dbbb6c5198b2c6aa2eddb0fb1fcd",
+    "docs/engine-semi-sequential.md": "c7f34a258f6f9339ecd5bd5eb6fecd2ce1849e8bb88d0b54cedb4954c917bfb4",
+    "firmware/main/web_assets.hpp": "9cf815f9bbf7d3daa1a313d7ee98ae4c19a341a9c0ba4316dc23480055f105d2"
+  },
+  "artifact_sha256": {
+    "getter_probe.cpp": "348fd64498fab2f24f44609b8282953f242a8122bd16e7963e0231c054ac9971",
+    "getter_probe.json": "4e353d19fc3f8bb120a86509e899f681d1b66c542b9aaceafc0768ce7cf938b2",
+    "target_timing_bridge.cpp": "45004577761bd958566e200f29d4b203684266e6bc6deeff53a8424d6631fa05",
+    "diagnostic-diffs.json": "3559e3b9cb26986b63bfe20b12972baad1d22a12676630279b30221a721e683d"
+  },
+  "getter_compile_command": [
+    "c++",
+    "-std=c++17",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-I.cache/engine/semi-architecture-final-review/snapshot/include",
+    "-I/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+    ".cache/engine/semi-architecture-final-review/addendum/getter_probe.cpp",
+    ".cache/engine/idle-owner-review/cJSON.o",
+    "-o",
+    ".cache/engine/semi-architecture-final-review/addendum/getter_probe"
+  ],
+  "getter_run_command": [
+    ".cache/engine/semi-architecture-final-review/addendum/getter_probe"
+  ],
+  "remaining_limits": [
+    "Static/source/native/cache evidence only. No physical jitter/latency, USB enumeration/cache-stall performance, loaded driver operation, stack high-water or heap-minimum qualification.",
+    "Selected/generic engine and idle writes remain inhibited. The separate explicit engine dummy-load policy is retained and was not activated.",
+    "Hard-load stalling and the speed-dependent predictive window after crank loss remain real limitations; no output limit was relaxed."
+  ]
+}

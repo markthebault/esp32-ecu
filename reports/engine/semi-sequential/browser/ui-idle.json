@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "checks": [
+    "Enable, mode, frequency, throttle threshold and table edits persist through native whole-tune validation",
+    "Browser own006 MSQ preserves all idle settings and explicit physical gain units",
+    "Actual application-authored own005 MSQ imports its curve edit and retains the loaded editor CAS base",
+    "Legacy JSON disables former virtual idle and restores fixed defaults without inheriting enabled editor values or saving automatically",
+    "Blank numeric input cannot silently become a saved zero",
+    "Invalid duty/curve relationship rejects atomically and retains local edits for correction",
+    "Enabled host SIL uses actual PWM edges; UI separates controller terms, dispatcher observations and synthetic valve state",
+    "Idle panel and curve table fit320/390/768/1440px without document overflow",
+    "Current wiring/debug guide exposes the routed draft, source bias, return separation and acceptance holds, separately from the archived manual"
+  ],
+  "page_errors": [],
+  "browser": "Installed Chrome via Playwright"
+}

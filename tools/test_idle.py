@@ -16,10 +16,10 @@ class IdleTests(unittest.TestCase):
    with tempfile.TemporaryDirectory() as d:
     path=Path(d)/'old.json';body=json.dumps(old).encode();path.write_bytes(body);store=EngineStore(path)
     self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['revision'],71)
-    self.assertEqual(store.tune['schema_version'],4);self.assertFalse(store.tune['settings']['idle_enabled']);self.assertEqual(store.tune['idle_control']['algorithm'],DEFAULT['idle_control']['algorithm']);self.assertAlmostEqual(store.tune['idle_control']['derivative_filter_s'],DEFAULT['idle_control']['derivative_filter_s'])
+    self.assertEqual(store.tune['schema_version'],5);self.assertFalse(store.tune['settings']['idle_enabled']);self.assertEqual(store.tune['idle_control']['algorithm'],DEFAULT['idle_control']['algorithm']);self.assertAlmostEqual(store.tune['idle_control']['derivative_filter_s'],DEFAULT['idle_control']['derivative_filter_s'])
  def test_all_historical_msqs_disable_new_output_without_resetting_supported_trims(self):
-  for path in (R/'tuning/examples').glob('tunerstudio-*-roundtrip.msq'):
-   if 'idle' in path.name:continue
+  for filename in ('tunerstudio-roundtrip.msq','tunerstudio-sequential-roundtrip.msq','tunerstudio-cylinder-roundtrip.msq','tunerstudio-development-roundtrip.msq'):
+   path=R/'tuning/examples'/filename
    t=import_msq(path.read_bytes());self.assertFalse(t['settings']['idle_enabled']);self.assertEqual(t['idle_control'],DEFAULT['idle_control'])
   t=import_msq((R/'tuning/examples/tunerstudio-development-roundtrip.msq').read_bytes());self.assertTrue(t['cylinder_trims']['enabled']);self.assertEqual(t['cylinder_trims']['spark_deg'][1],-2.5)
  def test_own005_nondefault_every_idle_field_roundtrips_native_msq_and_binary(self):
@@ -90,7 +90,7 @@ class IdleTests(unittest.TestCase):
   self.assertEqual(SCALAR_OFFSETS['frequency_hz'],4772);self.assertEqual(SCALAR_OFFSETS['fast_idle_hysteresis_c'],4840)
   self.assertEqual(ARRAY_OFFSETS,dict(coolant_c=4844,run_pct=4868,crank_pct=4892,target_add_rpm=4916))
   self.assertEqual(len(SCALARS),18);self.assertEqual(ARRAYS,(('coolant_c',6),('run_pct',6),('crank_pct',6),('target_add_rpm',6)))
-  ini=(R/'tuning/esp32-ecu-idle.ini').read_text();tables=[line for line in ini.splitlines() if line.strip().startswith('table =')]
+  ini=(R/'tuning/esp32-ecu-semi.ini').read_text();tables=[line for line in ini.splitlines() if line.strip().startswith('table =')]
   self.assertEqual(len(tables),7);self.assertTrue(all(line.rstrip().endswith(', 1') for line in tables))
   for field in ('iacAvailable','dataSource','snapshotAgeMs'):self.assertIn('entry = '+field,ini.split('[Datalog]')[1])
  def test_sil_msl_contains_proposals_dispatcher_and_model_without_invented_measurements(self):

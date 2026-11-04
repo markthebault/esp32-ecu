@@ -6,7 +6,7 @@
 #include <limits>
 namespace ecu::tuning {
 inline constexpr std::size_t page_bytes=4992,live_bytes=256,chunk_bytes=256;
-inline constexpr const char signature[]="ESP32ECU DEV 005 INHIBITED";
+inline constexpr const char signature[]="ESP32ECU DEV 006 INHIBITED";
 inline constexpr const char serial_protocol[]="002";
 using Page=std::array<std::uint8_t,page_bytes>;
 inline void put_u32(std::uint8_t*p,std::uint32_t v){for(unsigned i=0;i<4;++i)p[i]=std::uint8_t(v>>(8*i));}
@@ -142,7 +142,7 @@ inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  for(unsigned i=0;i<5;++i)t.battery_v[i]=get_float(p.data()+208+i*4);
  for(unsigned i=0;i<5;++i)t.deadtime_ms[i]=get_float(p.data()+228+i*4);
  for(unsigned i=0;i<5;++i)t.dwell_ms[i]=get_float(p.data()+248+i*4);
- t.revision=origin;const auto strategy=get_u32(p.data()+272);if(strategy>1)return false;t.strategy=engine::Strategy(strategy);
+ t.revision=origin;const auto strategy=get_u32(p.data()+272);if(strategy>2)return false;t.strategy=engine::Strategy(strategy);
  t.injection_end_deg=get_float(p.data()+276);
  t.cam_sync_deg=get_float(p.data()+280);
  t.cam_window_deg=get_float(p.data()+284);
@@ -182,7 +182,7 @@ inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  for(unsigned i=0;i<6;++i)t.idle_control.target_add_rpm[i]=get_float(p.data()+4916+i*4);
  return !engine::validate(t);
 }
-// Update only an owned, already canonical schema4 tree. No global data mutates.
+// Update only an owned, already canonical schema5 tree. No global data mutates.
 template<class Json> bool update_document(Json&j,const engine::Tune&t){
  if(!j.header(t.revision,engine::strategy_name(t.strategy)))return false;
  if(!j.number("engine","cylinders",t.cylinders))return false;

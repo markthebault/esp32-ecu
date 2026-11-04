@@ -13,10 +13,11 @@ template<std::size_t N>bool float_array(const cJSON*j,std::array<float,N>&a){
 template<class Grid>inline bool map_parse(const cJSON*j,Grid&m){return web::keys(j,"|rpm||load||cells|")&&float_array(cJSON_GetObjectItemCaseSensitive(j,"rpm"),m.rpm)&&float_array(cJSON_GetObjectItemCaseSensitive(j,"load"),m.load)&&float_array(cJSON_GetObjectItemCaseSensitive(j,"cells"),m.cells);}
 inline bool parse_tune(const cJSON*j,Tune&t){
  using namespace web;unsigned schema;char strategy[32]{},physical[32]{};
- if(!integer(j,"schema_version",schema)||(schema<1||schema>4))return false;
+ if(!integer(j,"schema_version",schema)||(schema<1||schema>5))return false;
  if(!keys(j,schema==1?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps|":schema==2?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing|":schema==3?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims|":"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims||idle_control|")||!integer(j,"revision",t.revision)||!string(j,"strategy",strategy)||!string(j,"physical_outputs",physical)||std::strcmp(physical,"inhibited"))return false;
  if(!std::strcmp(strategy,"batch_wasted_4cyl"))t.strategy=Strategy::BatchWasted;
  else if(schema>=2&&!std::strcmp(strategy,"sequential_4cyl"))t.strategy=Strategy::Sequential;
+ else if(schema>=5&&!std::strcmp(strategy,"semi_sequential_4cyl"))t.strategy=Strategy::SemiSequential;
  else return false;
  auto*e=cJSON_GetObjectItemCaseSensitive(j,"engine");
  if(!keys(e,"|cylinders||displacement_cc||injector_cc_min||fuel_density_g_cc||stoich_afr|")||!integer(e,"cylinders",t.cylinders))return false;
@@ -109,8 +110,8 @@ inline cJSON* idle_document(const idle::Config&c){
 // stored record. Failure discards that tree; no partial document is published.
 inline bool upgrade_tune_document(cJSON*j){
  auto*schema=cJSON_GetObjectItemCaseSensitive(j,"schema_version");if(!cJSON_IsNumber(schema))return false;
- if(schema->valuedouble==4)return true;
- if(schema->valuedouble!=1&&schema->valuedouble!=2&&schema->valuedouble!=3)return false;
+ if(schema->valuedouble==5)return true;
+ if(schema->valuedouble!=1&&schema->valuedouble!=2&&schema->valuedouble!=3&&schema->valuedouble!=4)return false;
  if(schema->valuedouble==1){
   auto*timing=cJSON_CreateObject();if(!timing)return false;
   const double order[]={1,3,4,2};auto*a=cJSON_CreateDoubleArray(order,4);
@@ -130,10 +131,12 @@ inline bool upgrade_tune_document(cJSON*j){
  }
  if(!ok||!cJSON_AddItemToObject(j,"cylinder_trims",trims)){cJSON_Delete(trims);return false;}
  }
- auto*control=idle_document(idle::Config{});if(!control||!cJSON_AddItemToObject(j,"idle_control",control)){cJSON_Delete(control);return false;}
- auto*enabled=cJSON_GetObjectItemCaseSensitive(cJSON_GetObjectItemCaseSensitive(j,"settings"),"idle_enabled");if(!cJSON_IsBool(enabled))return false;
- enabled->type=(enabled->type&~0xff)|cJSON_False;
- cJSON_SetNumberValue(schema,4);return true;
+ if(schema->valuedouble<4){
+  auto*control=idle_document(idle::Config{});if(!control||!cJSON_AddItemToObject(j,"idle_control",control)){cJSON_Delete(control);return false;}
+  auto*enabled=cJSON_GetObjectItemCaseSensitive(cJSON_GetObjectItemCaseSensitive(j,"settings"),"idle_enabled");if(!cJSON_IsBool(enabled))return false;
+  enabled->type=(enabled->type&~0xff)|cJSON_False;
+ }
+ cJSON_SetNumberValue(schema,5);return true;
 }
 inline bool canonical_tune(const char*text,Tune&t,std::string& document){
  if(!text||std::strlen(text)>tune_maximum||!web::safe_json(text,std::strlen(text),tune_maximum))return false;

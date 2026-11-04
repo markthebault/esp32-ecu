@@ -10,13 +10,14 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 class SpeeduinoRuntime:
-    def __init__(self,per_tooth=False,logger_cam=False,sequential=False,timer_bits=32):
+    def __init__(self,per_tooth=False,logger_cam=False,sequential=False,timer_bits=32,semi_sequential=False):
         if timer_bits not in (16,32):raise ValueError('Native timer width must be16or32')
+        if semi_sequential and (sequential or logger_cam):raise ValueError('Conflicting cycle profiles')
         executable=ROOT/('.cache/engine/speeduino-sim/speeduino-sim' if timer_bits==32 else '.cache/engine/speeduino-sim16/speeduino-sim')
         manifest=json.loads(executable.with_name('build-manifest.json').read_text())
         if hashlib.sha256(executable.read_bytes()).hexdigest()!=manifest['binary_sha256']:raise RuntimeError('Reference executable differs from its build manifest')
-        self.timer_bits=timer_bits;self.edge_modes={};self.sequential=sequential;self.spark_trims=[0]*4;self.last_status={}
-        self.process=subprocess.Popen([str(executable),*(['--per-tooth'] if per_tooth else []),*(['--logger-cam'] if logger_cam else []),*(['--sequential'] if sequential else [])],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
+        self.timer_bits=timer_bits;self.edge_modes={};self.sequential=sequential;self.semi_sequential=semi_sequential;self.spark_trims=[0]*4;self.last_status={}
+        self.process=subprocess.Popen([str(executable),*(['--per-tooth'] if per_tooth else []),*(['--logger-cam'] if logger_cam else []),*(['--sequential'] if sequential else []),*(['--semi-sequential'] if semi_sequential else [])],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
                                       stderr=subprocess.PIPE,bufsize=0)
         self.buffer=b'';self.now=0
         self.idle_profile=None
@@ -27,6 +28,11 @@ class SpeeduinoRuntime:
                 expected=[3,3,0,0,1,540,540,540,540]
                 if len(lines)!=1 or lines[0].split()[0]!="cycleprofile" or list(map(int,lines[0].split()[1:]))!=expected:raise RuntimeError("Sequential reference profile was not preserved by production setup")
                 self.profile["cycle_profile"]=expected
+            if semi_sequential:
+                for command,expected in [('cycleprofile',[1,2,0,0,1,180,180,180,180]),('injectorprofile',[1,1,1,0,2,360,2,2])]:
+                    lines=self.command(command)
+                    if len(lines)!=1 or lines[0].split()[0]!=command or list(map(int,lines[0].split()[1:]))!=expected:raise RuntimeError('Semi-sequential reference profile was not preserved by production setup: '+repr(lines))
+                    self.profile[command]=expected
         except BaseException:self.close();raise
 
     def _initialize(self,per_tooth):

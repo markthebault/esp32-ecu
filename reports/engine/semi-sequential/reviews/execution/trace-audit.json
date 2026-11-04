@@ -1,0 +1,183 @@
+{
+  "qualification": "Independent edge replay of root-preserved matrix inputs; not rerunning/calibrating a plant.20ms deadline applies to these traces, not allRPM.",
+  "rows": [
+    {
+      "mode": "target",
+      "scenario": "load_step",
+      "path": ".cache/engine/semi/matrix/target-load_step-250.json",
+      "sha256": "4b911ca7966d2e7595a24c075722a8636f9637ccaa5b0bd386af1ca44acde1a6",
+      "edge_count": 908,
+      "paired_edges_equal": true,
+      "max_high_us": [
+        4312,
+        4385,
+        4385,
+        4312,
+        2967,
+        2866,
+        2866,
+        2967
+      ],
+      "final_reconstructed_mask": 0,
+      "timing_reason": "invalid_angle_plan",
+      "angle_reason": "dwell_limit",
+      "timing_stops": 1,
+      "timing_recoveries": 1,
+      "protection_stops": [
+        {
+          "time_us": 4654304,
+          "reason": "invalid_angle_plan"
+        }
+      ],
+      "final_rpm": 0.0,
+      "unable_to_sustain_load": true
+    },
+    {
+      "mode": "target",
+      "scenario": "trigger_dropout",
+      "path": ".cache/engine/semi/matrix/target-trigger_dropout-250.json",
+      "sha256": "e8cea3ae6b1fdfe498c1f92d54294f77e6d039aa67d8cbd4b3b34af55d567c1a",
+      "edge_count": 832,
+      "paired_edges_equal": true,
+      "max_high_us": [
+        4312,
+        4385,
+        4385,
+        4312,
+        2805,
+        2804,
+        2804,
+        2805
+      ],
+      "final_reconstructed_mask": 0,
+      "timing_reason": "tooth_timeout",
+      "angle_reason": "none",
+      "timing_stops": 1,
+      "timing_recoveries": 1,
+      "last_actual_crank_us": 3999887,
+      "scenario_tooth_deadline_us": 4019887,
+      "post_loss_rises": 4,
+      "post_loss_last_edge_us": 4016267,
+      "post_loss_exposure_us": 16380,
+      "events_after_deadline_before_reacquisition": 0
+    },
+    {
+      "mode": "target",
+      "scenario": "stall_restart",
+      "path": ".cache/engine/semi/matrix/target-stall_restart-250.json",
+      "sha256": "9ff6e3811677a305a559527e705347e3fe7952bc41c62be141f8745e261d8393",
+      "edge_count": 1680,
+      "paired_edges_equal": true,
+      "max_high_us": [
+        4411,
+        4529,
+        4529,
+        4411,
+        2805,
+        2804,
+        2804,
+        2805
+      ],
+      "final_reconstructed_mask": 0,
+      "timing_reason": "tooth_timeout",
+      "angle_reason": "none",
+      "timing_stops": 1,
+      "timing_recoveries": 1,
+      "last_actual_crank_us": 3999887,
+      "scenario_tooth_deadline_us": 4019887,
+      "post_loss_rises": 4,
+      "post_loss_last_edge_us": 4016267,
+      "post_loss_exposure_us": 16380,
+      "events_after_deadline_before_reacquisition": 0
+    },
+    {
+      "mode": "portable",
+      "scenario": "load_step",
+      "path": ".cache/engine/semi/matrix/portable-load_step-250.json",
+      "sha256": "5bd5825c88f1ab8ca46d149b8ad480de805ee5cec635789b768cb7700f4d2f6b",
+      "edge_count": 908,
+      "paired_edges_equal": true,
+      "max_high_us": [
+        4312,
+        4385,
+        4385,
+        4312,
+        2967,
+        2866,
+        2866,
+        2967
+      ],
+      "final_reconstructed_mask": 0,
+      "timing_reason": "dwell_limit",
+      "angle_reason": null,
+      "timing_stops": 1,
+      "timing_recoveries": 1,
+      "protection_stops": [
+        {
+          "time_us": 4654304,
+          "reason": "dwell_limit"
+        }
+      ],
+      "final_rpm": 0.0,
+      "unable_to_sustain_load": true
+    },
+    {
+      "mode": "portable",
+      "scenario": "trigger_dropout",
+      "path": ".cache/engine/semi/matrix/portable-trigger_dropout-250.json",
+      "sha256": "af7902a48d0be08308944d3186098de79c21b063d9de073a81d9d9ac4c396f9e",
+      "edge_count": 832,
+      "paired_edges_equal": true,
+      "max_high_us": [
+        4312,
+        4385,
+        4385,
+        4312,
+        2805,
+        2804,
+        2804,
+        2805
+      ],
+      "final_reconstructed_mask": 0,
+      "timing_reason": "none",
+      "angle_reason": null,
+      "timing_stops": 0,
+      "timing_recoveries": 0,
+      "last_actual_crank_us": 3999887,
+      "scenario_tooth_deadline_us": 4019887,
+      "post_loss_rises": 4,
+      "post_loss_last_edge_us": 4016267,
+      "post_loss_exposure_us": 16380,
+      "events_after_deadline_before_reacquisition": 0
+    },
+    {
+      "mode": "portable",
+      "scenario": "stall_restart",
+      "path": ".cache/engine/semi/matrix/portable-stall_restart-250.json",
+      "sha256": "af5afc6f9f27114766a57cd70ccda555503f5a47a3732e88f0dffbd9b50ad141",
+      "edge_count": 1680,
+      "paired_edges_equal": true,
+      "max_high_us": [
+        4411,
+        4529,
+        4529,
+        4411,
+        2805,
+        2804,
+        2804,
+        2805
+      ],
+      "final_reconstructed_mask": 0,
+      "timing_reason": "none",
+      "angle_reason": null,
+      "timing_stops": 0,
+      "timing_recoveries": 0,
+      "last_actual_crank_us": 3999887,
+      "scenario_tooth_deadline_us": 4019887,
+      "post_loss_rises": 4,
+      "post_loss_last_edge_us": 4016267,
+      "post_loss_exposure_us": 16380,
+      "events_after_deadline_before_reacquisition": 0
+    }
+  ]
+}

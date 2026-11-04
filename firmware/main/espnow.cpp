@@ -182,7 +182,15 @@ void update_view(bool fault){
  char mac[18]{};mac_text(own,mac);cJSON_AddStringToObject(j,"mac",mac);
  char id[33]{},key[33]{};if(deadline){hex(window,16,id);hex(secret,16,key);}cJSON_AddStringToObject(j,"window",id);cJSON_AddStringToObject(j,"setup_key",key);
  if(waiting){auto*c=cJSON_AddObjectToObject(j,"candidate");mac_text(candidate.mac,mac);cJSON_AddStringToObject(c,"mac",mac);cJSON_AddStringToObject(c,"name",candidate.name);cJSON_AddBoolToObject(c,"approved",approved);}
- auto*a=cJSON_AddArrayToObject(j,"peers");for(unsigned i=0;i<max_peers;++i)if(occupied(saved.peers[i])){auto*p=cJSON_CreateObject();mac_text(saved.peers[i].mac,mac);cJSON_AddStringToObject(p,"mac",mac);cJSON_AddStringToObject(p,"name",saved.peers[i].name);const bool connected=ack_seen[i]&&now()-acks[i]<3000000;cJSON_AddBoolToObject(p,"connected",connected);cJSON_AddBoolToObject(p,"engine_telemetry",streams[i].capabilities.engine());cJSON_AddNumberToObject(p,"engine_schema",streams[i].capabilities.engine()?engine_schema:0);cJSON_AddNumberToObject(p,"capability_counter",streams[i].capabilities.counter());cJSON_AddNumberToObject(p,"last_ack_ms",acks[i]?(now()-acks[i])/1000:-1);cJSON_AddItemToArray(a,p);}
+ auto*a=cJSON_AddArrayToObject(j,"peers");for(unsigned i=0;i<max_peers;++i)if(occupied(saved.peers[i])){
+  auto*p=cJSON_CreateObject();mac_text(saved.peers[i].mac,mac);cJSON_AddStringToObject(p,"mac",mac);cJSON_AddStringToObject(p,"name",saved.peers[i].name);
+  const auto&cap=streams[i].capabilities;const bool connected=ack_seen[i]&&now()-acks[i]<3000000;
+  const bool blocked=cap.engine()&&live.engine.has(engine::Present)&&!engine_schema_supports(cap.schema(),live.engine);
+  cJSON_AddBoolToObject(p,"connected",connected);cJSON_AddBoolToObject(p,"engine_telemetry",cap.engine());cJSON_AddNumberToObject(p,"engine_schema",cap.schema());
+  cJSON_AddBoolToObject(p,"engine_telemetry_blocked",blocked);cJSON_AddBoolToObject(p,"engine_upgrade_needed",blocked&&cap.schema()<engine_schema);
+  cJSON_AddStringToObject(p,"engine_block_reason",blocked?"Current strategy or fault requires a newer engine schema":"");
+  cJSON_AddNumberToObject(p,"capability_counter",cap.counter());cJSON_AddNumberToObject(p,"last_ack_ms",acks[i]?(now()-acks[i])/1000:-1);cJSON_AddItemToArray(a,p);
+ }
  xSemaphoreTake(view_mutex,portMAX_DELAY);cJSON_Delete(view);view=j;xSemaphoreGive(view_mutex);
 }
 bool init_wifi(){
@@ -226,11 +234,11 @@ void task(void*){
       // Negotiation remains available before the first sensor observation.
      }else if(round%10==0&&tx_now-live.stamp<1000000){
       const unsigned sensor=(round/10)%6;std::uint8_t packet[98];std::memcpy(packet,live.meta[sensor],98);u32(packet+94,session_id);send(saved.peers[i].mac,packet,sizeof(packet));
-     }else if(stream.capabilities.engine()&&round%10!=1&&live.engine.has(engine::Present)){
+     }else if(stream.capabilities.engine()&&round%10!=1&&live.engine.has(engine::Present)&&engine_schema_supports(stream.capabilities.schema(),live.engine)){
       if(engine_sequence==UINT64_MAX){last_error="Engine telemetry sequence exhausted; restart required";fault_until=stamp+3000000;}
       else{
        std::uint8_t packet[engine_size];const auto sequence=++engine_sequence;
-       if(engine_body(packet,live.engine,session_id,sequence,transmitted_age(live.engine_sample_age,live.stamp,tx_now),transmitted_age(live.engine_control_age,live.stamp,tx_now),transmitted_age(live.worker_age,live.stamp,tx_now),tx_now)&&
+       if(engine_body(packet,live.engine,session_id,sequence,transmitted_age(live.engine_sample_age,live.stamp,tx_now),transmitted_age(live.engine_control_age,live.stamp,tx_now),transmitted_age(live.worker_age,live.stamp,tx_now),tx_now,stream.capabilities.schema())&&
           hmac_key(stream.key.data(),32,packet,engine_body_size,packet+engine_body_size)&&send(saved.peers[i].mac,packet,sizeof(packet))){stream.engine_sent.submitted(sequence,tx_now);++engine_packets;}
       }
      }else if(tx_now-live.stamp<1000000){

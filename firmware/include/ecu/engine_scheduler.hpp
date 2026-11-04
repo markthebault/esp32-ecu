@@ -12,7 +12,7 @@ struct AngleConfig {
 inline AngleConfig angle_config(const Tune&t){return {t.tooth1_btdc_deg,t.max_dwell_ms,t.strategy,t.firing_order,t.injection_end_deg,t.cam_sync_deg,t.cam_window_deg,t.max_duty,t.max_injection_ms};}
 inline bool demand_valid(const AngleConfig&t,const Output&o,double rpm){
  const bool sequential=t.strategy==Strategy::Sequential;
- if((!sequential&&t.strategy!=Strategy::BatchWasted)||!range(t.max_injection_ms,1,15)||!range(t.max_duty,.1,double(.85f))||!range(t.max_dwell_ms,.5,3.5))return false;
+ if(!strategy_valid(t.strategy)||!range(t.max_injection_ms,1,15)||!range(t.max_duty,.1,double(.85f))||!range(t.max_dwell_ms,.5,3.5))return false;
  if(!o.proposed_enabled())return true;
  if(!range(rpm,50,8000)||!range(o.dwell_ms,.5,t.max_dwell_ms)||!finite(o.advance_deg)||
     (o.cylinder_trims_enabled&&(!sequential||!o.cylinder_data)))return false;
@@ -75,6 +75,7 @@ public:
   if(!o.proposed_enabled()){cut();return true;}
   refresh_control(command_us,sampled_us);
   const bool sequential=t.strategy==Strategy::Sequential;
+  const bool end_scheduled=t.strategy!=Strategy::BatchWasted;
   const unsigned cycle_slots=slots*(sequential?2:1);const double span=sequential?720:360;
   if(!slots||slots>120||index>=cycle_slots||!demand_valid(t,o,o.rpm)||!range(t.tooth1_btdc_deg,0,359)||!firing_order_valid(t.firing_order)||!range(t.injection_end_deg,0,719))return fail(StopReason::BadCommand);
   const double step=360.0/slots;
@@ -95,7 +96,7 @@ public:
    if(!enabled){if(s.high)s.inhibited=true;else s=Slot{};continue;}
    if(s.inhibited)continue;
    const auto committed=s;
-   double phase=std::fmod(t.tooth1_btdc_deg+(coil?cylinder_phase[ch-4]-(s.high?s.advance:o.advance_for(ch-4)):sequential?cylinder_phase[ch]+t.injection_end_deg:180),span);if(phase<0)phase+=span;
+   double phase=std::fmod(t.tooth1_btdc_deg+(coil?cylinder_phase[ch-4]-(s.high?s.advance:o.advance_for(ch-4)):end_scheduled?cylinder_phase[ch]+t.injection_end_deg:180),span);if(phase<0)phase+=span;
    if(!s.phase_known){
     s.cycle=static_cast<std::int64_t>(std::floor((angle_-phase)/span))+1;s.phase_known=true;
    }else{
@@ -106,7 +107,7 @@ public:
    }
    s.previous_phase=phase;
    double goal=s.cycle*span+phase;
-   if(coil||sequential){
+   if(coil||end_scheduled){
     const auto requested=std::uint64_t(std::llround((coil?o.dwell_ms:o.pulse_for(ch))*1000));
     if(!coil&&s.high)continue; // An open injector always retains its low edge.
     std::uint64_t end;

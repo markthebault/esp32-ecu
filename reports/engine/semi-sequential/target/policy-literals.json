@@ -1,0 +1,28 @@
+{
+  "scope": "Root actual-ELF literal crosscheck of compiled engine policy; does not test gates/GPIO or hardware. CMake compile database is not a PlatformIO macro oracle.",
+  "images": {
+    "compact_n16r8_web": {
+      "elf_sha256": "a0c2c85c501a849de57b1db962e9a413aff5114dca16520aaaa11ac0a0a204b5",
+      "retained_policy_literals": [
+        "COMPILE-TIME INHIBITED",
+        "hardware_timer_virtual_outputs"
+      ],
+      "expected_engine_dummy_policy": false
+    },
+    "compact_a3_web": {
+      "elf_sha256": "a3e5afe5bf208d5b4347f5c02844c6938a3b12c432807a0d55d5faf1c19e1fb4",
+      "retained_policy_literals": [
+        "COMPILE-TIME INHIBITED",
+        "hardware_timer_virtual_outputs"
+      ],
+      "expected_engine_dummy_policy": false
+    },
+    "compact_a3_timing_bench": {
+      "elf_sha256": "1d84c8c19c27d83c205e6a6a585e935508e909d945c106d511854ce51fb7a00d",
+      "retained_policy_literals": [
+        "DUMMY LOADS ONLY"
+      ],
+      "expected_engine_dummy_policy": true
+    }
+  }
+}

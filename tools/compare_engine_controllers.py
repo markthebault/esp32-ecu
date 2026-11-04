@@ -32,12 +32,13 @@ def benchmark_tune():
 
 
 class OurController:
-    def __init__(self,tune=None):
+    def __init__(self,tune=None,target_dispatcher=False):
         tune=tune or benchmark_tune()
         from target_runtime import TargetRuntime
-        self.runtime=(TargetRuntime if tune['settings']['idle_enabled'] else EngineRuntime)(tune);self.runtime.wheel()
+        self.target_dispatcher=target_dispatcher or tune['settings']['idle_enabled']
+        self.runtime=(TargetRuntime if self.target_dispatcher else EngineRuntime)(tune);self.runtime.wheel()
         self.channels=9 if tune['settings']['idle_enabled'] else 8
-        self.worker_us=1000 if self.channels==9 else None
+        self.worker_us=1000 if self.target_dispatcher else None
         self.status={};self.high=[False]*self.channels;self.stops=[]
 
     def sample(self,sample,us):
@@ -76,7 +77,11 @@ class OurController:
     def close(self):self.runtime.close()
 
 
-def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32,idle_options=None):
+def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32,idle_options=None,semi_sequential=False,target_dispatcher=False):
+    if sequential and semi_sequential:raise ValueError('Conflicting cycle profiles')
+    if target_dispatcher and controller!='ours':raise ValueError('Target dispatcher applies only to the project')
+    if tune is not None and not sequential and not semi_sequential:
+        sequential=tune['strategy']=='sequential_4cyl';semi_sequential=tune['strategy']=='semi_sequential_4cyl'
     if controller not in ('ours','speeduino','speeduino_per_tooth') or scenario not in (SCENARIOS+(CAM_SCENARIOS if sequential else ())+ (IDLE_SCENARIOS if idle_options is not None else ())):raise ValueError('Unknown benchmark case')
     if step_us not in (100,125,250,500) or not 1<=duration<=30:raise ValueError('Invalid benchmark duration/step')
     if control_period_us not in (1000,5000):raise ValueError('Unsupported control sampling period')
@@ -86,11 +91,11 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
         idle_options=dict(idle_options);idle_tune=copy.deepcopy(idle_options.get('tune') or benchmark_tune());idle_tune['settings']['idle_enabled']=True
         if controller=='ours':tune=idle_tune
     plant=ResearchPlant(cold=scenario=='idle_cold_start',idle_valve=idle_options.get('valve_mode','normal') if idle else None)
-    if sequential and controller=='ours':
-        tune=copy.deepcopy(tune or benchmark_tune());tune['strategy']='sequential_4cyl'
-    try:ecu=OurController(tune) if controller=='ours' else SpeeduinoRuntime(per_tooth=controller=='speeduino_per_tooth',sequential=sequential,timer_bits=reference_timer_bits)
+    if (sequential or semi_sequential) and controller=='ours':
+        tune=copy.deepcopy(tune or benchmark_tune());tune['strategy']='sequential_4cyl' if sequential else 'semi_sequential_4cyl'
+    try:ecu=(OurController(tune,target_dispatcher=True) if target_dispatcher else OurController(tune)) if controller=='ours' else SpeeduinoRuntime(per_tooth=controller=='speeduino_per_tooth',sequential=sequential,timer_bits=reference_timer_bits,semi_sequential=semi_sequential)
     except Exception:plant.close();raise
-    trace=[];edges_all=[];trigger_edges=[];cam_edges=[];cam_angles=[900. if scenario=='cam_wrong_phase' else 540.,900.];now=0;next_sample=0;tooth_index=1
+    trace=[];edges_all=[];injection_timing=[];accepted_crank=[];trigger_edges=[];cam_edges=[];cam_angles=[900. if scenario=='cam_wrong_phase' else 540.,900.];now=0;next_sample=0;tooth_index=1
     channels=9 if idle else 8
     state={};high=[False]*channels;rise=[0]*channels;max_high=[0]*channels;inhibits=[];hard_cut_samples=0;fault_mask=0
     if idle and controller!='ours':
@@ -105,6 +110,14 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
         high[:]=[False]*channels;plant.cut();inhibits.append([us,cause])
     def plant_edge(ch,value,us,advance,latest,dwell):
         plant.edge(ch,value,us/1e6,advance,latest,dwell)
+        if semi_sequential and ch<4 and not value:
+            # Record the plant's actual shaft angle after integrating up to
+            # the executed closing edge. The plant geometry stays independent
+            # of the controller's configured order/reference.
+            end_angle=tune['timing']['injection_end_deg'] if controller=='ours' and tune else 540 if controller=='ours' else 180
+            order=tune['timing']['firing_order'] if controller=='ours' and tune else [1,3,4,2]
+            goal=(90+180*order.index(ch+1)+end_angle)%360
+            injection_timing.append(dict(time_us=us,channel=ch,shaft_angle_deg=plant.angle,closing_error_deg=math.remainder(plant.angle-goal,360),width_us=us-rise[ch]))
         if 4<=ch<8 and not value:
             if controller=='ours':mode=dict(sync_status=2 if state.get('phase_synced') else 1 if state.get('crank_synced',state.get('synced')) else 0,ignition_cycle_deg=720 if sequential else 360,effective_sequential=sequential and bool(state.get('phase_synced')))
             else:
@@ -167,7 +180,10 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                 if tooth>=58 or dropout:continue
                 trigger_edges.append([now,tooth,plant.angle-target])
                 if controller=='ours':
-                    if ecu.trigger(now):inhibit(now,'trigger')
+                    stopped=ecu.trigger(now)
+                    if stopped:inhibit(now,'trigger')
+                    timeout=ecu.runtime.crank_timeout_us()
+                    if not stopped and timeout:accepted_crank.append([now,timeout])
                 else:
                     # No virtual time elapses between the final timer callback
                     # and the production trigger/loop calls at this crossing.
@@ -220,7 +236,7 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
             idle_post_halt=ecu._edges(ecu.command('idleclock '+str(now+50000)))
             if any(ch!=8 for _,ch,_,_,_ in idle_post_halt):raise RuntimeError('Engine output restarted after production halt')
         inhibit(now,'simulation_end')
-        summary=dict(strategy='sequential_4cyl' if sequential else 'batch_wasted_4cyl',cam_profile=('one rising edge at90deg ATDC C1 compression TDC (deliberately wrong by360)' if scenario=='cam_wrong_phase' else 'one rising edge at450deg ATDC C1 compression TDC') if sequential else None,reference_timer_bits=reference_timer_bits if controller!='ours' else None,controller=controller,scenario=scenario,duration_s=duration,step_us=step_us,
+        summary=dict(strategy='sequential_4cyl' if sequential else 'semi_sequential_4cyl' if semi_sequential else 'batch_wasted_4cyl',project_runtime=('target_dispatcher' if getattr(ecu,'target_dispatcher',False) else 'portable_core') if controller=='ours' else None,reference_profile=ecu.profile if controller!='ours' else None,cam_profile=('one rising edge at90deg ATDC C1 compression TDC (deliberately wrong by360)' if scenario=='cam_wrong_phase' else 'one rising edge at450deg ATDC C1 compression TDC') if sequential else None,reference_timer_bits=reference_timer_bits if controller!='ours' else None,controller=controller,scenario=scenario,duration_s=duration,step_us=step_us,
                      control_period_us=control_period_us,
                      plant='MVEMLib air path + local empirical combustion/free shaft, uncalibrated',
                      physical_outputs_enabled=False,final_rpm=final_rpm,max_rpm=max((r['plant_rpm'] for r in trace),default=0),
@@ -246,8 +262,12 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                            idle_high_after_production_halt=idle_halt_high,
                            idle_post_halt_probe=dict(duration_us=50000,edges=idle_post_halt,pwm_restarts_or_stays_high=idle_halt_high or any(row[2] for row in idle_post_halt),basis='timer-only diagnostic after coupled horizon; no plant integration in this separate probe'),
                            idle_electrical_ledger_basis='before explicit external simulation-end cut; NC mechanical/current decay is finite')
-        return dict(summary=summary,trace=trace,edges=edges_all,triggers=trigger_edges,
-                    cams=cam_edges,spark_timing=plant.spark_errors,dwell=plant.dwell_events,final_ecu=state)
+        if semi_sequential:summary['max_injection_closing_error_after_3s_deg']=max((abs(row['closing_error_deg']) for row in injection_timing if row['time_us']>=3000000),default=0)
+        if controller=='ours' and gap_start is not None:
+            last=max((r for r in accepted_crank if r[0]<=gap_start),default=None)
+            summary['dropout_accepted_crank_watchdog']=dict(last_accepted_us=last[0],timeout_us=last[1],deadline_us=last[0]+last[1],basis='Native production decoder timeout at last successfully accepted plan; period*(missing+2)*2 clamped20..150ms') if last else None
+        return dict(summary=summary,trace=trace,edges=edges_all,injection_timing=injection_timing,triggers=trigger_edges,
+                    accepted_crank_watchdogs=accepted_crank,cams=cam_edges,spark_timing=plant.spark_errors,dwell=plant.dwell_events,final_ecu=state)
     finally:
         ecu.close();plant.close()
 
@@ -258,8 +278,12 @@ if __name__=='__main__':
     parser.add_argument('--scenario',choices=SCENARIOS,default='warm_start')
     parser.add_argument('--duration',type=float,default=10)
     parser.add_argument('--step-us',type=int,default=250)
+    cycle=parser.add_mutually_exclusive_group()
+    cycle.add_argument('--semi-sequential',action='store_true')
+    cycle.add_argument('--sequential',action='store_true')
+    parser.add_argument('--target-dispatcher',action='store_true')
     parser.add_argument('--output',type=Path)
-    a=parser.parse_args();result=run(a.controller,a.scenario,a.duration,a.step_us)
+    a=parser.parse_args();result=run(a.controller,a.scenario,a.duration,a.step_us,sequential=a.sequential,semi_sequential=a.semi_sequential,target_dispatcher=a.target_dispatcher)
     if a.output:
         a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(result,separators=(',',':'),allow_nan=False)+'\n')
     print(json.dumps(result['summary'],indent=2,allow_nan=False))

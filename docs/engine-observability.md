@@ -63,3 +63,5 @@ Actual two-device ESP-NOW pairing/negotiation, RF obstruction/range, reboot pers
 [The cylinder update](engine-cylinder-trims.md) records the additive JSON fields, recorder growth and unchanged ESP-NOW schema1 base-demand layout. Historical001 log/viewer evidence remains retained.
 
 The [idle update](engine-idle-control.md) documents the additive `idle.available` object, target/feedforward/P/I/D/state/reason fields and strict null handling. An absent legacy idle object is unavailable. The fixed radio frame remains232 bytes; only the existing base idle proposal is carried there.
+
+The [semi-sequential increment](engine-semi-sequential.md) adds the current schema5/own006 strategy and negotiated engine-radio schema2. Earlier identities/evidence described here remain historical records; byte offsets, CAS, bounded logging and selected physical-output inhibition are retained.

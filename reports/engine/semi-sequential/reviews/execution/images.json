@@ -1,0 +1,445 @@
+{
+  "compact_n16r8_web": {
+    "elf_sha256": "2feddce371d8629094629837c47004e2b61eac32a682d8499c1c82825e038675",
+    "binary_sha256": "9246203a112996e0d518bed6cf3834f4cf19fe7c90225ff910fdef60961f877c",
+    "static_internal_data_bss_bytes": 156308,
+    "IRAM_code_bytes": 133623,
+    "entry_frames": [
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "frame_bytes": 128,
+        "code_bytes": 3953
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_trigger_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "frame_bytes": 96,
+        "code_bytes": 554
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)",
+        "frame_bytes": 3680,
+        "code_bytes": 14878
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+        "frame_bytes": 112,
+        "code_bytes": 14221
+      },
+      {
+        "symbol": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+        "frame_bytes": 1360,
+        "code_bytes": 1322
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+        "frame_bytes": 2416,
+        "code_bytes": 2519
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+        "frame_bytes": 32,
+        "code_bytes": 75
+      },
+      {
+        "symbol": "app_main",
+        "frame_bytes": 6816,
+        "code_bytes": 2020
+      }
+    ],
+    "owner_state_placement": [
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::cam_context",
+        "section": ".dram0.data",
+        "address": "0x3fca7e08",
+        "bytes": 1
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::idle_output",
+        "section": ".dram0.data",
+        "address": "0x3fcabf00",
+        "bytes": 1
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::capture_clock",
+        "section": ".dram0.data",
+        "address": "0x3fcabee8",
+        "bytes": 24
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::idle_executor",
+        "section": ".dram0.data",
+        "address": "0x3fcabf08",
+        "bytes": 240
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::trigger_clock",
+        "section": ".dram0.data",
+        "address": "0x3fca7e98",
+        "bytes": 24
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::external_epoch",
+        "section": ".dram0.data",
+        "address": "0x3fca7e88",
+        "bytes": 4
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::installed_alarm",
+        "section": ".dram0.data",
+        "address": "0x3fca7e80",
+        "bytes": 8
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::trigger_capture",
+        "section": ".dram0.data",
+        "address": "0x3fca7eb0",
+        "bytes": 16440
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::configuration_hold",
+        "section": ".dram0.bss",
+        "address": "0x3fcb2930",
+        "bytes": 1
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::lock",
+        "section": ".dram0.data",
+        "address": "0x3fca7e90",
+        "bytes": 8
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::timer",
+        "section": ".dram0.bss",
+        "address": "0x3fcb2960",
+        "bytes": 4
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::output",
+        "section": ".dram0.data",
+        "address": "0x3fca7e8c",
+        "bytes": 4
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::executor",
+        "section": ".dram0.data",
+        "address": "0x3fcabff8",
+        "bytes": 5456
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::measured",
+        "section": ".dram0.data",
+        "address": "0x3fca7e10",
+        "bytes": 112
+      }
+    ],
+    "idle_physical_default0_not_overridden": true,
+    "engine_dummy_flag": false,
+    "closure": {
+      "artifact": "isr-selected/closure.json",
+      "sha256": "43560ab2924e23cc306bd544ab06885300a2bc48342aefcb63a85b721e990e14",
+      "roots": 5,
+      "functions": 30,
+      "external": [],
+      "flash_literals": 0,
+      "unclassified_flash_pointers": 0,
+      "passed": true
+    },
+    "usb": {
+      "artifact": "usb-selected.json",
+      "sha256": "06975d6e1380d90b88ca2d5913824b90cbe62bbce82c635096debfe045f50fc7",
+      "exclusive_usb": true,
+      "console": "UART0 only",
+      "ISR_cache_safe": false,
+      "ISR_flags": 0
+    }
+  },
+  "compact_a3_web": {
+    "elf_sha256": "bfdee5dfeadcd9146f0a0829f54a3248cff091031edf5a7916f720cdc36dd1cf",
+    "binary_sha256": "6b4b56b2c079b92fe14526aa31b79fc063e49ed35fff99ae278196a8aedc4695",
+    "static_internal_data_bss_bytes": 155056,
+    "IRAM_code_bytes": 127683,
+    "entry_frames": [
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "frame_bytes": 128,
+        "code_bytes": 3953
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_trigger_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "frame_bytes": 96,
+        "code_bytes": 554
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)",
+        "frame_bytes": 3680,
+        "code_bytes": 14878
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+        "frame_bytes": 112,
+        "code_bytes": 14221
+      },
+      {
+        "symbol": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+        "frame_bytes": 1360,
+        "code_bytes": 1322
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+        "frame_bytes": 2416,
+        "code_bytes": 2519
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+        "frame_bytes": 32,
+        "code_bytes": 75
+      },
+      {
+        "symbol": "app_main",
+        "frame_bytes": 6816,
+        "code_bytes": 2020
+      }
+    ],
+    "owner_state_placement": [
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::cam_context",
+        "section": ".dram0.data",
+        "address": "0x3fca65f8",
+        "bytes": 1
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::idle_output",
+        "section": ".dram0.data",
+        "address": "0x3fcaa6f0",
+        "bytes": 1
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::capture_clock",
+        "section": ".dram0.data",
+        "address": "0x3fcaa6d8",
+        "bytes": 24
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::idle_executor",
+        "section": ".dram0.data",
+        "address": "0x3fcaa6f8",
+        "bytes": 240
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::trigger_clock",
+        "section": ".dram0.data",
+        "address": "0x3fca6688",
+        "bytes": 24
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::external_epoch",
+        "section": ".dram0.data",
+        "address": "0x3fca6678",
+        "bytes": 4
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::installed_alarm",
+        "section": ".dram0.data",
+        "address": "0x3fca6670",
+        "bytes": 8
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::trigger_capture",
+        "section": ".dram0.data",
+        "address": "0x3fca66a0",
+        "bytes": 16440
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::configuration_hold",
+        "section": ".dram0.bss",
+        "address": "0x3fcb0cc8",
+        "bytes": 1
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::lock",
+        "section": ".dram0.data",
+        "address": "0x3fca6680",
+        "bytes": 8
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::timer",
+        "section": ".dram0.bss",
+        "address": "0x3fcb0cf8",
+        "bytes": 4
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::output",
+        "section": ".dram0.data",
+        "address": "0x3fca667c",
+        "bytes": 4
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::executor",
+        "section": ".dram0.data",
+        "address": "0x3fcaa7e8",
+        "bytes": 5456
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::measured",
+        "section": ".dram0.data",
+        "address": "0x3fca6600",
+        "bytes": 112
+      }
+    ],
+    "idle_physical_default0_not_overridden": true,
+    "engine_dummy_flag": false,
+    "closure": {
+      "artifact": "isr-generic/closure.json",
+      "sha256": "00ccf6a6148a28fdb9d76250def239a49d01e4ec769de11a46e876eb407fbff7",
+      "roots": 5,
+      "functions": 30,
+      "external": [],
+      "flash_literals": 0,
+      "unclassified_flash_pointers": 0,
+      "passed": true
+    },
+    "usb": {
+      "artifact": "usb-generic.json",
+      "sha256": "ccfd14b221d2a70ffb1f40f82e47afda9db81f578dae29b09b767b97e832b2d8",
+      "exclusive_usb": true,
+      "console": "UART0 only",
+      "ISR_cache_safe": false,
+      "ISR_flags": 0
+    }
+  },
+  "compact_a3_timing_bench": {
+    "elf_sha256": "1d84c8c19c27d83c205e6a6a585e935508e909d945c106d511854ce51fb7a00d",
+    "binary_sha256": "b7ab4cdab52312dda2823cc08f92793e139287a3446591038828b2e1ad378843",
+    "static_internal_data_bss_bytes": 129880,
+    "IRAM_code_bytes": 93695,
+    "entry_frames": [
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "frame_bytes": 128,
+        "code_bytes": 4289
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)",
+        "frame_bytes": 3680,
+        "code_bytes": 16618
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+        "frame_bytes": 112,
+        "code_bytes": 17365
+      },
+      {
+        "symbol": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+        "frame_bytes": 1360,
+        "code_bytes": 1322
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+        "frame_bytes": 2416,
+        "code_bytes": 2783
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+        "frame_bytes": 32,
+        "code_bytes": 75
+      },
+      {
+        "symbol": "app_main",
+        "frame_bytes": 6816,
+        "code_bytes": 1916
+      }
+    ],
+    "owner_state_placement": [
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::cam_context",
+        "section": ".dram0.data",
+        "address": "0x3fc9cadc",
+        "bytes": 1
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::idle_output",
+        "section": ".dram0.data",
+        "address": "0x3fca0bd8",
+        "bytes": 1
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::capture_clock",
+        "section": ".dram0.data",
+        "address": "0x3fca0bc0",
+        "bytes": 24
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::idle_executor",
+        "section": ".dram0.data",
+        "address": "0x3fca0be0",
+        "bytes": 240
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::external_epoch",
+        "section": ".dram0.data",
+        "address": "0x3fc9cb58",
+        "bytes": 4
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::installed_alarm",
+        "section": ".dram0.data",
+        "address": "0x3fc9cb50",
+        "bytes": 8
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::trigger_capture",
+        "section": ".dram0.data",
+        "address": "0x3fc9cb88",
+        "bytes": 16440
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::configuration_hold",
+        "section": ".dram0.bss",
+        "address": "0x3fca5a80",
+        "bytes": 1
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::lock",
+        "section": ".dram0.data",
+        "address": "0x3fc9cb80",
+        "bytes": 8
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::timer",
+        "section": ".dram0.bss",
+        "address": "0x3fca5aa8",
+        "bytes": 4
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::output",
+        "section": ".dram0.data",
+        "address": "0x3fc9cb5c",
+        "bytes": 4
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::executor",
+        "section": ".dram0.data",
+        "address": "0x3fca0cd0",
+        "bytes": 5456
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::measured",
+        "section": ".dram0.data",
+        "address": "0x3fc9cae0",
+        "bytes": 112
+      }
+    ],
+    "idle_physical_default0_not_overridden": true,
+    "engine_dummy_flag": false,
+    "closure": {
+      "artifact": "isr-dummy/closure.json",
+      "sha256": "955e98d3c477677ae31920bdf5998ef0ba3dd0c16b8164a4a3e7d0119d887444",
+      "roots": 4,
+      "functions": 29,
+      "external": [],
+      "flash_literals": 0,
+      "unclassified_flash_pointers": 0,
+      "passed": true
+    }
+  }
+}

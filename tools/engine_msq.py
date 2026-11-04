@@ -6,7 +6,7 @@ import math
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-from engine_protocol import DEFAULT,NUMBERS,FLAGS,CURVES,SIGNATURE,WHOLE_SIGNATURE,LEGACY_SIGNATURE,SEQUENTIAL_SIGNATURE,CYLINDER_SIGNATURE,TIMING_FIELDS,STRATEGIES,PAGE_SIZES,field_units
+from engine_protocol import DEFAULT,NUMBERS,FLAGS,CURVES,SIGNATURE,IDLE_SIGNATURE,WHOLE_SIGNATURE,LEGACY_SIGNATURE,SEQUENTIAL_SIGNATURE,CYLINDER_SIGNATURE,TIMING_FIELDS,STRATEGIES,STRATEGY_LABELS,PAGE_SIZES,field_units
 from idle_config import ALGORITHMS,SCALARS,ARRAYS,UNITS,name as idle_name
 
 NS='http://www.msefi.com/:msq'
@@ -24,7 +24,7 @@ def constants(tune,legacy=False,sequential=False,whole=True,idle=True):
  result += [(0,k,['"On"' if tune['settings'][k] else '"Off"'],None) for k in FLAGS]
  result += [(0,k,tune['curves'][k],(n,1)) for k,n in CURVES]
  if not legacy:
-  result += [(0,'engineStrategy',['"Sequential"' if tune['strategy']=='sequential_4cyl' else '"Batch / wasted"'],None)]
+  result += [(0,'engineStrategy',['"'+STRATEGY_LABELS[STRATEGIES.index(tune['strategy'])]+'"'],None)]
   result += [(0,k,[tune['timing'][k]],None) for k,_ in TIMING_FIELDS]
   result += [(0,f'fireOrder{i+1}',[v],None) for i,v in enumerate(tune['timing']['firing_order'])]
  for page,name in enumerate(('ve','spark','lambda'),1):
@@ -59,17 +59,17 @@ def export_msq(tune):
  return ET.tostring(root,encoding='utf-8',xml_declaration=True).decode()+'\n'
 
 def import_msq(body,base_revision=None):
- # Own004/005 apps can omit readOnly origin. A caller may supply its already-loaded
+ # Own004/005/006 apps can omit readOnly origin. A caller may supply its already-loaded
  # CAS base; otherwise 1 is an offline placeholder, never a discovered revision.
  if isinstance(body,str):body=body.encode()
  if len(body)>65536 or b'\0' in body or b'<!DOCTYPE' in body.upper() or b'<!ENTITY' in body.upper():raise ValueError('MSQ size or XML declarations rejected')
  try:root=ET.fromstring(body)
  except ET.ParseError as error:raise ValueError('Malformed MSQ XML') from error
  info=root.find(tag('versionInfo'))
- if root.tag!=tag('msq') or info is None or info.get('signature') not in (SIGNATURE.decode(),WHOLE_SIGNATURE.decode(),LEGACY_SIGNATURE.decode(),SEQUENTIAL_SIGNATURE.decode(),CYLINDER_SIGNATURE.decode()) or info.get('nPages')!=('1' if info.get('signature') in (SIGNATURE.decode(),WHOLE_SIGNATURE.decode()) else '5' if info.get('signature')==CYLINDER_SIGNATURE.decode() else '4'):raise ValueError('MSQ must match this ESP32ECU definition; other ECU tunes are incompatible')
+ if root.tag!=tag('msq') or info is None or info.get('signature') not in (SIGNATURE.decode(),IDLE_SIGNATURE.decode(),WHOLE_SIGNATURE.decode(),LEGACY_SIGNATURE.decode(),SEQUENTIAL_SIGNATURE.decode(),CYLINDER_SIGNATURE.decode()) or info.get('nPages')!=('1' if info.get('signature') in (SIGNATURE.decode(),IDLE_SIGNATURE.decode(),WHOLE_SIGNATURE.decode()) else '5' if info.get('signature')==CYLINDER_SIGNATURE.decode() else '4'):raise ValueError('MSQ must match this ESP32ECU definition; other ECU tunes are incompatible')
  legacy=info.get('signature')==LEGACY_SIGNATURE.decode();sequential=info.get('signature')==SEQUENTIAL_SIGNATURE.decode()
- current=info.get('signature')==SIGNATURE.decode();whole=info.get('signature') in (SIGNATURE.decode(),WHOLE_SIGNATURE.decode())
- expected={name:(page,len(values),shape) for page,name,values,shape in constants(DEFAULT,legacy=legacy,sequential=sequential,whole=whole,idle=current)}
+ current=info.get('signature')==SIGNATURE.decode();has_idle=info.get('signature') in (SIGNATURE.decode(),IDLE_SIGNATURE.decode());whole=info.get('signature') in (SIGNATURE.decode(),IDLE_SIGNATURE.decode(),WHOLE_SIGNATURE.decode())
+ expected={name:(page,len(values),shape) for page,name,values,shape in constants(DEFAULT,legacy=legacy,sequential=sequential,whole=whole,idle=has_idle)}
  values={}
  for page in root.findall(tag('page')):
   for element in page.findall(tag('constant')):
@@ -83,8 +83,10 @@ def import_msq(body,base_revision=None):
     elif text.strip('"') in ALGORITHMS and text=='"'+text.strip('"')+'"':values[name]=text.strip('"')
     else:raise ValueError('Invalid idle algorithm')
    elif name=='engineStrategy':
-    if text not in ('"Batch / wasted"','"Sequential"','0','1'):raise ValueError('Invalid MSQ strategy')
-    values[name]=1 if text in ('"Sequential"','1') else 0
+    allowed=STRATEGY_LABELS if current else STRATEGY_LABELS[:2]
+    if text in tuple('"'+x+'"' for x in allowed):values[name]=allowed.index(text.strip('"'))
+    elif text in tuple(str(i) for i in range(len(allowed))):values[name]=int(text)
+    else:raise ValueError('Invalid MSQ strategy for its identity')
    elif name in FLAGS or name=='cylinderTrimsEnabled':
     if text not in ('"Off"','"On"','0','1'):raise ValueError('Invalid MSQ flag')
     values[name]=text in ('"On"','1')
@@ -115,7 +117,7 @@ def import_msq(body,base_revision=None):
    tune['cylinder_trims']['fuel_maps'][i]=dict(rpm=values[f'c{i+1}FuelRpm'],load=values[f'c{i+1}FuelLoad'],cells=values[f'c{i+1}FuelTable'])
  for group,name in NUMBERS:tune[group][name]=values[name]
  for name in FLAGS:tune['settings'][name]=values[name]
- if current:
+ if has_idle:
   tune['idle_control']['algorithm']=values['iac_algorithm']
   for name in SCALARS:tune['idle_control'][name]=values[idle_name(name)]
   for name,_ in ARRAYS:tune['idle_control'][name]=values[idle_name(name)]

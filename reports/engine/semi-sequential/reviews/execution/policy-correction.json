@@ -1,0 +1,173 @@
+{
+  "reviewed_at_utc": "2026-11-04T03:58:58.137033+00:00",
+  "scope": "Narrow static source/final-ELF physical-policy evidence correction; no production edits, firmware rebuild, flashing or hardware execution.",
+  "verdict": "CORRECTED_EVIDENCE: separate timing-bench image has the engine dummy-load physical write policy compiled in; both web images remain inhibited.",
+  "historical_report": {
+    "path": ".cache/engine/semi-architecture-final-review/final-addendum.json",
+    "sha256_before": "a8aa6a1f6bffa6b7bcd59dba1a4a69be3bf88517f3ecc7d20e90f170212329c0",
+    "preserved_byte_for_byte": true
+  },
+  "supersedes": [
+    {
+      "json_pointer": "/final_images/compact_a3_timing_bench/engine_dummy_policy",
+      "historical_value": false,
+      "correct_value": true
+    }
+  ],
+  "cause": "The CMake compile_commands.json engine_target command omits the PlatformIO SCons build_flags in all three environments. Missing ECU_ENGINE_DUMMY_LOADS there is not evidence of the compiled macro value. The old false inference is withdrawn.",
+  "authoritative_evidence": "Final allocated ELF policy strings, retained internal-DRAM output_pins, emitted gated GPIO set/clear instructions, source gates, and the declared PlatformIO environment. A missing bench snapshot mode string is not an inhibition proof: engine_target::snapshot() is not retained in that ELF.",
+  "final_images": {
+    "compact_n16r8_web": {
+      "elf": "firmware/.pio/build/compact_n16r8_web/firmware.elf",
+      "elf_sha256": "a0c2c85c501a849de57b1db962e9a413aff5114dca16520aaaa11ac0a0a204b5",
+      "engine_dummy_policy": false,
+      "physical_engine_write_path_compiled": false,
+      "mapped_policy_strings": {
+        "DUMMY LOADS ONLY": [],
+        "COMPILE-TIME INHIBITED": [
+          {
+            "section": ".flash.rodata",
+            "address": "0x3c0d461c",
+            "file_offset": 22044
+          }
+        ],
+        "hardware_timer_virtual_outputs": [
+          {
+            "section": ".flash.rodata",
+            "address": "0x3c0d4964",
+            "file_offset": 22884
+          }
+        ],
+        "hardware_timer_dummy_loads": []
+      },
+      "on_alarm_symbol_address": "0x40376a94",
+      "on_alarm_symbol_size_bytes": 14221,
+      "on_alarm_GPIO_literal_references": 0,
+      "snapshot_symbol_retained": true,
+      "CMake_engine_target_command_contains_ECU_ENGINE_DUMMY_LOADS": false,
+      "CMake_command_sha256": "eedc58a14442937b9fe48dc94e1d5a1147d162e5c8f7d0777341581965c4010b",
+      "symbol_artifact": ".cache/engine/semi-architecture-final-review/policy-correction-probes/compact_n16r8_web-symbols.txt",
+      "disassembly_artifact": ".cache/engine/semi-architecture-final-review/policy-correction-probes/compact_n16r8_web-on-alarm.txt",
+      "disassembly_sha256": "394df8caa16941b6403739e1eadc29fe203db94b6e0fe73569f16a4d739c8847"
+    },
+    "compact_a3_web": {
+      "elf": "firmware/.pio/build/compact_a3_web/firmware.elf",
+      "elf_sha256": "a3e5afe5bf208d5b4347f5c02844c6938a3b12c432807a0d55d5faf1c19e1fb4",
+      "engine_dummy_policy": false,
+      "physical_engine_write_path_compiled": false,
+      "mapped_policy_strings": {
+        "DUMMY LOADS ONLY": [],
+        "COMPILE-TIME INHIBITED": [
+          {
+            "section": ".flash.rodata",
+            "address": "0x3c0d461c",
+            "file_offset": 22044
+          }
+        ],
+        "hardware_timer_virtual_outputs": [
+          {
+            "section": ".flash.rodata",
+            "address": "0x3c0d4964",
+            "file_offset": 22884
+          }
+        ],
+        "hardware_timer_dummy_loads": []
+      },
+      "on_alarm_symbol_address": "0x40376944",
+      "on_alarm_symbol_size_bytes": 14221,
+      "on_alarm_GPIO_literal_references": 0,
+      "snapshot_symbol_retained": true,
+      "CMake_engine_target_command_contains_ECU_ENGINE_DUMMY_LOADS": false,
+      "CMake_command_sha256": "0f61f214e6cffe9941e1056bd27c21ca001d1689519eac74a318b3b56516a38f",
+      "symbol_artifact": ".cache/engine/semi-architecture-final-review/policy-correction-probes/compact_a3_web-symbols.txt",
+      "disassembly_artifact": ".cache/engine/semi-architecture-final-review/policy-correction-probes/compact_a3_web-on-alarm.txt",
+      "disassembly_sha256": "e31aaac7ef52c0961009fa42b95190a13d8d2052702241b7c0279002db76b27c"
+    },
+    "compact_a3_timing_bench": {
+      "elf": "firmware/.pio/build/compact_a3_timing_bench/firmware.elf",
+      "elf_sha256": "1d84c8c19c27d83c205e6a6a585e935508e909d945c106d511854ce51fb7a00d",
+      "engine_dummy_policy": true,
+      "physical_engine_write_path_compiled": true,
+      "mapped_policy_strings": {
+        "DUMMY LOADS ONLY": [
+          {
+            "section": ".flash.rodata",
+            "address": "0x3c0502f8",
+            "file_offset": 4856
+          }
+        ],
+        "COMPILE-TIME INHIBITED": [],
+        "hardware_timer_virtual_outputs": [],
+        "hardware_timer_dummy_loads": []
+      },
+      "on_alarm_symbol_address": "0x40376548",
+      "on_alarm_symbol_size_bytes": 17365,
+      "on_alarm_GPIO_literal_references": 81,
+      "snapshot_symbol_retained": false,
+      "CMake_engine_target_command_contains_ECU_ENGINE_DUMMY_LOADS": false,
+      "CMake_command_sha256": "ef6b789c219c1c8869e2b14c67ce24783b7412b971087e22a90bdca6081a1de9",
+      "symbol_artifact": ".cache/engine/semi-architecture-final-review/policy-correction-probes/compact_a3_timing_bench-symbols.txt",
+      "disassembly_artifact": ".cache/engine/semi-architecture-final-review/policy-correction-probes/compact_a3_timing_bench-on-alarm.txt",
+      "disassembly_sha256": "a85013063117937d3542d5536a68166106e845e78a768c978e5318b6940563cd",
+      "compiled_output_pins": {
+        "address": "0x3fc9cb60",
+        "section": ".dram0.data",
+        "gpio_numbers": [
+          4,
+          5,
+          6,
+          7,
+          15,
+          16,
+          17,
+          18
+        ]
+      },
+      "write_path_evidence": {
+        "armed_required_branch": "0x40379059",
+        "failed_rejection_branch": "0x40379062",
+        "SAFE_N_GPIO40_check": "0x4037906e tests GPIO.in1 bit8",
+        "interlock_GPIO48_check": "0x4037907d tests GPIO.in1 bit16",
+        "ARM_GPIO47_set": "0x4037908c writes 0x8000 to GPIO+20 (out1_w1ts)",
+        "channel_high": "0x403790a9 writes selected channel mask to GPIO+8 (out_w1ts)",
+        "channel_low": "0x403790e8 writes selected channel mask to GPIO+12 (out_w1tc)",
+        "gate_loss_all_low": "0x40376562..0x40376672 checks armed, then GPIO40/48, latches failed and clears ARM, all eight channels, pump/fan"
+      }
+    }
+  },
+  "source_sha256": {
+    "firmware/platformio.ini": "579f4075495f9c070a80d14cdcedf1ec4f9de13c4d233ebd1a48b97947e3f3d0",
+    "firmware/main/engine_target.cpp": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738",
+    "firmware/main/app.cpp": "a5d196a1e6140c1b5b68fdb2e2fdeab8048cb67eff6ef69799a6cddb5da4f272",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+  },
+  "previously_bound_core_sources_unchanged": {
+    "firmware/include/ecu/engine.hpp": true,
+    "firmware/include/ecu/engine_scheduler.hpp": true,
+    "firmware/include/ecu/engine_phase.hpp": true,
+    "firmware/include/ecu/timing_executor.hpp": true,
+    "firmware/include/ecu/engine_json.hpp": true,
+    "firmware/include/ecu/engine_radio.hpp": true,
+    "firmware/include/ecu/idle_command.hpp": true,
+    "firmware/include/ecu/idle_hardware.hpp": true,
+    "firmware/include/ecu/tuning_layout.hpp": true,
+    "firmware/include/ecu/tuning_document.hpp": true,
+    "firmware/include/ecu/engine_storage.hpp": true,
+    "firmware/main/engine_target.cpp": true,
+    "firmware/main/engine_service.cpp": true,
+    "firmware/main/espnow.cpp": true
+  },
+  "source_contract": {
+    "bench_environment": "firmware/platformio.ini compact_a3_timing_bench explicitly sets -DECU_ENGINE_DUMMY_LOADS=1; no ECU_IDLE_DUMMY_LOADS override is configured.",
+    "engine_target": "OutputIO::write requires armed, !failed, SAFE_N and interlock for every rising write; all_low clears ARM/all eight engine channels/pump/fan. supervise requires boot interlock, healthy producer and current power/interlock, and latches failures. on_alarm independently trips/cuts on gate loss.",
+    "selected_compile_gate": "firmware/main/app.cpp rejects ECU_SELECTED_N16R8 together with ECU_ENGINE_DUMMY_LOADS.",
+    "idle": "ECU_IDLE_DUMMY_LOADS remains separately default0 in idle_hardware.hpp; the bench engine policy does not by itself enable channel8 accessory writes."
+  },
+  "qualification": "Compiled physical capability in the separate dummy-load image is not physical activation or qualification. No image was flashed and no driver loading, jitter, gate latency, polarity, board fit or stack high-water was measured. Existing hardware holds remain.",
+  "commands": [
+    "python3 .cache/engine/semi-architecture-final-review/policy-correction-probes/check.py",
+    "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-nm -n -S -C <final ELF>",
+    "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-objdump -d -C --start-address=<on_alarm> --stop-address=<on_alarm+size> <final ELF>"
+  ]
+}

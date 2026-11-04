@@ -5,20 +5,25 @@
 
 namespace ecu::radio::wire {
 constexpr unsigned capability_size=76,capability_reply_size=108,engine_size=232,engine_body_size=200,engine_ack_size=56;
-constexpr std::uint32_t engine_feature=1,engine_schema=1;
+constexpr std::uint32_t engine_feature=1,engine_schema=2;
+inline bool engine_schema_valid(std::uint32_t schema){return schema==1||schema==2;}
+inline bool engine_schema_supports(std::uint32_t schema,const engine::RuntimeSample&r){
+ return engine_schema_valid(schema)&&r.strategy<=(schema==1?1:2)&&r.timing_fault<=(schema==1?16:17)&&r.last_timing_fault<=(schema==1?16:17);
+}
 static_assert(engine_size<=max_packet&&capability_reply_size<=max_packet);
 static_assert(engine::input_count==8&&engine::proposal_count==14,"Schema1 base frame must not grow into its HMAC");
 // Only call after verifying the request's full HMAC with the saved peer LMK.
 class PeerCapabilities {
  std::array<std::uint8_t,44> accepted_{};
  std::array<std::uint8_t,16> reply_nonce_{};
- std::uint32_t counter_=0,features_=0;
+ std::uint32_t counter_=0,features_=0,schema_=0;
  bool reply_pending_=false;
 public:
  void reset(){*this=PeerCapabilities{};}
  bool engine()const{return (features_&engine_feature)!=0;}
  std::uint32_t counter()const{return counter_;}
  std::uint32_t features()const{return features_;}
+ std::uint32_t schema()const{return schema_;}
  bool pending()const{return reply_pending_;}
  void sent(){reply_pending_=false;}
  bool request(const std::uint8_t*p,unsigned length,std::uint32_t session){
@@ -27,9 +32,9 @@ public:
   if(!counter){
    if((boot&&boot!=session)||features||schema)return false;
   }else{
-   if(boot!=session||(features&~engine_feature)||schema!=(features?engine_schema:0)||counter<counter_)return false;
+   if(boot!=session||(features&~engine_feature)||(features?!engine_schema_valid(schema):schema!=0)||counter<counter_)return false;
    if(counter==counter_){if(!same(p,accepted_.data(),accepted_.size()))return false;}
-   else {counter_=counter;features_=features;std::memcpy(accepted_.data(),p,accepted_.size());}
+   else {counter_=counter;features_=features;schema_=schema;std::memcpy(accepted_.data(),p,accepted_.size());}
   }
   std::memcpy(reply_nonce_.data(),p+16,16);reply_pending_=true;return true;
  }
@@ -37,7 +42,7 @@ public:
  void reply(std::uint8_t*p,std::uint32_t session,const std::uint8_t*boot_nonce,std::uint64_t engine_sequence,std::uint64_t sent_esp_us)const{
   std::memset(p,0,capability_reply_size);header(p,CapabilitiesReply,capability_reply_size);
   u32(p+8,session);u32(p+12,counter_);std::memcpy(p+16,reply_nonce_.data(),16);
-  u32(p+32,features_);u32(p+36,features_?engine_schema:0);u32(p+40,0);
+  u32(p+32,features_);u32(p+36,features_?schema_:0);u32(p+40,0);
   std::memcpy(p+44,boot_nonce,16);u64(p+60,engine_sequence);u64(p+68,sent_esp_us);
  }
 };
@@ -66,9 +71,9 @@ inline std::uint32_t transmitted_age(std::uint64_t gp_age_us,std::uint64_t publi
  const auto elapsed=now_esp_us-published_esp_us;if(gp_age_us>UINT64_MAX-elapsed)return UINT32_MAX;
  return engine::data_age_ms(gp_age_us+elapsed);
 }
-inline bool engine_body(std::uint8_t*p,const engine::RuntimeSample&r,std::uint32_t session,std::uint64_t packet_sequence,std::uint32_t sample_age_ms,std::uint32_t control_age_ms,std::uint32_t worker_age_ms,std::uint64_t sent_esp_us){
- if(!session||!r.has(engine::Present)||!r.sequence||(r.source!=engine::DataSource::Target&&r.source!=engine::DataSource::Synthetic)||!packet_sequence||r.state>5||r.strategy>1||r.phase_reason>9||r.timing_fault>16||r.last_timing_fault>16||(r.board_flags&~15))return false;
- std::memset(p,0,engine_size);header(p,EngineTelemetry,engine_size);u32(p+8,session);u64(p+12,packet_sequence);u16(p+20,engine_schema);
+inline bool engine_body(std::uint8_t*p,const engine::RuntimeSample&r,std::uint32_t session,std::uint64_t packet_sequence,std::uint32_t sample_age_ms,std::uint32_t control_age_ms,std::uint32_t worker_age_ms,std::uint64_t sent_esp_us,std::uint32_t schema=engine_schema){
+ if(!session||!r.has(engine::Present)||!r.sequence||(r.source!=engine::DataSource::Target&&r.source!=engine::DataSource::Synthetic)||!packet_sequence||r.state>5||!engine_schema_supports(schema,r)||r.phase_reason>9||(r.board_flags&~15))return false;
+ std::memset(p,0,engine_size);header(p,EngineTelemetry,engine_size);u32(p+8,session);u64(p+12,packet_sequence);u16(p+20,schema);
  auto flags=static_cast<std::uint16_t>(r.flags&~engine::DisplayFresh);
  if(sample_age_ms<=1000&&control_age_ms<=1000)flags|=engine::DisplayFresh;
  u16(p+22,flags);u32(p+24,sample_age_ms);u32(p+28,control_age_ms);u32(p+32,r.tune_revision);u32(p+36,r.sensor_revision);

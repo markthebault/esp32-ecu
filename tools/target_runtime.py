@@ -33,6 +33,7 @@ def load_target_bridge():
                     'engine_cam':([P,U],ctypes.c_int),'engine_trigger':([P,U],ctypes.c_int),'engine_step':([P,S,U,U],S),
                     'engine_cut':([P],None),'engine_timing_reason':([P],S),'engine_next_time':([P],U),
                     'engine_progress':([P,U],None),
+                    'engine_crank_timeout':([P],U),
                     'engine_pop':([P],I),'engine_event_dwell':([P],U),'engine_event_advance':([P],ctypes.c_double),
                     'engine_data_json':([P],S),'engine_idle_json':([P],S),'engine_plan':([P],S)}
         for name,(args,result) in signatures.items():

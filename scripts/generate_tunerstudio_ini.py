@@ -18,7 +18,7 @@ for i,(group,k) in enumerate(NUMBERS):
 offset=4+4*len(NUMBERS)
 for k,n in CURVES:s.append(f' {k} = array, F32, {offset}, [{n}], "", 1, 0, -1000, 1000, 3');offset+=n*4
 s.append(f' baseRevision = scalar, U32, {REVISION_OFFSET}, "", 1, 0, 1, 4294967295, 0')
-s.append(' engineStrategy = bits, U32, 272, [0:0], "Batch / wasted", "Sequential"')
+s.append(' engineStrategy = bits, U32, 272, [0:1], "Batch / wasted", "Sequential", "Semi-sequential", "INVALID"')
 for name,offset in TIMING_FIELDS:s.append(f' {name} = scalar, F32, {offset}, "deg", 1, 0, 0, 719, 2')
 for i in range(4):s.append(f' fireOrder{i+1} = scalar, U08, {288+i}, "", 1, 0, 1, {1 if i==0 else 4}, 0')
 for page,key,units,lo,hi in [(2,'ve','%',20,120),(3,'spark','deg',-5,40),(4,'lambda','lambda',.75,1.2)]:
@@ -84,6 +84,6 @@ for name in ('cylinderValidMask','cylinderTrimsActive','cylinderCapacityMask','c
 s+=[' entry = faults, "Faults", int, "%d"',' entry = physicalInhibited, "PhysicalInhibited", int, "%d"']
 for name in ['iacTarget','iacFeedforward','iacP','iacI','iacD','iacDuty','iacFlags','iacState','iacReason','iacAlgorithm']:s.append(f' entry = {name}, "{name}", float, "%.4f"')
 for name in ('iacAvailable','dataSource','snapshotAgeMs','inputValidMask','observationFlags','activeRevision','sessionOriginRevision','tuningWriteState'):s.append(f' entry = {name}, "{name}", int, "%d"')
-(R/'tuning/esp32-ecu-idle.ini').write_text('\n'.join(s)+'\n')
+(R/'tuning/esp32-ecu-semi.ini').write_text('\n'.join(s)+'\n')
 (R/'tuning/protocol-layout.json').write_text(json.dumps(dict(signature=SIGNATURE.decode(),pages=PAGE_SIZES,numeric_fields=NUMBERS,flags=FLAGS,curves=CURVES,idle_scalars=SCALAR_OFFSETS,idle_arrays=ARRAY_OFFSETS,live_fields=LIVE_FIELDS,live_block_bytes=LIVE_BYTES,timing_fields=TIMING_FIELDS,strategy_offset=272,firing_order_offset=288,revision_offset=REVISION_OFFSET,serial_protocol='002',page_offsets=dict(header=0,ve=512,spark=1664,lambda_target=2816,cylinder=3968,idle=OFFSET),origin_revision_read_only=True,commit_behavior='whole-tune stage; burn persists/activates and resets control; stable session origin',scope='shared native and inhibited target USB Serial/JTAG; UART0 diagnostics separate; physical USB unmeasured; TunerStudio own-identity online gate unresolved'),indent=2)+'\n')
 print('Generated own TunerStudio INI and wire-layout manifest')

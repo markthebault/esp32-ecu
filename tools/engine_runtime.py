@@ -27,6 +27,7 @@ def load_engine_bridge():
   b.engine_step.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_uint64,ctypes.c_uint64];b.engine_step.restype=ctypes.c_char_p
   b.engine_cut.argtypes=[ctypes.c_void_p]
   b.engine_timing_reason.argtypes=[ctypes.c_void_p];b.engine_timing_reason.restype=ctypes.c_char_p
+  b.engine_crank_timeout.argtypes=[ctypes.c_void_p];b.engine_crank_timeout.restype=ctypes.c_uint64
   b.engine_next_time.argtypes=[ctypes.c_void_p];b.engine_next_time.restype=ctypes.c_uint64
   b.engine_pop.argtypes=[ctypes.c_void_p];b.engine_pop.restype=ctypes.c_uint
   b.engine_event_dwell.argtypes=[ctypes.c_void_p];b.engine_event_dwell.restype=ctypes.c_uint64
@@ -63,6 +64,7 @@ class EngineRuntime:
   return data
  def cut(self):self.bridge.engine_cut(self.handle)
  def timing_reason(self):return self.bridge.engine_timing_reason(self.handle).decode()
+ def crank_timeout_us(self):return self.bridge.engine_crank_timeout(self.handle)
  def next_event_us(self):return self.bridge.engine_next_time(self.handle)
  def pop_event(self):
   code=self.bridge.engine_pop(self.handle)
@@ -123,7 +125,7 @@ class EngineStore:
  def status(self):
   with self.lock:
    result=dict(self.latest or dict(state='stopped',faults=0,execution='SIL not yet run',physical_outputs_enabled=False))
-   result.update(simulator=True,revision=self.tune['revision'],storage_ok=self.storage_ok,binding='Native C++ core; independent reduced-order SIL plant, unvalidated',error=self.error)
+   result.update(simulator=True,revision=self.tune['revision'],active_strategy=self.tune['strategy'],storage_ok=self.storage_ok,binding='Native C++ core; independent reduced-order SIL plant, unvalidated',error=self.error)
    result['data_source']='completed_sil_snapshot' if self.last_run else 'no_sil_result'
    result['sample_age_ms']=int(max(0,time.monotonic()-self.completed_monotonic)*1000) if self.last_run else None
    result['fresh']=False
@@ -200,9 +202,9 @@ class EngineStore:
  def msl(self):
   with self.lock:
    if not self.last_run:raise ValueError('Run a SIL scenario before exporting a log')
-   rows=copy.deepcopy(self.last_run['trace']);scenario=self.last_run['summary']['scenario']
+   rows=copy.deepcopy(self.last_run['trace']);scenario=self.last_run['summary']['scenario'];strategy=self.last_run['summary']['strategy']
   from engine_log import export_msl
-  return export_msl(rows,scenario)
+  return export_msl(rows,scenario,strategy)
 
  def coherent_sample(self):
   with self.lock:

@@ -17,12 +17,12 @@ def fixture(sequence=1,now=0):
   data=with_runtime.data();data['sequence']=str(sequence);return data
  finally:with_runtime.close()
 
-def independent_frame(s,seq=FLOOR+1,sample_age=12,control_age=8,worker_age=4294967295,sent=5030000,nonce=BOOT):
+def independent_frame(s,seq=FLOOR+1,sample_age=12,control_age=8,worker_age=4294967295,sent=5030000,nonce=BOOT,schema=2):
  """Encode offsets independently with struct rather than the C++ wire helpers."""
  b=bytearray(232);b[:8]=header(9,232);w=s['worker_observation']
  flags=s['flags']&~DISPLAY_FRESH
  if sample_age<=1000 and control_age<=1000:flags|=DISPLAY_FRESH
- struct.pack_into('<IQHHIIII',b,8,SESSION,seq,1,flags,sample_age,control_age,s['tune_revision'],s['sensor_revision'])
+ struct.pack_into('<IQHHIIII',b,8,SESSION,seq,schema,flags,sample_age,control_age,s['tune_revision'],s['sensor_revision'])
  struct.pack_into('<QQIIIIIf',b,40,int(s['sequence']),int(w['command_sequence']),s['phase_epoch'],w['epoch'],s['controller_faults'],s['phase_losses'],s['cam_rejected'],s['cam_error_deg'] if s['cam_error_deg'] is not None else math.nan)
  struct.pack_into('<10B',b,80,s['state_code'],s['strategy_code'],s['source_code'],s['phase_reason_code'],s['input_valid_mask'],w['timing_fault_code'],w['last_timing_fault_code'],w['virtual_high_mask'],w['physical_command_mask'],s['board_flags'])
  struct.pack_into('<QIII',b,92,sent,w['tune_revision'],w['sensor_revision'],worker_age)
@@ -133,7 +133,7 @@ class ObservationTests(unittest.TestCase):
   self.assertEqual(r.last_packet,FLOOR+2)
  def test_signed_schema_faults_and_sender_clock_reversal_are_rejected(self):
   key=derive_engine_key(LMK,BOOT,SESSION);original=self.frame()
-  for offset,value in [(20,2),(82,0),(89,16),(90,1)]:
+  for offset,value in [(20,3),(82,0),(89,16),(90,1)]:
    packet=bytearray(original);packet[offset]=value;packet[200:]=hmac.digest(key,packet[:200],'sha256')
    with self.assertRaises(ValueError):engine_telemetry(bytes(packet),key)
   r=self.negotiate();r.receive(original,MAC,150)

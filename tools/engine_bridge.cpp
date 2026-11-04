@@ -45,6 +45,7 @@ extern "C" int engine_trigger(void*p,std::uint64_t time){
 }
 extern "C" void engine_cut(void*p){auto*c=static_cast<EngineContext*>(p);c->scheduler.cut();c->virtual_high_mask=0;}
 extern "C" const char* engine_timing_reason(void*p){return ecu::engine::AngleScheduler::reason_name(static_cast<EngineContext*>(p)->last_timing_reason);}
+extern "C" std::uint64_t engine_crank_timeout(void*p){auto&d=static_cast<EngineContext*>(p)->decoder;return d.crank_synced()?d.stall_timeout():0;}
 extern "C" std::uint64_t engine_next_time(void*p){auto*c=static_cast<EngineContext*>(p);return c->decoder.faulted()?c->scheduler.next_time():std::min(c->scheduler.next_time(),c->decoder.deadline());}
 extern "C" unsigned engine_pop(void*p){auto*c=static_cast<EngineContext*>(p);ecu::engine::Edge e;if(c->decoder.deadline()<=c->scheduler.next_time()&&c->decoder.deadline()!=UINT64_MAX){c->decoder.tick(c->decoder.deadline());phase_fault(c);return 0x30000;}if(!c->scheduler.pop(e))return 0;if(c->scheduler.event_forced_cut()){c->last.faults|=ecu::engine::Stale;c->last.state=ecu::engine::State::Faulted;c->last.fuel_cut=c->last.spark_cut=true;return 0x30000;}if(e.high)c->virtual_high_mask|=1U<<e.channel;else c->virtual_high_mask&=~(1U<<e.channel);return 0x10000|e.channel|(e.high?0x100:0);}
 extern "C" std::uint64_t engine_event_dwell(void*p){return static_cast<EngineContext*>(p)->scheduler.event_requested_dwell_us();}

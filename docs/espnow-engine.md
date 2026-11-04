@@ -8,7 +8,7 @@ Types 7–10 use the existing 8-byte `ECN1`, version 1, type, little-endian uint
 
 1. Load the saved ECU STA MAC and LMK. Send a type 7 read-only query with session/counter/features/schema all 0 and a fresh cryptographic 16-byte client nonce. Start a local monotonic timer for this request. A query does not enable engine telemetry.
 2. Within 1 second, verify type 8's full HMAC with the LMK, echoed nonce, enums, lengths and reserved/status fields. Reject responses from any other MAC. Record the current capability counter/mode, nonzero boot session, boot nonce, sequence floor and ECU reply-send time.
-3. To enable, send type 7 with that boot session, counter+1, feature bit 0 set, schema 1 and a new nonce. Accept the matching authenticated reply before using data. To disable, increment the counter with features/schema 0. Counter 0 is reserved for queries. Updates must be strictly newer; retry the exact same request bytes if a reply is lost. A same-counter request with changed bytes is rejected. At UINT32_MAX, re-pair/reboot is required before another update; never wrap the counter.
+3. To enable, send type 7 with that boot session, counter+1, feature bit 0 set, schema 2 (or explicit legacy schema 1) and a new nonce. Accept the matching authenticated reply before using data. To disable, increment the counter with features/schema 0. Counter 0 is reserved for queries. Updates must be strictly newer; retry the exact same request bytes if a reply is lost. A same-counter request with changed bytes is rejected. At UINT32_MAX, re-pair/reboot is required before another update; never wrap the counter.
 4. A rebooted screen queries the ECU's accepted counter instead of assuming 0. Queries report the current mode without modifying it. An ECU reboot starts disabled again. A query with session 0 discovers the current boot. Query/reply state is not persisted to NVS.
 5. Refresh the timed nonce query at most 5 seconds later and after a 1 second gap in authenticated engine frames, including no first data within 1 second of a reply. The reference receiver invalidates its cached display while querying. Use a fresh random nonce every time. Never accept an unsolicited, expired or nonce-mismatched reply.
 
@@ -25,7 +25,7 @@ The ASCII domain is 17 bytes. Use all 32 derived bytes for engine data/ACK HMACs
 | 12 counter u32, 0 for query | 12 accepted update counter u32 |
 | 16..31 fresh client nonce | 16..31 echoed client nonce |
 | 32 feature mask u32 (only bit 0) | 32 current feature mask u32 |
-| 36 schema u32 (1 enabled, 0 disabled/query) | 36 current schema u32 |
+| 36 schema u32 (1 or 2 enabled, 0 disabled/query) | 36 current schema u32 |
 | 40 reserved u32=0 | 40 status u32=0 |
 | 44..75 HMAC-SHA256(LMK16, bytes 0..43) | 44..59 per-boot random nonce |
 | | 60 engine packet sequence floor u64 |
@@ -41,7 +41,7 @@ Total 232 bytes. HMAC verification with the derived key precedes any sequence/fr
 | 0..7 | Common header |
 | 8 | Boot session u32 |
 | 12 | Engine packet sequence u64 |
-| 20, 22 | Schema u16=1, flags u16 |
+| 20, 22 | Negotiated schema u16 (1 or 2), flags u16 |
 | 24, 28 | Sensor-sample and control-evaluation ages at send, u32 ms |
 | 32, 36 | Tune and sensor-profile revisions, u32 |
 | 40, 48 | Source proposal sequence and earlier worker-current command sequence, u64 |
@@ -56,7 +56,7 @@ Total 232 bytes. HMAC verification with the derived key precedes any sequence/fr
 | 144..199 | Fourteen proposal floats: RPM, VE %, target lambda, advance °BTDC, PW ms, dwell ms, deadtime ms, air mg, warmup ratio, afterstart ratio, accel ratio, EGO ratio, duty %, idle % |
 | 200..231 | HMAC-SHA256(engine_key32, bytes 0..199) |
 
-State values 0..5 and fault bits match `engine.hpp`; strategy 0=batch/wasted, 1=sequential four cylinders. Source 1=target control observation, 2=synthetic control observation. Phase reasons match `engine_phase.hpp`, timing causes match `timing_executor.hpp`. Input validity bits follow the eight input floats. An invalid input is NaN with its bit clear. Unknown proposal/cam floats are NaN. Infinite values are rejected. Board bits 0..3 mean ADC OK, SAFE high, interlock high and capture overflow. Masks represent software state, without pin readback.
+State values 0..5 and fault bits match `engine.hpp`; strategy 0=batch/wasted, 1=sequential four cylinders, 2=semi-sequential four cylinders (schema2 only). Source 1=target control observation, 2=synthetic control observation. Phase reasons match `engine_phase.hpp`, timing causes match `timing_executor.hpp`. Schema1 permits strategies0/1 and current/last timing causes0..16. Schema2 adds strategy2 and timing cause17 (`idle_pwm_fault`), with the same offsets and size. Unknown enum values reject. The receiver must enforce the exact authenticated negotiated schema on every frame, including after upgrades or downgrades. Input validity bits follow the eight input floats. An invalid input is NaN with its bit clear. Unknown proposal/cam floats are NaN. Infinite values are rejected. Board bits 0..3 mean ADC OK, SAFE high, interlock high and capture overflow. Masks represent software state, without pin readback.
 
 Flags, low to high bits 0..15: present, inputs fresh at control evaluation, storage OK, crank synchronized, phase synchronized, phase required, proposal submitted to worker queue, dummy-load physical policy compiled, phase/revision context matched, proposal active, fuel cut, spark cut, pump proposal, fan proposal, inputs qualified at evaluation, sender display freshness. The selected N16R8 build keeps the dummy policy clear and engine outputs inhibited.
 
@@ -77,3 +77,5 @@ The UI reports each peer's negotiated engine schema, authenticated connectivity 
 `tools/test_engine_observability.py` compares native C++ and independent Python packet bodies/full HMACs, key length, nonce/counter recovery, replay, clock bounds, stale gaps, unknown values and 64-bit IDs. Native tests cover both ACK widths and recorder limits. [The observability guide](engine-observability.md) links engine-plant, UI, viewer and independent review evidence. Future screen firmware can use `EngineReceiver` as an executable contract; it must implement ESP-NOW peer storage/transport and display behavior separately. No screen, actual RF exchange, range or sealed-enclosure qualification was performed here.
 
 The cylinder-trim update keeps this schema unchanged. Its fourteen proposal floats remain untrimmed base demands. Applied per-cylinder PW/advance/fuel/duty and masks are available through web/JSON/engine MSL002, not this radio frame. Receivers must not present the scalar PW/advance as the applied value for every cylinder.
+
+The [semi-sequential increment](engine-semi-sequential.md) adds schema2 while preserving schema1. Negotiation is independent per peer; schema is part of the authenticated counter/nonce transcript. A retry at the same counter cannot change it. Query replies report the currently accepted version. Firmware emits the chosen version consistently in every representable mode. If a schema1 peer cannot represent the current strategy or current/last timing fault, its engine slots fall back to the existing sensor stream. API fields `engine_telemetry_blocked`, `engine_upgrade_needed` and `engine_block_reason` distinguish this from an offline screen; the UI asks for a screen firmware update. Historical fault17 can keep that fallback active after the current fault clears. No mode is silently relabelled. The232-byte frame still carries base scalar proposals, not per-cylinder applied values or executed pulse traces. The v1 key-domain transcript remains unchanged because the negotiated payload schema is authenticated inside the body.

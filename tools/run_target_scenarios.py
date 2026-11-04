@@ -16,17 +16,7 @@ from target_runtime import TargetRuntime
 
 class TargetController(benchmark.OurController):
     def __init__(self,tune=None):
-        self.runtime=TargetRuntime(tune or benchmark.benchmark_tune());self.runtime.wheel()
-        self.status={};self.high=[False]*8;self.stops=[];self.next_progress=1000
-
-    def advance(self,us):
-        edges=[]
-        # The actual producer task services captures and wakes every1ms even
-        # while the ADC/control task supplies a new command only every5ms.
-        while self.next_progress<=us:
-            edges+=super().advance(self.next_progress)
-            self.runtime.progress(self.next_progress);self.next_progress+=1000
-        return edges+super().advance(us)
+        super().__init__(tune,target_dispatcher=True)
 
 
 def audit(result,target):

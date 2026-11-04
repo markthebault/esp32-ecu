@@ -79,3 +79,5 @@ Use new output paths when preserving a published run. [Evidence](../reports/engi
 [Prepared vendor request](../tuning/vendor-integration-request.md) remains unsent. Full Speeduino feature parity, target/HIL measurements and vehicle electrical/environmental qualification remain open in the [coverage ledger](engine-feature-coverage.md).
 
 The [idle increment](engine-idle-control.md) records own005 offline application edits, 91-field bounded engine logging, 48-field direct SIL logging and current validation. Historical USB evidence in the directory above remains unchanged.
+
+The [semi-sequential increment](engine-semi-sequential.md) adds the current schema5/own006 strategy and negotiated engine-radio schema2. Earlier identities/evidence described here remain historical records; byte offsets, CAS, bounded logging and selected physical-output inhibition are retained.

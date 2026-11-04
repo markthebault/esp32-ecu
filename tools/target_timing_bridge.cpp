@@ -84,6 +84,7 @@ extern "C" int engine_trigger(void*p,std::uint64_t time){
 extern "C" void engine_cut(void*p){auto&c=*static_cast<Context*>(p);c.core.stop(c.now,ecu::timing::Cause::Control,c.io);c.event_count=0;}
 extern "C" void engine_progress(void*p,std::uint64_t now){auto&c=*static_cast<Context*>(p);c.now=now;c.io.dispatching=true;c.core.progress(now,c.io);c.pwm.dispatch(now,c.idle_io);idle_fault(c);c.io.dispatching=false;}
 extern "C" const char* engine_timing_reason(void*p){return ecu::timing::cause_name(static_cast<Context*>(p)->core.stats().last_fault);}
+extern "C" std::uint64_t engine_crank_timeout(void*p){auto&d=static_cast<Context*>(p)->decoder;return d.crank_synced()?d.stall_timeout():0;}
 extern "C" std::uint64_t engine_next_time(void*p){auto&c=*static_cast<Context*>(p);return c.event_count?c.events[c.event_begin].time:std::min(c.core.next_alarm(),c.pwm.next_alarm());}
 extern "C" unsigned engine_pop(void*p){
  auto&c=*static_cast<Context*>(p);

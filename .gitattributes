@@ -39,3 +39,7 @@ hardware/idle-isolated/** -text
 reports/engine/idle-isolation/** -text -whitespace
 hardware/a5-idle-interface/lib/ecu.pretty/*.kicad_mod -whitespace
 hardware/idle-isolated/lib/ecu.pretty/*.kicad_mod -whitespace
+
+# Preserve exact semi-sequential evidence and application export bytes.
+reports/engine/semi-sequential/** -text -whitespace
+tuning/examples/tunerstudio-semi-roundtrip.msq -text -whitespace

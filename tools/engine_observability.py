@@ -21,7 +21,7 @@ def load_bridge():
    'data_log_command':([P,S,U,T,U],I),'data_log_append':([P,S,T],I),'data_log_expire':([P,T],None),
    'data_log_header':([P],S),'data_log_page':([P,U,U],S),'data_log_msl':([P,U,S],S),
    'data_capability_reset':([P],None),'data_capability_reply':([P,S,U,S,U,S,T,T,P],I),
-   'data_radio_frame':([S,S,S,U,T,U,U,U,T,P],I)}
+   'data_radio_frame':([S,S,S,U,T,U,U,U,T,U,P],I)}
   for name,(args,result) in signatures.items():fn=getattr(b,name);fn.argtypes=args;fn.restype=result
   return b
 
@@ -53,9 +53,9 @@ class EngineRecorder:
   if not self.bridge.data_capability_reply(self.handle,request,len(request),key,session,nonce,floor,sent,out):raise ValueError('Capability request rejected')
   return out.raw
  def reset_capabilities(self):self.bridge.data_capability_reset(self.handle)
- def frame(self,sample,lmk,nonce,session,sequence,sample_age=0,control_age=0,worker_age=4294967295,sent=0):
+ def frame(self,sample,lmk,nonce,session,sequence,sample_age=0,control_age=0,worker_age=4294967295,sent=0,schema=2):
   out=ctypes.create_string_buffer(232)
-  if not self.bridge.data_radio_frame(encoded(sample),lmk,nonce,session,sequence,sample_age,control_age,worker_age,sent,out):raise ValueError('Invalid engine observation fixture')
+  if not self.bridge.data_radio_frame(encoded(sample),lmk,nonce,session,sequence,sample_age,control_age,worker_age,sent,schema,out):raise ValueError('Invalid engine observation fixture or unsupported wire schema')
   return out.raw
  def close(self):
   if self.handle:self.bridge.data_destroy(self.handle);self.handle=None

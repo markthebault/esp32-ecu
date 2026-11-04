@@ -41,6 +41,7 @@ bool record_edges = false;
 bool use_per_tooth = false;
 bool logger_cam = false;
 bool sequential_profile = false;
+bool semi_sequential_profile = false;
 bool idle_profile=false,idle_high=false;
 volatile uint8_t* output_ports[8]{};
 uint8_t output_masks[8]{};
@@ -73,8 +74,9 @@ void configure() {
     configPage2.injType = INJ_TYPE_PORT;
     configPage2.injLayout = (logger_cam||sequential_profile)?INJ_SEQUENTIAL:INJ_SEMISEQUENTIAL;
     configPage2.divider = 2;
-    configPage2.injTiming = sequential_profile?1:0;
-    if(sequential_profile){for(unsigned n=0;n<4;++n){configPage2.injAng[n]=540;configPage2.injAngRPM[n]=5+20*n;}}
+    configPage2.injTiming = (sequential_profile||semi_sequential_profile)?1:0;
+    if(sequential_profile||semi_sequential_profile){for(unsigned n=0;n<4;++n){configPage2.injAng[n]=sequential_profile?540:180;configPage2.injAngRPM[n]=5+20*n;}}
+    if(semi_sequential_profile)configPage4.inj4cylPairing=INJ_PAIR_13_24;
     configPage2.reqFuel = 107; // 2L/4cyl,300cc/min,14.7 AFR,25C rounded to0.1ms
     configPage2.injOpen = 9;
     configPage2.multiplyMAP = MULTIPLY_MAP_MODE_100;
@@ -189,8 +191,10 @@ int main(int argc,char** argv) {
             if(flag=="--per-tooth")use_per_tooth=true;
             else if(flag=="--logger-cam")logger_cam=true;
             else if(flag=="--sequential")sequential_profile=true;
+            else if(flag=="--semi-sequential")semi_sequential_profile=true;
             else throw std::runtime_error("unsupported native profile flag");
         }
+        if(semi_sequential_profile&&(sequential_profile||logger_cam))throw std::runtime_error("conflicting cycle profiles");
         prepare_hal(); configure();
         // Pin numbers are resolved by setup. Prime the standard v0.4 sensors.
         setPinMapping(3);
@@ -245,6 +249,12 @@ int main(int argc,char** argv) {
             }
             else if (command == "sensors") { double m,t,c,i,b,a;std::cin>>m>>t>>c>>i>>b>>a;set_sensors(m,t,c,i,b,a); }
             else if (command == "status") status();
+            else if(command=="injectorprofile"){
+                std::cout<<"injectorprofile "<<unsigned(configPage2.injLayout)<<' '<<unsigned(currentStatus.injLayout)<<' '
+                         <<unsigned(configPage2.injTiming)<<' '<<unsigned(configPage4.inj4cylPairing)<<' '
+                         <<unsigned(currentStatus.nSquirts)<<' '<<CRANK_ANGLE_MAX_INJ<<' '
+                         <<unsigned(currentStatus.injOutputs.primary)<<' '<<unsigned(configPage4.sparkMode)<<'\n';
+            }
             else if(command=="trimconfig"){
                 unsigned enabled=0;if(!(std::cin>>enabled))throw std::runtime_error("missing enable");
                 if(!sequential_profile||enabled>1)throw std::runtime_error("trim profile requires sequential mode");

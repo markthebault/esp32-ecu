@@ -41,7 +41,7 @@ bool sample(const char*text,ecu::engine::RuntimeSample&out){
   integer(j,"source_code",source,2)&&u64(j,"sequence",r.sequence)&&u64(j,"control_us",r.control_us)&&u64(j,"sampled_us",r.sampled_us)&&
   integer(j,"tune_revision",r.tune_revision)&&integer(j,"sensor_revision",r.sensor_revision)&&integer(j,"phase_epoch",r.phase_epoch)&&
   integer(j,"flags",r.flags,UINT16_MAX)&&integer(j,"input_valid_mask",r.input_valid,255)&&integer(j,"board_flags",r.board_flags,15)&&
-  integer(j,"controller_faults",r.controller_faults)&&integer(j,"state_code",r.state,5)&&integer(j,"strategy_code",r.strategy,1)&&
+  integer(j,"controller_faults",r.controller_faults)&&integer(j,"state_code",r.state,5)&&integer(j,"strategy_code",r.strategy,2)&&
   integer(j,"phase_reason_code",r.phase_reason,9)&&integer(j,"phase_losses",r.phase_losses)&&integer(j,"cam_rejected",r.cam_rejected)&&value(j,"cam_error_deg",r.cam_error_deg);
  r.source=static_cast<ecu::engine::DataSource>(source);
  ok=ok&&(available==(r.has(ecu::engine::Present)&&r.sequence!=0))&&(!available||source);
@@ -68,7 +68,7 @@ bool sample(const char*text,ecu::engine::RuntimeSample&out){
  const auto*worker=cJSON_GetObjectItemCaseSensitive(j,"worker_observation");
  ok=ok&&cJSON_IsObject(worker)&&u64(worker,"command_sequence",r.worker_sequence)&&u64(worker,"observed_us",r.worker_observed_us)&&
   integer(worker,"epoch",r.worker_epoch)&&integer(worker,"tune_revision",r.worker_tune_revision)&&integer(worker,"sensor_revision",r.worker_sensor_revision)&&
-  integer(worker,"timing_fault_code",r.timing_fault,16)&&integer(worker,"last_timing_fault_code",r.last_timing_fault,16)&&
+  integer(worker,"timing_fault_code",r.timing_fault,17)&&integer(worker,"last_timing_fault_code",r.last_timing_fault,17)&&
   integer(worker,"virtual_high_mask",r.virtual_high_mask,255)&&integer(worker,"physical_command_mask",r.physical_command_mask,255);
  const auto*raw=cJSON_GetObjectItemCaseSensitive(j,"raw_adc");ok=ok&&cJSON_IsArray(raw)&&cJSON_GetArraySize(raw)==8;
  for(unsigned i=0;ok&&i<8;++i){
@@ -119,8 +119,8 @@ extern "C" int data_capability_reply(void*p,const std::uint8_t*request,unsigned 
  auto&cap=static_cast<Context*>(p)->capabilities;if(!cap.request(request,length,session))return 0;
  cap.reply(out,session,nonce,floor,sent);return mac(key,16,out,76,out+76);
 }
-extern "C" int data_radio_frame(const char*text,const std::uint8_t*lmk,const std::uint8_t*nonce,std::uint32_t session,std::uint64_t seq,std::uint32_t sample_age,std::uint32_t control_age,std::uint32_t worker_age,std::uint64_t sent,std::uint8_t*out){
+extern "C" int data_radio_frame(const char*text,const std::uint8_t*lmk,const std::uint8_t*nonce,std::uint32_t session,std::uint64_t seq,std::uint32_t sample_age,std::uint32_t control_age,std::uint32_t worker_age,std::uint64_t sent,std::uint32_t schema,std::uint8_t*out){
  ecu::engine::RuntimeSample r;if(!sample(text,r))return 0;
  const auto transcript=ecu::radio::wire::engine_key_transcript(nonce,session);std::uint8_t key[32];
- return mac(lmk,16,transcript.data(),transcript.size(),key)&&ecu::radio::wire::engine_body(out,r,session,seq,sample_age,control_age,worker_age,sent)&&mac(key,32,out,200,out+200);
+ return mac(lmk,16,transcript.data(),transcript.size(),key)&&ecu::radio::wire::engine_body(out,r,session,seq,sample_age,control_age,worker_age,sent,schema)&&mac(key,32,out,200,out+200);
 }

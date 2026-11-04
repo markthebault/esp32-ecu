@@ -16,7 +16,7 @@ public:
   case Reason::Unmapped:return "cam_timestamp_unmapped";case Reason::Timeout:return "cam_timeout";
   case Reason::CrankLost:return "crank_sync_lost";default:return "awaiting_crank";}}
  explicit PhaseDecoder(MissingTooth::Config wheel={60,2,8000},AngleConfig angle={}):wheel_(wheel),angle_(angle),crank_(wheel){}
- bool valid()const{return crank_.valid()&&(angle_.strategy==Strategy::BatchWasted||angle_.strategy==Strategy::Sequential)&&range(angle_.tooth1_btdc_deg,0,359)&&range(angle_.cam_sync_deg,0,719)&&range(angle_.cam_window_deg,5,45);}
+ bool valid()const{return crank_.valid()&&strategy_valid(angle_.strategy)&&range(angle_.tooth1_btdc_deg,0,359)&&range(angle_.cam_sync_deg,0,719)&&range(angle_.cam_window_deg,5,45);}
  bool required()const{return angle_.strategy==Strategy::Sequential;}
  bool crank_synced()const{return crank_.synced();}
  bool phase_synced()const{return known_&&!faulted_&&crank_.synced();}

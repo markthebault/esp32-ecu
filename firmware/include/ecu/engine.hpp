@@ -44,8 +44,9 @@ inline double lookup(const TrimMap&m,double rpm,double load){
  const double b=m.cells[(y+1)*6+x]+(m.cells[(y+1)*6+x+1]-m.cells[(y+1)*6+x])*fx;
  return a+(b-a)*fy;
 }
-enum class Strategy : std::uint8_t {BatchWasted,Sequential};
-inline const char* strategy_name(Strategy s){return s==Strategy::Sequential?"sequential_4cyl":"batch_wasted_4cyl";}
+enum class Strategy : std::uint8_t {BatchWasted,Sequential,SemiSequential};
+inline bool strategy_valid(Strategy s){return s==Strategy::BatchWasted||s==Strategy::Sequential||s==Strategy::SemiSequential;}
+inline const char* strategy_name(Strategy s){switch(s){case Strategy::BatchWasted:return "batch_wasted_4cyl";case Strategy::Sequential:return "sequential_4cyl";case Strategy::SemiSequential:return "semi_sequential_4cyl";default:return "unknown";}}
 inline bool firing_order_valid(const std::array<unsigned,4>& order){unsigned mask=0;for(auto c:order){if(c<1||c>4||(mask&(1U<<c)))return false;mask|=1U<<c;}return order[0]==1;}
 struct Tune {
  unsigned revision=1;
@@ -73,7 +74,7 @@ struct Tune {
 };
 inline const char* validate(const Tune&t){
  if(!t.revision||t.cylinders!=4)return "Only four-cylinder, four-stroke, even-fire profiles are implemented";
- if((t.strategy!=Strategy::BatchWasted&&t.strategy!=Strategy::Sequential)||!firing_order_valid(t.firing_order)||!range(t.injection_end_deg,0,719)||!range(t.cam_sync_deg,0,719)||!range(t.cam_window_deg,5,45))return "Invalid strategy, firing order or cam/injection reference";
+ if(!strategy_valid(t.strategy)||!firing_order_valid(t.firing_order)||!range(t.injection_end_deg,0,719)||!range(t.cam_sync_deg,0,719)||!range(t.cam_window_deg,5,45))return "Invalid strategy, firing order or cam/injection reference";
  if(t.cylinder_trims_enabled&&t.strategy!=Strategy::Sequential)return "Cylinder trims require the sequential four-cylinder strategy";
  for(unsigned cylinder=0;cylinder<4;++cylinder){
   const auto&m=t.cylinder_fuel[cylinder];
@@ -221,9 +222,15 @@ inline Plan plan_revolution(const Tune&t,const Output&o,std::uint64_t gap_us){
   const auto start=gap_us+offset;
   p.edges[p.count++]={start,channel,true};p.edges[p.count++]={start+width,channel,false};return true;
  };
- for(unsigned ch=0;ch<4;++ch)if(!o.fuel_cut&&!add(ch,t.tooth1_btdc_deg+180,o.pulse_for(ch)*1000))return Plan{};
- // Firing order 1-3-4-2; four smart coils fire once/revolution in wasted mode.
- constexpr double phase[4]={0,180,180,0};
+ std::array<double,4> phase{};for(unsigned i=0;i<4;++i)phase[t.firing_order[i]-1]=180*i;
+ for(unsigned ch=0;ch<4;++ch)if(!o.fuel_cut){
+  // Semi-sequential pairs share a closing angle every crank revolution. The
+  // full four-stroke mass is divided between two openings by Controller.
+  const double start=t.strategy==Strategy::SemiSequential?
+    t.tooth1_btdc_deg+phase[ch]+t.injection_end_deg-o.pulse_for(ch)*1000/rev_us*360:t.tooth1_btdc_deg+180;
+  if(!add(ch,start,o.pulse_for(ch)*1000))return Plan{};
+ }
+ // Four dedicated smart-coil commands, paired by firing order modulo360deg.
  for(unsigned ch=0;ch<4;++ch)if(!o.spark_cut&&!add(ch+4,t.tooth1_btdc_deg+phase[ch]-o.advance_for(ch)-o.dwell_ms*1000/rev_us*360,o.dwell_ms*1000))return Plan{};
  std::sort(p.edges.begin(),p.edges.begin()+p.count,[](const Edge&a,const Edge&b){return a.time_us<b.time_us||(a.time_us==b.time_us&&a.high<b.high);});p.valid=true;return p;
 }

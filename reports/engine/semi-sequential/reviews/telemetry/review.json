@@ -1,0 +1,117 @@
+{
+  "reviewer": "independent child agent /root/engine_telemetry_review",
+  "completed_utc": "2026-11-04T03:30:58.896790+00:00",
+  "baseline_commit": "8b2f8ec25aacaaa4fd60c81f16e45e2951f96f1c",
+  "native_review_complete": true,
+  "production_files_modified": false,
+  "scope": "Read-only review of uncommitted semi-sequential/schema2 radio changes, host bridge ABI, backwards compatibility, negotiation/replay/downgrade, ACK/freshness, fallback API/UI source and regression coverage. Private probes only.",
+  "outcome": "No implementation defect reproduced in the reviewed radio/receiver/bridge changes. Native protocol review completed this turn. One release documentation mismatch and two actionable regression-coverage gaps remain in the reviewed tree.",
+  "source_sha256": {
+    "firmware/include/ecu/engine_radio.hpp": "c9835cd575b8a24ba0c6969e6f7adcf860b0e1ed7eac1bd80442e821acc8adb2",
+    "firmware/include/ecu/espnow_protocol.hpp": "634bd5a99ddd8c682a20959720f5599a0e39f20c25d8cadf4b3e8024eca25b6a",
+    "firmware/include/ecu/engine_data.hpp": "dcaea58680090204995406aa5c15813c940ae1253bd369518bad758727c94b6b",
+    "firmware/include/ecu/engine_data_json.hpp": "7b54056ef30aff295624dc7ee8473039cce5a181d958b8a6b83ff8a5e8608384",
+    "firmware/main/espnow.cpp": "948891c0b2f6d11e82ef01ba67dd4899d363671f77e3ebb1466980ce391f36e2",
+    "tools/engine_receiver.py": "d612903d8fe1feb2a980f104368f20a338e75e62197222c94218891508365948",
+    "tools/engine_observability.py": "2e04f851e712cc8a223719154d519b0664111db3edf794399f0afb82bee5482f",
+    "tools/engine_observability_bridge.cpp": "530e82f66f782a50aa95dcfd94043fab4717ff88de449e82aa959d4800b81605",
+    "tools/test_engine_semi.py": "0bfa009e1800c09d9b3f3caad944588132be5f8c366482b3c7118c2c2123b1be",
+    "tools/test_engine_observability.py": "e855a8e05240e19905581c2e0e88ecac22a72bb299f743f9d1e97840666a5621",
+    "firmware/tests/engine_observability_test.cpp": "edc295409548b2df28ec7dffd0c2dcf038c204358411d970aa673834247e2631",
+    "tools/radio_simulator.py": "a92cd71d2379ab05f20f2e47f36b9d5d672573e96df3cb60452dad5912fc1087",
+    "web/index.html": "4e5452518162166a21c420e603e3177feba0b4e6b395b4c39e55c369044f3158",
+    "docs/espnow-engine.md": "a7ad187374f9236bc8b2696f4eb35c2cd7899c621b84cc5963bc3d33c3845d96"
+  },
+  "findings": [
+    {
+      "id": "SEMI-RADIO-01",
+      "priority": "P2",
+      "kind": "contract documentation",
+      "file": "docs/espnow-engine.md",
+      "line": 11,
+      "additional_lines": [
+        28,
+        43,
+        59
+      ],
+      "issue": "The receiver guide still instructs schema 1 for enabled negotiation, schema u16=1 in data, and only strategies 0/1, while the implementation now negotiates schemas1/2 and requires schema2 for strategy2 or current/historical timing cause17. A screen following this guide cannot receive semi-sequential engine observations and only gets the intended fallback.",
+      "requested_change": "Document supported schemas1/2 and explicit per-peer selection, schema1 old enum limits, schema2 strategy2/cause17, exact-counter schema transitions, legacy fallback and upgrade-needed API/UI status. Preserve the documented232-byte scalar-only layout; do not imply per-cylinder or idle-extension arrays are transmitted.",
+      "status": "open at review snapshot"
+    },
+    {
+      "id": "SEMI-RADIO-02",
+      "priority": "P3",
+      "kind": "regression coverage",
+      "file": "tools/test_engine_semi.py",
+      "line": 137,
+      "issue": "The test named legacy_wire_blocks_new_mode_and_idle_fault always uses semi strategy2, so its fault17 cases would continue passing even if both schema1 timing-fault guards were removed. Existing schema-switch test only covers1-to2, not2-to1; the generic wire/golden tests now default to2.",
+      "requested_change": "Add batch and sequential observations with current17/history0 and current0/history17 independently; prove schema1 rejects each and schema2 preserves them. Add invalid strategy3/cause18/schema0/schema3 cases,1-to2-to1 negotiation and wrong-schema-frame rejection without state advance, and retained schema1 compatibility/golden coverage.",
+      "independent_probe": "36-case native matrix, genuine pre-change schema1 receiver compatibility, signed invalid-enum packets, unknown schemas and1-to2-to1 negotiation all passed. The implementation is currently correct; this finding concerns persistent CI protection.",
+      "status": "open coverage gap at review snapshot"
+    },
+    {
+      "id": "SEMI-RADIO-03",
+      "priority": "P3",
+      "kind": "fallback/API/UI regression coverage",
+      "file": "firmware/main/espnow.cpp",
+      "line": 188,
+      "additional_locations": [
+        "firmware/main/espnow.cpp:237",
+        "web/index.html:204"
+      ],
+      "issue": "Fallback and explicit blocked/upgrade-needed fields are present and look correct by source inspection, but no regression currently exercises an unsupported schema1 peer beside a working schema2 peer through stream selection and visible upgrade status. RadioSimulator always reports unnegotiated/unblocked peers, so normal UI/API tests cannot catch a regression here.",
+      "requested_change": "Add a focused regression for per-peer engine-versus-legacy selection and consistent blocked/upgrade-needed fields, plus a UI payload fixture proving the old peer displays the firmware-upgrade message while a schema2 peer stays on engine data. Verify return to supported strategy clears fallback when historical fault limits also permit it.",
+      "status": "open coverage gap at review snapshot; not a reproduced implementation fault"
+    }
+  ],
+  "validation": {
+    "build": "Built the actual tools/engine_observability_bridge.cpp plus a private fixture as .cache/engine/semi-telemetry-review/probe.so, with C++17 -O1 -g -Wall -Wextra -Werror -shared -fPIC and independent OpenSSL HMAC. ABI includes the new schema u32 before output buffer and matches Python ctypes declaration.",
+    "probe_source": "probe.py",
+    "fixture_source": "fixture.cpp",
+    "results": {
+      "native_frame_strategy_fault_matrix": {
+        "cases": 36,
+        "passed": true
+      },
+      "actual_prechange_receiver_compatibility": {
+        "strategies": [
+          0,
+          1
+        ],
+        "schema1_body_layout_unchanged": true,
+        "passed": true
+      },
+      "authenticated_schema_enum_limits": "pass",
+      "unknown_schemas": "pass",
+      "counter_schema_upgrade_downgrade_query_replay": "pass",
+      "schema_1_and_2_auth_age_ACK": {
+        "frame_byte_mutations": 464,
+        "slow_clock_history": "pass",
+        "ACK56_full_derived_key": "pass"
+      }
+    },
+    "negotiation_edges": {
+      "per_peer_schema_isolation": "pass",
+      "authenticated_unsupported_schema_updates_rejected_without_state_change": [
+        0,
+        3,
+        65537
+      ],
+      "reset_clears_schema_counter_and_mode": "pass"
+    },
+    "baseline_receiver_sha256": "4786d2b3d9984cc60ad2bf871b2631c146a3ad49e233564ff54ec5c718e0b9d9",
+    "native_library_sha256": "b4081168b64191b99bce11debc729632a220227fe37c06634c36c6ffb67eca7f",
+    "note": "These are bounded host/native codec and state-machine probes. No RF exchange, real SDK callbacks or physical ECU/engine operation was tested."
+  },
+  "confirmed_contract": [
+    "Wire lengths remain76/108/232/56 and HMAC coverages/byte offsets remain unchanged. The data schema field is1 or2 and old-compatible bodies otherwise match.",
+    "Per-peer accepted schema is stored separately from the global maximum. Query counter0 reports without changing mode; same-counter retries compare the exact first44 authenticated transcript bytes including schema. Old update replays cannot change a newer accepted counter.",
+    "Schema1 admits strategy0/1 and both timing causes at most16. Schema2 admits strategy0/1/2 and causes at most17. Unknown negotiated schemas and signed out-of-range data are rejected.",
+    "The actual pre-change schema1-only receiver from the baseline commit successfully negotiates with the current native helper and processes current schema1 batch and sequential packets.",
+    "Pending update replies must echo requested schema as well as nonce, session, counter and feature. Authenticated reply substitution cannot silently downgrade an update. Frames must match the accepted reply schema before receiver state advances.",
+    "Target sender checks per-peer schema support before encoding; unsupported engine data falls through to the unchanged legacy sensor stream. Target API/UI explicitly expose blocked and upgrade-needed state instead of coercing semi mode or fault17 into old enums.",
+    "Freshness retains the timed nonce query, per-boot derived key, sequence floor, monotonic packet/source sequence and sender time, pre-query source-age scaling, repeated-source age floors and stale-gap handling.",
+    "ACK HMAC/transcripts and recent-sent windows remain per-boot and schema-agnostic. A recent ACK can represent a legacy sensor or a recently sent earlier-schema packet; connected remains evidence of peer acknowledgement, not fresh/current-schema engine observation or execution.",
+    "The232-byte frame carries the fourteen base scalar proposals. The receiver explicitly labels untrimmed_base_demand and per_cylinder_available=false; new sample/log cylinder and idle arrays are not silently advertised as transmitted engine data."
+  ]
+}

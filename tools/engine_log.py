@@ -11,9 +11,10 @@ def value_text(value):
  if type(value) is int:return str(value)
  if isinstance(value,str) and value.isascii() and value.isdigit() and 0<=int(value)<=18446744073709551615:return str(int(value))
  return 'NaN'
-def export_msl(rows,scenario):
+def export_msl(rows,scenario,strategy=None):
+ if strategy is not None and strategy not in ('batch_wasted_4cyl','sequential_4cyl','semi_sequential_4cyl'):raise ValueError('Unknown log strategy')
  labels=[(name,unit) for name,unit,_ in FIELDS+IDLE_FIELDS]+[('IdleAvailable','bool')]+[(name,unit) for name,unit,_ in PWM_FIELDS]+[('IdlePwmAvailable','bool'),('IdlePwmFault','code')]+[(name,unit) for name,unit,_ in VALVE_FIELDS]+[('ValveModelAvailable','bool')]
- out=['"ESP32ECU SIL 003"','"UNVALIDATED REDUCED-ORDER SIMULATION / '+scenario+' / physical outputs inhibited; proposed controller terms, virtual dispatcher state and synthetic valve estimates are separate; electrical ledger only"','\t'.join(x[0] for x in labels),'\t'.join(x[1] for x in labels)]
+ out=['"ESP32ECU SIL 003"','"UNVALIDATED REDUCED-ORDER SIMULATION / '+scenario+(' / '+strategy if strategy else '')+' / physical outputs inhibited; proposed controller terms, virtual dispatcher state and synthetic valve estimates are separate; electrical ledger only"','\t'.join(x[0] for x in labels),'\t'.join(x[1] for x in labels)]
  for row in rows:
   values=[row.get(key,0) for _,_,key in FIELDS]
   idle=row.get('engine_sample',{}).get('idle',{});known=idle.get('available') is True

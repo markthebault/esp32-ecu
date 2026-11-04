@@ -28,7 +28,7 @@ class TuningTests(unittest.TestCase):
   fields={e.get('name'):e.get('units') for e in ET.fromstring(export_msq(self.store.tune)).iter(tag('constant'))}
   import csv
   expected={}
-  for line in (R/'tuning/esp32-ecu-idle.ini').read_text().split('[OutputChannels]')[0].splitlines():
+  for line in (R/'tuning/esp32-ecu-semi.ini').read_text().split('[OutputChannels]')[0].splitlines():
    if '=' not in line:continue
    name,definition=line.split('=',1);parts=next(csv.reader([definition],skipinitialspace=True))
    if parts[0] in ('scalar','array'):expected[name.strip()]=parts[3 if parts[0]=='scalar' else 4]

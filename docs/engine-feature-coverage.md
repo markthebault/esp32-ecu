@@ -11,7 +11,7 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | Batch/wasted four-cylinder | Shared native and ESP32 MCPWM/GPTimer executor | Explicit strategy, inhibited-output labels, timing trace | Four injector/four smart-coil commands; selected N16R8 physical policy inhibited |
 | Other cylinder counts | Missing; Speeduino publishes 1–8 support | Validator rejects other counts | Channel/strategy review required |
 | Full sequential four-cylinder | Shared720° phase/scheduler; strict cam-loss cut,33 external-plant cases plus6 step checks | Strategy/order/injection/cam settings, phase reasons/logs, schema migration and own003 MSQ | Existing protected Hall cam/four injector/four smart-coil commands; N16R8 physical policy inhibited |
-| Selectable semi-sequential | Missing as a separate selectable strategy | No misleading option | Strategy-specific timing/HIL remains |
+| Selectable semi-sequential | Crank-only timed pairs, half-effective fuel plus deadtime per opening;28 coupled cases and8 step checks against timed production Speeduino | Schema5/own006, derived pairs/modulo360 UI, strict trim rejection, schema2 screens, timing/log diagnostics and offline app fixture | Four separate existing J9 drivers; pair-current overlap, actual flow/deadtime/phase and physical timing remain unqualified |
 | Missing-tooth triggers | Existing generic decoder; SIL exercises 60-2 | Wheel geometry, sync/fault diagnostics | Protected Hall input, thresholds/noise unmeasured |
 | Other OEM trigger patterns | Missing decoder collection | No misleading selections | Pattern-specific HIL required |
 | VR crank/cam | Raw VR conditioning missing | Hall-specific guides | External conditioned module or reviewed new front end |
@@ -75,3 +75,5 @@ DBW/OEM integration remain outside the current bench scope.
 [Idle evidence](engine-idle-control.md) extends the software/control comparison and exposes remaining hardware release blockers. It does not close other control, OEM trigger, cylinder-count, online-vendor or physical-qualification gaps.
 
 [Isolated idle hardware](engine-idle-isolation.md) records the routed carrier/accessory, independent review corrections and conditional return/brownout/pulse circuit experiments.
+
+[Selectable semi-sequential](engine-semi-sequential.md) adds the current schema5/own006 configuration and schema2 screen contract. Historical per-feature identities and evidence above remain records; current exports use own006. This increment does not establish broader Speeduino parity or physical engine operation.

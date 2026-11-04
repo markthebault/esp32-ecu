@@ -28,7 +28,7 @@ class CylinderTests(unittest.TestCase):
    if schema==1:old['schema_version']=1;del old['timing']
    with tempfile.TemporaryDirectory() as directory:
     path=Path(directory)/'tune.json';body=json.dumps(old).encode();path.write_bytes(body);store=EngineStore(path)
-    self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['revision'],31);self.assertEqual(store.tune['schema_version'],4)
+    self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['revision'],31);self.assertEqual(store.tune['schema_version'],5)
     self.assertFalse(store.tune['cylinder_trims']['enabled']);self.assertEqual(store.tune['cylinder_trims']['spark_deg'],[0]*4)
     self.assertTrue(all(m['cells']==[100]*36 for m in store.tune['cylinder_trims']['fuel_maps']))
  def test_legacy_near_limit_migrates_above16k_and_keeps_source(self):
@@ -52,7 +52,7 @@ class CylinderTests(unittest.TestCase):
   with self.assertRaises(ValueError):decode_pages(broken,decoded)
  def test_old_application_msqs_migrate_to_disabled_neutral(self):
   for filename in ('tunerstudio-roundtrip.msq','tunerstudio-sequential-roundtrip.msq'):
-   tune=import_msq((R/'tuning/examples'/filename).read_bytes());self.assertEqual(tune['schema_version'],4);self.assertFalse(tune['cylinder_trims']['enabled']);self.assertTrue(all(m['cells']==[100]*36 for m in tune['cylinder_trims']['fuel_maps']))
+   tune=import_msq((R/'tuning/examples'/filename).read_bytes());self.assertEqual(tune['schema_version'],5);self.assertFalse(tune['cylinder_trims']['enabled']);self.assertTrue(all(m['cells']==[100]*36 for m in tune['cylinder_trims']['fuel_maps']))
  def test_actual_tunerstudio003_saved_cylinder_cell_and_spark(self):
   tune=import_msq((R/'tuning/examples/tunerstudio-cylinder-roundtrip.msq').read_bytes())
   self.assertTrue(tune['cylinder_trims']['enabled']);self.assertEqual(tune['cylinder_trims']['spark_deg'],[0,-2.5,0,0])

@@ -142,8 +142,9 @@ tuning::Result tuning_commit(const engine::Tune&candidate,std::uint32_t&saved_re
  return tuning::Result::Invalid;
 }
 cJSON* snapshot(){
- xSemaphoreTake(mutex,portMAX_DELAY);const auto output=latest;const auto revision=active.revision;const bool stored=storage_ok;const auto sample_stamp=stamp;const auto* reason=binding;xSemaphoreGive(mutex);
+ xSemaphoreTake(mutex,portMAX_DELAY);const auto output=latest;const auto revision=active.revision;const auto strategy=active.strategy;const bool stored=storage_ok;const auto sample_stamp=stamp;const auto* reason=binding;xSemaphoreGive(mutex);
  auto*j=engine::output_json(output);if(!j)return nullptr;const auto now=engine_target::clock_us();cJSON_AddNumberToObject(j,"revision",revision);cJSON_AddBoolToObject(j,"storage_ok",stored);cJSON_AddStringToObject(j,"binding",reason);cJSON_AddNumberToObject(j,"sample_age_ms",sample_stamp&&now>=sample_stamp?(now-sample_stamp)/1000.0:-1);cJSON_AddBoolToObject(j,"simulator",false);cJSON_AddBoolToObject(j,"fresh",sample_stamp&&now>=sample_stamp&&now-sample_stamp<50000);auto*timing=engine_target::snapshot();if(!timing||!cJSON_AddItemToObject(j,"timing",timing)){cJSON_Delete(timing);cJSON_Delete(j);return nullptr;}
+ cJSON_AddStringToObject(j,"active_strategy",engine::strategy_name(strategy));
  const auto phase=engine_target::measurement();cJSON_AddBoolToObject(j,"crank_synced",phase.synced);cJSON_AddBoolToObject(j,"phase_synced",phase.phase_synced);cJSON_AddBoolToObject(j,"phase_required",phase.phase_required);
  cJSON_AddStringToObject(j,"phase_reason",engine::PhaseDecoder::reason_name(phase.phase_reason));cJSON_AddNumberToObject(j,"phase_losses",phase.phase_losses);cJSON_AddNumberToObject(j,"cam_rejected",phase.cam_rejected);cJSON_AddNumberToObject(j,"cam_error_deg",phase.cam_error_deg);return j;
 }

@@ -2,7 +2,7 @@
 #pragma once
 namespace ecu::web::assets {
 inline constexpr char engine_defaults[]=R"ECU_ASSET({
-  "schema_version": 4,
+  "schema_version": 5,
   "revision": 1,
   "strategy": "batch_wasted_4cyl",
   "physical_outputs": "inhibited",
@@ -47,59 +47,1185 @@ inline constexpr char engine_defaults[]=R"ECU_ASSET({
     "pump_prime_s": 2
   },
   "curves": {
-    "coolant_c": [-40, 0, 20, 40, 70, 110],
-    "warmup_pct": [180, 150, 130, 115, 100, 100],
-    "crank_pct": [250, 210, 180, 160, 140, 130],
-    "battery_v": [8, 10, 12, 14, 16],
-    "deadtime_ms": [2, 1.5, 1.15, 0.9, 0.7],
-    "dwell_ms": [3.5, 3.3, 3, 2.8, 2.5]
+    "coolant_c": [
+      -40,
+      0,
+      20,
+      40,
+      70,
+      110
+    ],
+    "warmup_pct": [
+      180,
+      150,
+      130,
+      115,
+      100,
+      100
+    ],
+    "crank_pct": [
+      250,
+      210,
+      180,
+      160,
+      140,
+      130
+    ],
+    "battery_v": [
+      8,
+      10,
+      12,
+      14,
+      16
+    ],
+    "deadtime_ms": [
+      2,
+      1.5,
+      1.15,
+      0.9,
+      0.7
+    ],
+    "dwell_ms": [
+      3.5,
+      3.3,
+      3,
+      2.8,
+      2.5
+    ]
   },
   "maps": {
     "ve": {
-      "rpm": [80, 200, 400, 600, 800, 1000, 1200, 1600, 2000, 2500, 3000, 3500, 4000, 5000, 6000, 8000],
-      "load": [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110],
-      "cells": [85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85]
+      "rpm": [
+        80,
+        200,
+        400,
+        600,
+        800,
+        1000,
+        1200,
+        1600,
+        2000,
+        2500,
+        3000,
+        3500,
+        4000,
+        5000,
+        6000,
+        8000
+      ],
+      "load": [
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50,
+        55,
+        60,
+        70,
+        80,
+        90,
+        100,
+        110
+      ],
+      "cells": [
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85,
+        85
+      ]
     },
     "spark": {
-      "rpm": [80, 200, 400, 600, 800, 1000, 1200, 1600, 2000, 2500, 3000, 3500, 4000, 5000, 6000, 8000],
-      "load": [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110],
-      "cells": [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15]
+      "rpm": [
+        80,
+        200,
+        400,
+        600,
+        800,
+        1000,
+        1200,
+        1600,
+        2000,
+        2500,
+        3000,
+        3500,
+        4000,
+        5000,
+        6000,
+        8000
+      ],
+      "load": [
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50,
+        55,
+        60,
+        70,
+        80,
+        90,
+        100,
+        110
+      ],
+      "cells": [
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15
+      ]
     },
     "lambda": {
-      "rpm": [80, 200, 400, 600, 800, 1000, 1200, 1600, 2000, 2500, 3000, 3500, 4000, 5000, 6000, 8000],
-      "load": [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110],
-      "cells": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+      "rpm": [
+        80,
+        200,
+        400,
+        600,
+        800,
+        1000,
+        1200,
+        1600,
+        2000,
+        2500,
+        3000,
+        3500,
+        4000,
+        5000,
+        6000,
+        8000
+      ],
+      "load": [
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50,
+        55,
+        60,
+        70,
+        80,
+        90,
+        100,
+        110
+      ],
+      "cells": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
     }
   },
   "timing": {
-    "firing_order": [1, 3, 4, 2],
+    "firing_order": [
+      1,
+      3,
+      4,
+      2
+    ],
     "injection_end_deg": 540,
     "cam_sync_deg": 450,
     "cam_window_deg": 20
   },
   "cylinder_trims": {
     "enabled": false,
-    "spark_deg": [0, 0, 0, 0],
+    "spark_deg": [
+      0,
+      0,
+      0,
+      0
+    ],
     "fuel_maps": [
       {
-        "rpm": [80, 800, 1600, 3000, 5000, 8000],
-        "load": [10, 30, 50, 70, 90, 110],
-        "cells": [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
+        "rpm": [
+          80,
+          800,
+          1600,
+          3000,
+          5000,
+          8000
+        ],
+        "load": [
+          10,
+          30,
+          50,
+          70,
+          90,
+          110
+        ],
+        "cells": [
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100
+        ]
       },
       {
-        "rpm": [80, 800, 1600, 3000, 5000, 8000],
-        "load": [10, 30, 50, 70, 90, 110],
-        "cells": [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
+        "rpm": [
+          80,
+          800,
+          1600,
+          3000,
+          5000,
+          8000
+        ],
+        "load": [
+          10,
+          30,
+          50,
+          70,
+          90,
+          110
+        ],
+        "cells": [
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100
+        ]
       },
       {
-        "rpm": [80, 800, 1600, 3000, 5000, 8000],
-        "load": [10, 30, 50, 70, 90, 110],
-        "cells": [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
+        "rpm": [
+          80,
+          800,
+          1600,
+          3000,
+          5000,
+          8000
+        ],
+        "load": [
+          10,
+          30,
+          50,
+          70,
+          90,
+          110
+        ],
+        "cells": [
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100
+        ]
       },
       {
-        "rpm": [80, 800, 1600, 3000, 5000, 8000],
-        "load": [10, 30, 50, 70, 90, 110],
-        "cells": [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
+        "rpm": [
+          80,
+          800,
+          1600,
+          3000,
+          5000,
+          8000
+        ],
+        "load": [
+          10,
+          30,
+          50,
+          70,
+          90,
+          110
+        ],
+        "cells": [
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100,
+          100
+        ]
       }
     ]
   },
@@ -123,10 +1249,38 @@ inline constexpr char engine_defaults[]=R"ECU_ASSET({
     "derivative_filter_s": 0.1,
     "fast_idle_temp_c": 50,
     "fast_idle_hysteresis_c": 5,
-    "coolant_c": [-40, 0, 20, 40, 70, 110],
-    "run_pct": [65, 50, 38, 30, 20, 20],
-    "crank_pct": [75, 65, 55, 45, 35, 35],
-    "target_add_rpm": [400, 300, 200, 100, 0, 0]
+    "coolant_c": [
+      -40,
+      0,
+      20,
+      40,
+      70,
+      110
+    ],
+    "run_pct": [
+      65,
+      50,
+      38,
+      30,
+      20,
+      20
+    ],
+    "crank_pct": [
+      75,
+      65,
+      55,
+      45,
+      35,
+      35
+    ],
+    "target_add_rpm": [
+      400,
+      300,
+      200,
+      100,
+      0,
+      0
+    ]
   }
 }
 )ECU_ASSET";
@@ -320,7 +1474,7 @@ inline constexpr char defaults[]=R"ECU_ASSET({
 })ECU_ASSET";
 inline constexpr char guide[]=R"ECU_ASSET({
   "schema_version": 1,
-  "guide_version": "1.3",
+  "guide_version": "1.4",
   "hardware_revision": "A3-120",
   "scope": "Bench configuration and diagnostics. Physical engine outputs remain inhibited; no vehicle qualification.",
   "general": [
@@ -592,7 +1746,7 @@ inline constexpr char guide[]=R"ECU_ASSET({
       ],
       "expected": [
         "The decoder uses rising edges. Trigger logging records both polarities on separate diagnostic capture channels. Both Hall paths use two Schmitt inversions, preserving the input polarity.",
-        "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Batch/wasted mode uses crank sync only. Sequential mode requires one rising cam pulse per720 degrees and two repeatable cam observations; loss after acquisition inhibits and latches until a supervised stop. Mechanical cylinder1 compression reference remains essential."
+        "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Batch/wasted and semi-sequential use crank only. Full sequential requires one rising cam pulse per720 degrees and two repeatable observations; phase loss after acquisition cuts and latches until a supervised stop. Confirm mechanical cylinder1 compression reference independently."
       ],
       "faults": [
         "No edges: inspect supply, missing pull-up, wrong sensor type, target gap, signal/ground pin order and U7 conditioning.",
@@ -623,7 +1777,7 @@ inline constexpr char guide[]=R"ECU_ASSET({
       ],
       "expected": [
         "The decoder uses rising edges. Trigger logging records both polarities on separate diagnostic capture channels. Both Hall paths use two Schmitt inversions, preserving the input polarity.",
-        "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Batch/wasted mode uses crank sync only. Sequential mode requires one rising cam pulse per720 degrees and two repeatable cam observations; loss after acquisition inhibits and latches until a supervised stop. Mechanical cylinder1 compression reference remains essential."
+        "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Batch/wasted and semi-sequential use crank only. Full sequential requires one rising cam pulse per720 degrees and two repeatable observations; phase loss after acquisition cuts and latches until a supervised stop. Confirm mechanical cylinder1 compression reference independently."
       ],
       "faults": [
         "No edges: inspect supply, missing pull-up, wrong sensor type, target gap, signal/ground pin order and U7 conditioning.",
@@ -748,6 +1902,19 @@ inline constexpr char guide[]=R"ECU_ASSET({
         "Use a current-limited resistor fixture first with proper isolated/differential probes and an independent cutoff. Observe local rail, supervisor, ENA, gate/source, drain and both return currents during startup, reset, RUN/command loss, disconnected inputs and opened returns. Preserve scope protective earth.",
         "Compare proposed duty with separate cycle-latched PWM high time and fault. Synthetic current/opening are model estimates; no physical valve feedback exists. Command0% does not prove valve closure."
       ]
+    },
+    {
+      "connector": "J9 / J10 semi-sequential",
+      "title": "Semi-sequential fuel and wasted COP",
+      "checks": [
+        "This is a software development strategy. Selected web builds keep physical engine outputs OFF. The separate dummy-load bench build has no web service and is not installed here. Keep J3 open and real injector/ignition harnesses disconnected. The unchanged carrier needs four independent injector drivers and four smart-coil logic channels; no extra pair wiring is required.",
+        "J9 pins1-4 remain physical injector cylinders1-4; pins5-8 are return. J19 is the dedicated power return. J10 pins1-4 remain physical smart-coil commands1-4, pin5 ground. Check each harness by continuity with both ends unplugged. Never bridge low-side outputs or move two injectors onto one driver.",
+        "For firing order1-3-4-2 the scheduled fuel pairs are cylinders1+4 and3+2. Other valid four-cylinder orders derive pairs from order slots1+3 and2+4. Each injector opens once per crank revolution, giving two half-effective-fuel openings per720 degrees. Dead time is added to each opening.",
+        "Semi-sequential needs crank synchronization from J17, without compression phase from J18. Its closing reference repeats modulo360 degrees:540 means180 each revolution. The two groups are180 degrees apart. Full sequential alone uses the720-degree cam reference and individual trims; enabled trims must be disabled explicitly before saving a paired mode. Stored trim maps are retained.",
+        "After saving, check active strategy separately from unsaved editor settings. Compare executed rising/falling timestamps for both members of each pair, full electrical width, duty, fault cause, revision and source age. Injector low deadlines stay fixed after opening, so changing RPM can move the actual closing angle. A missing cam is expected in this mode; a missing crank must cut. Old latched faults still require stopped/quiet recovery.",
+        "Pairs can overlap above50 percent duty. Do not assume lower peak supply/return current. Existing1.2A injector and4mA smart-coil targets remain unqualified; saturated high-impedance PFI only. Actual flow/deadtime, current/flyback, loaded supply/gates, timing/jitter, temperature and engine phase need physical dummy-load/HIL acceptance.",
+        "The host reduced and research plants have fixed physical1-3-4-2 geometry. Changing the tune order does not change that engine. Coupled comparison uses a neutral test tune, not a vehicle calibration. Screen engine schema2 is required for this mode; schema1 peers fall back to sensors and show upgrade needed."
+      ]
     }
   ],
   "config_help": [
@@ -757,10 +1924,9 @@ inline constexpr char guide[]=R"ECU_ASSET({
     "NTC beta mode is for CLT/IAT only and requires the physical pull-up. It uses the measured sensor supply and compensates the 55 kohm divider load. A voltage table is preferable when the real curve is available.",
     "Filtering is for readout smoothing, not a substitute for fixing wiring/noise. Electrical fault checks use the instantaneous input.",
     "Saved calibration feeds readouts and shadow engine calculations. Physical engine outputs remain inhibited. DBW, catalyst diagnostics and OEM protocols are not implemented.",
-    "Saving trigger geometry cuts virtual timing and resets the decoder. Crank synchronization is 360 degrees only; raw cam logging does not establish 720-degree phase."
+    "Saving trigger geometry or engine timing fences virtual output plans and requires fresh synchronization. Batch and semi-sequential use crank-only360-degree synchronization; full sequential uses two repeatable cam observations for720-degree phase. Capture age, overflow and stopped/quiet recovery still apply."
   ]
-}
-)ECU_ASSET";
+})ECU_ASSET";
 inline constexpr char index[]=R"ECU_ASSET(<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ECU Studio | Configuration & diagnostics</title>
 <style>
@@ -814,12 +1980,14 @@ function renderDiagnostics(p){p.innerHTML=`<div class="metrics">${metric('ADC in
 
 
 
-const LEGACY_ENGINE_SIGNATURE='ESP32ECU SIL 001 INHIBITED',SEQUENTIAL_ENGINE_SIGNATURE='ESP32ECU SIL 002 INHIBITED',CYLINDER_ENGINE_SIGNATURE='ESP32ECU SIL 003 INHIBITED',WHOLE_ENGINE_SIGNATURE='ESP32ECU DEV 004 INHIBITED',ENGINE_SIGNATURE='ESP32ECU DEV 005 INHIBITED',MSQ_NS='http://www.msefi.com/:msq';
+const LEGACY_ENGINE_SIGNATURE='ESP32ECU SIL 001 INHIBITED',SEQUENTIAL_ENGINE_SIGNATURE='ESP32ECU SIL 002 INHIBITED',CYLINDER_ENGINE_SIGNATURE='ESP32ECU SIL 003 INHIBITED',WHOLE_ENGINE_SIGNATURE='ESP32ECU DEV 004 INHIBITED',IDLE_ENGINE_SIGNATURE='ESP32ECU DEV 005 INHIBITED',ENGINE_SIGNATURE='ESP32ECU DEV 006 INHIBITED',MSQ_NS='http://www.msefi.com/:msq';
+const ENGINE_STRATEGIES=['batch_wasted_4cyl','sequential_4cyl','semi_sequential_4cyl'],ENGINE_STRATEGY_LABELS=['Batch / wasted','Sequential','Semi-sequential'];
+function engineStrategyCode(strategy){const n=ENGINE_STRATEGIES.indexOf(strategy);if(n<0)throw Error('Unknown engine strategy.');return n;}
 function engineTimingDefaults(){return {firing_order:[1,3,4,2],injection_end_deg:540,cam_sync_deg:450,cam_window_deg:20};}
 function engineConstants(t,legacy=false,sequential=false,whole=true,idle=true){
  const values=[{page:0,name:'baseRevision',value:t.revision}];
  for(const group of ['engine','settings'])for(const [name,value] of Object.entries(t[group]))values.push({page:0,name,value,flag:typeof value==='boolean',group});
- if(!legacy){values.push({page:0,name:'engineStrategy',value:t.strategy==='sequential_4cyl'?1:0,strategy:true});for(const key of ['injection_end_deg','cam_sync_deg','cam_window_deg'])values.push({page:0,name:key,value:t.timing[key],group:'timing'});t.timing.firing_order.forEach((value,i)=>values.push({page:0,name:'fireOrder'+(i+1),value,order:i}));}
+ if(!legacy){values.push({page:0,name:'engineStrategy',value:engineStrategyCode(t.strategy),strategy:true});for(const key of ['injection_end_deg','cam_sync_deg','cam_window_deg'])values.push({page:0,name:key,value:t.timing[key],group:'timing'});t.timing.firing_order.forEach((value,i)=>values.push({page:0,name:'fireOrder'+(i+1),value,order:i}));}
  for(const [name,value] of Object.entries(t.curves))values.push({page:0,name,value,curve:true});
  for(const [i,key] of ['ve','spark','lambda'].entries())for(const [suffix,field] of [['Rpm','rpm'],['Load','load'],['Table','cells']])values.push({page:i+1,name:key+suffix,value:t.maps[key][field],map:key,field});
  if(!legacy&&!sequential)values.push(...window.EcuCylinderTuning.constants(t));
@@ -840,46 +2008,56 @@ function engineToMsq(t){
   const units=item.unit??(item.group?engineFieldUnits(item.name):item.field==='rpm'?'RPM':item.field==='load'?'kPa':item.field==='cells'?{ve:'%',spark:'deg',lambda:'lambda'}[item.map]:'');
   const attrs={name:item.name,units};if(Array.isArray(item.value)){attrs.rows=item.field==='cells'?(item.bins||16):item.value.length;attrs.cols=item.field==='cells'?(item.bins||16):1;}
   const e=add(ps[item.page],'constant',attrs);
-  e.textContent=item.idleAlgorithm?'"'+item.value+'"':item.strategy?(item.value?'"Sequential"':'"Batch / wasted"'):item.flag?(item.value?'"On"':'"Off"'):Array.isArray(item.value)?'\n'+Array.from({length:attrs.rows},(_,i)=>item.value.slice(i*attrs.cols,(i+1)*attrs.cols).join(' ')).join('\n')+'\n':String(item.value);
+  e.textContent=item.idleAlgorithm?'"'+item.value+'"':item.strategy?'"'+ENGINE_STRATEGY_LABELS[item.value]+'"':item.flag?(item.value?'"On"':'"Off"'):Array.isArray(item.value)?'\n'+Array.from({length:attrs.rows},(_,i)=>item.value.slice(i*attrs.cols,(i+1)*attrs.cols).join(' ')).join('\n')+'\n':String(item.value);
  }
  return '<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(doc)+'\n';
 }
 function engineFromMsq(text,template){
  if(/<!DOCTYPE|<!ENTITY/i.test(text)||text.includes('\0'))throw Error('MSQ XML declarations rejected.');
  const doc=new DOMParser().parseFromString(text,'application/xml'),root=doc.documentElement,info=doc.getElementsByTagNameNS(MSQ_NS,'versionInfo')[0];
- if(doc.getElementsByTagName('parsererror').length||root.localName!=='msq'||root.namespaceURI!==MSQ_NS||!info||![ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE,CYLINDER_ENGINE_SIGNATURE,LEGACY_ENGINE_SIGNATURE,SEQUENTIAL_ENGINE_SIGNATURE].includes(info.getAttribute('signature'))||info.getAttribute('nPages')!==([ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE].includes(info.getAttribute('signature'))?'1':info.getAttribute('signature')===CYLINDER_ENGINE_SIGNATURE?'5':'4'))throw Error('Use an MSQ for this ESP32ECU definition. Other ECU tunes are incompatible.');
- const legacy=info.getAttribute('signature')===LEGACY_ENGINE_SIGNATURE,sequential=info.getAttribute('signature')===SEQUENTIAL_ENGINE_SIGNATURE,result=JSON.parse(JSON.stringify(template));result.schema_version=4;result.idle_control=window.EcuIdleControl.defaults();if(legacy||sequential)result.cylinder_trims=window.EcuCylinderTuning.defaults();if(legacy){result.strategy='batch_wasted_4cyl';result.timing=engineTimingDefaults();}
- const ownCurrent=info.getAttribute('signature')===ENGINE_SIGNATURE,ownWhole=[ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE].includes(info.getAttribute('signature'));
- const expected=new Map(engineConstants(result,legacy,sequential,ownWhole,ownCurrent).map(x=>[x.name,x])),seen=new Set();
+ if(doc.getElementsByTagName('parsererror').length||root.localName!=='msq'||root.namespaceURI!==MSQ_NS||!info||![ENGINE_SIGNATURE,IDLE_ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE,CYLINDER_ENGINE_SIGNATURE,LEGACY_ENGINE_SIGNATURE,SEQUENTIAL_ENGINE_SIGNATURE].includes(info.getAttribute('signature'))||info.getAttribute('nPages')!==([ENGINE_SIGNATURE,IDLE_ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE].includes(info.getAttribute('signature'))?'1':info.getAttribute('signature')===CYLINDER_ENGINE_SIGNATURE?'5':'4'))throw Error('Use an MSQ for this ESP32ECU definition. Other ECU tunes are incompatible.');
+ const legacy=info.getAttribute('signature')===LEGACY_ENGINE_SIGNATURE,sequential=info.getAttribute('signature')===SEQUENTIAL_ENGINE_SIGNATURE,result=JSON.parse(JSON.stringify(template));result.schema_version=5;result.idle_control=window.EcuIdleControl.defaults();if(legacy||sequential)result.cylinder_trims=window.EcuCylinderTuning.defaults();if(legacy){result.strategy='batch_wasted_4cyl';result.timing=engineTimingDefaults();}
+ const ownCurrent=info.getAttribute('signature')===ENGINE_SIGNATURE,hasIdle=[ENGINE_SIGNATURE,IDLE_ENGINE_SIGNATURE].includes(info.getAttribute('signature')),ownWhole=[ENGINE_SIGNATURE,IDLE_ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE].includes(info.getAttribute('signature'));
+ const expected=new Map(engineConstants(result,legacy,sequential,ownWhole,hasIdle).map(x=>[x.name,x])),seen=new Set();
  for(const e of doc.getElementsByTagNameNS(MSQ_NS,'constant')){
   const item=expected.get(e.getAttribute('name'));if(!item||seen.has(item.name)||e.parentNode.localName!=='page'||e.parentNode.getAttribute('number')!==String(item.page))throw Error('Unknown, duplicate or misplaced MSQ constant.');
   seen.add(item.name);const raw=e.textContent.trim();let value;
   if(item.idleAlgorithm){const a=window.EcuIdleControl.algorithms;value=['0','1','2'].includes(raw)?a[Number(raw)]:a.find(x=>'"'+x+'"'===raw);if(!value)throw Error('Invalid idle algorithm.');}
-  else if(item.strategy){if(!['"Batch / wasted"','"Sequential"','0','1'].includes(raw))throw Error('Invalid MSQ strategy.');value=['"Sequential"','1'].includes(raw)?1:0;}
+  else if(item.strategy){const labels=ownCurrent?ENGINE_STRATEGY_LABELS:ENGINE_STRATEGY_LABELS.slice(0,2),quoted=labels.map(x=>'"'+x+'"');value=quoted.includes(raw)?quoted.indexOf(raw):labels.map((_,i)=>String(i)).includes(raw)?Number(raw):-1;if(value<0)throw Error('Invalid MSQ strategy for its identity.');}
   else if(item.flag){if(!['"On"','"Off"','0','1'].includes(raw))throw Error('Invalid MSQ flag.');value=['"On"','1'].includes(raw);}
   else{const list=raw?raw.split(/\s+/).map(Number):[];if(list.some(x=>!Number.isFinite(x))||list.length!==(Array.isArray(item.value)?item.value.length:1))throw Error('MSQ value count or number invalid.');value=Array.isArray(item.value)?list:list[0];}
-  if(item.idleKey)result.idle_control[item.idleKey]=value;else if(item.trimFlag||item.trimSpark!==undefined||item.trimCylinder!==undefined)window.EcuCylinderTuning.apply(result,item,value);else if(item.name==='baseRevision')result.revision=value;else if(item.strategy)result.strategy=value?'sequential_4cyl':'batch_wasted_4cyl';else if(item.order!==undefined)result.timing.firing_order[item.order]=value;else if(item.group)result[item.group][item.name]=value;else if(item.curve)result.curves[item.name]=value;else result.maps[item.map][item.field]=value;
+  if(item.idleKey)result.idle_control[item.idleKey]=value;else if(item.trimFlag||item.trimSpark!==undefined||item.trimCylinder!==undefined)window.EcuCylinderTuning.apply(result,item,value);else if(item.name==='baseRevision')result.revision=value;else if(item.strategy)result.strategy=ENGINE_STRATEGIES[value];else if(item.order!==undefined)result.timing.firing_order[item.order]=value;else if(item.group)result[item.group][item.name]=value;else if(item.curve)result.curves[item.name]=value;else result.maps[item.map][item.field]=value;
  }
  if(ownWhole&&!seen.has('baseRevision'))seen.add('baseRevision');
  if(seen.size!==expected.size)throw Error('Incomplete MSQ tune.');
- if(!ownCurrent)result.settings.idle_enabled=false;
+ if(!hasIdle)result.settings.idle_enabled=false;
  return result;
 }
 function engineImportShape(value,template,path=""){
  if(path==='schema_version'&&value!==template)throw Error('Unsupported engine schema version.');
  if(typeof template==='number'){if(typeof value!=='number'||!Number.isFinite(value))throw Error('Engine import contains an invalid number.');return;}
  if(typeof template==='boolean'){if(typeof value!=='boolean')throw Error('Engine import contains an invalid flag.');return;}
- if(typeof template==='string'){if(path==='idle_control.algorithm'){if(!window.EcuIdleControl.algorithms.includes(value))throw Error('Unknown idle algorithm.');return;}if(path==='strategy'){if(!['batch_wasted_4cyl','sequential_4cyl'].includes(value))throw Error('Unknown engine strategy.');return;}if(value!==template)throw Error('Engine tune identity or output inhibition changed.');return;}
+ if(typeof template==='string'){if(path==='idle_control.algorithm'){if(!window.EcuIdleControl.algorithms.includes(value))throw Error('Unknown idle algorithm.');return;}if(path==='strategy'){if(!ENGINE_STRATEGIES.includes(value))throw Error('Unknown engine strategy.');return;}if(value!==template)throw Error('Engine tune identity or output inhibition changed.');return;}
  if(!value||typeof value!=='object'||Array.isArray(value)!==Array.isArray(template)||Object.keys(value).sort().join('|')!==Object.keys(template).sort().join('|'))throw Error('Engine tune schema or array size does not match.');
  for(const k of Object.keys(template))engineImportShape(value[k],template[k],path?path+'.'+k:k);
 }
 function upgradeLegacyEngine(value,template){
- if(![1,2,3].includes(value?.schema_version))return value;
- const old=structuredClone(template);delete old.idle_control;old.schema_version=value.schema_version;
+ if(![1,2,3,4].includes(value?.schema_version))return value;
+ if(!['batch_wasted_4cyl','sequential_4cyl'].includes(value.strategy))throw Error('Legacy schema cannot represent semi-sequential mode.');
+ const old=structuredClone(template);if(value.schema_version<4)delete old.idle_control;old.schema_version=value.schema_version;
  if(value.schema_version<3)delete old.cylinder_trims;
  if(value.schema_version===1){delete old.timing;old.strategy='batch_wasted_4cyl';}
  engineImportShape(value,old);if(value.schema_version===1&&value.strategy!=='batch_wasted_4cyl')throw Error('Legacy tune must use batch / wasted.');
- return {...value,schema_version:4,settings:{...value.settings,idle_enabled:false},timing:value.schema_version===1?engineTimingDefaults():value.timing,cylinder_trims:value.schema_version<3?window.EcuCylinderTuning.defaults():value.cylinder_trims,idle_control:window.EcuIdleControl.defaults()};
+ return {...value,schema_version:5,settings:value.schema_version<4?{...value.settings,idle_enabled:false}:value.settings,timing:value.schema_version===1?engineTimingDefaults():value.timing,cylinder_trims:value.schema_version<3?window.EcuCylinderTuning.defaults():value.cylinder_trims,idle_control:value.schema_version<4?window.EcuIdleControl.defaults():value.idle_control};
+}
+function engineCycleSummary(t){
+ const node=$('#engine-cycle-summary');if(!node)return;
+ const order=t.timing.firing_order,valid=Array.isArray(order)&&order.length===4&&order[0]===1&&new Set(order).size===4&&order.every(x=>Number.isInteger(x)&&x>=1&&x<=4);
+ if(!valid){node.innerHTML='<p class="hint bad">Enter a valid firing order to derive the editor timing contract. Save performs native validation.</p>';return;}
+ const semi=t.strategy==='semi_sequential_4cyl',seq=t.strategy==='sequential_4cyl',angle=Number(t.timing.injection_end_deg),normalized=((angle%360)+360)%360;
+ const label=document.querySelector('label[for=eng-injection_end_deg]');if(label)label.textContent=semi?'Pair closing reference, °after pair TDC; repeats every360°':seq?'Injector closing angle, °ATDC of each cylinder compression TDC':'Stored closing reference; batch uses its fixed opening phase';
+ const pairs=[[order[0],order[2]],[order[1],order[3]]];
+ node.innerHTML=`<p class="hint"><b>Timing from editor settings:</b> ${seq?'One full-fuel opening per cylinder per720°, with cam phase required.':semi?'Two half-fuel openings per cylinder per720°, one every360°. Cam phase is not required.':'Two half-fuel openings per cylinder per720°, all injectors starting together at the fixed batch phase. Cam phase is not required.'} Dead time is added once per opening. ${semi?`Closing reference ${esc(angle)}° repeats at ${esc(Number(normalized.toFixed(3)))}° each revolution.`:''} ${t.cylinder_trims.enabled&&!seq?'Individual trims are enabled: choose full sequential or disable trims before saving.':''}</p>${semi?`<div class="tablewrap"><table><thead><tr><th>Logical pair</th><th>Physical cylinders / J9 channels</th><th>Pair TDC spacing</th></tr></thead><tbody>${pairs.map((pair,i)=>`<tr><td>${i+1}</td><td>${pair.join(' + ')}</td><td>360°; groups separated180°</td></tr>`).join('')}</tbody></table></div><p class="hint">Keep each injector on its own J9 low-side driver. Do not bridge outputs or double the load on one driver. Pairing is scheduled in software. The closing reference repeats on both strokes; it does not identify compression. Compare executed rise/fall edges and digital pulse widths after saving.</p>`:''}`;
 }
 function engineFile(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
 
@@ -890,13 +2068,13 @@ async function renderEngine(p){
  p.innerHTML='<section class="panel panelbody"><p>Loading engine development tools...</p></section>';
  try{if(!engineTune)engineTune=await api('/api/engine/config');if(current!=='engine')return;
  const t=engineTune;
- p.innerHTML=`<div class="banner"><b>SHADOW / SIL ONLY</b><span>Four-cylinder batch/wasted or cam-synchronized sequential proposals. This page cannot enable physical outputs. Defaults are illustrative, not an engine tune. The regression plant is unvalidated.</span></div><div class="actions" style="margin-bottom:18px"><button class="primary" id="engine-save">Save engine tune</button><button id="engine-reload">Reload saved tune</button><button id="engine-export">Export tune JSON</button><button id="engine-msq">Export TunerStudio MSQ</button><button id="engine-import">Import engine tune</button><input id="engine-import-file" type="file" accept=".json,.msq,application/json,application/xml" class="hidden"><span class="fine" id="engine-save-state">Revision ${t.revision}</span></div><div class="grid"><div class="stack"><section class="panel"><div class="panelhead"><h2>Engine and operating settings</h2></div><div class="panelbody"><div class="field"><label for="eng-strategy">Fuel and spark strategy</label><select id="eng-strategy"><option value="batch_wasted_4cyl" ${t.strategy==='batch_wasted_4cyl'?'selected':''}>Batch injection / wasted COP (360°)</option><option value="sequential_4cyl" ${t.strategy==='sequential_4cyl'?'selected':''}>Sequential fuel and spark (720°)</option></select></div><details open><summary>Cycle, firing order and cam reference</summary><div class="field" style="margin-top:12px"><label for="eng-order">Firing order, starting with cylinder 1</label><input id="eng-order" value="${esc(t.timing.firing_order.join(', '))}" placeholder="1, 3, 4, 2"></div><div class="formgrid">${[['injection_end_deg','Injector closing angle, °ATDC of each cylinder compression TDC'],['cam_sync_deg','Cam rising edge, crank °ATDC of cylinder 1 compression TDC'],['cam_window_deg','Cam acceptance window, ±crank degrees']].map(([k,label])=>`<div class="field"><label for="eng-${k}">${label}</label><input id="eng-${k}" data-eng-group="timing" data-eng-key="${k}" type="number" step="any" value="${t.timing[k]}"></div>`).join('')}</div><p class="hint">Sequential mode requires a missing-tooth crank wheel and one rising cam pulse per 720°. Two valid cam pulses establish phase. Cam loss cuts and latches until a supervised stop. A reference 360° wrong cannot be detected from one cam pulse alone. Confirm compression TDC mechanically. J17 is crank, J18 is cam.</p><p class="hint">Sequential fuel uses one opening per 720°, with dead time once per opening. The 15 ms limit still applies; cold default enrichment can exceed it and inhibit fuel. The simulator has a fixed 1-3-4-2 engine and a cam edge 450° after cylinder 1 compression TDC.</p></details><div class="formgrid">${Object.entries(t.engine).map(([k,v])=>`<div class="field"><label for="eng-${k}">${esc(k.replaceAll('_',' '))}</label><input id="eng-${k}" data-eng-group="engine" data-eng-key="${k}" type="number" step="any" value="${v}" ${k==='cylinders'?'readonly':''}></div>`).join('')}</div><details><summary>Starting, enrichment, protection and auxiliary proposals</summary><div class="formgrid" style="margin-top:16px">${Object.entries(t.settings).filter(([k])=>!k.startsWith('idle_')).map(([k,v])=>`<div class="field"><label for="eng-${k}">${esc(k.replaceAll('_',' '))}</label><input id="eng-${k}" data-eng-group="settings" data-eng-key="${k}" type="${typeof v==='boolean'?'checkbox':'number'}" ${typeof v==='boolean'?(v?'checked':''):`step="any" value="${v}"`}></div>`).join('')}</div></details><details><summary>Coolant and battery compensation curves</summary><div class="field" style="margin-top:12px"><label for="engine-curves">Curve arrays (JSON, increasing axes)</label><textarea id="engine-curves" rows="12" spellcheck="false">${esc(JSON.stringify(t.curves,null,2))}</textarea></div><p class="hint">Values are physical units. All curves are validated by the same C++ parser on target and host.</p></details><p class="hint">Current carrier limits: 15 ms injection, 3.5 ms dwell. Idle control drives virtual PWM in enabled SIL runs. Fan and pump remain proposals; physical engine outputs are inhibited.</p></div></section><section class="panel"><div class="panelhead"><h2>16 × 16 maps</h2><select id="engine-map-kind" style="width:auto"><option value="ve">VE (%)</option><option value="spark">Spark (degrees BTDC)</option><option value="lambda">Lambda target</option></select></div><div class="panelbody"><div id="engine-map"></div><p class="hint">Rows: manifold pressure in kPa. Columns: RPM. Bilinear interpolation; edge values clamp. Axes and all cells are validated on save.</p></div></section></div><div class="stack"><section class="panel"><div class="panelhead"><h2>Control diagnostics</h2><span class="tag">OUTPUTS INHIBITED</span></div><div class="panelbody" id="engine-live"></div></section><section class="panel"><div class="panelhead"><h2>Timing execution</h2><button class="small ghost" id="engine-timing-export">Export timing trace</button></div><div class="panelbody" id="engine-timing"><p class="hint">Waiting for timing diagnostics.</p></div></section><section class="panel"><div class="panelhead"><h2>Software-in-the-loop</h2><span class="tag">SYNTHETIC PLANT</span></div><div class="panelbody"><div class="field"><label for="engine-scenario">Regression scenario</label><select id="engine-scenario">${['warm_start','cold_start','throttle_step','load_step','trigger_dropout','sensor_short','overrev','stall_restart','load_stall_restart'].map(x=>`<option value="${x}">${x.replaceAll('_',' ')}</option>`).join('')}</select></div><div class="actions" style="margin-top:12px"><button id="engine-run">Run 12 virtual seconds</button><button id="engine-log">Export MSL log</button></div><p class="hint">Host simulator only. The native C++ ECU consumes generated 60-2 tooth events; virtual injector and spark edges feed an independent reduced-order plant. No predetermined RPM trace is played back.</p><pre id="engine-run-result" class="log" style="margin-top:14px">No SIL run yet.</pre></div></section></div></div>`;
- $('#eng-strategy').onchange=e=>{t.strategy=e.target.value;engineDirty=true;set('engine-save-state','Unsaved engine tune');};
- $('#eng-order').onchange=e=>{t.timing.firing_order=e.target.value.trim().split(/[\s,]+/).map(Number);engineDirty=true;set('engine-save-state','Unsaved engine tune');};
- document.querySelectorAll('[data-eng-key]').forEach(i=>i.onchange=()=>{t[i.dataset.engGroup][i.dataset.engKey]=i.type==='checkbox'?i.checked:Number(i.value);engineDirty=true;set('engine-save-state','Unsaved engine tune');});
+ p.innerHTML=`<div class="banner"><b>SHADOW / SIL ONLY</b><span>Four-cylinder batch, semi-sequential or cam-synchronized sequential proposals. This page cannot enable physical outputs. Defaults are illustrative, not an engine tune. The regression plant is unvalidated.</span></div><div class="actions" style="margin-bottom:18px"><button class="primary" id="engine-save">Save engine tune</button><button id="engine-reload">Reload saved tune</button><button id="engine-export">Export tune JSON</button><button id="engine-msq">Export TunerStudio MSQ</button><button id="engine-import">Import engine tune</button><input id="engine-import-file" type="file" accept=".json,.msq,application/json,application/xml" class="hidden"><span class="fine" id="engine-save-state">Revision ${t.revision}</span></div><div class="grid"><div class="stack"><section class="panel"><div class="panelhead"><h2>Engine and operating settings</h2></div><div class="panelbody"><div class="field"><label for="eng-strategy">Fuel and spark strategy</label><select id="eng-strategy"><option value="batch_wasted_4cyl" ${t.strategy==='batch_wasted_4cyl'?'selected':''}>Batch injection / wasted COP (360°)</option><option value="sequential_4cyl" ${t.strategy==='sequential_4cyl'?'selected':''}>Sequential fuel and spark (720°)</option><option value="semi_sequential_4cyl" ${t.strategy==='semi_sequential_4cyl'?'selected':''}>Semi-sequential fuel / wasted COP (360°)</option></select></div><details open><summary>Cycle, firing order and cam reference</summary><div class="field" style="margin-top:12px"><label for="eng-order">Firing order, starting with cylinder 1</label><input id="eng-order" value="${esc(t.timing.firing_order.join(', '))}" placeholder="1, 3, 4, 2"></div><div class="formgrid">${[['injection_end_deg','Injector closing angle, °ATDC of each cylinder compression TDC'],['cam_sync_deg','Cam rising edge, crank °ATDC of cylinder 1 compression TDC'],['cam_window_deg','Cam acceptance window, ±crank degrees']].map(([k,label])=>`<div class="field"><label for="eng-${k}">${label}</label><input id="eng-${k}" data-eng-group="timing" data-eng-key="${k}" type="number" step="any" value="${t.timing[k]}"></div>`).join('')}</div><div id="engine-cycle-summary"></div><p class="hint">Only full sequential mode requires a missing-tooth crank wheel and one rising cam pulse per 720°. Two valid cam pulses establish phase. Cam loss cuts and latches until a supervised stop. A reference 360° wrong cannot be detected from one cam pulse alone. Confirm compression TDC mechanically. J17 is crank, J18 is cam.</p><p class="hint">Sequential fuel uses one opening per 720°, with dead time once per opening. The 15 ms limit still applies; cold default enrichment can exceed it and inhibit fuel. The host regression plant uses a fixed 1-3-4-2 engine; use that order for its coupled runs. A cam edge is generated only for full sequential mode.</p></details><div class="formgrid">${Object.entries(t.engine).map(([k,v])=>`<div class="field"><label for="eng-${k}">${esc(k.replaceAll('_',' '))}</label><input id="eng-${k}" data-eng-group="engine" data-eng-key="${k}" type="number" step="any" value="${v}" ${k==='cylinders'?'readonly':''}></div>`).join('')}</div><details><summary>Starting, enrichment, protection and auxiliary proposals</summary><div class="formgrid" style="margin-top:16px">${Object.entries(t.settings).filter(([k])=>!k.startsWith('idle_')).map(([k,v])=>`<div class="field"><label for="eng-${k}">${esc(k.replaceAll('_',' '))}</label><input id="eng-${k}" data-eng-group="settings" data-eng-key="${k}" type="${typeof v==='boolean'?'checkbox':'number'}" ${typeof v==='boolean'?(v?'checked':''):`step="any" value="${v}"`}></div>`).join('')}</div></details><details><summary>Coolant and battery compensation curves</summary><div class="field" style="margin-top:12px"><label for="engine-curves">Curve arrays (JSON, increasing axes)</label><textarea id="engine-curves" rows="12" spellcheck="false">${esc(JSON.stringify(t.curves,null,2))}</textarea></div><p class="hint">Values are physical units. All curves are validated by the same C++ parser on target and host.</p></details><p class="hint">Current carrier limits: 15 ms injection, 3.5 ms dwell. Idle control drives virtual PWM in enabled SIL runs. Fan and pump remain proposals; physical engine outputs are inhibited.</p></div></section><section class="panel"><div class="panelhead"><h2>16 × 16 maps</h2><select id="engine-map-kind" style="width:auto"><option value="ve">VE (%)</option><option value="spark">Spark (degrees BTDC)</option><option value="lambda">Lambda target</option></select></div><div class="panelbody"><div id="engine-map"></div><p class="hint">Rows: manifold pressure in kPa. Columns: RPM. Bilinear interpolation; edge values clamp. Axes and all cells are validated on save.</p></div></section></div><div class="stack"><section class="panel"><div class="panelhead"><h2>Control diagnostics</h2><span class="tag">OUTPUTS INHIBITED</span></div><div class="panelbody" id="engine-live"></div></section><section class="panel"><div class="panelhead"><h2>Timing execution</h2><button class="small ghost" id="engine-timing-export">Export timing trace</button></div><div class="panelbody" id="engine-timing"><p class="hint">Waiting for timing diagnostics.</p></div></section><section class="panel"><div class="panelhead"><h2>Software-in-the-loop</h2><span class="tag">SYNTHETIC PLANT</span></div><div class="panelbody"><div class="field"><label for="engine-scenario">Regression scenario</label><select id="engine-scenario">${['warm_start','cold_start','throttle_step','load_step','trigger_dropout','sensor_short','overrev','stall_restart','load_stall_restart'].map(x=>`<option value="${x}">${x.replaceAll('_',' ')}</option>`).join('')}</select></div><div class="actions" style="margin-top:12px"><button id="engine-run">Run 12 virtual seconds</button><button id="engine-log">Export MSL log</button></div><p class="hint">Host simulator only. The native C++ ECU consumes generated 60-2 tooth events; virtual injector and spark edges feed an independent reduced-order plant. No predetermined RPM trace is played back.</p><pre id="engine-run-result" class="log" style="margin-top:14px">No SIL run yet.</pre></div></section></div></div>`;
+ $('#eng-strategy').onchange=e=>{t.strategy=e.target.value;engineDirty=true;set('engine-save-state','Unsaved engine tune');engineCycleSummary(t);};
+ $('#eng-order').onchange=e=>{t.timing.firing_order=e.target.value.trim().split(/[\s,]+/).map(Number);engineDirty=true;set('engine-save-state','Unsaved engine tune');engineCycleSummary(t);};
+ document.querySelectorAll('[data-eng-key]').forEach(i=>i.onchange=()=>{t[i.dataset.engGroup][i.dataset.engKey]=i.type==='checkbox'?i.checked:Number(i.value);engineDirty=true;set('engine-save-state','Unsaved engine tune');engineCycleSummary(t);});
  $('#engine-curves').onchange=e=>{try{t.curves=JSON.parse(e.target.value);engineDirty=true;set('engine-save-state','Unsaved engine tune')}catch(err){toast('Invalid curve JSON: '+err.message,true)}};
  $('#engine-map-kind').onchange=()=>drawEngineMap();
- $('#engine-save').onclick=async()=>{try{window.EcuIdleControl.validate($('#engine-idle-panel'));const curves=JSON.parse($('#engine-curves').value);t.curves=curves;engineTune=await api('/api/engine/config',{method:'PUT',body:JSON.stringify(t)});engineDirty=false;engineImportOrigin=undefined;toast('Engine tune validated and saved. Physical outputs remain inhibited.');renderEngine(p)}catch(e){toast(e.message,true)}};
+ $('#engine-save').onclick=async()=>{try{for(const i of p.querySelectorAll('[data-eng-key][type=number]'))if(!i.value.trim()||!Number.isFinite(Number(i.value)))throw Error('Engine settings: enter a finite value in every numeric field.');window.EcuIdleControl.validate($('#engine-idle-panel'));const curves=JSON.parse($('#engine-curves').value);t.curves=curves;engineTune=await api('/api/engine/config',{method:'PUT',body:JSON.stringify(t)});engineDirty=false;engineImportOrigin=undefined;toast('Engine tune validated and saved. Physical outputs remain inhibited.');renderEngine(p)}catch(e){toast(e.message,true)}};
  $('#engine-reload').onclick=async()=>{try{engineTune=await api('/api/engine/config');engineDirty=false;engineImportOrigin=undefined;renderEngine(p)}catch(e){toast(e.message,true)}};
  $('#engine-export').onclick=()=>download('ecu-shadow-engine-tune.json',t);
 
@@ -906,13 +2084,13 @@ async function renderEngine(p){
   if(file.size>65536)throw Error('Engine tune file exceeds 64 KiB.');
   const text=await file.text(),candidate=file.name.toLowerCase().endsWith('.msq')?engineFromMsq(text,t):upgradeLegacyEngine(JSON.parse(text),t);engineImportShape(candidate,t);
   if(!Number.isInteger(candidate.revision)||candidate.revision<1||candidate.revision>4294967295)throw Error('Invalid tune origin revision.');
-  const own004=file.name.toLowerCase().endsWith('.msq')&&[ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE].includes(new DOMParser().parseFromString(text,'application/xml').getElementsByTagNameNS(MSQ_NS,'versionInfo')[0]?.getAttribute('signature'));
-  if(!own004&&candidate.revision!==t.revision)throw Error('Tune base revision differs. Reload and export a current tune before editing it.');
-  const originElement=own004?[...new DOMParser().parseFromString(text,'application/xml').getElementsByTagNameNS(MSQ_NS,'constant')].find(e=>e.getAttribute('name')==='baseRevision'):null;
-  engineImportOrigin=own004?(originElement?candidate.revision:null):undefined;
+  const ownWholeFile=file.name.toLowerCase().endsWith('.msq')&&[ENGINE_SIGNATURE,IDLE_ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE].includes(new DOMParser().parseFromString(text,'application/xml').getElementsByTagNameNS(MSQ_NS,'versionInfo')[0]?.getAttribute('signature'));
+  if(!ownWholeFile&&candidate.revision!==t.revision)throw Error('Tune base revision differs. Reload and export a current tune before editing it.');
+  const originElement=ownWholeFile?[...new DOMParser().parseFromString(text,'application/xml').getElementsByTagNameNS(MSQ_NS,'constant')].find(e=>e.getAttribute('name')==='baseRevision'):null;
+  engineImportOrigin=ownWholeFile?(originElement?candidate.revision:null):undefined;
   // An offline file origin is metadata. Keep this loaded editor's CAS revision;
   // never fetch/rebase a newer server revision while importing someone’s file.
-  if(own004)candidate.revision=t.revision;
+  if(ownWholeFile)candidate.revision=t.revision;
   engineTune=candidate;engineDirty=true;if(current==='engine'){await renderEngine(p);set('engine-save-state','Imported edits. '+(engineImportOrigin===undefined?'':'File origin '+(engineImportOrigin===null?'unavailable':engineImportOrigin)+', editor base '+t.revision+'. ')+'Review, then save to validate.');}toast('Engine edits imported for review. Save validates them; outputs stay inhibited.');
  }catch(e){toast(e.message,true)}};
 
@@ -920,15 +2098,15 @@ async function renderEngine(p){
  $('#engine-run').onclick=async()=>{if(engineDirty)return toast('Save or reload the engine tune before running SIL.',true);const button=$('#engine-run');button.disabled=true;try{engineRun=await api('/api/engine/run',{method:'POST',body:JSON.stringify({scenario:$('#engine-scenario').value,duration_s:12})});set('engine-run-result',JSON.stringify(engineRun.summary,null,2));await pollEngine()}catch(e){toast(e.message,true)}finally{if(current==='engine')button.disabled=false}};
  $('#engine-log').onclick=async()=>{try{const response=await fetch('/api/engine/log');if(!response.ok)throw Error('Run a SIL scenario before exporting.');const blob=await response.blob(),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ecu-sil.msl';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}catch(e){toast(e.message,true)}};
  $('#engine-timing-export').onclick=async()=>{try{download('ecu-timing-trace.json',await api('/api/engine/timing'))}catch(e){toast(e.message,true)}};
- const cylinderPane=document.createElement('div');cylinderPane.id='engine-cylinder-panel';p.append(cylinderPane);window.EcuCylinderTuning.attach(cylinderPane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune')},toast);
+ const cylinderPane=document.createElement('div');cylinderPane.id='engine-cylinder-panel';p.append(cylinderPane);window.EcuCylinderTuning.attach(cylinderPane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune');engineCycleSummary(t)},toast);
  const idlePane=document.createElement('div');idlePane.id='engine-idle-panel';p.append(idlePane);window.EcuIdleControl.attach(idlePane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune')});
  const logPane=document.createElement('div');p.append(logPane);window.EcuEngineLogger?.attach(logPane,{api,file:engineFile,toast,simulator:session.simulator,token:session.token});
  const tuningPane=document.createElement('div');p.append(tuningPane);window.EcuTuningDiagnostics?.attach(tuningPane,{api,file:engineFile,toast});
- drawEngineMap();pollEngine();
+ engineCycleSummary(t);drawEngineMap();pollEngine();
  }catch(e){if(current==='engine')p.innerHTML='<section class="panel panelbody"><p>'+esc(e.message)+'</p></section>';}
 }
 function drawEngineMap(){const kind=$('#engine-map-kind').value,m=engineTune.maps[kind];$('#engine-map').innerHTML=`<div class="tablewrap"><table><thead><tr><th>kPa / RPM</th>${m.rpm.map((x,i)=>`<th><input aria-label="RPM axis ${i+1}" data-axis="rpm" data-idx="${i}" type="number" style="width:64px" value="${x}"></th>`).join('')}</tr></thead><tbody>${m.load.map((load,y)=>`<tr><th><input aria-label="Load axis ${y+1} kPa" data-axis="load" data-idx="${y}" type="number" style="width:64px" value="${load}"></th>${m.rpm.map((rpm,x)=>`<td><input aria-label="${kind} at ${load} kPa ${rpm} RPM" data-cell="${y*16+x}" type="number" step="any" style="width:64px" value="${m.cells[y*16+x]}"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;document.querySelectorAll('[data-cell],[data-axis]').forEach(i=>i.onchange=()=>{if(i.dataset.axis)m[i.dataset.axis][Number(i.dataset.idx)]=Number(i.value);else m.cells[Number(i.dataset.cell)]=Number(i.value);engineDirty=true;set('engine-save-state','Unsaved engine tune');});}
-async function pollEngine(){clearTimeout(engineStatusTimer);if(current!=='engine')return;try{const e=await api('/api/engine/status');if(current!=='engine')return;window.EcuCylinderTuning?.status(document.querySelector('#page'),e.cylinders);window.EcuIdleControl?.status(document.querySelector('#page'),e);const fields=['state','faults','crank_synced','phase_synced','phase_required','phase_reason','phase_losses','cam_rejected','cam_error_deg','rpm','ve_pct','target_lambda','pulse_ms','advance_deg','dwell_ms','deadtime_ms','warmup','afterstart','accel','ego','duty_pct','idle_pct','timing_stop_reason','timing_stops','timing_recoveries'];$('#engine-live').innerHTML=fields.map(k=>`<div class="keyline"><span>${esc(k.replaceAll('_',' '))}</span><strong>${typeof e[k]==='number'?num(e[k],k==='faults'?0:2):esc(e[k]??'--')}</strong></div>`).join('')+'<p class="hint">'+esc(e.binding||e.execution)+'</p>'+(!e.storage_ok?'<p class="warn" role="alert">'+esc(e.error||'Engine tune storage unavailable. Defaults may be active; inspect UART. Saves are blocked.')+'</p>':'')+'<p class="hint">'+esc(e.simulator?(e.last_run?'Completed SIL snapshot, '+Math.floor((e.sample_age_ms||0)/1000)+' seconds since completion.':'No SIL result yet.'):(e.fresh?'Fresh shadow sample.':'Shadow sample is stale.'))+'</p>';const timing=e.timing;const pane=$('#engine-timing');if(pane){if(!timing)pane.innerHTML='<p class="hint">Timing diagnostics are not available in this firmware.</p>';else{const rows=[['Mode',timing.mode],['Fault',timing.fault],['Last fault',timing.last_fault],['Angle plan reason',timing.angle_stop_reason],['Dispatched edges',timing.dispatched],['Virtual high mask',timing.virtual_high_mask],['Physical high mask',timing.physical_high_mask],['Capture clock uncertainty (µs)',timing.clock_uncertainty_us],['Maximum dispatch lateness (µs)',timing.max_lateness_us],['Maximum capture age (µs)',timing.max_capture_age_us],['Producer age (µs)',timing.producer_age_us],['Maximum coil dispatch high (µs)',timing.max_coil_high_us],['Trace records overwritten',timing.trace_overwritten]];pane.innerHTML=rows.map(([label,value])=>'<div class="keyline"><span>'+esc(label)+'</span><strong>'+esc(value??'--')+'</strong></div>').join('')+'<p class="hint">'+esc(timing.qualification||'')+'</p>';if(timing.fault&&timing.fault!=='none')pane.innerHTML+='<p class="warn" role="alert">Timing execution is inhibited: '+esc(timing.fault)+'</p>';}}if(e.last_run&&!engineRun)set('engine-run-result',JSON.stringify(e.last_run,null,2));}catch(e){if(current==='engine')set('engine-live','Engine diagnostics offline: '+e.message);}finally{if(current==='engine')engineStatusTimer=setTimeout(pollEngine,500);}}
+async function pollEngine(){clearTimeout(engineStatusTimer);if(current!=='engine')return;try{const e=await api('/api/engine/status');if(current!=='engine')return;window.EcuCylinderTuning?.status(document.querySelector('#page'),e.cylinders);window.EcuIdleControl?.status(document.querySelector('#page'),e);const fields=['active_strategy','state','faults','crank_synced','phase_synced','phase_required','phase_reason','phase_losses','cam_rejected','cam_error_deg','rpm','ve_pct','target_lambda','pulse_ms','advance_deg','dwell_ms','deadtime_ms','warmup','afterstart','accel','ego','duty_pct','idle_pct','timing_stop_reason','timing_stops','timing_recoveries'];$('#engine-live').innerHTML=fields.map(k=>`<div class="keyline"><span>${esc(k.replaceAll('_',' '))}</span><strong>${typeof e[k]==='number'?num(e[k],k==='faults'?0:2):esc(k==='phase_reason'&&e.phase_required===false?'not required for current strategy':e[k]??'--')}</strong></div>`).join('')+'<p class="hint">'+esc(e.binding||e.execution)+'</p>'+(!e.storage_ok?'<p class="warn" role="alert">'+esc(e.error||'Engine tune storage unavailable. Defaults may be active; inspect UART. Saves are blocked.')+'</p>':'')+'<p class="hint">'+esc(e.simulator?(e.last_run?'Completed SIL snapshot, '+Math.floor((e.sample_age_ms||0)/1000)+' seconds since completion.':'No SIL result yet.'):(e.fresh?'Fresh shadow sample.':'Shadow sample is stale.'))+'</p>';const timing=e.timing;const pane=$('#engine-timing');if(pane){if(!timing)pane.innerHTML='<p class="hint">Timing diagnostics are not available in this firmware.</p>';else{const rows=[['Mode',timing.mode],['Fault',timing.fault],['Last fault',timing.last_fault],['Angle plan reason',timing.angle_stop_reason],['Dispatched edges',timing.dispatched],['Virtual high mask',timing.virtual_high_mask],['Physical high mask',timing.physical_high_mask],['Capture clock uncertainty (µs)',timing.clock_uncertainty_us],['Maximum dispatch lateness (µs)',timing.max_lateness_us],['Maximum capture age (µs)',timing.max_capture_age_us],['Producer age (µs)',timing.producer_age_us],['Maximum coil dispatch high (µs)',timing.max_coil_high_us],['Trace records overwritten',timing.trace_overwritten]];pane.innerHTML=rows.map(([label,value])=>'<div class="keyline"><span>'+esc(label)+'</span><strong>'+esc(value??'--')+'</strong></div>').join('')+'<p class="hint">'+esc(timing.qualification||'')+'</p>';if(timing.fault&&timing.fault!=='none')pane.innerHTML+='<p class="warn" role="alert">Timing execution is inhibited: '+esc(timing.fault)+'</p>';}}if(e.last_run&&!engineRun)set('engine-run-result',JSON.stringify(e.last_run,null,2));}catch(e){if(current==='engine')set('engine-live','Engine diagnostics offline: '+e.message);}finally{if(current==='engine')engineStatusTimer=setTimeout(pollEngine,500);}}
 
 function renderScreens(p){
  p.innerHTML=`<section class="panel"><div class="panelhead"><h2>ESP-NOW screens</h2><span class="tag" id="radio-environment">LOADING</span></div><div class="panelbody"><p class="fine">Hold PAIR / BOOT for 3 seconds, or start pairing below. Enter the setup key on the future screen, then approve its name and MAC here or with a short PAIR press. Keep the key private. Pairing lasts 30 seconds.</p><div class="actions"><button class="primary" id="pair-open">Start pairing</button><button id="pair-cancel" disabled>Cancel pairing</button></div><p id="radio-status" role="status" aria-live="polite" class="fine">Loading radio status...</p><div id="pair-details" class="hidden"><div class="keyline"><span>Setup key</span><strong id="pair-key" style="overflow-wrap:anywhere;min-width:0"></strong></div><p class="hint">Enter this 32-character key on the screen or its setup tool. It is never broadcast over the radio.</p></div><div id="pair-candidate"></div><div class="divider"></div><h3>Saved screens</h3><div id="radio-peers"></div><p class="hint">A saved screen is connected only after authenticated acknowledgements. Unpair removes its saved key and stops future telemetry sends. Screens cannot control engine outputs. New screens can request authenticated engine telemetry with inputs, proposed fuel/spark, phase diagnostics and sample ages. Existing screens keep their sensor stream.</p><p class="fine" id="radio-engine-status"></p><p class="fine">LED: steady green when healthy, blinking blue during pairing, blinking red for a detected fault. Faults take priority. With no screens saved, an idle radio is healthy.</p><div id="radio-simulator" class="hidden"><div class="divider"></div><button id="sim-screen">Simulate a screen requesting pairing</button><p class="hint">Synthetic screen only. This simulator does not send ESP-NOW packets or prove radio range.</p></div></div></section>`;
@@ -952,7 +2130,7 @@ async function refreshRadio(){
  $('#pair-details').classList.toggle('hidden',!r.pairing);set('pair-key',r.setup_key||'');
  $('#pair-candidate').innerHTML=r.candidate?`<div class="notice" style="margin-top:16px"><p>Screen: <b>${esc(r.candidate.name)}</b> / <span class="mono">${esc(r.candidate.mac)}</span></p><button id="pair-confirm" ${r.candidate.approved?'disabled':''}>${r.candidate.approved?'Waiting for screen key confirmation':'Approve screen'}</button></div>`:'';
  if(r.candidate&&!r.candidate.approved)$('#pair-confirm').onclick=()=>radioAction({action:'confirm',mac:r.candidate.mac,window:r.window});
- $('#radio-peers').innerHTML=(r.peers||[]).map(p=>`<div class="keyline" style="gap:12px;flex-wrap:wrap"><div><b>${esc(p.name)}</b><p class="fine mono">${esc(p.mac)} / ${p.connected?'Connected':'Offline'}${p.last_ack_ms>=0?' / last reply '+num(p.last_ack_ms/1000,1)+' s ago':''} / ${p.engine_telemetry?'engine telemetry v'+p.engine_schema:'legacy sensor stream'}</p></div><button class="small" data-unpair="${esc(p.mac)}" aria-label="Unpair ${esc(p.name)}">Unpair</button></div>`).join('')||'<p class="fine">No screens paired.</p>';
+ $('#radio-peers').innerHTML=(r.peers||[]).map(p=>`<div class="keyline" style="gap:12px;flex-wrap:wrap"><div><b>${esc(p.name)}</b><p class="fine mono">${esc(p.mac)} / ${p.connected?'Connected':'Offline'}${p.last_ack_ms>=0?' / last reply '+num(p.last_ack_ms/1000,1)+' s ago':''} / ${p.engine_telemetry?'engine telemetry v'+p.engine_schema:'legacy sensor stream'}${p.engine_upgrade_needed?' / update screen firmware for current engine data':p.engine_telemetry_blocked?' / current engine data unavailable':''}</p></div><button class="small" data-unpair="${esc(p.mac)}" aria-label="Unpair ${esc(p.name)}">Unpair</button></div>`).join('')||'<p class="fine">No screens paired.</p>';
  document.querySelectorAll('[data-unpair]').forEach(b=>b.onclick=()=>radioAction({action:'unpair',mac:b.dataset.unpair}));
  $('#radio-simulator').classList.toggle('hidden',!r.simulator);$('#sim-screen').disabled=!r.pairing||!!r.candidate;
  }catch(e){if(current==='screens'){set('radio-status',e.message+' Pairing controls unavailable.');$('#pair-open').disabled=true;$('#pair-cancel').disabled=true;$('#pair-candidate').innerHTML='';$('#radio-peers').innerHTML='<p class="bad">Connection lost. Saved-screen state is unknown.</p>';$('#pair-details').classList.add('hidden');set('pair-key','');}}
