@@ -1,6 +1,6 @@
 # Idle air control and comparison
 
-The shared core implements on/off, PWM open-loop and closed-loop idle with feedforward, coolant target addition, crank/run taper, throttle/RPM entry hysteresis, dashpot, filtered derivative, duty slew and bounded anti-windup. The default master enable is off. The selected ESP32 remains an inhibited monitor; this increment establishes software and an explicitly unrouted hardware draft, not full Speeduino or physical-engine qualification.
+The shared core implements on/off, PWM open-loop and closed-loop idle with feedforward, coolant target addition, crank/run taper, throttle/RPM entry hysteresis, dashpot, filtered derivative, duty slew and bounded anti-windup. The default master enable is off. The selected ESP32 remains inhibited. The software evidence below and the later [isolated hardware development](engine-idle-isolation.md) establish neither full Speeduino parity nor physical-engine qualification.
 
 ## Configuration and diagnostics
 
@@ -40,7 +40,7 @@ The illustrative 900 RPM profile does not track perfectly. A disconnected/stuck-
 
 ## Hardware and reproduction
 
-The [THT accessory](../hardware/idle-accessory/README.md) supplies a reviewed pin/net contract and candidate BOM. It remains unrouted. Permanent carrier-side GPIO3 bias/eFuse verification, an alternate-return fault path, power/valve characterization, routing and physical fit remain release blockers. No shipped environment drives idle GPIO, and no board was flashed.
+The original [IAC-DRAFT1](../hardware/idle-accessory/README.md) remains an unrouted historical record. Current development uses the separate [A5 interface](../hardware/a5-idle-interface/README.md) and [isolated IAC-DRAFT2](../hardware/idle-isolated/README.md), with permanent carrier GPIO3 bias, routed copper, conditional circuit experiments and an independent layout/geometry review. [Hardware evidence and limits](engine-idle-isolation.md) retain the actual module/eFuse, driver guarantee, pulse/brownout, power/valve, thermal and physical-fit release holds. No shipped environment drives idle GPIO, and no board was flashed.
 
 ```sh
 python3 scripts/generate_tuning_wire.py

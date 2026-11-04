@@ -1,0 +1,51 @@
+{
+  "versions": {
+    "kicad": "9.0.8",
+    "java": [
+      "openjdk version \"21.0.12.1\" 2026-08-18",
+      "OpenJDK Runtime Environment (build 21.0.12.1+1-1-26.04.4-Ubuntu)",
+      "OpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-26.04.4-Ubuntu, mixed mode, sharing)"
+    ],
+    "platformio": "PlatformIO Core, version 6.2.0"
+  },
+  "freerouting": {
+    "version": "1.9.0",
+    "commit": "c88ad67e6d7cdb83ad52589a84e43ef9fe1e8620",
+    "primary_release": "https://github.com/freerouting/freerouting/releases/tag/v1.9.0",
+    "binary_sha256": "9084a4888937a7f31f857ecc12aa7a37407f51160e4d2892dff9c9bb47ae3102",
+    "analytics_disabled": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "-s",
+      "-screen 0 1280x900x24 -nolisten tcp",
+      "java",
+      "-Xmx1024m",
+      "-jar",
+      "freerouting-1.9.0.jar",
+      "-de",
+      "INPUT.dsn",
+      "-do",
+      "OUTPUT.ses",
+      "-mp",
+      "30",
+      "-mt",
+      "1",
+      "-da",
+      "-dct",
+      "0"
+    ],
+    "network_note": "Pinned router still checks public latest version; no vendor/person messages sent"
+  },
+  "ngspice": {
+    "version": "45.2+ds-1",
+    "package": "Ubuntu amd64 ngspice",
+    "filename": "pool/universe/n/ngspice/ngspice_45.2+ds-1_amd64.deb",
+    "primary_home": "https://ngspice.sourceforge.io/",
+    "package_sha256": "08aa3c21ca2390ae68521ccb3545de76663ebfbc643b7bfd87c9320969730fb2",
+    "binary_sha256": "25b6a73fafd9b489b92347a6c55fe307db502c1638f53d7d0bf439b5f7c65e38",
+    "installed_privately": true,
+    "note": "Package extracted into project cache without OS installation. Core SPICE/B/S/W/R/L/C models only; logs retain missing-global-spinit warning."
+  },
+  "qualification": "Tool provenance only; binary packages/JARs and proprietary device sources are not redistributed."
+}

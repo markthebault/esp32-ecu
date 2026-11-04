@@ -1,0 +1,136 @@
+IAC-DRAFT2 conditional lumped fault experiment / pulse_2us_tau_0.2us
+* Explicit assumptions, NOT vendor models. See ../results.json and source code.
+.param VREG=5.1645 TAU=2e-07 PGDOWN=1.4426950408888493e-05
+.options reltol=1e-5 abstol=1e-10 vntol=1e-7 method=gear
+Vbat battery 0 DC 12
+Vactpowerctl apctl 0 DC 1
+Sactpower battery vin apctl 0 WIRE
+Rvinleak vin 0 1e12
+Vcarrier c5 cg DC 5
+Vcarrier_reference cg 0 0
+Vcarrier_return crwire cg 0
+Vgpio gpiosrc cg PULSE(0 3.3 2m 10n 10n 2e-06 100m)
+Rgpio gpiosrc gpio 30
+R154 gpio cg 2200
+Vrun runsrc cg DC 5
+Rrun runsrc run 47
+Rexistingrun run cg 10000
+R50 run mainin 1000
+R53 mainin cg 10000
+* Conditional normal Q7 input-current proxy only. ST's500uA bound is at10V/25C,
+* not this5V/full-temperature case, and fault sink can be20mA. No loading proof.
+Bq7input mainin cg I=min(max(v(mainin,cg),0)/5,1)*500u
+Rhctinputs run cg 500k
+Vj1power pwrctl 0 DC 1
+Vj1return cgctl 0 DC 1
+Vactreturnctl agctl 0 DC 1
+Sinputpower c5 cin5 pwrctl 0 WIRE
+Sinputreturn gin crwire cgctl 0 WIRE
+Sactreturn ag actret agctl 0 WIRE
+Vactreturn actret 0 0
+Rbridge ag gin 1e12
+* J1 input buffers, actual resistor values and explicit generic BJT model.
+R1 gpio pb 1000
+R2 run rb 2200
+R3 cin5 pla 357
+R4 cin5 rla 357
+Vpwmled pla pl 0
+Vrunled rla rl 0
+Dpwled pl pc LED
+Drunled rl rc LED
+Q2 pc pb gin NPNGEN
+Q3 rc rb gin NPNGEN
+R5 pb gin 100k
+R6 rb gin 100k
+D3 gin pb DIODE
+D4 gin rb DIODE
+C9 cin5 gin 100n
+* No galvanic connection is introduced by optical transfer control variables.
+Bpwr rawpw ag V=(i(Vpwmled)>0.005 ? 1 : 0)
+Brun rawrun ag V=(i(Vrunled)>0.005 ? 1 : 0)
+Rpwdelay rawpw pwf 1000
+Crpw pwf ag {TAU/1000}
+Rrundelay rawrun runf 1000
+Crrun runf ag {TAU/1000}
+Spwout pwmn ag pwf ag OPTO
+Srunout runn ag runf ag OPTO
+R7 rail pwmn 1000
+R8 rail runn 1000
+Cpwload pwmn ag 100p
+Crunload runn ag 100p
+* HCT02 conditional transfer. Below4.5V choose HIGH as an adverse sensitivity,
+* not a claim of known invalid-rail behavior. The local supervisor must disable.
+Bhct nor ag V=(v(rail,ag)>=4.5 ? (v(pwmn,ag)<0.8 && v(runn,ag)<0.8 ? v(rail,ag) : 0) : v(rail,ag))
+R9 nor ina 1000
+R10 ina ag 10000
+Cina ina ag 15p
+* MCP100 timer approximation: threshold4.725V; declared assertion10us typical,
+* release350ms. First-order state crossing0.5, not an exact internal timer model.
+Bpgtimer pgstate ag I=(v(rail,ag)>4.725 ? 1n*(v(pgstate,ag)-1)/0.504943264 : 1n*v(pgstate,ag)/PGDOWN)
+Cpgstate pgstate ag 1n
+Bpg pgout ag V=(v(pgstate,ag)>0.5 ? max(v(rail,ag),0) : 0)
+R11 pgout ena 1000
+R12 ena ag 4700
+* Regulator draws its output current from the actual actuator branch. It is a
+* bounded ideal pass-current approximation with3V headroom, not LM317 dynamics.
+Breg vin rail I=max(min((min(VREG,max(v(vin,ag)-3,0))-v(rail,ag))*5,0.2),0)
+R15 rail adj 120
+R16 adj ag 374
+Rquiescent rail ag 500
+D2 rail vin DIODE
+C6 vin ag 100u
+C7 rail ag 22u
+C8 vin ag 100n
+C1 rail ag 100n
+C2 rail ag 100n
+C3 rail ag 100n
+C5 rail ag 100n
+C4 rail ag 100n
+C10 rail ag 1u
+* Force a known rail collapse, independent of unmodelled regulator dynamics.
+Vrailfault rdropctl 0 DC 0
+Vlowrail lowrail ag 4.2
+Srailfault rail lowrail rdropctl 0 CLAMP
+* Gate driver sources/sinks actual gate capacitance from local supply/return.
+* Below valid supply operation is deliberately allowed down to3.5V, adverse.
+Bgcmd gcmd ag V=(v(ina,ag)>2.4 && v(ena,ag)>2.4 && v(rail,ag)>3.5 ? 1 : 0)
+Bngcmd ngcmd ag V=(v(gcmd,ag)>0.5 ? 0 : 1)
+Shigh rail drive gcmd ag DRIVER
+Slow drive ag ngcmd ag DRIVER
+R13 drive gate 33
+R14 gate ag 10000
+Cgate gate ag 2.5n
+Cmiller gate drain 350p
+* Generic level1 MOS channel and explicit flyback, not an IRLZ44N macro-model.
+M1 drain gate ag ag FETGEN L=1u W=1u
+Rcoil vin winding 8
+Lcoil winding drain 12m
+D1 drain vin FLYBACK
+Vdrainshort shortctl 0 DC 0
+Sdrainshort drain ag shortctl 0 CLAMP
+.model WIRE SW(Ron=.01 Roff=1e9 Vt=.5 Vh=0)
+.model CLAMP SW(Ron=.01 Roff=1e9 Vt=.5 Vh=0)
+.model OPTO SW(Ron=80 Roff=1e9 Vt=.5 Vh=0)
+.model DRIVER SW(Ron=2 Roff=1e9 Vt=.5 Vh=0)
+.model NPNGEN NPN(Is=6.7e-15 Bf=150 Vaf=100 Cje=8p Cjc=4p Tf=.3n Tr=50n)
+.model LED D(Is=1e-18 N=1.5 Rs=3 Cjo=15p)
+.model DIODE D(Is=1e-9 N=1.7 Rs=.2 Cjo=5p)
+.model FLYBACK D(Is=1e-8 N=1.2 Rs=.08 Cjo=100p)
+.model FETGEN NMOS(Level=1 Vto=1.8 Kp=150 Lambda=.005 Rd=.02 Rs=.01)
+.ic v(rail)=5.1645 v(pgstate)=1 v(pwf)=0 v(runf)=1 v(pwmn)=5.1645 v(runn)=0.3826 v(vin)=12 v(drain)=12 v(winding)=12 v(gate)=0 v(cin5)=5
+.control
+set noaskquit
+set wr_singlescale
+set wr_vecnames
+set numdgt=17
+tran 5e-08 0.0022 0.0019 5e-08 uic
+let rail_v=v(rail)-v(ag)
+let gate_v=v(gate)-v(ag)
+let ina_v=v(ina)-v(ag)
+let ena_v=v(ena)-v(ag)
+let drain_v=v(drain)-v(ag)
+let gp_v=v(gpio)-v(cg)
+wrdata trace.tsv rail_v gate_v ina_v ena_v drain_v gp_v v(ag) i(Lcoil) i(Vpwmled) i(Vrunled) i(Vcarrier_return) i(Vactreturn)
+quit
+.endc
+.end

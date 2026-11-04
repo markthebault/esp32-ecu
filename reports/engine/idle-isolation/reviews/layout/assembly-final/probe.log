@@ -1,0 +1,110 @@
+{
+  "snapshot_bundle_sha256": "faa04b70b45721099858e38aa5f9effea7d069dfa2eb0f81359267f3bb547040",
+  "pcb_sha256": "dd12136d7c7dec1464d7119dcd1fefe8740fa3743c33520e7c524a3910bb3d2e",
+  "native_version": "9.0.8+dfsg-1",
+  "all_reference_count": 47,
+  "electrical_reference_count": 43,
+  "electrical_pin_count": 123,
+  "mounting_holes": [
+    "H1",
+    "H2",
+    "H3",
+    "H4"
+  ],
+  "board_mm": [
+    90,
+    60
+  ],
+  "copper_layers": 2,
+  "all_fitted_electrical_pads_PTH": true,
+  "unfitted_copper_tie_reference": "NT1",
+  "unfitted_copper_tie_pad_count": 2,
+  "fitted_electrical_pin_count": 121,
+  "drill_minmax_mm": [
+    0.75,
+    1.7
+  ],
+  "via_count": 2,
+  "vias": [
+    {
+      "net": "ACT_GND",
+      "position": [
+        93.0,
+        43.0
+      ],
+      "diameter_mm": 0.7,
+      "drill_mm": 0.35,
+      "locked": true
+    },
+    {
+      "net": "LOGIC_GND",
+      "position": [
+        96.88,
+        40.0
+      ],
+      "diameter_mm": 0.6,
+      "drill_mm": 0.3,
+      "locked": true
+    }
+  ],
+  "explicit_return_star_at_source": true,
+  "physical_ACT_GND_LOGIC_GND_shorts_outside_NT1": [],
+  "track_count": 241,
+  "same_net_pad_copper_contacts": [
+    {
+      "net": "ACT_GND",
+      "from_pin": "NT1.1",
+      "to_pin": "Q1.3",
+      "layer": "F.Cu",
+      "center_separation_mm": 0.0
+    }
+  ],
+  "track_width_counts": {
+    "0.8": 16,
+    "2.0": 15,
+    "0.5": 124,
+    "0.6": 5,
+    "0.3": 9,
+    "0.35": 72
+  },
+  "actual_copper_extents": {
+    "carrier_right_mm": 35.2,
+    "actuator_left_mm": 40.42,
+    "horizontal_gap_lower_bound_mm": 5.22
+  },
+  "barrier_rule_area_mm": [
+    35.3,
+    10,
+    40.3,
+    70
+  ],
+  "carrier_to_actuator_DC_path": false,
+  "deliberate_ground_bridge_negative_control": true,
+  "power_segments_2mm_locked_retained": 15,
+  "driver_logic_contacts_on_source_to_J2_power_bus_mm": [
+    [
+      95.08,
+      39.0
+    ]
+  ],
+  "limitations": [
+    "Conservative static graph, not fault/semiconductor simulation",
+    "Track-centerline lengths exclude internal package wires, solder/lead inductance and broad-pad shortcuts",
+    "No physical fit, current capacity, thermal, EMI, brownout/timing or certified isolation acceptance"
+  ]
+}
+CENTERLINE COPPER LENGTHS
+U2_C1 6.328
+U3_C2 6.328
+U4_C3 22.132
+U1_C4 9.126
+U5_C5 6.485
+U1_C10 26.597
+driver_to_fet_return 25.016
+driver_output_to_gate_resistor 4.88
+gate_resistor_to_fet 4.931
+driver_to_bulk_rail 48.021
+driver_to_bulk_return 35.826
+fet_source_to_supply_return 18.0
+flyback_plus 23.314
+flyback_low 13.814

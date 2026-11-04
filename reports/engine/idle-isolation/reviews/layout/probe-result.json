@@ -1,0 +1,1368 @@
+{
+  "snapshot_bundle_sha256": "7d761c8b82474863609ab3d7924ae29177f6d0fdafe617d2cf13bfe3d63853aa",
+  "pcb_sha256": "78edb587f537f692df9ed0a06e4511a5b40fcc17bcde72a1a8da44223bb975fe",
+  "native_version": "9.0.8+dfsg-1",
+  "all_reference_count": 45,
+  "electrical_reference_count": 41,
+  "electrical_pin_count": 119,
+  "mounting_holes": [
+    "H1",
+    "H2",
+    "H3",
+    "H4"
+  ],
+  "board_mm": [
+    90,
+    60
+  ],
+  "copper_layers": 2,
+  "all_electrical_pads_PTH": true,
+  "drill_minmax_mm": [
+    0.8,
+    1.7
+  ],
+  "via_count": 0,
+  "track_count": 218,
+  "track_width_counts": {
+    "2.0": 15,
+    "0.8": 10,
+    "0.5": 65,
+    "0.6": 54,
+    "0.35": 74
+  },
+  "actual_copper_extents": {
+    "carrier_right_mm": 35.2,
+    "actuator_left_mm": 40.42,
+    "horizontal_gap_lower_bound_mm": 5.22
+  },
+  "barrier_rule_area_mm": [
+    35.3,
+    10,
+    40.3,
+    70
+  ],
+  "carrier_to_actuator_DC_path": false,
+  "deliberate_ground_bridge_negative_control": true,
+  "power_segments_2mm_locked_retained": 15,
+  "driver_logic_contacts_on_source_to_J2_power_bus_mm": [
+    [
+      95.08,
+      53.8984
+    ]
+  ],
+  "copper_path_lengths": {
+    "U2_C1": {
+      "rail": {
+        "from_pin": "U2.8",
+        "to_pin": "C1.1",
+        "net": "ACT_5V2",
+        "length_mm": 6.380000000000003,
+        "path": [
+          [
+            "ACT_5V2",
+            0,
+            41.62,
+            22.0
+          ],
+          [
+            "ACT_5V2",
+            0,
+            43.0,
+            22.0
+          ],
+          [
+            "ACT_5V2",
+            0,
+            43.0,
+            17.0
+          ]
+        ]
+      },
+      "return_path": {
+        "from_pin": "C1.2",
+        "to_pin": "U2.5",
+        "net": "ACT_GND",
+        "length_mm": 16.318093952612745,
+        "path": [
+          [
+            "ACT_GND",
+            0,
+            48.0,
+            17.0
+          ],
+          [
+            "ACT_GND",
+            2,
+            48.0,
+            17.0
+          ],
+          [
+            "ACT_GND",
+            2,
+            43.4217,
+            21.5783
+          ],
+          [
+            "ACT_GND",
+            2,
+            43.4217,
+            29.62
+          ],
+          [
+            "ACT_GND",
+            2,
+            41.62,
+            29.62
+          ],
+          [
+            "ACT_GND",
+            0,
+            41.62,
+            29.62
+          ]
+        ]
+      },
+      "total_copper_mm": 22.698093952612748
+    },
+    "U3_C2": {
+      "rail": {
+        "from_pin": "U3.8",
+        "to_pin": "C2.1",
+        "net": "ACT_5V2",
+        "length_mm": 6.380000000000003,
+        "path": [
+          [
+            "ACT_5V2",
+            0,
+            41.62,
+            45.0
+          ],
+          [
+            "ACT_5V2",
+            0,
+            43.0,
+            45.0
+          ],
+          [
+            "ACT_5V2",
+            0,
+            43.0,
+            40.0
+          ]
+        ]
+      },
+      "return_path": {
+        "from_pin": "C2.2",
+        "to_pin": "U3.5",
+        "net": "ACT_GND",
+        "length_mm": 20.583170260293137,
+        "path": [
+          [
+            "ACT_GND",
+            0,
+            48.0,
+            40.0
+          ],
+          [
+            "ACT_GND",
+            0,
+            48.16,
+            40.16
+          ],
+          [
+            "ACT_GND",
+            0,
+            51.0,
+            40.16
+          ],
+          [
+            "ACT_GND",
+            2,
+            51.0,
+            40.16
+          ],
+          [
+            "ACT_GND",
+            2,
+            51.0,
+            42.7
+          ],
+          [
+            "ACT_GND",
+            2,
+            51.0,
+            45.24
+          ],
+          [
+            "ACT_GND",
+            2,
+            43.62,
+            52.62
+          ],
+          [
+            "ACT_GND",
+            2,
+            41.62,
+            52.62
+          ],
+          [
+            "ACT_GND",
+            0,
+            41.62,
+            52.62
+          ]
+        ]
+      },
+      "total_copper_mm": 26.96317026029314
+    },
+    "U4_C3": {
+      "rail": {
+        "from_pin": "U4.14",
+        "to_pin": "C3.1",
+        "net": "ACT_5V2",
+        "length_mm": 6.256812408671317,
+        "path": [
+          [
+            "ACT_5V2",
+            0,
+            58.62,
+            30.0
+          ],
+          [
+            "ACT_5V2",
+            2,
+            58.62,
+            30.0
+          ],
+          [
+            "ACT_5V2",
+            2,
+            58.0,
+            29.38
+          ],
+          [
+            "ACT_5V2",
+            2,
+            58.0,
+            24.0
+          ],
+          [
+            "ACT_5V2",
+            0,
+            58.0,
+            24.0
+          ]
+        ]
+      },
+      "return_path": {
+        "from_pin": "C3.2",
+        "to_pin": "U4.7",
+        "net": "ACT_GND",
+        "length_mm": 35.304206691542824,
+        "path": [
+          [
+            "ACT_GND",
+            0,
+            63.0,
+            24.0
+          ],
+          [
+            "ACT_GND",
+            2,
+            63.0,
+            24.0
+          ],
+          [
+            "ACT_GND",
+            2,
+            61.5775,
+            25.4225
+          ],
+          [
+            "ACT_GND",
+            2,
+            61.5775,
+            29.0375
+          ],
+          [
+            "ACT_GND",
+            2,
+            65.54,
+            33.0
+          ],
+          [
+            "ACT_GND",
+            0,
+            65.54,
+            33.0
+          ],
+          [
+            "ACT_GND",
+            0,
+            64.0409,
+            34.4991
+          ],
+          [
+            "ACT_GND",
+            0,
+            61.0026,
+            34.4991
+          ],
+          [
+            "ACT_GND",
+            0,
+            60.4217,
+            35.08
+          ],
+          [
+            "ACT_GND",
+            0,
+            58.62,
+            35.08
+          ],
+          [
+            "ACT_GND",
+            2,
+            58.62,
+            35.08
+          ],
+          [
+            "ACT_GND",
+            2,
+            58.62,
+            37.62
+          ],
+          [
+            "ACT_GND",
+            0,
+            58.62,
+            37.62
+          ],
+          [
+            "ACT_GND",
+            0,
+            56.8183,
+            37.62
+          ],
+          [
+            "ACT_GND",
+            0,
+            54.2783,
+            40.16
+          ],
+          [
+            "ACT_GND",
+            0,
+            51.0,
+            40.16
+          ],
+          [
+            "ACT_GND",
+            2,
+            51.0,
+            40.16
+          ],
+          [
+            "ACT_GND",
+            2,
+            51.0,
+            42.7
+          ],
+          [
+            "ACT_GND",
+            2,
+            51.0,
+            45.24
+          ],
+          [
+            "ACT_GND",
+            0,
+            51.0,
+            45.24
+          ]
+        ]
+      },
+      "total_copper_mm": 41.56101910021414
+    },
+    "U1_C4": {
+      "rail": {
+        "from_pin": "U1.6",
+        "to_pin": "C4.1",
+        "net": "ACT_5V2",
+        "length_mm": 3.2610764773832437,
+        "path": [
+          [
+            "ACT_5V2",
+            0,
+            75.62,
+            43.08
+          ],
+          [
+            "ACT_5V2",
+            0,
+            76.54,
+            44.0
+          ],
+          [
+            "ACT_5V2",
+            0,
+            78.5,
+            44.0
+          ]
+        ]
+      },
+      "return_path": {
+        "from_pin": "C4.2",
+        "to_pin": "U1.3",
+        "net": "ACT_GND",
+        "length_mm": 20.712411568866344,
+        "path": [
+          [
+            "ACT_GND",
+            0,
+            83.5,
+            44.0
+          ],
+          [
+            "ACT_GND",
+            0,
+            77.5,
+            38.0
+          ],
+          [
+            "ACT_GND",
+            0,
+            77.0,
+            38.0
+          ],
+          [
+            "ACT_GND",
+            0,
+            75.62,
+            38.0
+          ],
+          [
+            "ACT_GND",
+            2,
+            75.62,
+            38.0
+          ],
+          [
+            "ACT_GND",
+            2,
+            73.8183,
+            38.0
+          ],
+          [
+            "ACT_GND",
+            2,
+            69.8017,
+            42.0166
+          ],
+          [
+            "ACT_GND",
+            2,
+            69.8017,
+            43.08
+          ],
+          [
+            "ACT_GND",
+            2,
+            68.0,
+            43.08
+          ],
+          [
+            "ACT_GND",
+            0,
+            68.0,
+            43.08
+          ]
+        ]
+      },
+      "total_copper_mm": 23.97348804624959
+    },
+    "U5_C5": {
+      "rail": {
+        "from_pin": "U5.2",
+        "to_pin": "C5.1",
+        "net": "ACT_5V2",
+        "length_mm": 7.6047518010647135,
+        "path": [
+          [
+            "ACT_5V2",
+            0,
+            70.54,
+            21.0
+          ],
+          [
+            "ACT_5V2",
+            2,
+            70.54,
+            21.0
+          ],
+          [
+            "ACT_5V2",
+            2,
+            70.54,
+            26.54
+          ],
+          [
+            "ACT_5V2",
+            2,
+            72.0,
+            28.0
+          ],
+          [
+            "ACT_5V2",
+            0,
+            72.0,
+            28.0
+          ]
+        ]
+      },
+      "return_path": {
+        "from_pin": "C5.2",
+        "to_pin": "U5.3",
+        "net": "ACT_GND",
+        "length_mm": 8.623717164502533,
+        "path": [
+          [
+            "ACT_GND",
+            0,
+            77.0,
+            28.0
+          ],
+          [
+            "ACT_GND",
+            2,
+            77.0,
+            28.0
+          ],
+          [
+            "ACT_GND",
+            2,
+            77.0,
+            24.92
+          ],
+          [
+            "ACT_GND",
+            2,
+            73.08,
+            21.0
+          ],
+          [
+            "ACT_GND",
+            0,
+            73.08,
+            21.0
+          ]
+        ]
+      },
+      "total_copper_mm": 16.228468965567245
+    },
+    "driver_to_fet_return": {
+      "from_pin": "U1.3",
+      "to_pin": "Q1.3",
+      "net": "ACT_GND",
+      "length_mm": 51.56032485596857,
+      "path": [
+        [
+          "ACT_GND",
+          0,
+          68.0,
+          43.08
+        ],
+        [
+          "ACT_GND",
+          2,
+          68.0,
+          43.08
+        ],
+        [
+          "ACT_GND",
+          2,
+          69.8017,
+          43.08
+        ],
+        [
+          "ACT_GND",
+          2,
+          69.8017,
+          42.0166
+        ],
+        [
+          "ACT_GND",
+          2,
+          73.8183,
+          38.0
+        ],
+        [
+          "ACT_GND",
+          2,
+          75.62,
+          38.0
+        ],
+        [
+          "ACT_GND",
+          0,
+          75.62,
+          38.0
+        ],
+        [
+          "ACT_GND",
+          0,
+          77.0,
+          38.0
+        ],
+        [
+          "ACT_GND",
+          0,
+          77.5,
+          38.0
+        ],
+        [
+          "ACT_GND",
+          0,
+          83.5,
+          44.0
+        ],
+        [
+          "ACT_GND",
+          0,
+          87.04,
+          47.54
+        ],
+        [
+          "ACT_GND",
+          0,
+          87.04,
+          48.0
+        ],
+        [
+          "ACT_GND",
+          0,
+          89.1816,
+          48.0
+        ],
+        [
+          "ACT_GND",
+          0,
+          95.08,
+          53.8984
+        ],
+        [
+          "ACT_GND",
+          0,
+          95.08,
+          47.0242
+        ],
+        [
+          "ACT_GND",
+          0,
+          95.08,
+          39.0
+        ]
+      ]
+    },
+    "driver_output_to_gate_resistor": {
+      "from_pin": "U1.7",
+      "to_pin": "R13.1",
+      "net": "DRIVE",
+      "length_mm": 6.8463160108007495,
+      "path": [
+        [
+          "DRIVE",
+          0,
+          75.62,
+          40.54
+        ],
+        [
+          "DRIVE",
+          2,
+          75.62,
+          40.54
+        ],
+        [
+          "DRIVE",
+          2,
+          77.46,
+          40.54
+        ],
+        [
+          "DRIVE",
+          2,
+          81.0,
+          37.0
+        ],
+        [
+          "DRIVE",
+          0,
+          81.0,
+          37.0
+        ]
+      ]
+    },
+    "gate_resistor_to_fet": {
+      "from_pin": "R13.2",
+      "to_pin": "Q1.1",
+      "net": "GATE",
+      "length_mm": 7.723607869259213,
+      "path": [
+        [
+          "GATE",
+          0,
+          83.54,
+          37.0
+        ],
+        [
+          "GATE",
+          2,
+          83.54,
+          37.0
+        ],
+        [
+          "GATE",
+          2,
+          84.7971,
+          38.2571
+        ],
+        [
+          "GATE",
+          2,
+          84.7971,
+          39.0
+        ],
+        [
+          "GATE",
+          2,
+          88.5708,
+          39.0
+        ],
+        [
+          "GATE",
+          2,
+          90.0,
+          39.0
+        ],
+        [
+          "GATE",
+          0,
+          90.0,
+          39.0
+        ]
+      ]
+    },
+    "driver_to_bulk_rail": {
+      "from_pin": "U1.6",
+      "to_pin": "C7.1",
+      "net": "ACT_5V2",
+      "length_mm": 32.91132124556751,
+      "path": [
+        [
+          "ACT_5V2",
+          0,
+          75.62,
+          43.08
+        ],
+        [
+          "ACT_5V2",
+          0,
+          73.8683,
+          43.08
+        ],
+        [
+          "ACT_5V2",
+          0,
+          66.0,
+          50.9483
+        ],
+        [
+          "ACT_5V2",
+          0,
+          66.0,
+          51.0
+        ],
+        [
+          "ACT_5V2",
+          0,
+          59.5996,
+          51.0
+        ],
+        [
+          "ACT_5V2",
+          0,
+          59.5996,
+          62.5996
+        ],
+        [
+          "ACT_5V2",
+          0,
+          61.0,
+          64.0
+        ]
+      ]
+    },
+    "driver_to_bulk_return": {
+      "from_pin": "C7.2",
+      "to_pin": "U1.3",
+      "net": "ACT_GND",
+      "length_mm": 28.988562636131768,
+      "path": [
+        [
+          "ACT_GND",
+          0,
+          64.5,
+          64.0
+        ],
+        [
+          "ACT_GND",
+          2,
+          64.5,
+          64.0
+        ],
+        [
+          "ACT_GND",
+          2,
+          63.54,
+          63.04
+        ],
+        [
+          "ACT_GND",
+          2,
+          63.54,
+          57.0
+        ],
+        [
+          "ACT_GND",
+          2,
+          60.4217,
+          53.8817
+        ],
+        [
+          "ACT_GND",
+          2,
+          60.4217,
+          45.24
+        ],
+        [
+          "ACT_GND",
+          2,
+          62.3,
+          45.24
+        ],
+        [
+          "ACT_GND",
+          2,
+          64.54,
+          43.0
+        ],
+        [
+          "ACT_GND",
+          0,
+          64.54,
+          43.0
+        ],
+        [
+          "ACT_GND",
+          0,
+          64.62,
+          43.08
+        ],
+        [
+          "ACT_GND",
+          0,
+          68.0,
+          43.08
+        ]
+      ]
+    },
+    "fet_source_to_supply_return": {
+      "from_pin": "Q1.3",
+      "to_pin": "J2.2",
+      "net": "ACT_GND",
+      "length_mm": 18.0,
+      "path": [
+        [
+          "ACT_GND",
+          0,
+          95.08,
+          39.0
+        ],
+        [
+          "ACT_GND",
+          0,
+          95.08,
+          47.0242
+        ],
+        [
+          "ACT_GND",
+          0,
+          95.08,
+          53.8984
+        ],
+        [
+          "ACT_GND",
+          0,
+          95.08,
+          57.0
+        ]
+      ]
+    },
+    "flyback_plus": {
+      "from_pin": "D1.1",
+      "to_pin": "J3.1",
+      "net": "ACT_12V",
+      "length_mm": 23.31370849898476,
+      "path": [
+        [
+          "ACT_12V",
+          0,
+          70.0,
+          15.0
+        ],
+        [
+          "ACT_12V",
+          0,
+          73.0,
+          18.0
+        ],
+        [
+          "ACT_12V",
+          0,
+          85.0,
+          18.0
+        ],
+        [
+          "ACT_12V",
+          0,
+          90.0,
+          23.0
+        ]
+      ]
+    },
+    "flyback_low": {
+      "from_pin": "D1.2",
+      "to_pin": "J3.2",
+      "net": "IAC_LS",
+      "length_mm": 13.814499269370552,
+      "path": [
+        [
+          "IAC_LS",
+          0,
+          85.24,
+          15.0
+        ],
+        [
+          "IAC_LS",
+          0,
+          89.0,
+          15.0
+        ],
+        [
+          "IAC_LS",
+          0,
+          93.96,
+          19.96
+        ],
+        [
+          "IAC_LS",
+          0,
+          93.96,
+          23.0
+        ]
+      ]
+    }
+  },
+  "truth_table": [
+    {
+      "pwm_led": 0,
+      "run_led": 0,
+      "local_ok": 0,
+      "pwm_n": 1,
+      "run_n": 1,
+      "nor": 0,
+      "drive": 0
+    },
+    {
+      "pwm_led": 0,
+      "run_led": 0,
+      "local_ok": 1,
+      "pwm_n": 1,
+      "run_n": 1,
+      "nor": 0,
+      "drive": 0
+    },
+    {
+      "pwm_led": 0,
+      "run_led": 1,
+      "local_ok": 0,
+      "pwm_n": 1,
+      "run_n": 0,
+      "nor": 0,
+      "drive": 0
+    },
+    {
+      "pwm_led": 0,
+      "run_led": 1,
+      "local_ok": 1,
+      "pwm_n": 1,
+      "run_n": 0,
+      "nor": 0,
+      "drive": 0
+    },
+    {
+      "pwm_led": 1,
+      "run_led": 0,
+      "local_ok": 0,
+      "pwm_n": 0,
+      "run_n": 1,
+      "nor": 0,
+      "drive": 0
+    },
+    {
+      "pwm_led": 1,
+      "run_led": 0,
+      "local_ok": 1,
+      "pwm_n": 0,
+      "run_n": 1,
+      "nor": 0,
+      "drive": 0
+    },
+    {
+      "pwm_led": 1,
+      "run_led": 1,
+      "local_ok": 0,
+      "pwm_n": 0,
+      "run_n": 0,
+      "nor": 1,
+      "drive": 0
+    },
+    {
+      "pwm_led": 1,
+      "run_led": 1,
+      "local_ok": 1,
+      "pwm_n": 0,
+      "run_n": 0,
+      "nor": 1,
+      "drive": 1
+    }
+  ],
+  "independent_arithmetic": {
+    "regulator_corners": [
+      {
+        "vref": 1.225,
+        "r1": 118.8,
+        "r2": 370.26,
+        "iadj": 0,
+        "vout": 5.042916666666668
+      },
+      {
+        "vref": 1.225,
+        "r1": 118.8,
+        "r2": 370.26,
+        "iadj": 0.0001,
+        "vout": 5.079942666666668
+      },
+      {
+        "vref": 1.225,
+        "r1": 118.8,
+        "r2": 377.74,
+        "iadj": 0,
+        "vout": 5.120046296296296
+      },
+      {
+        "vref": 1.225,
+        "r1": 118.8,
+        "r2": 377.74,
+        "iadj": 0.0001,
+        "vout": 5.157820296296296
+      },
+      {
+        "vref": 1.225,
+        "r1": 121.2,
+        "r2": 370.26,
+        "iadj": 0,
+        "vout": 4.967314356435645
+      },
+      {
+        "vref": 1.225,
+        "r1": 121.2,
+        "r2": 370.26,
+        "iadj": 0.0001,
+        "vout": 5.004340356435645
+      },
+      {
+        "vref": 1.225,
+        "r1": 121.2,
+        "r2": 377.74,
+        "iadj": 0,
+        "vout": 5.042916666666668
+      },
+      {
+        "vref": 1.225,
+        "r1": 121.2,
+        "r2": 377.74,
+        "iadj": 0.0001,
+        "vout": 5.080690666666667
+      },
+      {
+        "vref": 1.27,
+        "r1": 118.8,
+        "r2": 370.26,
+        "iadj": 0,
+        "vout": 5.2281666666666675
+      },
+      {
+        "vref": 1.27,
+        "r1": 118.8,
+        "r2": 370.26,
+        "iadj": 0.0001,
+        "vout": 5.2651926666666675
+      },
+      {
+        "vref": 1.27,
+        "r1": 118.8,
+        "r2": 377.74,
+        "iadj": 0,
+        "vout": 5.308129629629629
+      },
+      {
+        "vref": 1.27,
+        "r1": 118.8,
+        "r2": 377.74,
+        "iadj": 0.0001,
+        "vout": 5.345903629629629
+      },
+      {
+        "vref": 1.27,
+        "r1": 121.2,
+        "r2": 370.26,
+        "iadj": 0,
+        "vout": 5.149787128712871
+      },
+      {
+        "vref": 1.27,
+        "r1": 121.2,
+        "r2": 370.26,
+        "iadj": 0.0001,
+        "vout": 5.186813128712871
+      },
+      {
+        "vref": 1.27,
+        "r1": 121.2,
+        "r2": 377.74,
+        "iadj": 0,
+        "vout": 5.2281666666666675
+      },
+      {
+        "vref": 1.27,
+        "r1": 121.2,
+        "r2": 377.74,
+        "iadj": 0.0001,
+        "vout": 5.265940666666667
+      }
+    ],
+    "rail_range_v": [
+      4.967314356435645,
+      5.345903629629629
+    ],
+    "divider_min_load_a": 0.010107260726072608,
+    "headroom_at_9v_v": 3.654096370370371,
+    "rail_above_max_supervisor_trip_v": 0.11731435643564492,
+    "rail_below_5p5_v": 0.15409637037037083,
+    "led_conditional_current_a": [
+      0.007626813101478215,
+      0.014854426619132501
+    ],
+    "assumptions": [
+      "Carrier rail4.75..5.25V, LEDVF<=1.7V and NPNVCEsat<=0.3V are conditional operating assumptions",
+      "No loadedGPIO or full-temperature NPN guarantee asserted"
+    ]
+  },
+  "footprint_provenance": [
+    {
+      "footprint": "CP_Radial_D8.0mm_P3.50mm",
+      "hashes_verified": true,
+      "origin": {
+        "source": "hardware/a4-n16r8/lib/ecu.pretty/CP_Radial_D8.0mm_P3.50mm.kicad_mod",
+        "source_sha256": "e7256cc327aa5d1bc5410a487248fa9b5e3d25153b2315201d5da5108cb49580",
+        "copy_sha256": "653c8574ab8c35ac9ab86aedd95e8dcf6a3be0156891ca0818f90ea8dfa1d216",
+        "omitted_metadata": {
+          "duplicate_pad_numbers_are_jumpers": 1,
+          "point": 0
+        }
+      }
+    },
+    {
+      "footprint": "C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "hashes_verified": true,
+      "origin": {
+        "source": "hardware/a4-n16r8/lib/ecu.pretty/C_Disc_D5.0mm_W2.5mm_P5.00mm.kicad_mod",
+        "source_sha256": "afb7659d91c9847218b705eca72d29f43dfa77a1ee0f99563bad4289768f2e17",
+        "copy_sha256": "951765c5e3866f11266d7d8f61ddc97a43ed3188cd9729f97eafc48b7b1878a3",
+        "omitted_metadata": {
+          "duplicate_pad_numbers_are_jumpers": 1,
+          "point": 0
+        }
+      }
+    },
+    {
+      "footprint": "DIP-14_W7.62mm_LongPads",
+      "hashes_verified": true,
+      "origin": {
+        "source": "hardware/a4-n16r8/lib/ecu.pretty/DIP-14_W7.62mm_LongPads.kicad_mod",
+        "source_sha256": "c2d460c2d6d138767317ebf8cd66cb55ff1359ee1793444e80d82fcb2d4883fe",
+        "copy_sha256": "8129bb34e9b9775987e0611ae309a81c4e389d15ada344ac81c17923d723f70b",
+        "omitted_metadata": {
+          "duplicate_pad_numbers_are_jumpers": 1,
+          "point": 1
+        }
+      }
+    },
+    {
+      "footprint": "DIP-8_W7.62mm_LongPads",
+      "hashes_verified": true,
+      "origin": {
+        "source": "hardware/a4-n16r8/lib/ecu.pretty/DIP-8_W7.62mm_LongPads.kicad_mod",
+        "source_sha256": "a16eccf33fe2258926d86e052b260d9391397ed38643a98f2a64bdc863b5b444",
+        "copy_sha256": "856a8b0b362480709646e1514ee9a700af954a14205f2d9b58dd32dc2c6761ac",
+        "omitted_metadata": {
+          "duplicate_pad_numbers_are_jumpers": 1,
+          "point": 1
+        }
+      }
+    },
+    {
+      "footprint": "D_DO-201AD_P15.24mm_Horizontal",
+      "hashes_verified": true,
+      "origin": {
+        "source": "hardware/a4-n16r8/lib/ecu.pretty/D_DO-201AD_P15.24mm_Horizontal.kicad_mod",
+        "source_sha256": "0e71c28fa6c04c60fc5f78ee975a0e07bdd33b892079738ee0ecea0868c7dd1f",
+        "copy_sha256": "a8019a2b94624e05b8185e681328b68ad5c1994a16277ee000ccdb6e83ce6c3e",
+        "omitted_metadata": {
+          "duplicate_pad_numbers_are_jumpers": 1,
+          "point": 0
+        }
+      }
+    },
+    {
+      "footprint": "D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp",
+      "hashes_verified": true,
+      "origin": {
+        "source": "hardware/a4-n16r8/lib/ecu.pretty/D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp.kicad_mod",
+        "source_sha256": "bfd5eaec45544f1725a207bf9de390d15cdb1c7c218de669ceeb96acfeee4545",
+        "copy_sha256": "110604720a16583167c7f2a5b11e72e138e158d6a838225d647744137c5b325d",
+        "omitted_metadata": {
+          "duplicate_pad_numbers_are_jumpers": 1,
+          "point": 0
+        }
+      }
+    },
+    {
+      "footprint": "D_DO-41_SOD81_P10.16mm_Horizontal",
+      "hashes_verified": true,
+      "origin": {
+        "url": "https://raw.githubusercontent.com/KiCad/kicad-footprints/7ebfa6b23cc292a56f751b7b5f4a0e12eeef69dd/Diode_THT.pretty/D_DO-41_SOD81_P10.16mm_Horizontal.kicad_mod",
+        "commit": "7ebfa6b23cc292a56f751b7b5f4a0e12eeef69dd",
+        "sha256": "cdc808500f6018e48deaa76c7e74b90f37eabbecc5e02c03440eb3c0dcff8af3",
+        "license": "KiCad footprint library CC-BY-SA4.0 with exception; see lib/NOTICE.md"
+      }
+    },
+    {
+      "footprint": "JST_VH_B2P-VH_1x02_P3.96mm_Vertical",
+      "hashes_verified": true,
+      "origin": {
+        "source": "hardware/a4-n16r8/lib/ecu.pretty/JST_VH_B2P-VH_1x02_P3.96mm_Vertical.kicad_mod",
+        "source_sha256": "db267aa991d5a9d6f37a7118ea3649762027773687cf65df88339d984a25edb3",
+        "copy_sha256": "039c57806cf885f28c874e4d2042ceec86fa8238cef6ea1aa5db09ad2069fb7a",
+        "omitted_metadata": {
+          "duplicate_pad_numbers_are_jumpers": 1,
+          "point": 0
+        }
+      }
+    },
+    {
+      "footprint": "JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical",
+      "hashes_verified": true,
+      "origin": {
+        "source": "hardware/a4-n16r8/lib/ecu.pretty/JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical.kicad_mod",
+        "source_sha256": "fa93a9f49b03c4caad76b643da2473903ee645833aa1d0ae65afd97740431d86",
+        "copy_sha256": "16d013aba8d9744f370b0ee861e3956eb2b237017d2ecef8fb6959a6b9bdbd91",
+        "omitted_metadata": {
+          "duplicate_pad_numbers_are_jumpers": 1,
+          "point": 0
+        }
+      }
+    },
+    {
+      "footprint": "MountingHole_3.2mm_M3",
+      "hashes_verified": true,
+      "origin": {
+        "source": "hardware/a4-n16r8/lib/ecu.pretty/MountingHole_3.2mm_M3.kicad_mod",
+        "source_sha256": "b83ec84428449465df3b459f1bc24b285045c812102a2052b1b7ce0f67e018f2",
+        "copy_sha256": "ad3ae9361d31f7f65b71a9b8c7d0159fc6278a7baba0a48c886e40b430d989dd",
+        "omitted_metadata": {
+          "duplicate_pad_numbers_are_jumpers": 1,
+          "point": 0
+        }
+      }
+    },
+    {
+      "footprint": "R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "hashes_verified": true,
+      "origin": {
+        "source": "hardware/a4-n16r8/lib/ecu.pretty/R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical.kicad_mod",
+        "source_sha256": "a6ba4cb8f709d8c6f991ebfdf0acef8b2080868c5290c4b2be5a9f2ec7542b00",
+        "copy_sha256": "3a34f732213b656c61226bc7ab649655e54299d56516f8c2f35d44c15f6b24d3",
+        "omitted_metadata": {
+          "duplicate_pad_numbers_are_jumpers": 1,
+          "point": 0
+        }
+      }
+    },
+    {
+      "footprint": "TO-220-3_Vertical",
+      "hashes_verified": true,
+      "origin": {
+        "source": "hardware/a4-n16r8/lib/ecu.pretty/TO-220-3_Vertical.kicad_mod",
+        "source_sha256": "0c6681bb273696adcf40811327dd0a0def4757d349b282292de39bde86cf3aff",
+        "copy_sha256": "88a13e76d4ba9b70d45330b9f9bac6b017dc31661f51bc6aecd59ea3afb40b38",
+        "omitted_metadata": {
+          "duplicate_pad_numbers_are_jumpers": 1,
+          "point": 0
+        }
+      }
+    },
+    {
+      "footprint": "TO-92_Inline_Wide",
+      "hashes_verified": true,
+      "origin": {
+        "source": "hardware/a4-n16r8/lib/ecu.pretty/TO-92_Inline_Wide.kicad_mod",
+        "source_sha256": "dec3d73e5b87d0ca4d957119b74f768649fa1140e06cc0a5bd53a87885e4d602",
+        "copy_sha256": "b67daafbfbad5a0c4270731cb4e2012145988792639ec3cd3630c25569313f51",
+        "omitted_metadata": {
+          "duplicate_pad_numbers_are_jumpers": 1,
+          "point": 0
+        }
+      }
+    },
+    {
+      "footprint": "TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+      "hashes_verified": true,
+      "origin": {
+        "source": "hardware/idle-accessory/lib/ecu.pretty/TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal.kicad_mod",
+        "source_sha256": "43274479460f20ae82c604b02e1775b712a225ad94ef79896a8abd6a4535e237",
+        "copy_sha256": "43274479460f20ae82c604b02e1775b712a225ad94ef79896a8abd6a4535e237",
+        "omitted_metadata": {
+          "duplicate_pad_numbers_are_jumpers": 0,
+          "point": 0
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Conservative static graph, not fault/semiconductor simulation",
+    "Track-centerline lengths exclude internal package wires, solder/lead inductance and broad-pad shortcuts",
+    "No physical fit, current capacity, thermal, EMI, brownout/timing or certified isolation acceptance"
+  ]
+}

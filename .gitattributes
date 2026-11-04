@@ -32,3 +32,10 @@ reports/engine/idle-control/metrics.csv -text -whitespace
 reports/engine/idle-control/applications/*.msq -whitespace
 reports/engine/idle-control/**/*.log -whitespace
 tuning/examples/tunerstudio-idle-roundtrip.msq -whitespace
+
+# Preserve reviewed native/source snapshots and raw circuit/tool evidence bytes.
+hardware/a5-idle-interface/** -text
+hardware/idle-isolated/** -text
+reports/engine/idle-isolation/** -text -whitespace
+hardware/a5-idle-interface/lib/ecu.pretty/*.kicad_mod -whitespace
+hardware/idle-isolated/lib/ecu.pretty/*.kicad_mod -whitespace

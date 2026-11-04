@@ -1,0 +1,276 @@
+{
+  "scope": "Independent arithmetic/logic/DC-connectivity probe for a proposed architecture.\n\nThis is not SPICE, a device switching model, a routed-netlist audit, or physical\nqualification. Its graph treats all input-side conductors as connected and\nintentionally excludes optical transfer and capacitance from DC connectivity.\n",
+  "base_commit": "497aabb4a0ea686b240182e42b4c64aefa280c32",
+  "assumptions": {
+    "led_vf_max_v": 1.7,
+    "npn_vce_sat_max_v": 0.3,
+    "carrier_5v_range": [
+      4.75,
+      5.25
+    ],
+    "resistor_tolerance_led": 0.01,
+    "loaded_gpio_voltage_guaranteed": false,
+    "npn_full_temperature_saturation_guaranteed": false
+  },
+  "regulator": {
+    "corners": [
+      {
+        "vref": 1.225,
+        "r1": 118.8,
+        "r2": 370.26,
+        "iadj": 0,
+        "vout": 5.042916666666668
+      },
+      {
+        "vref": 1.225,
+        "r1": 118.8,
+        "r2": 370.26,
+        "iadj": 0.0001,
+        "vout": 5.079942666666668
+      },
+      {
+        "vref": 1.225,
+        "r1": 118.8,
+        "r2": 377.74,
+        "iadj": 0,
+        "vout": 5.120046296296296
+      },
+      {
+        "vref": 1.225,
+        "r1": 118.8,
+        "r2": 377.74,
+        "iadj": 0.0001,
+        "vout": 5.157820296296296
+      },
+      {
+        "vref": 1.225,
+        "r1": 121.2,
+        "r2": 370.26,
+        "iadj": 0,
+        "vout": 4.967314356435645
+      },
+      {
+        "vref": 1.225,
+        "r1": 121.2,
+        "r2": 370.26,
+        "iadj": 0.0001,
+        "vout": 5.004340356435645
+      },
+      {
+        "vref": 1.225,
+        "r1": 121.2,
+        "r2": 377.74,
+        "iadj": 0,
+        "vout": 5.042916666666668
+      },
+      {
+        "vref": 1.225,
+        "r1": 121.2,
+        "r2": 377.74,
+        "iadj": 0.0001,
+        "vout": 5.080690666666667
+      },
+      {
+        "vref": 1.27,
+        "r1": 118.8,
+        "r2": 370.26,
+        "iadj": 0,
+        "vout": 5.2281666666666675
+      },
+      {
+        "vref": 1.27,
+        "r1": 118.8,
+        "r2": 370.26,
+        "iadj": 0.0001,
+        "vout": 5.2651926666666675
+      },
+      {
+        "vref": 1.27,
+        "r1": 118.8,
+        "r2": 377.74,
+        "iadj": 0,
+        "vout": 5.308129629629629
+      },
+      {
+        "vref": 1.27,
+        "r1": 118.8,
+        "r2": 377.74,
+        "iadj": 0.0001,
+        "vout": 5.345903629629629
+      },
+      {
+        "vref": 1.27,
+        "r1": 121.2,
+        "r2": 370.26,
+        "iadj": 0,
+        "vout": 5.149787128712871
+      },
+      {
+        "vref": 1.27,
+        "r1": 121.2,
+        "r2": 370.26,
+        "iadj": 0.0001,
+        "vout": 5.186813128712871
+      },
+      {
+        "vref": 1.27,
+        "r1": 121.2,
+        "r2": 377.74,
+        "iadj": 0,
+        "vout": 5.2281666666666675
+      },
+      {
+        "vref": 1.27,
+        "r1": 121.2,
+        "r2": 377.74,
+        "iadj": 0.0001,
+        "vout": 5.265940666666667
+      }
+    ],
+    "minimum_output_v": 4.967314356435645,
+    "maximum_output_v": 5.345903629629629,
+    "minimum_divider_load_a": 0.010107260726072608,
+    "minimum_headroom_at_9v_v": 3.654096370370371,
+    "maximum_logic_rail_margin_v": 0.15409637037037083
+  },
+  "supervisor": {
+    "part": "MCP100-485DI/TO",
+    "trip_min_v": 4.6,
+    "trip_max_v": 4.85,
+    "static_brownout_margin_above_4p5_v": 0.1,
+    "minimum_regulator_minus_max_trip_v": 0.11731435643564492,
+    "release_delay_ms": [
+      150,
+      700
+    ],
+    "assertion_delay_typ_us": 10,
+    "assertion_delay_max_us": null,
+    "hysteresis_typ_mv": 50,
+    "hysteresis_max_mv": null,
+    "arbitrary_rapid_brownout_fail_low_proven": false
+  },
+  "led": {
+    "resistor_ohm": 357,
+    "minimum_current_a": 0.007626813101478215,
+    "conservative_maximum_current_a": 0.014854426619132501,
+    "switching_table_test_current_a": 0.0075
+  },
+  "logic": {
+    "initial_hct14_falling_threshold_min_v": 0.5,
+    "opto_low_max_v": 0.6,
+    "initial_hct14_margin_v": -0.1,
+    "revised_hct02_vil_max_v": 0.8,
+    "revised_hct02_margin_v": 0.2,
+    "truth_table": [
+      {
+        "pwm": false,
+        "run": false,
+        "power_good": false,
+        "opto_pwm_n": true,
+        "opto_run_n": true,
+        "driver_ina": false,
+        "driver_ena": false,
+        "output": false
+      },
+      {
+        "pwm": false,
+        "run": false,
+        "power_good": true,
+        "opto_pwm_n": true,
+        "opto_run_n": true,
+        "driver_ina": false,
+        "driver_ena": true,
+        "output": false
+      },
+      {
+        "pwm": false,
+        "run": true,
+        "power_good": false,
+        "opto_pwm_n": true,
+        "opto_run_n": false,
+        "driver_ina": false,
+        "driver_ena": false,
+        "output": false
+      },
+      {
+        "pwm": false,
+        "run": true,
+        "power_good": true,
+        "opto_pwm_n": true,
+        "opto_run_n": false,
+        "driver_ina": false,
+        "driver_ena": true,
+        "output": false
+      },
+      {
+        "pwm": true,
+        "run": false,
+        "power_good": false,
+        "opto_pwm_n": false,
+        "opto_run_n": true,
+        "driver_ina": false,
+        "driver_ena": false,
+        "output": false
+      },
+      {
+        "pwm": true,
+        "run": false,
+        "power_good": true,
+        "opto_pwm_n": false,
+        "opto_run_n": true,
+        "driver_ina": false,
+        "driver_ena": true,
+        "output": false
+      },
+      {
+        "pwm": true,
+        "run": true,
+        "power_good": false,
+        "opto_pwm_n": false,
+        "opto_run_n": false,
+        "driver_ina": true,
+        "driver_ena": false,
+        "output": false
+      },
+      {
+        "pwm": true,
+        "run": true,
+        "power_good": true,
+        "opto_pwm_n": false,
+        "opto_run_n": false,
+        "driver_ina": true,
+        "driver_ena": true,
+        "output": true
+      }
+    ]
+  },
+  "run_driver": {
+    "direct_required_minimum_led_a": 0.005,
+    "direct_hct_guaranteed_voh_test_current_a": 0.004,
+    "direct_drive_supported": false,
+    "buffered_maximum_output_load_including_R47_a": 0.0036228070175438596
+  },
+  "dc_graph": {
+    "old_return_path": true,
+    "new_return_path": false,
+    "negative_control_added_bridge_returns_path": true,
+    "assumes_no_external_conductive_bridge": true,
+    "proves_isolation_voltage_or_transient_behavior": false
+  },
+  "source_sha256": {
+    "hardware/idle-accessory/net_contract.json": "53d2cecf0e822d6f15f67a409e46043b3cd330c9c28752163518049270e94b03",
+    "hardware/idle-accessory/idle.kicad_sch": "9516317fb6f48020c301e76d88dd8005fe7412d785dd5bb4d3baadae5010e496",
+    "hardware/idle-accessory/idle.kicad_pcb": "d5689e2698fa0511b87caf241a252d6f820b40249d60d2558fc9e880f02d4e45",
+    "hardware/a4-n16r8/net_contract.json": "728f174b3596a631ae598d0786a34182068f7cfa94ae8f75f09cb27e11bd7682",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+    "reports/engine/idle-control/reviews/hardware/pass2/review.md": "70534dd203240d5fb6fb48ff9227fdc6fffaee326ed5b19d430291975b7dc69a"
+  },
+  "unresolved": [
+    "Actual new netlist and routed copper not reviewed in this architecture probe",
+    "Opto/NPN/gate and supervisor transient timing not validated",
+    "Loaded GPIO voltage and actual module eFuse/routing unknown",
+    "Regulator transient overshoot, thermal and startup behavior unmeasured",
+    "Physical barrier, mounting and enclosure conductive bridges unmeasured",
+    "External protected/fused switched actuator branch and actual valve unselected"
+  ]
+}

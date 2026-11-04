@@ -1,0 +1,158 @@
+{
+  "regulator": {
+    "corners": [
+      {
+        "vref": 1.225,
+        "r1": 118.8,
+        "r2": 370.26,
+        "iadj": 0,
+        "vout": 5.042916666666668
+      },
+      {
+        "vref": 1.225,
+        "r1": 118.8,
+        "r2": 370.26,
+        "iadj": 0.0001,
+        "vout": 5.079942666666668
+      },
+      {
+        "vref": 1.225,
+        "r1": 118.8,
+        "r2": 377.74,
+        "iadj": 0,
+        "vout": 5.120046296296296
+      },
+      {
+        "vref": 1.225,
+        "r1": 118.8,
+        "r2": 377.74,
+        "iadj": 0.0001,
+        "vout": 5.157820296296296
+      },
+      {
+        "vref": 1.225,
+        "r1": 121.2,
+        "r2": 370.26,
+        "iadj": 0,
+        "vout": 4.967314356435645
+      },
+      {
+        "vref": 1.225,
+        "r1": 121.2,
+        "r2": 370.26,
+        "iadj": 0.0001,
+        "vout": 5.004340356435645
+      },
+      {
+        "vref": 1.225,
+        "r1": 121.2,
+        "r2": 377.74,
+        "iadj": 0,
+        "vout": 5.042916666666668
+      },
+      {
+        "vref": 1.225,
+        "r1": 121.2,
+        "r2": 377.74,
+        "iadj": 0.0001,
+        "vout": 5.080690666666667
+      },
+      {
+        "vref": 1.27,
+        "r1": 118.8,
+        "r2": 370.26,
+        "iadj": 0,
+        "vout": 5.2281666666666675
+      },
+      {
+        "vref": 1.27,
+        "r1": 118.8,
+        "r2": 370.26,
+        "iadj": 0.0001,
+        "vout": 5.2651926666666675
+      },
+      {
+        "vref": 1.27,
+        "r1": 118.8,
+        "r2": 377.74,
+        "iadj": 0,
+        "vout": 5.308129629629629
+      },
+      {
+        "vref": 1.27,
+        "r1": 118.8,
+        "r2": 377.74,
+        "iadj": 0.0001,
+        "vout": 5.345903629629629
+      },
+      {
+        "vref": 1.27,
+        "r1": 121.2,
+        "r2": 370.26,
+        "iadj": 0,
+        "vout": 5.149787128712871
+      },
+      {
+        "vref": 1.27,
+        "r1": 121.2,
+        "r2": 370.26,
+        "iadj": 0.0001,
+        "vout": 5.186813128712871
+      },
+      {
+        "vref": 1.27,
+        "r1": 121.2,
+        "r2": 377.74,
+        "iadj": 0,
+        "vout": 5.2281666666666675
+      },
+      {
+        "vref": 1.27,
+        "r1": 121.2,
+        "r2": 377.74,
+        "iadj": 0.0001,
+        "vout": 5.265940666666667
+      }
+    ],
+    "minimum_output_v": 4.967314356435645,
+    "maximum_output_v": 5.345903629629629,
+    "minimum_divider_load_a": 0.010107260726072608,
+    "minimum_headroom_at_9v_v": 3.654096370370371,
+    "maximum_logic_rail_margin_v": 0.15409637037037083
+  },
+  "supervisor": {
+    "part": "MCP100-485DI/TO",
+    "trip_min_v": 4.6,
+    "trip_max_v": 4.85,
+    "static_brownout_margin_above_4p5_v": 0.1,
+    "minimum_regulator_minus_max_trip_v": 0.11731435643564492,
+    "release_delay_ms": [
+      150,
+      700
+    ],
+    "assertion_delay_typ_us": 10,
+    "assertion_delay_max_us": null,
+    "hysteresis_typ_mv": 50,
+    "hysteresis_max_mv": null,
+    "arbitrary_rapid_brownout_fail_low_proven": false
+  },
+  "led": {
+    "resistor_ohm": 357,
+    "minimum_current_a": 0.007626813101478215,
+    "conservative_maximum_current_a": 0.014854426619132501,
+    "switching_table_test_current_a": 0.0075
+  },
+  "run_driver": {
+    "direct_required_minimum_led_a": 0.005,
+    "direct_hct_guaranteed_voh_test_current_a": 0.004,
+    "direct_drive_supported": false,
+    "buffered_maximum_output_load_including_R47_a": 0.0036228070175438596
+  },
+  "dc_graph": {
+    "old_return_path": true,
+    "new_return_path": false,
+    "negative_control_added_bridge_returns_path": true,
+    "assumes_no_external_conductive_bridge": true,
+    "proves_isolation_voltage_or_transient_behavior": false
+  }
+}

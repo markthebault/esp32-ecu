@@ -1,0 +1,633 @@
+{
+  "scope": "Independent read-only review of the conditional ngspice experiment.\n\nNo manufacturer macro-model, physical qualification or complete fault coverage\nis implied. Additional deck mutations are declared reviewer sensitivity controls.\n",
+  "reviewed_source_sha256": {
+    "tools/run_idle_circuit.py": "8d90df5fea226147ee6bfced59cc51a39fd4375932486d4b2f32957b90cce257",
+    "hardware/idle-isolated/net_contract.json": "32bd3435b398d603d37606f78b65d9c9b06210ab307ba9b48bf33bb1356786bf",
+    "hardware/idle-isolated/isolated.kicad_pcb": "dd12136d7c7dec1464d7119dcd1fefe8740fa3743c33520e7c524a3910bb3d2e",
+    "hardware/a5-idle-interface/net_contract.json": "09b64f8846412f16a8baea041b8d272180b52bbb2d34fbfb44eeade4b29953c4",
+    "hardware/a5-idle-interface/esp32-ecu.kicad_pcb": "12a0d3a36dda51e8d2e99e046480309d23a0c40471b02e0ab47458bea71bf33a",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+    "docs/engine-idle-isolation.md": "ce4891a2fe5da3b37d749dc5ffa6f004fd05cbe4c53efb5318b0d7c4a23fcd0b",
+    "hardware/idle-isolated/README.md": "37367f5345030da9882ef68325260ac981a88d1b6992cd1e4cf0143aaec29dca",
+    "hardware/a5-idle-interface/README.md": "5fcdef772678cf5a8712c38a57b87d4d73741587a822c15a216f7677fdde550d"
+  },
+  "source_matches_at_end": true,
+  "binary_sha256": "25b6a73fafd9b489b92347a6c55fe307db502c1638f53d7d0bf439b5f7c65e38",
+  "results_sha256": "5db174514b89a453be91725f8dc734906d5aa099a654369c3aba21785fa7cc26",
+  "input_folder": ".cache/engine/idle-isolation/circuit-published",
+  "raw_trace_audit": [
+    {
+      "name": "warm_continuous",
+      "rows": 16254,
+      "first_time_s": 5e-09,
+      "last_time_s": 0.008,
+      "minimum_dt_s": 3.000000000956314e-16,
+      "duplicate_exported_timestamps": 0,
+      "maximum_coil_peak_time_s": 0.008,
+      "artifacts": {
+        "circuit.cir": "658815c3e1184e6b1676f874d6eba965627bb8f822a771cf3fe6acc98087802f",
+        "ngspice.log": "ed9fef5523f3468d157c28857ef3ea04d4c3167cd373f3130f1c6ad2a5a6fd68",
+        "trace.tsv.gz": "981ea8b4a1ef140fc8fc00044015f932c1074d5be8b2e362e9bba34fc457802a"
+      }
+    },
+    {
+      "name": "cold_start",
+      "rows": 53541,
+      "first_time_s": 2e-07,
+      "last_time_s": 0.8,
+      "minimum_dt_s": 0.0,
+      "duplicate_exported_timestamps": 104,
+      "maximum_coil_peak_time_s": 0.385335065,
+      "artifacts": {
+        "circuit.cir": "86c3e27ea01f47c68039069528d0bc7e9df6b745cd6ad018dbb4b9537b02a5b3",
+        "ngspice.log": "88c841fec860eaf389b5d98b49b58ae4e23aa4a6849ec08cbba934a1360b0ccd",
+        "trace.tsv.gz": "ae41aa77f5c23ce13de981de1e7933ef8534d41c4f868f38ac56d4f51d235d85"
+      }
+    },
+    {
+      "name": "command_low",
+      "rows": 16643,
+      "first_time_s": 5e-09,
+      "last_time_s": 0.008,
+      "minimum_dt_s": 3.000000000956314e-16,
+      "duplicate_exported_timestamps": 0,
+      "maximum_coil_peak_time_s": 0.00400034384,
+      "artifacts": {
+        "circuit.cir": "c393e35f451a48adf9c1bc93d9560dc36e1eda698f464b9fc631230cfc0282b3",
+        "ngspice.log": "d99866f2c7f8ee8160dbd35e157ef62b60eb32decd3b61b0068a330e692aa8aa",
+        "trace.tsv.gz": "d16ce0a592def91a69021e90d7fdfbd8622537959dd884a820e0cd618b89c029"
+      }
+    },
+    {
+      "name": "run_low",
+      "rows": 16606,
+      "first_time_s": 5e-09,
+      "last_time_s": 0.008,
+      "minimum_dt_s": 3.000000000956314e-16,
+      "duplicate_exported_timestamps": 0,
+      "maximum_coil_peak_time_s": 0.00400037225,
+      "artifacts": {
+        "circuit.cir": "12b044cb9f01bff77ff4a5ed724c92106dd2043ac598e5b1f2b9b73e5994dab2",
+        "ngspice.log": "af9656440dc55cbb38666e60e881255cf59a88d53f0dfd0ce83b12abf78025bd",
+        "trace.tsv.gz": "3a01a751ddbdecb3446ba4f70cf5fc798c82ad5416eec0b908c8003fb6802f08"
+      }
+    },
+    {
+      "name": "carrier_power_open",
+      "rows": 16569,
+      "first_time_s": 5e-09,
+      "last_time_s": 0.008,
+      "minimum_dt_s": 3.000000000956314e-16,
+      "duplicate_exported_timestamps": 0,
+      "maximum_coil_peak_time_s": 0.00401258986,
+      "artifacts": {
+        "circuit.cir": "ecb85545b57690d37c9ff8509cde781d610da19b913cc4e5ee389ce61e022ce6",
+        "ngspice.log": "f418c445a6b5174e73feb1c265e1c3e43cc10072513f43252bd677de36f20479",
+        "trace.tsv.gz": "6b60a007f3654c533cfd62e7fabf603d0ae5c7770e8916df01907806528267dd"
+      }
+    },
+    {
+      "name": "carrier_return_open",
+      "rows": 16629,
+      "first_time_s": 5e-09,
+      "last_time_s": 0.008,
+      "minimum_dt_s": 3.000000000956314e-16,
+      "duplicate_exported_timestamps": 0,
+      "maximum_coil_peak_time_s": 0.00401038161,
+      "artifacts": {
+        "circuit.cir": "28cfdf3d9bdba2490488bde844ff8de1685e731f1a6ee7b5945e15386f239bb9",
+        "ngspice.log": "65bbc8560772aad9da2cfccb6822d25f969366928b6ff7e28b3c64fd8af1ea67",
+        "trace.tsv.gz": "ec99b8dd1b63568313b71b1d36b9cf80e4406359d31badfbde6891453d00602e"
+      }
+    },
+    {
+      "name": "actuator_return_open",
+      "rows": 16453,
+      "first_time_s": 5e-09,
+      "last_time_s": 0.008,
+      "minimum_dt_s": 3.000000000956314e-16,
+      "duplicate_exported_timestamps": 0,
+      "maximum_coil_peak_time_s": 0.0040568284,
+      "artifacts": {
+        "circuit.cir": "0baa509752402c353c526ccb303f3cb25e1900e2aa2048dab22d6d6d7b0e510b",
+        "ngspice.log": "4da4b07d50c0d9fd98e1bc37b75a3da404191962212ce1554001962940159c82",
+        "trace.tsv.gz": "274fd865bf162ee05bdd01e879fa2ea9bcba9c905cdc4c34d8333a1141dd7ac5"
+      }
+    },
+    {
+      "name": "actuator_power_open",
+      "rows": 16447,
+      "first_time_s": 5e-09,
+      "last_time_s": 0.008,
+      "minimum_dt_s": 3.000000000956314e-16,
+      "duplicate_exported_timestamps": 0,
+      "maximum_coil_peak_time_s": 0.0040568284,
+      "artifacts": {
+        "circuit.cir": "0074f120c97cbf03bcbb9387fff404e964ee216435867ae5a03274df63941941",
+        "ngspice.log": "ea02cb71ff1d067eb1f2e7b40efe1e072e7a4bcd21565a5c2b9e0c5690b0b679",
+        "trace.tsv.gz": "2193f0ea8054785d12a409f6107dea3b6eb36d47bc6faa5bc4f8bc8ea81e7a4e"
+      }
+    },
+    {
+      "name": "rail_drop",
+      "rows": 16474,
+      "first_time_s": 5e-09,
+      "last_time_s": 0.008,
+      "minimum_dt_s": 3.000000000956314e-16,
+      "duplicate_exported_timestamps": 0,
+      "maximum_coil_peak_time_s": 0.00401022066,
+      "artifacts": {
+        "circuit.cir": "9e0bb68f650d0acee8e1d652b0869676eef94595c772bd5ef772db02bccf46a3",
+        "ngspice.log": "708bbb6b68b5fb310d8f9b2545a5bc42e1bf7bd3c4e6bbf4e10ba78666573796",
+        "trace.tsv.gz": "c04efe399eba639194ba2f4a983f5f9ba6cf2c7a17c5625973704763e9cd5198"
+      }
+    },
+    {
+      "name": "drain_short",
+      "rows": 16590,
+      "first_time_s": 5e-09,
+      "last_time_s": 0.008,
+      "minimum_dt_s": 3.000000000956314e-16,
+      "duplicate_exported_timestamps": 0,
+      "maximum_coil_peak_time_s": 0.008,
+      "artifacts": {
+        "circuit.cir": "f291c562c25fca6ebbdfec9be0869c4ab56b5b02959c703f69993991c153b842",
+        "ngspice.log": "d04c1282791c4f0232ea311c74e8396d41a0794cd9dfbf03466cede18d89b4e9",
+        "trace.tsv.gz": "9f2c1fc580e531927dc9a220164f60aeea64e9078dc86fdc1b7d0b2abdf54b68"
+      }
+    },
+    {
+      "name": "return_open_deliberate_bridge",
+      "rows": 16415,
+      "first_time_s": 5e-09,
+      "last_time_s": 0.008,
+      "minimum_dt_s": 0.0,
+      "duplicate_exported_timestamps": 10,
+      "maximum_coil_peak_time_s": 0.008,
+      "artifacts": {
+        "circuit.cir": "545ecd253bbd815c5582644c5969e755c343b357aeaea93ceaf54bee1e4655cd",
+        "ngspice.log": "84259ddeb9eaead2944b44574e904e218f2e0ce9d27fc1d13bb7553fe3f78550",
+        "trace.tsv.gz": "ccfbd72fc40164a57c89e6c12cb13e83ca315e88a99d757d35b0dc3e49574eec"
+      }
+    },
+    {
+      "name": "rail_drop_assertion_100us",
+      "rows": 16477,
+      "first_time_s": 5e-09,
+      "last_time_s": 0.008,
+      "minimum_dt_s": 3.000000000956314e-16,
+      "duplicate_exported_timestamps": 0,
+      "maximum_coil_peak_time_s": 0.00410022576,
+      "artifacts": {
+        "circuit.cir": "e4a7065d9eab5f5ead94d09caf64f59c2a6a8f3bb21f376b0a21c2ab6a8b2c91",
+        "ngspice.log": "cec85887c7ea6cfe7f8720df0c94fdb42dffd2dcfd66f1c4929cfe04f954ac85",
+        "trace.tsv.gz": "d9bfb57e321ca8fbcb4bec376340c92150f8d95e939233edb03b67177d6a719f"
+      }
+    },
+    {
+      "name": "supply_9v",
+      "rows": 16283,
+      "first_time_s": 5e-09,
+      "last_time_s": 0.008,
+      "minimum_dt_s": 6.000000001912628e-16,
+      "duplicate_exported_timestamps": 0,
+      "maximum_coil_peak_time_s": 0.008,
+      "artifacts": {
+        "circuit.cir": "70f21e02d80fba6e8ff772c3654b2e043ab722e22382f897df8df683060e1a1f",
+        "ngspice.log": "22f985352ce3d722776cb855ccf5ea3d32b14a884f15e89e211469dcec08a083",
+        "trace.tsv.gz": "be31f4544e714d790c0390c5dbd1f9fc7eeb33506151d3954e088749bd08a89a"
+      }
+    },
+    {
+      "name": "supply_16v",
+      "rows": 16268,
+      "first_time_s": 5e-09,
+      "last_time_s": 0.008,
+      "minimum_dt_s": 3.000000000956314e-16,
+      "duplicate_exported_timestamps": 0,
+      "maximum_coil_peak_time_s": 0.008,
+      "artifacts": {
+        "circuit.cir": "ffa5e80191fb46351d6631e1d7c66ea85f58f58879f275eb07cb56f52a7ef849",
+        "ngspice.log": "52ea18a2285c5e43c977a65afce20e5fa7729d77e8c308c811b19f44e8b6fc11",
+        "trace.tsv.gz": "f13dc13c1caac49bc46db56ab6d35521c67ea07824291daec3de2c904489aabd"
+      }
+    },
+    {
+      "name": "pulse_1us_tau_0.2us",
+      "rows": 6725,
+      "first_time_s": 0.00190004619,
+      "last_time_s": 0.0022,
+      "minimum_dt_s": 0.0,
+      "duplicate_exported_timestamps": 106,
+      "maximum_coil_peak_time_s": 0.00200384388,
+      "artifacts": {
+        "circuit.cir": "be409d05015d73d31d0aa2ff206c4ede71100dafb1f88e68305b589ce1fe0beb",
+        "ngspice.log": "77d471a2a1128dc861cf09e3bb0f5bd6a70b300a7909e9a4115dbda9adf15ee0",
+        "trace.tsv.gz": "83fc1df3cdae879a72cd4a1358cf1c37c744a28a3c4d348a0e56ccde59b60175"
+      }
+    },
+    {
+      "name": "pulse_1us_tau_2us",
+      "rows": 6233,
+      "first_time_s": 0.00190000974,
+      "last_time_s": 0.0022,
+      "minimum_dt_s": 0.0,
+      "duplicate_exported_timestamps": 10,
+      "maximum_coil_peak_time_s": 0.00191395974,
+      "artifacts": {
+        "circuit.cir": "c8bb66ba35f3c879343f3cfcef4b5420cf20c2724b91e96277880af3ed157556",
+        "ngspice.log": "5c987e7679476577c20ace39d1ade135cc3dc3697f0a563a690ed92de5b5ddd4",
+        "trace.tsv.gz": "48246c129314715d6aa4c434b2137008a522f8455022aa7de339e379dfcbdfac"
+      }
+    },
+    {
+      "name": "pulse_2us_tau_0.2us",
+      "rows": 6731,
+      "first_time_s": 0.00190004619,
+      "last_time_s": 0.0022,
+      "minimum_dt_s": 0.0,
+      "duplicate_exported_timestamps": 106,
+      "maximum_coil_peak_time_s": 0.00200423375,
+      "artifacts": {
+        "circuit.cir": "414813028a27ea237b1a9609d4b6fa1834d23132d62a28f8aaa1102b5ac8a599",
+        "ngspice.log": "2c34bf6f0504a03066582bd409bfec27d1a782376bbdd01090066e438653ef2c",
+        "trace.tsv.gz": "63c0ad3e0083884738109f5606e78ce1534c7781e59f1ce5f41e0e3626f9d98f"
+      }
+    },
+    {
+      "name": "pulse_2us_tau_2us",
+      "rows": 6709,
+      "first_time_s": 0.00190000974,
+      "last_time_s": 0.0022,
+      "minimum_dt_s": 0.0,
+      "duplicate_exported_timestamps": 86,
+      "maximum_coil_peak_time_s": 0.00200512788,
+      "artifacts": {
+        "circuit.cir": "1a38a64ede3353655388d806ed6129e49f0d581d812bd5f988e0340ba8df970c",
+        "ngspice.log": "087d7ed4ecd0246936e5c6f7082a9fb73560f605540a048e96363667e2e16211",
+        "trace.tsv.gz": "621edceddcc3776300a9f836740518a6af43597aac1e31dba567ea9850be7b6c"
+      }
+    },
+    {
+      "name": "pulse_4us_tau_0.2us",
+      "rows": 6729,
+      "first_time_s": 0.00190004619,
+      "last_time_s": 0.0022,
+      "minimum_dt_s": 0.0,
+      "duplicate_exported_timestamps": 106,
+      "maximum_coil_peak_time_s": 0.00200552449,
+      "artifacts": {
+        "circuit.cir": "c3a5dcf2a42346bb999c77a18471282f52ee18ecde21cc8eb3e35b14f707ebd6",
+        "ngspice.log": "59336733d304e23abbde1d93e573420b54ef845449838f8eb9d3dce3fdd75f95",
+        "trace.tsv.gz": "d20606a9cc2ae080581fe871adb714c3f0d02c8f855d0a53fdae047dd968e37d"
+      }
+    },
+    {
+      "name": "pulse_4us_tau_2us",
+      "rows": 6709,
+      "first_time_s": 0.00190000974,
+      "last_time_s": 0.0022,
+      "minimum_dt_s": 0.0,
+      "duplicate_exported_timestamps": 86,
+      "maximum_coil_peak_time_s": 0.00200656293,
+      "artifacts": {
+        "circuit.cir": "88aef4d0265cb7b5d7012dc7694295c3361438cd374ef59da7905f37faad6411",
+        "ngspice.log": "f075de2862684c02474a8c056053777347958eded8c6f737ed7631c99229d772",
+        "trace.tsv.gz": "5c99cdf9607a9b14d18b0612352ccfab554c6b9ddbabc67c2def1a62e5ed2eaf"
+      }
+    },
+    {
+      "name": "pulse_10us_tau_0.2us",
+      "rows": 6722,
+      "first_time_s": 0.00190004619,
+      "last_time_s": 0.0022,
+      "minimum_dt_s": 0.0,
+      "duplicate_exported_timestamps": 106,
+      "maximum_coil_peak_time_s": 0.0020108637,
+      "artifacts": {
+        "circuit.cir": "e307ae1441ca8a65d06983f03424654784b9abd3a8d40396dab11b65f97d81d6",
+        "ngspice.log": "2e7af1b92013537410131a4c8563acdac9bc7baa0bbf3ca1f56eeb5608e9d483",
+        "trace.tsv.gz": "c0203b78189020bfd160475e8705060af99f16fd93afe473dcc6c4c45be1bbb1"
+      }
+    },
+    {
+      "name": "pulse_10us_tau_2us",
+      "rows": 6705,
+      "first_time_s": 0.00190000974,
+      "last_time_s": 0.0022,
+      "minimum_dt_s": 0.0,
+      "duplicate_exported_timestamps": 86,
+      "maximum_coil_peak_time_s": 0.00201209901,
+      "artifacts": {
+        "circuit.cir": "916d598b1af2d9efb07680770f07d7142a7854d4109aca031996d5a5f59aef00",
+        "ngspice.log": "9f669b3baa037216aa42143c39bf397786f9d9181689c1b65b03c2ffeef9a19f",
+        "trace.tsv.gz": "bab9164e76e4c82fb3169d0310926d0b0b2b4ead0a1acaeafce2b2dc948b9c16"
+      }
+    },
+    {
+      "name": "pulse_40us_tau_0.2us",
+      "rows": 6732,
+      "first_time_s": 0.00190004619,
+      "last_time_s": 0.0022,
+      "minimum_dt_s": 0.0,
+      "duplicate_exported_timestamps": 106,
+      "maximum_coil_peak_time_s": 0.00204047631,
+      "artifacts": {
+        "circuit.cir": "794988873bc30738993b6cd9b12c3c6db5f3632bed81d3d8d98bd5542fb48eb7",
+        "ngspice.log": "af5e0bdf099173f4c4cb1c81f79a9762041b4f7991fbd8692be1e5b3e614368c",
+        "trace.tsv.gz": "d9b04d6d2ef74b97d7dcb49d7869eb57937f13dac7deb68e3253aeb8d6270a47"
+      }
+    },
+    {
+      "name": "pulse_40us_tau_2us",
+      "rows": 6714,
+      "first_time_s": 0.00190000974,
+      "last_time_s": 0.0022,
+      "minimum_dt_s": 0.0,
+      "duplicate_exported_timestamps": 86,
+      "maximum_coil_peak_time_s": 0.00204172366,
+      "artifacts": {
+        "circuit.cir": "c4b24c72787315a3b6628115399b5f2cac594ee173abf1ab5ac535a91cd99fb4",
+        "ngspice.log": "335065ce1952437b4ecf951450889ad0bd1ce4423f2fa310aa35402628b07d38",
+        "trace.tsv.gz": "793087a28d869a6d10a178c57e34c0e35e6f9a8f1c497945946e4381347fd6a9"
+      }
+    },
+    {
+      "name": "pulse_1us_refinement",
+      "rows": 12652,
+      "first_time_s": 0.00190001791,
+      "last_time_s": 0.0022,
+      "minimum_dt_s": 0.0,
+      "duplicate_exported_timestamps": 95,
+      "maximum_coil_peak_time_s": 0.00200384207,
+      "artifacts": {
+        "circuit.cir": "ef7bcdbac11b427a4d1f4294da1a345a0aba04ece31d89703e55c6b1044494f0",
+        "ngspice.log": "f5bb3098d26f5240508032dfcd72cef2136dbe3ed5ff84672b99262e862cfb62",
+        "trace.tsv.gz": "88b4a5803fd07187e209f656eacb7d876e6e407a7871a104fdda65e0d3273150"
+      }
+    }
+  ],
+  "pulse_window_comparison": [
+    {
+      "name": "pulse_1us_tau_0.2us",
+      "old_complete_trace_sha256": "ad66498501fdc49eae1f4ed87d9156329927bd050ec8e4602c8a7cf6d29a9c7d",
+      "new_saved_window_max_current_relative_difference": 0.0,
+      "gate_width_abs_difference_us": 0.0
+    },
+    {
+      "name": "pulse_1us_tau_2us",
+      "old_complete_trace_sha256": "d42ebed2f8b30bb4c28718d2389fb3e31335ed262592ec816d06d3da47c14349",
+      "new_saved_window_max_current_relative_difference": 0.0,
+      "gate_width_abs_difference_us": 0.0
+    },
+    {
+      "name": "pulse_2us_tau_0.2us",
+      "old_complete_trace_sha256": "f4b8c97023cf9cf1cc09a627ea9c5b8bef859831867affd0c216de0a6389e3ca",
+      "new_saved_window_max_current_relative_difference": 0.0,
+      "gate_width_abs_difference_us": 0.0
+    },
+    {
+      "name": "pulse_2us_tau_2us",
+      "old_complete_trace_sha256": "cdf8ac3eb1d64fe43519b45153949642d30efc04136fac3577e9dd635a8bee64",
+      "new_saved_window_max_current_relative_difference": 0.0,
+      "gate_width_abs_difference_us": 0.0
+    },
+    {
+      "name": "pulse_4us_tau_0.2us",
+      "old_complete_trace_sha256": "93d50cae826a089b391a466cfebbafdd0f3be29eb73c2a716cf04d80852ab831",
+      "new_saved_window_max_current_relative_difference": 0.0,
+      "gate_width_abs_difference_us": 0.0
+    },
+    {
+      "name": "pulse_4us_tau_2us",
+      "old_complete_trace_sha256": "91e93dbae40dcb8c9d76b5f5c51dc2d84c818e314db2b37e128ed5debfad0a27",
+      "new_saved_window_max_current_relative_difference": 0.0,
+      "gate_width_abs_difference_us": 0.0
+    },
+    {
+      "name": "pulse_10us_tau_0.2us",
+      "old_complete_trace_sha256": "7f48dda22eda6076add8516eb770fd7331ca8309fe9d3228e66b418135043aae",
+      "new_saved_window_max_current_relative_difference": 0.0,
+      "gate_width_abs_difference_us": 0.0
+    },
+    {
+      "name": "pulse_10us_tau_2us",
+      "old_complete_trace_sha256": "d75a28bc188fc6d02b9bbdef8fd7f85f92409f4f2adcffc80da0287778e0529d",
+      "new_saved_window_max_current_relative_difference": 0.0,
+      "gate_width_abs_difference_us": 0.0
+    },
+    {
+      "name": "pulse_40us_tau_0.2us",
+      "old_complete_trace_sha256": "7f6f26da7e06191d2066900b2d0a286c253077e70c58174de8af0b44dae6a6f8",
+      "new_saved_window_max_current_relative_difference": 0.0,
+      "gate_width_abs_difference_us": 0.0
+    },
+    {
+      "name": "pulse_40us_tau_2us",
+      "old_complete_trace_sha256": "fb2a3544d16eeff8d8e69dd6f1218b0ad48a346058a7aa3d13a3394d6d8a4c0e",
+      "new_saved_window_max_current_relative_difference": 0.0,
+      "gate_width_abs_difference_us": 0.0
+    },
+    {
+      "name": "pulse_1us_refinement",
+      "old_complete_trace_sha256": "4212d7b67b7ae3fdeee357c23a2c2a5f31112d25daed7fe64f4f29caf792ff81",
+      "new_saved_window_max_current_relative_difference": 0.0,
+      "gate_width_abs_difference_us": 0.0
+    }
+  ],
+  "probes": {
+    "baseline_repeat": {
+      "base_case": "warm_continuous",
+      "declared_mutation": "",
+      "base_deck_sha256": "658815c3e1184e6b1676f874d6eba965627bb8f822a771cf3fe6acc98087802f",
+      "metrics": {
+        "rows": 16254,
+        "first_time_s": 5e-09,
+        "last_time_s": 0.008,
+        "final_coil_a": 1.4819778695137116,
+        "final_gate_v": 5.140343760000001,
+        "final_carrier_return_a": 0.0238827683,
+        "maximum_carrier_return_a": 0.0238827683,
+        "maximum_coil_a": 1.48328555,
+        "final_run_source_a": 0.0031750255000000003,
+        "final_run_v": 4.850773799999999,
+        "final_main_input_v": 4.0423115,
+        "gate_high_us": 7999.788087409501
+      },
+      "artifacts": {
+        "circuit.cir": "421edd40542b0a045f4d449d65ddc49f0ecb19ac18babfda52c86398cc3ddc9e",
+        "ngspice.log": "82e9cb9c73413151122d5ad399f83c50e8a1ac4ca86204e275979ad23a43131e",
+        "trace.tsv.gz": "8b82c288e591b9f4737a51bafbfd45b65dca938db22238efbf3d649b6fe52d90"
+      }
+    },
+    "return_open_repeat": {
+      "base_case": "actuator_return_open",
+      "declared_mutation": "",
+      "base_deck_sha256": "0baa509752402c353c526ccb303f3cb25e1900e2aa2048dab22d6d6d7b0e510b",
+      "metrics": {
+        "rows": 16453,
+        "first_time_s": 5e-09,
+        "last_time_s": 0.008,
+        "final_coil_a": 0.09215635063006093,
+        "final_gate_v": -5.267270929155648e-07,
+        "final_carrier_return_a": 0.0238827683,
+        "maximum_carrier_return_a": 0.0238827683,
+        "maximum_coil_a": 1.39038693,
+        "final_run_source_a": 0.0031750255000000008,
+        "final_run_v": 4.850773799999999,
+        "final_main_input_v": 4.0423115,
+        "gate_high_us": 4605.1519374095005
+      },
+      "artifacts": {
+        "circuit.cir": "938e7a6475f9435e45f55ab714d5be985617afea02f42568dfab051feb3a5310",
+        "ngspice.log": "4da4b07d50c0d9fd98e1bc37b75a3da404191962212ce1554001962940159c82",
+        "trace.tsv.gz": "a2000e57153e8d9d1ab34b358040312254414edeb946a60821ea704d926a4b3a"
+      }
+    },
+    "bridge_repeat": {
+      "base_case": "return_open_deliberate_bridge",
+      "declared_mutation": "",
+      "base_deck_sha256": "545ecd253bbd815c5582644c5969e755c343b357aeaea93ceaf54bee1e4655cd",
+      "metrics": {
+        "rows": 16415,
+        "first_time_s": 5e-09,
+        "last_time_s": 0.008,
+        "final_coil_a": 1.4802809003576434,
+        "final_gate_v": 5.14034376,
+        "final_carrier_return_a": 1.5348682745914453,
+        "maximum_carrier_return_a": 1.53614476,
+        "maximum_coil_a": 1.4815549,
+        "final_run_source_a": 0.003168429444147053,
+        "final_run_v": 4.851083816164463,
+        "final_main_input_v": 4.042569846764617,
+        "gate_high_us": 7999.802556599999
+      },
+      "artifacts": {
+        "circuit.cir": "bf4e8f478d90d6e0661a5989f13c2d447a055faf40ada4e6ef563334d5d92c16",
+        "ngspice.log": "294f367222cb6eefc301e6fa42f7b56cdd0215fd8b41dbb240218c89eda98125",
+        "trace.tsv.gz": "29e6ac5765b3cea003e79bb7e90941c280334dab3c6d588346d624faa69f3190"
+      }
+    },
+    "drain_short_repeat": {
+      "base_case": "drain_short",
+      "declared_mutation": "",
+      "base_deck_sha256": "f291c562c25fca6ebbdfec9be0869c4ab56b5b02959c703f69993991c153b842",
+      "metrics": {
+        "rows": 16590,
+        "first_time_s": 5e-09,
+        "last_time_s": 0.008,
+        "final_coil_a": 1.485683440632688,
+        "final_gate_v": 1.0989351408729852e-08,
+        "final_carrier_return_a": 0.0116469175,
+        "maximum_carrier_return_a": 0.0238827683,
+        "maximum_coil_a": 1.48704956,
+        "final_run_source_a": 0.00317507869,
+        "final_run_v": 4.8507713,
+        "final_main_input_v": 4.042309419999999,
+        "gate_high_us": 4000.0570324095
+      },
+      "artifacts": {
+        "circuit.cir": "b4a3e89759ed41b7610af7d70339bbaf7481fd080bd5c593ed9fbaf23c12af2d",
+        "ngspice.log": "e68f5fbdadf411b76c669abb7b2f26dec0a0615c26dd4e9b1ef2b121f6895173",
+        "trace.tsv.gz": "11dae17aa1ee0cba026f76e6eb31914365e98964b0910f23c8f14b314fe12837"
+      }
+    },
+    "optical_block": {
+      "base_case": "warm_continuous",
+      "declared_mutation": "optical_block",
+      "base_deck_sha256": "658815c3e1184e6b1676f874d6eba965627bb8f822a771cf3fe6acc98087802f",
+      "metrics": {
+        "rows": 16716,
+        "first_time_s": 5e-09,
+        "last_time_s": 0.008,
+        "final_coil_a": 1.201149852845372e-08,
+        "final_gate_v": 1.0282793592861644e-08,
+        "final_carrier_return_a": 0.0238827683,
+        "maximum_carrier_return_a": 0.0238827757,
+        "maximum_coil_a": 2.5793521e-08,
+        "final_run_source_a": 0.0031750255000000003,
+        "final_run_v": 4.850773799999999,
+        "final_main_input_v": 4.042311499999999,
+        "gate_high_us": 0.0
+      },
+      "artifacts": {
+        "circuit.cir": "66a215e41fbbae7c4bb2f0d30118abfb0e3c1b882777222b2b94e2141a068e66",
+        "ngspice.log": "6fda8d87464dc838c0f2e077b4061c2002009e41de4b496a9a7bb75cfd1f3e04",
+        "trace.tsv.gz": "afd2821e07caafab48997fc039086b56bea8eaafbc18954b5380bd3f89dd9de2"
+      }
+    },
+    "supervisor_block": {
+      "base_case": "warm_continuous",
+      "declared_mutation": "supervisor_block",
+      "base_deck_sha256": "658815c3e1184e6b1676f874d6eba965627bb8f822a771cf3fe6acc98087802f",
+      "metrics": {
+        "rows": 17091,
+        "first_time_s": 5e-09,
+        "last_time_s": 0.008,
+        "final_coil_a": 1.2011403620362734e-08,
+        "final_gate_v": 1.028085751200117e-08,
+        "final_carrier_return_a": 0.0238827683,
+        "maximum_carrier_return_a": 0.0238827741,
+        "maximum_coil_a": 3.03079175e-08,
+        "final_run_source_a": 0.0031750255000000003,
+        "final_run_v": 4.850773799999999,
+        "final_main_input_v": 4.0423115,
+        "gate_high_us": 0.0
+      },
+      "artifacts": {
+        "circuit.cir": "6a28fdd9c3b2897a856278941b0d668461e5f8c9293a234227778d25bd6e143b",
+        "ngspice.log": "ea69e500cd3b14102cf0aec0ae0a6c42583742052e760a499a964b4a8214284d",
+        "trace.tsv.gz": "e501f0f93265ef8039395a0f970511e1bc9e022156aa78f164f5da9759885da7"
+      }
+    },
+    "extra_main_load": {
+      "base_case": "warm_continuous",
+      "declared_mutation": "extra_main_load",
+      "base_deck_sha256": "658815c3e1184e6b1676f874d6eba965627bb8f822a771cf3fe6acc98087802f",
+      "metrics": {
+        "rows": 16267,
+        "first_time_s": 5e-09,
+        "last_time_s": 0.008,
+        "final_coil_a": 1.4819778300125745,
+        "final_gate_v": 5.140343760000001,
+        "final_carrier_return_a": 0.023830373200000005,
+        "maximum_carrier_return_a": 0.0238303732,
+        "maximum_coil_a": 1.48328555,
+        "final_run_source_a": 0.005561994180000002,
+        "final_run_v": 4.738586269999999,
+        "final_main_input_v": 1.4808082099999995,
+        "gate_high_us": 7999.789954223499
+      },
+      "artifacts": {
+        "circuit.cir": "148755502313ab2737de184f097290ffed2f4d4933fb60181a6d53f14a454a54",
+        "ngspice.log": "840d88f78f7f25dff65a3884ba6904d8449f8d9228f98e19216e98b9edd0109c",
+        "trace.tsv.gz": "bd0bbac08008e3ce507a569db43940041fa71330e029132a1d6cd8da98aa89fc"
+      }
+    },
+    "cold_half_step": {
+      "base_case": "cold_start",
+      "declared_mutation": "cold_half_step",
+      "base_deck_sha256": "86c3e27ea01f47c68039069528d0bc7e9df6b745cd6ad018dbb4b9537b02a5b3",
+      "metrics": {
+        "rows": 93319,
+        "first_time_s": 1e-07,
+        "last_time_s": 0.8,
+        "final_coil_a": 1.49023536,
+        "final_gate_v": 5.1403437599999995,
+        "final_carrier_return_a": 0.0238827683,
+        "maximum_carrier_return_a": 4.92477534,
+        "maximum_coil_a": 1.49023536,
+        "final_run_source_a": 0.0031750255,
+        "final_run_v": 4.8507738,
+        "final_main_input_v": 4.0423115,
+        "gate_high_us": 443554.82050000003
+      },
+      "artifacts": {
+        "circuit.cir": "f9ac094f6971e0031b6742de66ae677d0a42a9a199a9aed2c7b599bca12d5444",
+        "ngspice.log": "4f33098b334af9dd6dbf8981991e6dadcbc6bf9d71f4598fd19a5402ff9e95e2",
+        "trace.tsv.gz": "c0a6e564be8e0630967932dd7502f3ec01ed8421bf852a795155aaca84134e74"
+      }
+    }
+  },
+  "qualification": "Generic conditional electrical sensitivity only; no guarantee of GPIO/RUN levels, exact device timing/temperature, regulator behavior, PCB parasitics, physical or engine acceptance"
+}

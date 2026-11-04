@@ -1,0 +1,324 @@
+{
+  "scope": "Bind final full-precision ngspice vectors after review corrections.\n\nThis audits data/source fidelity and conditional summaries, not device behavior.\nThe independently mutated electrical probes retain their original decks.\n",
+  "reviewed_sources_sha256": {
+    "tools/run_idle_circuit.py": "aece1686d6f33c343f31d06f7d9ac566f8dcdf973b3d85ffbd6db7d041ecf711",
+    "hardware/idle-isolated/net_contract.json": "32bd3435b398d603d37606f78b65d9c9b06210ab307ba9b48bf33bb1356786bf",
+    "hardware/idle-isolated/isolated.kicad_pcb": "dd12136d7c7dec1464d7119dcd1fefe8740fa3743c33520e7c524a3910bb3d2e",
+    "hardware/a5-idle-interface/net_contract.json": "09b64f8846412f16a8baea041b8d272180b52bbb2d34fbfb44eeade4b29953c4",
+    "hardware/a5-idle-interface/esp32-ecu.kicad_pcb": "12a0d3a36dda51e8d2e99e046480309d23a0c40471b02e0ab47458bea71bf33a",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+    "docs/engine-idle-isolation.md": "ce4891a2fe5da3b37d749dc5ffa6f004fd05cbe4c53efb5318b0d7c4a23fcd0b",
+    "hardware/idle-isolated/README.md": "37367f5345030da9882ef68325260ac981a88d1b6992cd1e4cf0143aaec29dca",
+    "hardware/a5-idle-interface/README.md": "5fcdef772678cf5a8712c38a57b87d4d73741587a822c15a216f7677fdde550d"
+  },
+  "source_unchanged_at_end": true,
+  "input_directory": ".cache/engine/idle-isolation/circuit-precision",
+  "input_results_sha256": "34f6c205188f002932a44e2cb642dae2d45517851285a103a978f871b35b7129",
+  "ngspice_binary_sha256": "25b6a73fafd9b489b92347a6c55fe307db502c1638f53d7d0bf439b5f7c65e38",
+  "full_precision_trace_audit": [
+    {
+      "name": "warm_continuous",
+      "rows": 16254,
+      "saved_first_s": 5e-09,
+      "saved_last_s": 0.008,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.988653934390186e-08,
+      "peak_current_relative_rounding_delta": 6.49322203824061e-10
+    },
+    {
+      "name": "cold_start",
+      "rows": 53541,
+      "saved_first_s": 2e-07,
+      "saved_last_s": 0.8,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.999946945360989e-08,
+      "peak_current_relative_rounding_delta": 4.897932668824262e-10
+    },
+    {
+      "name": "command_low",
+      "rows": 16643,
+      "saved_first_s": 5e-09,
+      "saved_last_s": 0.008,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.999876601630149e-08,
+      "peak_current_relative_rounding_delta": 4.822354018628338e-10
+    },
+    {
+      "name": "run_low",
+      "rows": 16606,
+      "saved_first_s": 5e-09,
+      "saved_last_s": 0.008,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.9996943474184263e-08,
+      "peak_current_relative_rounding_delta": 2.05024861962203e-09
+    },
+    {
+      "name": "carrier_power_open",
+      "rows": 16569,
+      "saved_first_s": 5e-09,
+      "saved_last_s": 0.008,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.999662372995317e-08,
+      "peak_current_relative_rounding_delta": 1.0602638780837715e-09
+    },
+    {
+      "name": "carrier_return_open",
+      "rows": 16629,
+      "saved_first_s": 5e-09,
+      "saved_last_s": 0.008,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.9995373174738234e-08,
+      "peak_current_relative_rounding_delta": 1.2459731402964044e-10
+    },
+    {
+      "name": "actuator_return_open",
+      "rows": 16453,
+      "saved_first_s": 5e-09,
+      "saved_last_s": 0.008,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.988653934390186e-08,
+      "peak_current_relative_rounding_delta": 5.788238560551773e-10
+    },
+    {
+      "name": "actuator_power_open",
+      "rows": 16447,
+      "saved_first_s": 5e-09,
+      "saved_last_s": 0.008,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.988653934390186e-08,
+      "peak_current_relative_rounding_delta": 5.788334380470733e-10
+    },
+    {
+      "name": "rail_drop",
+      "rows": 16474,
+      "saved_first_s": 5e-09,
+      "saved_last_s": 0.008,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.998140568091003e-08,
+      "peak_current_relative_rounding_delta": 7.227311746302167e-10
+    },
+    {
+      "name": "drain_short",
+      "rows": 16590,
+      "saved_first_s": 5e-09,
+      "saved_last_s": 0.008,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.988653934390186e-08,
+      "peak_current_relative_rounding_delta": 1.8198850156665579e-09
+    },
+    {
+      "name": "return_open_deliberate_bridge",
+      "rows": 16415,
+      "saved_first_s": 5e-09,
+      "saved_last_s": 0.008,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.98810770466207e-08,
+      "peak_current_relative_rounding_delta": 5.992285967169434e-10
+    },
+    {
+      "name": "rail_drop_assertion_100us",
+      "rows": 16477,
+      "saved_first_s": 5e-09,
+      "saved_last_s": 0.008,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.9984349104192916e-08,
+      "peak_current_relative_rounding_delta": 1.0172765751032944e-09
+    },
+    {
+      "name": "supply_9v",
+      "rows": 16283,
+      "saved_first_s": 5e-09,
+      "saved_last_s": 0.008,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.999980873776622e-09,
+      "peak_current_relative_rounding_delta": 2.320518620301444e-09
+    },
+    {
+      "name": "supply_16v",
+      "rows": 16268,
+      "saved_first_s": 5e-09,
+      "saved_last_s": 0.008,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.964807587271025e-08,
+      "peak_current_relative_rounding_delta": 8.630472826255139e-10
+    },
+    {
+      "name": "pulse_1us_tau_0.2us",
+      "rows": 6725,
+      "saved_first_s": 0.0019000461887862736,
+      "saved_last_s": 0.0022,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.9992818773603176e-08,
+      "peak_current_relative_rounding_delta": 5.777028142047806e-10
+    },
+    {
+      "name": "pulse_1us_tau_2us",
+      "rows": 6233,
+      "saved_first_s": 0.0019000097358387808,
+      "saved_last_s": 0.0022,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.998452141080634e-08,
+      "peak_current_relative_rounding_delta": 1.0523225838972925e-09
+    },
+    {
+      "name": "pulse_2us_tau_0.2us",
+      "rows": 6731,
+      "saved_first_s": 0.0019000461887862736,
+      "saved_last_s": 0.0022,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.9992818773603176e-08,
+      "peak_current_relative_rounding_delta": 7.517587171612657e-11
+    },
+    {
+      "name": "pulse_2us_tau_2us",
+      "rows": 6709,
+      "saved_first_s": 0.0019000097358387808,
+      "saved_last_s": 0.0022,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.99947088172803e-08,
+      "peak_current_relative_rounding_delta": 5.668944769039891e-10
+    },
+    {
+      "name": "pulse_4us_tau_0.2us",
+      "rows": 6729,
+      "saved_first_s": 0.0019000461887862736,
+      "saved_last_s": 0.0022,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.9992818773603176e-08,
+      "peak_current_relative_rounding_delta": 2.3951592351614987e-10
+    },
+    {
+      "name": "pulse_4us_tau_2us",
+      "rows": 6709,
+      "saved_first_s": 0.0019000097358387808,
+      "saved_last_s": 0.0022,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.998262070898818e-08,
+      "peak_current_relative_rounding_delta": 2.0353635610148273e-11
+    },
+    {
+      "name": "pulse_10us_tau_0.2us",
+      "rows": 6722,
+      "saved_first_s": 0.0019000461887862736,
+      "saved_last_s": 0.0022,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.9996403461705086e-08,
+      "peak_current_relative_rounding_delta": 4.382402219413692e-09
+    },
+    {
+      "name": "pulse_10us_tau_2us",
+      "rows": 6705,
+      "saved_first_s": 0.0019000097358387808,
+      "saved_last_s": 0.0022,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.998197589145548e-08,
+      "peak_current_relative_rounding_delta": 9.662718518484316e-10
+    },
+    {
+      "name": "pulse_40us_tau_0.2us",
+      "rows": 6732,
+      "saved_first_s": 0.0019000461887862736,
+      "saved_last_s": 0.0022,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.9992818773603176e-08,
+      "peak_current_relative_rounding_delta": 6.988546200659916e-10
+    },
+    {
+      "name": "pulse_40us_tau_2us",
+      "rows": 6714,
+      "saved_first_s": 0.0019000097358387808,
+      "saved_last_s": 0.0022,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.999031055774594e-08,
+      "peak_current_relative_rounding_delta": 3.4354529976242206e-10
+    },
+    {
+      "name": "pulse_1us_refinement",
+      "rows": 12652,
+      "saved_first_s": 0.0019000179089673204,
+      "saved_last_s": 0.0022,
+      "strict_time_order": true,
+      "model_deck_unchanged_except_export_precision": true,
+      "prior_maximum_numeric_rounding_delta": 4.999839831043573e-08,
+      "peak_current_relative_rounding_delta": 4.5739785250828276e-10
+    }
+  ],
+  "exported_time_duplicates_total": 0,
+  "final_precision_reruns": {
+    "baseline_final_precision": {
+      "base_case": "warm_continuous",
+      "declared_mutation": "",
+      "base_deck_sha256": "78520392b43a087852ef60142ffe7f0c6210723bbda404df806b54247f15a671",
+      "metrics": {
+        "rows": 16254,
+        "first_time_s": 5e-09,
+        "last_time_s": 0.008,
+        "final_coil_a": 1.4819778694609307,
+        "final_gate_v": 5.140343757677352,
+        "final_carrier_return_a": 0.02388276830272101,
+        "maximum_carrier_return_a": 0.023882768309400917,
+        "maximum_coil_a": 1.4832855490368697,
+        "final_run_source_a": 0.0031750255023531857,
+        "final_run_v": 4.850773801389401,
+        "final_main_input_v": 4.042311501157833,
+        "gate_high_us": 7999.788087409635
+      },
+      "artifacts": {
+        "circuit.cir": "395e6d53013e4707de2e8f34a271ffce23622f6becd48017905f194f20c6be9d",
+        "ngspice.log": "82e9cb9c73413151122d5ad399f83c50e8a1ac4ca86204e275979ad23a43131e",
+        "trace.tsv.gz": "811e73beb440d44e4e3db0326472ea8f04ff8c8cb4b65f5c80498aec8f15a47b"
+      }
+    },
+    "supervisor_final_precision": {
+      "base_case": "warm_continuous",
+      "declared_mutation": "supervisor_block",
+      "base_deck_sha256": "78520392b43a087852ef60142ffe7f0c6210723bbda404df806b54247f15a671",
+      "metrics": {
+        "rows": 17091,
+        "first_time_s": 5e-09,
+        "last_time_s": 0.008,
+        "final_coil_a": 1.2011403622597579e-08,
+        "final_gate_v": 1.0280857512754455e-08,
+        "final_carrier_return_a": 0.023882768302706334,
+        "maximum_carrier_return_a": 0.023882774132411258,
+        "maximum_coil_a": 3.030791745399714e-08,
+        "final_run_source_a": 0.0031750255023531852,
+        "final_run_v": 4.8507738013894,
+        "final_main_input_v": 4.042311501157834,
+        "gate_high_us": 0.0
+      },
+      "artifacts": {
+        "circuit.cir": "b2bca4cbd5909783aabc4db8271819f4409d91c3a980dea4ff66eace5917ba84",
+        "ngspice.log": "366fb7e072bd47e93a39bb8757e9a765c2e286bf707e399ce26b7b5a721007e5",
+        "trace.tsv.gz": "21f2ee0a0e11499a47efef58f9e1769eaeb3a98c9f789d39174064614fa55ae9"
+      }
+    }
+  },
+  "prior_independent_probe_results_sha256": "158afa6fc3fc0c99ff15faa89898681219af16a09075446a34c576861e01f7d5",
+  "all_input_artifacts_sha256_file": "reviewed-data-sha256.json",
+  "qualification": "Conditional lumped circuit/source/trace review only. No actual GPIO/RUN, semiconductor timing/temperature, regulator transient, PCB parasitic, valve, engine or physical isolation acceptance."
+}

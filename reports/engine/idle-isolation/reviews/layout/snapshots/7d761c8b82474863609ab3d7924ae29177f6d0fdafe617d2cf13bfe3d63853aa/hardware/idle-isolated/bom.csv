@@ -1,0 +1,46 @@
+Reference,Value,MPN candidate,Footprint,Qualification / procurement
+J1,CARRIER INPUT DOMAIN,B4B-XH-A(LF)(SN),ECU:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical,Only optocoupler LED/buffer circuitry uses carrier power/ground. A5 J21; permanent carrier GPIO3 bias required.
+J2,PROTECTED ACTUATOR SUPPLY,1715721,"ECU:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal","Separate externally fused, relay-switched, reverse/transient-protected branch. Never carrier/sensor supply. No onboard coil current limit."
+J3,NC TWO-WIRE VALVE,B2P-VH(LF)(SN),ECU:JST_VH_B2P-VH_1x02_P3.96mm_Vertical,"Normally closed, continuous PWM, energize-to-open; actual coil <=2A across voltage/temp. Valve selection and decay remain unqualified."
+Q1,IRLZ44NPBF,IRLZ44NPBF,ECU:TO-220-3_Vertical,"Fast logic-level MOSFET, no automatic current/thermal shutdown or fault feedback. Drain tab must not bridge domains or share an uninsulated regulator heatsink."
+Q2,2N3904,2N3904BU,ECU:TO-92_Inline_Wide,"Input-side LED buffer, E-B-C formed leads at2.54mm. Loaded GPIO/RUN levels, saturation and storage over temperature require bench acceptance."
+Q3,2N3904,2N3904BU,ECU:TO-92_Inline_Wide,"Input-side LED buffer, E-B-C formed leads at2.54mm. Loaded GPIO/RUN levels, saturation and storage over temperature require bench acceptance."
+U2,6N137,6N137,ECU:DIP-8_W7.62mm_LongPads,"Vishay DIP8, direct solder. No copper across optical gap. Actual pullup/load and input-current timing conditions require verification."
+U3,6N137,6N137,ECU:DIP-8_W7.62mm_LongPads,"Vishay DIP8, direct solder. No copper across optical gap. Actual pullup/load and input-current timing conditions require verification."
+U4,SN74HCT02N,SN74HCT02N,ECU:DIP-14_W7.62mm_LongPads,"Ordinary TTL NOR accepts opto VOL0.6V under its0.8V VIL. NOR(PWM_N,RUN_N) is high only when both input LEDs are lit. Unused inputs grounded."
+U1,UCC27524P,UCC27524P.B,ECU:DIP-8_W7.62mm_LongPads,"Direct PDIP8, no socket. Exact procured P/P.B electrical guarantee remains a release item. Local supervisor gates ENA independently of logic."
+U5,MCP100-485DI/TO,MCP100-485DI/TO,ECU:TO-92_Inline_Wide,D-bondout only. Static trip4.60-4.85V; assertion10us is typical without a maximum. No hard brownout-latency claim.
+U6,LM317AT/NOPB,LM317AT/NOPB,ECU:TO-220-3_Vertical,"120/374ohm1% divider: DC4.967-5.346V, >=10mA minimum load, >=3V headroom at9V input. Tab is output, not ground. No rail transient/thermal qualification."
+D1,SB5H100-E3,SB5H100-E3/54,ECU:D_DO-201AD_P15.24mm_Horizontal,"Flyback cathode at valve+, anode at drain. Close coil/diode loop; current decays after cut."
+D2,1N4007,1N4007-E3/54,ECU:D_DO-41_SOD81_P10.16mm_Horizontal,"LM317 output-discharge protection: A atOUT, K atIN. Does not provide input reverse-battery protection."
+D3,1N4148,1N4148-TAP,ECU:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,Input transistor reverse BE clamp only; not an isolation bridge.
+D4,1N4148,1N4148-TAP,ECU:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,Input transistor reverse BE clamp only; not an isolation bridge.
+R1,1k 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,GPIO buffer base; loaded GPIO voltage unmeasured; exact leaded passive part/temperature rating pending
+R2,1k8 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,RUN base load stays within source budget conditionally; exact leaded passive part/temperature rating pending
+R3,357R 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,LED current conditional7.63-14.85mA; exact leaded passive part/temperature rating pending
+R4,357R 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,LED current conditional7.63-14.85mA; exact leaded passive part/temperature rating pending
+R5,100k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Base-emitter off bias; exact leaded passive part/temperature rating pending
+R6,100k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Base-emitter off bias; exact leaded passive part/temperature rating pending
+R7,1k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Opto pullup; timing load condition must match; exact leaded passive part/temperature rating pending
+R8,1k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Opto pullup; timing load condition must match; exact leaded passive part/temperature rating pending
+R9,1k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Logic-to-driver input series; exact leaded passive part/temperature rating pending
+R10,10k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Driver input off bias; exact leaded passive part/temperature rating pending
+R11,1k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Independent local supervisor enable; exact leaded passive part/temperature rating pending
+R12,4k7,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Mandatory enable off bias overrides internal pullup; exact leaded passive part/temperature rating pending
+R13,33R,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,MOS gate damping; actual switching remains unmeasured; exact leaded passive part/temperature rating pending
+R14,10k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Local gate-source off bias; exact leaded passive part/temperature rating pending
+R15,120R 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Regulator minimum load and divider high arm; exact leaded passive part/temperature rating pending
+R16,374R 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Regulator divider low arm; exact leaded passive part/temperature rating pending
+C1,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm,"Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C2,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm,"Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C3,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm,"Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C4,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm,"Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C5,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm,"Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C8,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm,"Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C9,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm,"Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C6,100uF 50V,,ECU:CP_Radial_D8.0mm_P3.50mm,"Input reservoir; exact D8/P3.5 leaded part, ripple/thermal and interruption response pending"
+C7,22uF 16V,,ECU:CP_Radial_D8.0mm_P3.50mm,"LM317 local output reservoir, no generic old-LDO ESR-window claim; exact leaded part/fit and transient behavior pending"
+H1,M3 ISOLATED MOUNT,,ECU:MountingHole_3.2mm_M3,Unplated mount. Insulating spacers/hardware must not bridge carrier/actuator ground or live TO220 tabs. Case fit unmeasured.
+H2,M3 ISOLATED MOUNT,,ECU:MountingHole_3.2mm_M3,Unplated mount. Insulating spacers/hardware must not bridge carrier/actuator ground or live TO220 tabs. Case fit unmeasured.
+H3,M3 ISOLATED MOUNT,,ECU:MountingHole_3.2mm_M3,Unplated mount. Insulating spacers/hardware must not bridge carrier/actuator ground or live TO220 tabs. Case fit unmeasured.
+H4,M3 ISOLATED MOUNT,,ECU:MountingHole_3.2mm_M3,Unplated mount. Insulating spacers/hardware must not bridge carrier/actuator ground or live TO220 tabs. Case fit unmeasured.

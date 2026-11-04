@@ -43,10 +43,24 @@ async def check(url,device,out):
    assert 'Cycle-latched high time' in text and 'Proposed duty' in text
    assert device.engine.last_run['summary']['idle_valve']['edges']>0 and not device.engine.status()['physical_outputs_enabled']
    checks.append('Enabled host SIL uses actual PWM edges; UI separates controller terms, dispatcher observations and synthetic valve state')
+   await page.locator('#engine-idle-panel summary').filter(has_text='Driver connection and debugging').click()
+   wiring=await page.locator('#engine-idle-panel details').inner_text()
+   assert 'A5 J21 PH4' in wiring and 'IAC-DRAFT2 J1 XH4' in wiring and 'independent actuator cutoff' in wiring
+   await page.locator('#toast').wait_for(state='hidden',timeout=8000)
    await page.locator('#engine-idle-panel').scroll_into_view_if_needed();await page.screenshot(path=out/'idle-desktop.png')
    for width in (320,390,768,1440):
     await page.set_viewport_size({'width':width,'height':1000});await page.evaluate('()=>new Promise(requestAnimationFrame)');assert await page.evaluate('()=>document.documentElement.scrollWidth<=innerWidth')
    checks.append('Idle panel and curve table fit320/390/768/1440px without document overflow')
+   await page.locator('[data-page="guides"]').click();await page.locator('#guide-select').select_option('A5 J21 / IAC-DRAFT2')
+   guide=await page.locator('#page').inner_text()
+   assert 'R154' in guide and 'carrier' in guide and 'preserve scope protective earth'.lower() in guide.lower()
+   assert 'A3/A4 and the old manual/ZIP do not contain this new carrier connector' in guide
+   for width in (320,390,768,1440):
+    await page.set_viewport_size({'width':width,'height':1000});await page.evaluate('()=>new Promise(requestAnimationFrame)')
+    await page.screenshot(path=out/f'idle-guide-{width}.png')
+    assert await page.evaluate('()=>document.documentElement.scrollWidth<=innerWidth')
+   await page.screenshot(path=out/'idle-wiring-guide.png')
+   checks.append('Current wiring/debug guide exposes the routed draft, source bias, return separation and acceptance holds, separately from the archived manual')
    assert not errors,errors
   finally:await browser.close()
  report=dict(passed=True,checks=checks,page_errors=errors,browser='Installed Chrome via Playwright');(out/'ui-tests.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))

@@ -1,0 +1,54 @@
+[
+  {
+    "argv": [
+      "kicad-cli",
+      "sch",
+      "erc",
+      "--severity-all",
+      "--format",
+      "json",
+      "--exit-code-violations",
+      "--output",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/a5/native-erc.json",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/a5/native-working-copy/esp32-ecu.kicad_sch"
+    ],
+    "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/a5/native-working-copy",
+    "returncode": 0,
+    "stdout": "Found 0 violations\nSaved ERC Report to /home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/a5/native-erc.json\n"
+  },
+  {
+    "argv": [
+      "kicad-cli",
+      "pcb",
+      "drc",
+      "--severity-all",
+      "--all-track-errors",
+      "--schematic-parity",
+      "--format",
+      "json",
+      "--exit-code-violations",
+      "--output",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/a5/native-drc.json",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/a5/native-working-copy/esp32-ecu.kicad_pcb"
+    ],
+    "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/a5/native-working-copy",
+    "returncode": 0,
+    "stdout": "Found 0 violations\nFound 0 unconnected items\nFound 0 schematic parity issues\nSaved DRC Report to /home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/a5/native-drc.json\n"
+  },
+  {
+    "argv": [
+      "kicad-cli",
+      "sch",
+      "export",
+      "netlist",
+      "--format",
+      "kicadxml",
+      "--output",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/a5/schematic-netlist.xml",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/a5/native-working-copy/esp32-ecu.kicad_sch"
+    ],
+    "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/a5/native-working-copy",
+    "returncode": 0,
+    "stdout": ""
+  }
+]

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "guide_version": "1.2",
+  "guide_version": "1.3",
   "hardware_revision": "A3-120",
   "scope": "Bench configuration and diagnostics. Physical engine outputs remain inhibited; no vehicle qualification.",
   "general": [
@@ -34,6 +34,18 @@
     {
       "title": "ST protected low-side driver",
       "url": "https://www.st.com/resource/en/datasheet/vnp35n07-e.pdf"
+    },
+    {
+      "title": "Vishay 6N137 optical input/detector data",
+      "url": "https://www.vishay.com/docs/84732/6n137_vo2601_vo2611.pdf"
+    },
+    {
+      "title": "TI UCC27524 gate-driver data and layout guidance",
+      "url": "https://www.ti.com/lit/ds/symlink/ucc27524.pdf"
+    },
+    {
+      "title": "Microchip MCP100 supply supervisor",
+      "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/11187f.pdf"
     }
   ],
   "sensors": [
@@ -403,15 +415,18 @@
       ]
     },
     {
-      "connector": "IAC-DRAFT1",
-      "title": "Idle PWM accessory / unrouted draft",
+      "connector": "A5 J21 / IAC-DRAFT2",
+      "title": "Isolated idle PWM",
       "checks": [
-        "Engine development contains the idle mode, gains, six-point coolant curves and source/age diagnostics. All shipped builds keep physical idle GPIO writes disabled.",
-        "Draft J1 logic: pin1 GPIO3 from module socket pad13; pin2 RUN_5V from TP6; pin3 logic5V from TP3; pin4 ground from TP1. No take-off connector is implemented on the archived carrier.",
-        "Draft J2 is a fixed screw terminal: protected, externally fused/switched actuator12V and dedicated return. J3 VH carries valve positive and IAC_LS. Do not use carrier J1 or sensor/logic rails for valve power.",
-        "The draft uses a PDIP8 driver, TO220 smart low-side switch and axial flyback, for a normally closed two-wire continuous-duty valve,9\u201316V and <=2A. Exact valve and passive parts remain unqualified.",
-        "Do not power this unrouted draft. Open actuator-return current can bypass through logic ground. Resolve that path and install permanent carrier-side GPIO3 bias; read actual JTAG/eFuse routing without burns. Routing, thermal, reset/backfeed and case-fit tests remain pending.",
-        "Compare proposed idle duty with the separate cycle-latched PWM high time and fault. Synthetic current/opening are model estimates; there is no physical valve feedback."
+        "Engine development contains idle modes, gains, coolant curves and source/age diagnostics. All shipped builds keep physical idle GPIO writes disabled. A3/A4 and the old manual/ZIP do not contain this new carrier connector.",
+        "A5 J21 PH4 maps pin 1 GPIO3/IDLE_CMD, pin 2 RUN_5V, pin 3 carrier 5V, pin 4 carrier GND to IAC-DRAFT2 J1 XH4 pins1 through 4. R154 is the permanent 2.2 kohm carrier bias and stays present with the harness unplugged. Verify the keyed mating view and continuity with power removed.",
+        "Two input-side transistor buffers and 6N137 optocouplers separate carrier power/return from actuator logic. Do not bridge these domains with wires, case foil, heatsinks or scope ground clips. This is low-voltage return separation, not certified isolation.",
+        "Accessory J2 fixed screw terminal: pin 1 separate externally protected, fused, relay-switched 9-16 V; pin 2 dedicated return. J3 VH2: pin 1 valve positive, pin 2 IAC_LS. Use an actual <=2 A normally closed two-wire continuous-PWM valve; carrier J1 and sensor rails cannot supply it.",
+        "IRLZ44NPBF has no current/thermal shutdown or valve feedback. A drain-source short can energize a normal-current coil without clearing a fuse. Provide an independently operable actuator-branch disconnect. Q1 drain tab and U6 regulator-output tab are live at different voltages.",
+        "C1-C5, C10, R13 and R14 mount on the back. C4/C10 bypass the driver locally; LOGIC_GND joins ACT_GND only at NT1/Q1 source. Do not add a second return strap. Actual passive parts, trimmed leads, finished TO220 holes, underside height and case clearance require assembly acceptance.",
+        "Keep this draft unpowered pending release of the protected branch, exact PDIP driver guarantee, loaded GPIO/RUN/opto timing, minimum 1 us pulse, supervisor brownout, temperature and mounting checks. MCP100 assertion 10 us is typical with no specified maximum. Read actual GPIO3/JTAG eFuses without burns; N16R8 socket/antenna fit remains provisional. The RUN source also feeds carrier R47/R50/R53, Q7 and HCT inputs; measure loaded RUN and MAIN_IN with both boards attached. The Q7 500 uA figure at 10 V/25 C is not a 5 V/full-temperature/fault bound.",
+        "Use a current-limited resistor fixture first with proper isolated/differential probes and an independent cutoff. Observe local rail, supervisor, ENA, gate/source, drain and both return currents during startup, reset, RUN/command loss, disconnected inputs and opened returns. Preserve scope protective earth.",
+        "Compare proposed duty with separate cycle-latched PWM high time and fault. Synthetic current/opening are model estimates; no physical valve feedback exists. Command0% does not prove valve closure."
       ]
     }
   ],

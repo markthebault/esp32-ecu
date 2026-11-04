@@ -23,7 +23,7 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | Rev limiting | Retard band, cut and hysteresis | Editable thresholds and fault logs | Target response and physical cut behavior pending |
 | Overrun fuel cut | Continuous entry delay/hysteresis | Enable/limits/state logs | Active pulses finish bounded closing edges |
 | Closed-loop lambda | Basic bounded PI | Gains/limits and correction logs | External wideband controller, no raw sensor heater/control |
-| Idle | On/off, open-loop and closed-loop PWM with executed-edge NC valve model; 33 coupled runs/38 reference checks | Coolant/duty curves, normalized gains, gates, applied/pending PWM diagnostics, own005 files and logs | Separate THT accessory pin/placement draft, 28 unrouted connections; return-fault/module/valve/fit checks remain; stepper/H-bridge missing |
+| Idle | On/off, open-loop and closed-loop PWM with executed-edge NC valve model; 33 coupled runs/38 reference checks | Coolant/duty curves, normalized gains, gates, applied/pending PWM diagnostics, own005 files/logs and isolated wiring/debug guide | Routed A5 permanent-bias/PH4 interface and isolated THT IAC-DRAFT2; native checks, independent copper review and25 conditional circuit runs; physical output disabled; actual module/driver/pulse/brownout/valve/fit holds; stepper/H-bridge missing |
 | Fuel pump / fan | Prime/hysteresis shadow proposals | Settings and status | Existing command stages, engine execution disabled |
 | Boost / overboost | Missing, current profile NA only | Boost tune rejected | Solenoid driver/connector allocation needed |
 | VVT | Missing | No controls | Phase sensing, driver, flyback and connector work |
@@ -44,13 +44,13 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | ESP-NOW screens | Existing authenticated read-only sensor telemetry | Button/UI pair, approve/unpair, LED | Sealed buttons/LED fit remains provisional |
 | New engine telemetry to screens | Opt-in232-byte authenticated schema, coherent inputs/proposals/phase/worker observations, timed nonce recovery and64-bit sequences | Negotiated schema/source-age diagnostics; Python receiver and clock/replay/queue tests; legacy stream retained | Actual two-device/RF/load testing and screen implementation pending |
 | Target engine data logging | Bounded256-row fixed RAM ring, absolute sampling and final loss accounting | Period/duration controls, paged browser collection, gap disclosures, JSON/MSL and retained-window export | Runtime load, minimum heap, stack high-water and physical data integrity tests pending |
-| Hand assembly / enclosure | A3 sources and A4 fit draft retained | Existing build/manual/guides | Module geometry, antenna RF and sealed fit checks pending |
+| Hand assembly / enclosure | A3 sources, A4 fit and A5 idle drafts retained | Existing manual plus new back-assembly/insulation/harness guide | Module geometry, antenna RF, new header/accessory clearance and sealed fit checks pending |
 | External engine benchmark | Verified MVEM air path, pulse-driven empirical combustion/free shaft; production Speeduino loop compared | Declared neutral profiles, edge/ledger/fault logs, step convergence | Uncalibrated research plant; native HAL is not target/HIL qualification |
 | Vehicle electrical/environment | Not established | Software never implies qualification | Surge/EMI/current/thermal/splash/fit tests undone |
 
 ## Hardware sequence
 
-1. Preserve A3/A4 manufacturing records. Define a future carrier against an explicit engine/channel/trigger contract before routing.
+1. Preserve A3/A4 manufacturing records. A5 defines a separate idle interface; it has no fabrication release. Define each later carrier increment against an explicit engine/channel/trigger contract before routing.
 2. Prove Hall, ADC, injector and smart-coil paths on dummy loads, with captured supply/watchdog/interlock/reset behavior. Measure the actual N16R8 socket and antenna geometry.
 3. Add agreed protected inputs/drivers together with firmware, configuration, UI guides and fault tests. Idle stepper, VR, boost and VVT need real hardware work.
 4. Preserve the 120×120 mm limit, ordinary iron assembly, leaded parts, pluggable ESP32 and direct-solder DIP preferences. Use reviewed modules where necessary.
@@ -73,3 +73,5 @@ DBW/OEM integration remain outside the current bench scope.
 [USB tuning](engine-usb-tuning.md) covers the shared own005 codec, dedicated target transport, offline file workflow, diagnostics and unresolved online application gate.
 
 [Idle evidence](engine-idle-control.md) extends the software/control comparison and exposes remaining hardware release blockers. It does not close other control, OEM trigger, cylinder-count, online-vendor or physical-qualification gaps.
+
+[Isolated idle hardware](engine-idle-isolation.md) records the routed carrier/accessory, independent review corrections and conditional return/brownout/pulse circuit experiments.
