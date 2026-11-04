@@ -1,0 +1,47 @@
+{
+  "compile": {
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-pthread",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-001/firmware/include",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-001/firmware/tests/switch_fakes",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/cjson",
+      "-DECU_COMPACT_A3=1",
+      "-DECU_SELECTED_N16R8=1",
+      "-DECU_FLEX_G38_DRAFT=1",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-001/firmware/tests/shared_i2c_service_test.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-001/firmware/main/switch_service.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/cjson/cJSON.o",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/parent-shared-001"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "runs": [
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/parent-shared-001"
+      ],
+      "returncode": 0,
+      "stdout": "{\"passed\":true,\"shared_service_checks\":2330,\"status_allocation_cuts\":74,\"physical_i2c_or_LED_test\":false}\n",
+      "stderr": ""
+    }
+  ],
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  }
+}

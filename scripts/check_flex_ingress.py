@@ -147,8 +147,10 @@ def audit(elf, directory):
     return report
 
 
-def run(output):
+def run(output, sdkconfig_directory=None):
     output = output.resolve()
+    sdkconfig_directory = (sdkconfig_directory or ROOT / "firmware/.pio/build/compact_n16r8_web/config").resolve()
+    require((sdkconfig_directory / "sdkconfig.h").is_file(), "Missing SDK config; pass --sdkconfig-directory from an isolated firmware build")
     output.mkdir(parents=True, exist_ok=False)
     commands = []
 
@@ -169,7 +171,7 @@ def run(output):
     scans = (
         ["g++", "-std=c++17", "-MM", "-I", ROOT / "firmware/include", ROOT / "firmware/tests/flex_ingress_test.cpp"],
         [str(PREFIX) + "g++", "-std=c++17", "-DESP_PLATFORM", "-DFLEX_PROBE_NEGATIVE_MODE=0", "-MM",
-         "-I", ROOT / "firmware/include", "-I", ROOT / "firmware/.pio/build/compact_n16r8_web/config",
+         "-I", ROOT / "firmware/include", "-I", sdkconfig_directory,
          "-I", FRAMEWORK / "components/esp_common/include", ROOT / "firmware/tests/flex_ingress_xtensa_probe.cpp"])
     for index, command in enumerate(scans):
         dependencies = execute(command, "dependency-scan-" + str(index))
@@ -190,6 +192,7 @@ def run(output):
     (output / "tools-before.json").write_text(json.dumps(tools, indent=2) + "\n")
     frozen = output / "sources"
     frozen_framework = frozen / "external" / str(FRAMEWORK).lstrip("/")
+    frozen_config = frozen / (sdkconfig_directory.relative_to(ROOT) if sdkconfig_directory.is_relative_to(ROOT) else Path("external") / str(sdkconfig_directory).lstrip("/"))
     native = output / "native"
     native.mkdir()
     execute(["g++", "-std=c++17", "-O1", "-g", "-Wall", "-Wextra", "-Werror", "-pedantic",
@@ -209,7 +212,7 @@ def run(output):
         execute([str(PREFIX) + "g++", "-std=c++17", "-Os", "-mlongcalls", "-ffunction-sections", "-fdata-sections",
                  "-fno-exceptions", "-fno-rtti", "-fno-threadsafe-statics", "-fno-unwind-tables", "-fno-asynchronous-unwind-tables",
                  "-Wall", "-Wextra", "-Werror", "-DESP_PLATFORM", "-DFLEX_PROBE_NEGATIVE_MODE=" + str(mode),
-                 "-I", frozen / "firmware/include", "-I", frozen / "firmware/.pio/build/compact_n16r8_web/config",
+                 "-I", frozen / "firmware/include", "-I", frozen_config,
                  "-I", frozen_framework / "components/esp_common/include", "-MMD", "-MF", directory / "dependencies.d", "-c",
                  frozen / "firmware/tests/flex_ingress_xtensa_probe.cpp", "-o", obj], directory.name + "-compile")
         execute([str(PREFIX) + "g++", "-nostdlib", "-Wl,-T," + str(linker), obj, "-lgcc", "-o", elf], directory.name + "-link")
@@ -261,4 +264,6 @@ def run(output):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
-    run(parser.parse_args().output)
+    parser.add_argument("--sdkconfig-directory", type=Path)
+    arguments = parser.parse_args()
+    run(arguments.output, arguments.sdkconfig_directory)

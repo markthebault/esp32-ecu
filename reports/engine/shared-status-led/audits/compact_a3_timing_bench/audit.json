@@ -1,0 +1,57 @@
+{
+  "environment": "compact_a3_timing_bench",
+  "passed": true,
+  "elf_sha256": "fe93520e307e094b1f76cd72e4b586c3f513e01bf2e6a4b61d4b679ac6140c86",
+  "binary_sha256": "cc02ff75edfed090cfdb9f7e3dce6fa17502fd19c3be92f45fca7deede1b7b03",
+  "app_image_bytes": 680864,
+  "factory_partition_bytes": 2097152,
+  "policy": "gated_engine_dummy_loads_only",
+  "mapped_policy_strings": {
+    "DUMMY LOADS ONLY": [
+      {
+        "section": ".flash.rodata",
+        "address": "0x3c0602f8"
+      }
+    ],
+    "COMPILE-TIME INHIBITED": [],
+    "hardware_timer_virtual_outputs": [],
+    "hardware_timer_dummy_loads": []
+  },
+  "on_alarm_address": "0x40376640",
+  "on_alarm_size": 18569,
+  "on_alarm_GPIO_literal_references": 81,
+  "compiled_engine_output_pins": [
+    4,
+    5,
+    6,
+    7,
+    15,
+    16,
+    17,
+    18
+  ],
+  "source_sha256": {
+    "firmware/platformio.ini": "1cd5facedd3e9fc9e3c7a7b0d6741b24b4a3871d2a6897ac36c740e09a8d8497",
+    "firmware/main/engine_target.cpp": "aa94d0c1740cc5450bfe209ddb5af57b2138e59bb003dd9b0ac232be959478ee",
+    "firmware/main/app.cpp": "487d5e03a964f686939dcb46a148a91c02e516678cfd6c7d342ec0ba269ce9e6",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+  },
+  "allocated_sections": {
+    ".rtc.force_fast": 32,
+    ".rtc_reserved": 24,
+    ".iram0.vectors": 1028,
+    ".iram0.text": 96031,
+    ".dram0.dummy": 80896,
+    ".dram0.data": 126280,
+    ".noinit": 0,
+    ".dram0.bss": 11664,
+    ".flash.text": 346342,
+    ".flash_rodata_dummy": 393216,
+    ".flash.appdesc": 256,
+    ".flash.rodata": 110776,
+    ".ext_ram.dummy": 524256,
+    ".iram0.text_end": 221
+  },
+  "qualification": "Linked binary/data/static image checks only. Pin initialization and fail-safe low writes are separate from scheduler actuation. No physical flashing, USB, runtime heap/stack, interrupt latency, electrical, thermal or engine qualification. CMake macro absence is not used as evidence."
+}

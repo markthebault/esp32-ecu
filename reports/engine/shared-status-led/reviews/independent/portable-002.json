@@ -1,0 +1,43 @@
+{
+  "compile": {
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-pthread",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-002/firmware/include",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-002/firmware/tests/switch_fakes",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/cjson",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-002/firmware/tests/status_led_test.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/portable-002"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "runs": [
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/portable-002"
+      ],
+      "returncode": 0,
+      "stdout": "status_led_checks 517\n",
+      "stderr": ""
+    }
+  ],
+  "freeze_manifest_sha256": "31aec00f46d768c7092765923985cd62ae20ec9f83d965a437ce8cb59971186b",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  }
+}

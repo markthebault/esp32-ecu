@@ -1,0 +1,137 @@
+{
+  "passed": true,
+  "scope": "native_SDK_model_UI_replay_not_physical_LED",
+  "results": [
+    "Host fixture explicitly has no measured LED/expander",
+    {
+      "fixture": "green_ready",
+      "text": "Requested steady green. Expander latch verified green, 5.0 ms old. Advisory only; light output and live CPU health are unproven."
+    },
+    {
+      "fixture": "led_timeout",
+      "text": "Requested steady green. Historical latch: green, 114.8 ms old. Current verification unavailable (i2c_timeout, SDK 263). Advisory only; light output and live CPU health are unproven."
+    },
+    {
+      "fixture": "led_recovered",
+      "text": "Requested steady green. Expander latch verified green, 4.8 ms old. Advisory only; light output and live CPU health are unproven."
+    },
+    {
+      "fixture": "shared_bus_fault",
+      "text": "Requested steady green. Historical latch: green, 115.0 ms old. Current verification unavailable (i2c_timeout, SDK 263). Advisory only; light output and live CPU health are unproven."
+    },
+    {
+      "fixture": "bus_recovered",
+      "text": "Requested steady green. Expander latch verified green, 9.8 ms old. Advisory only; light output and live CPU health are unproven."
+    },
+    {
+      "fixture": "stale_latch",
+      "text": "Requested steady green. Historical latch: green, 259.8 ms old. Current verification unavailable (none, SDK 0). Advisory only; light output and live CPU health are unproven."
+    },
+    {
+      "rejected_malformed_ready_payloads": [
+        {
+          "name": "ready_string",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "fresh_string",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "known_string",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "allocated_string",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "error_string",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "error_nan",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "error_range",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "fault_contradiction",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "prototype",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "constructor",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "object_pattern",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "wrong_pattern_color",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "bad_mask",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "string_mask",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "unverified_write",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "wrong_phase",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "numeric_time",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "leading_zero",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "u64_overflow",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "future_read",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "future_completion",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "reversed_completion",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "stale_ready",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "wrong_contract",
+          "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+        },
+        {
+          "name": "wrong_source",
+          "text": "Requested policy: steady green. Hardware readback is unavailable; the indicator is advisory."
+        }
+      ]
+    },
+    "U64 ages, unknown/legacy sources, literal fault markup, failed-poll clearing and mobile overflow passed"
+  ],
+  "page_errors": []
+}

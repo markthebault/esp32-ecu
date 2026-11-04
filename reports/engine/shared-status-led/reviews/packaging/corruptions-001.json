@@ -1,0 +1,74 @@
+{
+  "all_rejected": false,
+  "results": [
+    {
+      "case": "overstated_scope",
+      "updated_outer_manifest": true,
+      "expected": "reject",
+      "rejected": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 155, in <module>\n    verify(options.report, options.check_live_sources, options.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 55, in verify\n    require(summary[name] is False, \"Overstated completion: \" + name)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 30, in require\n    raise ValueError(message)\nValueError: Overstated completion: target_capture_producer\n",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/corrupt-001"
+      ],
+      "elapsed_seconds": 0.23309083306230605
+    },
+    {
+      "case": "missing_independent_acceptance",
+      "updated_outer_manifest": true,
+      "expected": "reject",
+      "rejected": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 155, in <module>\n    verify(options.report, options.check_live_sources, options.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 62, in verify\n    require(independent[\"accepted\"] is True and not independent[\"open_findings\"], \"Independent acceptance missing\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 30, in require\n    raise ValueError(message)\nValueError: Independent acceptance missing\n",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/corrupt-001"
+      ],
+      "elapsed_seconds": 0.18980158295016736
+    },
+    {
+      "case": "false_compile_source_binding",
+      "updated_outer_manifest": true,
+      "expected": "reject",
+      "rejected": false,
+      "returncode": 0,
+      "stdout": "Verified 1261 artifacts and 254 sources; target capture/circuit/HIL and full parity remain open\n",
+      "stderr": "",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/corrupt-001"
+      ],
+      "elapsed_seconds": 0.38201177201699466
+    },
+    {
+      "case": "false_policy_source_binding",
+      "updated_outer_manifest": true,
+      "expected": "reject",
+      "rejected": false,
+      "returncode": 0,
+      "stdout": "Verified 1261 artifacts and 254 sources; target capture/circuit/HIL and full parity remain open\n",
+      "stderr": "",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/corrupt-001"
+      ],
+      "elapsed_seconds": 0.37535110698081553
+    }
+  ],
+  "scope": "Owned packet only, refreshed manifests; no firmware execution. Native fixture case executes only sanitizer-built frozen native tests."
+}

@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+import json,os,sys
+from pathlib import Path
+r=Path.cwd();out=Path(os.environ['PLATFORMIO_BUILD_DIR']);out.mkdir(parents=True,exist_ok=True)
+(out/'pio-command.json').write_text(json.dumps({'argv':sys.argv,'build_dir':str(out)}))
+names=[sys.argv[n+1]for n,a in enumerate(sys.argv)if a=='-e']
+for name in names:
+ p=out/name;p.mkdir();(p/'firmware.elf').write_text('OWNED FAKE BUILD ONLY '+name);(p/'firmware.bin').write_text('OWNED FAKE IMAGE ONLY')
+mode=os.environ['REVIEW_FAKE_PIO_MODE']
+if mode=='cache_mutation':(r/'firmware/.pio/build/prior/firmware.elf').write_text('owned mutation')
+if mode=='source_mutation':(r/'firmware/main/mock.cpp').write_text('owned source mutation')
+sys.exit(2 if mode=='build_failure'else 0)

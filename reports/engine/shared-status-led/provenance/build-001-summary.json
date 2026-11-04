@@ -1,0 +1,72 @@
+{
+  "created_utc": "2026-11-04T20:57:42.785328+00:00",
+  "command": [
+    "pio",
+    "run",
+    "-d",
+    "/home/mark/persospace/esp32-ecu/firmware",
+    "-e",
+    "compact_n16r8_flex_dev",
+    "-e",
+    "compact_n16r8_web",
+    "-e",
+    "compact_a3_web",
+    "-e",
+    "compact_a3_timing_bench"
+  ],
+  "exit_code": 0,
+  "build_dir_override": "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-build-001/build",
+  "environments": [
+    "compact_n16r8_flex_dev",
+    "compact_n16r8_web",
+    "compact_a3_web",
+    "compact_a3_timing_bench"
+  ],
+  "default_cache_retained": true,
+  "default_cache_unchanged": true,
+  "source_inputs_unchanged": true,
+  "artifacts": [
+    {
+      "path": "build/compact_a3_timing_bench/firmware.bin",
+      "bytes": 680864,
+      "sha256": "96336fbb9c592b60c225d3f7870d1b64c4708ab0dd528585e315e5392f6c743d"
+    },
+    {
+      "path": "build/compact_a3_timing_bench/firmware.elf",
+      "bytes": 8407940,
+      "sha256": "4e650e7636aae9d2d1b08878a9808624b3adf77fa409a1da1920d2bb52b18caa"
+    },
+    {
+      "path": "build/compact_a3_web/firmware.bin",
+      "bytes": 1644496,
+      "sha256": "36e8663132423306ec2610eee1c977ae8d4d176d40b842a1891a28b2f34744f4"
+    },
+    {
+      "path": "build/compact_a3_web/firmware.elf",
+      "bytes": 13898144,
+      "sha256": "41514032bea746ea9634952344e2f5f7a1bd16f356cfbbfe67146a6b31459bd6"
+    },
+    {
+      "path": "build/compact_n16r8_flex_dev/firmware.bin",
+      "bytes": 1644176,
+      "sha256": "34200623bb329115cf0740c4b3d9868939d639ced0dae84834ec6bc72c75f1bc"
+    },
+    {
+      "path": "build/compact_n16r8_flex_dev/firmware.elf",
+      "bytes": 14022632,
+      "sha256": "763cec25d5c80880a65fb60d4c13b1d4a4716d49ce8eb248e3eb8200ddf4a383"
+    },
+    {
+      "path": "build/compact_n16r8_web/firmware.bin",
+      "bytes": 1655424,
+      "sha256": "c32c3e85bd12486a7ca51d494aeaa6d096a7d94e241f5eea1272b75be65e7149"
+    },
+    {
+      "path": "build/compact_n16r8_web/firmware.elf",
+      "bytes": 14193972,
+      "sha256": "b50dade86cd69fc6dd12d088f447e3836883314481558ba1744f8948a11c2c29"
+    }
+  ],
+  "flashed": false,
+  "physical_qualification": false
+}

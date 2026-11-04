@@ -1,0 +1,126 @@
+{
+  "all_rejected": false,
+  "results": [
+    {
+      "case": "overstated_scope",
+      "updated_outer_manifest": true,
+      "expected": "reject",
+      "rejected": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 155, in <module>\n    verify(options.report, options.check_live_sources, options.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 55, in verify\n    require(summary[name] is False, \"Overstated completion: \" + name)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 30, in require\n    raise ValueError(message)\nValueError: Overstated completion: target_capture_producer\n",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/corrupt-002"
+      ],
+      "elapsed_seconds": 0.21081007504835725
+    },
+    {
+      "case": "missing_independent_acceptance",
+      "updated_outer_manifest": true,
+      "expected": "reject",
+      "rejected": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 155, in <module>\n    verify(options.report, options.check_live_sources, options.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 62, in verify\n    require(independent[\"accepted\"] is True and not independent[\"open_findings\"], \"Independent acceptance missing\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 30, in require\n    raise ValueError(message)\nValueError: Independent acceptance missing\n",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/corrupt-002"
+      ],
+      "elapsed_seconds": 0.17843525006901473
+    },
+    {
+      "case": "false_compile_source_binding",
+      "updated_outer_manifest": true,
+      "expected": "reject",
+      "rejected": false,
+      "returncode": 0,
+      "stdout": "Verified 1261 artifacts and 254 sources; target capture/circuit/HIL and full parity remain open\n",
+      "stderr": "",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/corrupt-002"
+      ],
+      "elapsed_seconds": 0.37559837906155735
+    },
+    {
+      "case": "false_policy_source_binding",
+      "updated_outer_manifest": true,
+      "expected": "reject",
+      "rejected": false,
+      "returncode": 0,
+      "stdout": "Verified 1261 artifacts and 254 sources; target capture/circuit/HIL and full parity remain open\n",
+      "stderr": "",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/corrupt-002"
+      ],
+      "elapsed_seconds": 0.3757090719882399
+    },
+    {
+      "case": "wrong_actual_compiled_UI",
+      "updated_outer_manifest": true,
+      "expected": "reject",
+      "rejected": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 155, in <module>\n    verify(options.report, options.check_live_sources, options.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 108, in verify\n    require(helper.embedded_index(elf, html) == (env != ENVS[-1]), \"Actual ELF flash UI differs\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 30, in require\n    raise ValueError(message)\nValueError: Actual ELF flash UI differs\n",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/corrupt-002"
+      ],
+      "elapsed_seconds": 0.2403144279960543
+    },
+    {
+      "case": "wrong_policy_ELF_binding",
+      "updated_outer_manifest": true,
+      "expected": "reject",
+      "rejected": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 155, in <module>\n    verify(options.report, options.check_live_sources, options.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 112, in verify\n    require(policy[\"passed\"] and policy[\"elf_sha256\"] == row[\"elf_sha256\"] and policy[\"binary_sha256\"] == sha(image), \"Linked policy binding\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 30, in require\n    raise ValueError(message)\nValueError: Linked policy binding\n",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/corrupt-002"
+      ],
+      "elapsed_seconds": 0.24224774492904544
+    },
+    {
+      "case": "native_fixture_replay_differs",
+      "updated_outer_manifest": true,
+      "expected": "reject",
+      "rejected": true,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 155, in <module>\n    verify(options.report, options.check_live_sources, options.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 144, in verify\n    require({p.name: sha(p) for p in fixtures.iterdir()} == {p.name: sha(p) for p in (report / \"fixtures\").iterdir()}, \"Actual-service fixture replay differs\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py\", line 30, in require\n    raise ValueError(message)\nValueError: Actual-service fixture replay differs\n",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-001.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/corrupt-002",
+        "--replay"
+      ],
+      "elapsed_seconds": 10.115900639910251
+    }
+  ],
+  "scope": "Owned packet only, refreshed manifests; no firmware execution. Native fixture case executes only sanitizer-built frozen native tests."
+}

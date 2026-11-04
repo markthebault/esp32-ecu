@@ -1,9 +1,13 @@
 #include "ecu/espnow.hpp"
 #include "ecu/engine_radio.hpp"
 #include "ecu/engine_target.hpp"
+#include "ecu/board_status.hpp"
+#include "ecu/flex_hardware.hpp"
 #include "driver/gpio.h"
+#if !ECU_FLEX_G38_DRAFT
 #include "driver/rmt_tx.h"
 #include "driver/rmt_encoder.h"
+#endif
 #include "esp_now.h"
 #include "esp_wifi.h"
 #include "esp_event.h"
@@ -51,7 +55,9 @@ std::int64_t deadline=0,last_beacon=0,candidate_started=0;bool waiting=false,app
 std::int64_t fault_until=0;
 std::atomic<std::uint32_t> session_id{0};std::uint32_t sequence=0;std::atomic<bool> sending{false};std::atomic<bool> rx_overflow{false};std::atomic<std::uint32_t> mac_failures{0};std::uint32_t mac_failure_count=0;std::uint64_t engine_packets=0,sensor_packets=0,capability_replies=0;
 cJSON* view=nullptr;const char* last_error="initializing";
+#if !ECU_FLEX_G38_DRAFT
 rmt_channel_handle_t led_channel{};rmt_encoder_handle_t led_encoder{};
+#endif
 std::int64_t now(){return esp_timer_get_time();}
 void hex(const std::uint8_t*p,unsigned n,char*out){for(unsigned i=0;i<n;++i)std::sprintf(out+2*i,"%02X",p[i]);}
 void mac_text(const std::uint8_t*p,char*out){std::sprintf(out,"%02X:%02X:%02X:%02X:%02X:%02X",p[0],p[1],p[2],p[3],p[4],p[5]);}
@@ -161,16 +167,24 @@ void command_run(const Command&c){
  }}
 }
 void led_init(){
+#if ECU_FLEX_G38_DRAFT
+ board_status::request(status_led::Pattern::Problem);
+#else
  rmt_tx_channel_config_t c{};c.gpio_num=GPIO_NUM_38;c.clk_src=RMT_CLK_SRC_DEFAULT;c.resolution_hz=10000000;c.mem_block_symbols=64;c.trans_queue_depth=1;
  ESP_ERROR_CHECK(rmt_new_tx_channel(&c,&led_channel));rmt_copy_encoder_config_t e{};ESP_ERROR_CHECK(rmt_new_copy_encoder(&e,&led_encoder));ESP_ERROR_CHECK(rmt_enable(led_channel));
+#endif
 }
 void led(bool fault,bool pairing){
+#if ECU_FLEX_G38_DRAFT
+ board_status::request(fault?status_led::Pattern::Problem:pairing?status_led::Pattern::Pairing:status_led::Pattern::Normal);
+#else
  // WS2812 GRB, low brightness. Fault takes precedence over pairing.
  const bool on=(now()/250000)%2==0;std::uint8_t rgb[3]={std::uint8_t(!fault&&!pairing?12:0),std::uint8_t(fault&&on?12:0),std::uint8_t(!fault&&pairing&&on?12:0)};
  rmt_symbol_word_t symbols[25]{};unsigned n=0;
  for(auto byte:rgb)for(int bit=7;bit>=0;--bit){bool one=byte&(1<<bit);auto&s=symbols[n++];s.level0=1;s.duration0=one?9:3;s.level1=0;s.duration1=one?3:9;}
  symbols[24].duration0=800;symbols[24].duration1=1;
  rmt_transmit_config_t tx{};ESP_ERROR_CHECK(rmt_transmit(led_channel,led_encoder,symbols,sizeof(symbols),&tx));ESP_ERROR_CHECK(rmt_tx_wait_all_done(led_channel,20));
+#endif
 }
 void update_view(bool fault){
  auto*j=cJSON_CreateObject();cJSON_AddBoolToObject(j,"available",radio_ok);cJSON_AddBoolToObject(j,"storage_ok",storage_ok);cJSON_AddBoolToObject(j,"simulator",false);
@@ -288,7 +302,10 @@ void publish(const web::Sample&s,const config::Config&c,const std::array<double,
 }
 cJSON* status(){
  if(!view_mutex){auto*j=cJSON_CreateObject();cJSON_AddBoolToObject(j,"available",false);return j;}
- xSemaphoreTake(view_mutex,portMAX_DELAY);auto*j=view?cJSON_Duplicate(view,true):cJSON_CreateObject();xSemaphoreGive(view_mutex);return j;
+ xSemaphoreTake(view_mutex,portMAX_DELAY);auto*j=view?cJSON_Duplicate(view,true):cJSON_CreateObject();xSemaphoreGive(view_mutex);
+ auto*indicator=board_status::snapshot();
+ if(!j||!indicator||!cJSON_AddItemToObject(j,"indicator",indicator)){cJSON_Delete(indicator);cJSON_Delete(j);return nullptr;}
+ return j;
 }
 bool command(const char*action,const char*mac,const char*window_id){
  if(!commands||std::strlen(action)>=12||std::strlen(mac)>=18||std::strlen(window_id)>=33)return false;

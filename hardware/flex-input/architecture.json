@@ -1,6 +1,7 @@
 {
   "contract": "FLEX-G38-DRAFT1",
-  "status": "architecture_only_not_for_fabrication_or_sensor_connection",
+  "status": "software_integration_draft_not_for_fabrication_or_sensor_connection",
+  "software_build": "compact_n16r8_flex_dev",
   "parent_carrier": "a5-idle-interface",
   "board_limit_mm": [120, 120],
   "module": "pluggable_44_pin_ESP32-S3_N16R8",
@@ -8,7 +9,7 @@
   "implementation": {
     "portable_integer_ingress": true,
     "target_producer": false,
-    "shared_bus_led_driver": false,
+    "shared_bus_led_driver": true,
     "protected_input_circuit": false,
     "native_cad": false,
     "physical_qualification": false,
@@ -24,6 +25,9 @@
       "i2c_sda_gpio": 41,
       "i2c_scl_gpio": 42,
       "rgb_outputs": [0, 1, 2],
+      "unused_outputs_NC_low": [3, 4, 5, 6, 7],
+      "IODIR_expected": 0,
+      "IOCON_expected": 4,
       "gp7": "NC_but_IODIR_bit7_must_be_zero",
       "ordinary_rgb_led_driver_and_resistors": "not_selected",
       "old_GPIO38_WS2812_wiring_compatible": false,
@@ -73,6 +77,7 @@
     "switch_IODIR_expected": 127,
     "switch_GP7_GP6_challenge_preserved": true,
     "mask_IODIR_bit7_to_accept_reset_value": false,
+    "LED_nonzero_IOCON_marker_rejects_byte_mode_alias": true,
     "led_initialize": "OLAT_off_before_direction_then_verify_full_legal_IODIR_and_latch",
     "led_diagnostics": ["desired", "last_verified_latch", "verified_age", "bus_failure_or_unknown"],
     "failed_bus_guarantees_red_or_off": false

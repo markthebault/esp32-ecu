@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/verify-002.py",
+    "--report",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/packet-002",
+    "--replay"
+  ],
+  "returncode": 0,
+  "stdout": "Replayed frozen portable/legacy/shared services with sanitizers and six exact mocked-I2C fixtures\nVerified 1261 artifacts and 254 sources; target capture/circuit/HIL and full parity remain open\n",
+  "stderr": "",
+  "elapsed_seconds": 10.460677144001238,
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "TMPDIR": "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-packaging-review/tmp"
+  }
+}

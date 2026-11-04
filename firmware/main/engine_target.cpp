@@ -6,6 +6,7 @@
 #include "ecu/idle_command.hpp"
 #include "ecu/idle_pwm_json.hpp"
 #include "ecu/idle_hardware.hpp"
+#include "ecu/flex_hardware.hpp"
 #include "driver/gpio.h"
 #include "driver/gptimer.h"
 #include "driver/mcpwm_cap.h"
@@ -230,6 +231,13 @@ void init_trigger_logger(){
 #endif
 }
 void init_peripherals(){
+#if ECU_FLEX_G38_DRAFT
+ // Explicitly remove former output ownership. Capture setup only enables an
+ // input route; it must never leave an earlier GPIO/RMT output driver active.
+ gpio_config_t flex_pin{};flex_pin.pin_bit_mask=1ULL<<flex::gpio;
+ flex_pin.mode=GPIO_MODE_INPUT;flex_pin.pull_up_en=GPIO_PULLUP_DISABLE;flex_pin.pull_down_en=GPIO_PULLDOWN_DISABLE;
+ flex_pin.intr_type=GPIO_INTR_DISABLE;ESP_ERROR_CHECK(gpio_config(&flex_pin));
+#endif
 #if ECU_IDLE_DUMMY_LOADS
  ESP_ERROR_CHECK(gpio_set_level(static_cast<gpio_num_t>(idle::gpio),0));
  ESP_ERROR_CHECK(gpio_set_direction(static_cast<gpio_num_t>(idle::gpio),GPIO_MODE_OUTPUT));

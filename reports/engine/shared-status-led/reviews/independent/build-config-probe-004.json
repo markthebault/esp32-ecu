@@ -1,0 +1,434 @@
+{
+  "passed": true,
+  "checks": 86,
+  "commands": [
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsyntax-only",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/guard.cpp"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsyntax-only",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/firmware/include",
+        "-DECU_FLEX_G38_DRAFT=1",
+        "-DECU_COMPACT_A3=1",
+        "-DECU_SELECTED_N16R8=1",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/guard.cpp"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsyntax-only",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/firmware/include",
+        "-DECU_FLEX_G38_DRAFT=1",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/guard.cpp"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "In file included from /home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/guard.cpp:1:\n/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/firmware/include/ecu/flex_hardware.hpp:7:2: error: #error GPIO38 flex draft requires the separate selected compact N16R8 carrier\n    7 | #error GPIO38 flex draft requires the separate selected compact N16R8 carrier\n      |  ^~~~~\n"
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsyntax-only",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/firmware/include",
+        "-DECU_FLEX_G38_DRAFT=1",
+        "-DECU_COMPACT_A3=1",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/guard.cpp"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "In file included from /home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/guard.cpp:1:\n/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/firmware/include/ecu/flex_hardware.hpp:7:2: error: #error GPIO38 flex draft requires the separate selected compact N16R8 carrier\n    7 | #error GPIO38 flex draft requires the separate selected compact N16R8 carrier\n      |  ^~~~~\n"
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsyntax-only",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/firmware/include",
+        "-DECU_FLEX_G38_DRAFT=1",
+        "-DECU_SELECTED_N16R8=1",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/guard.cpp"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "In file included from /home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/guard.cpp:1:\n/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/firmware/include/ecu/flex_hardware.hpp:7:2: error: #error GPIO38 flex draft requires the separate selected compact N16R8 carrier\n    7 | #error GPIO38 flex draft requires the separate selected compact N16R8 carrier\n      |  ^~~~~\n"
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsyntax-only",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/firmware/include",
+        "-DECU_FLEX_G38_DRAFT=1",
+        "-DECU_COMPACT_A3=1",
+        "-DECU_SELECTED_N16R8=1",
+        "-DECU_ENGINE_DUMMY_LOADS=1",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/guard.cpp"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "In file included from /home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/guard.cpp:1:\n/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/firmware/include/ecu/flex_hardware.hpp:10:2: error: #error GPIO38 flex draft keeps all physical engine outputs inhibited\n   10 | #error GPIO38 flex draft keeps all physical engine outputs inhibited\n      |  ^~~~~\n"
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsyntax-only",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/firmware/include",
+        "-DECU_FLEX_G38_DRAFT=1",
+        "-DECU_COMPACT_A3=1",
+        "-DECU_SELECTED_N16R8=1",
+        "-DECU_BENCH_PULSES=1",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/guard.cpp"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "In file included from /home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/guard.cpp:1:\n/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/firmware/include/ecu/flex_hardware.hpp:10:2: error: #error GPIO38 flex draft keeps all physical engine outputs inhibited\n   10 | #error GPIO38 flex draft keeps all physical engine outputs inhibited\n      |  ^~~~~\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-c",
+        "import runpy;runpy.run_path('/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/scripts/tuning_sdkconfig.py',init_globals={\"Import\":lambda _:None,\"env\":{\"PIOENV\":'compact_n16r8_web',\"PROJECT_DIR\":'/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/sdk-compact_n16r8_web/firmware'}})"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-c",
+        "import runpy;runpy.run_path('/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/scripts/tuning_sdkconfig.py',init_globals={\"Import\":lambda _:None,\"env\":{\"PIOENV\":'compact_n16r8_web',\"PROJECT_DIR\":'/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/sdk-compact_n16r8_web/firmware'}})"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-c",
+        "import runpy;runpy.run_path('/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/scripts/tuning_sdkconfig.py',init_globals={\"Import\":lambda _:None,\"env\":{\"PIOENV\":'compact_a3_web',\"PROJECT_DIR\":'/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/sdk-compact_a3_web/firmware'}})"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-c",
+        "import runpy;runpy.run_path('/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/scripts/tuning_sdkconfig.py',init_globals={\"Import\":lambda _:None,\"env\":{\"PIOENV\":'compact_a3_web',\"PROJECT_DIR\":'/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/sdk-compact_a3_web/firmware'}})"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-c",
+        "import runpy;runpy.run_path('/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/scripts/tuning_sdkconfig.py',init_globals={\"Import\":lambda _:None,\"env\":{\"PIOENV\":'compact_n16r8_flex_dev',\"PROJECT_DIR\":'/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/sdk-compact_n16r8_flex_dev/firmware'}})"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-c",
+        "import runpy;runpy.run_path('/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/scripts/tuning_sdkconfig.py',init_globals={\"Import\":lambda _:None,\"env\":{\"PIOENV\":'compact_n16r8_flex_dev',\"PROJECT_DIR\":'/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/sdk-compact_n16r8_flex_dev/firmware'}})"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-c",
+        "import runpy;runpy.run_path('/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/scripts/tuning_sdkconfig.py',init_globals={\"Import\":lambda _:None,\"env\":{\"PIOENV\":'compact_a3_timing_bench',\"PROJECT_DIR\":'/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/sdk-compact_a3_timing_bench/firmware'}})"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-c",
+        "import runpy;runpy.run_path('/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/scripts/tuning_sdkconfig.py',init_globals={\"Import\":lambda _:None,\"env\":{\"PIOENV\":\"compact_n16r8_flex_dev\",\"PROJECT_DIR\":'/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/sdk-symlink/firmware'}})"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import runpy;runpy.run_path('/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/scripts/tuning_sdkconfig.py',init_globals={\"Import\":lambda _:None,\"env\":{\"PIOENV\":\"compact_n16r8_flex_dev\",\"PROJECT_DIR\":'/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/sdk-symlink/firmware'}})\n                 ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen runpy>\", line 287, in run_path\n  File \"<frozen runpy>\", line 98, in _run_module_code\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-005/scripts/tuning_sdkconfig.py\", line 11, in <module>\n    if path.is_symlink():raise RuntimeError('Preserve legacy sdkconfig symlinks and select a fresh Linux generated sdkconfig before USB tuning')\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Preserve legacy sdkconfig symlinks and select a fresh Linux generated sdkconfig before USB tuning\n"
+    },
+    {
+      "command": [
+        "git",
+        "init",
+        "-q",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/scripts/build_firmware_preserved.py",
+        "--output",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/.cache/run",
+        "--environment",
+        "owned_fake"
+      ],
+      "returncode": 0,
+      "stdout": "{\"environments\": [\"owned_fake\"], \"passed\": true, \"artifacts\": 2, \"default_cache_unchanged\": true}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/scripts/build_firmware_preserved.py",
+        "--output",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/.cache/run",
+        "--environment",
+        "owned_fake"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/scripts/build_firmware_preserved.py\", line 178, in <module>\n    run(arguments.output, arguments.environment)\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/scripts/build_firmware_preserved.py\", line 73, in run\n    output.mkdir(parents=True, exist_ok=False)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/pathlib/__init__.py\", line 1012, in mkdir\n    os.mkdir(self, mode)\n    ~~~~~~~~^^^^^^^^^^^^\nFileExistsError: [Errno 17] File exists: '/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/.cache/run'\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/scripts/build_firmware_preserved.py",
+        "--output",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/not-cache",
+        "--environment",
+        "owned_fake"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/scripts/build_firmware_preserved.py\", line 178, in <module>\n    run(arguments.output, arguments.environment)\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/scripts/build_firmware_preserved.py\", line 70, in run\n    raise ValueError(\"Choose a new output directory below the project's .cache\")\nValueError: Choose a new output directory below the project's .cache\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/scripts/build_firmware_preserved.py",
+        "--output",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/.cache/bad-env",
+        "--environment",
+        "owned_fake;upload"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/scripts/build_firmware_preserved.py\", line 178, in <module>\n    run(arguments.output, arguments.environment)\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/scripts/build_firmware_preserved.py\", line 72, in run\n    raise ValueError(\"Use explicit PlatformIO environment names\")\nValueError: Use explicit PlatformIO environment names\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/scripts/build_firmware_preserved.py",
+        "--output",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/.cache/symlink-config",
+        "--environment",
+        "owned_fake"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/scripts/build_firmware_preserved.py\", line 178, in <module>\n    run(arguments.output, arguments.environment)\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/scripts/build_firmware_preserved.py\", line 86, in run\n    raise ValueError(\"Preserve historical SDK config symlink: \" + str(path))\nValueError: Preserve historical SDK config symlink: /home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-positive/firmware/sdkconfig.owned_fake\n"
+    },
+    {
+      "command": [
+        "git",
+        "init",
+        "-q",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-cache_mutation"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-cache_mutation/scripts/build_firmware_preserved.py",
+        "--output",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-cache_mutation/.cache/run",
+        "--environment",
+        "owned_fake"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-cache_mutation/scripts/build_firmware_preserved.py\", line 178, in <module>\n    run(arguments.output, arguments.environment)\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-cache_mutation/scripts/build_firmware_preserved.py\", line 169, in run\n    raise RuntimeError(\"Build/source/cache verification failed; see \" + str(output / \"summary.json\"))\nRuntimeError: Build/source/cache verification failed; see /home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-cache_mutation/.cache/run/summary.json\n"
+    },
+    {
+      "command": [
+        "git",
+        "init",
+        "-q",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-source_mutation"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-source_mutation/scripts/build_firmware_preserved.py",
+        "--output",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-source_mutation/.cache/run",
+        "--environment",
+        "owned_fake"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-source_mutation/scripts/build_firmware_preserved.py\", line 178, in <module>\n    run(arguments.output, arguments.environment)\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-source_mutation/scripts/build_firmware_preserved.py\", line 169, in run\n    raise RuntimeError(\"Build/source/cache verification failed; see \" + str(output / \"summary.json\"))\nRuntimeError: Build/source/cache verification failed; see /home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-source_mutation/.cache/run/summary.json\n"
+    },
+    {
+      "command": [
+        "git",
+        "init",
+        "-q",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-build_failure"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-build_failure/scripts/build_firmware_preserved.py",
+        "--output",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-build_failure/.cache/run",
+        "--environment",
+        "owned_fake"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-build_failure/scripts/build_firmware_preserved.py\", line 178, in <module>\n    run(arguments.output, arguments.environment)\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-build_failure/scripts/build_firmware_preserved.py\", line 169, in run\n    raise RuntimeError(\"Build/source/cache verification failed; see \" + str(output / \"summary.json\"))\nRuntimeError: Build/source/cache verification failed; see /home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-build_failure/.cache/run/summary.json\n"
+    },
+    {
+      "command": [
+        "git",
+        "init",
+        "-q",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-missing_default"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-missing_default/scripts/build_firmware_preserved.py",
+        "--output",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-missing_default/.cache/run",
+        "--environment",
+        "owned_fake"
+      ],
+      "returncode": 0,
+      "stdout": "{\"environments\": [\"owned_fake\"], \"passed\": true, \"artifacts\": 2, \"default_cache_unchanged\": true}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "init",
+        "-q",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-config_mutation"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-config_mutation/scripts/build_firmware_preserved.py",
+        "--output",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-config_mutation/.cache/run",
+        "--environment",
+        "owned_fake"
+      ],
+      "returncode": 0,
+      "stdout": "{\"environments\": [\"owned_fake\"], \"passed\": true, \"artifacts\": 2, \"default_cache_unchanged\": true}\n",
+      "stderr": ""
+    }
+  ],
+  "scope": "Native syntax and owned generated-config/fake-pio models only. No actual PlatformIO build or device command run by this probe.",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  }
+}
