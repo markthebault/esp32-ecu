@@ -1,0 +1,27 @@
+Independent SW2-J4-DRAFT1 circuit/CAD review
+2026-11-04 / /root/switch_input_circuit_review
+
+Decision
+Accept the frozen source/CAD consistency and declared assumed-model results for inhibited prototype development. Fabrication, electrical, engine and vehicle release remain HOLD. No project design/source was changed by this reviewer; no subagents were spawned.
+
+The accepted scope is reviewed-revision/. Its 94 frozen project files include 60 A5 files byte-equal to HEAD b0c39a9. The exact PCB is 7f710511aa96466ade2216041d9c3551191d629263978f1ff7c2a1d1864dd5d1; the contract is e0c140d72c584318998beff9c72c18c600239fe9ce5bcdcded9dd9a7a2cd2296. Initial and intermediate directories preserve evidence of earlier findings and are not the accepted design.
+
+Independent evidence
+717 literal/interface/BOM/native-PCB/exported-schematic/zone assertions pass. Fresh all-severity native ERC, DRC, unconnected and schematic-parity reports are zero. The actual A5 J4 pad map, module 5V pad NC and existing 4.7k pullups were independently checked. GP7 is used only as output, static marker/loop resistor paths and exact IC/transistor pin maps agree, and all electrical assembly pads are through-hole.
+
+The original same-family power/contact cross-plug short was corrected to XH4 internal versus two VH2 contact headers. R19 is now 100k, matching the supervisor's published test condition. The original long narrow bypass return was addressed by a filled B.Cu GND pour. The new fill reaches 23 ground-pad neighbors, including the bypass/chip return pads, with adjacent copper in the same filled outline. Only R18.2 has the documented full-zone connection; others inherit thermal relief. Native checks have no exclusions. This establishes a design improvement, not measured loop impedance, EMI, soldering performance or physical fit.
+
+256 conditional arithmetic corners passed under stated semiconductor-voltage assumptions. They give an encouraging required collector/base ratio, not a transferred transistor saturation guarantee. The conservative mutually-exclusive normal branch sum is 9.660 mA; two steady -18V branches raise it to 26.189 mA, plus an additional possible 1.528 mA from both carrier I2C pullups low. These are resistor/test-point analysis terms, not available regulator headroom or assembled thermal acceptance. The 1k bleeder does not prove zero backfeed or arbitrary power-sequence safety.
+
+13 independent simplified ngspice cases used a different assumed BJT/diode parameter set. Two negative controls demonstrate why analog contact checks remain necessary: swapped transistor emitter/collector fails the open-state logic check, and removing the reverse-BE clamp exceeds the quoted stress voltage in this assumed model. The expander selftest would not establish the analog circuit's correctness.
+
+The root's 95 declared model cases were re-executed from frozen copies. 800 independent assertions reread 30,686 raw rows, reconstructed supply/bus currents and bias-resistor powers, checked declared static/settled-transition logic and retained bus-backfed floating rails. The two transient step sizes differ by 0.36928 us in the declared 0.8VDD crossing. Root and reviewer result rows/source bindings are exact. This is numerical consistency of generic assumed models, not manufacturer device validation, a coupled engine trajectory or HIL.
+
+Remaining release gates
+Exact procured parts, capacitance/lead/body fit, harness/crimps/retention and dry-circuit contacts remain open. Measure every analog high/low/RESET margin, slow/fast rail changes, powered/unpowered injections, all-rail currents, missing grounds/returns, full carrier/Wi-Fi/thermal loading, bus waveforms and scheduling/watchdog behavior under competing services. The 3.3V expander domain does not extend to 125C from its E order code. Typical-only/reset/model assumptions cannot become an all-corner guarantee. Ordinary contacts cannot distinguish open wires or return shorts from intended states. Automotive surge, EMI, ingress, printed fit and engine/car qualification remain unestablished.
+
+The raw review assembly overlay has overlapping U1/C1 labels and clipped mounting-hole text. The parent agreed not to present it as a finished assembly guide and will validate any annotation-only cleanup separately. It has no electrical effect on this frozen design.
+
+Secondary-enabled coupled plant/Speeduino acceptance, online TunerStudio vendor acceptance and wider ECU parity are outside this circuit review and remain open. Physical engine outputs stay inhibited in the selected builds.
+
+See review.json, reference-index.json, reviewed-revision/native/, reviewed-revision/arithmetic/, reviewed-revision/independent-spice/ and reviewed-revision/model-replay/. Reproduce using run_review.py with numpy, Linux KiCad9 and the recorded private ngspice binary. The replay writes into a new directory outside this immutable packet and never routes, flashes or changes live project sources.

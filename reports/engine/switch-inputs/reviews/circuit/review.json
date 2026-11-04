@@ -1,0 +1,94 @@
+{
+  "reviewer": "/root/switch_input_circuit_review",
+  "date": "2026-11-04",
+  "decision": "Accept frozen source/CAD consistency and declared model tests for inhibited prototype development only; HOLD fabrication/electrical/engine/vehicle release",
+  "baseline": "b0c39a9daf3334f9ddec0e181ade62aecb10e2f9",
+  "physical_qualification": false,
+  "root_project_files_edited": false,
+  "subagents_spawned": false,
+  "accepted_sources": "reviewed-revision/source-bindings.json",
+  "accepted_source_files": 94,
+  "archived_A5_files_byte_equal_to_HEAD": 60,
+  "pcb_sha256": "7f710511aa96466ade2216041d9c3551191d629263978f1ff7c2a1d1864dd5d1",
+  "contract_sha256": "e0c140d72c584318998beff9c72c18c600239fe9ce5bcdcded9dd9a7a2cd2296",
+  "checks": {
+    "cad_interface_BOM_netlist_zone_assertions": 717,
+    "native_ERC": 0,
+    "native_DRC": 0,
+    "unconnected_items": 0,
+    "schematic_parity": 0,
+    "conditional_arithmetic_corners": 256,
+    "independent_assumed_model_cases": 13,
+    "negative_controls": 2,
+    "root_assumed_model_replay_cases": 95,
+    "raw_model_assertions": 800,
+    "raw_model_rows": 30686,
+    "half_step_crossing_delta_us": 0.36927999999981864,
+    "root_model_result_rows_and_source_bindings_exact": true
+  },
+  "findings": [
+    {
+      "id": "C1",
+      "priority": "medium",
+      "topic": "Cross-plug power short",
+      "status": "resolved in reviewed revision",
+      "finding": "Original J1/J2 both used XH4; placing the J4 power harness on the contact header directly shorted carrier3V3 toGND.",
+      "resolution": "J1 remains XH4; external channels now use separate VH2 headers/housings. Independent actual pad/pitch/MPN/net checks and primary family drawings reviewed. Incorrect forced/wrong harness wiring still needs physical prevention/checking."
+    },
+    {
+      "id": "C2",
+      "priority": "medium release margin",
+      "topic": "Supervisor pullup/test condition",
+      "status": "resolved as prototype design; physical reset acceptance open",
+      "finding": "Original10k reset pullup did not match published100k test condition; the1V10uA low-output entry could not establish a guarantee at the larger load.",
+      "resolution": "R19 now100k and candidate order code/model/docs agree. Typical-only leakage, hysteresis/temperature and arbitrary ramp/loaded reset behavior remain explicit physical release gates."
+    },
+    {
+      "id": "C3",
+      "priority": "medium release layout",
+      "topic": "Bypass return",
+      "status": "resolved as design improvement; assembled performance unqualified",
+      "finding": "Original no-plane C1 return to U1VSS followed31.329mm of narrow track, despite only4mm on its VDD side.",
+      "resolution": "Filled B.Cu GND return with0.35mm clearance,0.25mm minimum fill,0.35mm thermal gap and0.4mm spokes. OnlyR18.2 uses the documented full-pad override.23ground-pad zone neighbors and same filled outline near C1/U1 returns checked. No extracted/measured loop impedance, EMI or soldering claim."
+    },
+    {
+      "id": "C4",
+      "priority": "low",
+      "topic": "Assembly overlay annotations",
+      "status": "resolved publication disposition; annotation-only export outside this acceptance",
+      "finding": "Raw combinedF.Fab/F.SilkS overlay duplicates U1/C1 reference labels and fit-to-board clips part of H1/H2 text.",
+      "resolution": "Parent will not publish raw overlay as a finished assembly guide; any cleaned annotation-only export must retain geometry/net/copper signatures. Raw renders here are review witnesses only."
+    },
+    {
+      "id": "C5",
+      "priority": "low",
+      "topic": "Model binding/feed observability",
+      "status": "resolved in reviewed revision",
+      "finding": "Initial root model binding omitted some pin/capacitor maps and its power-off result exposed only the disconnected3V3-feed current.",
+      "resolution": "Literal binding now covers all modeled R/D/C/IC/Q maps; bus and carrier3V3 feed currents are separate. Connected bus follows carrierrail; a3.63V disconnected-supply bus case is explicit."
+    }
+  ],
+  "open_medium_high_consistency_findings_in_prototype_scope": 0,
+  "physical_release_gates": [
+    "Exact purchased pinout/package/formed-lead/capacitor and full harness/crimp/retention validation",
+    "Dry-contact low-current behavior, resistance/leakage/noise and analog high/low margins over intended temperature",
+    "Loaded RESET high/low, supply ramps/dips, actual unpowered behavior and every-rail backfeed including missing grounds/returns",
+    "Full carrier/ESP32/accessory rail loading, peak currents and enclosure thermal behavior",
+    "Actual100kHz bus rise/fall/VOL/capacitance and acquisition/scheduler/watchdog timing under web/USB/radio load",
+    "Physical fail-safe outputs and selected inhibition",
+    "Accessory/cable/gland/mount/enclosure clearance and ingress testing",
+    "Automotive pulse/ESD/EMI/surge/vehicle qualification; none claimed"
+  ],
+  "wider_goal_gates": [
+    "Secondary-enabled external plant trajectories against pinned production Speeduino remain outside this circuit review",
+    "TunerStudio online vendor acceptance and broader feature parity remain open"
+  ],
+  "packet_scope_notes": [
+    "initial/ is the original cross-pluggable no-plane draft context",
+    "final/ is an intermediate ground-pour witness with one starved thermal and is NOT accepted",
+    "reviewed-revision/ alone is the final accepted prototype consistency scope",
+    "All ngspice device/clamp/reset models are declared assumptions, not manufacturer macro-models",
+    "Expander marker/configuration/loopback cannot prove analog conditioner correctness or ordinary two-wire continuity"
+  ],
+  "replay": "uv run --with numpy python run_review.py --ngspice /path/to/ngspice --output NEW_DIRECTORY_OUTSIDE_PACKET"
+}

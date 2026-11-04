@@ -1,0 +1,941 @@
+{
+  "revision": "SW2-J4-DRAFT1",
+  "status": "ROUTED_DESIGN_HOLD_NOT_FOR_FABRICATION",
+  "board_mm": [
+    80,
+    60
+  ],
+  "copper_layers": 2,
+  "physical_qualification": false,
+  "carrier_harness": {
+    "carrier": "J4",
+    "pins": {
+      "1": "GND",
+      "2": "+3V3",
+      "3": "SDA_CARRIER",
+      "4": "SCL_CARRIER"
+    },
+    "pin5": "SAFE_N: no wire/contact; NOT an accessory signal"
+  },
+  "acquisition": {
+    "address": 32,
+    "bus_hz": 100000,
+    "marker_mask": 60,
+    "marker_value": 40,
+    "loopback": [
+      "GP7",
+      "GP6"
+    ],
+    "raw_high": "closed contact",
+    "wire_continuity_detection": false
+  },
+  "supply": {
+    "rail": "+3V3",
+    "additional_headroom_measured": false,
+    "carrier_200mA_target": "total provisional thermal target, not accessory headroom",
+    "simultaneous_carrier_and_module_USB_power": false
+  },
+  "parts": [
+    {
+      "reference": "J1",
+      "value": "INTERNAL J4 LINK",
+      "footprint": "ECU:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "+3V3",
+        "3": "SDA_CARRIER",
+        "4": "SCL_CARRIER"
+      },
+      "pin_names": {
+        "1": "GND",
+        "2": "3V3",
+        "3": "SDA GPIO41",
+        "4": "SCL GPIO42"
+      },
+      "pin_types": {
+        "1": "power_out",
+        "2": "power_out",
+        "3": "bidirectional",
+        "4": "bidirectional"
+      },
+      "mpn": "B4B-XH-A(LF)(SN)",
+      "note": "Short internal harness only. Carrier J4 pin5 SAFE_N has NO wire/contact on this accessory. One explicit I2C owner; no other device at0x20.",
+      "placed_xy_mm": [
+        21,
+        23
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "J2",
+      "value": "DRY CONTACT 0",
+      "footprint": "ECU:JST_VH_B2P-VH_1x02_P3.96mm_Vertical",
+      "pins": {
+        "1": "SW0",
+        "2": "GND"
+      },
+      "pin_names": {
+        "1": "SW0",
+        "2": "RETURN0"
+      },
+      "pin_types": {},
+      "mpn": "B2P-VH(LF)(SN)",
+      "note": "3.96mm VH deliberately incompatible with2.50mm XH J1 power/I2C. Low-current dry contact closes SW to its own return. No external supply, Hall/pulse or safety-interlock role. Open wire=open; short to return=closed. Use dry-circuit contacts.",
+      "placed_xy_mm": [
+        70,
+        22
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "J3",
+      "value": "DRY CONTACT 1",
+      "footprint": "ECU:JST_VH_B2P-VH_1x02_P3.96mm_Vertical",
+      "pins": {
+        "1": "SW1",
+        "2": "GND"
+      },
+      "pin_names": {
+        "1": "SW1",
+        "2": "RETURN1"
+      },
+      "pin_types": {},
+      "mpn": "B2P-VH(LF)(SN)",
+      "note": "3.96mm VH deliberately incompatible with2.50mm XH J1 power/I2C. Low-current dry contact closes SW to its own return. No external supply, Hall/pulse or safety-interlock role. Open wire=open; short to return=closed. Use dry-circuit contacts.",
+      "placed_xy_mm": [
+        82,
+        22
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "U1",
+      "value": "MCP23008-E/P",
+      "footprint": "ECU:DIP-18_W7.62mm_LongPads",
+      "pins": {
+        "1": "SCL",
+        "2": "SDA",
+        "3": "GND",
+        "4": "GND",
+        "5": "GND",
+        "6": "RESET_N",
+        "7": null,
+        "8": null,
+        "9": "GND",
+        "10": "GP0",
+        "11": "GP1",
+        "12": "GP2",
+        "13": "GP3",
+        "14": "GP4",
+        "15": "GP5",
+        "16": "GP6",
+        "17": "GP7",
+        "18": "+3V3"
+      },
+      "pin_names": {
+        "1": "SCL",
+        "2": "SDA",
+        "3": "A2",
+        "4": "A1",
+        "5": "A0",
+        "6": "RESET_N",
+        "7": "NC",
+        "8": "INT_NC",
+        "9": "VSS",
+        "10": "GP0",
+        "11": "GP1",
+        "12": "GP2",
+        "13": "GP3",
+        "14": "GP4",
+        "15": "GP5",
+        "16": "GP6",
+        "17": "GP7 OUTPUT ONLY",
+        "18": "VDD"
+      },
+      "pin_types": {
+        "1": "input",
+        "2": "bidirectional",
+        "3": "input",
+        "4": "input",
+        "5": "input",
+        "6": "input",
+        "8": "open_collector",
+        "9": "power_in",
+        "10": "input",
+        "11": "input",
+        "12": "input",
+        "13": "input",
+        "14": "input",
+        "15": "input",
+        "16": "input",
+        "17": "output",
+        "18": "power_in"
+      },
+      "mpn": "MCP23008-E/P",
+      "note": "Direct solder PDIP18, no socket. Address0x20. DS20001919I pinout; GP7 output only. Marker is behavior/readback, not unique identity.",
+      "placed_xy_mm": [
+        45,
+        27
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "U2",
+      "value": "MCP121-300E/TO",
+      "footprint": "ECU:TO-92_Inline_Wide",
+      "pins": {
+        "1": "RESET_N",
+        "2": "+3V3",
+        "3": "GND"
+      },
+      "pin_names": {
+        "1": "RESET_N OPEN DRAIN",
+        "2": "VDD",
+        "3": "VSS"
+      },
+      "pin_types": {
+        "1": "open_collector",
+        "2": "power_in",
+        "3": "power_in"
+      },
+      "mpn": "MCP121-300E/TO",
+      "note": "Prototype supervisor. Open-drain100k pullup matches data-sheet test condition. Trip2.857..3.003V; release80..180ms under specified conditions. Leakage max, hysteresis over temperature, rail ramps and actual loaded RESET levels remain characterization holds.",
+      "placed_xy_mm": [
+        24,
+        47
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "Q1",
+      "value": "2N3904BU",
+      "footprint": "ECU:TO-92_Inline_Wide",
+      "pins": {
+        "1": "GND",
+        "2": "BASE0",
+        "3": "COL0"
+      },
+      "pin_names": {
+        "1": "EMITTER",
+        "2": "BASE",
+        "3": "COLLECTOR"
+      },
+      "pin_types": {},
+      "mpn": "2N3904BU",
+      "note": "onsemi E-B-C bondout only, manually formed2.54mm leads. Open contact drives low; closed reads high. Sub-mA saturation/cutoff, temperature and power-off injection need physical characterization.",
+      "placed_xy_mm": [
+        73,
+        35
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "Q2",
+      "value": "2N3904BU",
+      "footprint": "ECU:TO-92_Inline_Wide",
+      "pins": {
+        "1": "GND",
+        "2": "BASE1",
+        "3": "COL1"
+      },
+      "pin_names": {
+        "1": "EMITTER",
+        "2": "BASE",
+        "3": "COLLECTOR"
+      },
+      "pin_types": {},
+      "mpn": "2N3904BU",
+      "note": "onsemi E-B-C bondout only, manually formed2.54mm leads. Open contact drives low; closed reads high. Sub-mA saturation/cutoff, temperature and power-off injection need physical characterization.",
+      "placed_xy_mm": [
+        73,
+        52
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "D1",
+      "value": "1N4148-TAP",
+      "footprint": "ECU:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp",
+      "pins": {
+        "1": "BIAS0",
+        "2": "+3V3"
+      },
+      "pin_names": {
+        "1": "K BAND",
+        "2": "A"
+      },
+      "pin_types": {},
+      "mpn": "1N4148-TAP",
+      "note": "Feed diode or reverse-BE clamp; NOT a guarantee of zero backfeed. Band/cathode is pad1; verify purchased part and assembly.",
+      "placed_xy_mm": [
+        58.5,
+        26
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "D2",
+      "value": "1N4148-TAP",
+      "footprint": "ECU:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp",
+      "pins": {
+        "1": "BIAS1",
+        "2": "+3V3"
+      },
+      "pin_names": {
+        "1": "K BAND",
+        "2": "A"
+      },
+      "pin_types": {},
+      "mpn": "1N4148-TAP",
+      "note": "Feed diode or reverse-BE clamp; NOT a guarantee of zero backfeed. Band/cathode is pad1; verify purchased part and assembly.",
+      "placed_xy_mm": [
+        58.5,
+        56
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "D3",
+      "value": "1N4148-TAP",
+      "footprint": "ECU:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp",
+      "pins": {
+        "1": "BASE0",
+        "2": "GND"
+      },
+      "pin_names": {
+        "1": "K BAND",
+        "2": "A"
+      },
+      "pin_types": {},
+      "mpn": "1N4148-TAP",
+      "note": "Feed diode or reverse-BE clamp; NOT a guarantee of zero backfeed. Band/cathode is pad1; verify purchased part and assembly.",
+      "placed_xy_mm": [
+        62.5,
+        21
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "D4",
+      "value": "1N4148-TAP",
+      "footprint": "ECU:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp",
+      "pins": {
+        "1": "BASE1",
+        "2": "GND"
+      },
+      "pin_names": {
+        "1": "K BAND",
+        "2": "A"
+      },
+      "pin_types": {},
+      "mpn": "1N4148-TAP",
+      "note": "Feed diode or reverse-BE clamp; NOT a guarantee of zero backfeed. Band/cathode is pad1; verify purchased part and assembly.",
+      "placed_xy_mm": [
+        62.5,
+        52
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R1",
+      "value": "2200R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "BIAS0",
+        "2": "SW0"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C2201FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        65,
+        29
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R2",
+      "value": "2200R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "BIAS1",
+        "2": "SW1"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C2201FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        65,
+        56
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R3",
+      "value": "4990R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "SW0",
+        "2": "MID0"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C4991FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        65,
+        32.5
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R4",
+      "value": "4990R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "MID0",
+        "2": "BASE0"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C4991FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        65,
+        37.5
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R5",
+      "value": "4990R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "SW1",
+        "2": "MID1"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C4991FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        65,
+        61.5
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R6",
+      "value": "4990R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "MID1",
+        "2": "BASE1"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C4991FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        72,
+        65
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R7",
+      "value": "100000R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "BASE0",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1003FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        74,
+        29
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R8",
+      "value": "100000R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "BASE1",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1003FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        74,
+        46.5
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R9",
+      "value": "4700R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "+3V3",
+        "2": "COL0"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C4701FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        81,
+        35
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R10",
+      "value": "4700R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "+3V3",
+        "2": "COL1"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C4701FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        81,
+        52
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R11",
+      "value": "1000R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "COL0",
+        "2": "GP0"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1001FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        63,
+        42
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R12",
+      "value": "1000R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "COL1",
+        "2": "GP1"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1001FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        63,
+        47.5
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R13",
+      "value": "10000R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "GP2",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1002FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        56,
+        30
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R14",
+      "value": "10000R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "GP3",
+        "2": "+3V3"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1002FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        56,
+        35.5
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R15",
+      "value": "10000R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "GP4",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1002FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        56,
+        41
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R16",
+      "value": "10000R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "GP5",
+        "2": "+3V3"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1002FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        56,
+        46.5
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R17",
+      "value": "1000R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "GP7",
+        "2": "GP6"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1001FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        56,
+        22.5
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R18",
+      "value": "100000R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "GP6",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1003FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        56,
+        52
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R19",
+      "value": "100000R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "RESET_N",
+        "2": "+3V3"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1003FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        32,
+        47
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R20",
+      "value": "1000R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1001FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified. Mandatory local bleeder, not proof of zero backfeed.",
+      "placed_xy_mm": [
+        21,
+        41
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R21",
+      "value": "100R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "SDA_CARRIER",
+        "2": "SDA"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1000FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        34,
+        22
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "R22",
+      "value": "100R 1% 0.6W",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "SCL_CARRIER",
+        "2": "SCL"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "MRS25000C1000FCT00",
+      "note": "Vishay MRS25 ordering-code candidate, availability/packing unverified. P70=0.6W with film-temperature limits; upright body may be6.5mm tall. Fault/rail thermal and actual formed-lead fit unqualified.",
+      "placed_xy_mm": [
+        34,
+        28
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "C1",
+      "value": "100nF 50V",
+      "footprint": "ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Leaded ceramic candidate: P5mm, body<=D5/W2.5mm envelope. Exact part and bias/temp/assembly fit pending; no SMD. Collector RC is filtering, not continuity detection.",
+      "placed_xy_mm": [
+        52.62,
+        23
+      ],
+      "placed_angle_deg": 180,
+      "fitted": true
+    },
+    {
+      "reference": "C2",
+      "value": "100nF 50V",
+      "footprint": "ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Leaded ceramic candidate: P5mm, body<=D5/W2.5mm envelope. Exact part and bias/temp/assembly fit pending; no SMD. Collector RC is filtering, not continuity detection.",
+      "placed_xy_mm": [
+        24,
+        52
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "C3",
+      "value": "10nF 50V",
+      "footprint": "ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "COL0",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Leaded ceramic candidate: P5mm, body<=D5/W2.5mm envelope. Exact part and bias/temp/assembly fit pending; no SMD. Collector RC is filtering, not continuity detection.",
+      "placed_xy_mm": [
+        74,
+        42
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "C4",
+      "value": "10nF 50V",
+      "footprint": "ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "COL1",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Leaded ceramic candidate: P5mm, body<=D5/W2.5mm envelope. Exact part and bias/temp/assembly fit pending; no SMD. Collector RC is filtering, not continuity detection.",
+      "placed_xy_mm": [
+        74,
+        59
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "C5",
+      "value": "10uF 16V",
+      "footprint": "ECU:CP_Radial_D8.0mm_P3.50mm",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "pin_names": {
+        "1": "PLUS",
+        "2": "MINUS"
+      },
+      "pin_types": {},
+      "mpn": "",
+      "note": "Leaded radial local bulk. Exact D8/P3.5 part, leakage/ESR/temperature and physical fit pending.",
+      "placed_xy_mm": [
+        21,
+        35
+      ],
+      "placed_angle_deg": 0,
+      "fitted": true
+    },
+    {
+      "reference": "H1",
+      "value": "M3 INSULATED MOUNT",
+      "footprint": "ECU:MountingHole_3.2mm_M3",
+      "pins": {},
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Unplated3.2mm. Insulating spacers; separate80x60mm accessory fit/clearance unmeasured.",
+      "placed_xy_mm": [
+        14,
+        14
+      ],
+      "placed_angle_deg": 0,
+      "fitted": false
+    },
+    {
+      "reference": "H2",
+      "value": "M3 INSULATED MOUNT",
+      "footprint": "ECU:MountingHole_3.2mm_M3",
+      "pins": {},
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Unplated3.2mm. Insulating spacers; separate80x60mm accessory fit/clearance unmeasured.",
+      "placed_xy_mm": [
+        86,
+        14
+      ],
+      "placed_angle_deg": 0,
+      "fitted": false
+    },
+    {
+      "reference": "H3",
+      "value": "M3 INSULATED MOUNT",
+      "footprint": "ECU:MountingHole_3.2mm_M3",
+      "pins": {},
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Unplated3.2mm. Insulating spacers; separate80x60mm accessory fit/clearance unmeasured.",
+      "placed_xy_mm": [
+        14,
+        66
+      ],
+      "placed_angle_deg": 0,
+      "fitted": false
+    },
+    {
+      "reference": "H4",
+      "value": "M3 INSULATED MOUNT",
+      "footprint": "ECU:MountingHole_3.2mm_M3",
+      "pins": {},
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Unplated3.2mm. Insulating spacers; separate80x60mm accessory fit/clearance unmeasured.",
+      "placed_xy_mm": [
+        86,
+        66
+      ],
+      "placed_angle_deg": 0,
+      "fitted": false
+    }
+  ],
+  "ground_return": {
+    "layer": "B.Cu",
+    "net": "GND",
+    "clearance_mm": 0.35,
+    "minimum_fill_mm": 0.25,
+    "thermal_gap_mm": 0.35,
+    "thermal_spoke_mm": 0.4,
+    "remove_unconnected_islands": true,
+    "qualification": "Broad return pour, not measured bypass/EMI performance"
+  }
+}

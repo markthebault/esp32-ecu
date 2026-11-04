@@ -52,7 +52,7 @@ mkdir -p "$task_root/build"
     -I "$task_root/firmware/include" "$task_root/firmware/tests/trigger_log_test.cpp" \
     -o "$task_root/build/trigger-log-test"
 "$task_root/build/trigger-log-test"
-for task_idle_name in idle_control idle_pwm transient_enrichment engine_transient load_model engine_load secondary_tables engine_secondary; do
+for task_idle_name in idle_control idle_pwm transient_enrichment engine_transient load_model engine_load secondary_tables engine_secondary switch_acquisition switch_transport; do
     "${CXX:-g++}" -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic \
         -fsanitize=address,undefined -fno-omit-frame-pointer \
         -I "$task_root/firmware/include" "$task_root/firmware/tests/${task_idle_name}_test.cpp" \
@@ -80,3 +80,9 @@ task_cjson="${PLATFORMIO_CORE_DIR:-$HOME/.platformio}/packages/framework-espidf/
     "$task_root/firmware/tests/engine_log_service_test.cpp" "$task_root/firmware/main/engine_log_service.cpp" \
     -o "$task_root/build/engine-log-service-test"
 "$task_root/build/engine-log-service-test"
+"${CXX:-g++}" -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic \
+    -fsanitize=address,undefined -fno-omit-frame-pointer -pthread \
+    -I "$task_cjson" -I "$task_root/firmware/tests/switch_fakes" -I "$task_root/firmware/include" \
+    "$task_root/firmware/tests/switch_service_test.cpp" "$task_root/firmware/main/switch_service.cpp" \
+    "$task_root/build/trigger-cjson.o" -o "$task_root/build/switch-service-test"
+"$task_root/build/switch-service-test"

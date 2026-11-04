@@ -1,0 +1,262 @@
+[
+  {
+    "argv": [
+      "cc",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-c",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/external/json/cJSON/cJSON.c",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-cjson.o"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "g++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/sources/firmware/include",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/adversarial_probe.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-adversarial"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-adversarial"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":11890,\"reset_cases\":26,\"register_mutations\":144,\"budget_cases\":720,\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "g++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/sources/firmware/tests/switch_fakes",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/sources/firmware/include",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/external/json/cJSON",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/service_probe.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/sources/firmware/main/switch_service.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-cjson.o",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":9,\"scenario\":\"normal\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "race"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":48,\"scenario\":\"race\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "fatal"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":12,\"scenario\":\"fatal\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "omit",
+      "0"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":13,\"scenario\":\"omit\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "omit",
+      "1"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":13,\"scenario\":\"omit\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "omit",
+      "2"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":13,\"scenario\":\"omit\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "omit",
+      "3"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":13,\"scenario\":\"omit\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "omit",
+      "4"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":13,\"scenario\":\"omit\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "omit",
+      "5"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":13,\"scenario\":\"omit\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "omit",
+      "6"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":13,\"scenario\":\"omit\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "omit",
+      "7"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":13,\"scenario\":\"omit\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "omit",
+      "8"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":13,\"scenario\":\"omit\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "omit",
+      "9"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":13,\"scenario\":\"omit\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "omit",
+      "10"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":13,\"scenario\":\"omit\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-service",
+      "omit",
+      "11"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":13,\"scenario\":\"omit\",\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "g++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/integration-fakes",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/sources/firmware/tests/switch_fakes",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/sources/firmware/include",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/external/json/cJSON",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/engine_integration_probe.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/sources/firmware/main/switch_service.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/sources/firmware/main/engine_service.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-cjson.o",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-integration"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/review-integration"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"assertions\":142,\"actual_engine_and_switch_services\":true,\"physical_qualification\":false}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "node",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/switch-input-implementation-review/ui_probe.cjs"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"ui_assertions\":21,\"execution\":\"Node VM with minimal DOM assignment fixture; no browser/physical acceptance\"}\n",
+    "stderr": ""
+  }
+]

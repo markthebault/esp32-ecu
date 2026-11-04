@@ -1,0 +1,3945 @@
+{
+  "passed_declared_model_checks": true,
+  "physical_qualification": false,
+  "manufacturer_models": false,
+  "cases": 95,
+  "binding": {
+    "literal_resistors_ohm": {
+      "R1": 2200,
+      "R2": 2200,
+      "R3": 4990,
+      "R4": 4990,
+      "R5": 4990,
+      "R6": 4990,
+      "R7": 100000,
+      "R8": 100000,
+      "R9": 4700,
+      "R10": 4700,
+      "R11": 1000,
+      "R12": 1000,
+      "R13": 10000,
+      "R14": 10000,
+      "R15": 10000,
+      "R16": 10000,
+      "R17": 1000,
+      "R18": 100000,
+      "R19": 100000,
+      "R20": 1000,
+      "R21": 100,
+      "R22": 100
+    },
+    "literal_resistor_pins": {
+      "R1": [
+        "BIAS0",
+        "SW0"
+      ],
+      "R2": [
+        "BIAS1",
+        "SW1"
+      ],
+      "R3": [
+        "SW0",
+        "MID0"
+      ],
+      "R4": [
+        "MID0",
+        "BASE0"
+      ],
+      "R5": [
+        "SW1",
+        "MID1"
+      ],
+      "R6": [
+        "MID1",
+        "BASE1"
+      ],
+      "R7": [
+        "BASE0",
+        "GND"
+      ],
+      "R8": [
+        "BASE1",
+        "GND"
+      ],
+      "R9": [
+        "+3V3",
+        "COL0"
+      ],
+      "R10": [
+        "+3V3",
+        "COL1"
+      ],
+      "R11": [
+        "COL0",
+        "GP0"
+      ],
+      "R12": [
+        "COL1",
+        "GP1"
+      ],
+      "R13": [
+        "GP2",
+        "GND"
+      ],
+      "R14": [
+        "GP3",
+        "+3V3"
+      ],
+      "R15": [
+        "GP4",
+        "GND"
+      ],
+      "R16": [
+        "GP5",
+        "+3V3"
+      ],
+      "R17": [
+        "GP7",
+        "GP6"
+      ],
+      "R18": [
+        "GP6",
+        "GND"
+      ],
+      "R19": [
+        "RESET_N",
+        "+3V3"
+      ],
+      "R20": [
+        "+3V3",
+        "GND"
+      ],
+      "R21": [
+        "SDA_CARRIER",
+        "SDA"
+      ],
+      "R22": [
+        "SCL_CARRIER",
+        "SCL"
+      ]
+    },
+    "scope": "Literal CAD/interface binding only; independent model parameters below are assumptions"
+  },
+  "max_bias_resistor_w": 0.19921305280973217,
+  "max_connected_3v3_feed_current_ma": 23.6915256,
+  "poweroff_results": [
+    {
+      "case": {
+        "name": "fault-054",
+        "supply": 0,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": -1.46903991,
+      "gp_v": [
+        -0.736860083,
+        -0.736730457
+      ],
+      "base_v": [
+        -0.752177219,
+        -0.221683601
+      ],
+      "bias_resistor_w": [
+        0.11208656049107062,
+        2.4045454520141614e-19
+      ],
+      "carrier_3v3_feed_current_ma": 1.46903991e-09,
+      "bus_feed_current_ma": 1.6747511,
+      "reset_v_assumed_model_only": -0.000147889202,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-055",
+        "supply": 0,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": -18,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": -1.5499749,
+      "gp_v": [
+        -0.776035989,
+        -0.776051526
+      ],
+      "base_v": [
+        -0.75217731,
+        -0.75217731
+      ],
+      "bias_resistor_w": [
+        0.11093857227462278,
+        0.11093857227462278
+      ],
+      "carrier_3v3_feed_current_ma": 1.5499748999999999e-09,
+      "bus_feed_current_ma": 1.69516904,
+      "reset_v_assumed_model_only": -0.000155981892,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-056",
+        "supply": 0,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.657808287,
+      "gp_v": [
+        0.00696411242,
+        0.652108233
+      ],
+      "base_v": [
+        0.78261788,
+        0.162680086
+      ],
+      "bias_resistor_w": [
+        4.545454651691795e-18,
+        5.822320453800393e-09
+      ],
+      "carrier_3v3_feed_current_ma": -6.57808287e-10,
+      "bus_feed_current_ma": 0.812215752,
+      "reset_v_assumed_model_only": 6.47743512e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-057",
+        "supply": 0,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": 18,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.584400802,
+      "gp_v": [
+        0.00691327656,
+        0.00490676242
+      ],
+      "base_v": [
+        0.782573293,
+        0.782567578
+      ],
+      "bias_resistor_w": [
+        4.545454651691795e-18,
+        4.545454651691795e-18
+      ],
+      "carrier_3v3_feed_current_ma": -5.84400802e-10,
+      "bus_feed_current_ma": 0.842196663,
+      "reset_v_assumed_model_only": 5.74343367e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-058",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": -1.31574062,
+      "gp_v": [
+        -0.660171288,
+        -0.660015904
+      ],
+      "base_v": [
+        -0.675591082,
+        -0.226309373
+      ],
+      "bias_resistor_w": [
+        0.11523829588938102,
+        1.5657890909466906e-15
+      ],
+      "carrier_3v3_feed_current_ma": 1.31574062e-09,
+      "bus_feed_current_ma": 1.6423087299999999,
+      "reset_v_assumed_model_only": -0.000132560806,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-059",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": -18,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": -1.40683927,
+      "gp_v": [
+        -0.704487826,
+        -0.704505278
+      ],
+      "base_v": [
+        -0.6755912,
+        -0.6755912
+      ],
+      "bias_resistor_w": [
+        0.11392900224078975,
+        0.11392900224078975
+      ],
+      "carrier_3v3_feed_current_ma": 1.4068392700000001e-09,
+      "bus_feed_current_ma": 1.66506528,
+      "reset_v_assumed_model_only": -0.00014166976,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-060",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.678849454,
+      "gp_v": [
+        0.00803580337,
+        0.673143824
+      ],
+      "base_v": [
+        0.711937298,
+        0.272020754
+      ],
+      "bias_resistor_w": [
+        1.6409090863051998e-15,
+        1.628940256392039e-08
+      ],
+      "carrier_3v3_feed_current_ma": -6.78849454e-10,
+      "bus_feed_current_ma": 0.839021675,
+      "reset_v_assumed_model_only": 6.68782576e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-061",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": 18,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.603693475,
+      "gp_v": [
+        0.00797482781,
+        0.00596722709
+      ],
+      "base_v": [
+        0.711883832,
+        0.711877138
+      ],
+      "bias_resistor_w": [
+        1.6409090863051998e-15,
+        1.6409090863051998e-15
+      ],
+      "carrier_3v3_feed_current_ma": -6.03693475e-10,
+      "bus_feed_current_ma": 0.869633388,
+      "reset_v_assumed_model_only": 5.93634112e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-062",
+        "supply": 0,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": -1.10803821,
+      "gp_v": [
+        -0.556155004,
+        -0.55578334
+      ],
+      "base_v": [
+        -0.570892188,
+        -0.206596851
+      ],
+      "bias_resistor_w": [
+        0.11959248189141766,
+        8.944635382271855e-12
+      ],
+      "carrier_3v3_feed_current_ma": 1.1080382100000001e-09,
+      "bus_feed_current_ma": 1.5985092,
+      "reset_v_assumed_model_only": -0.000111792642,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-063",
+        "supply": 0,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": -18,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": -1.21189486,
+      "gp_v": [
+        -0.606990675,
+        -0.607010488
+      ],
+      "base_v": [
+        -0.57089236,
+        -0.57089236
+      ],
+      "bias_resistor_w": [
+        0.11807319460490494,
+        0.11807319460490494
+      ],
+      "carrier_3v3_feed_current_ma": 1.21189486e-09,
+      "bus_feed_current_ma": 1.624126,
+      "reset_v_assumed_model_only": -0.000122177268,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-064",
+        "supply": 0,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.700926857,
+      "gp_v": [
+        0.00951580579,
+        0.647419066
+      ],
+      "base_v": [
+        0.615053665,
+        0.409075413
+      ],
+      "bias_resistor_w": [
+        8.94731363658792e-12,
+        4.4384014896182014e-08
+      ],
+      "carrier_3v3_feed_current_ma": -7.00926857e-10,
+      "bus_feed_current_ma": 0.878033468,
+      "reset_v_assumed_model_only": 6.90857772e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-065",
+        "supply": 0,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": 18,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.629809675,
+      "gp_v": [
+        0.009447034,
+        0.0074399201
+      ],
+      "base_v": [
+        0.614993342,
+        0.61498537
+      ],
+      "bias_resistor_w": [
+        8.94731363658792e-12,
+        8.94731363658792e-12
+      ],
+      "carrier_3v3_feed_current_ma": -6.29809675e-10,
+      "bus_feed_current_ma": 0.906904723,
+      "reset_v_assumed_model_only": 6.19747701e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "poweroff-0",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": false,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.75940698e-09,
+      "gp_v": [
+        0.00569881575,
+        -0.00569881023
+      ],
+      "base_v": [
+        5.03804981e-10,
+        -4.99926529e-10
+      ],
+      "bias_resistor_w": [
+        3.715768816362815e-30,
+        7.75859086545336e-30
+      ],
+      "carrier_3v3_feed_current_ma": -2.75940698e-18,
+      "bus_feed_current_ma": -1.0055805e-13,
+      "reset_v_assumed_model_only": -9.99899734e-07,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "poweroff-1",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.776735132,
+      "gp_v": [
+        0.782402138,
+        0.771003328
+      ],
+      "base_v": [
+        0.349000839,
+        0.349000838
+      ],
+      "bias_resistor_w": [
+        2.681568377315632e-08,
+        2.681568377315632e-08
+      ],
+      "carrier_3v3_feed_current_ma": -7.76735132e-10,
+      "bus_feed_current_ma": 0.7991898000000001,
+      "reset_v_assumed_model_only": 7.66658466e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "poweroff-bus3.63",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": 3.63
+      },
+      "rail_v": 0.869702513,
+      "gp_v": [
+        0.874891016,
+        0.863492253
+      ],
+      "base_v": [
+        0.423775192,
+        0.423775192
+      ],
+      "bias_resistor_w": [
+        3.962210289972511e-08,
+        3.962211138737489e-08
+      ],
+      "carrier_3v3_feed_current_ma": -8.697025130000001e-10,
+      "bus_feed_current_ma": 0.895715977,
+      "reset_v_assumed_model_only": 8.59616552e-05,
+      "rows": 1
+    }
+  ],
+  "assumptions": [
+    "Generic BJT beta/diode/ESD/supervisor assumptions, not vendor macro-models",
+    "Connected bus pullups track the carrier rail; disconnected supply cases use3.3V bus, with a separate3.63V bus-only case",
+    "Steady \u00b118V is a conditional bench experiment, not a protected-input rating or automotive pulse qualification",
+    "Open wires/short-to-return are indistinguishable from valid contact states",
+    "Unpowered IC and full-temperature loaded reset behavior remain unknown",
+    "3V3-feed and bus-feed currents are separate; neither includes ESP32/carrier loads or switching peaks; no headroom or thermal qualification"
+  ],
+  "binary_sha256": "25b6a73fafd9b489b92347a6c55fe307db502c1638f53d7d0bf439b5f7c65e38",
+  "sources": {
+    "tools/run_switch_circuit.py": "54891719d8ef357f573a57b6586a276ac39010c696cd7a76f798530a9e1af8fa",
+    "scripts/build_switch_inputs.py": "c6f3d6f4ff79fb2c8e5a37dcfee8f0d49caa12ad6e3331a966b887a2bcaf0630",
+    "hardware/switch-inputs/net_contract.json": "272808831819f6b8b5e02f9ea15c6c85945f23304804e2267f24021432030c73",
+    "hardware/switch-inputs/switches.kicad_pcb": "e327f6c25d2decb94edef613c381852c75fbcadd66456b13055e79123cded9cc",
+    "hardware/a5-idle-interface/net_contract.json": "09b64f8846412f16a8baea041b8d272180b52bbb2d34fbfb44eeade4b29953c4"
+  },
+  "results": [
+    {
+      "case": {
+        "name": "normal-000",
+        "supply": 2.97,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96889776,
+      "gp_v": [
+        0.0251421363,
+        0.0230939176
+      ],
+      "base_v": [
+        0.739735543,
+        0.739699821
+      ],
+      "bias_resistor_w": [
+        3.709612975182619e-05,
+        3.709776592133253e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.5112000199999995,
+      "bus_feed_current_ma": 2.44579424e-08,
+      "reset_v_assumed_model_only": 2.95889776,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-001",
+        "supply": 2.97,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96880201,
+      "gp_v": [
+        2.9745019,
+        2.96310192
+      ],
+      "base_v": [
+        9.25450587e-05,
+        0.0884938811
+      ],
+      "bias_resistor_w": [
+        0.0022777492662321348,
+        0.002087692304535594
+      ],
+      "carrier_3v3_feed_current_ma": 5.98995417,
+      "bus_feed_current_ma": 2.4503421e-08,
+      "reset_v_assumed_model_only": 2.95880201,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-002",
+        "supply": 2.97,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96885442,
+      "gp_v": [
+        2.97455431,
+        0.0230941084
+      ],
+      "base_v": [
+        0.0884959138,
+        0.73969935
+      ],
+      "bias_resistor_w": [
+        0.0020877882088624644,
+        3.709580511930904e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.72791007,
+      "bus_feed_current_ma": 2.44788803e-08,
+      "reset_v_assumed_model_only": 2.95885442,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-003",
+        "supply": 2.97,
+        "temperature": -20,
+        "beta": 200,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96889761,
+      "gp_v": [
+        0.0226441431,
+        0.0206049021
+      ],
+      "base_v": [
+        0.741779064,
+        0.741743202
+      ],
+      "bias_resistor_w": [
+        3.700266316595194e-05,
+        3.700430246065163e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.5119335,
+      "bus_feed_current_ma": 2.44580562e-08,
+      "reset_v_assumed_model_only": 2.95889761,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-004",
+        "supply": 2.97,
+        "temperature": -20,
+        "beta": 200,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96880201,
+      "gp_v": [
+        2.9745019,
+        2.96310192
+      ],
+      "base_v": [
+        9.25450587e-05,
+        0.0884938811
+      ],
+      "bias_resistor_w": [
+        0.0022777492662321348,
+        0.002087692304535594
+      ],
+      "carrier_3v3_feed_current_ma": 5.98995417,
+      "bus_feed_current_ma": 2.4503421e-08,
+      "reset_v_assumed_model_only": 2.95880201,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-005",
+        "supply": 2.97,
+        "temperature": -20,
+        "beta": 200,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96885434,
+      "gp_v": [
+        2.97455424,
+        0.020605057
+      ],
+      "base_v": [
+        0.088495911,
+        0.741742731
+      ],
+      "bias_resistor_w": [
+        0.0020877880785193817,
+        3.7002346724004565e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.72827586,
+      "bus_feed_current_ma": 2.4478941399999998e-08,
+      "reset_v_assumed_model_only": 2.95885434,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-006",
+        "supply": 2.97,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96889247,
+      "gp_v": [
+        0.0275211363,
+        0.0254684321
+      ],
+      "base_v": [
+        0.662743899,
+        0.662704156
+      ],
+      "bias_resistor_w": [
+        4.5352605989373145e-05,
+        4.5354613240727926e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.53763384,
+      "bus_feed_current_ma": 1.73214876e-06,
+      "reset_v_assumed_model_only": 2.95889247,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-007",
+        "supply": 2.97,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96878797,
+      "gp_v": [
+        2.97448249,
+        2.96308368
+      ],
+      "base_v": [
+        9.57863695e-05,
+        0.0916119959
+      ],
+      "bias_resistor_w": [
+        0.0024409394294100466,
+        0.0022377267917513804
+      ],
+      "carrier_3v3_feed_current_ma": 6.06015796,
+      "bus_feed_current_ma": 1.7360539699999999e-06,
+      "reset_v_assumed_model_only": 2.95878797,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-008",
+        "supply": 2.97,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.9688449,
+      "gp_v": [
+        2.97453942,
+        0.0254686063
+      ],
+      "base_v": [
+        0.0916141986,
+        0.662703582
+      ],
+      "bias_resistor_w": [
+        0.002237834397979528,
+        4.5352238428843755e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.77551878,
+      "bus_feed_current_ma": 1.73392556e-06,
+      "reset_v_assumed_model_only": 2.9588449,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-009",
+        "supply": 2.97,
+        "temperature": 25,
+        "beta": 200,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96889233,
+      "gp_v": [
+        0.0249301503,
+        0.0228866637
+      ],
+      "base_v": [
+        0.665149223,
+        0.665109316
+      ],
+      "bias_resistor_w": [
+        4.523115671593749e-05,
+        4.5233169881287665e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.538349510000001,
+      "bus_feed_current_ma": 1.7321539500000001e-06,
+      "reset_v_assumed_model_only": 2.95889233,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-010",
+        "supply": 2.97,
+        "temperature": 25,
+        "beta": 200,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96878797,
+      "gp_v": [
+        2.97448249,
+        2.96308368
+      ],
+      "base_v": [
+        9.57863695e-05,
+        0.0916119959
+      ],
+      "bias_resistor_w": [
+        0.0024409394294100466,
+        0.0022377267917513804
+      ],
+      "carrier_3v3_feed_current_ma": 6.06015796,
+      "bus_feed_current_ma": 1.7360539699999999e-06,
+      "reset_v_assumed_model_only": 2.95878797,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-011",
+        "supply": 2.97,
+        "temperature": 25,
+        "beta": 200,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96884482,
+      "gp_v": [
+        2.97453935,
+        0.022886807
+      ],
+      "base_v": [
+        0.0916141959,
+        0.665108741
+      ],
+      "bias_resistor_w": [
+        0.0022378342648493358,
+        4.5230801118736526e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.77587563,
+      "bus_feed_current_ma": 1.73392778e-06,
+      "reset_v_assumed_model_only": 2.95884482,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-012",
+        "supply": 2.97,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96888526,
+      "gp_v": [
+        0.0303717422,
+        0.0283152892
+      ],
+      "base_v": [
+        0.557950869,
+        0.557906478
+      ],
+      "bias_resistor_w": [
+        5.784481699374227e-05,
+        5.7847343341200126e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.57369718,
+      "bus_feed_current_ma": 0.000129428872,
+      "reset_v_assumed_model_only": 2.95888526,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-013",
+        "supply": 2.97,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96876887,
+      "gp_v": [
+        2.97406877,
+        2.96274073
+      ],
+      "base_v": [
+        9.92344154e-05,
+        0.0953844089
+      ],
+      "bias_resistor_w": [
+        0.002671706740017076,
+        0.0024499057355733805
+      ],
+      "carrier_3v3_feed_current_ma": 6.1556616,
+      "bus_feed_current_ma": 0.00012969880699999998,
+      "reset_v_assumed_model_only": 2.95876887,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-014",
+        "supply": 2.97,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96883193,
+      "gp_v": [
+        2.97413003,
+        0.0283154325
+      ],
+      "base_v": [
+        0.0953868376,
+        0.557905759
+      ],
+      "bias_resistor_w": [
+        0.0024500300985403657,
+        5.7844346755440195e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.8403365,
+      "bus_feed_current_ma": 0.000129552478,
+      "reset_v_assumed_model_only": 2.95883193,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-015",
+        "supply": 2.97,
+        "temperature": 85,
+        "beta": 200,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96888513,
+      "gp_v": [
+        0.0276949164,
+        0.0256479481
+      ],
+      "base_v": [
+        0.560838205,
+        0.560793618
+      ],
+      "bias_resistor_w": [
+        5.76804474770732e-05,
+        5.768298642508043e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.57437377,
+      "bus_feed_current_ma": 0.000129429185,
+      "reset_v_assumed_model_only": 2.95888513,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-016",
+        "supply": 2.97,
+        "temperature": 85,
+        "beta": 200,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96876887,
+      "gp_v": [
+        2.97406877,
+        2.96274073
+      ],
+      "base_v": [
+        9.92344256e-05,
+        0.0953844769
+      ],
+      "bias_resistor_w": [
+        0.002671706740017076,
+        0.0024499057334628413
+      ],
+      "carrier_3v3_feed_current_ma": 6.1556616,
+      "bus_feed_current_ma": 0.00012969880699999998,
+      "reset_v_assumed_model_only": 2.95876887,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-017",
+        "supply": 2.97,
+        "temperature": 85,
+        "beta": 200,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.96883187,
+      "gp_v": [
+        2.97412996,
+        0.0256480677
+      ],
+      "base_v": [
+        0.0953869029,
+        0.560792899
+      ],
+      "bias_resistor_w": [
+        0.0024500299550200863,
+        5.767999409938049e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.840673789999999,
+      "bus_feed_current_ma": 0.000129552635,
+      "reset_v_assumed_model_only": 2.95883187,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-018",
+        "supply": 3.3,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29879246,
+      "gp_v": [
+        0.0239188848,
+        0.0218778925
+      ],
+      "base_v": [
+        0.743059283,
+        0.743028396
+      ],
+      "bias_resistor_w": [
+        5.35860414409136e-05,
+        5.358774571950618e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.03769022,
+      "bus_feed_current_ma": 2.5168291300000003e-08,
+      "reset_v_assumed_model_only": 3.28879246,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-019",
+        "supply": 3.3,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.2986777,
+      "gp_v": [
+        3.30437759,
+        3.29297761
+      ],
+      "base_v": [
+        0.000105949391,
+        0.101302687
+      ],
+      "bias_resistor_w": [
+        0.0029854092370843574,
+        0.002735784430100353
+      ],
+      "carrier_3v3_feed_current_ma": 6.61148367,
+      "bus_feed_current_ma": 2.52226083e-08,
+      "reset_v_assumed_model_only": 3.2886777,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-020",
+        "supply": 3.3,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29874025,
+      "gp_v": [
+        3.30444015,
+        0.0218780535
+      ],
+      "base_v": [
+        0.101305119,
+        0.743027905
+      ],
+      "bias_resistor_w": [
+        0.002735915741702385,
+        5.358488966358553e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.29872687,
+      "bus_feed_current_ma": 2.51930742e-08,
+      "reset_v_assumed_model_only": 3.28874025,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-021",
+        "supply": 3.3,
+        "temperature": -20,
+        "beta": 200,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29879233,
+      "gp_v": [
+        0.0216453291,
+        0.0196116188
+      ],
+      "base_v": [
+        0.745108233,
+        0.74507722
+      ],
+      "bias_resistor_w": [
+        5.347293299784156e-05,
+        5.347464483117318e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.03832637,
+      "bus_feed_current_ma": 2.5168425500000002e-08,
+      "reset_v_assumed_model_only": 3.28879233,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-022",
+        "supply": 3.3,
+        "temperature": -20,
+        "beta": 200,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.2986777,
+      "gp_v": [
+        3.30437759,
+        3.29297761
+      ],
+      "base_v": [
+        0.000105949391,
+        0.101302687
+      ],
+      "bias_resistor_w": [
+        0.0029854092370843574,
+        0.002735784430100353
+      ],
+      "carrier_3v3_feed_current_ma": 6.61148367,
+      "bus_feed_current_ma": 2.52226083e-08,
+      "reset_v_assumed_model_only": 3.2886777,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-023",
+        "supply": 3.3,
+        "temperature": -20,
+        "beta": 200,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29874019,
+      "gp_v": [
+        3.30444008,
+        0.0196117507
+      ],
+      "base_v": [
+        0.101305116,
+        0.74507673
+      ],
+      "bias_resistor_w": [
+        0.0027359156123429825,
+        5.347179490887828e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.29904418,
+      "bus_feed_current_ma": 2.51927778e-08,
+      "reset_v_assumed_model_only": 3.28874019,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-024",
+        "supply": 3.3,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29878722,
+      "gp_v": [
+        0.0264870907,
+        0.0244417244
+      ],
+      "base_v": [
+        0.666453981,
+        0.666419341
+      ],
+      "bias_resistor_w": [
+        6.337042698436814e-05,
+        6.337250436918562e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.06389562,
+      "bus_feed_current_ma": 1.73674422e-06,
+      "reset_v_assumed_model_only": 3.28878722,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-025",
+        "supply": 3.3,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29866379,
+      "gp_v": [
+        3.30435831,
+        3.29295949
+      ],
+      "base_v": [
+        0.000109158304,
+        0.104391707
+      ],
+      "bias_resistor_w": [
+        0.0031700731731081327,
+        0.0029055529709441307
+      ],
+      "carrier_3v3_feed_current_ma": 6.681037760000001,
+      "bus_feed_current_ma": 1.7413676299999999e-06,
+      "reset_v_assumed_model_only": 3.28866379,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-026",
+        "supply": 3.3,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29873082,
+      "gp_v": [
+        3.30442533,
+        0.0244418735
+      ],
+      "base_v": [
+        0.104394307,
+        0.666418747
+      ],
+      "bias_resistor_w": [
+        0.002905697661802828,
+        6.33691540938284e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.3459039299999995,
+      "bus_feed_current_ma": 1.73885527e-06,
+      "reset_v_assumed_model_only": 3.28873082,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-027",
+        "supply": 3.3,
+        "temperature": 25,
+        "beta": 200,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29878709,
+      "gp_v": [
+        0.0240760593,
+        0.02203836
+      ],
+      "base_v": [
+        0.668866088,
+        0.668831299
+      ],
+      "bias_resistor_w": [
+        6.322587447681818e-05,
+        6.322795627211799e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.06453244,
+      "bus_feed_current_ma": 1.73674903e-06,
+      "reset_v_assumed_model_only": 3.28878709,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-028",
+        "supply": 3.3,
+        "temperature": 25,
+        "beta": 200,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29866379,
+      "gp_v": [
+        3.30435831,
+        3.29295949
+      ],
+      "base_v": [
+        0.000109158304,
+        0.104391707
+      ],
+      "bias_resistor_w": [
+        0.0031700731731081327,
+        0.0029055529709441307
+      ],
+      "carrier_3v3_feed_current_ma": 6.681037760000001,
+      "bus_feed_current_ma": 1.7413676299999999e-06,
+      "reset_v_assumed_model_only": 3.28866379,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-029",
+        "supply": 3.3,
+        "temperature": 25,
+        "beta": 200,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29873076,
+      "gp_v": [
+        3.30442527,
+        0.0220384833
+      ],
+      "base_v": [
+        0.104394304,
+        0.668830705
+      ],
+      "bias_resistor_w": [
+        0.002905697530788523,
+        6.32246166008291e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.346221529999999,
+      "bus_feed_current_ma": 1.7388579000000002e-06,
+      "reset_v_assumed_model_only": 3.28873076,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-030",
+        "supply": 3.3,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29878006,
+      "gp_v": [
+        0.0295980697,
+        0.0275490008
+      ],
+      "base_v": [
+        0.562114395,
+        0.562075334
+      ],
+      "bias_resistor_w": [
+        7.793129034168915e-05,
+        7.79338839084045e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.09968497,
+      "bus_feed_current_ma": 0.000129673777,
+      "reset_v_assumed_model_only": 3.28878006,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-031",
+        "supply": 3.3,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29864485,
+      "gp_v": [
+        3.30394474,
+        3.29261573
+      ],
+      "base_v": [
+        0.000112434276,
+        0.108107443
+      ],
+      "bias_resistor_w": [
+        0.0034300939305166233,
+        0.0031446142584148204
+      ],
+      "carrier_3v3_feed_current_ma": 6.7757459,
+      "bus_feed_current_ma": 0.000129987998,
+      "reset_v_assumed_model_only": 3.28864485,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-032",
+        "supply": 3.3,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29871796,
+      "gp_v": [
+        3.30401508,
+        0.0275491253
+      ],
+      "base_v": [
+        0.108110267,
+        0.562074597
+      ],
+      "bias_resistor_w": [
+        0.0031447780263315077,
+        7.792981101164289e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.4101962,
+      "bus_feed_current_ma": 0.00012981800299999998,
+      "reset_v_assumed_model_only": 3.28871796,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-033",
+        "supply": 3.3,
+        "temperature": 85,
+        "beta": 200,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29877994,
+      "gp_v": [
+        0.027048664,
+        0.0250076988
+      ],
+      "base_v": [
+        0.565010361,
+        0.564971122
+      ],
+      "bias_resistor_w": [
+        7.773919291684046e-05,
+        7.774179080436667e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.10030448,
+      "bus_feed_current_ma": 0.000129674065,
+      "reset_v_assumed_model_only": 3.28877994,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-034",
+        "supply": 3.3,
+        "temperature": 85,
+        "beta": 200,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29864485,
+      "gp_v": [
+        3.30394474,
+        3.29261573
+      ],
+      "base_v": [
+        0.000112434288,
+        0.108107548
+      ],
+      "bias_resistor_w": [
+        0.0034300939305166233,
+        0.003144614256023695
+      ],
+      "carrier_3v3_feed_current_ma": 6.7757459,
+      "bus_feed_current_ma": 0.000129987998,
+      "reset_v_assumed_model_only": 3.28864485,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-035",
+        "supply": 3.3,
+        "temperature": 85,
+        "beta": 200,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.2987179,
+      "gp_v": [
+        3.30401502,
+        0.0250078027
+      ],
+      "base_v": [
+        0.108110369,
+        0.564970384
+      ],
+      "bias_resistor_w": [
+        0.0031447778876426274,
+        7.77377266897878e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.4105051,
+      "bus_feed_current_ma": 0.000129818147,
+      "reset_v_assumed_model_only": 3.2887179,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-036",
+        "supply": 3.63,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62868714,
+      "gp_v": [
+        0.0230404252,
+        0.0210047303
+      ],
+      "base_v": [
+        0.745959645,
+        0.745932428
+      ],
+      "bias_resistor_w": [
+        7.319985978736369e-05,
+        7.320162185885254e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.56428376,
+      "bus_feed_current_ma": 2.58784899e-08,
+      "reset_v_assumed_model_only": 3.61868714,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-037",
+        "supply": 3.63,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62855329,
+      "gp_v": [
+        3.63425317,
+        3.62285319
+      ],
+      "base_v": [
+        0.000119379533,
+        0.114136129
+      ],
+      "bias_resistor_w": [
+        0.003790291069430372,
+        0.003472851130590429
+      ],
+      "carrier_3v3_feed_current_ma": 7.2335680899999995,
+      "bus_feed_current_ma": 2.5942463e-08,
+      "reset_v_assumed_model_only": 3.61855329,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-038",
+        "supply": 3.63,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62862603,
+      "gp_v": [
+        3.63432591,
+        0.0210048691
+      ],
+      "base_v": [
+        0.114138962,
+        0.745931923
+      ],
+      "bias_resistor_w": [
+        0.003473023499759456,
+        7.319769644495277e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.86986674,
+      "bus_feed_current_ma": 2.59069836e-08,
+      "reset_v_assumed_model_only": 3.61862603,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-039",
+        "supply": 3.63,
+        "temperature": -20,
+        "beta": 200,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62868703,
+      "gp_v": [
+        0.0209234309,
+        0.0188938617
+      ],
+      "base_v": [
+        0.748014085,
+        0.747986753
+      ],
+      "bias_resistor_w": [
+        7.306690832775818e-05,
+        7.306867973298771e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.5648517,
+      "bus_feed_current_ma": 2.58784019e-08,
+      "reset_v_assumed_model_only": 3.61868703,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-040",
+        "supply": 3.63,
+        "temperature": -20,
+        "beta": 200,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62855329,
+      "gp_v": [
+        3.63425317,
+        3.62285319
+      ],
+      "base_v": [
+        0.000119379533,
+        0.114136129
+      ],
+      "bias_resistor_w": [
+        0.003790291069430372,
+        0.003472851130590429
+      ],
+      "carrier_3v3_feed_current_ma": 7.2335680899999995,
+      "bus_feed_current_ma": 2.5942463e-08,
+      "reset_v_assumed_model_only": 3.61855329,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-041",
+        "supply": 3.63,
+        "temperature": -20,
+        "beta": 200,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62862597,
+      "gp_v": [
+        3.63432586,
+        0.0188939758
+      ],
+      "base_v": [
+        0.114138959,
+        0.747986247
+      ],
+      "bias_resistor_w": [
+        0.0034730233540121607,
+        7.306476153003658e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.87015006,
+      "bus_feed_current_ma": 2.59077475e-08,
+      "reset_v_assumed_model_only": 3.61862597,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-042",
+        "supply": 3.63,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62868194,
+      "gp_v": [
+        0.0257249045,
+        0.0236850494
+      ],
+      "base_v": [
+        0.669714399,
+        0.669683689
+      ],
+      "bias_resistor_w": [
+        8.450328362007256e-05,
+        8.450541596318248e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.59029339,
+      "bus_feed_current_ma": 1.74134895e-06,
+      "reset_v_assumed_model_only": 3.61868194,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-043",
+        "supply": 3.63,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62853949,
+      "gp_v": [
+        3.63423401,
+        3.62283519
+      ],
+      "base_v": [
+        0.000122558661,
+        0.117198609
+      ],
+      "bias_resistor_w": [
+        0.003996212781317157,
+        0.0036621563898308835
+      ],
+      "carrier_3v3_feed_current_ma": 7.30252871,
+      "bus_feed_current_ma": 1.74669793e-06,
+      "reset_v_assumed_model_only": 3.61853949,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-044",
+        "supply": 3.63,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62861667,
+      "gp_v": [
+        3.63431118,
+        0.0236851791
+      ],
+      "base_v": [
+        0.117201608,
+        0.669683081
+      ],
+      "bias_resistor_w": [
+        0.0036623437834846584,
+        8.450092396291647e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.916655909999999,
+      "bus_feed_current_ma": 1.74379778e-06,
+      "reset_v_assumed_model_only": 3.61861667,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-045",
+        "supply": 3.63,
+        "temperature": 25,
+        "beta": 200,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62868183,
+      "gp_v": [
+        0.0234444424,
+        0.0214111508
+      ],
+      "base_v": [
+        0.672133198,
+        0.67210235
+      ],
+      "bias_resistor_w": [
+        8.433539125905632e-05,
+        8.433753323047313e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.59087268,
+      "bus_feed_current_ma": 1.74135327e-06,
+      "reset_v_assumed_model_only": 3.61868183,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-046",
+        "supply": 3.63,
+        "temperature": 25,
+        "beta": 200,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62853949,
+      "gp_v": [
+        3.63423401,
+        3.62283519
+      ],
+      "base_v": [
+        0.000122558661,
+        0.117198609
+      ],
+      "bias_resistor_w": [
+        0.003996212781317157,
+        0.0036621563898308835
+      ],
+      "carrier_3v3_feed_current_ma": 7.30252871,
+      "bus_feed_current_ma": 1.74669793e-06,
+      "reset_v_assumed_model_only": 3.61853949,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-047",
+        "supply": 3.63,
+        "temperature": 25,
+        "beta": 200,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62861661,
+      "gp_v": [
+        3.63431112,
+        0.0214112584
+      ],
+      "base_v": [
+        0.117201606,
+        0.672101741
+      ],
+      "bias_resistor_w": [
+        0.003662343662202739,
+        8.433304961027575e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.91694486,
+      "bus_feed_current_ma": 1.7437997100000002e-06,
+      "reset_v_assumed_model_only": 3.61861661,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-048",
+        "supply": 3.63,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62867483,
+      "gp_v": [
+        0.0290121718,
+        0.0269687933
+      ],
+      "base_v": [
+        0.565804261,
+        0.565769375
+      ],
+      "bias_resistor_w": [
+        0.00010112311935961316,
+        0.00010112576500656158
+      ],
+      "carrier_3v3_feed_current_ma": 6.625842090000001,
+      "bus_feed_current_ma": 0.000129919119,
+      "reset_v_assumed_model_only": 3.61867483,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-049",
+        "supply": 3.63,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.6285207,
+      "gp_v": [
+        3.63382059,
+        3.62249009
+      ],
+      "base_v": [
+        0.000125665133,
+        0.120864614
+      ],
+      "bias_resistor_w": [
+        0.004285219909266639,
+        0.003927856034771489
+      ],
+      "carrier_3v3_feed_current_ma": 7.39650283,
+      "bus_feed_current_ma": 0.00013027804,
+      "reset_v_assumed_model_only": 3.6185207,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-050",
+        "supply": 3.63,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62860391,
+      "gp_v": [
+        3.63389954,
+        0.0269689026
+      ],
+      "base_v": [
+        0.120867835,
+        0.565768625
+      ],
+      "bias_resistor_w": [
+        0.003928064784309842,
+        0.0001011204437324205
+      ],
+      "carrier_3v3_feed_current_ma": 6.9804694099999995,
+      "bus_feed_current_ma": 0.000130084157,
+      "reset_v_assumed_model_only": 3.61860391,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-051",
+        "supply": 3.63,
+        "temperature": 85,
+        "beta": 200,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62867472,
+      "gp_v": [
+        0.026559279,
+        0.0245229765
+      ],
+      "base_v": [
+        0.568708567,
+        0.568673516
+      ],
+      "bias_resistor_w": [
+        0.00010090301738862558,
+        0.00010090566872136041
+      ],
+      "carrier_3v3_feed_current_ma": 6.62641805,
+      "bus_feed_current_ma": 0.00012991938699999999,
+      "reset_v_assumed_model_only": 3.61867472,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-052",
+        "supply": 3.63,
+        "temperature": 85,
+        "beta": 200,
+        "contact0": 0.1,
+        "contact1": 100,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.6285207,
+      "gp_v": [
+        3.63382059,
+        3.62249009
+      ],
+      "base_v": [
+        0.000125665146,
+        0.120864773
+      ],
+      "bias_resistor_w": [
+        0.004285219909266639,
+        0.003927856029426752
+      ],
+      "carrier_3v3_feed_current_ma": 7.39650283,
+      "bus_feed_current_ma": 0.00013027804,
+      "reset_v_assumed_model_only": 3.6185207,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "normal-053",
+        "supply": 3.63,
+        "temperature": 85,
+        "beta": 200,
+        "contact0": 100,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62860385,
+      "gp_v": [
+        3.63389948,
+        0.0245230676
+      ],
+      "base_v": [
+        0.120867993,
+        0.568672764
+      ],
+      "bias_resistor_w": [
+        0.0039280646266358805,
+        0.00010090036180755648
+      ],
+      "carrier_3v3_feed_current_ma": 6.98075665,
+      "bus_feed_current_ma": 0.000130084291,
+      "reset_v_assumed_model_only": 3.61860385,
+      "rows": 1,
+      "declared_static_logic_check": true
+    },
+    {
+      "case": {
+        "name": "fault-054",
+        "supply": 0,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": -1.46903991,
+      "gp_v": [
+        -0.736860083,
+        -0.736730457
+      ],
+      "base_v": [
+        -0.752177219,
+        -0.221683601
+      ],
+      "bias_resistor_w": [
+        0.11208656049107062,
+        2.4045454520141614e-19
+      ],
+      "carrier_3v3_feed_current_ma": 1.46903991e-09,
+      "bus_feed_current_ma": 1.6747511,
+      "reset_v_assumed_model_only": -0.000147889202,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-055",
+        "supply": 0,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": -18,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": -1.5499749,
+      "gp_v": [
+        -0.776035989,
+        -0.776051526
+      ],
+      "base_v": [
+        -0.75217731,
+        -0.75217731
+      ],
+      "bias_resistor_w": [
+        0.11093857227462278,
+        0.11093857227462278
+      ],
+      "carrier_3v3_feed_current_ma": 1.5499748999999999e-09,
+      "bus_feed_current_ma": 1.69516904,
+      "reset_v_assumed_model_only": -0.000155981892,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-056",
+        "supply": 0,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.657808287,
+      "gp_v": [
+        0.00696411242,
+        0.652108233
+      ],
+      "base_v": [
+        0.78261788,
+        0.162680086
+      ],
+      "bias_resistor_w": [
+        4.545454651691795e-18,
+        5.822320453800393e-09
+      ],
+      "carrier_3v3_feed_current_ma": -6.57808287e-10,
+      "bus_feed_current_ma": 0.812215752,
+      "reset_v_assumed_model_only": 6.47743512e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-057",
+        "supply": 0,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": 18,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.584400802,
+      "gp_v": [
+        0.00691327656,
+        0.00490676242
+      ],
+      "base_v": [
+        0.782573293,
+        0.782567578
+      ],
+      "bias_resistor_w": [
+        4.545454651691795e-18,
+        4.545454651691795e-18
+      ],
+      "carrier_3v3_feed_current_ma": -5.84400802e-10,
+      "bus_feed_current_ma": 0.842196663,
+      "reset_v_assumed_model_only": 5.74343367e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-058",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": -1.31574062,
+      "gp_v": [
+        -0.660171288,
+        -0.660015904
+      ],
+      "base_v": [
+        -0.675591082,
+        -0.226309373
+      ],
+      "bias_resistor_w": [
+        0.11523829588938102,
+        1.5657890909466906e-15
+      ],
+      "carrier_3v3_feed_current_ma": 1.31574062e-09,
+      "bus_feed_current_ma": 1.6423087299999999,
+      "reset_v_assumed_model_only": -0.000132560806,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-059",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": -18,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": -1.40683927,
+      "gp_v": [
+        -0.704487826,
+        -0.704505278
+      ],
+      "base_v": [
+        -0.6755912,
+        -0.6755912
+      ],
+      "bias_resistor_w": [
+        0.11392900224078975,
+        0.11392900224078975
+      ],
+      "carrier_3v3_feed_current_ma": 1.4068392700000001e-09,
+      "bus_feed_current_ma": 1.66506528,
+      "reset_v_assumed_model_only": -0.00014166976,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-060",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.678849454,
+      "gp_v": [
+        0.00803580337,
+        0.673143824
+      ],
+      "base_v": [
+        0.711937298,
+        0.272020754
+      ],
+      "bias_resistor_w": [
+        1.6409090863051998e-15,
+        1.628940256392039e-08
+      ],
+      "carrier_3v3_feed_current_ma": -6.78849454e-10,
+      "bus_feed_current_ma": 0.839021675,
+      "reset_v_assumed_model_only": 6.68782576e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-061",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": 18,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.603693475,
+      "gp_v": [
+        0.00797482781,
+        0.00596722709
+      ],
+      "base_v": [
+        0.711883832,
+        0.711877138
+      ],
+      "bias_resistor_w": [
+        1.6409090863051998e-15,
+        1.6409090863051998e-15
+      ],
+      "carrier_3v3_feed_current_ma": -6.03693475e-10,
+      "bus_feed_current_ma": 0.869633388,
+      "reset_v_assumed_model_only": 5.93634112e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-062",
+        "supply": 0,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": -1.10803821,
+      "gp_v": [
+        -0.556155004,
+        -0.55578334
+      ],
+      "base_v": [
+        -0.570892188,
+        -0.206596851
+      ],
+      "bias_resistor_w": [
+        0.11959248189141766,
+        8.944635382271855e-12
+      ],
+      "carrier_3v3_feed_current_ma": 1.1080382100000001e-09,
+      "bus_feed_current_ma": 1.5985092,
+      "reset_v_assumed_model_only": -0.000111792642,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-063",
+        "supply": 0,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": -18,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": -1.21189486,
+      "gp_v": [
+        -0.606990675,
+        -0.607010488
+      ],
+      "base_v": [
+        -0.57089236,
+        -0.57089236
+      ],
+      "bias_resistor_w": [
+        0.11807319460490494,
+        0.11807319460490494
+      ],
+      "carrier_3v3_feed_current_ma": 1.21189486e-09,
+      "bus_feed_current_ma": 1.624126,
+      "reset_v_assumed_model_only": -0.000122177268,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-064",
+        "supply": 0,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.700926857,
+      "gp_v": [
+        0.00951580579,
+        0.647419066
+      ],
+      "base_v": [
+        0.615053665,
+        0.409075413
+      ],
+      "bias_resistor_w": [
+        8.94731363658792e-12,
+        4.4384014896182014e-08
+      ],
+      "carrier_3v3_feed_current_ma": -7.00926857e-10,
+      "bus_feed_current_ma": 0.878033468,
+      "reset_v_assumed_model_only": 6.90857772e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-065",
+        "supply": 0,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": 18,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.629809675,
+      "gp_v": [
+        0.009447034,
+        0.0074399201
+      ],
+      "base_v": [
+        0.614993342,
+        0.61498537
+      ],
+      "bias_resistor_w": [
+        8.94731363658792e-12,
+        8.94731363658792e-12
+      ],
+      "carrier_3v3_feed_current_ma": -6.29809675e-10,
+      "bus_feed_current_ma": 0.906904723,
+      "reset_v_assumed_model_only": 6.19747701e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-066",
+        "supply": 3.3,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.2971044,
+      "gp_v": [
+        3.30280428,
+        0.0218831025
+      ],
+      "base_v": [
+        -0.752171862,
+        0.743012542
+      ],
+      "bias_resistor_w": [
+        0.1901383513501081,
+        5.3495432228589144e-05
+      ],
+      "carrier_3v3_feed_current_ma": 14.4780147,
+      "bus_feed_current_ma": 2.5987116999999997e-08,
+      "reset_v_assumed_model_only": 3.2871044,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-067",
+        "supply": 3.3,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": -18,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29541604,
+      "gp_v": [
+        3.30111593,
+        3.28971594
+      ],
+      "base_v": [
+        -0.752171864,
+        -0.752171864
+      ],
+      "bias_resistor_w": [
+        0.1901070623720199,
+        0.1901070623720199
+      ],
+      "carrier_3v3_feed_current_ma": 22.9197874,
+      "bus_feed_current_ma": 2.68419282e-08,
+      "reset_v_assumed_model_only": 3.28541604,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-068",
+        "supply": 3.3,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29882302,
+      "gp_v": [
+        0.00874994579,
+        0.0218777983
+      ],
+      "base_v": [
+        0.784176098,
+        0.743028682
+      ],
+      "bias_resistor_w": [
+        0.0,
+        5.3589421932029434e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.88489572,
+      "bus_feed_current_ma": 2.51534438e-08,
+      "reset_v_assumed_model_only": 3.28882302,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-069",
+        "supply": 3.3,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": 18,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29885358,
+      "gp_v": [
+        0.00874996599,
+        0.0067437523
+      ],
+      "base_v": [
+        0.784176116,
+        0.784170722
+      ],
+      "bias_resistor_w": [
+        0.0,
+        0.0
+      ],
+      "carrier_3v3_feed_current_ma": 5.73208643,
+      "bus_feed_current_ma": 2.51392449e-08,
+      "reset_v_assumed_model_only": 3.28885358,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-070",
+        "supply": 3.3,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29709589,
+      "gp_v": [
+        3.3027904,
+        0.0244461994
+      ],
+      "base_v": [
+        -0.675585082,
+        0.666401542
+      ],
+      "bias_resistor_w": [
+        0.19134509838057687,
+        6.327219743680008e-05
+      ],
+      "carrier_3v3_feed_current_ma": 14.520567,
+      "bus_feed_current_ma": 1.8011878799999999e-06,
+      "reset_v_assumed_model_only": 3.28709589,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-071",
+        "supply": 3.3,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": -18,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29540426,
+      "gp_v": [
+        3.30109878,
+        3.28969996
+      ],
+      "base_v": [
+        -0.675585085,
+        -0.675585085
+      ],
+      "bias_resistor_w": [
+        0.19131365972191347,
+        0.19131365972191347
+      ],
+      "carrier_3v3_feed_current_ma": 22.9786836,
+      "bus_feed_current_ma": 1.8680429600000001e-06,
+      "reset_v_assumed_model_only": 3.28540426,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-072",
+        "supply": 3.3,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29882046,
+      "gp_v": [
+        0.0101120113,
+        0.0244416365
+      ],
+      "base_v": [
+        0.713748508,
+        0.66641969
+      ],
+      "bias_resistor_w": [
+        1.6409090924417052e-15,
+        6.337447655850047e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.89770965,
+      "bus_feed_current_ma": 1.73550152e-06,
+      "reset_v_assumed_model_only": 3.28882046,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-073",
+        "supply": 3.3,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": 18,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.2988537,
+      "gp_v": [
+        0.0101120371,
+        0.00810478227
+      ],
+      "base_v": [
+        0.71374853,
+        0.713742207
+      ],
+      "bias_resistor_w": [
+        1.6409090924417052e-15,
+        1.6409090924417052e-15
+      ],
+      "carrier_3v3_feed_current_ma": 5.73150746,
+      "bus_feed_current_ma": 1.73425872e-06,
+      "reset_v_assumed_model_only": 3.2888537,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-074",
+        "supply": 3.3,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.2970842,
+      "gp_v": [
+        3.30238418,
+        0.0275524027
+      ],
+      "base_v": [
+        -0.570885433,
+        0.562055215
+      ],
+      "bias_resistor_w": [
+        0.19300911501305504,
+        7.78227004370694e-05
+      ],
+      "carrier_3v3_feed_current_ma": 14.5789753,
+      "bus_feed_current_ma": 0.00013367006000000002,
+      "reset_v_assumed_model_only": 3.2870842,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-075",
+        "supply": 3.3,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": -18,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29538806,
+      "gp_v": [
+        3.30068804,
+        3.2893618
+      ],
+      "base_v": [
+        -0.570885436,
+        -0.570885436
+      ],
+      "bias_resistor_w": [
+        0.192977471385673,
+        0.192977471385673
+      ],
+      "carrier_3v3_feed_current_ma": 23.0597073,
+      "bus_feed_current_ma": 0.00013778948799999998,
+      "reset_v_assumed_model_only": 3.28538806,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-076",
+        "supply": 3.3,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29881696,
+      "gp_v": [
+        0.0119701694,
+        0.0275489269
+      ],
+      "base_v": [
+        0.617196125,
+        0.562075771
+      ],
+      "bias_resistor_w": [
+        8.947313636134788e-12,
+        7.793630059431563e-05
+      ],
+      "carrier_3v3_feed_current_ma": 5.91521992,
+      "bus_feed_current_ma": 0.000129588173,
+      "reset_v_assumed_model_only": 3.28881696,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-077",
+        "supply": 3.3,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": 18,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29885385,
+      "gp_v": [
+        0.0119702035,
+        0.0099634068
+      ],
+      "base_v": [
+        0.617196154,
+        0.617188615
+      ],
+      "bias_resistor_w": [
+        8.947313636134788e-12,
+        8.947313636134788e-12
+      ],
+      "carrier_3v3_feed_current_ma": 5.73073697,
+      "bus_feed_current_ma": 0.000129502616,
+      "reset_v_assumed_model_only": 3.28885385,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-078",
+        "supply": 3.63,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62698853,
+      "gp_v": [
+        3.63268842,
+        0.0210085885
+      ],
+      "base_v": [
+        -0.752171491,
+        0.745918384
+      ],
+      "bias_resistor_w": [
+        0.19630110610483362,
+        7.309260309616365e-05
+      ],
+      "carrier_3v3_feed_current_ma": 15.0573361,
+      "bus_feed_current_ma": 2.67048209e-08,
+      "reset_v_assumed_model_only": 3.61698853,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-079",
+        "supply": 3.63,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": -18,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62528963,
+      "gp_v": [
+        3.63098952,
+        3.61958953
+      ],
+      "base_v": [
+        -0.752171493,
+        -0.752171493
+      ],
+      "bias_resistor_w": [
+        0.1962691162970279,
+        0.1962691162970279
+      ],
+      "carrier_3v3_feed_current_ma": 23.5518352,
+      "bus_feed_current_ma": 2.75678263e-08,
+      "reset_v_assumed_model_only": 3.61528963,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-080",
+        "supply": 3.63,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62872302,
+      "gp_v": [
+        0.00896742197,
+        0.0210046489
+      ],
+      "base_v": [
+        0.784364754,
+        0.745932725
+      ],
+      "bias_resistor_w": [
+        4.5454543287178264e-18,
+        7.320392389310123e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.38492441,
+      "bus_feed_current_ma": 2.58611186e-08,
+      "reset_v_assumed_model_only": 3.61872302,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-081",
+        "supply": 3.63,
+        "temperature": -20,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": 18,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62875889,
+      "gp_v": [
+        0.00896744556,
+        0.00696126567
+      ],
+      "base_v": [
+        0.784364774,
+        0.784359416
+      ],
+      "bias_resistor_w": [
+        4.5454543287178264e-18,
+        4.5454543287178264e-18
+      ],
+      "carrier_3v3_feed_current_ma": 6.20555081,
+      "bus_feed_current_ma": 2.5844063700000002e-08,
+      "reset_v_assumed_model_only": 3.61875889,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-082",
+        "supply": 3.63,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62698005,
+      "gp_v": [
+        3.63267456,
+        0.0236884347
+      ],
+      "base_v": [
+        -0.675584653,
+        0.669667825
+      ],
+      "bias_resistor_w": [
+        0.19752516588792315,
+        8.43883728962708e-05
+      ],
+      "carrier_3v3_feed_current_ma": 15.099741,
+      "bus_feed_current_ma": 1.80634994e-06,
+      "reset_v_assumed_model_only": 3.61698005,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-083",
+        "supply": 3.63,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": -18,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62527787,
+      "gp_v": [
+        3.63097238,
+        3.61957357
+      ],
+      "base_v": [
+        -0.675584655,
+        -0.675584655
+      ],
+      "bias_resistor_w": [
+        0.19749302324515777,
+        0.19749302324515777
+      ],
+      "carrier_3v3_feed_current_ma": 23.6106327,
+      "bus_feed_current_ma": 1.87379872e-06,
+      "reset_v_assumed_model_only": 3.61527787,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-084",
+        "supply": 3.63,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62872047,
+      "gp_v": [
+        0.0103669671,
+        0.0236849728
+      ],
+      "base_v": [
+        0.713969646,
+        0.669684048
+      ],
+      "bias_resistor_w": [
+        1.6409090924417052e-15,
+        8.450806575056366e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.397632440000001,
+      "bus_feed_current_ma": 1.73990483e-06,
+      "reset_v_assumed_model_only": 3.61872047,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-085",
+        "supply": 3.63,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": 18,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62875901,
+      "gp_v": [
+        0.0103669968,
+        0.00835978119
+      ],
+      "base_v": [
+        0.713969672,
+        0.713963391
+      ],
+      "bias_resistor_w": [
+        1.6409090924417052e-15,
+        1.6409090924417052e-15
+      ],
+      "carrier_3v3_feed_current_ma": 6.20495589,
+      "bus_feed_current_ma": 1.7384611800000002e-06,
+      "reset_v_assumed_model_only": 3.61875901,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-086",
+        "supply": 3.63,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62696841,
+      "gp_v": [
+        3.63226838,
+        0.0269714244
+      ],
+      "base_v": [
+        -0.570884928,
+        0.565751309
+      ],
+      "bias_resistor_w": [
+        0.19921305280973217,
+        0.00010099778453209464
+      ],
+      "carrier_3v3_feed_current_ma": 15.157963599999999,
+      "bus_feed_current_ma": 0.00013394822000000001,
+      "reset_v_assumed_model_only": 3.61696841,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-087",
+        "supply": 3.63,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": -18,
+        "fault1": -18,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62526169,
+      "gp_v": [
+        3.63056167,
+        3.61923543
+      ],
+      "base_v": [
+        -0.57088493,
+        -0.57088493
+      ],
+      "bias_resistor_w": [
+        0.1991807011873025,
+        0.1991807011873025
+      ],
+      "carrier_3v3_feed_current_ma": 23.6915256,
+      "bus_feed_current_ma": 0.000138102249,
+      "reset_v_assumed_model_only": 3.61526169,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-088",
+        "supply": 3.63,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.628717,
+      "gp_v": [
+        0.0122742479,
+        0.0269687283
+      ],
+      "base_v": [
+        0.617460058,
+        0.565769822
+      ],
+      "bias_resistor_w": [
+        8.960072727192872e-12,
+        0.00010112892953734468
+      ],
+      "carrier_3v3_feed_current_ma": 6.41501175,
+      "bus_feed_current_ma": 0.0001298211,
+      "reset_v_assumed_model_only": 3.618717,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "fault-089",
+        "supply": 3.63,
+        "temperature": 85,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": 18,
+        "fault1": 18,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.62875917,
+      "gp_v": [
+        0.0122742867,
+        0.0102675262
+      ],
+      "base_v": [
+        0.617460092,
+        0.617452603
+      ],
+      "bias_resistor_w": [
+        8.960072727192872e-12,
+        8.960072727192872e-12
+      ],
+      "carrier_3v3_feed_current_ma": 6.20416417,
+      "bus_feed_current_ma": 0.000129723147,
+      "reset_v_assumed_model_only": 3.61875917,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "poweroff-0",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": false,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 2.75940698e-09,
+      "gp_v": [
+        0.00569881575,
+        -0.00569881023
+      ],
+      "base_v": [
+        5.03804981e-10,
+        -4.99926529e-10
+      ],
+      "bias_resistor_w": [
+        3.715768816362815e-30,
+        7.75859086545336e-30
+      ],
+      "carrier_3v3_feed_current_ma": -2.75940698e-18,
+      "bus_feed_current_ma": -1.0055805e-13,
+      "reset_v_assumed_model_only": -9.99899734e-07,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "poweroff-1",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 0.776735132,
+      "gp_v": [
+        0.782402138,
+        0.771003328
+      ],
+      "base_v": [
+        0.349000839,
+        0.349000838
+      ],
+      "bias_resistor_w": [
+        2.681568377315632e-08,
+        2.681568377315632e-08
+      ],
+      "carrier_3v3_feed_current_ma": -7.76735132e-10,
+      "bus_feed_current_ma": 0.7991898000000001,
+      "reset_v_assumed_model_only": 7.66658466e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "poweroff-bus3.63",
+        "supply": 0,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": false,
+        "bus_powered": true,
+        "transition": false,
+        "max_step_us": 1,
+        "bus_v": 3.63
+      },
+      "rail_v": 0.869702513,
+      "gp_v": [
+        0.874891016,
+        0.863492253
+      ],
+      "base_v": [
+        0.423775192,
+        0.423775192
+      ],
+      "bias_resistor_w": [
+        3.962210289972511e-08,
+        3.962211138737489e-08
+      ],
+      "carrier_3v3_feed_current_ma": -8.697025130000001e-10,
+      "bus_feed_current_ma": 0.895715977,
+      "reset_v_assumed_model_only": 8.59616552e-05,
+      "rows": 1
+    },
+    {
+      "case": {
+        "name": "transition-1",
+        "supply": 3.3,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": true,
+        "max_step_us": 1,
+        "bus_v": null
+      },
+      "rail_v": 3.29878722,
+      "gp_v": [
+        0.0264870907,
+        0.0244417244
+      ],
+      "base_v": [
+        0.666453981,
+        0.666419341
+      ],
+      "bias_resistor_w": [
+        6.337042698436814e-05,
+        6.337250436918562e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.06389562,
+      "bus_feed_current_ma": 1.7367438599999999e-06,
+      "reset_v_assumed_model_only": 3.28878722,
+      "rows": 10303,
+      "declared_static_logic_check": true,
+      "settled_transitions_check": true,
+      "conditional_rise_to_0_8vdd_us": 76.04402999999982
+    },
+    {
+      "case": {
+        "name": "transition-0.5",
+        "supply": 3.3,
+        "temperature": 25,
+        "beta": 40,
+        "contact0": 1000000000000.0,
+        "contact1": 1000000000000.0,
+        "fault0": null,
+        "fault1": null,
+        "power_connected": true,
+        "bus_powered": true,
+        "transition": true,
+        "max_step_us": 0.5,
+        "bus_v": null
+      },
+      "rail_v": 3.29878722,
+      "gp_v": [
+        0.0264870907,
+        0.0244417244
+      ],
+      "base_v": [
+        0.666453981,
+        0.666419341
+      ],
+      "bias_resistor_w": [
+        6.337042698436814e-05,
+        6.337250436918562e-05
+      ],
+      "carrier_3v3_feed_current_ma": 6.06389562,
+      "bus_feed_current_ma": 1.7367439200000001e-06,
+      "reset_v_assumed_model_only": 3.28878722,
+      "rows": 20290,
+      "declared_static_logic_check": true,
+      "settled_transitions_check": true,
+      "conditional_rise_to_0_8vdd_us": 75.67475
+    }
+  ]
+}

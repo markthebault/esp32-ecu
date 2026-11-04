@@ -80,7 +80,21 @@ async def check(url,device,out):
    assert all(result['bad']);a=list(csv.reader(io.StringIO(native),delimiter='\t'));b=list(csv.reader(io.StringIO(result['msl']),delimiter='\t'));assert a[2:]==b[2:] and len(b[2])==188
    (out/'native006.msl').write_text(native);(out/'browser006.msl').write_text(result['msl'])
    checks.append('Native/browser188-field MSL006 agree, including future invalid raw timestamp; malformed secondary metadata rejects atomically before cursor publication')
+   # DOM fixtures exercise target rendering; they are not target measurements.
+   assert device.engine.status()['switch_accessory']['source']=='host_no_target_i2c'
+   probe=await page.evaluate('''()=>{const root=document.querySelector('#engine-secondary-panel'),render=e=>{EcuSecondaryTables.status(root,e);return root.querySelector('#switch-accessory-status').textContent};
+    const target={simulator:false,switch_accessory:{source:'target_j4_i2c',phase:'retry_wait',requested_mask:3,fault:'i2c_timeout',last_fault:'i2c_timeout',raw_known:true,ready:false,fresh:false,fault_pending:true,fault_id:'18446744073709551615',observed_us:'18446744073709550000',read_completed_us:'18446744073709551000',reads:'9007199254740993',failures:'3',consumed_faults:'2',last_duration_us:3001,max_duration_us:3001,budget_us:3000,bus_allocated:true,sdk_error:263}};
+    const fault=render(target);target.switch_accessory.ready=true;target.switch_accessory.fresh=true;target.switch_accessory.fault_pending=false;target.switch_accessory.phase='<img src=x onerror="window.badSwitchMarkup=true">';const recovered=render(target),safe=!root.querySelector('#switch-accessory-status img')&&!window.badSwitchMarkup;
+    const unknown=render({simulator:false}),host=render({simulator:true,switch_accessory:{source:'host_no_target_i2c'}});
+    return {fault,recovered,safe,unknown,host,guide:root.querySelector('#switch-accessory-guide').textContent};}''')
+   assert 'i2c_timeout' in probe['fault'] and '18446744073709551615' in probe['fault'] and '9007199254740993' in probe['fault'] and 'Input rules inhibit' in probe['fault']
+   assert 'readback accepted' in probe['recovered'] and 'fresh raw sample' in probe['recovered'] and probe['safe']
+   assert 'unknown' in probe['unknown'] and 'synthetic' not in probe['unknown'] and 'synthetic stimuli only' in probe['host']
+   assert all(s in probe['guide'] for s in ('pin5 SAFE_N completely unconnected','wire continuity','Closed contact reads high','clock/state fault requires an ECU restart','USB power with carrier3V3'))
+   (out/'switch-status-dom-fixtures.json').write_text(json.dumps(probe,indent=2)+'\n')
+   checks.append('Switch diagnostic DOM fixtures retain exactU64 text, show fault/recovery separately from qualification, escape markup and keep missing target provenance unknown; explicit host data stays synthetic')
    await page.locator('#engine-reload').click();await page.locator('#engine-save-state').filter(has_text='Revision 4').wait_for()
+   await page.locator('#switch-accessory-guide').evaluate('e=>e.open=true')
    await page.locator('#toast').evaluate("e=>e.classList.add('hidden')");await page.locator('#engine-secondary-panel').screenshot(path=out/'secondary-desktop.png')
    for width in (320,390,768,1440):
     await page.set_viewport_size({'width':width,'height':1000});await page.evaluate('()=>new Promise(requestAnimationFrame)');assert await page.evaluate('()=>document.documentElement.scrollWidth<=innerWidth')

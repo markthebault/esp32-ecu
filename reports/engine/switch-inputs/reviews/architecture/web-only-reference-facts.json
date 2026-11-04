@@ -1,0 +1,42 @@
+{
+  "scope": "Primary PDF-reader transcription only. Raw PDF downloader returned403; no raw file bytes/hash claimed. Numeric facts are limited to test conditions.",
+  "references": [
+    {
+      "url": "https://www.onsemi.com/download/data-sheet/pdf/2n3904-d.pdf",
+      "publication": "2N3904/D",
+      "revision": "3, October2024",
+      "raw_file_saved": false,
+      "facts": {
+        "package_pin_order": [
+          "1 emitter",
+          "2 base",
+          "3 collector"
+        ],
+        "sat_test": {
+          "IC_A": 0.01,
+          "IB_A": 0.001,
+          "VCEsat_max_V": 0.2,
+          "TA_C": 25,
+          "pulse_width_max_s": 0.0003,
+          "duty_cycle_max": 0.02
+        },
+        "caution": "No transferred sub-mA/full-temperature saturation guarantee."
+      }
+    },
+    {
+      "url": "https://www.onsemi.com/pdf/datasheet/h11l3m-d.pdf",
+      "publication": "H11L3M/D",
+      "revision": "4, September2024",
+      "raw_file_saved": false,
+      "facts": {
+        "detector_operating_range_V": [
+          3,
+          15
+        ],
+        "H11L1_IFon_max_A": 0.0016,
+        "H11L1_IFon_conditions": "VCC5V,RL270ohm,TJ25C",
+        "caution": "Nominal operating range is not a full-temperature3.3V threshold guarantee."
+      }
+    }
+  ]
+}

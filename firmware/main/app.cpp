@@ -6,6 +6,7 @@
 #include "ecu/engine_target.hpp"
 #include "ecu/engine_log_service.hpp"
 #include "ecu/engine_tuning.hpp"
+#include "ecu/switch_service.hpp"
 #include "driver/gpio.h"
 #include "driver/gptimer.h"
 #include "driver/mcpwm_cap.h"
@@ -153,6 +154,7 @@ extern "C" void app_main() {
     ecu::config::Config profile;
     (void)ecu::web::try_config(profile);
     ecu::engine_target::init({profile.slots,profile.missing,profile.max_rpm},interlock_at_boot);
+    ecu::switch_service::init();
     ecu::engine_tuning::start(interlock_at_boot);
     ecu::web::start_service();
     ecu::radio::start();
@@ -162,6 +164,7 @@ extern "C" void app_main() {
     std::uint64_t can_frames = 0;
     std::int64_t last_print = 0, last_heartbeat = 0, last_publish = 0;
     ecu::engine::RuntimeSample last_engine;
+    std::uint8_t switch_mask=0;
 #if ECU_BENCH_PULSES
     std::int64_t last_pulse = 0;
     unsigned next_channel = 0;
@@ -173,6 +176,10 @@ extern "C" void app_main() {
         if (ecu::web::try_config(next) && next.revision != profile.revision) {
             profile = next;
         }
+        // A skipped tune-lock read retains ownership until a later successful
+        // read. Never turn a contention event into an Off rule or clear faults.
+        (void)ecu::engine_service::switch_requirements(switch_mask);
+        const auto switch_observation=ecu::switch_service::tick(switch_mask);
         std::array<unsigned,8> raw{};
         const auto sampled_us=ecu::engine_target::clock_us();
         const bool adc_ok = sample(raw);
@@ -184,6 +191,7 @@ extern "C" void app_main() {
         for (unsigned i=0; i<16 && twai_receive(&message,0) == ESP_OK; ++i) ++can_frames;
     ecu::web::Sample live;
     live.raw=raw; live.adc_ok=adc_ok; live.safe=safe; live.interlock=interlock;
+    live.table_switches=switch_observation.samples;
     live.overflow=edge_state.overflow; live.synced=edge_state.synced; live.rpm=edge_state.rpm; live.timing_fault=edge_state.timing_fault;
     live.phase_synced=edge_state.phase_synced;
     live.phase_tune_revision=edge_state.tune_revision;live.phase_sensor_revision=edge_state.sensor_revision;
@@ -198,7 +206,8 @@ extern "C" void app_main() {
     live.can_frames=can_frames; live.cam_edges=edge_state.cam_edges; live.crank_edges=edge_state.crank_edges;
     live.crank_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::crank));
     live.cam_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::cam));
-        (void)ecu::engine_service::observe(live,profile,ecu::engine_target::clock_us(),sampled_us,last_engine);
+        const bool control_completed=ecu::engine_service::observe(live,profile,ecu::engine_target::clock_us(),sampled_us,last_engine);
+        ecu::switch_service::control_observed(switch_observation,control_completed);
         live.engine=last_engine;
         ecu::engine_log_service::observe(last_engine);
         const bool monitor_healthy = adc_ok && !edge_state.overflow && esp_timer_get_time()-now < 10000;

@@ -10,6 +10,7 @@ struct Sample {
  std::uint32_t phase_tune_revision{},phase_sensor_revision{},phase_epoch{},phase_losses{},cam_rejected{};
  std::uint8_t phase_reason{},timing_cause{},last_timing_cause{},virtual_high_mask{},physical_command_mask{};float cam_error_deg{};
  std::uint64_t worker_sequence{},worker_observed_us{};std::uint32_t worker_epoch{},worker_tune_revision{},worker_sensor_revision{};
+ std::array<secondary::SwitchSample,2> table_switches{};
  engine::RuntimeSample engine;
 };
 void init(); // Load NVS before the monitor loop; never enables outputs.

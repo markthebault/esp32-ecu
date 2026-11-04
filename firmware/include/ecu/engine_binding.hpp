@@ -7,6 +7,7 @@ inline bool named_unit(const char*s,const char*a,const char*b=""){return !std::s
 inline BoundInputs bind_inputs(const web::Sample&s,const config::Config&c,std::uint64_t now,const Tune*tune=nullptr){
  BoundInputs bound;auto&in=bound.input;const double supply=s.raw[7]*c.adc_reference_v/4095/.6;
  in.rpm=s.rpm;in.synced=s.synced;in.phase_synced=s.phase_synced;in.sampled_us=now;in.battery_v=s.raw[6]*c.adc_reference_v/4095*13;in.sensor_v=supply;in.sensors_valid=s.adc_ok&&!s.overflow;
+ in.table_switches=s.table_switches;
  if(!s.adc_ok)bound.reason="ADC acquisition unavailable";else if(s.overflow)bound.reason="Capture overflow latched";
  double values[6]{};bool valid[6]{};
  for(unsigned i=0;i<6;++i){const double av=s.raw[i]*c.adc_reference_v/4095;auto r=config::convert(c.sensors[i],av/.6,av,supply);values[i]=r.value;valid[i]=r.valid&&c.sensors[i].confirmed;}

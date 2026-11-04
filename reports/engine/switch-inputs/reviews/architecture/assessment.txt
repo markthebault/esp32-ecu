@@ -1,0 +1,109 @@
+Independent secondary-table switch acquisition architecture review
+Date: 2026-11-04
+Reviewer: /root/switch_input_architecture_review
+Frozen project baseline: b0c39a9daf3334f9ddec0e181ade62aecb10e2f9
+Scope: read-only architecture and independent arithmetic/model probes. Project implementation, CAD, target timing and physical electrical acceptance are outside this review. All writes are confined to this cache directory.
+
+Decision
+
+Proceed with a two-input leaded accessory prototype on internal J4, using MCP23008 in PDIP18 with the exact temperature/package variant selected by the hardware owner, and the proposed resistor-isolated 2N3904 contact conditioners. The proposed guarded acquisition and fault-ID acknowledgment address concrete failure cases in the existing control integration. This recommendation authorizes engineering implementation and tests; it does not establish a qualified protected input, complete engine ECU or physical installation.
+
+Acceptance depends on the conditions below. In particular, a calculated forced beta is not a transferred transistor saturation guarantee; a readable expander is not proof of contact continuity; and a source age within 20 ms is not evidence of instantaneous fault detection.
+
+Frozen source and role findings
+
+1. A5 J4 is a five-pin internal logic connector: pin1 GND, pin2 +3V3, pin3 SDA/GPIO41, pin4 SCL/GPIO42, pin5 SAFE_N. Preserve pin5 as an unfitted/NC accessory cavity. Keep cam/J16/PAIR/RESET roles. R16/R17 already provide 4.7k I2C pullups; do not parallel another default pair. Existing sources do not implement this accessory.
+2. A5 U3 pads1/2 are +3V3, while module pad21 (5V) is unconnected in both the contract and actual PCB. There is no depicted direct carrier +5V feed into the module regulator input. The 200mA continuous LD1117 target is a provisional whole-rail thermal target, not available accessory headroom. Header3V3 feeding the module still requires its regulator's reverse-power behavior to be understood. Existing docs/web-configuration.md already prohibit simultaneous module USB power and carrier3V3, require unplugging the module for USB flashing and prohibit UART power. Future powered USB tuning instructions must carry that restriction until a separately reviewed power arrangement exists.
+3. engine_target owns a GPTimer clock; esp_timer has a separate origin. app.cpp obtains the engine clock before its sequential ADC window and then calls engine_service::observe. observe may fail its zero-wait mutex acquisition. A switch producer must use the same engine_target clock as the consuming core, and must retain source timestamps independently of ADC and UI timestamps.
+4. The existing SwitchFilter immediately invalidates bad/stale/future/reversed/contradictory data, requires newly timed samples to advance debounce and accepts age <=20ms. A gap >20ms resets qualification. Off rules add no switch dependency. Reuse this contract rather than hiding an acquisition fault as a valid open switch.
+
+Concrete candidate circuit
+
+For each of two channels:
+  local3V3 -> 1N4148 anode; cathode -> 2.2k, 1%, >=0.6W -> external SW.
+  external SW -> 4.99k + 4.99k series, 1% -> 2N3904 base.
+  base -> 100k, 1% -> localGND.
+  1N4148 anode at emitter/localGND, cathode at base, to clamp negative B-E voltage.
+  emitter -> localGND.
+  collector -> 4.7k, 1% -> local3V3; collector -> 1k -> GP0 or GP1.
+  optional initial 10nF collector-to-localGND RC, selected as an exact leaded part.
+  remote dry contact connects SW to its dedicated localGND return.
+
+A closed contact produces a high raw GPIO. Open produces low. State the raw polarity in harness/UI documentation and retain independent configurable active polarity in the core. The proposed low contact current requires switches suitable for dry circuits; no minimum contact wetting current is established here. A broken wire and open switch have the same observation, as do a short to return and a closed switch. Ordinary two-wire contacts cannot establish continuity.
+
+Use separate protected connectors for external contacts. J4, its SDA/SCL/3V3 and SAFE_N are not external protected wiring. Keep protection near the external connector and its return; route I2C as a short internal connection. Do not invent a vehicle wiring or surge rating from this topology.
+
+MCP23008 accessory assignments: GP0/GP1 contact data; GP2 low, GP3 high, GP4 low, GP5 high via 10k straps; GPIO mask0x3C must read0x28. GP7 drives a challenge through1k into GP6, which has100k to ground. GP7 is output-only on the current MCP23008; qualify the physical GP6 response rather than treating GP7 as an input. Select fixed address0x20 using grounded A0/A1/A2 and bias RESET locally. Leave NC and unused INT unconnected. Add local decoupling. The series resistors limit opposing-driver currents if IODIR is corrupted; they do not make arbitrary misconfiguration an operating mode.
+
+The MCP23008 primary source is Microchip DS20001919I. At100kHz its industrial operating domain includes1.8..5.5V and -40..85C; input Schmitt limits are VIL<=0.2VDD and VIH>=0.8VDD. GPIO leakage is specified +/-1uA. Its 1mA supply-current maximum is tested with1MHz clock. Output-drive specifications use particular1.8/4.5V loads, so the low-load3.3V feedback margin still needs measurement. Raw PDF and rendered tables are retained in references/.
+https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/MCP23008-and-MCP23008-Data-Sheet-DS20001919.pdf
+
+Independent quantitative probe
+
+Run: python3 .cache/engine/switch-input-architecture-review/electrical_probe.py
+
+The probe enumerates256 resistor/voltage corners using VDD2.97..3.63V, 1% resistors, assumed feed-diode drop0.4..1.0V and assumed VBE0.55..0.95V. These semiconductor voltage intervals are analysis assumptions, not guaranteed procured-part bounds.
+
+- Open-contact base current:73.319..216.810uA. With VCE=.2V assumed solely to calculate load demand, the greatest required collector/base ratio is8.120. That is encouraging drive margin, not proof of VCE=.2V. The onsemi source guarantees VCEsat<=.2V only at IC10mA/IB1mA/25C under its pulse conditions, not at this circuit's sub-mA current and temperature domain. Exact E/B/C pin mapping must match the chosen vendor part.
+- A0..100ohm closed contact gives calculated base voltage <=.1451V, using a worst zero feed-diode drop for this branch. Measure transistor leakage/cutoff and GP high margins across the intended component and temperature domain; do not infer full-temperature cutoff from that voltage alone.
+- At -18V steady SW fault, VDD3.63V, Rbias2178ohm and conservative zero diode drop: rail draw <=9.932mA/channel, <=19.863mA for two; Rbias dissipation <=.21482W/channel. The two base resistors dissipate <=.0328W combined. A 0.6W resistor still requires exact body size, ambient derating and enclosure assessment.
+- At +18V, base-path current bound is1.822mA and bias diode reverse voltage at most18V for the stated common-ground fault. The 1N4148 reverse leakage is not zero: its source gives25nA at20V/25C and50uA at20V/150C. Do not interpolate those into an unsupported full-temperature bound.
+- Conservative resistor-only normal branch sum for two channels is4.894mA, deliberately summing mutually exclusive maximum bias/collector currents. Add expander, loop, reset, optional bleeder and other-board loads. Both existing I2C pullups low add up to1.561mA at3.63V with1% low resistors. No accessory current allowance is established by the regulator label.
+- An illustrative4.7k/10nF node has47us nominal tau and75.65us nominal rise from zero to0.8VDD. It is conditioning ahead of software debounce, not a substitute for EMI or transient testing.
+- At100kHz, a full11-register repeated-start read costs126 SCL clocks nominal; trailing single-register IODIR read adds36. Total nominal wire time1.62ms before driver and scheduling overhead. A3ms measured acceptance budget is a reasonable implementation target and needs actual HIL measurement.
+- With4.7k pullups, tr30..70%=0.8473RC gives.796us at200pF. A1us target corresponds to about251pF. Choose100kHz initially and measure actual harness rise/fall levels; this calculation does not establish bus capacitance or timing compliance.
+
+Primary transistor/diode sources:
+https://www.onsemi.com/download/data-sheet/pdf/2n3904-d.pdf
+https://www.vishay.com/docs/81857/1n4148.pdf
+The onsemi URL worked through the primary web PDF reader but returned403 to the file downloader. web-only-reference-facts.json records this; no nonexistent raw-PDF checksum is claimed.
+
+Power-off, reset and hot-wire objections
+
+The blocking feed diode blocks the direct SW-to-bias-rail path, but the BJT base/collector junction, collector pullup and I2C clamp paths still exist. Their actual conduction depends on transistor saturation, grounds, rail loading and device states. Neither zero backfeed nor a harmful magnitude is proven by topology alone. Probe powered/unpowered accessory, powered host with missing accessory supply, disconnected host, both contacts faulted and opened returns. A deliberately selected rail bleeder/supervisor may improve behavior, but size it from measured worst-case injections and minimum reset/dropout requirements. Do not rely on an arbitrary100k bleeder to prevent phantom operation. The included simple KCL examples are illustrative and explicitly omit device I/V; their out-of-domain voltages are not physical predictions.
+
+RESET needs an exact local circuit and startup/brownout procedure. A resistor or simple RC must not be represented as arbitrary-ramp supervision. MCP100-315 is a leaded candidate with trip3.0..3.15V and release150..700ms, but its VOH minimum VDD-.7V at3mA does not independently establish the expander's0.8VDD high margin throughout low3.3V operation. MCP120/130 are open-drain alternatives, but the old MCP120 leakage entry is typical only and MCP130 high/pullup entries also need careful interpretation. Select exact parts and measure RESET while rail ramps/dips and I2C/external faults inject current; a supervisor does not eliminate power-path qualification.
+https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/11187f.pdf
+https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/11184d.pdf
+
+The +/-18V steady condition is a proposed bench characterization envelope with intact stated common ground. It is not yet an established circuit rating, and it does not include automotive pulses, inductive wiring, reversed J4, disconnected grounds, ESD, EMC, thermal or splash qualification.
+
+Alternative component assessment
+
+H11L1M-family and Vishay VOH1016A DIP Schmitt optocouplers are attractive mechanically, but their published threshold/low-output proof is tied to5V/25C test conditions. Their nominal3..15V detector operation does not establish a guaranteed3.3V/full-temperature switching threshold. Do not reuse the1.6mA threshold as such a guarantee. LED current, degradation and supply loading make them a poor default here without manufacturer confirmation or characterization.
+https://www.onsemi.com/pdf/datasheet/h11l3m-d.pdf
+https://www.vishay.com/docs/84896/voh1016ab.pdf
+
+A native comparator can give deliberate hysteresis and avoids LED threshold aging, but needs a properly bounded input network and rail-compatible output. TI LM393B/LM2903B are not available in PDIP in the reviewed package table; ordinary PDIP LM2903/LM393 variants have different offset and low-output specifications. Microchip MCP6542 has a PDIP option and1.6..5.5V operating range, but its cited output levels use5V load conditions and several useful offset/hysteresis numbers are25C. None is an automatic guaranteed3.3V substitute based on a family name. The discrete candidate is the simpler initial home-soldered prototype with explicit characterization holds.
+https://www.ti.com/lit/ds/symlink/lm393.pdf
+https://ww1.microchip.com/downloads/aemDocuments/documents/MSLD/ProductDocuments/DataSheets/MCP6541-Output-Sub-Microamp-Comparators-DS20001696.pdf
+
+Acquisition contract recommended for implementation
+
+- Explicit accessory ownership precedes writes: fixed enabled board contract and address; a read-only marker check is a useful guard, not device identity. Do not scan/configure an arbitrary0x20 device. Reject incompatible/shared bus ownership; one driver owns bus/configuration and recovery. No uncontrolled second caller or bus recovery that disturbs other devices.
+- Before target source can become valid, initialize and read back every owned writable register, observe correct markers and a physical challenge response. Never treat an ACK alone, register cache or successful write as current pin evidence. Use no internal contact pullups, inversion or interrupts when external conditioning owns polarity/bias. Mask GPIO contact bits as data, GP6 as challenge, GP7 as output; do not compare historical INTCAP as current contact data.
+- At5ms service cadence alternate a bounded OLAT challenge write and guarded read; successful raw reads therefore nominally arrive10ms apart. The read must validate the full owned configuration, OLAT, marker pattern and GP6 response, then re-read IODIR. A reset after initial IODIR can otherwise pass a low-challenge read with default configuration.
+- Do not publish a target sample until engine_target::init has started its clock. Remain unavailable during local reset release, polling without blocking the monitor loop.
+- Record engine_target clock at the start of acquisition. Check nonreversed elapsed after each transaction and reject if total exceeds3ms. Budget the trailing call from the remaining time, do not start it when <1ms remains, floor SDK millisecond timeout appropriately and still recheck actual elapsed. OS/API timeout is not an elapsed bound under preemption. Keep prior source timestamp on held/write ticks.
+- NACK, short transfer, timeout, register/marker/challenge mismatch, reset suspicion, missing bus, reversed clock or over-budget operation invalidates immediately. Keep an invalid fault snapshot latched until engine_service::observe returns true for that same snapshot/fault ID. Recovery reads cannot replace it before consumption. A later fault must not be cleared by acknowledging an older invalid snapshot.
+- A requested-mask getter lock skip retains the last actual request; it must not masquerade as Off. A genuine transition to Off may release ownership according to an explicit policy; it does not manufacture fresh samples. Re-enable/source/rule changes must require the core's normal qualification.
+- Preserve the existing20ms core freshness contract. A3ms acquisition plus nominal10ms sample period is not a worst-case poll guarantee. Monitor actual gaps and scheduler stalls. A reset after the final guard is a later unobserved event, bounded only by subsequent detection/freshness. Target scheduling, bus stalls, simultaneous UI/USB/radio activity and watchdog behavior require measured traces.
+- Expose source, validity, acquired timestamp/age, active mask, observed readback state, fault reason and recovery/overrun counters through coherent debug output. Distinguish raw GPIO, source qualification, software debounce and selected table. UI must not call the expander or switches healthy solely because the I2C address answers.
+
+Independent abstract protocol probe
+
+Run: python3 .cache/engine/switch-input-architecture-review/protocol_probe.py
+
+The model exercises24 reset boundaries over both challenge polarities. Without the trailing IODIR guard,12 reset placements can be accepted, including a reset after OLAT was read. The guarded model rejects all24 and accepts both healthy polarities. Separate model assertions demonstrate retained invalid state through observation lock skip/fast recovery, protection against old-fault acknowledgment clearing a newer fault and conservative20ms timestamp handling. These are independent counterexample/model tests, not production-driver tests or HIL.
+
+Required implementation and physical tests
+
+Software/native: absent/NACK, stuck SDA/SCL, short reads, every owned register corrupted, changed SEQOP/pointer behavior, wrong marker, GP6 stuck high/low, OLAT not applied, reset at every burst/guard boundary, integer-ms timeout boundaries, overrun/reversed clock, held sample timestamps,20ms/20ms+1us age, both channels/shared-channel/polarities, debounce0/20/500ms, mask/rule changes and re-enable. Exercise engine mutex skips, quick bus recovery and new-fault/old-ack races through the actual binding. Confirm selected Off rules add no dependency and required invalid switches trigger existing control fault/cuts.
+
+Hardware/HIL: exact procured pinouts and header orientation; cold/hot supply corners; dry-contact resistance/leakage/bounce; raw GP/collector/base voltages and noise margins; RESET and slow ramps/brownouts; +/-18V steady powered/unpowered faults with measured every-rail current; supply loss with I2C high; disconnected grounds/returns as separate fault tests; simultaneous input switching; cable capacitance/rise/fall and loaded timing. Trace acquisition elapsed/gaps and invalid-latch delivery while web, USB and radio are busy. Confirm actual safe physical output behavior separately, retaining selected inhibition.
+
+CAD/harness: source contract/schematic/PCB/BOM parity, native ERC/DRC, exact leaded package dimensions and resistor wattage/body fit, connector ratings/polarity, retained SAFE_N and all prior signal roles, new accessory mounting and cable/case clearance. Software checks and rendered/printed geometry are not physical fit, thermal, ingress, vehicle, EMI or surge acceptance.
+
+Evidence/provenance
+
+source-bindings.json freezes18 source files against the stated baseline. sources/ holds exact copies, including the actual A5 PCB. references/ retains7 directly downloaded primary PDFs, text extracts and selected rendered table pages. reference-index.json records exact URLs, bytes/hashes and downloader failures. electrical_probe.py and protocol_probe.py are reproducible independent arithmetic/abstract models. artifact-manifest.json hashes all retained review files except itself. No design, firmware, source release, manufacturing file or physical board was changed by this reviewer.

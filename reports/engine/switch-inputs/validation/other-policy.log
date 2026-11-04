@@ -1,0 +1,136 @@
+{
+  "environment": "compact_a3_web",
+  "passed": true,
+  "elf_sha256": "aafc85f812352ef2396468497098175a8cd4c7807ecdfb86ef0d30626a13da90",
+  "binary_sha256": "bea8ac0836218be890db0feb72c234ef4fb83cc1423f47cbf59b421dd8e318b8",
+  "app_image_bytes": 1657216,
+  "factory_partition_bytes": 2097152,
+  "policy": "engine_scheduler_physical_writes_compile_time_inhibited",
+  "mapped_policy_strings": {
+    "DUMMY LOADS ONLY": [],
+    "COMPILE-TIME INHIBITED": [
+      {
+        "section": ".flash.rodata",
+        "address": "0x3c0e5d38"
+      }
+    ],
+    "hardware_timer_virtual_outputs": [
+      {
+        "section": ".flash.rodata",
+        "address": "0x3c0e6078"
+      }
+    ],
+    "hardware_timer_dummy_loads": []
+  },
+  "on_alarm_address": "0x40376a70",
+  "on_alarm_size": 15453,
+  "on_alarm_GPIO_literal_references": 0,
+  "compiled_engine_output_pins": null,
+  "source_sha256": {
+    "firmware/platformio.ini": "579f4075495f9c070a80d14cdcedf1ec4f9de13c4d233ebd1a48b97947e3f3d0",
+    "firmware/main/engine_target.cpp": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738",
+    "firmware/main/app.cpp": "487d5e03a964f686939dcb46a148a91c02e516678cfd6c7d342ec0ba269ce9e6",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+  },
+  "allocated_sections": {
+    ".rtc.force_fast": 32,
+    ".rtc_reserved": 24,
+    ".iram0.vectors": 1028,
+    ".iram0.text": 130027,
+    ".dram0.dummy": 114688,
+    ".dram0.data": 188704,
+    ".noinit": 0,
+    ".dram0.bss": 26000,
+    ".flash.text": 871054,
+    ".flash_rodata_dummy": 917504,
+    ".flash.appdesc": 256,
+    ".flash.rodata": 465996,
+    ".flash.rodata_noload": 11753,
+    ".ext_ram.dummy": 1441760,
+    ".iram0.text_end": 17
+  },
+  "qualification": "Linked binary/data/static image checks only. Pin initialization and fail-safe low writes are separate from scheduler actuation. No physical flashing, USB, runtime heap/stack, interrupt latency, electrical, thermal or engine qualification. CMake macro absence is not used as evidence."
+}
+{
+  "environment": "compact_a3_timing_bench",
+  "passed": true,
+  "elf_sha256": "4925add5cf1ea2eb6bb1cd232858709c817ec6e00dddbbb86db53b83cc9e115f",
+  "binary_sha256": "d145b1d8f8d7748a68920642a9e0c32beb2a2f13cd3988fb72e3b2565f8929e9",
+  "app_image_bytes": 720016,
+  "factory_partition_bytes": 2097152,
+  "policy": "gated_engine_dummy_loads_only",
+  "mapped_policy_strings": {
+    "DUMMY LOADS ONLY": [
+      {
+        "section": ".flash.rodata",
+        "address": "0x3c0602f8"
+      }
+    ],
+    "COMPILE-TIME INHIBITED": [],
+    "hardware_timer_virtual_outputs": [],
+    "hardware_timer_dummy_loads": []
+  },
+  "on_alarm_address": "0x40376678",
+  "on_alarm_size": 18761,
+  "on_alarm_GPIO_literal_references": 81,
+  "compiled_engine_output_pins": [
+    4,
+    5,
+    6,
+    7,
+    15,
+    16,
+    17,
+    18
+  ],
+  "source_sha256": {
+    "firmware/platformio.ini": "579f4075495f9c070a80d14cdcedf1ec4f9de13c4d233ebd1a48b97947e3f3d0",
+    "firmware/main/engine_target.cpp": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738",
+    "firmware/main/app.cpp": "487d5e03a964f686939dcb46a148a91c02e516678cfd6c7d342ec0ba269ce9e6",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+  },
+  "allocated_sections": {
+    ".rtc.force_fast": 32,
+    ".rtc_reserved": 24,
+    ".iram0.vectors": 1028,
+    ".iram0.text": 96279,
+    ".dram0.dummy": 81152,
+    ".dram0.data": 177960,
+    ".noinit": 0,
+    ".dram0.bss": 11360,
+    ".flash.text": 336066,
+    ".flash_rodata_dummy": 393216,
+    ".flash.appdesc": 256,
+    ".flash.rodata": 108280,
+    ".ext_ram.dummy": 524256,
+    ".iram0.text_end": 229
+  },
+  "qualification": "Linked binary/data/static image checks only. Pin initialization and fail-safe low writes are separate from scheduler actuation. No physical flashing, USB, runtime heap/stack, interrupt latency, electrical, thermal or engine qualification. CMake macro absence is not used as evidence."
+}
+{
+  "environment": "compact_a3_web",
+  "elf_sha256": "aafc85f812352ef2396468497098175a8cd4c7807ecdfb86ef0d30626a13da90",
+  "binary_sha256": "bea8ac0836218be890db0feb72c234ef4fb83cc1423f47cbf59b421dd8e318b8",
+  "sdkconfig_sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c",
+  "exclusive_usb": true,
+  "console": "UART0 only",
+  "project_driver_source": "firmware/components/esp_driver_usb_serial_jtag/src/usb_serial_jtag.c",
+  "project_driver_sha256": "6316295b4776a662f0feea6117eab665877d7587f4bd5dce8d64ac1dd6cf0670",
+  "sdk_original_retained": true,
+  "usb_isr_symbol": "42039018 l     F .flash.text\t000001a6 usb_serial_jtag_isr_handler_default",
+  "usb_isr_cache_safe": false,
+  "usb_isr_flags": 0,
+  "source_budgets": {
+    "rx_ring_bytes": 1024,
+    "tx_ring_bytes": 1024,
+    "read_slice_bytes": 64,
+    "task_stack_bytes": 12288,
+    "task_cpu": 0,
+    "task_priority": 1,
+    "mandatory_yield_ticks": 1,
+    "send_retry_budget_us": 2000
+  },
+  "qualification": "Static ELF/config/source checks only. USB ISR can pause during flash work. Runtime stack/heap, boot/panic traffic, enumeration, driver RX drops, sustained load and physical timing remain unmeasured."
+}

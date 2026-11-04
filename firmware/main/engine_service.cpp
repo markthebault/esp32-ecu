@@ -3,6 +3,7 @@
 #include "ecu/engine_binding.hpp"
 #include "ecu/engine_storage.hpp"
 #include "ecu/engine_target.hpp"
+#include "ecu/switch_service.hpp"
 #include "ecu/idle_command.hpp"
 #include "ecu/engine_data_json.hpp"
 #include "ecu/heap_object.hpp"
@@ -47,6 +48,13 @@ void init(){
  }
  if(result==engine_storage::Load::Migrated)ESP_LOGI("ecu_engine","Legacy engine tune copied to dedicated blob partition; old record retained");
  if(!storage_ok)ESP_LOGE("ecu_engine","Engine storage unavailable or invalid (%s); no application erase requested, defaults shadow-only",esp_err_to_name(error));
+}
+bool switch_requirements(std::uint8_t&mask){
+ if(!mutex||xSemaphoreTake(mutex,0)!=pdTRUE)return false;
+ std::uint8_t requested=0;
+ for(const auto*rule:{&active.secondary_tables.fuel,&active.secondary_tables.spark})
+  if(rule->mode==secondary::Mode::Input)requested|=1U<<rule->input_channel;
+ mask=requested;xSemaphoreGive(mutex);return true;
 }
 bool observe(const web::Sample&s,const config::Config&c,std::uint64_t now,std::uint64_t sampled,engine::RuntimeSample& published){
  if(!mutex||xSemaphoreTake(mutex,0)!=pdTRUE)return false;
@@ -151,6 +159,7 @@ tuning::Result tuning_commit(const engine::Tune&candidate,std::uint32_t&saved_re
 cJSON* snapshot(){
  xSemaphoreTake(mutex,portMAX_DELAY);const auto output=latest;const auto revision=active.revision;const auto strategy=active.strategy;const bool stored=storage_ok;const auto sample_stamp=stamp;const auto* reason=binding;const auto* storage_message=storage_reason;xSemaphoreGive(mutex);
  auto*j=engine::output_json(output);if(!j)return nullptr;if(!cJSON_AddStringToObject(j,"error",stored?"":storage_message)){cJSON_Delete(j);return nullptr;}const auto now=engine_target::clock_us();cJSON_AddNumberToObject(j,"revision",revision);cJSON_AddBoolToObject(j,"storage_ok",stored);cJSON_AddStringToObject(j,"binding",reason);cJSON_AddNumberToObject(j,"sample_age_ms",sample_stamp&&now>=sample_stamp?(now-sample_stamp)/1000.0:-1);cJSON_AddBoolToObject(j,"simulator",false);cJSON_AddBoolToObject(j,"fresh",sample_stamp&&now>=sample_stamp&&now-sample_stamp<50000);auto*timing=engine_target::snapshot();if(!timing||!cJSON_AddItemToObject(j,"timing",timing)){cJSON_Delete(timing);cJSON_Delete(j);return nullptr;}
+ auto*switches=switch_service::snapshot();if(!switches||!cJSON_AddItemToObject(j,"switch_accessory",switches)){cJSON_Delete(switches);cJSON_Delete(j);return nullptr;}
  cJSON_AddStringToObject(j,"active_strategy",engine::strategy_name(strategy));
  const auto phase=engine_target::measurement();cJSON_AddBoolToObject(j,"crank_synced",phase.synced);cJSON_AddBoolToObject(j,"phase_synced",phase.phase_synced);cJSON_AddBoolToObject(j,"phase_required",phase.phase_required);
  cJSON_AddStringToObject(j,"phase_reason",engine::PhaseDecoder::reason_name(phase.phase_reason));cJSON_AddNumberToObject(j,"phase_losses",phase.phase_losses);cJSON_AddNumberToObject(j,"cam_rejected",phase.cam_rejected);cJSON_AddNumberToObject(j,"cam_error_deg",phase.cam_error_deg);return j;

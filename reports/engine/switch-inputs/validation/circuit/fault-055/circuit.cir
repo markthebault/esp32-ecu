@@ -1,0 +1,67 @@
+SW2-J4-DRAFT1 conditional experiment fault-055
+* Generic assumed models, not manufacturer guarantees or actual unpowered IC behavior.
+.options reltol=1e-5 abstol=1e-11 vntol=1e-7 method=gear
+.temp -20
+.model QASSUMED NPN(IS=1e-14 BF=40 NF=1 VAF=75 IKF=.05 ISE=1e-14 NE=1.3 BR=4 CJE=4p CJC=3p TF=.3n TR=100n)
+.model DASSUMED D(IS=1e-9 N=1.8 RS=2 CJO=2p TT=4n)
+.model CONTACT SW(RON=.1 ROFF=1e12 VT=.5 VH=.3)
+Vsupply source 0 0
+Rwire source rail 1000000000000.0
+Rbleeder rail 0 1000
+Cbulk rail 0 10u
+Cchip rail 0 100n
+Creset_supply rail 0 100n
+Ichip rail 0 0
+Rreset rail resetn 100000
+Ireset_leak resetn 0 100n
+* Idealized supervisor static behavior ONLY. No ramp/delay/leakage guarantee.
+Breset resetn 0 I=ternary_fcn(v(rail)<2.93,v(resetn)/10,0)
+Vbus bus_source 0 3.3
+Rcarrier_sda bus_source bus_sda 4700
+Rseries_sda bus_sda sda 100
+Dhi_sda sda rail DASSUMED
+Dlo_sda 0 sda DASSUMED
+Rcarrier_scl bus_source bus_scl 4700
+Rseries_scl bus_scl scl 100
+Dhi_scl scl rail DASSUMED
+Dlo_scl 0 scl DASSUMED
+Dfeed0 rail bias0 DASSUMED
+Rbias0 bias0 sw0 2200
+RinA0 sw0 mid0 4990
+RinB0 mid0 base0 4990
+Rbe0 base0 0 100000
+Dbe0 0 base0 DASSUMED
+Qinput0 col0 base0 0 QASSUMED
+Rcol0 rail col0 4700
+Ccol0 col0 0 10n
+Riso0 col0 gp0 1000
+Dgphi0 gp0 rail DASSUMED
+Dgplo0 0 gp0 DASSUMED
+Igp0 gp0 0 -1u
+Vfault0 external0 0 -18
+Rfault0 external0 sw0 1
+Dfeed1 rail bias1 DASSUMED
+Rbias1 bias1 sw1 2200
+RinA1 sw1 mid1 4990
+RinB1 mid1 base1 4990
+Rbe1 base1 0 100000
+Dbe1 0 base1 DASSUMED
+Qinput1 col1 base1 0 QASSUMED
+Rcol1 rail col1 4700
+Ccol1 col1 0 10n
+Riso1 col1 gp1 1000
+Dgphi1 gp1 rail DASSUMED
+Dgplo1 0 gp1 DASSUMED
+Igp1 gp1 0 1u
+Vfault1 external1 0 -18
+Rfault1 external1 sw1 1
+Rloop rail loop 1000
+Rloop_bias loop 0 100000
+.control
+set wr_singlescale
+set wr_vecnames
+op
+wrdata values.txt v(rail) v(sw0) v(sw1) v(base0) v(base1) v(col0) v(col1) v(gp0) v(gp1) v(bias0) v(bias1) v(resetn) i(Vsupply) i(Vbus)
+quit
+.endc
+.end

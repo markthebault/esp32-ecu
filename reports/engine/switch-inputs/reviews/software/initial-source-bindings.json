@@ -1,0 +1,276 @@
+{
+  "scope": "Initial implementation review, not final acceptance; concurrent root edits expected",
+  "head": "b0c39a9daf3334f9ddec0e181ade62aecb10e2f9",
+  "sources": [
+    {
+      "path": "firmware/include/ecu/capture_clock.hpp",
+      "bytes": 2211,
+      "sha256": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d"
+    },
+    {
+      "path": "firmware/include/ecu/config.hpp",
+      "bytes": 3939,
+      "sha256": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39"
+    },
+    {
+      "path": "firmware/include/ecu/control.hpp",
+      "bytes": 10954,
+      "sha256": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b"
+    },
+    {
+      "path": "firmware/include/ecu/engine.hpp",
+      "bytes": 27998,
+      "sha256": "92f57e82305b4db6fb098523a1951bff4e014cab0a1fa202bb9629e476db494c"
+    },
+    {
+      "path": "firmware/include/ecu/engine_binding.hpp",
+      "bytes": 3197,
+      "sha256": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9"
+    },
+    {
+      "path": "firmware/include/ecu/engine_data.hpp",
+      "bytes": 6200,
+      "sha256": "962f0cb52eeb864fe904423eda84ebbb51c757a6382a53f7686812fe0aa499e3"
+    },
+    {
+      "path": "firmware/include/ecu/engine_data_json.hpp",
+      "bytes": 8136,
+      "sha256": "4c944171485bd95f8ac4f82d5d699b32c6824a5e5287b0cb64909205f0907776"
+    },
+    {
+      "path": "firmware/include/ecu/engine_json.hpp",
+      "bytes": 19194,
+      "sha256": "b579bd896c4672f6d6c7d299c6d316a9989324d6637461415b0c940efb73047d"
+    },
+    {
+      "path": "firmware/include/ecu/engine_limits.hpp",
+      "bytes": 107,
+      "sha256": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d"
+    },
+    {
+      "path": "firmware/include/ecu/engine_log.hpp",
+      "bytes": 5430,
+      "sha256": "a7ba2b5b2aaa62cb2e36e3239106991b657ecdf3ae72ecd3b43bb02ab653b30f"
+    },
+    {
+      "path": "firmware/include/ecu/engine_log_json.hpp",
+      "bytes": 3996,
+      "sha256": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6"
+    },
+    {
+      "path": "firmware/include/ecu/engine_log_msl.hpp",
+      "bytes": 9217,
+      "sha256": "a8aeff99b935c51ff1042dc04847937a73dce59c6c8b01900f521d89c521a359"
+    },
+    {
+      "path": "firmware/include/ecu/engine_log_service.hpp",
+      "bytes": 754,
+      "sha256": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f"
+    },
+    {
+      "path": "firmware/include/ecu/engine_phase.hpp",
+      "bytes": 8547,
+      "sha256": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27"
+    },
+    {
+      "path": "firmware/include/ecu/engine_radio.hpp",
+      "bytes": 8441,
+      "sha256": "70413d02362a1f5f960bbdc76bf1e789befca72e47a93887effd006b522b7758"
+    },
+    {
+      "path": "firmware/include/ecu/engine_scheduler.hpp",
+      "bytes": 10251,
+      "sha256": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a"
+    },
+    {
+      "path": "firmware/include/ecu/engine_service.hpp",
+      "bytes": 976,
+      "sha256": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0"
+    },
+    {
+      "path": "firmware/include/ecu/engine_storage.hpp",
+      "bytes": 3104,
+      "sha256": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e"
+    },
+    {
+      "path": "firmware/include/ecu/engine_target.hpp",
+      "bytes": 1373,
+      "sha256": "0cfcef7fa43cadaf105da094a4524aded50dcff0f88ddb6449799155e63b25b0"
+    },
+    {
+      "path": "firmware/include/ecu/engine_tuning.hpp",
+      "bytes": 120,
+      "sha256": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6"
+    },
+    {
+      "path": "firmware/include/ecu/espnow.hpp",
+      "bytes": 336,
+      "sha256": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc"
+    },
+    {
+      "path": "firmware/include/ecu/espnow_protocol.hpp",
+      "bytes": 2749,
+      "sha256": "634bd5a99ddd8c682a20959720f5599a0e39f20c25d8cadf4b3e8024eca25b6a"
+    },
+    {
+      "path": "firmware/include/ecu/heap_object.hpp",
+      "bytes": 540,
+      "sha256": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51"
+    },
+    {
+      "path": "firmware/include/ecu/idle_command.hpp",
+      "bytes": 1489,
+      "sha256": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310"
+    },
+    {
+      "path": "firmware/include/ecu/idle_control.hpp",
+      "bytes": 10973,
+      "sha256": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd"
+    },
+    {
+      "path": "firmware/include/ecu/idle_hardware.hpp",
+      "bytes": 616,
+      "sha256": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+    },
+    {
+      "path": "firmware/include/ecu/idle_pwm.hpp",
+      "bytes": 6460,
+      "sha256": "392ef3640df5e3ea64c465df7a6815c2272ead28570626bc9540aab8b58a8c42"
+    },
+    {
+      "path": "firmware/include/ecu/idle_pwm_json.hpp",
+      "bytes": 1434,
+      "sha256": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b"
+    },
+    {
+      "path": "firmware/include/ecu/json.hpp",
+      "bytes": 2130,
+      "sha256": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247"
+    },
+    {
+      "path": "firmware/include/ecu/load_json.hpp",
+      "bytes": 8013,
+      "sha256": "04048aac889a77b29beac77ba4d43b93694fe61a23a089bb2e09d87ec72de218"
+    },
+    {
+      "path": "firmware/include/ecu/load_model.hpp",
+      "bytes": 11563,
+      "sha256": "4ebcebe554ebf29f4dc7db29a8a51302d3ebbc8647ba9f73d5278ef85503074b"
+    },
+    {
+      "path": "firmware/include/ecu/pins.hpp",
+      "bytes": 1139,
+      "sha256": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad"
+    },
+    {
+      "path": "firmware/include/ecu/realtime.hpp",
+      "bytes": 387,
+      "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+    },
+    {
+      "path": "firmware/include/ecu/secondary_json.hpp",
+      "bytes": 11768,
+      "sha256": "54653a90fdbadeeebe926980bacbb25e54b6f61f93e83d4b97be5bf260a4c497"
+    },
+    {
+      "path": "firmware/include/ecu/secondary_tables.hpp",
+      "bytes": 15777,
+      "sha256": "085d414ac3bee096170638b95815f949f155d427f5e985b3b70f71287a71c561"
+    },
+    {
+      "path": "firmware/include/ecu/switch_acquisition.hpp",
+      "bytes": 9100,
+      "sha256": "7744fbee4852d7c4ecb1045c1af0688eef314ac58cee0fb086c197d5146ea842"
+    },
+    {
+      "path": "firmware/include/ecu/switch_service.hpp",
+      "bytes": 416,
+      "sha256": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e"
+    },
+    {
+      "path": "firmware/include/ecu/switch_transport.hpp",
+      "bytes": 2438,
+      "sha256": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932"
+    },
+    {
+      "path": "firmware/include/ecu/timing_executor.hpp",
+      "bytes": 15308,
+      "sha256": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db"
+    },
+    {
+      "path": "firmware/include/ecu/transient_enrichment.hpp",
+      "bytes": 11886,
+      "sha256": "75250d519305aa604ebefb4a177ec64cf2c38d14a3d31f60e99cc88322052911"
+    },
+    {
+      "path": "firmware/include/ecu/transient_json.hpp",
+      "bytes": 3294,
+      "sha256": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88"
+    },
+    {
+      "path": "firmware/include/ecu/trigger_log.hpp",
+      "bytes": 2952,
+      "sha256": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451"
+    },
+    {
+      "path": "firmware/include/ecu/trigger_log_json.hpp",
+      "bytes": 4155,
+      "sha256": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58"
+    },
+    {
+      "path": "firmware/include/ecu/tuning_document.hpp",
+      "bytes": 5896,
+      "sha256": "a89fb02ba3cc9accf31effda1b777df321f8628d7fb87195f6311fa0d6b4b3a3"
+    },
+    {
+      "path": "firmware/include/ecu/tuning_layout.hpp",
+      "bytes": 24728,
+      "sha256": "bff9eff532e74de816af855e663991ca460e78807c16581b9821297b252b9e16"
+    },
+    {
+      "path": "firmware/include/ecu/tuning_live.hpp",
+      "bytes": 5059,
+      "sha256": "182f5fb61f697f8b1e6444b88b06dbb368f73d3c5e02e6cf4c4534085d74df1b"
+    },
+    {
+      "path": "firmware/include/ecu/tuning_session.hpp",
+      "bytes": 7958,
+      "sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e"
+    },
+    {
+      "path": "firmware/include/ecu/tuning_stream.hpp",
+      "bytes": 3028,
+      "sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042"
+    },
+    {
+      "path": "firmware/include/ecu/web_config.hpp",
+      "bytes": 1050,
+      "sha256": "984d5447a6f07e626987819d2338489aa25004a15b529c460c29bde497e7a019"
+    },
+    {
+      "path": "firmware/main/switch_service.cpp",
+      "bytes": 6113,
+      "sha256": "813f488d127fb25dd3c2287b7bc53968dc9c5e821050159fbe2978e590aed25a"
+    },
+    {
+      "path": "firmware/main/app.cpp",
+      "bytes": 12967,
+      "sha256": "487d5e03a964f686939dcb46a148a91c02e516678cfd6c7d342ec0ba269ce9e6"
+    },
+    {
+      "path": "firmware/main/engine_service.cpp",
+      "bytes": 13414,
+      "sha256": "dfc0dce8066385f66da66224c194e2446d121c1f90ea9d83117c6547330083b4"
+    },
+    {
+      "path": "firmware/main/CMakeLists.txt",
+      "bytes": 495,
+      "sha256": "2b6bde9fd593ea127fd647020cd70915627d26074634d9e8e581b72ae00c8269"
+    },
+    {
+      "path": "firmware/tests/switch_acquisition_test.cpp",
+      "bytes": 9560,
+      "sha256": "c26b3e8de9da0a5f8ff13b266a983782dba487f0fc93b25b500aad54dae4035e"
+    }
+  ]
+}

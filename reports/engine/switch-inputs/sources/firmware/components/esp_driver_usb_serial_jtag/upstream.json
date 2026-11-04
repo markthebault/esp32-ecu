@@ -1,0 +1,19 @@
+{
+  "upstream": "Espressif ESP-IDF5.5.0, PlatformIOframework3.50500.0",
+  "source_directory": "components/esp_driver_usb_serial_jtag",
+  "license": "Apache-2.0; upstream SPDX notices retained",
+  "original_sha256": {
+    "CMakeLists.txt": "854d00de5fe0f3d271b4d7c86ea9920f6234e074b6386c3b7acc23d3ce580613",
+    "Kconfig": "8ef250dc1ab81bb2646a21234a6184945a8a4baa024473a30198c4b237f128ea",
+    "include/driver/esp_private/usb_serial_jtag_vfs.h": "6bd0d7bbd68bb0bcf854836afdbbf11c1ba7b34e1d71e2e041b8c618ea352577",
+    "include/driver/usb_serial_jtag.h": "88e03e1650895708da6844ab0c1409bc717ac3c0e775cef2e3e3531e67558b50",
+    "include/driver/usb_serial_jtag_select.h": "e633508e776ce690f7d4c758b5feaa3f71223b6add612138899e010ffa3853c8",
+    "include/driver/usb_serial_jtag_vfs.h": "844aff0b95770b7a961ade36cadefaa1ad56714f4ef3fdf7580617875965ae1c",
+    "linker.lf": "962c75077a584c3fc31be99ee40680ca1f748f193e473737fb09e8d4989816fe",
+    "src/usb_serial_jtag.c": "ebec8c2a96870ebe0dd0554534820cb539ccf40e1468c1b72ff255642aa71c60",
+    "src/usb_serial_jtag_connection_monitor.c": "58779a75668f9d253a7f0ea0c8a7bbb194204a41b8979b98b7261c1954c5d29d",
+    "src/usb_serial_jtag_vfs.c": "0d333e9a6bf94cd58e1abdcfc63a34b14fb0c6696ce1772835f20f9411b968d7"
+  },
+  "patch": "Check allocated TX ring rather than RX ring after TX allocation; no other upstream source changes.",
+  "patched_source_sha256": "6316295b4776a662f0feea6117eab665877d7587f4bd5dce8d64ac1dd6cf0670"
+}
