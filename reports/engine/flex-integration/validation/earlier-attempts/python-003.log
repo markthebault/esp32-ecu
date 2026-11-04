@@ -1,0 +1,40 @@
+..........................................................F.............................................F....F....
+======================================================================
+FAIL: test_zero_decel_and_adder_observations_preserve_dose_and_log_fields (test_transient.TransientTests.test_zero_decel_and_adder_observations_preserve_dose_and_log_fields)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_transient.py", line 104, in test_zero_decel_and_adder_observations_preserve_dose_and_log_fields
+    rows=list(csv.reader(io.StringIO(recorder.msl(1)),delimiter='\t'));self.assertEqual([len(row) for row in rows[2:]],[188]*4)
+                                                                       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [229, 229, 229, 229] != [188, 188, 188, 188]
+
+First differing element 0:
+229
+188
+
+- [229, 229, 229, 229]
++ [188, 188, 188, 188]
+
+======================================================================
+FAIL: test_identity_gates_new_mode_and_retains_old005_idle_values (test_engine_semi.SemiTests.test_identity_gates_new_mode_and_retains_old005_idle_values)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_engine_semi.py", line 134, in test_identity_gates_new_mode_and_retains_old005_idle_values
+    self.assertEqual(old['schema_version'],8);self.assertEqual(old['idle_control']['frequency_hz'],90)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 9 != 8
+
+======================================================================
+FAIL: test_schema4_preserves_stored_bytes_revision_idle_and_trims_until_save (test_engine_semi.SemiTests.test_schema4_preserves_stored_bytes_revision_idle_and_trims_until_save)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_engine_semi.py", line 125, in test_schema4_preserves_stored_bytes_revision_idle_and_trims_until_save
+    expected=copy.deepcopy(old);expected['schema_version']=8;expected['secondary_tables']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['secondary_tables']);expected['load_model']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['load_model']);expected['transient_enrichment']=copy.deepcopy(semi_tune()['transient_enrichment']);self.assertEqual(store.tune,expected)
+                                                                                                                                                                                                                                                                                                                                                                                         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'schema_version': 9, 'revision': 37, 'strategy': 'sequentia[10515 chars]0]}}} != {'schema_version': 8, 'revision': 37, 'strategy': 'sequentia[10071 chars]50]}}
+Diff is 77076 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 114 tests in 23.256s
+
+FAILED (failures=3)

@@ -1,0 +1,26 @@
+{
+  "command": [
+    "g++",
+    "-std=c++17",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-pedantic",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-003/firmware/include",
+    "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/cjson-owned",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/runtime-flags-003.cpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/cjson-owned/cJSON.o",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/runtime-flags-003"
+  ],
+  "source_sha256": "f763aafcdfa24c06cbab250116ac9ae01ce97ec5705d0f1f5c7cd62434354995",
+  "stdout": "source2_value_qualified_without_raw accepted=1\ntarget_qualified_unconfirmed accepted=1\nenabled_but_not_required accepted=1\nvalue_only_tagged_ready accepted=1\n",
+  "stderr": "",
+  "returncode": 0,
+  "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/gcov",
+  "GCOV_PREFIX_STRIP": "0"
+}

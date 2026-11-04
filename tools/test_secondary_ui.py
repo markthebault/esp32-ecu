@@ -16,7 +16,7 @@ async def check(url,device,out):
   try:
    page=await browser.new_page(viewport={'width':1440,'height':1100});page.on('pageerror',lambda e:errors.append(str(e)))
    await page.goto(url);await page.locator('[data-page="engine"]').click();await page.locator('#sec-fuel-mode').wait_for()
-   initial=copy.deepcopy(device.engine.tune);assert initial['schema_version']==8
+   initial=copy.deepcopy(device.engine.tune);assert initial['schema_version']==9
    await page.locator('#sec-fuel-mode').select_option('multiply');await page.locator('#engine-save').click()
    await page.locator('#toast').filter(has_text='cell meaning').wait_for();assert device.engine.tune==initial
    await page.locator('#sec-fuel-source').select_option('tps');assert await page.evaluate('engineTune.secondary_tables.fuel.map')==initial['secondary_tables']['fuel']['map']
@@ -35,11 +35,11 @@ async def check(url,device,out):
    await page.locator('#engine-save').click();await page.locator('#engine-save-state').filter(has_text='Revision 3').wait_for()
    saved=copy.deepcopy(device.engine.tune);assert saved['secondary_tables']['spark']['cells']=='adder' and saved['secondary_tables']['spark']['map']['cells'][0]==-2.5
    async with page.expect_download() as d:await page.locator('#engine-msq').click()
-   file=out/'secondary-browser009.msq';await (await d.value).save_as(file);assert 'DEV 009' in file.read_text() and pages(import_msq(file.read_bytes()))==pages(saved)
+   file=out/'secondary-browser009.msq';await (await d.value).save_as(file);assert 'DEV 010' in file.read_text() and pages(import_msq(file.read_bytes()))==pages(saved)
    units=lambda text:{e.get('name'):e.get('units') for e in ET.fromstring(text).iter() if e.tag.endswith('}constant') and e.get('name','').startswith('secondary_')}
    assert units(file.read_text())==units(export_msq(saved)) and units(file.read_text())['secondary_spark_mapTable']=='deg delta'
    imported=await page.evaluate('text=>engineFromMsq(text,engineTune)',file.read_text());assert pages(imported)==pages(saved)
-   checks.append('Independent spark additive units and signed cell edits survive8192-byte own009 browser/native MSQ roundtrip')
+   checks.append('Independent spark additive units and signed cell edits survive8192-byte own010 browser/native MSQ roundtrip')
    application=R/'tuning/examples/tunerstudio-secondary-roundtrip.msq';await page.locator('#engine-import-file').set_input_files(application)
    await page.locator('#engine-save-state').filter(has_text='Imported edits').wait_for()
    current=await page.evaluate('engineTune');assert pages(current)==pages(import_msq(application.read_bytes(),base_revision=3)) and device.engine.tune==saved
@@ -47,10 +47,10 @@ async def check(url,device,out):
    checks.append('Actual TunerStudio own009 file imports both edited rules/maps without publishing or rebasing the editor')
    application=R/'tuning/examples/tunerstudio-load-roundtrip.msq';await page.locator('#engine-import-file').set_input_files(application)
    await page.locator('#engine-save-state').filter(has_text='Imported edits').wait_for()
-   current=await page.evaluate('engineTune');assert current['schema_version']==8 and current['load_model']['afr']=='measured' and current['load_model']['fixed_baro_kpa']==99.5 and all(r['mode']=='off' for r in current['secondary_tables'].values())
+   current=await page.evaluate('engineTune');assert current['schema_version']==9 and current['load_model']['afr']=='measured' and current['load_model']['fixed_baro_kpa']==99.5 and all(r['mode']=='off' for r in current['secondary_tables'].values())
    assert pages(current)==pages(import_msq(application.read_bytes(),base_revision=3)) and device.engine.tune==saved
    old=json.loads((R/'config/engine/defaults-v7.json').read_text());old['revision']=3;old['maps']['ve']['cells'][0]=0
-   candidate=await page.evaluate('value=>upgradeLegacyEngine(value,engineTune)',old);assert candidate['schema_version']==8 and candidate['maps']['ve']['cells'][0]==0 and candidate['load_model']==old['load_model']
+   candidate=await page.evaluate('value=>upgradeLegacyEngine(value,engineTune)',old);assert candidate['schema_version']==9 and candidate['maps']['ve']['cells'][0]==0 and candidate['load_model']==old['load_model']
    old6=json.loads((R/'config/engine/defaults-v6.json').read_text());old6['maps']['ve']['cells'][0]=0
    assert await page.evaluate('value=>{try{upgradeLegacyEngine(value,engineTune);return false}catch{return true}}',old6)
    checks.append('Actual own008 file retains load/AFR calibration and migrates secondaryOff; JSON7 keeps zero coefficient while older bounds remain enforced; imports do not publish')
@@ -77,9 +77,9 @@ async def check(url,device,out):
    result=await page.evaluate('''({h,q})=>{const logger=window.EcuEngineLogger,bad=[];
     for(const [key,value]of [['threshold',null],['debounce_ms',null],['threshold','3000'],['input_observed_us','18446744073709551616'],['mode_code',5],['flags',0],['unexpected',0]]){logger.adopt(h);const p=structuredClone(q);p.records.at(-1).sample.secondary_tables.fuel[key]=value;try{logger.acceptPage(p);bad.push(false)}catch{bad.push(logger.inspect().rows===0&&logger.inspect().cursor===0)}}
     logger.adopt(h);logger.acceptPage(q);return {bad,msl:logger.exportMsl()};}''',dict(h=h,q=q))
-   assert all(result['bad']);a=list(csv.reader(io.StringIO(native),delimiter='\t'));b=list(csv.reader(io.StringIO(result['msl']),delimiter='\t'));assert a[2:]==b[2:] and len(b[2])==188
+   assert all(result['bad']);a=list(csv.reader(io.StringIO(native),delimiter='\t'));b=list(csv.reader(io.StringIO(result['msl']),delimiter='\t'));assert a[2:]==b[2:] and len(b[2])==229
    (out/'native006.msl').write_text(native);(out/'browser006.msl').write_text(result['msl'])
-   checks.append('Native/browser188-field MSL006 agree, including future invalid raw timestamp; malformed secondary metadata rejects atomically before cursor publication')
+   checks.append('Native/browser229-field MSL007 agree, including future invalid raw timestamp; malformed secondary metadata rejects atomically before cursor publication')
    # DOM fixtures exercise target rendering; they are not target measurements.
    assert device.engine.status()['switch_accessory']['source']=='host_no_target_i2c'
    probe=await page.evaluate('''()=>{const root=document.querySelector('#engine-secondary-panel'),render=e=>{EcuSecondaryTables.status(root,e);return root.querySelector('#switch-accessory-status').textContent};

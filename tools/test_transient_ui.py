@@ -26,10 +26,10 @@ async def check(url,device,out):
     for i,value in enumerate((0,2,4,6)):
      field=page.locator(f'[data-ae-array="{prefix}_added_pct"][data-ae-index="{i}"]');await field.fill(str(value));await field.dispatch_event('change')
    await page.locator('#engine-save').click();await page.locator('#engine-save-state').filter(has_text='Revision 2').wait_for()
-   saved=copy.deepcopy(device.engine.tune);assert saved['schema_version']==8 and saved['transient_enrichment']['duration_ms']==120
+   saved=copy.deepcopy(device.engine.tune);assert saved['schema_version']==9 and saved['transient_enrichment']['duration_ms']==120
    checks.append('Default legacy behavior retained; unsaved new mode differs from active; blank value rejects; explicit Save publishes full schema8 tune')
    async with page.expect_download() as d:await page.locator('#engine-msq').click()
-   path=out/'transient-browser.msq';await (await d.value).save_as(path);assert import_msq(path.read_bytes())==saved and 'DEV 009' in path.read_text()
+   path=out/'transient-browser.msq';await (await d.value).save_as(path);assert import_msq(path.read_bytes())==saved and 'DEV 010' in path.read_text()
    current=await page.evaluate('text=>engineFromMsq(text,engineTune)',path.read_text());assert current==saved
    checks.append('Browser own009 MSQ and native importer preserve complete transient curves and application settings')
    axis=page.locator('[data-ae-array="tps_rates"][data-ae-index="1"]');await axis.fill('0');await axis.dispatch_event('change');await page.locator('#engine-save').click()
@@ -38,7 +38,7 @@ async def check(url,device,out):
    for old in sorted((R/'tuning/examples').glob('*.msq')):
     if any(identity in old.read_text() for identity in ('ESP32ECU DEV 007 INHIBITED','ESP32ECU DEV 008 INHIBITED','ESP32ECU DEV 009 INHIBITED')):continue
     value=await page.evaluate('text=>engineFromMsq(text,engineTune)',old.read_text())
-    assert value['schema_version']==8 and value['transient_enrichment']['mode']=='legacy_tps',old.name
+    assert value['schema_version']==9 and value['transient_enrichment']['mode']=='legacy_tps',old.name
    old=json.loads((R/'config/engine/defaults-v5.json').read_text());old['revision']=2;old['settings']['accel_gain']=.007
    await page.locator('#engine-import-file').set_input_files(dict(name='legacy5.json',mimeType='application/json',buffer=json.dumps(old).encode()))
    await page.locator('#engine-save-state').filter(has_text='Imported edits').wait_for()

@@ -1,0 +1,13 @@
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/target_binding_absence_probe.cpp: In function ‘int main()’:
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/target_binding_absence_probe.cpp:18:5: error: ‘struct ecu::engine::Tune’ has no member named ‘secondary_fuel’; did you mean ‘secondary_ve’?
+   18 |   t.secondary_fuel.mode=scenario==2?ecu::secondary::Mode::Conditional:ecu::secondary::Mode::Off;
+      |     ^~~~~~~~~~~~~~
+      |     secondary_ve
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/target_binding_absence_probe.cpp:19:5: error: ‘struct ecu::engine::Tune’ has no member named ‘secondary_fuel’; did you mean ‘secondary_ve’?
+   19 |   t.secondary_fuel.condition=ecu::secondary::Condition::Ethanol;t.secondary_fuel.threshold=40;
+      |     ^~~~~~~~~~~~~~
+      |     secondary_ve
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/target_binding_absence_probe.cpp:19:67: error: ‘struct ecu::engine::Tune’ has no member named ‘secondary_fuel’; did you mean ‘secondary_ve’?
+   19 |   t.secondary_fuel.condition=ecu::secondary::Condition::Ethanol;t.secondary_fuel.threshold=40;
+      |                                                                   ^~~~~~~~~~~~~~
+      |                                                                   secondary_ve

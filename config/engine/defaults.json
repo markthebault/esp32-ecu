@@ -1,5 +1,5 @@
 {
-  "schema_version": 8,
+  "schema_version": 9,
   "revision": 1,
   "strategy": "batch_wasted_4cyl",
   "physical_outputs": "inhibited",
@@ -1950,6 +1950,62 @@
           15
         ]
       }
+    }
+  },
+  "flex_fuel": {
+    "input_confirmed": false,
+    "capture": {
+      "low_hz": 50,
+      "high_hz": 150,
+      "fault_hz": 170,
+      "tolerance_hz": 1,
+      "stale_ms": 250,
+      "filter_ms": 0,
+      "cycles": 8
+    },
+    "correction": {
+      "enabled": false,
+      "temperature_enabled": false,
+      "ethanol_bins": [
+        0,
+        20,
+        40,
+        60,
+        80,
+        100
+      ],
+      "fuel_pct": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ],
+      "spark_deg": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "temperature_c": [
+        -40,
+        0,
+        20,
+        40,
+        80,
+        125
+      ],
+      "temperature_pct": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ]
     }
   }
 }

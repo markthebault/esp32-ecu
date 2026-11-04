@@ -8,14 +8,15 @@
 #include <limits>
 
 namespace ecu { namespace flex {
-enum class Source:std::uint8_t {Unavailable,TargetCapture,Synthetic};
+enum class Source:std::uint8_t {Unavailable,TargetCapture,Synthetic,SyntheticValue};
 enum class Reason:std::uint8_t {
  Disabled,Acquiring,Ready,InvalidConfig,Unavailable,RepeatedLevel,
  TimeReversed,Gap,Glitch,Frequency,SensorFault,PulseWidth,Overflow,
- Stale,Future,SourceChanged,ConfigurationChanged
+ Stale,Future,SourceChanged,ConfigurationChanged,ConfigurationMismatch,
+ Unconfirmed,MalformedSample,RawCaptureRequired,ValueOnly,ClockFault
 };
 inline const char* source_name(Source s){
- switch(s){case Source::Unavailable:return "unavailable";case Source::TargetCapture:return "target_capture";case Source::Synthetic:return "synthetic_edges";default:return "unknown";}
+ switch(s){case Source::Unavailable:return "unavailable";case Source::TargetCapture:return "target_capture";case Source::Synthetic:return "synthetic_edges";case Source::SyntheticValue:return "synthetic_value";default:return "unknown";}
 }
 inline const char* reason_name(Reason r){switch(r){
  case Reason::Disabled:return "disabled";case Reason::Acquiring:return "acquiring";case Reason::Ready:return "ready";
@@ -26,6 +27,9 @@ inline const char* reason_name(Reason r){switch(r){
  case Reason::PulseWidth:return "low_pulse_width_out_of_range";case Reason::Overflow:return "capture_overflow";
  case Reason::Stale:return "stale";case Reason::Future:return "future_edge";
  case Reason::SourceChanged:return "source_changed";case Reason::ConfigurationChanged:return "configuration_changed";
+ case Reason::ConfigurationMismatch:return "capture_configuration_mismatch";case Reason::Unconfirmed:return "protected_input_unconfirmed";
+ case Reason::MalformedSample:return "malformed_capture_sample";case Reason::RawCaptureRequired:return "raw_capture_required";
+ case Reason::ValueOnly:return "synthetic_value_only";case Reason::ClockFault:return "capture_clock_fault";
  default:return "unknown";
 }}
 inline bool range(double v,double low,double high){return std::isfinite(v)&&v>=low&&v<=high;}
@@ -121,6 +125,10 @@ public:
   if(!config_valid_)value_.capture_reason=Reason::InvalidConfig;
  }
  const CaptureConfig&config()const{return config_;}
+ void context_changed(){
+  fault(Reason::ConfigurationChanged);
+  if(value_.config_epoch==std::numeric_limits<std::uint64_t>::max())exhausted_=true;else ++value_.config_epoch;
+ }
  bool configure(const CaptureConfig&config){
   if(same(config_,config))return false;
   config_=config;config_valid_=valid(config);fault(config_valid_?Reason::ConfigurationChanged:Reason::InvalidConfig);
@@ -153,6 +161,9 @@ public:
   rise_seen_=true;rise_us_=now;fall_seen_=false;seeded_=true;
  }
  void overflow(){fault(Reason::Overflow);}
+ // External transport/clock failures are not synthetic edges. The single
+ // owning worker delivers these errors and retains the same fault-ACK fence.
+ void capture_error(Reason reason){fault(reason==Reason::ClockFault||reason==Reason::Unconfirmed||reason==Reason::Overflow?reason:Reason::Unavailable);}
  Observation observe(std::uint64_t now){
   if(query_seen_&&now<query_us_)fault(Reason::TimeReversed);
   else{

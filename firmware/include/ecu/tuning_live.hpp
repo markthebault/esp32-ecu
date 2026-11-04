@@ -45,5 +45,12 @@ inline void live_block(const engine::RuntimeSample&s,std::uint64_t now,std::arra
   for(unsigned code=0;code<6;++code)put_u32(b.data()+offset+40+code*4,codes[code]);
   put_u32(b.data()+offset+64,static_cast<std::uint32_t>(o.input_observed_us));put_u32(b.data()+offset+68,static_cast<std::uint32_t>(o.input_observed_us>>32));
  }
+ const auto&f=s.flex_fuel;const unsigned base=640;
+ for(unsigned n=0;n<10;++n)put_float(b.data()+base+n*4,f.values[n]);
+ put_u32(b.data()+base+40,f.flags);
+ const auto codes=f.codes();for(unsigned n=0;n<7;++n)put_u32(b.data()+base+44+n*4,codes[n]);
+ for(unsigned n=0;n<7;++n){put_u32(b.data()+base+72+n*8,static_cast<std::uint32_t>(f.times[n]));put_u32(b.data()+base+76+n*8,static_cast<std::uint32_t>(f.times[n]>>32));}
+ for(unsigned n=0;n<6;++n)put_float(b.data()+base+128+n*4,f.calibration[n]);
+ put_u32(b.data()+base+152,f.calibration_cycles);
 }
 } // namespace ecu::tuning

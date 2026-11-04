@@ -1,0 +1,359 @@
+{
+  "accepted": true,
+  "open_findings": [],
+  "reviewed_utc": "2026-11-04T19:19:43.941204+00:00",
+  "scope": "Independent source-bound review of development host/controller adapters, schema9/own010 tune/config, UI validation and diagnostics, fixed-gasoline SIL capture evidence, and absent-target-input inhibition. This accepts this bounded development integration only, not feature-complete flex fuel, Speeduino parity, target capture, PCB or vehicle use.",
+  "source_hashes": {
+    "tools/engine_bridge.cpp": "954c42e3eaeebfba08401f6f3e7e7fcb13a604b2339e8f42671d9158efd58e09",
+    "tools/engine_runtime.py": "2ae1aad361a7339b167cf7d1aebd6c4378229b2f02ad640405f539d38e045829",
+    "tools/target_timing_bridge.cpp": "d108f870a8b4c74250d796796cf2a7ea41a5361fc0114f60acf052e2125aa488",
+    "tools/target_runtime.py": "d08296cdb74da69d7ae3000031f1c67f3dccbff5a8a2d3ae34f8798ed19948db",
+    "tools/engine_protocol.py": "88e728992cd4b2c63709ac96f2c294d1549e22dd59c8aa64fb8ac9ebc2997180",
+    "tools/tuning_runtime.py": "cd479cbca510ae3a63db28bd8f634e6e1d33399ab629c4ca06b872bc8fc40da9",
+    "tools/tuning_bridge.cpp": "7603e1a835521844e3d9e0aad31979b28ffa86e0cb26bf4977afd3ae62d5a820",
+    "tools/engine_msq.py": "c297fb8585ddd2d3f9b299ec017cebf0aa92d9024cb4931af050c87fff40dda4",
+    "tools/flex_stimulus.py": "9c3b6f271ba4f7f9976d61cfe9e5feb14fd279dfad62c1b10b1893e2679e97be",
+    "tools/engine_observability_bridge.cpp": "3cd2d6cfda4d927bbb67b0ceb27cbaeb0cc291b6622741d86b315ee92efd0570",
+    "tools/engine_log.py": "90bd232863f2ce622a9c8ee8675298307f47594199dc506f87d15e272b108052",
+    "tools/run_flex_integration_scenarios.py": "7c2dbf64b5c934e2c5580a3f321354d820f798897b3429d323c8bb80443b7bc3",
+    "tools/flex_config.py": "d6ace2e77b6126b5ed428b6cc1b34e227b8b44e131ec61c4db38425643d65067",
+    "tools/engine_observability.py": "ac78c62c0d9ecb796aaeb308a893ab87469376b64bef7f3a51e07b3c31067413",
+    "tools/engine_sil.py": "344b7182710dd80857b1e8e3080f7c20afb409d09b4d68dbbc2303a6ebc07991",
+    "firmware/include/ecu/tuning_layout.hpp": "2dffbc95204918efe2fde6d6ee98438978ddd91d4f49c65bcb7fde70854b62f5",
+    "firmware/include/ecu/tuning_document.hpp": "96e6e5bfde427f5f7d0e4ad8959b4b5db534f31079754cd0118279e17b9ce957",
+    "firmware/include/ecu/tuning_live.hpp": "6d9dc7b328631e20c1e99d513efdebec6b9448532baaab26361f7dc8b4f873e1",
+    "firmware/include/ecu/engine_data.hpp": "1e9773a82c824839fa6d8fee2700840f993305424c7257a9b809cf070d11ada6",
+    "firmware/include/ecu/engine_data_json.hpp": "1928528b4f21dec94bd93df9c492314c07fbcc6daf1e7c6bbe5fa0c88aa911d8",
+    "firmware/include/ecu/engine_log.hpp": "c17b1d3435879e4ac0fcb1b4621b85f58d9975d044952fc0b083284e56e1a4fc",
+    "firmware/include/ecu/engine_log_json.hpp": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6",
+    "firmware/include/ecu/engine_log_msl.hpp": "c44439aa9f3e863bb0c4468f8cfa10912d4f52a32f4a9d32714f483a5a17ef5c",
+    "firmware/include/ecu/engine_radio.hpp": "57197c7776a9195a2df3f006ea4efe7a910a6bf91659fddfab4b5a7f903a57fe",
+    "firmware/include/ecu/engine_binding.hpp": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9",
+    "firmware/include/ecu/web_config.hpp": "984d5447a6f07e626987819d2338489aa25004a15b529c460c29bde497e7a019",
+    "firmware/include/ecu/engine.hpp": "96782e593914078d96b2229c381d7de633c1cf2b676f7c70979b16651ca4d6fa",
+    "firmware/include/ecu/flex_engine.hpp": "a2348897d50e3de0c3c46989fbb75fdf1ccd2dda634cba90ca164ba4b9b533ca",
+    "firmware/include/ecu/flex_fuel.hpp": "6bda00e1df16c9782245e74cabe67f4a4da75420b17e82a7cba80898e4ad2a38",
+    "firmware/include/ecu/flex_json.hpp": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45",
+    "firmware/include/ecu/flex_runtime.hpp": "abacf194ac5d0fc0b0512a351ca988f9aa12fee80adb6a9d73da9f9f2d2aa6f2",
+    "firmware/include/ecu/flex_runtime_json.hpp": "e125f511ad9b9b0e9a2ce8618c11decc6cf25c4a94f81506b7b44de2b606f99f",
+    "firmware/include/ecu/engine_json.hpp": "e2ce934844850c3096db7acd974300521ec414f6d24cce1936f7d526a65eca37",
+    "web/flex_fuel_logic.js": "8e17c972038ff85225b63f41f0975a9f1190e3b248c862a1798680b7eb82c2e2",
+    "web/flex_fuel.js": "c26bfb7a9e8ff60e7defaaa0ded8fc4b816ec8aa785eef669e9c9c8c00b31441",
+    "web/engine_logger.js": "05d6ebfa8c020a6c105b23d13b19f2546331506cfc9c6a11706efc9f2a9ce337",
+    "web/index.html": "837206c0177020a6a97d0ffdbdc597335fea3def7341cb3298176fd517ed995f",
+    "scripts/generate_flex_ui.py": "6266c257872bde6d9ceafd692500f2a8a6a8109dbedfcd268f8312c9ecaf87d0",
+    "scripts/generate_tunerstudio_ini.py": "5e90d1e55f0722909f3e12428c283e1e9008027018d472aa337b4bf62b2ba1c0",
+    "scripts/generate_tuning_wire.py": "f3fd706d0c05cac53d670d7e80b5b9aef755a34633a3b275cb4120f94d28e9f7",
+    "scripts/embed_web.py": "2893e1b9423d066538b8dd9cbcbf4d7bdeccb249751e3da9296073a682b210dc",
+    "config/engine/defaults.json": "abdd064e74ace0c55fa8b2060dcfe4a0f8f4f83b20cac346578bc4f245b1ab24",
+    "config/engine/defaults-v8.json": "98edc81ac7c840d5f83c337dcab06a84a1642bf2ddf82c998b09481f18d434f6",
+    "tuning/esp32-ecu-flex.ini": "883342b5143fc4c1b1d791461458ecc7642cd5f4d7fda9b8ec82ccc94d0ff6d9",
+    "tuning/protocol-layout.json": "997df75586ff9226e65ad8868e4c070b4cea609b217984d03923cdf92126213e",
+    "firmware/main/web_assets.hpp": "372d7e82cf20ed8884e99a82362d8e5d8e78354ffb4caaeb8ce5cc7470e995cd"
+  },
+  "functional_scope": {
+    "paths": [
+      "tools/engine_bridge.cpp",
+      "tools/engine_runtime.py",
+      "tools/target_timing_bridge.cpp",
+      "tools/target_runtime.py",
+      "tools/engine_protocol.py",
+      "tools/tuning_runtime.py",
+      "tools/tuning_bridge.cpp",
+      "tools/engine_msq.py",
+      "tools/flex_stimulus.py",
+      "tools/engine_observability_bridge.cpp",
+      "tools/engine_log.py",
+      "tools/run_flex_integration_scenarios.py",
+      "tools/flex_config.py",
+      "tools/engine_observability.py",
+      "tools/engine_sil.py",
+      "firmware/include/ecu/tuning_layout.hpp",
+      "firmware/include/ecu/tuning_document.hpp",
+      "firmware/include/ecu/tuning_live.hpp",
+      "firmware/include/ecu/engine_data.hpp",
+      "firmware/include/ecu/engine_data_json.hpp",
+      "firmware/include/ecu/engine_log.hpp",
+      "firmware/include/ecu/engine_log_json.hpp",
+      "firmware/include/ecu/engine_log_msl.hpp",
+      "firmware/include/ecu/engine_radio.hpp",
+      "firmware/include/ecu/engine_binding.hpp",
+      "firmware/include/ecu/web_config.hpp",
+      "firmware/include/ecu/engine.hpp",
+      "firmware/include/ecu/flex_engine.hpp",
+      "firmware/include/ecu/flex_fuel.hpp",
+      "firmware/include/ecu/flex_json.hpp",
+      "firmware/include/ecu/flex_runtime.hpp",
+      "firmware/include/ecu/flex_runtime_json.hpp",
+      "firmware/include/ecu/engine_json.hpp",
+      "web/flex_fuel_logic.js",
+      "web/flex_fuel.js",
+      "web/engine_logger.js",
+      "web/index.html",
+      "scripts/generate_flex_ui.py",
+      "scripts/generate_tunerstudio_ini.py",
+      "scripts/generate_tuning_wire.py",
+      "scripts/embed_web.py",
+      "config/engine/defaults.json",
+      "config/engine/defaults-v8.json",
+      "tuning/esp32-ecu-flex.ini",
+      "tuning/protocol-layout.json",
+      "firmware/main/web_assets.hpp"
+    ],
+    "generated_reproducibility_only": [
+      "web/flex_fuel.js",
+      "tuning/esp32-ecu-flex.ini",
+      "tuning/protocol-layout.json",
+      "firmware/main/web_assets.hpp"
+    ],
+    "note": "The complete346-file freeze inventory is provenance, not blanket review/acceptance of every frozen file. Current docs and tuning/README.md were being edited by parent and are excluded from frozen functional acceptance. Generated assets reproduce bytes; unrelated embedded UI behavior is not newly accepted."
+  },
+  "owned_freezes": {
+    "host-freeze-001": {
+      "manifest": "host-freeze-001/freeze-manifest.json",
+      "sha256": "80178c30f9561bfffa0913655bd31c4317ff0e0d50a729dc36e2f92e9857f352",
+      "files": 346
+    },
+    "host-freeze-002": {
+      "manifest": "host-freeze-002/freeze-manifest.json",
+      "sha256": "8fc7d3f1a28608f663be8e0015c70efc8574cbcab4d20e6382a7c11c95a73ea3",
+      "files": 346
+    },
+    "host-freeze-003": {
+      "manifest": "host-freeze-003/freeze-manifest.json",
+      "sha256": "d030540f7cfda9a226c90459fb96f825eca092ea8c0efe98e84a61ca7b151225",
+      "files": 346
+    }
+  },
+  "previous_kernel_review": {
+    "path": "kernel-independent-review.json",
+    "sha256": "f7b5a71be542b9ec852820231f15827fc5eefaacba27477393fa3820803fbc18",
+    "accepted": true,
+    "all8_bound_sources_still_match_live": true,
+    "exact_Off_baseline": {
+      "accepted": true,
+      "baseline_commit": "8c589a4b99c4cbabb44586ba6a1266cbec3cef6b",
+      "profiles": 144,
+      "stateful_rows": 14400,
+      "output_bytes": 12271007,
+      "baseline_and_final_sha256": "5825b992bb99148fc851c8656e164edde7a54b22cc98d8f8803258df4de6da92",
+      "float_comparison": "Exact binary64 bit patterns plus state/fault/cut/channel/selected diagnostic values, not an epsilon comparison",
+      "covered": [
+        "three strategies",
+        "four transient modes and both application modes",
+        "all secondary modes plus explicit host value-only ETH condition",
+        "crank/run/overrun/limiter/recovery",
+        "trimmed channels",
+        "invalid/stale/future/temperature/battery cases"
+      ],
+      "result": "off-retention-results-005.json"
+    }
+  },
+  "closed_findings": [
+    {
+      "finding": "UI allowed fuel-temperature enabled while flex correction disabled",
+      "closure": "Live configuration validation rejects dependency violation; native/JS differential agrees."
+    },
+    {
+      "finding": "UI Math.fround coercion accepted boolean/string/null numeric calibration values",
+      "closure": "Original Number types checked for capture scalars and all curve elements before F32 conversion; integer cycles checked before rounding.80 config mutations agree with native."
+    },
+    {
+      "finding": "Explicit dropout_at_s:null passed early validation then raised TypeError",
+      "closure": "Present null now yields ValueError; absent field remains optional. Valid stimulus output unchanged."
+    },
+    {
+      "finding": "Browser accepted invalid available calibration",
+      "closure": "Available record checks capture calibration using neutral disabled correction configuration; native/browser negative-case rejection agrees."
+    },
+    {
+      "finding": "Browser accepted fractional read_age_ms",
+      "closure": "Integer age now required, matching native parse_record."
+    },
+    {
+      "finding": "Browser accepted required control allowed without qualified value",
+      "closure": "required && control_ok now requires value qualification plus enabled correction validity, matching native parse_record."
+    }
+  ],
+  "independent_validation": {
+    "focused_parent_tests": {
+      "tests": 24,
+      "result": "pass",
+      "record": "host-unit-tests-002.json",
+      "source_root": "host-freeze-002",
+      "reason_not_repeated": "Final freeze003 changes only JS/generated UI assets, descriptive UI test source, and tuning README. Native adapter/runtime/headers and the24 executed tests are byte-identical."
+    },
+    "independent_host": {
+      "checks": 389,
+      "result": "pass",
+      "record": "host-adversarial-003.json",
+      "source_root": "host-freeze-002",
+      "coverage": [
+        "Both native adapters retain stored producer revision when Python metadata is mutated",
+        "Malformed raw/scalar input does not consume pending fault ticket",
+        "Both adapters publish a completed invalid control observation before ACK; next evaluation sees cleared ticket",
+        "Same-calibration configure invalidates old window, retains monotonic context and requires N cycles",
+        "Failed configure preserves prior context",
+        "Own010 page reserved/read-only writes atomic, full-width flags/cycles reject, flex burn atomically activates revision",
+        "Stale native sessions and JSON CAS cannot overwrite a newer calibration",
+        "Schema8 whole secondary objects, revision and original persisted bytes survive neutral migration",
+        "Strict current MSQ complete fieldset/duplicate/signature/DTD rejection",
+        "U64 counters through JSON/native recorder/native229-column MSL",
+        "300 rows yield128 retained/172 overwritten and explicit missing1..172",
+        "Radio schemas1..4 suppress required raw or scalar-ETH evaluations; neutral Off remains supported"
+      ]
+    },
+    "independent_UI": {
+      "checks": 105,
+      "result": "pass",
+      "record": "host-ui-003.json",
+      "source_root": "host-freeze-003",
+      "configuration_cases": 80,
+      "malformed_diagnostic_cases": 6,
+      "coverage": [
+        "Schema1..8 JSON neutral migration and schema8 secondary preservation",
+        "Strict JSON import shape/types",
+        "Native/browser configuration differential",
+        "Source labels distinguish raw synthetic edges from scalar percentage and unknown waveform",
+        "Exact U64 strings in browser229-column MSL",
+        "128-row browser import, declared loss range, cursor and page validation atomicity"
+      ]
+    },
+    "independent_native_target_binding_isolation": {
+      "checks": 15,
+      "result": "pass",
+      "record": "target-binding-003.json",
+      "compiler": "c++ C++17 -Wall -Wextra -Werror -pedantic ASan/UBSan",
+      "coverage": "Actual bind_inputs ignores completed runtime-record provenance and produces no flex sample. Isolated otherwise-qualified binding works with Off; enabled corrections and ETH-only dependency inhibit fuel/spark even with input_confirmed=true. No target execution."
+    },
+    "plant_saved_capture_audit": {
+      "checks": 20799,
+      "cases": 27,
+      "rows": 5400,
+      "record": "host-plant-002.json",
+      "replayed_complete_captures": [
+        "batch_wasted_4cyl-off",
+        "batch_wasted_4cyl-neutral",
+        "sequential_4cyl-corrected",
+        "semi_sequential_4cyl-dropout"
+      ],
+      "result": "All complete decoded captures exactly reproduced from owned native source; all27 saved captures independently checked for time/source coherence, neutral edge/crank/cam/fuel/RPM equivalence, missing/stale cuts, valid-zero fuel-only cut and nonneutral factors.",
+      "plant_log_columns": 186,
+      "scope": "Fixed gasoline reduced-order SI plant and independent synthetic sensor waveform. No Speeduino executable comparison, ethanol chemistry, HIL or electrical measurements."
+    },
+    "published_matrix002_binding": {
+      "record": "host-artifacts-002.json",
+      "artifacts": 54,
+      "all54_gzip_and_MSL_bytes_identical_to_audited001": true,
+      "all_matrix002_source_hashes_match_final_freeze003": true,
+      "original001_to_final_source_delta": [
+        "tools/flex_stimulus.py explicit-null validation only"
+      ]
+    },
+    "application_and_generators": {
+      "checks": 136,
+      "record": "host-artifacts-002.json",
+      "scope": "Independently parsed/hash-bound parent application captures and inspected saved TS/MLV screenshots; no applications independently launched. TS edited010-003 MSQ exactly reconstructs8192 expected page bytes and committed filter130.5. Earlier two saves remain125.5 and are not claimed edited successes. MLV original121-row229-column log preserves startup NaNs and plotted FlexEthanolPct rounded min/max; exact U64 guarantees belong to JSON/MSL/bytes, not an external viewer numeric display.",
+      "generated_outputs_reproduced_byte_for_byte": [
+        "web/flex_fuel.js",
+        "tuning/esp32-ecu-flex.ini",
+        "tuning/protocol-layout.json",
+        "firmware/main/web_assets.hpp"
+      ]
+    }
+  },
+  "application_example": {
+    "path": "tuning/examples/tunerstudio-flex-roundtrip.msq",
+    "sha256": "87508c941b7cc8198f6b715496ea2a02b1480f21c69592325b90baa46bd3136f",
+    "snapshot": "application-example-freeze-001/tuning/examples/tunerstudio-flex-roundtrip.msq",
+    "matches_saved_TS_edited010_003": true
+  },
+  "retention_tradeoff": {
+    "capacity": 128,
+    "retention_at100ms_s": 12.8,
+    "retention_at20ms_s": 2.56,
+    "native_recorder_bytes": 87128,
+    "note": "Reduced from256 after target DRAM overflow. Loss metadata remains explicit. Browser accepts historical256 metadata. Static size/build success does not establish target stack/heap/runtime qualification."
+  },
+  "execution_constraints": {
+    "no_child_agents": true,
+    "no_project_or_external_checkout_edits": true,
+    "no_physical_device_eFuse_flashing_services_or_external_messages": true,
+    "no_production_Speeduino_executable_executed_this_review": true,
+    "native_project_libraries_and_probe_ELFs_built_and_run_only_in_owned_roots": true,
+    "GCOV_PREFIX_before_each_linked_probe_process": "Owned host-gcov-002 or host-gcov-003; exact environment and commands saved per result",
+    "no_broad_legacy_or_application_matrix_rerun": true
+  },
+  "coverage_side_effect_disclosure": {
+    "previous_event": "An earlier acquisition review accidentally updated exactly16 generated.gcda counters in the external Speeduino native coverage cache at2026-11-04T16:57:29Z. Existing counters were preserved; no restoration was attempted. That event was already disclosed and is not an unchanged-cache claim.",
+    "record": "prior-coverage-side-effect.json",
+    "sha256": "67e23bda6af687c8c37658016df138b70bb2cd09d3abfba39e1524d694f739df",
+    "generated_coverage_excluded_from_unchanged_cache_claims": true,
+    "this_review_did_not_execute_production_objects": true
+  },
+  "evidence_sha256": {
+    "kernel-independent-review.json": "f7b5a71be542b9ec852820231f15827fc5eefaacba27477393fa3820803fbc18",
+    "host-unit-tests-001.json": "f07e4775af2985f67910d594baf20c0ff435278c9fae7fcef3dfa9711b663e8f",
+    "host-unit-tests-002.json": "2b0ee2cc28d8ef61246b972fefee7cd356fbac38b94a69489186afdbff4ada6d",
+    "host-adversarial-002.json": "58a07144730df1a49cdd98e8db6f328fc6be5b419cc82e6d32ad3e585c0c09b3",
+    "host-adversarial-003.json": "43d7c0c4b63b8fa4fe20c2a9ac40ae3b9790fb05134cb25e0106dbec6a28a3a4",
+    "ui-config-001.json": "ee444c51b4a81d3e1c7ad24d27f65226af8dae7c883be307e6ea306e8989e9cf",
+    "ui-config-002.json": "6623e374f35ab938b97603e418e1f003086047f24e5c6c52d4eb1ec811018d9a",
+    "host-ui-002.json": "31760675f78f067397b272a91343bb9913fb6e6be91758e6c27ec417a063fc7e",
+    "host-ui-003.json": "b6d0135d32c85aa6f820d7ad2f546059e44ff2311c911240f13bdb2b86d64042",
+    "host-config-cases.json": "69d261184e58b906d9c8aaee97bd77405c856d615a38fcd278fb69a366669a38",
+    "host-config-cases-command.json": "8f998a04b38454cdbdf1ece9619e355e010a1738b13eff242f09cebda2a03d4f",
+    "host-diagnostic-fixtures.json": "079c13195b2e4d916863dde25af9646c2b024cb38a859514ee65a5d841035938",
+    "host-diagnostic-mutations.json": "455af71bc11df7f2f16de70924c8cd4d133c7ee6a5e7f5558e552f6b03802e52",
+    "host-plant-001.json": "f78a5545600e4214e775be67879fc3495a3b092638f5739b3b1173a68171f043",
+    "host-plant-002.json": "2bdd9b33fefacadbc5f681c1146c6640d02d353ada57022c56a9e9973895aa5c",
+    "host-artifacts-001.json": "460dcfd6e632e96359dbafbd17fb35beb9788ab1d0aa36d949b6c78d231b66a2",
+    "host-artifacts-002.json": "243d3447de4d50cfb0e2736996f2f715d4f1658b7d896e223efa9e7031bb45b1",
+    "target-binding-001.json": "2029bc4e50fb639d1e7aa1a130ecf9cbf5e10d2380fba60bbba91420579b3a33",
+    "target-binding-002.json": "3b846bb28740e4148baa4a74c68284be8d9f25671be2060daf9444fb6aa12afa",
+    "target-binding-003.json": "2171b3b546c6a4fd064c6f569f00f682f896ab05241f17b42608a368bde48e1e",
+    "prior-coverage-side-effect.json": "67e23bda6af687c8c37658016df138b70bb2cd09d3abfba39e1524d694f739df"
+  },
+  "owned_probe_source_hashes": {
+    "host_adversarial_probe.py": "047a63b43650c2c03118cbcf60cf6078be98b3a71d92b1b1d6b903db4e1847a3",
+    "host_ui_probe.js": "1b49515909b09820725dc479c868d58f0ee92589b369f8aebbdb25443cbf833c",
+    "ui_config_probe.js": "cee946ef94f372502dcac9342d226e73e72d54d668632aaf39adb88a7d6745e3",
+    "host_plant_capture_probe.py": "cd59974fb370734343ae9218f2ab899370ca683eb522d6caac24b200c6ed3817",
+    "host_artifact_probe.py": "555101f50c3304a8a05c9eebb85b12101a18ec0d82af789487541171bbb0991d",
+    "target_binding_absence_probe.cpp": "67f48feff17cb15018e08c917079ff72cc794dc31734a9c9987d9ceae4f930d1"
+  },
+  "owned_dependency_hashes": {
+    "/home/mark/.platformio/packages/framework-espidf/components/json/cJSON/cJSON.c": "f892717f26cf3d21b7108de50cea95b6e48092950427615fe1d8d9c46ea09cca",
+    "/home/mark/.platformio/packages/framework-espidf/components/json/cJSON/cJSON.h": "fda63720ffad1d007802f62204831018d167084c26e2ce08ad36f11529a90682"
+  },
+  "failed_review_probe_history": [
+    {
+      "record": "host-adversarial-002.json",
+      "cause": "Own migration fixture accidentally supplied nonexistent hysteresis key. Corrected to debounce_ms; rerun003 passed389."
+    },
+    {
+      "record": "host-plant-001.json",
+      "cause": "Own cadence assumption started at20ms. Saved trace begins0ms and ends3.98s. Corrected; rerun002 passed20799."
+    },
+    {
+      "record": "host-artifacts-001.json",
+      "cause": "Own assertion compared full precision raw MSL extrema to rounded3-decimal viewer labels. Corrected rounding tolerance; rerun002 passed136."
+    },
+    {
+      "record": "target-binding-001.json",
+      "cause": "Own probe used nonexistent Tune secondary_fuel member; corrected to secondary_tables.fuel."
+    },
+    {
+      "record": "target-binding-002.json",
+      "cause": "Own physical config fixture lacked ordered generic conversion points; completed fixture; rerun003 passed15."
+    }
+  ],
+  "out_of_scope_open_work": [
+    "Actual target capture producer, protected pin allocation, clock/IRQ/reset/BOOT behavior and fault-consumer synchronization on target remain unimplemented/unqualified.",
+    "No new flex PCB or harness circuit exists; GPIO3 idle accessory and GPIO0 BOOT/PAIR remain reserved. GPIO46 is only an unapproved protected-hardware candidate.",
+    "Current radio schemas1..4 deliberately suppress flex-dependent control observations. A negotiated flex-capable radio schema and peer compatibility remain pending.",
+    "Own010 offline definition/MSQ works for saved app evidence. Online TunerStudio own010 acceptance and vendor integration remain unverified; earlier own009 online rejection is not resolved by offline import.",
+    "Fixed-gasoline plant simulation is not ethanol chemistry or production Speeduino closed-loop comparison.",
+    "No target heap/stack/runtime, electrical, thermal, actuator, HIL, vehicle, emissions or road-use qualification is claimed."
+  ]
+}

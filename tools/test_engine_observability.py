@@ -147,8 +147,8 @@ class ObservationTests(unittest.TestCase):
   self.assertEqual(self.native.command(dict(action='start',period_ms=20,duration_s=60),0),200)
   for i in range(600):
    s=copy.deepcopy(self.sample);s.update(sequence=str(i+1),control_us=str(i*20000),sampled_us=str(i*20000));self.assertTrue(self.native.append(s,i*20000))
-  h=self.native.header();self.assertEqual((h['total'],h['retained'],h['overwritten']),(600,256,344))
-  page=self.native.page(h['log_id'],0);self.assertEqual((page['gap_first'],page['gap_last'],page['next_after']),(1,344,360));saved=copy.deepcopy(page)
+  h=self.native.header();self.assertEqual((h['total'],h['retained'],h['overwritten']),(600,128,472))
+  page=self.native.page(h['log_id'],0);self.assertEqual((page['gap_first'],page['gap_last'],page['next_after']),(1,472,488));saved=copy.deepcopy(page)
   for i in range(600,620):
    s=copy.deepcopy(self.sample);s.update(sequence=str(i+1),control_us=str(i*20000),sampled_us=str(i*20000));self.native.append(s,i*20000)
   self.assertEqual(saved,page)
@@ -172,7 +172,7 @@ class ObservationTests(unittest.TestCase):
   with self.assertRaises(ValueError):self.native.msl(1)
   self.native.command(dict(action='stop',log_id=1),1000)
   text=self.native.msl(1);rows=list(csv.reader(io.StringIO(text),delimiter='\t'))
-  self.assertIn('SYNTHETIC ENGINE REPLAY',text);self.assertEqual([len(r) for r in rows[2:]],[188,188,188])
+  self.assertIn('SYNTHETIC ENGINE REPLAY',text);self.assertEqual([len(r) for r in rows[2:]],[229,229,229])
   record=dict(zip(rows[2],rows[4]));self.assertEqual(record['SnapshotSequence'],str(2**53+1));self.assertEqual(record['Lambda'],'NaN');self.assertEqual(record['ADC0'],'NaN')
  def test_completed_sil_replay_preserves_original_revisions_after_tune_save(self):
   with tempfile.TemporaryDirectory() as directory:

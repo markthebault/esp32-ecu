@@ -1,0 +1,11 @@
+#include "ecu/flex_engine.hpp"
+#include <iostream>
+#include <stdexcept>
+using namespace ecu::flex;
+static unsigned checks=0;static void ck(bool b,const char*m){++checks;if(!b)throw std::runtime_error(m);}
+int main(){try{CaptureConfig cfg;cfg.cycles=2;Capture c(cfg);c.edge(0,true);for(unsigned n=1;n<=2;++n){c.edge(n*10000-3000,false);c.edge(n*10000,true);}auto o=c.observe(20000);ck(o.valid,"initial ready");const auto epoch=o.config_epoch;
+ c.context_changed();ck(!c.acknowledge(1),"unobserved context ticket rejected");o=c.observe(20000);ck(!o.valid&&o.pending_fault&&o.reason==Reason::ConfigurationChanged&&o.config_epoch==epoch+1&&o.window_cycles==0,"context resets coherent window and epochs");const auto ticket=o.fault_generation;
+ c.edge(27000,false);c.edge(30000,true);c.edge(37000,false);c.edge(40000,true);o=c.observe(40000);ck(!o.valid&&o.window_cycles==1,"N-1 cycles not ready");c.edge(47000,false);c.edge(50000,true);o=c.observe(50000);ck(!o.valid&&o.pending_fault&&o.capture_reason==Reason::Ready,"full reacquisition still pending");ck(c.acknowledge(ticket),"same consumed fault generation acknowledged");ck(c.observe(50000).valid,"ready after ACK");
+ c.context_changed();o=c.observe(50000);c.context_changed();ck(!c.acknowledge(o.fault_generation),"superseded context ticket rejected");c.edge(49999,false);ck(c.observe(50000).reason==Reason::TimeReversed,"context does not reset monotonic history");
+ Config f;f.capture.filter_ms=200;f.correction.enabled=true;Capture filtered(f.capture);std::uint64_t now=0;filtered.edge(now,true);for(unsigned n=1;n<=25;++n){const std::uint64_t period=n<10?10000:6667;filtered.edge(now+period-3000,false);now+=period;filtered.edge(now,true);}Sample s{filtered.observe(now),f.capture,4};ck(s.observation.ethanol_pct<s.observation.unfiltered_ethanol_pct,"real filter lag");ck(assess(f,s,now,false,4).control_ok,"legitimate smoothed sample accepted");s.observation.unfiltered_ethanol_pct=0;ck(!assess(f,s,now,false,4).control_ok,"inconsistent unfiltered data rejected");
+ std::cout<<"context_probe_checks "<<checks<<'\n';return 0;}catch(const std::exception&e){std::cerr<<e.what()<<'\n';return 1;}}

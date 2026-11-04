@@ -1,6 +1,8 @@
-# Flex-fuel acquisition and correction groundwork
+# Flex-fuel development integration
 
-The portable raw-edge core and a separate genuine production-reference fixture are implemented. **Flex fuel is not yet connected to the engine controller, target input, configuration store, browser, TunerStudio definition or PCB.** The current device remains schema 8/own009 with physical engine outputs inhibited. This increment makes the acquisition and correction semantics testable before those required integration steps.
+The shared controller, configuration store, browser, own010 tuning definition and logs now consume the raw-edge flex core. **The protected target producer and a matching PCB input remain missing.** Enabled corrections or an ethanol secondary condition therefore inhibit target control until a qualified target source is implemented. All selected physical engine outputs remain inhibited.
+
+The earlier [production raw-edge groundwork packet](../reports/engine/flex-core/README.md) remains immutable. The [integration evidence](../reports/engine/flex-integration/README.md) adds controller, migration, UI, logger and fixed-gasoline plant checks. Neither establishes ethanol combustion calibration or physical engine operation.
 
 ## Acquisition contract
 
@@ -12,15 +14,25 @@ The core requires eight complete coherent cycles by default, adjustable from 2 t
 
 Calibration validation bounds frequency, sensor-fault threshold, tolerance, window size, stale interval and filter time. Default frequency tolerance is 1 Hz with 1 µs timestamp-difference uncertainty. Low width has a 2 µs boundary tolerance. The fault-frequency period threshold rounds conservatively. Values inside tolerance can clamp to the physical range and expose clamp flags. Repeated levels, timestamps that do not increase, a reversed/future query, short edges, invalid widths/frequencies, overflow, source/config changes and stale data invalidate acquisition. A completed sample expires after 250 ms by default even if a newer incomplete edge exists.
 
-Faults carry a generation and remain pending through reacquisition. `observe()` returns the invalid pending sample; `acknowledge(generation)` may clear only the current generation after observation. The later engine consumer must ACK only after a completed control observation consumed that invalid sample. Old tickets cannot clear newer faults. Reconfiguration resets the complete window/filter and preserves fault notification. No initial or held value is silently treated as E0.
+Faults carry a generation and remain pending through reacquisition. `observe()` returns the invalid pending sample; `acknowledge(generation)` may clear only the current generation after observation. The host engine adapters ACK only after a completed control observation consumed that invalid sample. The future target worker must follow the same rule. Old tickets cannot clear newer faults. Reconfiguration resets the complete window/filter and preserves fault notification. No initial or held value is silently treated as E0.
 
 ## Correction contract and integration requirements
 
 The separate correction helper provides six-bin ethanol fuel percentage, signed spark addition and optional fuel-temperature percentage curves. Defaults are neutral and disabled. Enabled correction requires a valid, fresh, source-tagged coherent sample. Invalid correction returns unknown factors and an explicit reason. Off returns exactly neutral factors without disabling acquisition needed by secondary ETH conditions.
 
-This helper does not yet alter fuel mass, pulse widths, cranking angles, cylinder trims, secondary spark or scheduler demands. Required integration must preserve zero-effective-fuel behavior, deadtime per opening, hard pulse/dwell limits and actual correction order. Production applies fuel and temperature factors separately; its flex spark correction precedes later limiter/fixed/cranking overrides. Interactions with our secondary tables, trims and transient reference adder need explicit coupled experiments before acceptance.
+Fuel and optional temperature factors apply separately to ordinary fuel before the independent acceleration reference adder. Zero factors suppress all fuel, including that adder and opening deadtime. Cranking still uses fuel factors but bypasses flex and secondary spark for its fixed angle. Flex spark is added before limiter retard and secondary combination; per-cylinder trims preserve the existing arithmetic, including recovery from a scalar clamp. Hard pulse/dwell/duty limits remain active.
 
-Required remaining work includes schema/default/import migration, atomic whole-tune validation and storage, browser controls/guides, own TunerStudio offline definition/MSQ, runtime/log/radio fields, target acquisition/fault ACK, pin/protection design and HIL. Acquisition ownership must be requested when either flex corrections or a secondary ETH condition needs it. Existing own009 pages, runtime layout and applications are unchanged in this groundwork.
+One immutable observation carries its actual capture calibration and producer revision. Control rechecks timestamp/window geometry, calibrated frequency, pulse/high interval, raw conversion and clamp consistency. When smoothing is Off, filtered values must equal raw values. A new configuration invalidates acquisition even when capture calibration is unchanged, preserves clock/fault history and requires reacquisition. Host-only scalar ETH fixtures are explicitly `synthetic_value`: they may select secondary ETH with corrections Off but never qualify as a frequency/temperature capture or enable corrections.
+
+Schema9 requires the complete `flex_fuel` section. Schema1..8 migration always initializes it disabled and neutral, including when parsing into a previously enabled Tune. Schema8 secondary maps survive migration unchanged. Browser controls cover both correction curves, calibration, input confirmation and source/fault/age diagnostics. Confirmation is a configuration assertion, not physical qualification. The current carrier has no released flex connection; do not wire a sensor to an unassigned module pin.
+
+Use [esp32-ecu-flex.ini](../tuning/esp32-ecu-flex.ini), identity `ESP32ECU DEV 010 INHIBITED`. Its8192-byte page preserves all prior offsets and appends160 bytes at7808; its832-byte runtime block preserves the640-byte prefix. MSL007 appends41 flex fields for229 engine /186 direct SIL columns, with U64 counters/timestamps preserved as decimal strings in JSON. The device recorder retains128 rows, with overwrite/gap accounting. Prior256-row retention exceeded linked DRAM after this diagnostic expansion.
+
+Known engine screen schemas1..4 cannot carry flex quality/factors. When flex is required they explicitly suppress the engine frame and retain legacy sensor telemetry; a negotiated flex-capable screen protocol is still needed. No frame is silently extended beyond250 bytes.
+
+The host SIL panel can emit actual synthetic frequency/low-pulse edges. The27-case matrix exercises three strategies, neutral/off controls, endpoint frequencies, enabled fuel/temperature/spark factors, smoothing, zero fuel, missing input and dropout. Its combustion model retains fixed gasoline properties. This tests integration and cut behavior, not ethanol chemistry; the separate pinned production fixture supplies the earlier raw-edge comparisons.
+
+Remaining work includes protected target acquisition/fault ACK, pin/protection/reset design, PCB/case integration, negotiated flex radio fields, ethanol-aware plant calibration, online vendor support and HIL. The target producer must acquire when either corrections or a secondary ETH condition requires it. The software cannot turn the confirmation checkbox into missing target data.
 
 ## Source execution and observed differences
 
@@ -56,4 +68,6 @@ CXX=g++ sh scripts/test_firmware.sh
 
 Use new output paths. The runner sets an owned coverage prefix before startup; the fixture also confines coverage to its executable directory. Run an owned ELF copy for independent probes. The initial reviewer table-cache probe updated 16 generated upstream `.gcda` counters before that safeguard was applied; the exact files and limitation are disclosed in the packet. Tracked upstream sources and both existing numerical binaries/manifests remain unchanged. Generated coverage counters are excluded from unchanged-cache claims.
 
-Native success does not establish actual ESP32 input acquisition, online TunerStudio support, coupled own-engine flex operation, fuel chemistry/calibration, target timing, physical electrical/environmental behavior or full Speeduino parity. Those remain open requirements of the project.
+Native success does not establish actual ESP32 input acquisition, online TunerStudio support, ethanol combustion chemistry/calibration, target timing, physical electrical/environmental behavior or full Speeduino parity. Those remain open requirements of the project.
+
+For the current software integration, run `PYTHONPATH=tools python3 -B -m unittest test_engine_flex`, `python3 -B tools/run_flex_integration_scenarios.py --output NEW_DIRECTORY` and `python3 -B tools/verify_flex_integration_evidence.py --replay`. The earlier reproduction commands above refer to the separate raw production-reference packet.

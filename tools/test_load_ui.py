@@ -15,7 +15,7 @@ async def check(url,device,out):
   try:
    page=await browser.new_page(viewport={'width':1440,'height':1100});page.on('pageerror',lambda e:errors.append(str(e)))
    await page.goto(url);await page.locator('[data-page="engine"]').click();await page.locator('#load-fuel_source').wait_for()
-   original=copy.deepcopy(device.engine.tune);assert original['schema_version']==8
+   original=copy.deepcopy(device.engine.tune);assert original['schema_version']==9
    await page.locator('#load-fuel_source').select_option('tps');await page.locator('#engine-save').click()
    await page.locator('#toast').filter(has_text='acknowledge the new table basis').wait_for();assert device.engine.tune==original
    assert await page.evaluate('engineTune.maps.ve.load')==original['maps']['ve']['load']
@@ -32,7 +32,7 @@ async def check(url,device,out):
    saved=copy.deepcopy(device.engine.tune);assert saved['load_model']['fuel_source']=='tps' and saved['maps']['ve']['cells'][0]==3.25
    checks.append('Source edits preserve axes/cells, mismatch blocks Save, explicit acknowledgement precedes axis replacement; coefficient below20 saves from schema7 onward')
    async with page.expect_download() as d:await page.locator('#engine-msq').click()
-   file=out/'load-browser009.msq';await (await d.value).save_as(file);assert 'DEV 009' in file.read_text() and pages(import_msq(file.read_bytes()))==pages(saved)
+   file=out/'load-browser009.msq';await (await d.value).save_as(file);assert 'DEV 010' in file.read_text() and pages(import_msq(file.read_bytes()))==pages(saved)
    imported=await page.evaluate('text=>engineFromMsq(text,engineTune)',file.read_text());assert pages(imported)==pages(saved)
    checks.append('Browser own0098192-byte complete-page MSQ preserves sources, basis metadata and all map fields through native roundtrip')
    application=R/'tuning/examples/tunerstudio-load-roundtrip.msq'
@@ -73,7 +73,7 @@ async def check(url,device,out):
     for(const value of [null,{},[],{available:false}]){x.adopt(h);const p=structuredClone(q);p.records.at(-1).sample.load_model=value;try{x.acceptPage(p);bad.push(false)}catch{bad.push(x.inspect().rows===0&&x.inspect().cursor===0)}}
     for(const [key,value] of [['fuel_source_code',3],['fuel_source','map'],['afr_state_code',255],['fuel_load','10'],['afr_factor',null],['unexpected',0],['spark_load',3.5e38],['afr_factor',1e300],['pressure_factor',1e-300]]){x.adopt(h);const p=structuredClone(q);p.records.at(-1).sample.load_model[key]=value;try{x.acceptPage(p);bad.push(false)}catch{bad.push(x.inspect().rows===0&&x.inspect().cursor===0)}}
     x.adopt(h);x.acceptPage(q);return {bad,msl:x.exportMsl()};}''',dict(h=h,q=q))
-   assert all(result['bad']);a=list(csv.reader(io.StringIO(native),delimiter='\t'));b=list(csv.reader(io.StringIO(result['msl']),delimiter='\t'));assert a[2:]==b[2:] and len(b[2])==188
+   assert all(result['bad']);a=list(csv.reader(io.StringIO(native),delimiter='\t'));b=list(csv.reader(io.StringIO(result['msl']),delimiter='\t'));assert a[2:]==b[2:] and len(b[2])==229
    (out/'native005.msl').write_text(native);(out/'browser005.msl').write_text(result['msl'])
    checks.append('Native/browser188-column MSL006 agree exactly including unavailable MAP; malformed load observations reject before cursor publication')
    await page.locator('#engine-reload').click();await page.locator('#engine-save-state').filter(has_text='Revision 3').wait_for()

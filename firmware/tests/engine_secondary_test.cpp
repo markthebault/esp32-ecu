@@ -10,7 +10,7 @@ static bool near(double a,double b){return std::abs(a-b)<1e-9;}
 static Tune tune(){Tune t;t.ve.cells.fill(80);t.spark.cells.fill(20);t.injector_cc_min=600;t.afterstart_pct=0;t.ego_enabled=t.dfco_enabled=false;t.transient_enrichment.mode=ecu::transient::Mode::Off;return t;}
 static Inputs input(std::uint64_t now=1000000){Inputs s;s.rpm=2000;s.map_kpa=40;s.tps_pct=25;s.clt_c=85;s.iat_c=25;s.lambda=1;s.battery_v=14;s.sensor_v=5;s.synced=s.phase_synced=s.sensors_valid=s.lambda_ready=true;s.sampled_us=now;return s;}
 static void configure(sec::Rule&r,sec::Mode mode){r.mode=mode;r.cells=sec::expected_cells(mode);r.debounce_ms=0;r.threshold=1000;}
-static Output step(Tune&t,Inputs s){check(!validate(t));Controller c;return c.step(t,s,s.sampled_us);}
+static Output step(Tune&t,Inputs s){check(!validate(t));s.flex_sample=ecu::flex::synthetic_value(s.ethanol_pct,s.ethanol_qualified,s.sampled_us,t.flex_fuel.capture,t.revision);Controller c;return c.step(t,s,s.sampled_us);}
 static void fuel_and_capacity(){
  for(unsigned m=0;m<5;++m){
   auto t=tune();auto s=input();configure(t.secondary_tables.fuel,sec::Mode(m));t.secondary_ve.cells.fill(m==1?150:20);

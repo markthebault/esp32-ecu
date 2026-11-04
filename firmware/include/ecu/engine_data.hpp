@@ -1,5 +1,6 @@
 #pragma once
 #include "ecu/engine.hpp"
+#include "ecu/flex_runtime.hpp"
 #include <cfloat>
 
 namespace ecu::engine {
@@ -25,6 +26,7 @@ struct RuntimeSample {
  transient::Output transient_enrichment;
  load::Observation load_model;
  secondary::Observation secondary_fuel,secondary_spark;
+ flex::Record flex_fuel;
  std::array<float,4> cylinder_pulse_ms{},cylinder_advance_deg{},cylinder_fuel_pct{},cylinder_duty_pct{};
  float cam_error_deg=0;
  std::array<std::uint16_t,8> raw_adc{};
@@ -35,7 +37,7 @@ struct RuntimeSample {
  std::uint8_t cylinder_valid=0,cylinder_enabled=0,cylinder_capacity_mask=0,cylinder_spark_clamp_mask=0,cylinder_retard_floor_mask=0;
  bool has(DataFlag flag)const{return (flags&flag)!=0;}
 };
-static_assert(sizeof(RuntimeSample)<=544,"Runtime/log sample exceeds its explicit secondary-table diagnostic budget");
+static_assert(sizeof(RuntimeSample)<=680,"Runtime/log sample exceeds its explicit flex diagnostic budget");
 inline float data_float(double value){return finite(value)&&std::abs(value)<=FLT_MAX?static_cast<float>(value):NAN;}
 inline void data_values(RuntimeSample& r,const Inputs& in,const Output& out){
  const double inputs[]={in.rpm,in.map_kpa,in.tps_pct,in.clt_c,in.iat_c,in.lambda,in.battery_v,in.sensor_v};
@@ -51,6 +53,7 @@ inline void data_values(RuntimeSample& r,const Inputs& in,const Output& out){
  r.transient_enrichment=out.transient_enrichment;
  r.load_model=out.load_model;
  r.secondary_fuel=out.secondary_fuel;r.secondary_spark=out.secondary_spark;
+ r.flex_fuel=flex::record(out.flex_fuel);
  r.flags=Present|(out.proposed_enabled()?ProposedActive:0)|(out.fuel_cut?FuelCut:0)|(out.spark_cut?SparkCut:0)|(out.pump?Pump:0)|(out.fan?Fan:0);
 }
 inline std::uint8_t data_input_mask(const Inputs& in,std::uint8_t qualified){
@@ -66,7 +69,7 @@ inline RuntimeSample synthetic_data(const Tune&t,const Inputs&in,const Output&ou
  r.idle_algorithm=static_cast<std::uint8_t>(t.idle_control.algorithm);r.strategy=static_cast<std::uint8_t>(t.strategy);auto qualified=static_cast<std::uint8_t>(in.sensors_valid?255:0);if(!in.lambda_ready)qualified&=~(1U<<Lambda);
  r.input_valid=data_input_mask(in,qualified);r.flags|=StorageOk|(in.synced?CrankSynced:0)|(in.phase_synced?PhaseSynced:0)|
   (t.strategy==Strategy::Sequential?PhaseRequired:0)|(now>=in.sampled_us&&now-in.sampled_us<=20000?InputsFresh:0)|
-  (in.sensors_valid&&out.secondary_fuel.valid&&out.secondary_spark.valid&&(!(out.load_model.flags&load::AuxRequired)||(out.load_model.flags&load::AuxInRange))?InputsQualified:0);
+  (in.sensors_valid&&out.secondary_fuel.valid&&out.secondary_spark.valid&&out.flex_fuel.control_ok&&(!(out.load_model.flags&load::AuxRequired)||(out.load_model.flags&load::AuxInRange))?InputsQualified:0);
  return r;
 }
 inline std::uint64_t data_age_us(const RuntimeSample&r,std::uint64_t point,std::uint64_t now){return r.has(Present)&&r.sequence&&now>=point?now-point:UINT64_MAX;}

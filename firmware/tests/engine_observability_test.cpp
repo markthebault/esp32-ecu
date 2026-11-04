@@ -16,11 +16,11 @@ void recorder_tests(){
  engine_log::Recorder recorder;assert(!recorder.start(21,1,engine::DataSource::Synthetic,0));assert(!recorder.start(20,901,engine::DataSource::Synthetic,0));assert(!recorder.start(20,1,engine::DataSource::None,0));
  assert(recorder.start(20,60,engine::DataSource::Synthetic,0));const auto id=recorder.header().log_id;
  for(unsigned n=0;n<600;++n)assert(recorder.append(sample(n+1,n*20000ULL),n*20000ULL));
- auto h=recorder.header();assert(h.total==600&&h.retained==256&&h.overwritten==344&&h.first_sequence()==345);
- engine_log::Page page;recorder.page(id,0,page);assert(page.gap_first==1&&page.gap_last==344&&page.count==16&&page.next_after==360);
- const auto copied=page.rows[0];engine_log::Row row;assert(!recorder.read(id,344,row));assert(recorder.read(id,345,row));
+ auto h=recorder.header();assert(h.total==600&&h.retained==128&&h.overwritten==472&&h.first_sequence()==473);
+ engine_log::Page page;recorder.page(id,0,page);assert(page.gap_first==1&&page.gap_last==472&&page.count==16&&page.next_after==488);
+ const auto copied=page.rows[0];engine_log::Row row;assert(!recorder.read(id,472,row));assert(recorder.read(id,473,row));
  for(unsigned n=600;n<900;++n)assert(recorder.append(sample(n+1,n*20000ULL),n*20000ULL));
- assert(!recorder.read(id,345,row));assert(copied.sequence==345&&copied.sample.sequence==345); // The copied page stays immutable.
+ assert(!recorder.read(id,473,row));assert(copied.sequence==473&&copied.sample.sequence==473); // The copied page stays immutable.
  recorder.page(id,901,page);assert(page.future_cursor);recorder.page(id+1,0,page);assert(page.superseded);
  assert(!recorder.stop(id+1,18000000));assert(recorder.stop(id,18000000));assert(recorder.start(100,1,engine::DataSource::Synthetic,18000000));
  recorder.page(id,0,page);assert(page.superseded);assert(!recorder.stop(id,18000000));
@@ -64,7 +64,7 @@ void framing_and_msl_tests(){
  assert(radio::wire::read32(bytes+112+4*engine::Lambda)==0x7fc00000);assert(radio::wire::read32(bytes+24)==30);
  assert((bytes[23]&128)!=0);assert(radio::wire::engine_body(bytes,r,123,457,1001,1001,1002,6000000));assert((bytes[23]&128)==0);
  engine_log::Header h;h.source=engine::DataSource::Synthetic;h.total=h.retained=1;engine_log::Row row{r,20000,1,1};char text[engine_log::text_capacity];assert(engine_log::msl_header(h,text,sizeof(text)));
- std::string header=text;const auto start=header.find('\n',header.find('\n')+1)+1;const auto end=header.find('\n',start);const auto count=fields(header.substr(start,end-start));assert(count==188);
+ std::string header=text;const auto start=header.find('\n',header.find('\n')+1)+1;const auto end=header.find('\n',start);const auto count=fields(header.substr(start,end-start));assert(count==229);
  assert(engine_log::msl_row(h,row,text,sizeof(text)));assert(fields(text)==count);assert(std::string(text).find("NaN")!=std::string::npos);assert(!engine_log::msl_row(h,row,text,10));
  engine_log::Request q;assert(engine_log::parse_request("{\"action\":\"start\",\"period_ms\":20,\"duration_s\":1}",49,q)==false); // Explicit lengths must match the actual envelope.
  std::string body="{\"action\":\"start\",\"period_ms\":20,\"duration_s\":1}";assert(engine_log::parse_request(body.c_str(),body.size(),q));

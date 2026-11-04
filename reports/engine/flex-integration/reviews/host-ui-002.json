@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host_ui_probe.js",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review"
+  ],
+  "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002",
+  "returncode": 0,
+  "stdout": "{\n  \"passed\": true,\n  \"checks\": 105,\n  \"diagnostic_differential\": {\n    \"negative_calibration\": {\n      \"native_accepted\": false,\n      \"browser_accepted\": true,\n      \"error\": \"\"\n    },\n    \"fractional_read_age\": {\n      \"native_accepted\": false,\n      \"browser_accepted\": true,\n      \"error\": \"\"\n    },\n    \"control_allowed_without_value\": {\n      \"native_accepted\": false,\n      \"browser_accepted\": true,\n      \"error\": \"\"\n    },\n    \"target_unconfirmed\": {\n      \"native_accepted\": false,\n      \"browser_accepted\": false,\n      \"error\": \"Inconsistent flex source and quality flags.\"\n    },\n    \"bad_raw_counter\": {\n      \"native_accepted\": false,\n      \"browser_accepted\": false,\n      \"error\": \"Invalid flex timestamp or counter.\"\n    },\n    \"required_false_enabled\": {\n      \"native_accepted\": false,\n      \"browser_accepted\": false,\n      \"error\": \"Inconsistent flex source and quality flags.\"\n    }\n  },\n  \"configuration_differential\": []\n}\n",
+  "stderr": ""
+}

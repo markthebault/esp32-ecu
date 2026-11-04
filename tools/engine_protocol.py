@@ -1,4 +1,4 @@
-"""Own009 development protocol, shared with the inhibited target USB service.
+"""Own010 development protocol, shared with the inhibited target USB service.
 
 One complete calibration page avoids automatic cross-page burn transitions.
 Historical own001/002/003 INIs and own003 codec remain separate records.
@@ -9,7 +9,8 @@ from engine_runtime import R
 from idle_config import ALGORITHMS,SCALARS,ARRAYS,SCALAR_OFFSETS,ARRAY_OFFSETS,USED_END as IDLE_USED_END
 from transient_config import OFFSET as AE_OFFSET,USED_END as AE_USED_END,SCALARS as AE_SCALARS,ARRAYS as AE_ARRAYS,SCALAR_OFFSETS as AE_SCALAR_OFFSETS,ARRAY_OFFSETS as AE_ARRAY_OFFSETS,MODES,APPLIES,VALUE_NAMES
 from load_config import OFFSET as LOAD_OFFSET,USED_END as LOAD_USED_END,ENUM_FIELDS as LOAD_ENUM_FIELDS,SCALARS as LOAD_SCALARS,ENUM_OFFSETS as LOAD_ENUM_OFFSETS,SCALAR_OFFSETS as LOAD_SCALAR_OFFSETS,ENUMS as LOAD_ENUMS,VALUE_NAMES as LOAD_VALUE_NAMES
-from secondary_config import PAGE_BYTES,LIVE_BYTES,KINDS,ENUM_FIELDS as SEC_ENUM_FIELDS,SCALARS as SEC_SCALARS,ENUMS as SEC_ENUMS,OFFSET as SEC_OFFSET,CONTROL_END as SEC_CONTROL_END,MAP_OFFSETS as SEC_MAP_OFFSETS,USED_END as SEC_USED_END,VALUE_NAMES as SEC_VALUE_NAMES,CODE_FIELDS as SEC_CODE_FIELDS,enum_offset,scalar_offset,rule_offset
+from secondary_config import KINDS,ENUM_FIELDS as SEC_ENUM_FIELDS,SCALARS as SEC_SCALARS,ENUMS as SEC_ENUMS,OFFSET as SEC_OFFSET,CONTROL_END as SEC_CONTROL_END,MAP_OFFSETS as SEC_MAP_OFFSETS,USED_END as SEC_USED_END,VALUE_NAMES as SEC_VALUE_NAMES,CODE_FIELDS as SEC_CODE_FIELDS,enum_offset,scalar_offset,rule_offset
+from flex_config import PAGE_BYTES,LIVE_BYTES,OFFSET as FLEX_OFFSET,USED_END as FLEX_END,BOOLEANS as FLEX_BOOLS,CAPTURE_FLOATS as FLEX_FLOATS,ARRAYS as FLEX_ARRAYS,OFFSETS as FLEX_OFFSETS,get as flex_get,set_value as flex_set,DEFAULT as FLEX_DEFAULT,VALUES as FLEX_VALUES,FLAGS as FLEX_FLAGS,CODES as FLEX_CODES,TIMES as FLEX_TIMES
 import engine_protocol_legacy as legacy
 from engine_protocol_legacy import (NUMBERS,FLAGS,CURVES,REVISION_OFFSET,
  TIMING_FIELDS,LIVE_FIELDS,field_units as legacy_field_units,envelope,LEGACY_SIGNATURE,
@@ -23,7 +24,8 @@ IDLE_SIGNATURE=b'ESP32ECU DEV 005 INHIBITED'
 SEMI_SIGNATURE=b'ESP32ECU DEV 006 INHIBITED'
 TRANSIENT_SIGNATURE=b'ESP32ECU DEV 007 INHIBITED'
 LOAD_SIGNATURE=b'ESP32ECU DEV 008 INHIBITED'
-SIGNATURE=b'ESP32ECU DEV 009 INHIBITED'
+SECONDARY_SIGNATURE=b'ESP32ECU DEV 009 INHIBITED'
+SIGNATURE=b'ESP32ECU DEV 010 INHIBITED'
 STRATEGIES=legacy.STRATEGIES+('semi_sequential_4cyl',)
 STRATEGY_LABELS=('Batch / wasted','Sequential','Semi-sequential')
 VERSION=b'ESP32ECU development; staged whole-tune burn; outputs inhibited'
@@ -53,17 +55,23 @@ def pages(tune):
   for name in SEC_SCALARS:struct.pack_into('<f',page,scalar_offset(kind,name),rule[name])
   struct.pack_into('<II',page,rule_offset(kind)+28,rule['input_channel'],int(rule['active_high']))
   grid=rule['map'];struct.pack_into('<288f',page,SEC_MAP_OFFSETS[kind],*grid['rpm'],*grid['load'],*grid['cells'])
+
+ flex=tune['flex_fuel']
+ for name in FLEX_BOOLS:struct.pack_into('<I',page,FLEX_OFFSETS[name],int(flex_get(flex,name)))
+ struct.pack_into('<I',page,FLEX_OFFSETS['cycles'],flex['capture']['cycles'])
+ for name in FLEX_FLOATS:struct.pack_into('<f',page,FLEX_OFFSETS[name],flex_get(flex,name))
+ for name in FLEX_ARRAYS:struct.pack_into('<6f',page,FLEX_OFFSETS[name],*flex_get(flex,name))
  return {1:page}
 
 def decode_pages(buffers,base):
- if set(buffers)!={1} or len(buffers[1])!=PAGE_BYTES:raise ValueError('Own009 requires one complete 8192-byte page')
+ if set(buffers)!={1} or len(buffers[1])!=PAGE_BYTES:raise ValueError('Own010 requires one complete 8192-byte page')
  p=buffers[1]
- if any(p[292:512]) or any(p[4756:4768]) or any(p[IDLE_USED_END:AE_OFFSET]) or any(p[AE_USED_END:LOAD_OFFSET]) or any(p[LOAD_USED_END:SEC_OFFSET]) or any(p[SEC_CONTROL_END:SEC_MAP_OFFSETS['fuel']]) or any(p[SEC_USED_END:]):raise ValueError('Reserved tune bytes must be zero')
+ if any(p[292:512]) or any(p[4756:4768]) or any(p[IDLE_USED_END:AE_OFFSET]) or any(p[AE_USED_END:LOAD_OFFSET]) or any(p[LOAD_USED_END:SEC_OFFSET]) or any(p[SEC_CONTROL_END:SEC_MAP_OFFSETS['fuel']]) or any(p[SEC_USED_END:FLEX_OFFSET]) or any(p[FLEX_END:]):raise ValueError('Reserved tune bytes must be zero')
  strategy=struct.unpack_from('<I',p,272)[0]
  if strategy>=len(STRATEGIES):raise ValueError('Unknown engine strategy')
  old={i:bytearray(p[offset:offset+legacy.PAGE_SIZES[i]]) for i,offset in PAGE_OFFSETS.items()}
  struct.pack_into('<I',old[1],272,strategy if strategy<len(legacy.STRATEGIES) else 0)
- candidate=legacy.decode_pages(old,base);candidate['schema_version']=8;candidate['strategy']=STRATEGIES[strategy];candidate['idle_control']=copy.deepcopy(DEFAULT['idle_control'])
+ candidate=legacy.decode_pages(old,base);candidate['schema_version']=9;candidate['strategy']=STRATEGIES[strategy];candidate['idle_control']=copy.deepcopy(DEFAULT['idle_control'])
  algorithm=struct.unpack_from('<I',p,4768)[0]
  if algorithm>=len(ALGORITHMS):raise ValueError('Unknown idle algorithm')
  candidate['idle_control']['algorithm']=ALGORITHMS[algorithm]
@@ -92,6 +100,15 @@ def decode_pages(buffers,base):
   if channel>1 or polarity>1:raise ValueError('Invalid secondary input channel or polarity')
   rule['input_channel']=channel;rule['active_high']=bool(polarity)
   values=struct.unpack_from('<288f',p,SEC_MAP_OFFSETS[kind]);rule['map']=dict(rpm=list(values[:16]),load=list(values[16:32]),cells=list(values[32:]))
+
+ flex=candidate['flex_fuel']=copy.deepcopy(FLEX_DEFAULT)
+ for name in FLEX_BOOLS:
+  value=struct.unpack_from('<I',p,FLEX_OFFSETS[name])[0]
+  if value>1:raise ValueError('Invalid flex boolean')
+  flex_set(flex,name,bool(value))
+ flex['capture']['cycles']=struct.unpack_from('<I',p,FLEX_OFFSETS['cycles'])[0]
+ for name in FLEX_FLOATS:flex_set(flex,name,struct.unpack_from('<f',p,FLEX_OFFSETS[name])[0])
+ for name in FLEX_ARRAYS:flex_set(flex,name,list(struct.unpack_from('<6f',p,FLEX_OFFSETS[name])))
  # Keep offline binary helpers under the same native whole-tune validator.
  from engine_runtime import EngineRuntime
  runtime=EngineRuntime(candidate);candidate=runtime.tune;runtime.close()
@@ -122,4 +139,12 @@ def live_block(store):
    codes=[int(observation.get(k+'_code',0)) for k in SEC_CODE_FIELDS]
    when=int(observation.get('input_observed_us') or 0)
    prefix+=struct.pack('<9f7IQ',*values,word,*codes,when)+bytes(8)
-  return prefix+bytes(64)
+  prefix+=bytes(64)
+  f=sample.get('flex_fuel',{}) if present else {};known=bool(f.get('available'))
+  values=[float(f[k]) if f.get(k)is not None else float('nan') for k in FLEX_VALUES] if known else [0.]*10
+  flags=sum(1<<n for n,key in enumerate(FLEX_FLAGS) if f.get(key,False)) if known else 0
+  codes=[int(f.get(key,0)) for key in FLEX_CODES] if known else [0]*7
+  times=[int(f.get(key,0)) for key in FLEX_TIMES] if known else [0]*7
+  cal=f.get('capture_calibration',{}) if known else {}
+  prefix+=struct.pack('<10f8I7Q6fI',*values,flags,*codes,*times,*[float(cal.get(key,0)) for key in FLEX_FLOATS],int(cal.get('cycles',0)))
+  return prefix+bytes(LIVE_BYTES-len(prefix))

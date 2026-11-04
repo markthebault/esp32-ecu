@@ -23,6 +23,7 @@ def load_engine_bridge():
   b.engine_configure.argtypes=[ctypes.c_void_p,ctypes.c_char_p];b.engine_configure.restype=ctypes.c_int
   b.engine_wheel.argtypes=[ctypes.c_void_p,ctypes.c_uint,ctypes.c_uint,ctypes.c_uint];b.engine_wheel.restype=ctypes.c_int
   b.engine_cam.argtypes=[ctypes.c_void_p,ctypes.c_uint64];b.engine_cam.restype=ctypes.c_int
+  b.engine_flex_edge.argtypes=[ctypes.c_void_p,ctypes.c_uint64,ctypes.c_uint];b.engine_flex_edge.restype=ctypes.c_int
   b.engine_trigger.argtypes=[ctypes.c_void_p,ctypes.c_uint64];b.engine_trigger.restype=ctypes.c_int
   b.engine_step.argtypes=[ctypes.c_void_p,ctypes.c_char_p,ctypes.c_uint64,ctypes.c_uint64];b.engine_step.restype=ctypes.c_char_p
   b.engine_cut.argtypes=[ctypes.c_void_p]
@@ -49,6 +50,9 @@ class EngineRuntime:
  def wheel(self,slots=60,missing=2,max_rpm=8000):
   if not self.bridge.engine_wheel(self.handle,slots,missing,max_rpm):raise ValueError('Invalid trigger wheel geometry')
  def cam(self,time_us):return self.bridge.engine_cam(self.handle,int(time_us))
+ def flex_edge(self,time_us,high):
+  if type(time_us)is not int or not 0<=time_us<=18446744073709551615 or type(high)is not bool:raise ValueError('A nonnegative U64 capture time and bool level are required')
+  if not self.bridge.engine_flex_edge(self.handle,time_us,int(high)):raise ValueError('Invalid synthetic flex edge')
  def trigger(self,time_us):return self.bridge.engine_trigger(self.handle,int(time_us))
  def step(self,inputs,time_us,sampled_us=None,use_decoder=True):
   sample=dict(rpm=0,map_kpa=45,tps_pct=10,clt_c=85,iat_c=25,lambda_=1,battery_v=13.8,sensor_v=5,synced=False,sensors_valid=True,lambda_ready=True,use_decoder=use_decoder)
@@ -188,12 +192,12 @@ class EngineStore:
 
  def run(self,request):
   from engine_sil import Simulation
-  if not isinstance(request,dict) or set(request)-{'scenario','duration_s','seed'}:return 422,{'error':'Invalid SIL request'}
+  if not isinstance(request,dict) or set(request)-{'scenario','duration_s','seed','flex_stimulus'}:return 422,{'error':'Invalid SIL request'}
   with self.lock:
    if getattr(self,'running',False):return 409,{'error':'An engine SIL run is already active'}
    self.running=True;tune=copy.deepcopy(self.tune);revision=tune['revision']
   try:
-   result=Simulation(tune,request.get('scenario','warm_start'),request.get('duration_s',10),request.get('seed',1)).run()
+   result=Simulation(tune,request.get('scenario','warm_start'),request.get('duration_s',10),request.get('seed',1),request.get('flex_stimulus')).run()
    with self.lock:
     if self.tune['revision']!=revision:return 409,{'error':'Tune changed during simulation; result not published'}
     result['summary']['tune_revision']=revision;self.last_run=result;self.completed_monotonic=time.monotonic();self.latest=dict(result['final']);return 200,result

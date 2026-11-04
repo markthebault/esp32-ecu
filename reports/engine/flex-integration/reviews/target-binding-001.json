@@ -1,0 +1,31 @@
+{
+  "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-003",
+  "commands": [
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-003/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/target_binding_absence_probe.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/target_binding_absence_probe"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/target_binding_absence_probe.cpp: In function \u2018int main()\u2019:\n/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/target_binding_absence_probe.cpp:18:5: error: \u2018struct ecu::engine::Tune\u2019 has no member named \u2018secondary_fuel\u2019; did you mean \u2018secondary_ve\u2019?\n   18 |   t.secondary_fuel.mode=scenario==2?ecu::secondary::Mode::Conditional:ecu::secondary::Mode::Off;\n      |     ^~~~~~~~~~~~~~\n      |     secondary_ve\n/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/target_binding_absence_probe.cpp:19:5: error: \u2018struct ecu::engine::Tune\u2019 has no member named \u2018secondary_fuel\u2019; did you mean \u2018secondary_ve\u2019?\n   19 |   t.secondary_fuel.condition=ecu::secondary::Condition::Ethanol;t.secondary_fuel.threshold=40;\n      |     ^~~~~~~~~~~~~~\n      |     secondary_ve\n/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/target_binding_absence_probe.cpp:19:67: error: \u2018struct ecu::engine::Tune\u2019 has no member named \u2018secondary_fuel\u2019; did you mean \u2018secondary_ve\u2019?\n   19 |   t.secondary_fuel.condition=ecu::secondary::Condition::Ethanol;t.secondary_fuel.threshold=40;\n      |                                                                   ^~~~~~~~~~~~~~\n      |                                                                   secondary_ve\n"
+    }
+  ],
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-gcov-003",
+    "GCOV_PREFIX_STRIP": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-tmp-003",
+    "PYTHONPATH": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-003/tools"
+  }
+}

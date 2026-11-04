@@ -1,0 +1,10 @@
+{
+  "command": [
+    "python3",
+    "-c",
+    "import json,copy\nfrom engine_runtime import load_engine_bridge\nfrom engine_protocol import DEFAULT\nfrom flex_config import CAPTURE_FLOATS,ARRAYS\nb=load_engine_bridge();cases=[]\ndef add(name,t):cases.append(dict(name=name,tune=t,native_accepted=bool(b.engine_validate(json.dumps(t,allow_nan=False).encode()))))\nadd(\"default\",copy.deepcopy(DEFAULT))\nfor key in CAPTURE_FLOATS+(\"cycles\",):\n for v in [None,True,\"50\",-1,0,256,8.0000001]:\n  t=copy.deepcopy(DEFAULT);t[\"flex_fuel\"][\"capture\"][key]=v;add(key+\":\"+repr(v),t)\nfor key in ARRAYS:\n for v in [None,False,\"0\",-41,256]:\n  t=copy.deepcopy(DEFAULT);t[\"flex_fuel\"][\"correction\"][key][2]=v;add(key+\":\"+repr(v),t)\nfor key,n,v in [(\"ethanol_bins\",0,1e-50),(\"ethanol_bins\",5,99.999999999),(\"temperature_c\",0,-39.999999999),(\"temperature_c\",5,124.999999999)]:\n t=copy.deepcopy(DEFAULT);t[\"flex_fuel\"][\"correction\"][key][n]=v;add(key+\":\"+repr(v),t)\nt=copy.deepcopy(DEFAULT);t[\"flex_fuel\"][\"correction\"][\"temperature_enabled\"]=True;add(\"temperature_without_enabled\",t)\nprint(json.dumps(cases))"
+  ],
+  "returncode": 0,
+  "stderr": "",
+  "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002"
+}

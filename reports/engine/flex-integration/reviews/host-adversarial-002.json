@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python3",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host_adversarial_probe.py",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002"
+  ],
+  "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002",
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host_adversarial_probe.py\", line 121, in <module>\n    require(migrated.storage_ok and migrated.tune['secondary_tables']==old['secondary_tables'],'schema8 all secondary values preserved')\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host_adversarial_probe.py\", line 22, in require\n    if not v: raise AssertionError(message)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: schema8 all secondary values preserved\n",
+  "freeze_manifest_sha256": "8fc7d3f1a28608f663be8e0015c70efc8574cbcab4d20e6382a7c11c95a73ea3",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-gcov-002",
+    "GCOV_PREFIX_STRIP": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-tmp-002",
+    "PYTHONPATH": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002/tools"
+  }
+}

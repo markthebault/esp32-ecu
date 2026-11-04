@@ -14,6 +14,9 @@ inline bool legacy_load_model(const engine::RuntimeSample&r){
  return !o.available||(o.fuel==load::Source::Map&&o.spark==load::Source::Map&&o.lambda==load::Source::Map&&o.trim==load::Source::Map&&o.pressure==load::Pressure::MapReference&&o.afr==load::Afr::Target&&o.aux_role==load::AuxRole::PostcatMonitor);
 }
 inline bool engine_schema_supports(std::uint32_t schema,const engine::RuntimeSample&r){
+ // Schemas1..4 have no flex quality/factor block. Suppress engine telemetry
+ // when it affects control rather than publish an incomplete legacy frame.
+ if(r.flex_fuel.has(flex::Required)||r.flex_fuel.has(flex::CorrectionsEnabled))return false;
  const bool secondary_legacy=r.secondary_fuel.mode==secondary::Mode::Off&&r.secondary_spark.mode==secondary::Mode::Off;
  if(schema>=4)for(const secondary::Observation*o:{&r.secondary_fuel,&r.secondary_spark})if(o->available&&(static_cast<unsigned>(o->mode)>4||static_cast<unsigned>(o->source)>2||(o->evaluated&&!o->available)||(o->active&&o->mode==secondary::Mode::Off)))return false;
  return engine_schema_valid(schema)&&(schema>=4||secondary_legacy)&&r.strategy<=(schema==1?1:2)&&r.timing_fault<=(schema==1?16:17)&&r.last_timing_fault<=(schema==1?16:17)&&(schema>=3||legacy_load_model(r));

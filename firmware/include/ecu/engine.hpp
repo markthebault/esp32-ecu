@@ -3,6 +3,7 @@
 #include "ecu/transient_enrichment.hpp"
 #include "ecu/load_model.hpp"
 #include "ecu/secondary_tables.hpp"
+#include "ecu/flex_engine.hpp"
 // Engine-development core shared by the ESP32 shadow monitor and native SIL.
 // Independent implementation. Physical outputs are NOT enabled by this module.
 #include <algorithm>
@@ -76,6 +77,7 @@ struct Tune {
  // carry the full model; protected target switch acquisition is separate.
  secondary::Config secondary_tables;
  Map secondary_ve{},secondary_spark{};
+ flex::Config flex_fuel;
  bool cylinder_trims_enabled=false;
  std::array<TrimMap,4> cylinder_fuel{};
  std::array<float,4> cylinder_spark_deg{}; // Physical cylinders1..4, not order slots.
@@ -94,6 +96,7 @@ inline const char* validate(const Tune&t){
  if(!strategy_valid(t.strategy)||!firing_order_valid(t.firing_order)||!range(t.injection_end_deg,0,719)||!range(t.cam_sync_deg,0,719)||!range(t.cam_window_deg,5,45))return "Invalid strategy, firing order or cam/injection reference";
  if(t.cylinder_trims_enabled&&t.strategy!=Strategy::Sequential)return "Cylinder trims require the sequential four-cylinder strategy";
  if(!transient::valid(t.transient_enrichment))return "Invalid transient enrichment configuration";
+ if(!flex::valid(t.flex_fuel))return "Invalid flex-fuel capture or correction configuration";
  if(!load::valid(t.load_model,t.cylinder_trims_enabled,t.ego_enabled))return "Load sources, table bases or shared pressure roles disagree";
  if(!secondary::valid(t.secondary_tables,t.load_model))return "Secondary-table source, units, mode or shared pressure role disagree";
  const Map*secondary_maps[]={&t.secondary_ve,&t.secondary_spark};const secondary::Rule*rules[]={&t.secondary_tables.fuel,&t.secondary_tables.spark};
@@ -139,6 +142,7 @@ struct Inputs {
  double aux_pressure_kpa=NAN;bool map_qualified=true,aux_pressure_qualified=false;
  double ethanol_pct=NAN;bool ethanol_qualified=false;
  std::array<secondary::SwitchSample,2> table_switches{};
+ flex::Sample flex_sample{};
 };
 struct Output {
  State state=State::Stopped;std::uint32_t faults=0;
@@ -146,6 +150,7 @@ struct Output {
  transient::Output transient_enrichment;
  load::Observation load_model;
  secondary::Observation secondary_fuel,secondary_spark;
+ flex::Evaluation flex_fuel;
  double rpm=0,ve_pct=0,target_lambda=1,advance_deg=0,pulse_ms=0,dwell_ms=0,deadtime_ms=0,air_mg=0;
  double warmup=1,afterstart=1,accel=1,ego=1,duty_pct=0,idle_pct=0;
  bool fuel_cut=false,spark_cut=false,pump=false,fan=false;
@@ -189,14 +194,15 @@ public:
   // cannot repeatedly move this start timer.
   if(now>=s.sampled_us&&now-s.sampled_us<=20000&&range(s.rpm,0,t.cranking_rpm))afr_running_=false;
   const auto extra=secondary::requirements(t.secondary_tables);
+  o.flex_fuel=flex::assess(t.flex_fuel,s.flex_sample,now,extra.ethanol,t.revision);
   secondary::Input selection_input;selection_input.rpm=s.rpm;selection_input.map_kpa=s.map_kpa;selection_input.tps_pct=s.tps_pct;
-  selection_input.emap_kpa=s.aux_pressure_kpa;selection_input.ethanol_pct=s.ethanol_pct;
+  selection_input.emap_kpa=s.aux_pressure_kpa;selection_input.ethanol_pct=o.flex_fuel.sample.observation.ethanol_pct;
   selection_input.map_qualified=s.map_qualified;selection_input.emap_qualified=s.aux_pressure_qualified&&t.load_model.aux_role==load::AuxRole::Emap;
-  selection_input.ethanol_qualified=s.ethanol_qualified;selection_input.switches=s.table_switches;
+  selection_input.ethanol_qualified=o.flex_fuel.value_qualified;selection_input.switches=s.table_switches;
   const bool crank_selection=was_crank_?s.rpm<t.cranking_rpm+100:s.rpm<t.cranking_rpm;
   auto second_fuel=secondary_control_.select(secondary::Kind::Fuel,t.secondary_tables.fuel,selection_input,now,crank_selection);
   auto second_spark=secondary_control_.select(secondary::Kind::Spark,t.secondary_tables.spark,selection_input,now,crank_selection);
-  const bool ethanol_ok=!extra.ethanol||(s.ethanol_qualified&&range(s.ethanol_pct,0,100));
+  const bool ethanol_ok=!extra.ethanol||o.flex_fuel.value_qualified;
   if(!ethanol_ok){
    const secondary::Rule*rules[]={&t.secondary_tables.fuel,&t.secondary_tables.spark};secondary::Selection*observations[]={&second_fuel,&second_spark};
    for(unsigned n=0;n<2;++n)if(rules[n]->mode==secondary::Mode::Conditional&&rules[n]->condition==secondary::Condition::Ethanol){observations[n]->ok=observations[n]->observation.valid=false;observations[n]->observation.reason=secondary::Reason::RequiredEthanol;}
@@ -205,7 +211,7 @@ public:
   const auto model=load::evaluate(t.load_model,{s.map_kpa,s.tps_pct,s.aux_pressure_kpa,s.map_qualified,s.aux_pressure_qualified,t.cylinder_trims_enabled,t.transient_enrichment.mode==transient::Mode::MapRate,t.ego_enabled,extra.map,extra.emap});
   o.load_model=model.observation;
   if(!timing)o.faults|=Timing;
-  const bool sensor_ok=s.sensors_valid&&model.ok()&&second_fuel.ok&&second_spark.ok&&ethanol_ok&&range(s.rpm,0,12000)&&range(s.tps_pct,0,100)&&range(s.clt_c,-40,140)&&range(s.iat_c,-40,110)&&range(s.battery_v,7,18)&&range(s.sensor_v,4.75,5.25);
+  const bool sensor_ok=s.sensors_valid&&model.ok()&&second_fuel.ok&&second_spark.ok&&ethanol_ok&&o.flex_fuel.control_ok&&range(s.rpm,0,12000)&&range(s.tps_pct,0,100)&&range(s.clt_c,-40,140)&&range(s.iat_c,-40,110)&&range(s.battery_v,7,18)&&range(s.sensor_v,4.75,5.25);
   if(!sensor_ok)o.faults|=BadSensor;
   if(now<s.sampled_us||now-s.sampled_us>20000)o.faults|=Stale;
   if(s.clt_c>=115)o.faults|=OverTemp;
@@ -230,9 +236,19 @@ public:
   o.ve_pct=secondary::fuel(second_fuel,primary_ve,secondary_ve);o.secondary_fuel=second_fuel.observation;
   o.target_lambda=finite(model.coordinates[2])?lookup(t.lambda,s.rpm,model.coordinates[2]):NAN;
   const double raw_advance=cranking?t.crank_advance_deg:lookup(t.spark,s.rpm,model.coordinates[1]);
+  o.flex_fuel.spark_bypassed=cranking;
+  const bool flex_active=t.flex_fuel.correction.enabled;
+  const double flex_spark=flex_active&&!cranking?o.flex_fuel.corrections.spark_add_deg:0;
+  const double primary_advance=flex_active&&!cranking?std::clamp(raw_advance+flex_spark,-5.,40.):raw_advance;
+  o.flex_fuel.spark_clamped=primary_advance!=raw_advance+flex_spark;
   const double retard=!cranking&&t.soft_limit_band>0&&s.rpm>t.rpm_limit-t.soft_limit_band?10*(s.rpm-(t.rpm_limit-t.soft_limit_band))/t.soft_limit_band:0;
   const double secondary_spark=second_spark.observation.active?lookup(t.secondary_spark,s.rpm,second_spark.coordinate):NAN;
-  o.advance_deg=secondary::spark(second_spark,raw_advance,std::max(-5.0,raw_advance-retard),secondary_spark,retard);o.secondary_spark=second_spark.observation;
+  const bool switched_spark=second_spark.observation.active&&(t.secondary_tables.spark.mode==secondary::Mode::Conditional||t.secondary_tables.spark.mode==secondary::Mode::Input);
+  const double chosen_secondary=flex_active&&!cranking&&switched_spark?std::clamp(secondary_spark+flex_spark,-5.,40.):secondary_spark;
+  if(flex_active&&!cranking&&switched_spark)o.flex_fuel.spark_clamped|=chosen_secondary!=secondary_spark+flex_spark;
+  o.advance_deg=secondary::spark(second_spark,raw_advance,std::max(-5.0,primary_advance-retard),chosen_secondary,retard);
+  if(switched_spark&&flex_active)second_spark.observation.secondary=static_cast<float>(secondary_spark);
+  o.secondary_spark=second_spark.observation;
   if(!second_fuel.ok||!second_spark.ok){o.faults|=BadSensor;o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;return finish();}
   o.deadtime_ms=interpolate(t.battery_v,t.deadtime_ms,s.battery_v);
   o.dwell_ms=interpolate(t.battery_v,t.dwell_ms,s.battery_v);
@@ -259,21 +275,24 @@ public:
   // the original MAP path retains its input precision and operation order.
   const double afr=load::afr_factor(o.load_model,t.load_model,o.target_lambda,s.lambda,s.lambda_ready,cranking,afr_running_&&now>=afr_started_?(now-afr_started_)/1e6:NAN);
   o.air_mg=model.fuel_pressure_kpa*1000*(t.displacement_cc/t.cylinders*1e-6)*(o.ve_pct/100)/(287.05*(s.iat_c+273.15))*1e6;
-  const double base=t.load_model.afr==load::Afr::Target?o.air_mg/(t.stoich_afr*o.target_lambda)*o.warmup*o.afterstart*o.ego:o.air_mg/t.stoich_afr*afr*o.warmup*o.afterstart*o.ego;
+  double base=t.load_model.afr==load::Afr::Target?o.air_mg/(t.stoich_afr*o.target_lambda)*o.warmup*o.afterstart*o.ego:o.air_mg/t.stoich_afr*afr*o.warmup*o.afterstart*o.ego;
   double fuel_mg=t.load_model.afr==load::Afr::Target?o.air_mg/(t.stoich_afr*o.target_lambda)*o.warmup*o.afterstart*o.accel*o.ego:o.air_mg/t.stoich_afr*afr*o.warmup*o.afterstart*o.accel*o.ego;
+  // Preserve the exact historical Off arithmetic. Enabled factors precede
+  // the reference AE adder; neither deadtime nor that adder is multiplied.
+  if(flex_active){base*=o.flex_fuel.corrections.fuel_factor;base*=o.flex_fuel.corrections.temperature_factor;fuel_mg*=o.flex_fuel.corrections.fuel_factor;fuel_mg*=o.flex_fuel.corrections.temperature_factor;}
   if(base==0)o.load_model.flags|=load::ZeroBaseFuel;
   if(!legacy_transient&&t.transient_enrichment.apply==transient::Apply::AddReference&&o.transient_enrichment.phase==transient::Phase::Acceleration&&o.accel>1){
    // Reference adder is a full-cycle dose at100kPa,25C,100%VE,lambda1.
    // It is independent of current MAP/VE/WUE/EGO. Split by actual openings
    // below, scale the complete dose by cylinder trim, then add deadtime once.
    const double reference=100000*(t.displacement_cc/t.cylinders*1e-6)/(287.05*298.15)*1e6/t.stoich_afr;
-   const double added=reference*(o.accel-1);fuel_mg=base+added;
+   const double added=o.flex_fuel.zero_factor?0:reference*(o.accel-1);fuel_mg=base+added;
    o.transient_enrichment.values[transient::AddedFuelMg]=static_cast<float>(added);
    o.accel=base>0?fuel_mg/base:NAN;
    if(!finite(o.accel)||o.accel>std::numeric_limits<float>::max()){o.accel=NAN;o.load_model.flags|=load::AccelRatioUnavailable;}
   }
   const bool transient_cut=!legacy_transient&&o.transient_enrichment.phase==transient::Phase::Deceleration&&o.transient_enrichment.correction()==0;
-  const bool zero_fuel=transient_cut||fuel_mg==0;
+  const bool zero_fuel=transient_cut||o.flex_fuel.zero_factor||fuel_mg==0;
   const double flow_mg_ms=t.injector_cc_min*t.fuel_density_g_cc/60;
   // Dead time belongs to each opening, not to the four-stroke fuel mass.
   const double openings=t.strategy==Strategy::Sequential?1:2;
@@ -284,7 +303,8 @@ public:
   for(unsigned cylinder=0;cylinder<4;++cylinder){
    const double pct=t.cylinder_trims_enabled?lookup(t.cylinder_fuel[cylinder],s.rpm,model.coordinates[3]):100;
    const bool switched=second_spark.observation.active&&(t.secondary_tables.spark.mode==secondary::Mode::Conditional||t.secondary_tables.spark.mode==secondary::Mode::Input);
-   const double demand=(switched?secondary_spark:raw_advance)+(t.cylinder_trims_enabled?t.cylinder_spark_deg[cylinder]:0);
+   double demand=(switched?secondary_spark:raw_advance)+(t.cylinder_trims_enabled?t.cylinder_spark_deg[cylinder]:0);
+   if(flex_active&&!cranking)demand+=flex_spark;
    const double nominal=std::clamp(demand,-5.0,cranking?15.0:40.0);
    const double advance=nominal-retard;
    o.cylinder_fuel_pct[cylinder]=pct;

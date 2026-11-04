@@ -1,0 +1,90 @@
+{
+  "freeze_manifest_sha256": "c166342990ff0a8ab2aa7751eebae36e1e182af0e1df0bb29dd862aaca0d1786",
+  "runs": [
+    {
+      "name": "parent-engine-flex-004",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-004/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-004/firmware/tests/engine_flex_test.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/parent-engine-flex-004"
+      ],
+      "run": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/parent-engine-flex-004"
+      ],
+      "source_sha256": "090b879fe59153534b46b09f5fe1a6f31f0fc973e3f8d4acce013bd8d2f2c0f1",
+      "stdout": "engine_flex_checks 294\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    {
+      "name": "kernel-json-004",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-004/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003.cpp",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/cjson-owned",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/cjson-owned/cJSON.o",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-004"
+      ],
+      "run": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-004",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/json-fixtures-003"
+      ],
+      "source_sha256": "79f1a0bdfa7dd0c485f602186b7e7bb6c0d48fa28f17b835e05792f47bed45cb",
+      "stdout": "source2_value_qualified_without_raw_qualified_accepted 0\nkernel_json_checks 93\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    {
+      "name": "runtime-flags-004",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-004/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/runtime-flags-004.cpp",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/cjson-owned",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/cjson-owned/cJSON.o",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/runtime-flags-004"
+      ],
+      "run": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/runtime-flags-004"
+      ],
+      "source_sha256": "978d71066719251bb1d3e9212d8461ba036bbab8a53b71c5910c22cc65d3fa07",
+      "stdout": "source2_value_qualified_without_raw accepted=0\ntarget_qualified_unconfirmed accepted=0\nenabled_but_not_required accepted=0\nvalue_only_tagged_ready accepted=0\n",
+      "stderr": "",
+      "returncode": 0
+    }
+  ],
+  "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/gcov",
+  "GCOV_PREFIX_STRIP": "0"
+}

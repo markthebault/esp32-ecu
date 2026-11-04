@@ -1,0 +1,207 @@
+{
+  "signature": "ESP32ECU SIL 003 INHIBITED",
+  "pages": {
+    "1": 512,
+    "2": 1152,
+    "3": 1152,
+    "4": 1152,
+    "5": 800
+  },
+  "numeric_fields": [
+    [
+      "engine",
+      "cylinders"
+    ],
+    [
+      "engine",
+      "displacement_cc"
+    ],
+    [
+      "engine",
+      "injector_cc_min"
+    ],
+    [
+      "engine",
+      "fuel_density_g_cc"
+    ],
+    [
+      "engine",
+      "stoich_afr"
+    ],
+    [
+      "settings",
+      "cranking_rpm"
+    ],
+    [
+      "settings",
+      "crank_advance_deg"
+    ],
+    [
+      "settings",
+      "rpm_limit"
+    ],
+    [
+      "settings",
+      "rpm_hysteresis"
+    ],
+    [
+      "settings",
+      "soft_limit_band"
+    ],
+    [
+      "settings",
+      "max_duty"
+    ],
+    [
+      "settings",
+      "max_injection_ms"
+    ],
+    [
+      "settings",
+      "max_dwell_ms"
+    ],
+    [
+      "settings",
+      "tooth1_btdc_deg"
+    ],
+    [
+      "settings",
+      "afterstart_pct"
+    ],
+    [
+      "settings",
+      "afterstart_s"
+    ],
+    [
+      "settings",
+      "accel_threshold_pct_s"
+    ],
+    [
+      "settings",
+      "accel_gain"
+    ],
+    [
+      "settings",
+      "accel_decay_s"
+    ],
+    [
+      "settings",
+      "ego_kp"
+    ],
+    [
+      "settings",
+      "ego_ki"
+    ],
+    [
+      "settings",
+      "ego_limit"
+    ],
+    [
+      "settings",
+      "ego_min_clt"
+    ],
+    [
+      "settings",
+      "dfco_rpm"
+    ],
+    [
+      "settings",
+      "dfco_hysteresis"
+    ],
+    [
+      "settings",
+      "dfco_tps"
+    ],
+    [
+      "settings",
+      "dfco_delay_s"
+    ],
+    [
+      "settings",
+      "idle_target_rpm"
+    ],
+    [
+      "settings",
+      "idle_kp"
+    ],
+    [
+      "settings",
+      "idle_ki"
+    ],
+    [
+      "settings",
+      "fan_on_c"
+    ],
+    [
+      "settings",
+      "fan_off_c"
+    ],
+    [
+      "settings",
+      "pump_prime_s"
+    ]
+  ],
+  "flags": [
+    "ego_enabled",
+    "dfco_enabled",
+    "idle_enabled"
+  ],
+  "curves": [
+    [
+      "coolant_c",
+      6
+    ],
+    [
+      "warmup_pct",
+      6
+    ],
+    [
+      "crank_pct",
+      6
+    ],
+    [
+      "battery_v",
+      5
+    ],
+    [
+      "deadtime_ms",
+      5
+    ],
+    [
+      "dwell_ms",
+      5
+    ]
+  ],
+  "live_fields": [
+    "time",
+    "rpm",
+    "map_kpa",
+    "tps",
+    "lambda_measured",
+    "pulse_ms",
+    "advance_deg",
+    "dwell_ms",
+    "ve_pct",
+    "target_lambda",
+    "ego"
+  ],
+  "live_block_bytes": 184,
+  "timing_fields": [
+    [
+      "injection_end_deg",
+      276
+    ],
+    [
+      "cam_sync_deg",
+      280
+    ],
+    [
+      "cam_window_deg",
+      284
+    ]
+  ],
+  "strategy_offset": 272,
+  "firing_order_offset": 288,
+  "revision_offset": 268,
+  "scope": "native SIL transport only; physical UART is not implemented"
+}

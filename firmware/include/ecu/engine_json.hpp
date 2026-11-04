@@ -3,6 +3,7 @@
 #include "ecu/load_json.hpp"
 #include "ecu/engine.hpp"
 #include "ecu/secondary_json.hpp"
+#include "ecu/flex_json.hpp"
 #include "ecu/json.hpp"
 #include <string>
 #include <cstdio>
@@ -16,10 +17,11 @@ template<std::size_t N>bool float_array(const cJSON*j,std::array<float,N>&a){
 template<class Grid>inline bool map_parse(const cJSON*j,Grid&m){return web::keys(j,"|rpm||load||cells|")&&float_array(cJSON_GetObjectItemCaseSensitive(j,"rpm"),m.rpm)&&float_array(cJSON_GetObjectItemCaseSensitive(j,"load"),m.load)&&float_array(cJSON_GetObjectItemCaseSensitive(j,"cells"),m.cells);}
 inline bool parse_tune(const cJSON*j,Tune&t){
  using namespace web;unsigned schema;char strategy[32]{},physical[32]{};
- if(!integer(j,"schema_version",schema)||(schema<1||schema>8))return false;
+ if(!integer(j,"schema_version",schema)||(schema<1||schema>9))return false;
  // Historical identities migrate to Off; schema8 then reads its full model.
  reset_secondary_tables(t);
- if(!keys(j,schema==1?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps|":schema==2?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing|":schema==3?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims|":schema<6?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims||idle_control|":schema==6?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims||idle_control||transient_enrichment|":schema==7?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims||idle_control||transient_enrichment||load_model|":"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims||idle_control||transient_enrichment||load_model||secondary_tables|")||!integer(j,"revision",t.revision)||!string(j,"strategy",strategy)||!string(j,"physical_outputs",physical)||std::strcmp(physical,"inhibited"))return false;
+ t.flex_fuel=flex::Config{};
+ if(!keys(j,schema==1?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps|":schema==2?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing|":schema==3?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims|":schema<6?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims||idle_control|":schema==6?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims||idle_control||transient_enrichment|":schema==7?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims||idle_control||transient_enrichment||load_model|":schema==8?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims||idle_control||transient_enrichment||load_model||secondary_tables|":"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims||idle_control||transient_enrichment||load_model||secondary_tables||flex_fuel|")||!integer(j,"revision",t.revision)||!string(j,"strategy",strategy)||!string(j,"physical_outputs",physical)||std::strcmp(physical,"inhibited"))return false;
  t.transient_enrichment=transient::Config{};
  t.load_model=load::Config{};
  if(schema>=6&&!transient::parse_config(cJSON_GetObjectItemCaseSensitive(j,"transient_enrichment"),t.transient_enrichment))return false;
@@ -46,6 +48,7 @@ inline bool parse_tune(const cJSON*j,Tune&t){
  }
  if(schema>=7&&!load::parse_config(cJSON_GetObjectItemCaseSensitive(j,"load_model"),t.load_model,t.cylinder_trims_enabled))return false;
  if(schema>=8&&!secondary::parse_config(cJSON_GetObjectItemCaseSensitive(j,"secondary_tables"),t.secondary_tables,t.secondary_ve,t.secondary_spark))return false;
+ if(schema>=9&&!flex::parse_config(cJSON_GetObjectItemCaseSensitive(j,"flex_fuel"),t.flex_fuel))return false;
  if(!number_float(e,"displacement_cc",t.displacement_cc)||!number_float(e,"injector_cc_min",t.injector_cc_min)||!number_float(e,"fuel_density_g_cc",t.fuel_density_g_cc)||!number_float(e,"stoich_afr",t.stoich_afr))return false;
  auto*s=cJSON_GetObjectItemCaseSensitive(j,"settings");
  if(!keys(s,"|cranking_rpm||crank_advance_deg||rpm_limit||rpm_hysteresis||soft_limit_band||max_duty||max_injection_ms||max_dwell_ms||tooth1_btdc_deg||afterstart_pct||afterstart_s||accel_threshold_pct_s||accel_gain||accel_decay_s||ego_enabled||ego_kp||ego_ki||ego_limit||ego_min_clt||dfco_enabled||dfco_rpm||dfco_hysteresis||dfco_tps||dfco_delay_s||idle_enabled||idle_target_rpm||idle_kp||idle_ki||fan_on_c||fan_off_c||pump_prime_s|"))return false;
@@ -123,8 +126,8 @@ inline cJSON* idle_document(const idle::Config&c){
 // stored record. Failure discards that tree; no partial document is published.
 inline bool upgrade_tune_document(cJSON*j){
  auto*schema=cJSON_GetObjectItemCaseSensitive(j,"schema_version");if(!cJSON_IsNumber(schema))return false;
- if(schema->valuedouble==8)return true;
- if(schema->valuedouble!=1&&schema->valuedouble!=2&&schema->valuedouble!=3&&schema->valuedouble!=4&&schema->valuedouble!=5&&schema->valuedouble!=6&&schema->valuedouble!=7)return false;
+ if(schema->valuedouble==9)return true;
+ if(schema->valuedouble<1||schema->valuedouble>8||schema->valuedouble!=std::floor(schema->valuedouble))return false;
  if(schema->valuedouble==1){
   auto*timing=cJSON_CreateObject();if(!timing)return false;
   const double order[]={1,3,4,2};auto*a=cJSON_CreateDoubleArray(order,4);
@@ -151,8 +154,9 @@ inline bool upgrade_tune_document(cJSON*j){
  }
  if(schema->valuedouble<6){auto*ae=transient::config_document(transient::Config{});if(!ae||!cJSON_AddItemToObject(j,"transient_enrichment",ae)){cJSON_Delete(ae);return false;}}
  if(schema->valuedouble<7){auto*model=load::config_document(load::Config{});if(!model||!cJSON_AddItemToObject(j,"load_model",model)){cJSON_Delete(model);return false;}}
- auto*second=secondary::default_document();if(!second||!cJSON_AddItemToObject(j,"secondary_tables",second)){cJSON_Delete(second);return false;}
- cJSON_SetNumberValue(schema,8);return true;
+ if(schema->valuedouble<8){auto*second=secondary::default_document();if(!second||!cJSON_AddItemToObject(j,"secondary_tables",second)){cJSON_Delete(second);return false;}}
+ auto*flex=flex::config_document(flex::Config{});if(!flex||!cJSON_AddItemToObject(j,"flex_fuel",flex)){cJSON_Delete(flex);return false;}
+ cJSON_SetNumberValue(schema,9);return true;
 }
 inline bool canonical_tune(const char*text,Tune&t,std::string& document){
  if(!text||std::strlen(text)>tune_maximum||!web::safe_json(text,std::strlen(text),tune_maximum))return false;
@@ -173,6 +177,7 @@ inline cJSON* output_json(const Output&o){
  if(ok){auto*ae=transient::observation_json(o.transient_enrichment);if(!ae||!cJSON_AddItemToObject(j,"transient_enrichment",ae)){cJSON_Delete(ae);ok=false;}}
  if(ok){auto*model=load::observation_json(o.load_model);if(!model||!cJSON_AddItemToObject(j,"load_model",model)){cJSON_Delete(model);ok=false;}}
  if(ok){auto*second=secondary::observations_json(o.secondary_fuel,o.secondary_spark);if(!second||!cJSON_AddItemToObject(j,"secondary_tables",second)){cJSON_Delete(second);ok=false;}}
+ if(ok){auto*flex=flex::evaluation_json(o.flex_fuel);if(!flex||!cJSON_AddItemToObject(j,"flex_fuel",flex)){cJSON_Delete(flex);ok=false;}}
  if(ok)ok=cJSON_AddBoolToObject(j,"fuel_cut",o.fuel_cut)&&cJSON_AddBoolToObject(j,"spark_cut",o.spark_cut)&&cJSON_AddBoolToObject(j,"proposed_pump",o.pump)&&cJSON_AddBoolToObject(j,"proposed_fan",o.fan)&&cJSON_AddStringToObject(j,"scalar_proposal_basis","untrimmed_base_demand");
  auto*idle=ok?cJSON_AddObjectToObject(j,"idle"):nullptr;if(!idle)ok=false;
  if(ok)ok=cJSON_AddStringToObject(idle,"state",idle::state_name(o.idle.state))&&cJSON_AddStringToObject(idle,"reason",idle::reason_name(o.idle.reason))&&cJSON_AddStringToObject(idle,"basis","controller_proposal")&&cJSON_AddNumberToObject(idle,"flags",o.idle.flags);

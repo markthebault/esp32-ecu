@@ -1,8 +1,75 @@
 {
-  "signature": "ESP32ECU DEV 009 INHIBITED",
+  "signature": "ESP32ECU DEV 010 INHIBITED",
   "pages": {
     "1": 8192
   },
+  "flex_config_offsets": {
+    "enabled": 7808,
+    "temperature_enabled": 7812,
+    "input_confirmed": 7816,
+    "cycles": 7820,
+    "low_hz": 7824,
+    "high_hz": 7828,
+    "fault_hz": 7832,
+    "tolerance_hz": 7836,
+    "stale_ms": 7840,
+    "filter_ms": 7844,
+    "ethanol_bins": 7848,
+    "fuel_pct": 7872,
+    "spark_deg": 7896,
+    "temperature_c": 7920,
+    "temperature_pct": 7944
+  },
+  "flex_live_offset": 640,
+  "flex_values": [
+    "frequency_hz",
+    "low_pulse_us",
+    "ethanol_pct",
+    "fuel_temp_c",
+    "unfiltered_ethanol_pct",
+    "unfiltered_fuel_temp_c",
+    "sample_age_ms",
+    "fuel_pct",
+    "spark_add_deg",
+    "temperature_pct"
+  ],
+  "flex_flags": [
+    "required",
+    "configuration_match",
+    "value_qualified",
+    "raw_capture_qualified",
+    "control_ok",
+    "capture_valid",
+    "sample_value_valid",
+    "pending_fault",
+    "frequency_clamped",
+    "temperature_clamped",
+    "input_confirmed",
+    "corrections_enabled",
+    "corrections_valid",
+    "spark_bypassed",
+    "spark_clamped",
+    "zero_factor",
+    "available"
+  ],
+  "flex_codes": [
+    "source_code",
+    "reason_code",
+    "capture_reason_code",
+    "last_fault_code",
+    "correction_reason_code",
+    "window_cycles",
+    "configuration_revision"
+  ],
+  "flex_times": [
+    "sample_us",
+    "window_start_us",
+    "last_edge_us",
+    "raw_edges",
+    "fault_generation",
+    "acknowledged_generation",
+    "config_epoch"
+  ],
   "secondary_rule_offsets": {
     "fuel": 5376,
     "spark": 5412
@@ -407,7 +474,7 @@
     "target_lambda",
     "ego"
   ],
-  "live_block_bytes": 640,
+  "live_block_bytes": 832,
   "timing_fields": [
     [
       "injection_end_deg",

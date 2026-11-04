@@ -78,7 +78,7 @@ bool observe(const web::Sample&s,const config::Config&c,std::uint64_t now,std::u
  data.input_valid=engine::data_input_mask(in,bound.qualified);if(s.overflow)data.input_valid&=~(1U<<engine::DecodedRpm);
  data.flags|=(storage_ok?engine::StorageOk:0)|(in.synced?engine::CrankSynced:0)|(in.phase_synced?engine::PhaseSynced:0)|
   (active.strategy==engine::Strategy::Sequential?engine::PhaseRequired:0)|(submitted?engine::Submitted:0)|
-  (now>=sampled&&now-sampled<=20000?engine::InputsFresh:0)|(in.sensors_valid&&latest.secondary_fuel.valid&&latest.secondary_spark.valid?engine::InputsQualified:0)|
+  (now>=sampled&&now-sampled<=20000?engine::InputsFresh:0)|(in.sensors_valid&&latest.secondary_fuel.valid&&latest.secondary_spark.valid&&latest.flex_fuel.control_ok?engine::InputsQualified:0)|
   (s.phase_epoch&&s.phase_tune_revision==active.revision&&s.phase_sensor_revision==c.revision?engine::PhaseContextMatch:0);
 #if defined(ECU_ENGINE_DUMMY_LOADS) && ECU_ENGINE_DUMMY_LOADS
  data.flags|=engine::DummyPolicy;

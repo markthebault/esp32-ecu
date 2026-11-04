@@ -1,0 +1,3 @@
+#include "ecu/flex_engine.hpp"
+#include <iostream>
+int main(){using namespace ecu::flex;Config c;c.capture.low_hz=100;c.capture.high_hz=200;c.capture.fault_hz=220;c.correction.enabled=true;Sample s;s.calibration=c.capture;s.tune_revision=1;auto&o=s.observation;o.source=Source::Synthetic;o.reason=o.capture_reason=Reason::Ready;o.valid=true;o.window_cycles=8;o.sample_us=o.last_edge_us=1000000;o.window_start_us=960000;o.edges=17;o.frequency_hz=200;o.low_pulse_us=4975;o.ethanol_pct=o.unfiltered_ethanol_pct=100;o.fuel_temp_c=o.unfiltered_fuel_temp_c=.04125*4975-81.25;const auto e=assess(c,s,1000000,false,1);std::cout<<"gap_us=25 control_ok="<<e.control_ok<<" raw_qualified="<<e.raw_qualified<<" reason="<<reason_name(e.reason)<<'\n';}

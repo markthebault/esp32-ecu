@@ -1,0 +1,56 @@
+{
+  "runs": [
+    {
+      "name": "off-candidate-005",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-005/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/off-baseline-001.cpp",
+        "-DREVIEW_NEW",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/off-candidate-005"
+      ],
+      "source_sha256": "cfb89d3e8850b31a03744cd8b99c2f35855d170e320245567126bb8b0f2a7101",
+      "output_sha256": "5825b992bb99148fc851c8656e164edde7a54b22cc98d8f8803258df4de6da92",
+      "returncode": 0,
+      "stderr": "",
+      "bit_exact_baseline": true,
+      "rows": 14400
+    },
+    {
+      "name": "retention-probe-005",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-005/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/retention-probe-005.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/retention-probe-005"
+      ],
+      "source_sha256": "91b8004ee863c64d7bdeef44bf05636a4917697b00abf9a6f8220d48bfd02847",
+      "output_sha256": "f0d92e97f626a336e70e111864cb6a9bfb01df5cf444cd769777acc613c78092",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "retention rows=128 overwritten=172 recorder_bytes=87128 runtime_sample_bytes=664 row_bytes=680\n"
+    }
+  ],
+  "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/gcov",
+  "GCOV_PREFIX_STRIP": "0"
+}

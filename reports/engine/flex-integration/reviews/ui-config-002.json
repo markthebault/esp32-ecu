@@ -1,0 +1,19 @@
+{
+  "command": [
+    "node",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/ui_config_probe.js",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002"
+  ],
+  "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002",
+  "returncode": 0,
+  "stdout": "{\n  \"root\": \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002\",\n  \"mutations\": {\n    \"temp_without_corrections\": {\n      \"accepted\": false,\n      \"error\": \"Fuel-temperature correction requires flex corrections enabled.\"\n    },\n    \"boolean_frequency\": {\n      \"accepted\": false,\n      \"error\": \"Flex calibration requires numeric values.\"\n    },\n    \"string_frequency\": {\n      \"accepted\": false,\n      \"error\": \"Flex calibration requires numeric values.\"\n    },\n    \"null_curve\": {\n      \"accepted\": false,\n      \"error\": \"Flex Spark addition: six bounded values and increasing bins are required.\"\n    },\n    \"fractional_cycles\": {\n      \"accepted\": false,\n      \"error\": \"Flex Complete cycles per window: value outside bounds.\"\n    }\n  }\n}\n",
+  "stderr": "",
+  "freeze_manifest_sha256": "8fc7d3f1a28608f663be8e0015c70efc8574cbcab4d20e6382a7c11c95a73ea3",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-gcov-002",
+    "GCOV_PREFIX_STRIP": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-tmp-002",
+    "PYTHONPATH": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002/tools"
+  }
+}

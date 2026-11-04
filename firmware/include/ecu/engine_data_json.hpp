@@ -2,6 +2,7 @@
 #include "ecu/transient_json.hpp"
 #include "ecu/load_json.hpp"
 #include "ecu/secondary_json.hpp"
+#include "ecu/flex_json.hpp"
 #include "ecu/engine_data.hpp"
 #include "ecu/engine_phase.hpp"
 #include "ecu/timing_executor.hpp"
@@ -60,6 +61,7 @@ inline cJSON* data_json(const RuntimeSample&r,std::uint64_t observed_us){
  if(ok){auto*ae=transient::observation_json(r.transient_enrichment,present);if(!ae||!cJSON_AddItemToObject(j,"transient_enrichment",ae)){cJSON_Delete(ae);ok=false;}}
  if(ok){auto*model=load::observation_json(r.load_model,present);if(!model||!cJSON_AddItemToObject(j,"load_model",model)){cJSON_Delete(model);ok=false;}}
  if(ok){auto*second=secondary::observations_json(r.secondary_fuel,r.secondary_spark,present);if(!second||!cJSON_AddItemToObject(j,"secondary_tables",second)){cJSON_Delete(second);ok=false;}}
+ if(ok){auto*flex=flex::evaluation_json(flex::expand(r.flex_fuel));if(!flex||!cJSON_AddItemToObject(j,"flex_fuel",flex)){cJSON_Delete(flex);ok=false;}else ok=json_age(flex,"read_age_ms",present&&r.flex_fuel.source&&observed_us>=r.flex_fuel.times[0]?observed_us-r.flex_fuel.times[0]:UINT64_MAX);}
  for(unsigned i=0;ok&&i<8;++i){auto*value=present&&(r.board_flags&1)?cJSON_CreateNumber(r.raw_adc[i]):cJSON_CreateNull();if(!value||!cJSON_AddItemToArray(raw,value)){cJSON_Delete(value);ok=false;}}
  auto*worker=ok?cJSON_AddObjectToObject(j,"worker_observation"):nullptr;if(!worker)ok=false;
  if(ok)ok=json_u64(worker,"command_sequence",r.worker_sequence)&&json_u64(worker,"observed_us",r.worker_observed_us)&&json_age(worker,"age_ms",worker_age)&&

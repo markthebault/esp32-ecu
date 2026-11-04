@@ -1,0 +1,33 @@
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003.cpp: In function ‘int main(int, char**)’:
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003.cpp:15:36: error: reference to ‘load’ is ambiguous
+   15 |  for(unsigned n=1;n<=8;++n){auto*j=load(dir+"/v"+std::to_string(n)+".json");ck(j!=nullptr,"load legacy");engine::Tune t;t.flex_fuel.correction.enabled=t.flex_fuel.correction.temperature_enabled=t.flex_fuel.input_confirmed=true;t.flex_fuel.correction.fuel_pct.fill(200);t.flex_fuel.capture.cycles=2;
+      |                                    ^~~~
+In file included from /home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-003/firmware/include/ecu/load_json.hpp:2,
+                 from /home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-003/firmware/include/ecu/engine_json.hpp:3,
+                 from /home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003.cpp:1:
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-003/firmware/include/ecu/load_model.hpp:9:16: note: candidates are: ‘namespace ecu::load { }’
+    9 | namespace ecu::load {
+      |                ^~~~
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003.cpp:10:15: note:                 ‘cJSON* load(const std::string&)’
+   10 | static cJSON* load(const std::string&p){std::ifstream f(p);std::stringstream s;s<<f.rdbuf();return cJSON_Parse(s.str().c_str());}
+      |               ^~~~
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003.cpp:21:9: error: reference to ‘load’ is ambiguous
+   21 |  auto*j=load(dir+"/v8.json");number(j,"schema_version",9);engine::Tune t;ck(!engine::parse_tune(j,t),"schema9 missing flex rejects");auto*cfg=flex::config_document(flex::Config{});ck(cfg&&cJSON_AddItemToObject(j,"flex_fuel",cfg),"add full config");ck(engine::parse_tune(j,t),"schema9 full flex accepts");
+      |         ^~~~
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-003/firmware/include/ecu/load_model.hpp:9:16: note: candidates are: ‘namespace ecu::load { }’
+    9 | namespace ecu::load {
+      |                ^~~~
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003.cpp:10:15: note:                 ‘cJSON* load(const std::string&)’
+   10 | static cJSON* load(const std::string&p){std::ifstream f(p);std::stringstream s;s<<f.rdbuf();return cJSON_Parse(s.str().c_str());}
+      |               ^~~~
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003.cpp: At global scope:
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003.cpp:12:13: error: ‘void number(cJSON*, const char*, double)’ defined but not used [-Werror=unused-function]
+   12 | static void number(cJSON*j,const char*k,double v){auto*x=cJSON_GetObjectItemCaseSensitive(j,k);ck(x!=nullptr,"mutation key exists");cJSON_SetNumberValue(x,v);}
+      |             ^~~~~~
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003.cpp:11:15: error: ‘cJSON* clone(const cJSON*)’ defined but not used [-Werror=unused-function]
+   11 | static cJSON* clone(const cJSON*j){return cJSON_Duplicate(j,true);}
+      |               ^~~~~
+/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003.cpp:10:15: error: ‘cJSON* load(const std::string&)’ defined but not used [-Werror=unused-function]
+   10 | static cJSON* load(const std::string&p){std::ifstream f(p);std::stringstream s;s<<f.rdbuf();return cJSON_Parse(s.str().c_str());}
+      |               ^~~~
+cc1plus: all warnings being treated as errors

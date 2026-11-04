@@ -1,0 +1,20 @@
+{
+  "command": [
+    "node",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host_ui_probe.js",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-003",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review"
+  ],
+  "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-003",
+  "returncode": 0,
+  "stdout": "{\n  \"passed\": true,\n  \"checks\": 105,\n  \"diagnostic_differential\": {\n    \"negative_calibration\": {\n      \"native_accepted\": false,\n      \"browser_accepted\": false,\n      \"error\": \"Flex E0 frequency: value outside bounds.\"\n    },\n    \"fractional_read_age\": {\n      \"native_accepted\": false,\n      \"browser_accepted\": false,\n      \"error\": \"Invalid flex read age.\"\n    },\n    \"control_allowed_without_value\": {\n      \"native_accepted\": false,\n      \"browser_accepted\": false,\n      \"error\": \"Invalid flex control qualification.\"\n    },\n    \"target_unconfirmed\": {\n      \"native_accepted\": false,\n      \"browser_accepted\": false,\n      \"error\": \"Inconsistent flex source and quality flags.\"\n    },\n    \"bad_raw_counter\": {\n      \"native_accepted\": false,\n      \"browser_accepted\": false,\n      \"error\": \"Invalid flex timestamp or counter.\"\n    },\n    \"required_false_enabled\": {\n      \"native_accepted\": false,\n      \"browser_accepted\": false,\n      \"error\": \"Inconsistent flex source and quality flags.\"\n    }\n  },\n  \"configuration_differential\": []\n}\n",
+  "stderr": "",
+  "freeze_manifest_sha256": "d030540f7cfda9a226c90459fb96f825eca092ea8c0efe98e84a61ca7b151225",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-gcov-003",
+    "GCOV_PREFIX_STRIP": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-tmp-003",
+    "PYTHONPATH": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-003/tools"
+  }
+}

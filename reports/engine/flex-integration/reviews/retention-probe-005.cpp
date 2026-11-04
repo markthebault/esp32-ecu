@@ -1,0 +1,4 @@
+#include "ecu/engine_log.hpp"
+#include <iostream>
+#include <cassert>
+int main(){using namespace ecu;engine_log::Recorder r;assert(r.capacity==128);assert(r.start(100,60,engine::DataSource::Synthetic,0));for(unsigned n=1;n<=300;++n){engine::RuntimeSample s;s.flags=engine::Present;s.source=engine::DataSource::Synthetic;s.sequence=n;s.control_us=s.sampled_us=(n-1)*100000ULL;assert(r.append(s,s.control_us));}const auto h=r.header();assert(h.total==300&&h.retained==128&&h.overwritten==172&&h.first_sequence()==173);engine_log::Row row;assert(!r.read(h.log_id,172,row)&&r.read(h.log_id,173,row));engine_log::Page p;r.page(h.log_id,0,p);assert(p.gap_first==1&&p.gap_last==172&&p.count==16&&p.next_after==188);std::cout<<"retention rows="<<h.retained<<" overwritten="<<h.overwritten<<" recorder_bytes="<<sizeof(r)<<" runtime_sample_bytes="<<sizeof(engine::RuntimeSample)<<" row_bytes="<<sizeof(row)<<'\n';}

@@ -1,0 +1,159 @@
+{
+  "accepted": true,
+  "open_findings": [],
+  "scope": "Frozen development control/kernel, capture context helper, strict tune JSON migration and lossless runtime record contracts only; no target capture/PCB or full integration acceptance.",
+  "reviewed_utc": "2026-11-04T18:50:05.779826+00:00",
+  "source_hashes": {
+    "firmware/include/ecu/engine.hpp": "96782e593914078d96b2229c381d7de633c1cf2b676f7c70979b16651ca4d6fa",
+    "firmware/include/ecu/flex_fuel.hpp": "6bda00e1df16c9782245e74cabe67f4a4da75420b17e82a7cba80898e4ad2a38",
+    "firmware/include/ecu/flex_engine.hpp": "a2348897d50e3de0c3c46989fbb75fdf1ccd2dda634cba90ca164ba4b9b533ca",
+    "firmware/include/ecu/flex_runtime.hpp": "abacf194ac5d0fc0b0512a351ca988f9aa12fee80adb6a9d73da9f9f2d2aa6f2",
+    "firmware/include/ecu/flex_json.hpp": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45",
+    "firmware/include/ecu/flex_runtime_json.hpp": "e125f511ad9b9b0e9a2ce8618c11decc6cf25c4a94f81506b7b44de2b606f99f",
+    "firmware/include/ecu/engine_json.hpp": "e2ce934844850c3096db7acd974300521ec414f6d24cce1936f7d526a65eca37",
+    "firmware/tests/engine_flex_test.cpp": "b83af90088af9f934d392adcfbabc064aa7789ec8aad33c0b648ff231aebce7a"
+  },
+  "final_freeze_manifest_sha256": "9f753a0a11f0720bd776ca991ad953824653f9777c3b74a28b5b8595054b9141",
+  "ordering": {
+    "accepted": true,
+    "production_source_basis": "Pinned9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20 source review; no production execution in this integration review",
+    "parent_checks_final": 296,
+    "independent_spark_ordering_checks": 2164,
+    "independent_ordering_result": "ordering-adversarial-003.json",
+    "ordering_execution_freeze": "kernel-freeze-003; later assess change only rejects invented Source3 unfiltered data, while ordering cases use raw Source2; engine arithmetic unchanged",
+    "fuel_contract": "Separate fuel/temp factors precede independent reference AE adder; zero factor suppresses adder resurrection/deadtime; effective complete dose is trimmed then deadtime added once per actual opening",
+    "spark_contract": "Flex applied once to selected raw scalar/cylinder demand before own clamp/retard and secondary multiply/add/switch; crank suppresses flex spark; negative cylinder trim can recover unclamped raw demand",
+    "known_preserved_production_differences": [
+      "Own fuel trims apply to effective dose before deadtime; production scales complete pulse including deadtime",
+      "Own spark trim precedes secondary combination; production applies per-cylinder spark trim after global correction",
+      "Own hard output bounds and continuous arithmetic differ from production integer/saturation rules"
+    ]
+  },
+  "exact_Off_comparison": {
+    "accepted": true,
+    "baseline_commit": "8c589a4b99c4cbabb44586ba6a1266cbec3cef6b",
+    "profiles": 144,
+    "stateful_rows": 14400,
+    "output_bytes": 12271007,
+    "baseline_and_final_sha256": "5825b992bb99148fc851c8656e164edde7a54b22cc98d8f8803258df4de6da92",
+    "float_comparison": "Exact binary64 bit patterns plus state/fault/cut/channel/selected diagnostic values, not an epsilon comparison",
+    "covered": [
+      "three strategies",
+      "four transient modes and both application modes",
+      "all secondary modes plus explicit host value-only ETH condition",
+      "crank/run/overrun/limiter/recovery",
+      "trimmed channels",
+      "invalid/stale/future/temperature/battery cases"
+    ],
+    "result": "off-retention-results-005.json"
+  },
+  "quality_and_context": {
+    "accepted": true,
+    "context_checks_final": 14,
+    "raw_assessment": "Exact capture calibration+tune revision fence; source/confirmation/freshness; full-window frequency, calibrated bounds, width/period/high-gap and unfiltered conversion consistency; filterOff filtered/raw agreement",
+    "value_only_host_route": "Explicit SyntheticValue, Off-only corrections, waveform values unknown, never unlabelled bare ETH fallback; target binding still requires later separate review",
+    "context_changed": "Preserves monotonic history/counters, clears series and increments config epoch/fault generation; unobserved/superseded ACK rejection, N\u22121/N reacquisition and hidden fault retention verified",
+    "smoothed_samples": "Real filtered lag accepted; inconsistent unfiltered values rejected",
+    "control_findings_closed": [
+      "Out-of-calibration/fault frequency accepted as raw qualified",
+      "Forged ETH/temperature or missing unfiltered conversion accepted",
+      "Average high gap below Capture50us floor accepted"
+    ]
+  },
+  "JSON_and_records": {
+    "accepted": true,
+    "independent_schema_record_checks": 93,
+    "legacy_schema1_to8": "Reused enabled Tune resets flex disabled/neutral; canonical upgrade to9 reparses; schema8 secondary map and rules preserved; upgrade idempotent",
+    "schema9": "Complete strict flex section required; unknown/missing keys, numeric booleans, fractional cycle count and NaN curve values rejected",
+    "U64": "All seven timestamp/counter fields preserve exact values near UINT64_MAX using decimal strings; number encodings, leading zeros and overflow rejected",
+    "runtime_tuple_corruptions_closed": 4,
+    "closed_tuples": [
+      "Raw source1/2 qualified value without raw qualification",
+      "Target qualification without input confirmation",
+      "Corrections enabled but not required",
+      "SyntheticValue qualified with Ready instead of ValueOnly/Unavailable"
+    ],
+    "Record_reassessment": "Rounded float Record expansion is diagnostic only and is not reassessed as a control input",
+    "result": "kernel-probe-results-005.json"
+  },
+  "retention_tradeoff": {
+    "reviewed_context": true,
+    "rows_before": 256,
+    "rows_now": 128,
+    "window_at100ms_s": 12.8,
+    "window_at20ms_s": 2.56,
+    "record_bytes_budget": 136,
+    "native_Recorder_bytes": 87128,
+    "native_RuntimeSample_bytes": 664,
+    "native_row_bytes": 680,
+    "explicit_static_budget_bytes": 92160,
+    "independent_probe": "300 rows produce128 retained/172 overwritten,first173 and explicit gap1..172; page16-row progress verified",
+    "browser_context": "Collector accepts128/256 metadata; help states128 rows/12.8s and browser-loss limits",
+    "source_hashes": {
+      "firmware/include/ecu/engine_log.hpp": "c17b1d3435879e4ac0fcb1b4621b85f58d9975d044952fc0b083284e56e1a4fc",
+      "firmware/include/ecu/engine_data.hpp": "1e9773a82c824839fa6d8fee2700840f993305424c7257a9b809cf070d11ada6",
+      "web/engine_logger.js": "05d6ebfa8c020a6c105b23d13b19f2546331506cfc9c6a11706efc9f2a9ce337",
+      "web/flex_fuel_logic.js": "898b66548568ac003bef9d59dbf0bf23f085b2a4393fad4c9c0f36159a56f58b"
+    },
+    "limitation": "Retention reduction is explicit. Native sizes/static budget and parent-reported builds are not target heap/stack/load/runtime qualification."
+  },
+  "execution": {
+    "toolchain": "g++ C++17, strict warnings, ASan/UBSan",
+    "all_review_probes_owned": true,
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "production_Speeduino_executions_this_integration_review": 0,
+    "physical_actions": false,
+    "commands_and_hashes": [
+      "kernel-probe-results-003.json",
+      "kernel-probe-results-004.json",
+      "kernel-probe-results-005.json",
+      "off-baseline-comparison-001.json",
+      "off-retention-results-005.json",
+      "ordering-adversarial-003.json",
+      "kernel-malformed-001.json",
+      "malformed-closure-002.json",
+      "runtime-flags-003.json"
+    ]
+  },
+  "coverage_side_effect_disclosure": {
+    "prior_generated_files_touched": 16,
+    "exact_record": "prior-coverage-side-effect.json",
+    "record_sha256": "67e23bda6af687c8c37658016df138b70bb2cd09d3abfba39e1524d694f739df",
+    "description": "Earlier separate acquisition-review table-cache probe unintentionally flushed16 preexisting upstream .gcda counters. Exact files/timestamps preserved. No reconstruction/reset attempted.",
+    "generated_coverage_excluded_from_unchanged_claims": true,
+    "later_integrations_runs": "Only owned native components, with owned GCOV_PREFIX before startup; no production archive execution."
+  },
+  "out_of_scope_open_work": [
+    "Target binding/provenance, ISR/timer/queue, exact consumer-ACK wiring and physical input confirmation path",
+    "Host bridge reconfiguration ownership wiring and full C API/UI/storage/wire integration review",
+    "Protected GPIO/pin/BOOT/reset/download/PCB/enclosure hardware draft and qualification",
+    "Target heap/stack/timing/runtime and physical HIL/electrical/environmental/vehicle testing",
+    "Raw-edge coupled running-engine plant and fuel chemistry/calibration",
+    "Online TunerStudio support and full Speeduino parity"
+  ],
+  "owned_test_dependency_hashes": {
+    "json-fixtures-003/v1.json": "010ffafb495c7dc09af6c9cfadbbc7d7d2d9994df71091bed32c6eeaf4eb3292",
+    "json-fixtures-003/v2.json": "81195ce83acaafefc02ebe955c2d1d92656f41f015beb8c57bad6745139fd769",
+    "json-fixtures-003/v3.json": "9274e32ff7f0f0debe253f95304241a398b6b9c10fe04b868048fda4cf19d835",
+    "json-fixtures-003/v4.json": "5c18c92edab479ddafa47e207928a0bd29aa68fcdf7e55708ff9514ab8cee01e",
+    "json-fixtures-003/v5.json": "e169b5e20eb15f18cf4e61a8eb385c9cded0a0fcf9ca6bb65ad1df6abf58dda9",
+    "json-fixtures-003/v6.json": "c9007e8875392e436771cd64778d4ac1e17f8d85ff112d401d4293a6cfb46dba",
+    "json-fixtures-003/v7.json": "34f6fde4104352d9fb181c1b15a52e228e398946b54f7eba6651f92eb394ae4c",
+    "json-fixtures-003/v8.json": "8b2d9dbbba6835db38cddccca813a0731fb44776b8ba092dae1d86c0bfe2cdb6",
+    "cjson-owned/cJSON.c": "f892717f26cf3d21b7108de50cea95b6e48092950427615fe1d8d9c46ea09cca",
+    "cjson-owned/cJSON.h": "fda63720ffad1d007802f62204831018d167084c26e2ce08ad36f11529a90682"
+  },
+  "owned_probe_source_hashes": {
+    "context-probe-003.cpp": "5106a22c9230c71da766c30e965beb22aa3ab5512ac4b1fdc0df28a675100822",
+    "context-probe-005.cpp": "14946a9cd04a45ca1c0841e5896640ff660b2ba7ed1436a7973f0d733399eca4",
+    "high-gap-002.cpp": "15a128eef36c7b30ee97deee16bb98d42b8f3d95e23e1d4849731ba4e11b5464",
+    "kernel-json-003.cpp": "79f1a0bdfa7dd0c485f602186b7e7bb6c0d48fa28f17b835e05792f47bed45cb",
+    "kernel-malformed-001.cpp": "8c382512ef38b861a961bb4b6cfb711adaf548b2d1128a1bf14d2f6c814d903d",
+    "off-baseline-001.cpp": "cfb89d3e8850b31a03744cd8b99c2f35855d170e320245567126bb8b0f2a7101",
+    "ordering-adversarial-003.cpp": "b48beafae07132be25bb231fe964fbb58cbd89441bb9c395d7abedd52c353933",
+    "retention-probe-005.cpp": "91b8004ee863c64d7bdeef44bf05636a4917697b00abf9a6f8220d48bfd02847",
+    "runtime-flags-003.cpp": "f763aafcdfa24c06cbab250116ac9ae01ce97ec5705d0f1f5c7cd62434354995",
+    "runtime-flags-004.cpp": "978d71066719251bb1d3e9212d8461ba036bbab8a53b71c5910c22cc65d3fa07"
+  }
+}

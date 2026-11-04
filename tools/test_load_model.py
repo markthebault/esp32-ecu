@@ -33,7 +33,7 @@ class LoadModelTests(unittest.TestCase):
    path=R/'config/engine'/('defaults-v1.json' if schema==1 else f'defaults-v{schema}.json')
    if not path.exists():continue
    old=json.loads(path.read_text());r=self.runtime(old)
-   self.assertEqual(r.tune['schema_version'],8);self.assertEqual(r.tune['load_model'],tune()['load_model'])
+   self.assertEqual(r.tune['schema_version'],9);self.assertEqual(r.tune['load_model'],tune()['load_model'])
    for value,allowed in ((0,False),(19.9999999,True),(120.000001,True),(120.001,False)):
     bad=copy.deepcopy(old);bad['maps']['ve']['cells'][0]=value
     if allowed:self.runtime(bad)
@@ -41,7 +41,7 @@ class LoadModelTests(unittest.TestCase):
      with self.assertRaises(ValueError):self.runtime(bad)
   for path in (R/'tuning/examples').glob('*.msq'):
    if any(identity in path.read_bytes() for identity in (b'ESP32ECU DEV 008 INHIBITED',b'ESP32ECU DEV 009 INHIBITED')):continue
-   result=import_msq(path.read_bytes());self.assertEqual(result['schema_version'],8);self.assertEqual(result['load_model'],tune()['load_model'])
+   result=import_msq(path.read_bytes());self.assertEqual(result['schema_version'],9);self.assertEqual(result['load_model'],tune()['load_model'])
  def test_independent_source_and_unit_metadata_reject_without_reinterpreting(self):
   t=tune();t['load_model']['fuel_source']='tps'
   with self.assertRaises(ValueError):self.runtime(t)
@@ -73,8 +73,8 @@ class LoadModelTests(unittest.TestCase):
   self.assertEqual(s.command(b'b\0\1'),b'\x84');self.assertEqual(store.tune['revision'],1)
  def test_single_atomic_live_read_640_bytes_framed_647(self):
   store=EngineStore(Path(self.directory.name)/'tune.json');self.addCleanup(lambda:store.runtime.close());self.addCleanup(store.data_recorder.close);s=Session(store);self.addCleanup(s.close)
-  self.assertEqual(LIVE_BYTES,640);request=b'r'+struct.pack('<BBHH',0,0x30,0,640)
-  response=s.command(request);self.assertEqual(len(response),641);self.assertEqual(len(envelope(response)),647)
+  self.assertEqual(LIVE_BYTES,832);request=b'r'+struct.pack('<BBHH',0,0x30,0,832)
+  response=s.command(request);self.assertEqual(len(response),833);self.assertEqual(len(envelope(response)),839)
   data=response[1:];self.assertEqual(struct.unpack_from('<I',data,356)[0],0);self.assertEqual(data[392:416],bytes(24))
  def test_model_json_fixture_rejects_null_mismatch_unknown_and_overflow(self):
   data=self.sample();rec=self.recorder();self.assertTrue(rec.bridge.data_validate(encoded(data)))
@@ -86,10 +86,10 @@ class LoadModelTests(unittest.TestCase):
  def test_native_log_126_fields_and_sil_log_83_preserve_source_and_unknown(self):
   r=self.runtime(alpha());r.step(dict(rpm=1200,map_kpa=None,map_qualified=False,tps_pct=10,synced=True),1000000,use_decoder=False);d=r.data()
   rec=self.recorder();self.assertEqual(rec.command(dict(action='start',period_ms=20,duration_s=2),1000000),200);self.assertTrue(rec.append(d,1000000));rec.command(dict(action='stop',log_id=1),1000001)
-  lines=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));self.assertIn('LOG 006',lines[0][0]);self.assertEqual(len(lines[2]),188);self.assertEqual(len(lines[3]),188);self.assertEqual(len(lines[4]),188)
+  lines=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));self.assertIn('LOG 007',lines[0][0]);self.assertEqual(len(lines[2]),229);self.assertEqual(len(lines[3]),229);self.assertEqual(len(lines[4]),229)
   row=dict(zip(lines[2],lines[4]));self.assertEqual(row['MAP'],'NaN');self.assertEqual(row['LoadFuelSource'],'1');self.assertEqual(row['LoadFuel'],'10');self.assertEqual(row['LoadBaro'],'NaN');self.assertEqual(row['LoadAvailable'],'1')
-  text=export_msl([dict(time=0,engine_sample=d)],'boundary');sil=list(csv.reader(io.StringIO(text),delimiter='\t'));self.assertEqual(len(sil[2]),145);self.assertEqual(len(sil[4]),145);self.assertEqual(dict(zip(sil[2],sil[4]))['LoadFuelSource'],'1')
+  text=export_msl([dict(time=0,engine_sample=d)],'boundary');sil=list(csv.reader(io.StringIO(text),delimiter='\t'));self.assertEqual(len(sil[2]),186);self.assertEqual(len(sil[4]),186);self.assertEqual(dict(zip(sil[2],sil[4]))['LoadFuelSource'],'1')
   # A maximum-width metadata header and F32 row must fit the target buffer.
-  self.assertLess(len(lines[1][0])+len('\t'.join(lines[2]))+len('\t'.join(lines[3]))+12,4096)
+  self.assertLess(len(lines[1][0])+len('\t'.join(lines[2]))+len('\t'.join(lines[3]))+12,6144)
 
 if __name__=='__main__':unittest.main(verbosity=2)

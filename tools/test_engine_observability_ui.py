@@ -25,15 +25,15 @@ async def check(url,device,out):
    msl=await save('#engine-data-msl','browser-collected.msl');data_path=await save('#engine-data-json','browser-collected.json');retained=await save('#engine-data-retained','device-retained.msl')
    collected=json.loads(data_path.read_text());assert not collected['gaps'];assert len(collected['records'])==count
    a=list(csv.reader(io.StringIO(msl.read_text()),delimiter='\t'));b=list(csv.reader(io.StringIO(retained.read_text()),delimiter='\t'))
-   assert a[2]==b[2] and a[3]==b[3] and len(a[2])==188 and len(a)==len(b)==count+4
+   assert a[2]==b[2] and a[3]==b[3] and len(a[2])==229 and len(a)==len(b)==count+4
    for x,y in zip(a[4:],b[4:]):
-    assert len(x)==len(y)==188
+    assert len(x)==len(y)==229
     for left,right in zip(x,y):
      if left=='NaN' or right=='NaN':assert left==right
      else:assert abs(float(left)-float(right))<max(1e-6,abs(float(right))*2e-8),(left,right)
-   assert all(row['sample']['source_code']==2 for row in collected['records']);checks.append('Actual browser and native MSL exports agree across188 fields; unknown values stay NaN')
+   assert all(row['sample']['source_code']==2 for row in collected['records']);checks.append('Actual browser and native MSL exports agree across229 fields; unknown values stay NaN')
    await page.locator('#engine-data-period').select_option('20');await page.locator('#engine-data-start').click()
-   await page.wait_for_function('()=>window.EcuEngineLogger.inspect().identity.log_id===2&&window.EcuEngineLogger.inspect().rows===256&&!window.EcuEngineLogger.inspect().collecting')
+   await page.wait_for_function('()=>window.EcuEngineLogger.inspect().identity.log_id===2&&window.EcuEngineLogger.inspect().rows===128&&!window.EcuEngineLogger.inspect().collecting')
    state=await page.evaluate('()=>window.EcuEngineLogger.inspect()');assert state['gaps'][0][0]==1 and state['gaps'][0][1]>=340
    await save('#engine-data-json','browser-gapped.json');await save('#engine-data-msl','browser-gapped.msl');checks.append('20ms replay exposes overwritten prefix and exports exact gap ranges')
    pending=asyncio.Event();release=asyncio.Event();finished=asyncio.Event();held=False
@@ -44,7 +44,7 @@ async def check(url,device,out):
    await page.route('**/api/engine/data-log?*',delayed_page)
    await page.locator('#engine-data-start').click();await asyncio.wait_for(pending.wait(),5)
    await page.locator('[data-page="diagnostics"]').click();release.set();await asyncio.wait_for(finished.wait(),5)
-   await page.wait_for_function('()=>window.EcuEngineLogger.inspect().rows===256&&!window.EcuEngineLogger.inspect().collecting')
+   await page.wait_for_function('()=>window.EcuEngineLogger.inspect().rows===128&&!window.EcuEngineLogger.inspect().collecting')
    assert await page.locator('#title').inner_text()=='Diagnostics';assert not await page.locator('#engine-data-summary').count()
    await page.unroute('**/api/engine/data-log?*',delayed_page);checks.append('Collection continues across navigation without replacing the current page')
    await page.locator('[data-page="engine"]').click();await page.locator('#engine-data-start').wait_for()
@@ -54,7 +54,7 @@ async def check(url,device,out):
    h=device.engine.data_log_header();code,new=device.engine.data_log_command(b'{"action":"start","period_ms":20,"duration_s":12}',h['boot_id']);assert code==200
    await page.locator('#engine-data-follow').click();await page.wait_for_function('(id)=>window.EcuEngineLogger.inspect().identity.log_id===id',arg=new['log_id'])
    assert await page.evaluate('()=>window.EcuEngineLogger.inspect().rows')==0
-   release.set();await asyncio.wait_for(finished.wait(),5);await page.wait_for_function('()=>window.EcuEngineLogger.inspect().rows===256&&!window.EcuEngineLogger.inspect().collecting')
+   release.set();await asyncio.wait_for(finished.wait(),5);await page.wait_for_function('()=>window.EcuEngineLogger.inspect().rows===128&&!window.EcuEngineLogger.inspect().collecting')
    race_path=await save('#engine-data-json','identity-race.json');race=json.loads(race_path.read_text());assert all(r['log_id']==new['log_id'] for r in race['records'])
    await page.unroute('**/api/engine/data-log?*',delayed_page);checks.append('Delayed old-log response cannot join a newly followed session')
    # A fully parsed page is committed atomically, even if its last row is bad.
@@ -67,7 +67,7 @@ async def check(url,device,out):
     return {bad,exact:x.exportMsl().includes('9007199254740993'),count:x.inspect().rows};
    }''')
    assert all(result['bad']) and result['exact'] and result['count']==16;checks.append('Mixed identities, tail corruption and future observations reject the whole page;64-bit IDs remain exact')
-   await page.locator('#engine-data-follow').click();await page.wait_for_function('()=>window.EcuEngineLogger.inspect().rows===256')
+   await page.locator('#engine-data-follow').click();await page.wait_for_function('()=>window.EcuEngineLogger.inspect().rows===128')
    await page.locator('#engine-data-summary').scroll_into_view_if_needed();await page.screenshot(path=out/'engine-log-desktop.png')
    for width in (320,390,768,1440):
     await page.set_viewport_size({'width':width,'height':1000});await page.evaluate('()=>new Promise(requestAnimationFrame)');assert await page.evaluate('()=>document.documentElement.scrollWidth<=innerWidth')

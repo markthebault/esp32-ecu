@@ -1,0 +1,51 @@
+{
+  "freeze_sha256": "4d80cd77becd8e085ab6fb0b76f4c93a50d00aec586e82b5831a66888c96f7b3",
+  "runs": [
+    {
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-002/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-malformed-001.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-malformed-001-updated"
+      ],
+      "stdout": "frequency400_above_fault_and_width_above_period faults=4 control_ok=0 raw_qualified=0 fuel_factor=nan temp_factor=nan reason=malformed_capture_sample\nfrequency10_below_calibration faults=4 control_ok=0 raw_qualified=0 fuel_factor=nan temp_factor=nan reason=malformed_capture_sample\nethanol99_from100Hz_filterOff faults=4 control_ok=0 raw_qualified=0 fuel_factor=nan temp_factor=nan reason=malformed_capture_sample\ntemperature120_from3ms_filterOff faults=4 control_ok=0 raw_qualified=0 fuel_factor=nan temp_factor=nan reason=malformed_capture_sample\nunfiltered_values_NaN faults=4 control_ok=0 raw_qualified=0 fuel_factor=nan temp_factor=nan reason=malformed_capture_sample\n",
+      "stderr": "",
+      "source_sha256": "8c382512ef38b861a961bb4b6cfb711adaf548b2d1128a1bf14d2f6c814d903d",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-002/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/high-gap-002.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/high-gap-002-updated"
+      ],
+      "stdout": "gap_us=25 control_ok=1 raw_qualified=1 reason=ready\n",
+      "stderr": "",
+      "source_sha256": "15a128eef36c7b30ee97deee16bb98d42b8f3d95e23e1d4849731ba4e11b5464",
+      "returncode": 0
+    }
+  ],
+  "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/gcov",
+  "GCOV_PREFIX_STRIP": "0"
+}

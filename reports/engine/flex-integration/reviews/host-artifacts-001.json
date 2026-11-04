@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python3",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host_artifact_probe.py",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-003"
+  ],
+  "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-003",
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host_artifact_probe.py\", line 30, in <module>\n    i=table[2].index('FlexEthanolPct');known=[float(row[i])for row in table[4:]if row[i]!='NaN'];require(min(known)==1.724 and max(known)==99.993,'saved plotted field min/max')\n                                                                                                 ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host_artifact_probe.py\", line 13, in require\n    if not v:raise AssertionError(label)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: saved plotted field min/max\n",
+  "probe_sha256": "39c6a7ec5edcbc1da8f692c0eb4ee8654191114422e2ba445418462abd807114",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-gcov-003",
+    "GCOV_PREFIX_STRIP": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-tmp-003",
+    "PYTHONPATH": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-003/tools"
+  }
+}

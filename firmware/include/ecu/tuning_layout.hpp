@@ -5,17 +5,17 @@
 #include <cstring>
 #include <limits>
 namespace ecu::tuning {
-inline constexpr std::size_t page_bytes=8192,live_bytes=640,chunk_bytes=256;
-inline constexpr const char signature[]="ESP32ECU DEV 009 INHIBITED";
+inline constexpr std::size_t page_bytes=8192,live_bytes=832,chunk_bytes=256;
+inline constexpr const char signature[]="ESP32ECU DEV 010 INHIBITED";
 inline constexpr const char serial_protocol[]="002";
 using Page=std::array<std::uint8_t,page_bytes>;
 inline void put_u32(std::uint8_t*p,std::uint32_t v){for(unsigned i=0;i<4;++i)p[i]=std::uint8_t(v>>(8*i));}
 inline std::uint32_t get_u32(const std::uint8_t*p){std::uint32_t v=0;for(unsigned i=0;i<4;++i)v|=std::uint32_t(p[i])<<(8*i);return v;}
 inline void put_float(std::uint8_t*p,float v){static_assert(sizeof(float)==4&&std::numeric_limits<float>::is_iec559);std::uint32_t u;std::memcpy(&u,&v,4);put_u32(p,u);}
 inline float get_float(const std::uint8_t*p){auto u=get_u32(p);float v;std::memcpy(&v,&u,4);return v;}
-inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||(n>=4756&&n<4768)||(n>=4940&&n<4992)||(n>=5116&&n<5120)||(n>=5176&&n<5376)||(n>=5448&&n<5504)||n>=7808;}
+inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||(n>=4756&&n<4768)||(n>=4940&&n<4992)||(n>=5116&&n<5120)||(n>=5176&&n<5376)||(n>=5448&&n<5504)||n>=7968;}
 inline bool revision_offset(std::size_t n){return n>=268&&n<272;}
-// own009 carries the complete validated model and both secondary maps.
+// own010 appends flex capture/correction settings without moving old fields.
 inline bool representable(const engine::Tune&t){return !engine::validate(t);}
 inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill(0);
  put_u32(p.data(),(std::uint32_t(t.ego_enabled)<<0)|(std::uint32_t(t.dfco_enabled)<<1)|(std::uint32_t(t.idle_enabled)<<2));
@@ -149,6 +149,21 @@ inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill
  put_u32(p.data()+5440,t.secondary_tables.spark.input_channel);put_u32(p.data()+5444,t.secondary_tables.spark.active_high);
  for(unsigned i=0;i<16;++i){put_float(p.data()+6656+i*4,t.secondary_spark.rpm[i]);put_float(p.data()+6720+i*4,t.secondary_spark.load[i]);}
  for(unsigned i=0;i<256;++i)put_float(p.data()+6784+i*4,t.secondary_spark.cells[i]);
+ put_u32(p.data()+7808,t.flex_fuel.correction.enabled);
+ put_u32(p.data()+7812,t.flex_fuel.correction.temperature_enabled);
+ put_u32(p.data()+7816,t.flex_fuel.input_confirmed);
+ put_u32(p.data()+7820,t.flex_fuel.capture.cycles);
+ put_float(p.data()+7824,t.flex_fuel.capture.low_hz);
+ put_float(p.data()+7828,t.flex_fuel.capture.high_hz);
+ put_float(p.data()+7832,t.flex_fuel.capture.fault_hz);
+ put_float(p.data()+7836,t.flex_fuel.capture.tolerance_hz);
+ put_float(p.data()+7840,t.flex_fuel.capture.stale_ms);
+ put_float(p.data()+7844,t.flex_fuel.capture.filter_ms);
+ for(unsigned i=0;i<6;++i)put_float(p.data()+7848+i*4,t.flex_fuel.correction.ethanol_bins[i]);
+ for(unsigned i=0;i<6;++i)put_float(p.data()+7872+i*4,t.flex_fuel.correction.fuel_pct[i]);
+ for(unsigned i=0;i<6;++i)put_float(p.data()+7896+i*4,t.flex_fuel.correction.spark_deg[i]);
+ for(unsigned i=0;i<6;++i)put_float(p.data()+7920+i*4,t.flex_fuel.correction.temperature_c[i]);
+ for(unsigned i=0;i<6;++i)put_float(p.data()+7944+i*4,t.flex_fuel.correction.temperature_pct[i]);
 }
 inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  if(!origin||get_u32(p.data()+268)!=origin)return false;
@@ -286,9 +301,24 @@ inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  const auto sec_spark_channel=get_u32(p.data()+5440),sec_spark_polarity=get_u32(p.data()+5444);if(sec_spark_channel>1||sec_spark_polarity>1)return false;t.secondary_tables.spark.input_channel=std::uint8_t(sec_spark_channel);t.secondary_tables.spark.active_high=sec_spark_polarity;
  for(unsigned i=0;i<16;++i){t.secondary_spark.rpm[i]=get_float(p.data()+6656+i*4);t.secondary_spark.load[i]=get_float(p.data()+6720+i*4);}
  for(unsigned i=0;i<256;++i)t.secondary_spark.cells[i]=get_float(p.data()+6784+i*4);
+ const auto flex_enabled=get_u32(p.data()+7808);if(flex_enabled>1)return false;t.flex_fuel.correction.enabled=flex_enabled;
+ const auto flex_temperature_enabled=get_u32(p.data()+7812);if(flex_temperature_enabled>1)return false;t.flex_fuel.correction.temperature_enabled=flex_temperature_enabled;
+ const auto flex_input_confirmed=get_u32(p.data()+7816);if(flex_input_confirmed>1)return false;t.flex_fuel.input_confirmed=flex_input_confirmed;
+ const auto flex_cycles=get_u32(p.data()+7820);if(flex_cycles<2||flex_cycles>32)return false;t.flex_fuel.capture.cycles=static_cast<std::uint8_t>(flex_cycles);
+ t.flex_fuel.capture.low_hz=get_float(p.data()+7824);
+ t.flex_fuel.capture.high_hz=get_float(p.data()+7828);
+ t.flex_fuel.capture.fault_hz=get_float(p.data()+7832);
+ t.flex_fuel.capture.tolerance_hz=get_float(p.data()+7836);
+ t.flex_fuel.capture.stale_ms=get_float(p.data()+7840);
+ t.flex_fuel.capture.filter_ms=get_float(p.data()+7844);
+ for(unsigned i=0;i<6;++i)t.flex_fuel.correction.ethanol_bins[i]=get_float(p.data()+7848+i*4);
+ for(unsigned i=0;i<6;++i)t.flex_fuel.correction.fuel_pct[i]=get_float(p.data()+7872+i*4);
+ for(unsigned i=0;i<6;++i)t.flex_fuel.correction.spark_deg[i]=get_float(p.data()+7896+i*4);
+ for(unsigned i=0;i<6;++i)t.flex_fuel.correction.temperature_c[i]=get_float(p.data()+7920+i*4);
+ for(unsigned i=0;i<6;++i)t.flex_fuel.correction.temperature_pct[i]=get_float(p.data()+7944+i*4);
  return !engine::validate(t);
 }
-// Update only an owned, already canonical schema8 tree. No global data mutates.
+// Update only an owned, already canonical schema9 tree. No global data mutates.
 template<class Json> bool update_document(Json&j,const engine::Tune&t){
  if(!j.header(t.revision,engine::strategy_name(t.strategy)))return false;
  if(!j.number("engine","cylinders",t.cylinders))return false;
@@ -341,7 +371,7 @@ template<class Json> bool update_document(Json&j,const engine::Tune&t){
  if(!j.number("timing","cam_window_deg",t.cam_window_deg))return false;
  if(!j.array("timing","firing_order",t.firing_order)||!j.boolean("cylinder_trims","enabled",t.cylinder_trims_enabled)||!j.array("cylinder_trims","spark_deg",t.cylinder_spark_deg))return false;
  for(unsigned i=0;i<4;++i)if(!j.trim(i,t.cylinder_fuel[i]))return false;
- if(!j.idle(t.idle_control)||!j.transient_enrichment(t.transient_enrichment)||!j.load_model(t.load_model)||!j.secondary_tables(t.secondary_tables,t.secondary_ve,t.secondary_spark))return false;
+ if(!j.idle(t.idle_control)||!j.transient_enrichment(t.transient_enrichment)||!j.load_model(t.load_model)||!j.secondary_tables(t.secondary_tables,t.secondary_ve,t.secondary_spark)||!j.flex_fuel(t.flex_fuel))return false;
  return true;
 }
 } // namespace ecu::tuning

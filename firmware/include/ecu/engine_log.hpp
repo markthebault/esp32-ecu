@@ -21,7 +21,7 @@ struct Page {
 // Retention is bounded; a consumer collects by row sequence and discloses gaps.
 class Recorder {
 public:
- static constexpr unsigned capacity=256;
+ static constexpr unsigned capacity=128;
  static bool valid_period(unsigned ms){return ms==20||ms==50||ms==100||ms==200||ms==500||ms==1000;}
  bool start(unsigned period_ms,unsigned duration_s,engine::DataSource source,std::uint64_t now){
   expire(now);
@@ -87,5 +87,5 @@ private:
  Header header_;std::array<Row,capacity> rows_{};
  std::uint64_t next_due_=0,last_observed_=0,last_snapshot_=0;
 };
-static_assert(sizeof(Recorder)<144*1024,"Engine recorder exceeds its explicit256-row secondary-table diagnostic RAM budget");
+static_assert(sizeof(Recorder)<90*1024,"Engine recorder exceeds its explicit128-row flex diagnostic RAM budget");
 }

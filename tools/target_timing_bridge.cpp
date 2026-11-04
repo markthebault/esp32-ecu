@@ -18,7 +18,7 @@ struct IO {
 struct IdleIO {Context*owner=nullptr;bool high=false;void all_low();bool write(bool value);};
 struct Context {
  ecu::engine::RuntimeSample data;std::uint64_t data_sequence=0;
- ecu::engine::Tune tune;ecu::engine::Controller controller;ecu::engine::PhaseDecoder decoder{{60,2,8000}};
+ ecu::engine::Tune tune;ecu::flex::Capture flex_capture;std::uint32_t flex_revision=0;ecu::engine::Controller controller;ecu::engine::PhaseDecoder decoder{{60,2,8000}};
  ecu::timing::Executor core;ecu::idle::PwmExecutor pwm;ecu::engine::Output last;IO io;IdleIO idle_io;
  std::array<Event,32> events{};unsigned event_begin=0,event_count=0;
  Event popped;std::uint64_t now=0,command_us=0,sampled_us=0,gap=0,sequence=0;
@@ -56,7 +56,7 @@ extern "C" int engine_configure(void*p,const char* text){
  if(!text||!ecu::web::safe_json(text,std::strlen(text),ecu::engine::tune_maximum))return 0;
  auto*j=cJSON_ParseWithOpts(text,nullptr,true);ecu::engine::Tune candidate;
  const bool ok=j&&ecu::engine::parse_tune(j,candidate);cJSON_Delete(j);if(!ok)return 0;
- auto&c=*static_cast<Context*>(p);c.tune=candidate;c.controller.reset();c.core=ecu::timing::Executor{};c.pwm=ecu::idle::PwmExecutor{};c.idle_io.high=false;
+ auto&c=*static_cast<Context*>(p);c.tune=candidate;if(!c.flex_revision)c.flex_capture=ecu::flex::Capture(candidate.flex_fuel.capture);else if(!c.flex_capture.configure(candidate.flex_fuel.capture))c.flex_capture.context_changed();c.flex_revision=candidate.revision;c.controller.reset();c.core=ecu::timing::Executor{};c.pwm=ecu::idle::PwmExecutor{};c.idle_io.high=false;
  c.decoder=ecu::engine::PhaseDecoder({c.slots,c.missing,c.max_rpm},ecu::engine::angle_config(c.tune));c.last={};c.data={};c.data_sequence=0;c.io.mask=0;c.event_count=0;c.event_begin=0;c.now=c.command_us=c.sampled_us=c.sequence=0;c.have_control=false;return 1;
 }
 extern "C" int engine_wheel(void*p,unsigned slots,unsigned missing,unsigned max_rpm){
@@ -69,6 +69,7 @@ static void update_phase(Context&c){
  c.core.phase(c.decoder.phase_synced(),c.decoder.deadline(),c.now,c.io);
  if(c.core.stats().fault==ecu::timing::Cause::CamPhase&&!c.decoder.faulted())c.decoder.invalidate(ecu::engine::PhaseDecoder::Reason::Timeout);
 }
+extern "C" int engine_flex_edge(void*p,std::uint64_t time,unsigned level){if(level>1)return 0;static_cast<Context*>(p)->flex_capture.edge(time,level!=0,ecu::flex::Source::Synthetic);return 1;}
 extern "C" int engine_cam(void*p,std::uint64_t time){auto&c=*static_cast<Context*>(p);c.now=time;c.core.progress(time,c.io);c.core.raw_capture(time);c.decoder.cam(time);update_phase(c);return c.core.stats().fault==ecu::timing::Cause::None?0:3;}
 extern "C" int engine_trigger(void*p,std::uint64_t time){
  auto&c=*static_cast<Context*>(p);c.now=time;c.core.progress(time,c.io);c.core.raw_capture(time);
@@ -96,9 +97,12 @@ extern "C" unsigned engine_pop(void*p){
 extern "C" double engine_event_advance(void*p){return static_cast<Context*>(p)->popped.advance;}
 extern "C" std::uint64_t engine_event_dwell(void*p){return static_cast<Context*>(p)->popped.dwell;}
 extern "C" const char* engine_step(void*p,const char*text,std::uint64_t now,std::uint64_t sampled){
- auto&c=*static_cast<Context*>(p);auto*j=cJSON_Parse(text);ecu::engine::Inputs in;bool wheel=false;
- bool ok=j&&ecu::web::keys(j,"|rpm||map_kpa||tps_pct||clt_c||iat_c||lambda||battery_v||sensor_v||synced||sensors_valid||lambda_ready||use_decoder||phase_synced||aux_pressure_kpa||map_qualified||aux_pressure_qualified||ethanol_pct||ethanol_qualified||table_switches|");
+ auto&c=*static_cast<Context*>(p);auto*j=cJSON_Parse(text);ecu::engine::Inputs in;bool wheel=false,raw_flex=true;
+ bool ok=j&&ecu::web::keys(j,"|rpm||map_kpa||tps_pct||clt_c||iat_c||lambda||battery_v||sensor_v||synced||sensors_valid||lambda_ready||use_decoder||phase_synced||aux_pressure_kpa||map_qualified||aux_pressure_qualified||ethanol_pct||ethanol_qualified||table_switches||use_flex_capture|");
  ok=ok&&ecu::secondary::parse_synthetic_inputs(j,in);
+ raw_flex=!cJSON_GetObjectItemCaseSensitive(j,"ethanol_pct")&&!cJSON_GetObjectItemCaseSensitive(j,"ethanol_qualified");
+ if(cJSON_GetObjectItemCaseSensitive(j,"use_flex_capture"))ok=ok&&ecu::web::boolean(j,"use_flex_capture",raw_flex);
+ if(raw_flex&&(in.ethanol_qualified||std::isfinite(in.ethanol_pct)))ok=false;
  if(cJSON_GetObjectItemCaseSensitive(j,"map_qualified"))ok=ok&&ecu::web::boolean(j,"map_qualified",in.map_qualified);
  if(cJSON_GetObjectItemCaseSensitive(j,"aux_pressure_qualified"))ok=ok&&ecu::web::boolean(j,"aux_pressure_qualified",in.aux_pressure_qualified);
  if(const auto*a=cJSON_GetObjectItemCaseSensitive(j,"aux_pressure_kpa"))if(!cJSON_IsNull(a))ok=ok&&ecu::web::number(j,"aux_pressure_kpa",in.aux_pressure_kpa);
@@ -114,13 +118,15 @@ extern "C" const char* engine_step(void*p,const char*text,std::uint64_t now,std:
  c.now=now;
  if(!ok){c.core.trip(now,ecu::timing::Cause::Control,c.io);j=cJSON_CreateObject();cJSON_AddStringToObject(j,"error","Invalid native timing input");return encode(j);}
  c.decoder.tick(now);update_phase(c);if(wheel){in.rpm=c.decoder.rpm();in.synced=c.decoder.crank_synced();in.phase_synced=c.decoder.phase_synced();}in.sampled_us=sampled;
+ in.flex_sample=raw_flex?ecu::flex::Sample{c.flex_capture.observe(now),c.flex_capture.config(),c.flex_revision}:ecu::flex::synthetic_value(in.ethanol_pct,in.ethanol_qualified,sampled,c.tune.flex_fuel.capture,c.tune.revision);
  c.last=c.controller.step(c.tune,in,now);c.command_us=now;c.sampled_us=sampled;c.have_control=true;
  c.core.progress(now,c.io);const auto cmd=command(c);c.core.command(cmd,now,c.io);
  c.pwm.submit(ecu::idle::pwm_command(cmd,c.core.current_command(),now,c.core.stats()),now,c.idle_io);idle_fault(c);
  if(c.core.recover(now,wheel&&!in.synced&&c.last.state==ecu::engine::State::Stopped&&!c.last.faults))c.decoder.reset();
  const auto& stats=c.core.stats();
  if(stats.fault!=ecu::timing::Cause::None){c.last.faults|=ecu::engine::Timing;c.last.state=ecu::engine::State::Faulted;c.last.fuel_cut=c.last.spark_cut=true;}
- c.data=ecu::engine::synthetic_data(c.tune,in,c.last,++c.data_sequence,now);c.data.phase_reason=static_cast<std::uint8_t>(c.decoder.reason());c.data.phase_losses=c.decoder.losses();c.data.cam_rejected=c.decoder.rejected();c.data.cam_error_deg=c.decoder.cam_error_deg();c.data.virtual_high_mask=c.io.mask;
+ c.data=ecu::engine::synthetic_data(c.tune,in,c.last,++c.data_sequence,now);if(raw_flex&&c.last.flex_fuel.required&&c.last.flex_fuel.configuration_match&&in.flex_sample.observation.pending_fault)c.flex_capture.acknowledge(in.flex_sample.observation.fault_generation);
+ c.data.phase_reason=static_cast<std::uint8_t>(c.decoder.reason());c.data.phase_losses=c.decoder.losses();c.data.cam_rejected=c.decoder.rejected();c.data.cam_error_deg=c.decoder.cam_error_deg();c.data.virtual_high_mask=c.io.mask;
  c.data.worker_sequence=c.core.current_command().sequence;c.data.worker_observed_us=now;c.data.worker_epoch=stats.epoch;c.data.worker_tune_revision=c.core.current_command().tune_revision;c.data.worker_sensor_revision=c.core.current_command().sensor_revision;c.data.timing_fault=static_cast<std::uint8_t>(stats.fault);c.data.last_timing_fault=static_cast<std::uint8_t>(stats.last_fault);
  j=ecu::engine::output_json(c.last);cJSON_AddStringToObject(j,"angle_stop_reason",ecu::engine::AngleScheduler::reason_name(stats.angle_reason));cJSON_AddBoolToObject(j,"synced",in.synced&&(!c.decoder.required()||in.phase_synced));cJSON_AddBoolToObject(j,"crank_synced",in.synced);cJSON_AddBoolToObject(j,"phase_synced",in.phase_synced);cJSON_AddBoolToObject(j,"phase_required",c.decoder.required());cJSON_AddStringToObject(j,"phase_reason",ecu::engine::PhaseDecoder::reason_name(c.decoder.reason()));cJSON_AddNumberToObject(j,"phase_losses",c.decoder.losses());cJSON_AddNumberToObject(j,"cam_rejected",c.decoder.rejected());cJSON_AddNumberToObject(j,"cam_error_deg",c.decoder.cam_error_deg());cJSON_AddNumberToObject(j,"time_us",now);cJSON_AddNumberToObject(j,"gap_us",c.gap);
  cJSON_AddNumberToObject(j,"timing_stops",stats.faults);cJSON_AddNumberToObject(j,"timing_recoveries",stats.recoveries);

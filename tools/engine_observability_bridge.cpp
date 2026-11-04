@@ -1,6 +1,7 @@
 // Native adapter for the same bounded recorder and packet bodies as the target.
 // JSON input is an observation fixture only. It cannot apply ECU commands.
 #include "ecu/engine_log_json.hpp"
+#include "ecu/flex_runtime_json.hpp"
 #include "ecu/engine_log_msl.hpp"
 #include "ecu/engine_radio.hpp"
 #include <openssl/hmac.h>
@@ -64,6 +65,7 @@ bool sample(const char*text,ecu::engine::RuntimeSample&out){
  const auto*inputs=cJSON_GetObjectItemCaseSensitive(j,"inputs");const auto*proposals=cJSON_GetObjectItemCaseSensitive(j,"proposals");
  const auto*second=cJSON_GetObjectItemCaseSensitive(j,"secondary_tables");
  if(second)ok=ok&&ecu::secondary::parse_observations(second,r.secondary_fuel,r.secondary_spark,available);
+ const auto*flex=cJSON_GetObjectItemCaseSensitive(j,"flex_fuel");if(flex)ok=ok&&ecu::flex::parse_record(flex,r.flex_fuel,available);
  const auto*model=cJSON_GetObjectItemCaseSensitive(j,"load_model");
  if(model)ok=ok&&ecu::load::parse_observation(model,r.load_model,available);
  const auto*ae=cJSON_GetObjectItemCaseSensitive(j,"transient_enrichment");

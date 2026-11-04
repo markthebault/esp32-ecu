@@ -1,0 +1,25 @@
+{
+  "environment": "compact_n16r8_web",
+  "elf_sha256": "10c99de1593a9114f8ffb7346ba62165a55876599ffa19ce0fb268fcb2ca48c5",
+  "binary_sha256": "ae5e39b8422e8b819086b238b2a81dde6d160158838fe675428e3db200476c8d",
+  "sdkconfig_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+  "exclusive_usb": true,
+  "console": "UART0 only",
+  "project_driver_source": "firmware/components/esp_driver_usb_serial_jtag/src/usb_serial_jtag.c",
+  "project_driver_sha256": "6316295b4776a662f0feea6117eab665877d7587f4bd5dce8d64ac1dd6cf0670",
+  "sdk_original_retained": true,
+  "usb_isr_symbol": "4203c650 l     F .flash.text\t000001a6 usb_serial_jtag_isr_handler_default",
+  "usb_isr_cache_safe": false,
+  "usb_isr_flags": 0,
+  "source_budgets": {
+    "rx_ring_bytes": 1024,
+    "tx_ring_bytes": 1024,
+    "read_slice_bytes": 64,
+    "task_stack_bytes": 12288,
+    "task_cpu": 0,
+    "task_priority": 1,
+    "mandatory_yield_ticks": 1,
+    "send_retry_budget_us": 2000
+  },
+  "qualification": "Static ELF/config/source checks only. USB ISR can pause during flash work. Runtime stack/heap, boot/panic traffic, enumeration, driver RX drops, sustained load and physical timing remain unmeasured."
+}

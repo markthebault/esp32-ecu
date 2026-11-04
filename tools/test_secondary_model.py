@@ -89,8 +89,8 @@ class SecondaryTests(unittest.TestCase):
  def test_json7_retains_load_zero_coefficients_and_stored_bytes(self):
   old=json.loads((R/'config/engine/defaults-v7.json').read_text());old['maps']['ve']['cells'][0]=0;old['revision']=71;body=json.dumps(old,indent=2).encode()
   with tempfile.TemporaryDirectory() as d:
-   path=Path(d)/'old.json';path.write_bytes(body);store=self.store(path);self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['revision'],71);self.assertEqual(store.tune['schema_version'],8);self.assertEqual(store.tune['load_model'],old['load_model']);self.assertEqual(store.tune['maps'],old['maps']);self.assertTrue(all(r['mode']=='off' for r in store.tune['secondary_tables'].values()))
-   self.assertEqual(store.save(body)[0],200);self.assertEqual(json.loads(path.read_bytes())['schema_version'],8)
+   path=Path(d)/'old.json';path.write_bytes(body);store=self.store(path);self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['revision'],71);self.assertEqual(store.tune['schema_version'],9);self.assertEqual(store.tune['load_model'],old['load_model']);self.assertEqual(store.tune['maps'],old['maps']);self.assertTrue(all(r['mode']=='off' for r in store.tune['secondary_tables'].values()))
+   self.assertEqual(store.save(body)[0],200);self.assertEqual(json.loads(path.read_bytes())['schema_version'],9)
  def test_own008_actual_file_keeps_model_and_full_new_msq_roundtrip(self):
   old=import_msq((R/'tuning/examples/tunerstudio-load-roundtrip.msq').read_bytes());self.assertEqual(old['load_model']['fuel_source'],'tps');self.assertEqual(old['load_model']['afr'],'measured');self.assertEqual(old['load_model']['fixed_baro_kpa'],99.5);self.assertTrue(all(r['mode']=='off' for r in old['secondary_tables'].values()))
   t=tune();configure(t,'fuel','multiply','tps');configure(t,'spark','add','imap_emap');t['secondary_tables']['fuel']['map']['cells'][231]=123.125;t['secondary_tables']['spark']['map']['cells'][17]=-2.5
@@ -110,7 +110,7 @@ class SecondaryTests(unittest.TestCase):
    store=self.store(Path(d)/'dense.json');self.assertEqual(store.save(body)[0],200);self.assertEqual(pages(decode_pages(pages(store.tune),store.tune)),pages(store.tune))
  def test_reserved_regions_and_full_u32_reject_before_narrowing(self):
   t=tune();p=pages(t)[1]
-  for offset in (292,511,4756,4767,5116,5119,5176,5375,5448,5503,7808,8191):
+  for offset in (292,511,4756,4767,5116,5119,5176,5375,5448,5503,7968,8191):
    bad=bytearray(p);bad[offset]=1
    with self.assertRaises(ValueError):decode_pages({1:bad},t)
   for offset in (rule_offset('fuel')+28,rule_offset('fuel')+32,enum_offset('spark','mode'),enum_offset('spark','source')):
@@ -121,7 +121,7 @@ class SecondaryTests(unittest.TestCase):
    store=self.store(Path(d)/'t.json');stream=Stream(store);self.addCleanup(stream.close);t=copy.deepcopy(store.tune);configure(t,'fuel','multiply');configure(t,'spark','add');page=pages(t)[1]
    for offset in range(0,len(page),256):self.assertEqual(stream.session.command(b'M'+struct.pack('<BBHH',0,1,offset,256)+page[offset:offset+256]),b'\0')
    self.assertEqual(store.tune['secondary_tables']['fuel']['mode'],'off');self.assertEqual(stream.session.command(b'b\0\1'),b'\4');self.assertEqual(store.tune['secondary_tables']['fuel']['mode'],'multiply');self.assertEqual(store.tune['secondary_tables']['spark']['mode'],'add')
-   replies=stream.feed(envelope(b'r'+struct.pack('<BBHH',0,0x30,0,LIVE_BYTES)),1000000);self.assertEqual(len(replies[0]),647)
+   replies=stream.feed(envelope(b'r'+struct.pack('<BBHH',0,0x30,0,LIVE_BYTES)),1000000);self.assertEqual(len(replies[0]),839)
    before=bytes(stream.session.buffers[1]);external=copy.deepcopy(store.tune);external['secondary_tables']['spark']['map']['cells'][0]=3;self.assertEqual(store.save(json.dumps(external).encode())[0],200)
    self.assertEqual(stream.session.command(b'M'+struct.pack('<BBHH',0,1,MAP_OFFSETS['fuel']+128,4)+struct.pack('<f',110)),b'\x84');self.assertEqual(bytes(stream.session.buffers[1]),before)
  def test_malformed_observations_reject_and_188_column_msl_keeps_codes(self):
@@ -129,6 +129,6 @@ class SecondaryTests(unittest.TestCase):
   for key,value in [('threshold',None),('debounce_ms',None),('input_observed_us','1'),('mode_code',5),('flags',0),('extra',0),('valid',False)]:
    bad=copy.deepcopy(data);bad['secondary_tables']['fuel'][key]=value;self.assertFalse(rec.bridge.data_validate(json.dumps(bad).encode()),key)
   self.assertEqual(rec.command(dict(action='start',period_ms=20,duration_s=1),1000000),200);self.assertTrue(rec.append(data,1000000));rec.command(dict(action='stop',log_id=1),1000001)
-  rows=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));self.assertEqual([len(row) for row in rows[2:]],[188,188,188]);values=dict(zip(rows[2],rows[4]));self.assertEqual(values['SecFuelAvailable'],'1');self.assertEqual(values['SecFuelMode'],'0');self.assertEqual(values['SecFuelObservedUs'],'NaN')
+  rows=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));self.assertEqual([len(row) for row in rows[2:]],[229,229,229]);values=dict(zip(rows[2],rows[4]));self.assertEqual(values['SecFuelAvailable'],'1');self.assertEqual(values['SecFuelMode'],'0');self.assertEqual(values['SecFuelObservedUs'],'NaN')
 
 if __name__=='__main__':unittest.main(verbosity=2)

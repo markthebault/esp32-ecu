@@ -1,8 +1,8 @@
-"""The target's own009 task-side tuning codec on native shared-library callbacks."""
+"""The target's own010 task-side tuning codec on native shared-library callbacks."""
 import copy,ctypes,fcntl,json,os,struct,subprocess,threading,time
 from pathlib import Path
 from engine_runtime import R
-from secondary_config import PAGE_BYTES,LIVE_BYTES
+from flex_config import PAGE_BYTES,LIVE_BYTES
 
 _build_lock=threading.Lock()
 LOAD=ctypes.CFUNCTYPE(ctypes.c_int,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t)
@@ -125,7 +125,7 @@ def status(store):
  def wire_fields(o):
   return {k:o[v] for k,v in dict(received='received_bytes',transmitted='fully_queued_reply_bytes',frames='frames',crc_errors='crc_errors',timeouts='timeouts',framing_errors='framing_errors',tx_errors='tx_errors').items()}
  current=observations[-1] if len(observations)==1 else None
- return dict(schema_version=1,transport='native_host_development',identity='ESP32ECU DEV 009 INHIBITED',serial_protocol='002',enabled=True,
+ return dict(schema_version=1,transport='native_host_development',identity='ESP32ECU DEV 010 INHIBITED',serial_protocol='002',enabled=True,
   available=bool(observations),boot_allowed=True,host_present=None,reason='Host transport sessions observed' if observations else 'No native tuning session open',
   physical_outputs_inhibited=True,host_presence_meaning='Host TCP/PTY session records; no target USB hardware is connected',
   observed_clock_domain='host_monotonic',observed_us=str(time.monotonic_ns()//1000),active_revision=revision,

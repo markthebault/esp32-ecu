@@ -91,10 +91,12 @@ class Plant:
   return self.exhaust_lambda
 
 class Simulation:
- def __init__(self,tune,scenario='warm_start',duration_s=10,seed=1):
+ def __init__(self,tune,scenario='warm_start',duration_s=10,seed=1,flex_stimulus=None):
   if scenario not in SCENARIOS:raise ValueError('Unknown engine scenario')
   if isinstance(duration_s,bool) or not isinstance(duration_s,(int,float)) or not 1<=duration_s<=30:raise ValueError('Duration must be 1-30 virtual seconds')
   if isinstance(seed,bool) or not isinstance(seed,int) or not 0<=seed<=4294967295:raise ValueError('Seed must be a uint32 integer')
+  from flex_stimulus import FlexStimulus
+  self.flex_stimulus=FlexStimulus(flex_stimulus)
   self.tune=copy.deepcopy(tune);self.scenario=scenario;self.duration=duration_s;self.seed=seed
  def run(self):
   idle=bool(self.tune['settings']['idle_enabled'])
@@ -122,6 +124,7 @@ class Simulation:
     if t+1e-9>=next_sample:
      sample=plant.sample(t)
      if self.scenario=='sensor_short' and 4<t<5:sample['map_kpa']=0
+     self.flex_stimulus.feed(runtime,round(t*1e6))
      result=runtime.step(sample,round(t*1e6),use_decoder=True);
      if idle:result.update(idle_pwm=runtime.idle_status(),idle_valve=plant.idle_valve.snapshot())
      failure_recorded=failure_recorded and bool(result['faults']&128);fault_or|=result['faults'];sync_seen|=result['synced'];next_sample+=.001
@@ -167,7 +170,7 @@ class Simulation:
      if cam_result in (2,3):cut_outputs(cam_us,'cam_inhibit')
    before_stop=sum(states);cut_outputs(round(t*1e6),'simulation_end')
    errors=sorted(abs(e['error_deg']) for e in plant.spark_errors);warm_errors=[abs(e['error_deg']) for e in plant.spark_errors if e['time_s']>=3]
-   summary=dict(strategy=self.tune['strategy'],wrong_stroke_sparks=sum(abs(e['phase_error_deg'])>180 for e in plant.spark_errors) if sequential else None,max_spark_720_error_deg=max((abs(e['phase_error_deg']) for e in plant.spark_errors),default=0) if sequential else None,scenario=self.scenario,duration_s=self.duration,seed=self.seed,model='unvalidated reduced-order SI plant v1',ecu='native production engine.hpp + MissingTooth decoder',physical_outputs_enabled=False,plant_parameters=dict(injector_flow_cc_min=plant.injector_flow_cc_min,rotor_inertia_kg_m2=plant.rotor_inertia),sync_acquired=sync_seen,max_rpm=max((p['plant_rpm'] for p in trace),default=0),final_rpm=plant.rpm,fuel_mg=plant.fuel_mg,sparks=plant.sparks,planned_revolutions=proposals,rejected_plans=late,max_injector_high_us=max(max_high[:4]),max_dwell_high_us=max(max_high[4:]),min_completed_dwell_us=min((d['dwell_us'] for d in plant.dwell_events),default=0),max_dwell_shortfall_us=max((d['requested_us']-d['dwell_us'] for d in plant.dwell_events),default=0),max_spark_error_deg=max(errors,default=0),max_spark_error_to_latest_demand_deg=max((abs(e['demand_error_deg']) for e in plant.spark_errors),default=0),p95_spark_error_deg=errors[int(.95*(len(errors)-1))] if errors else 0,max_spark_error_after_3s_deg=max(warm_errors,default=0),fault_mask_seen=fault_or,final_state=result.get('state'),final_faults=result.get('faults'),outputs_high_before_stop=before_stop,executor_stopped=True,final_outputs_high=sum(states),timing_recoveries=result.get('timing_recoveries',0),timing_protection_stops=result.get('timing_stops',0))
+   summary=dict(flex_stimulus=self.flex_stimulus.summary(),strategy=self.tune['strategy'],wrong_stroke_sparks=sum(abs(e['phase_error_deg'])>180 for e in plant.spark_errors) if sequential else None,max_spark_720_error_deg=max((abs(e['phase_error_deg']) for e in plant.spark_errors),default=0) if sequential else None,scenario=self.scenario,duration_s=self.duration,seed=self.seed,model='unvalidated reduced-order SI plant v1',ecu='native production engine.hpp + MissingTooth decoder',physical_outputs_enabled=False,plant_parameters=dict(injector_flow_cc_min=plant.injector_flow_cc_min,rotor_inertia_kg_m2=plant.rotor_inertia),sync_acquired=sync_seen,max_rpm=max((p['plant_rpm'] for p in trace),default=0),final_rpm=plant.rpm,fuel_mg=plant.fuel_mg,sparks=plant.sparks,planned_revolutions=proposals,rejected_plans=late,max_injector_high_us=max(max_high[:4]),max_dwell_high_us=max(max_high[4:]),min_completed_dwell_us=min((d['dwell_us'] for d in plant.dwell_events),default=0),max_dwell_shortfall_us=max((d['requested_us']-d['dwell_us'] for d in plant.dwell_events),default=0),max_spark_error_deg=max(errors,default=0),max_spark_error_to_latest_demand_deg=max((abs(e['demand_error_deg']) for e in plant.spark_errors),default=0),p95_spark_error_deg=errors[int(.95*(len(errors)-1))] if errors else 0,max_spark_error_after_3s_deg=max(warm_errors,default=0),fault_mask_seen=fault_or,final_state=result.get('state'),final_faults=result.get('faults'),outputs_high_before_stop=before_stop,executor_stopped=True,final_outputs_high=sum(states),timing_recoveries=result.get('timing_recoveries',0),timing_protection_stops=result.get('timing_stops',0))
    if idle:summary.update(idle_pwm=runtime.idle_status(),idle_valve=plant.idle_valve.snapshot());summary['max_dwell_high_us']=max(max_high[4:8])
    return dict(summary=summary,trace=trace,edges=edge_trace,trigger_edges=trigger_trace,cam_edges=cam_trace,timing_stops=timing_stops,spark_timing=plant.spark_errors,dwell_events=plant.dwell_events,final=result)
   finally:runtime.close()

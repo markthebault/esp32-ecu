@@ -1,0 +1,25 @@
+{
+  "command": [
+    "g++",
+    "-std=c++17",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-pedantic",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-001/firmware/include",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-malformed-001.cpp",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-malformed-001"
+  ],
+  "source_sha256": "8c382512ef38b861a961bb4b6cfb711adaf548b2d1128a1bf14d2f6c814d903d",
+  "header_freeze_sha256": "16e95cda165eb955db5daf2583976785f08455768b77620673979b32eb4eeebe",
+  "stdout": "frequency400_above_fault_and_width_above_period faults=0 control_ok=1 raw_qualified=1 fuel_factor=1.25 temp_factor=1.00625 reason=ready\nfrequency10_below_calibration faults=0 control_ok=1 raw_qualified=1 fuel_factor=1.25 temp_factor=1.00625 reason=ready\nethanol99_from100Hz_filterOff faults=0 control_ok=1 raw_qualified=1 fuel_factor=1.495 temp_factor=1.00625 reason=ready\ntemperature120_from3ms_filterOff faults=0 control_ok=1 raw_qualified=1 fuel_factor=1.25 temp_factor=1.18889 reason=ready\nunfiltered_values_NaN faults=0 control_ok=1 raw_qualified=1 fuel_factor=1.25 temp_factor=1.00625 reason=ready\n",
+  "stderr": "",
+  "returncode": 0,
+  "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/gcov",
+  "GCOV_PREFIX_STRIP": "0"
+}
