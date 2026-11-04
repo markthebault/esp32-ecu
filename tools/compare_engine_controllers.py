@@ -78,12 +78,32 @@ class OurController:
     def close(self):self.runtime.close()
 
 
-def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32,idle_options=None,semi_sequential=False,target_dispatcher=False,transient_options=None,load_options=None):
+def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32,idle_options=None,semi_sequential=False,target_dispatcher=False,transient_options=None,load_options=None,secondary_options=None):
+    secondary_tune=None;secondary_program=None;secondary_monitor=None
+    if secondary_options is not None:
+        from secondary_stimulus import ContactProgram
+        secondary_options=copy.deepcopy(secondary_options)
+        if set(secondary_options)-{'tune','stimulus'} or 'tune'not in secondary_options:raise ValueError('Secondary comparison requires one explicit complete tune and contact program')
+        if control_period_us!=5000:raise ValueError('Synthetic synchronous secondary monitor uses a nominal5ms cycle')
+        secondary_tune=secondary_options['tune'];secondary_program=ContactProgram(secondary_options.get('stimulus'))
+        wanted=secondary_tune['strategy'];want_seq=wanted=='sequential_4cyl';want_semi=wanted=='semi_sequential_4cyl'
+        if sequential and not want_seq or semi_sequential and not want_semi:raise ValueError('Conflicting secondary/cycle profile')
+        sequential=want_seq;semi_sequential=want_semi
+        if tune is not None and tune!=secondary_tune:raise ValueError('Conflicting complete secondary tune')
+        if load_options is not None and load_options.get('tune')!=secondary_tune:raise ValueError('Load and secondary profiles must share the same declared complete tune')
+        load_options=copy.deepcopy(load_options)if load_options is not None else dict(tune=secondary_tune)
+        if transient_options is not None and transient_options['config']!=secondary_tune['transient_enrichment']:raise ValueError('Conflicting transient profile')
+        transient_options=copy.deepcopy(transient_options)if transient_options is not None else dict(config=secondary_tune['transient_enrichment'])
+        if secondary_tune['settings']['idle_enabled']:
+            if idle_options is not None and idle_options.get('tune')!=secondary_tune:raise ValueError('Conflicting idle profile')
+            idle_options=copy.deepcopy(idle_options)if idle_options is not None else dict(tune=secondary_tune)
+        elif idle_options is not None:raise ValueError('Idle options conflict with complete secondary tune')
+        if controller=='ours':tune=copy.deepcopy(secondary_tune)
     if sequential and semi_sequential:raise ValueError('Conflicting cycle profiles')
     if target_dispatcher and controller!='ours':raise ValueError('Target dispatcher applies only to the project')
     if tune is not None and not sequential and not semi_sequential:
         sequential=tune['strategy']=='sequential_4cyl';semi_sequential=tune['strategy']=='semi_sequential_4cyl'
-    if controller not in ('ours','speeduino','speeduino_per_tooth') or scenario not in (SCENARIOS+(CAM_SCENARIOS if sequential else ())+ (IDLE_SCENARIOS if idle_options is not None else ())+(TRANSIENT_SCENARIOS if transient_options is not None else ())):raise ValueError('Unknown benchmark case')
+    if controller not in ('ours','speeduino','speeduino_per_tooth') or scenario not in (SCENARIOS+(CAM_SCENARIOS if sequential else ())+ (IDLE_SCENARIOS if idle_options is not None else ())+(TRANSIENT_SCENARIOS if transient_options is not None else ())+(('secondary_cycle','secondary_plateau')if secondary_tune is not None else ())):raise ValueError('Unknown benchmark case')
     if step_us not in (100,125,250,500) or not 1<=duration<=30:raise ValueError('Invalid benchmark duration/step')
     if control_period_us not in (1000,5000):raise ValueError('Unsupported control sampling period')
     if tune is not None and controller!='ours':raise ValueError('Custom tune is supported only by the project controller')
@@ -101,11 +121,13 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
     plant=ResearchPlant(cold=scenario=='idle_cold_start' or bool(transient_options and transient_options.get('cold')),idle_valve=idle_options.get('valve_mode','normal') if idle else None,**(dict(ambient_kpa=load_options.get('ambient_kpa',100)) if load_options is not None else {}))
     if (sequential or semi_sequential) and controller=='ours':
         tune=copy.deepcopy(tune or benchmark_tune());tune['strategy']='sequential_4cyl' if sequential else 'semi_sequential_4cyl'
-    try:ecu=(OurController(tune,target_dispatcher=True) if target_dispatcher else OurController(tune)) if controller=='ours' else SpeeduinoRuntime(per_tooth=controller=='speeduino_per_tooth',sequential=sequential,timer_bits=reference_timer_bits,semi_sequential=semi_sequential)
+    secondary_channels=tuple(secondary_tune['secondary_tables'][k]['input_channel']for k in('fuel','spark'))if secondary_tune is not None else None
+    try:ecu=(OurController(tune,target_dispatcher=True) if target_dispatcher else OurController(tune)) if controller=='ours' else SpeeduinoRuntime(per_tooth=controller=='speeduino_per_tooth',sequential=sequential,timer_bits=reference_timer_bits,semi_sequential=semi_sequential,secondary_channels=secondary_channels)
     except Exception:plant.close();raise
     trace=[];edges_all=[];injection_timing=[];accepted_crank=[];trigger_edges=[];cam_edges=[];cam_angles=[900. if scenario=='cam_wrong_phase' else 540.,900.];now=0;next_sample=0;tooth_index=1
     channels=9 if idle else 8
     state={};high=[False]*channels;rise=[0]*channels;max_high=[0]*channels;inhibits=[];hard_cut_samples=0;fault_mask=0
+    monitor_started=False;monitor_begin_us=0;last_control_us=None;last_contact_levels=None;next_secondary_trace_us=0
     if idle and controller!='ours':
         initial=ecu.configure_idle(idle_tune,seeded=idle_options.get('seeded',True),invert=idle_options.get('invert',False))
         for us,ch,value,_,_ in initial:
@@ -134,10 +156,26 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
             plant.spark_errors[-1].update(mode)
     try:
         if transient_options is not None and controller!='ours':ecu.configure_transient(transient_options['config'],map_sampling=transient_options.get('reference_map_sampling',0))
-        if load_options is not None and controller!='ours':ecu.configure_load(load_tune)
+        if load_options is not None and controller!='ours':ecu.configure_load(load_tune,allow_cylinder_trims=secondary_tune is not None)
+        if secondary_tune is not None:
+            if controller=='ours':
+                from secondary_stimulus import SecondaryMonitor
+                secondary_monitor=SecondaryMonitor(secondary_tune,secondary_program)
+            else:
+                ecu.configure_secondary(secondary_tune)
+                if secondary_tune['cylinder_trims']['enabled']:ecu.cylinder_trims(secondary_tune['cylinder_trims'])
         while now<round(duration*1e6):
             t=now/1e6
+            if secondary_monitor is not None:
+                secondary_monitor.progress(now)
+                if now>=next_sample and not monitor_started:
+                    monitor_begin_us=now;next_sample=secondary_monitor.begin(now);monitor_started=True
+            elif secondary_program is not None:
+                levels=secondary_program.levels(now)
+                if levels!=last_contact_levels:ecu.contacts(levels);last_contact_levels=levels
             plant.tps=(12 if scenario=='throttle_step' else 100) if t>=3 and scenario in ('throttle_step','overrev') else 0
+            if scenario=='secondary_cycle':plant.tps=12 if 3<=t<4 else 0
+            if scenario=='secondary_plateau':plant.tps=20 if 3<=t<3.5 or 4.25<=t<5 else 25 if 3.5<=t<4.25 else 0
             if scenario=='idle_throttle_blip':plant.tps=8 if 4<=t<4.5 else 0
             if scenario=='transient_tip':plant.tps=0 if t<3 or t>=4 else (min(12,(t-3)*60) if t<3.6 else max(0,12-(t-3.6)*30))
             if scenario=='transient_reverse':plant.tps=0 if t<3 or t>=3.12 else ((t-3)*200 if t<3.04 else max(0,8-(t-3.04)*100))
@@ -151,7 +189,10 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
             starter=t<2.5 or (scenario=='stall_restart' and 8<t<10)
             dropout=(scenario=='trigger_dropout' and 4<t<4.7) or (scenario=='stall_restart' and 4<t<8)
             if now>=next_sample:
+                switch_snapshot=None;switch_inputs={};control_completed=True
+                if secondary_monitor is not None:switch_snapshot,switch_inputs,control_completed=secondary_monitor.observe(now)
                 sample=plant.sample(t)
+                sample.update(switch_inputs)
                 if scenario=='sensor_short' and 4<t<5:sample['map_kpa']=0
                 if scenario=='transient_noise' and 3<=t<5:sample['tps_pct']+=.2 if (now//20000)%2 else 0
                 if load_options is not None:
@@ -165,29 +206,41 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                     interval=load_options.get('known_overpressure_window')
                     if interval and interval[0]<=t<interval[1]:sample['map_kpa']=115
                 if controller=='ours':
-                    if ecu.sample(sample,now):inhibit(now,'control')
+                    if control_completed:
+                        if ecu.sample(sample,now):inhibit(now,'control')
+                        last_control_us=now
                     state=copy.deepcopy(ecu.status)
                     fault_mask|=state.get('faults',0)
+                    if secondary_monitor is not None:
+                        secondary_monitor.consumed(switch_snapshot,control_completed,now)
+                        secondary_monitor.history[-1]['edge_cursor']=len(edges_all)
+                        secondary_monitor.history[-1]['control']=dict(time_us=now,rpm=state.get('rpm'),faults=state.get('faults'),state=state.get('state'),fuel_cut=state.get('fuel_cut'),spark_cut=state.get('spark_cut'),secondary_tables=copy.deepcopy(state.get('secondary_tables')))if control_completed else None
                 else:
                     ecu.sensors(sample);state=ecu.status()
                     if transient_options is not None:state['transient_enrichment']=ecu.transient_status()
                     if load_options is not None:state['load_model']=ecu.load_status()
+                    if secondary_tune is not None:state['secondary_reference']=ecu.secondary_status();last_control_us=state['secondary_reference']['last_loop_us']
                 if idle:
                     state['idle_valve']=plant.idle_valve.snapshot()
                     state['idle_pwm']=ecu.runtime.idle_status() if controller=='ours' else ecu.idle_status()
                 if (controller=='ours' and state.get('faults',0)&32) or (controller!='ours' and state.get('rpm',0)>=6450 and state.get('fuel_channels',255)==0 and state.get('ignition_channels',255)==0):
                     hard_cut_samples+=1
-                next_sample=now+control_period_us
-                if now%20000<1000:
+                next_sample=(monitor_begin_us if secondary_monitor is not None else now)+control_period_us;monitor_started=False
+                trace_due=now>=next_secondary_trace_us if secondary_tune is not None else now%20000<1000
+                if trace_due:
+                    if secondary_tune is not None:next_secondary_trace_us=(now//20000+1)*20000
                     trace.append(dict(time=t,plant_rpm=plant.rpm,map_kpa=plant.map_kpa,
                                       tps=plant.tps,lambda_measured=plant.lambda_sensor,
-                                      lambda_valid=plant.lambda_valid,sensor_map_kpa=sample['map_kpa'],**{'ecu':state}))
+                                      lambda_valid=plant.lambda_valid,sensor_map_kpa=sample['map_kpa'],**{'ecu':state},
+                                      **(dict(control_observation_completed=control_completed,control_observed_us=last_control_us,control_observation_age_us=now-last_control_us if last_control_us is not None else None,contact_levels=secondary_program.levels(now))if secondary_tune is not None else {})))
             # End very near the next actual shaft-angle crossing. At most one
             # microsecond quantization remains after this adaptive subdivision.
             tooth_wait=(tooth_index*6-plant.angle)/(plant.rpm*6) if plant.rpm>1e-9 else step_us/1e6
             cam_wait=min((a-plant.angle)/(plant.rpm*6) for a in cam_angles) if sequential and plant.rpm>1e-9 else step_us/1e6
             delta=max(1,min(step_us,max(1,math.floor(min(tooth_wait,cam_wait)*1e6))))
             end=min(round(duration*1e6),now+delta,next_sample)
+            if secondary_program is not None:end=min(end,secondary_program.next_event(now))
+            if secondary_monitor is not None:end=min(end,secondary_monitor.next_event())
             edges=ecu.advance(end)
             cursor=now
             for us,ch,value,advance,dwell in edges:
@@ -238,7 +291,9 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                                 high[ch]=value;plant_edge(ch,value,us,state.get('advance_deg',10),10,2800)
                                 edges_all.append([us,ch,value,'scheduled'])
         ledger=plant.ledger();final_rpm=plant.rpm
-        if controller!='ours':state=ecu.status()
+        if controller!='ours':
+            state=ecu.status()
+            if secondary_tune is not None:state['secondary_reference']=ecu.secondary_status()
         inhibits_before_end=len(inhibits)
         gap_start=gap_end=None;post_loss=[]
         if scenario in ('trigger_dropout','stall_restart'):
@@ -295,13 +350,21 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
         if load_options is not None:
             summary['load_profile']=dict(requested=load_options,reference=ecu.load_profile if controller!='ours' else None)
             summary['load_scope']='Declared source/pressure/AFR fixture; FMU ambient pressure is a physical parameter, EMAP is an exogenous sensor stimulus with no exhaust dynamics; pulse-driven empirical combustion; no calibration or physical qualification'
+        if secondary_tune is not None:
+            summary['secondary_profile']=dict(requested=secondary_options,reference=ecu.secondary_profile if controller!='ours'else None)
+            summary['secondary_scope']='Actual controller/dispatcher loops on independent plants. Project actual portable acquisition uses a synthetic three-stage MCP model in a nominal5ms blocking monitor: registers0..8 at+400us,GPIO/OLAT at+1200us,guard/publication at+1800us; other I2C operation durations are declared wire-clock-scale assumptions. Reference independently polls raw virtual GPIO without project debounce/validity; source-channel acquisition ages are not provided. Native main-loop opportunities track adaptive plant steps,tooth callbacks and program-event boundaries, with zero CPU/IRQ cost. No physical timing/electrical/engine qualification.'
+            summary['secondary_applied_faults']=secondary_monitor.applied_faults if secondary_monitor is not None else []
+            summary['secondary_monitor_operations']=int(secondary_monitor.runtime.snapshot()['attempts'])if secondary_monitor is not None else None
+            summary['secondary_operation_pending_at_end']=secondary_monitor.pending is not None if secondary_monitor is not None else None
         if controller=='ours' and gap_start is not None:
             last=max((r for r in accepted_crank if r[0]<=gap_start),default=None)
             summary['dropout_accepted_crank_watchdog']=dict(last_accepted_us=last[0],timeout_us=last[1],deadline_us=last[0]+last[1],basis='Native production decoder timeout at last successfully accepted plan; period*(missing+2)*2 clamped20..150ms') if last else None
         return dict(summary=summary,trace=trace,edges=edges_all,injection_timing=injection_timing,triggers=trigger_edges,
                     accepted_crank_watchdogs=accepted_crank,cams=cam_edges,spark_timing=plant.spark_errors,dwell=plant.dwell_events,final_ecu=state,
-                    **(dict(combustions=plant.cylinder_combustions) if transient_options is not None or load_options is not None else {}))
+                    **(dict(combustions=plant.cylinder_combustions) if transient_options is not None or load_options is not None else {}),
+                    **(dict(secondary_monitor=secondary_monitor.history if secondary_monitor is not None else None)if secondary_tune is not None else {}))
     finally:
+        if secondary_monitor is not None:secondary_monitor.close()
         ecu.close();plant.close()
 
 

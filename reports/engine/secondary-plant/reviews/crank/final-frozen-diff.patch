@@ -1,0 +1,171 @@
+diff --git a/firmware/include/ecu/secondary_tables.hpp b/firmware/include/ecu/secondary_tables.hpp
+index c129026..961af38 100644
+--- a/firmware/include/ecu/secondary_tables.hpp
++++ b/firmware/include/ecu/secondary_tables.hpp
+@@ -195,9 +195,24 @@ public:
+   rules_[slot]=r;rule_seen_[slot]=true;
+   auto fail=[&](Reason reason){o.reason=reason;return result;};
+   if(!valid(r)){filter.reset();return fail(Reason::InvalidConfig);}
+-  if(r.mode!=Mode::Input)filter.reset();
++  auto observe_input=[&](){
++   const auto&sample=i.switches[r.input_channel];o.input_observed_us=sample.observed_us;o.input_raw=sample.level;o.input_valid=sample.valid;
++   const auto state=filter.step(sample,r,now);
++   o.input_source=state.source;o.input_age_ms=static_cast<float>(state.age_ms);o.input_qualified=state.valid;
++   o.input_level=state.level;o.pending=state.pending;o.pending_level=state.pending_level;
++   return state;
++  };
++  // Observe every configured input even when another required sensor fails.
++  // A simultaneous load fault must not conceal a lost switch qualification.
++  SwitchState input_state;
++  if(r.mode==Mode::Input)input_state=observe_input();else filter.reset();
+   if(r.mode==Mode::Off){result.ok=o.valid=true;return result;}
+-  if(kind==Kind::Spark&&cranking){filter.reset();result.ok=o.valid=true;o.reason=Reason::CrankingBypass;return result;}
++  if(kind==Kind::Spark&&cranking){
++   // Observe the switch while the cranking angle bypasses secondary spark.
++   // Crossing into running must not erase an already fresh qualification.
++   // Invalid data resets the filter but never selects secondary spark here.
++   result.ok=o.valid=true;o.reason=Reason::CrankingBypass;return result;
++  }
+   if(r.source==load::Source::Map||r.source==load::Source::PressureRatio){
+    if(!i.map_qualified||!range(i.map_kpa,10,110))return fail(Reason::RequiredMap);
+    result.coordinate=i.map_kpa;
+@@ -222,10 +237,7 @@ public:
+    o.condition_value=static_cast<float>(value);o.active=value>r.threshold;
+    o.reason=o.active?Reason::ConditionSecondary:Reason::ConditionPrimary;
+   }else if(r.mode==Mode::Input){
+-   const auto&sample=i.switches[r.input_channel];o.input_observed_us=sample.observed_us;o.input_raw=sample.level;o.input_valid=sample.valid;
+-   const auto state=filter.step(i.switches[r.input_channel],r,now);
+-   o.input_source=state.source;o.input_age_ms=static_cast<float>(state.age_ms);o.input_qualified=state.valid;
+-   o.input_level=state.level;o.pending=state.pending;o.pending_level=state.pending_level;
++   const auto&state=input_state;
+    if(!state.valid)return fail(state.reason);
+    o.condition_value=state.level?1:0;o.active=state.level==r.active_high;
+    o.reason=o.active?Reason::InputSecondary:Reason::InputPrimary;
+diff --git a/firmware/tests/engine_secondary_test.cpp b/firmware/tests/engine_secondary_test.cpp
+index a369730..fd7b63f 100644
+--- a/firmware/tests/engine_secondary_test.cpp
++++ b/firmware/tests/engine_secondary_test.cpp
+@@ -93,6 +93,29 @@ static void input_faults(){
+  // Even an input fault during normal operation cannot alter the global gate.
+  s.sampled_us=1070000;for(auto&sw:s.table_switches)sw.observed_us=s.sampled_us;s.table_switches[1].valid=false;o=c.step(t,s,s.sampled_us);check(o.faults&BadSensor);check(o.pulse_ms==0&&o.dwell_ms==0&&!o.proposed_enabled());
+ }
++static void crank_input_handoff(){
++ auto t=tune();configure(t.secondary_tables.spark,sec::Mode::Input);t.secondary_tables.spark.debounce_ms=20;
++ t.secondary_spark.cells.fill(12);Controller c;
++ auto observe=[&](std::uint64_t now,double rpm,bool level,bool valid=true){
++  auto s=input(now);s.rpm=rpm;s.table_switches[1]={now,sec::InputSource::Synthetic,level,valid};return c.step(t,s,now);
++ };
++ for(unsigned n=0;n<=4;++n){const auto o=observe(1000000+n*5000,220,true);
++  check(!o.faults&&o.state==State::Cranking&&o.advance_deg==t.crank_advance_deg);
++  check(!o.secondary_spark.active&&o.secondary_spark.reason==sec::Reason::CrankingBypass);
++  check(o.secondary_spark.input_qualified==(n==4));
++ }
++ auto o=observe(1025000,500,true);check(!o.faults&&o.state==State::Cranking);
++ o=observe(1030000,550,true);check(!o.faults&&o.state==State::Running&&o.advance_deg==12&&o.secondary_spark.active);
++ // A qualified bouncing contact retains its previous running selection.
++ o=observe(1035000,2000,false);check(!o.faults&&o.advance_deg==12&&o.secondary_spark.pending);
++ o=observe(1040000,220,false);check(!o.faults&&o.state==State::Cranking&&o.advance_deg==t.crank_advance_deg);
++ o=observe(1045000,550,false);check(!o.faults&&o.advance_deg==12&&o.secondary_spark.pending);
++ o=observe(1055000,2000,false);check(!o.faults&&o.advance_deg==20&&!o.secondary_spark.active);
++ // Bypassed bad inputs are visible, but do not interrupt the cranking angle.
++ o=observe(1060000,220,true,false);check(!o.faults&&o.advance_deg==t.crank_advance_deg&&!o.secondary_spark.input_qualified);
++ o=observe(1065000,550,true);check(o.faults==BadSensor&&o.fuel_cut&&o.spark_cut&&!o.proposed_enabled());
++ o=observe(1085000,550,true);check(!o.faults&&o.advance_deg==12&&o.secondary_spark.input_qualified);
++}
+ static void secondary_transport(){
+  auto t=tune();configure(t.secondary_tables.fuel,sec::Mode::Multiply);t.secondary_ve.cells.fill(150);
+  ecu::tuning::Page p;ecu::tuning::encode_page(t,9,p);auto enabled=tune();
+@@ -100,4 +123,4 @@ static void secondary_transport(){
+  check(enabled.secondary_tables.spark.mode==sec::Mode::Off&&enabled.secondary_spark.cells[0]==15);
+  ecu::tuning::Page roundtrip;ecu::tuning::encode_page(enabled,9,roundtrip);check(p==roundtrip);
+ }
+-int main(){fuel_and_capacity();spark_order_and_cylinders();dependencies_and_units();input_faults();secondary_transport();std::cout<<"{\"passed\":true,\"engine_secondary_checks\":"<<checks<<"}\n";}
++int main(){fuel_and_capacity();spark_order_and_cylinders();dependencies_and_units();input_faults();crank_input_handoff();secondary_transport();std::cout<<"{\"passed\":true,\"engine_secondary_checks\":"<<checks<<"}\n";}
+diff --git a/firmware/tests/secondary_tables_test.cpp b/firmware/tests/secondary_tables_test.cpp
+index ab485d8..c4c1725 100644
+--- a/firmware/tests/secondary_tables_test.cpp
++++ b/firmware/tests/secondary_tables_test.cpp
+@@ -112,4 +112,56 @@ static void switches(){
+  check(pair.select(Kind::Fuel,fuel_rule,i,1,false).observation.active);
+  check(!pair.select(Kind::Spark,spark_rule,i,1,false).observation.active);
+ }
+-int main(){configuration();conditional_and_coordinates();arithmetic();switches();std::cout<<"{\"passed\":true,\"secondary_checks\":"<<checks<<"}\n";}
++static void crank_input_handoff(){
++ auto r=rule(Mode::Input);r.debounce_ms=20;auto i=inputs();Controller c;
++ for(unsigned n=0;n<=4;++n){
++  const auto now=1000000+n*5000;i.switches[0]=sample(now,true);
++  const auto s=c.select(Kind::Spark,r,i,now,true);
++  check(s.ok&&!s.observation.active&&s.observation.reason==Reason::CrankingBypass);
++  check(s.observation.input_qualified==(n==4));
++ }
++ i.switches[0]=sample(1025000,true);auto s=c.select(Kind::Spark,r,i,1025000,false);
++ check(s.ok&&s.observation.active&&s.observation.reason==Reason::InputSecondary);
++ // Re-entering cranking preserves qualification but never selects the table.
++ i.switches[0]=sample(1030000,false);s=c.select(Kind::Spark,r,i,1030000,true);
++ check(s.ok&&!s.observation.active&&s.observation.input_qualified&&s.observation.pending);
++ i.switches[0]=sample(1035000,false);s=c.select(Kind::Spark,r,i,1035000,false);
++ check(s.ok&&s.observation.active&&s.observation.pending);
++ i.switches[0]=sample(1050000,false);s=c.select(Kind::Spark,r,i,1050000,false);
++ check(s.ok&&!s.observation.active&&!s.observation.pending);
++ // A fault while bypassed must discard qualification before running resumes.
++ for(unsigned fault=0;fault<5;++fault){
++  Controller probe;auto in=inputs();in.switches[0]=sample(2000000,true);
++  probe.select(Kind::Spark,r,in,2000000,true);in.switches[0]=sample(2020000,true);
++  check(probe.select(Kind::Spark,r,in,2020000,true).observation.input_qualified);
++  in.switches[0]=sample(2025000,true);
++  if(fault==0)in.switches[0].valid=false;
++  if(fault==1)in.switches[0].observed_us=2000000; // Stale and reversed.
++  if(fault==2)in.switches[0].observed_us=2025001; // Future source time.
++  if(fault==3)in.switches[0].source=InputSource::Unavailable;
++  if(fault==4)in.switches[0].source=InputSource::TargetProtected;
++  s=probe.select(Kind::Spark,r,in,2025000,true);
++  check(s.ok&&!s.observation.active&&!s.observation.input_qualified&&s.observation.reason==Reason::CrankingBypass);
++  in.switches[0]=sample(2030000,true);s=probe.select(Kind::Spark,r,in,2030000,false);
++  check(!s.ok&&s.observation.reason==Reason::Debouncing);
++  in.switches[0]=sample(2050000,true);s=probe.select(Kind::Spark,r,in,2050000,false);
++  check(s.ok&&s.observation.active);
++ }
++ // Missing polls during cranking cannot bridge a fresh-looking running read.
++ c.reset();i.switches[0]=sample(3000000,true);c.select(Kind::Spark,r,i,3000000,true);
++ i.switches[0]=sample(3020000,true);check(c.select(Kind::Spark,r,i,3020000,true).observation.input_qualified);
++ i.switches[0]=sample(3040001,true);s=c.select(Kind::Spark,r,i,3040001,false);
++ check(!s.ok&&s.observation.reason==Reason::Debouncing);
++ // Another bad dependency cannot conceal a simultaneously invalid switch.
++ for(auto kind:{Kind::Fuel,Kind::Spark})for(bool cranking:{false,true}){
++  c.reset();i=inputs();i.switches[0]=sample(4000000,true);c.select(kind,r,i,4000000,cranking);
++  i.switches[0]=sample(4020000,true);check(c.select(kind,r,i,4020000,cranking).observation.input_qualified);
++  i.map_qualified=false;i.switches[0]=sample(4025000,true);i.switches[0].valid=false;
++  s=c.select(kind,r,i,4025000,false);
++  check(!s.ok&&s.observation.reason==Reason::RequiredMap&&!s.observation.input_qualified&&!s.observation.input_valid);
++  i.map_qualified=true;i.switches[0]=sample(4030000,true);s=c.select(kind,r,i,4030000,false);
++  check(!s.ok&&s.observation.reason==Reason::Debouncing);
++  i.switches[0]=sample(4050000,true);check(c.select(kind,r,i,4050000,false).ok);
++ }
++}
++int main(){configuration();conditional_and_coordinates();arithmetic();switches();crank_input_handoff();std::cout<<"{\"passed\":true,\"secondary_checks\":"<<checks<<"}\n";}
+diff --git a/tools/test_secondary_model.py b/tools/test_secondary_model.py
+index c0dc24a..791c7d3 100644
+--- a/tools/test_secondary_model.py
++++ b/tools/test_secondary_model.py
+@@ -51,6 +51,21 @@ class SecondaryTests(unittest.TestCase):
+   self.assertTrue(o['faults']&4);self.assertEqual(d['secondary_tables']['fuel']['reason'],'input_time_reversed');self.assertEqual(d['secondary_tables']['fuel']['input_observed_us'],'18446744073709551615');self.assertTrue(self.recorder().bridge.data_validate(json.dumps(d).encode()))
+   bad=inputs(1040000);bad['table_switches'][0]['source']='target_protected_input'
+   with self.assertRaises(ValueError):r.step(bad,1040000,use_decoder=False)
++ def test_cranking_input_diagnostics_roundtrip_and_log_before_running(self):
++  t=tune();configure(t,'spark','input');t['secondary_tables']['spark']['debounce_ms']=20;r=self.runtime(t);rec=self.recorder()
++  self.assertEqual(rec.command(dict(action='start',period_ms=20,duration_s=1),1000000),200)
++  for now in (1000000,1010000,1020000,1025000):
++   sample=inputs(now);sample['rpm']=220 if now<1025000 else 600
++   o=r.step(sample,now,use_decoder=False);d=r.data();spark=d['secondary_tables']['spark']
++   self.assertEqual(o['faults'],0);self.assertTrue(rec.bridge.data_validate(json.dumps(d).encode()))
++   self.assertEqual(spark['input_observed_us'],str(now));self.assertEqual(spark['input_qualified'],now>=1020000)
++   self.assertEqual(spark['reason'],'cranking_spark_bypass'if now<1025000 else'input_secondary')
++   if now<1025000:self.assertFalse(spark['active']);self.assertEqual(o['advance_deg'],5)
++   else:self.assertTrue(spark['active']);self.assertEqual(o['advance_deg'],20)
++   self.assertEqual(rec.append(d,now),now in(1000000,1020000))
++  rec.command(dict(action='stop',log_id=1),1025001)
++  rows=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));last=dict(zip(rows[2],rows[-1]))
++  self.assertEqual(last['SecSparkInputQualified'],'1');self.assertEqual(last['SecSparkActive'],'0');self.assertEqual(last['SecSparkObservedUs'],'1020000')
+  def test_missing_target_style_input_and_ethanol_are_unknown_faults(self):
+   t=tune();configure(t,'fuel','input');r=self.runtime(t);o=r.step(dict(rpm=1200,synced=True),1000000,use_decoder=False)
+   self.assertTrue(o['faults']&4);self.assertEqual(o['secondary_tables']['fuel']['input_source'],'unavailable');self.assertIsNone(o['secondary_tables']['fuel']['input_observed_us'])

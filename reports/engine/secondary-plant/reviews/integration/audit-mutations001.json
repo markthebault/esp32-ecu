@@ -1,0 +1,87 @@
+{
+  "scope": "Deliberate saved-result corruption to measure acceptance sensitivity. An accepted mutation is an auditor gap, not proof of a firmware defect.",
+  "checks": [
+    {
+      "mutation": "consistent_wrong_ratio_coordinate",
+      "accepted": true,
+      "errors": [],
+      "arithmetic": {
+        "passed": true,
+        "errors": [],
+        "checks": 9267,
+        "witnesses": {
+          "fuel": {
+            "evaluated": 1073,
+            "active": 1073,
+            "inactive": 0,
+            "nonneutral": 1073,
+            "raw_pairs": [],
+            "reasons": [
+              "multiply"
+            ]
+          },
+          "spark": {
+            "evaluated": 1073,
+            "active": 910,
+            "inactive": 0,
+            "nonneutral": 910,
+            "raw_pairs": [],
+            "reasons": [
+              "cranking_spark_bypass",
+              "multiply"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "mutation": "erased_acknowledgments",
+      "accepted": true,
+      "errors": [],
+      "arithmetic": {
+        "passed": true,
+        "errors": [],
+        "checks": 13871,
+        "witnesses": {
+          "fuel": {
+            "evaluated": 1045,
+            "active": 1045,
+            "inactive": 0,
+            "nonneutral": 1045,
+            "raw_pairs": [
+              [
+                1,
+                1
+              ]
+            ],
+            "reasons": [
+              "input_secondary"
+            ]
+          },
+          "spark": {
+            "evaluated": 1045,
+            "active": 881,
+            "inactive": 0,
+            "nonneutral": 881,
+            "raw_pairs": [
+              [
+                1,
+                1
+              ]
+            ],
+            "reasons": [
+              "cranking_spark_bypass",
+              "input_secondary"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "source_file": ".cache/engine/secondary-plant-matrix-001/portable-ratio_mixed-250.json.gz",
+  "source_sha256": "02b58c6916e0ef7018fddf4682c894e42caa90147406c24f83ec1c4c7f99d63d",
+  "auditor_sha256": {
+    "tools/run_secondary_scenarios.py": "15354f98b4981cce7a23ea435473a96f321d3e59af40584a1f9ce90fe08d74ab",
+    "tools/secondary_audit.py": "16c7d31516b5e448a01a8352058b95bfb8f6934092a16ef24e40f6393689a6af"
+  }
+}

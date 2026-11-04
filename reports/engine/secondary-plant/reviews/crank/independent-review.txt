@@ -1,0 +1,9 @@
+Accepted for the frozen cranking switch prequalification fix. No open findings remain within this review scope.
+
+The frozen core passes 2,507 independent checks, including 791 valid observation JSON/browser validations and one intentional invalid-rule metadata rejection. AddressSanitizer and UndefinedBehaviorSanitizer pass with empty stderr. Seven actual native runtime records pass the native recorder and installed Chrome validator; native/browser MSL006 exports match across 188 columns. Exact U64 time 18446744073709541615 is preserved.
+
+The review independently found and verified the repair for a simultaneous coordinate/input fault hiding a lost switch qualification. The initial prequalification patch failed 24 checks for that interaction; the frozen implementation passes all of them. True HEAD 1c3e9ea before-change sources and all frozen source hashes are stored separately.
+
+Cranking qualification never activates secondary Spark; invalid input resets its qualifier while the bypass remains valid. Running requires fresh qualification. Previously qualified pending bounce continues to hold its previous stable selection, matching existing debounce semantics. Shared channels retain independent per-rule filters. Off selector observations and all JSON/MSL field layouts remain compatible.
+
+Scope excludes coupled matrix acceptance, full Speeduino parity, circuit, HIL and physical qualification. Root target builds and full repository sanitizer checks remain separate. See independent-review.json and final-frozen-source-bindings.json for complete evidence and hashes.

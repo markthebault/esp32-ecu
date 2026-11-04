@@ -1,0 +1,92 @@
+{
+  "passed": true,
+  "matrix": ".cache/engine/secondary-plant-fine-001",
+  "runs": 20,
+  "errors": [],
+  "scope": "Independent actual native lookup-domain bound, all raw GPIO pairs, shared-channel unequal-debounce transition chronology, opposite polarity, and exact-threshold equality before/after activation. Domain bound explicitly excludes wrapped uint8 lookup coordinates beyond255.",
+  "reference_domains": [
+    {
+      "label": "speeduino16",
+      "case": "input_bounce",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "multiply",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "producer_pause",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "ratio_mixed",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "trim_multiply",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "input_bounce",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "multiply",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "producer_pause",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "ratio_mixed",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "trim_multiply",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    }
+  ],
+  "selection_witnesses": [],
+  "artifacts": {
+    "portable-input_bounce-125.json.gz": "7662be7023e01891b5211706df0e236da5b9ab0bc5ae486ea3ee2e5c51d7c116",
+    "portable-multiply-125.json.gz": "895c9578bce665dcff849f97e276c2779c963329bc3a1c250f235cb6ed602ee9",
+    "portable-producer_pause-125.json.gz": "3bdda973109b2ee9c3b8c2715abdd0c0016b463c76fd7ddbd87bee9e52d95669",
+    "portable-ratio_mixed-125.json.gz": "6f584a60c2e400c771814761fd9b0b636fcacc8b870ac611ad9758bfd9198b16",
+    "portable-trim_multiply-125.json.gz": "8c0df7addbaf2a298d49c8edb7a819bd519ddc5a6da19bdbb804f1cba8d3a2c4",
+    "speeduino16-input_bounce-125.json.gz": "aa46d3d585ef4e214f408f47667160d427d1342e769bf64de55918f196893860",
+    "speeduino16-multiply-125.json.gz": "a54eecbdb732ab5d4142d02b243b96f41801d4fcefe11efd438eac09cfe50116",
+    "speeduino16-producer_pause-125.json.gz": "033ab12cddf997ce533636da654430ebf235b9821caa8f1ebf273a693f2e18eb",
+    "speeduino16-ratio_mixed-125.json.gz": "41292c8bf124b3c90bc2a82015b52a876978523c5a4dd6439bd085fe8130d093",
+    "speeduino16-trim_multiply-125.json.gz": "4776b91bbd4ee9bd016ce2fc33b95cb1e7c2238897042551c64c6320b08af47f",
+    "speeduino32-input_bounce-125.json.gz": "9ca9813e104b76396bf8bac20a3f8363ce7d53a0b499f1a2abd455ff3455935b",
+    "speeduino32-multiply-125.json.gz": "880339bd94c154582655b851890fc2e576c950279b3d6a6091a24a161e6be70c",
+    "speeduino32-producer_pause-125.json.gz": "8c7a2cc086651424cb631b333b2277d9eb23fa56ac920f574f9c02f8667b3fe6",
+    "speeduino32-ratio_mixed-125.json.gz": "878ca35d3445b139f2f352feb267f21c689e6adacc176e7c5a7d75c8fc25e7a4",
+    "speeduino32-trim_multiply-125.json.gz": "12d4500c1e3fd2d41e54d3e65ff1bfbf86d99417353547ac4f6c01b56d0feafa",
+    "target-input_bounce-125.json.gz": "44d3bfe097dc58cb518003b8e6cf15bdcb3d7e5f7ba37ef8c4c14f84dbbb4bdd",
+    "target-multiply-125.json.gz": "86fc76d82d03fc3e23b6cd7dd5f0b6d300ee50629c5ce4e2fdc19e5e2ac69e88",
+    "target-producer_pause-125.json.gz": "cbd305754e1ceeebf1ebd0c5e886081b006ae13f124b598e895d94a308ac115f",
+    "target-ratio_mixed-125.json.gz": "5402d66649be8b0d99d6fd5ac6cfb0122d85cb4cfd37ddd1c80b8e4a69607894",
+    "target-trim_multiply-125.json.gz": "b749c8c9366e02684a18aed6a17db3735f5b29d75c1a09ef14c0f70d323037fd"
+  }
+}

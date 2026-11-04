@@ -10,14 +10,16 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 class SpeeduinoRuntime:
-    def __init__(self,per_tooth=False,logger_cam=False,sequential=False,timer_bits=32,semi_sequential=False):
+    def __init__(self,per_tooth=False,logger_cam=False,sequential=False,timer_bits=32,semi_sequential=False,secondary_channels=None):
         if timer_bits not in (16,32):raise ValueError('Native timer width must be16or32')
         if semi_sequential and (sequential or logger_cam):raise ValueError('Conflicting cycle profiles')
+        if secondary_channels is not None and (not isinstance(secondary_channels,(tuple,list)) or len(secondary_channels)!=2 or any(type(v)is not int or v not in (0,1) for v in secondary_channels)):raise ValueError('Two native secondary input channels0/1 required')
         executable=ROOT/('.cache/engine/speeduino-sim/speeduino-sim' if timer_bits==32 else '.cache/engine/speeduino-sim16/speeduino-sim')
         manifest=json.loads(executable.with_name('build-manifest.json').read_text())
         if hashlib.sha256(executable.read_bytes()).hexdigest()!=manifest['binary_sha256']:raise RuntimeError('Reference executable differs from its build manifest')
         self.timer_bits=timer_bits;self.edge_modes={};self.sequential=sequential;self.semi_sequential=semi_sequential;self.spark_trims=[0]*4;self.last_status={}
-        self.process=subprocess.Popen([str(executable),*(['--per-tooth'] if per_tooth else []),*(['--logger-cam'] if logger_cam else []),*(['--sequential'] if sequential else []),*(['--semi-sequential'] if semi_sequential else [])],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
+        self.secondary_channels=tuple(secondary_channels)if secondary_channels is not None else None;self.secondary_profile=None
+        self.process=subprocess.Popen([str(executable),*(['--per-tooth'] if per_tooth else []),*(['--logger-cam'] if logger_cam else []),*(['--sequential'] if sequential else []),*(['--semi-sequential'] if semi_sequential else []),*(['--secondary-inputs='+''.join(map(str,self.secondary_channels))]if self.secondary_channels is not None else [])],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
                                       stderr=subprocess.PIPE,bufsize=0)
         self.buffer=b'';self.now=0
         self.idle_profile=None
@@ -25,6 +27,10 @@ class SpeeduinoRuntime:
         self.load_profile=None
         try:
             self._initialize(per_tooth)
+            if self.secondary_channels is not None:
+                a,b=self.secondary_channels;expected=[4,0,0,0,a,1,4,0,0,0,b,1,14+a,14+b,14+a,14+b,0,0,0,0]
+                if self._secondary_readback()!=expected:raise RuntimeError('Secondary GPIO configuration did not survive production setup')
+                self.profile['secondary_before_setup']=expected
             if sequential:
                 lines=self.command("cycleprofile")
                 expected=[3,3,0,0,1,540,540,540,540]
@@ -90,7 +96,7 @@ class SpeeduinoRuntime:
         if self.load_profile is None or any(type(v) not in (int,float) or not math.isfinite(v) for v in (emap_kpa,baro_kpa)) or not 20<=emap_kpa<=500 or not 50<=baro_kpa<=110:raise ValueError('Invalid configured virtual absolute-pressure fixture')
         self.command(f'pressure {emap_kpa:.12g} {baro_kpa:.12g}')
 
-    def configure_load(self,tune,map_filter=0,tps_filter=0):
+    def configure_load(self,tune,map_filter=0,tps_filter=0,allow_cylinder_trims=False):
         """Declare representable primary tables and production sensor paths.
 
         Upstream TPS getLoad is physical percent*4, not percent. The common
@@ -100,8 +106,9 @@ class SpeeduinoRuntime:
         if self.load_profile is not None or self.now:raise ValueError('Reference load profile is before-start only')
         c=tune['load_model'];source=('map','tps','imap_emap');fuel=c['fuel_source'];spark=c['spark_source']
         if c['afr']!='off' and c['lambda_source'] not in ('follow_fuel',fuel):raise ValueError('Production reference lambda table follows primary fuel source')
-        if tune['cylinder_trims']['enabled']:raise ValueError('This declared load benchmark does not configure reference cylinder trims')
-        args=[source.index(fuel),source.index(spark),{'none':0,'map_baro':1,'map_100kpa':2}[c['pressure']],('off','target','measured').index(c['afr']),round(c['afr_delay_s']),int('imap_emap' in (fuel,spark)),map_filter,tps_filter]
+        if type(allow_cylinder_trims)is not bool or tune['cylinder_trims']['enabled']and not(allow_cylinder_trims and self.sequential and fuel=='map'):raise ValueError('Reference trim/load combination requires an explicit sequential MAP-primary fixture')
+        extra=[r['source']for r in tune.get('secondary_tables',{}).values()if r['mode']!='off']
+        args=[source.index(fuel),source.index(spark),{'none':0,'map_baro':1,'map_100kpa':2}[c['pressure']],('off','target','measured').index(c['afr']),round(c['afr_delay_s']),int('imap_emap' in (fuel,spark,*extra)),map_filter,tps_filter]
         if any(type(v) is not int or not 0<=v<=255 for v in args):raise ValueError('Reference profile cannot be represented in raw bytes')
         maps={}
         for id,name in enumerate(('ve','spark','lambda')):
@@ -129,6 +136,69 @@ class SpeeduinoRuntime:
             unrepresented=['independent lambda/trim source','project wideband-ready qualification','project microsecond running delay; upstream integer runSecs uses strict greater-than','project known-MAP guard and sensor fault policy'],
             execution='Unchanged pinned production sensor, table, AFR, pressure, normal loop and schedulers in native HAL')
         return self.load_profile
+
+    def _secondary_readback(self):
+        lines=self.command('secondaryprofile')
+        if len(lines)!=1 or lines[0].split()[0]!='secondaryprofile':raise RuntimeError('Missing reference secondary profile')
+        values=list(map(int,lines[0].split()[1:]))
+        if len(values)!=20:raise RuntimeError('Incomplete reference secondary profile')
+        return values
+
+    def configure_secondary(self,tune):
+        """Before-start raw profile writer; production selection/math stays intact.
+
+        Preparation of both rules/maps precedes any IPC mutation. Quantization,
+        different TPS condition/table units and unrepresented policies are data.
+        This does not invent a reference debounce/fault/flex-fuel producer.
+        """
+        if self.secondary_channels is None or self.secondary_profile is not None or self.now or self.load_profile is None:raise ValueError('Secondary fixture requires a complete primary load profile, before-start once only')
+        modes=('off','multiply','add','conditional','input');sources=('map','tps','imap_emap');conditions=('rpm','map_kpa','tps_pct','ethanol_pct');axes=('map_kpa','tps_pct','imap_emap_pct')
+        rules=tune.get('secondary_tables')
+        if not isinstance(rules,dict)or set(rules)!={'fuel','spark'}:raise ValueError('Two complete secondary rules required')
+        args=[];maps={}
+        def finite(v):return type(v)in(int,float)and math.isfinite(v)
+        for index,kind in enumerate(('fuel','spark')):
+            r=rules[kind]
+            if not isinstance(r,dict)or r.get('mode')not in modes or r.get('source')not in sources or r.get('condition')not in conditions:raise ValueError('Invalid reference secondary enums')
+            source=sources.index(r['source']);mode=r['mode'];condition=r['condition'];expected_cells='multiplier'if mode=='multiply'else'adder'if mode=='add'else'absolute'
+            if r.get('axis')!=axes[source]or mode!='off'and r.get('cells')!=expected_cells:raise ValueError('Reference secondary units/cell meaning disagree')
+            if type(r.get('input_channel'))is not int or r['input_channel']!=self.secondary_channels[index]or type(r.get('active_high'))is not bool:raise ValueError('Secondary input mapping must match the before-setup fixture')
+            if not finite(r.get('threshold'))or not 0<=r['threshold']<=(10000 if condition=='rpm'else 110 if condition=='map_kpa'else 100):raise ValueError('Invalid physical secondary threshold')
+            if mode=='conditional'and condition=='ethanol_pct':raise ValueError('Reference coupled ETH requires an actual flex-input producer; status injection is unsupported')
+            if mode!='off'and source==2 and(self.load_profile is None or not self.load_profile['raw_profile'][5]):raise ValueError('Secondary ratio requires configured production EMAP input')
+            threshold=round(r['threshold']*(2 if condition=='tps_pct'else 1))
+            args +=[modes.index(mode),source,conditions.index(condition),threshold,r['input_channel'],int(r['active_high'])]
+            m=r.get('map')
+            if not isinstance(m,dict)or set(m)!={'rpm','load','cells'}or any(not isinstance(m[k],list)or len(m[k])!=n or any(not finite(v)for v in m[k])for k,n in [('rpm',16),('load',16),('cells',256)]):raise ValueError('Complete finite16x16 secondary map required')
+            rpm=[round(v/100)for v in m['rpm']];load=[round(v*(2 if source==1 else .5))for v in m['load']]
+            cells=[round(v+(40 if kind=='spark'else 0))for v in m['cells']];raw=rpm+load+cells
+            if any(not 0<=v<=255 for v in raw)or any(a[i]>=a[i+1]for a in(rpm,load)for i in range(15))or any(m[k][i]>=m[k][i+1]for k in('rpm','load')for i in range(15)):raise ValueError('Reference secondary map cannot be represented after quantization; spark multiplier maximum215%')
+            maps[kind]=dict(raw_rpm=rpm,raw_load=load,raw_cells=cells,represented_rpm=[v*100 for v in rpm],represented_load=[v/(2 if source==1 else .5)for v in load],represented_cells=[v-(40 if kind=='spark'else 0)for v in cells],represented_threshold=threshold/(2 if condition=='tps_pct'else 1))
+        if self.command('secondaryconfig '+' '.join(map(str,args))):raise RuntimeError('Unexpected reference secondary configuration response')
+        a,b=self.secondary_channels;expected=args+[14+a,14+b,14+a,14+b,0,0,0,0]
+        if self._secondary_readback()!=expected:raise RuntimeError('Reference secondary profile did not read back exactly')
+        for index,kind in enumerate(('fuel','spark')):
+            m=maps[kind];raw=m['raw_rpm']+m['raw_load']+m['raw_cells']
+            if self.command('secondarymap '+str(index)+' '+' '.join(map(str,raw))):raise RuntimeError('Unexpected secondary map response')
+            lines=self.command('secondarymapread '+str(index))
+            if len(lines)!=1 or lines[0].split()[0]!='secondarymapread'or list(map(int,lines[0].split()[1:]))!=raw:raise RuntimeError('Reference secondary map did not read back exactly')
+        self.secondary_profile=dict(raw_profile=expected,maps=maps,native_channels=list(self.secondary_channels),
+            rounding='Nearest integer, ties to even; RPM/100; MAP and ratio axes/2; physical TPS axes*2, condition threshold*2; spark table+40',
+            unrepresented=['project debounce/freshness/bus fault qualification','project source-tagged timestamps','fractional axes/cells/thresholds','spark multipliers216..255','actual target ethanol producer','project final angle/capacity/zero-opening/trim ordering policies'],
+            execution='Unchanged pinned production setup,loop,secondary functions,sensors and schedulers; independently driven GPIO14/15, virtual only')
+        return self.secondary_profile
+
+    def contacts(self,levels):
+        if self.secondary_profile is None or not isinstance(levels,(list,tuple))or len(levels)!=2 or any(type(v)is not bool for v in levels):raise ValueError('Two raw boolean virtual contact levels and a complete fixture required')
+        if self.command('contacts '+' '.join(str(int(v))for v in levels)):raise RuntimeError('Contact stimulus unexpectedly executed controller/edges')
+
+    def secondary_status(self):
+        if self.secondary_profile is None:raise ValueError('Secondary profile not configured')
+        lines=self.command('secondarystatus');keys=('time_us','last_loop_us','loop_count','primary_ve','secondary_ve','combined_ve','primary_advance','secondary_advance_diagnostic','combined_advance','fuel_active','spark_active','rpm','map_kpa','tps_raw_half_pct','ethanol_pct','fuel_raw_level','spark_raw_level','rotation_status','emap_kpa','secondary_fuel_load','secondary_spark_load','loop_fuel_raw','loop_spark_raw','loop_rotation')
+        if len(lines)!=1 or lines[0].split()[0]!='secondarystatus':raise RuntimeError('Missing reference secondary status')
+        values=list(map(int,lines[0].split()[1:]))
+        if len(values)!=len(keys):raise RuntimeError('Incomplete reference secondary status')
+        return dict(zip(keys,values))
 
     def load_status(self):
         lines=self.command('loadstatus')
@@ -234,6 +304,7 @@ class SpeeduinoRuntime:
         return result
 
     def advance(self,time_us,tooth=False):
+        if self.secondary_channels is not None and self.secondary_profile is None:raise ValueError('Configure both secondary tables before advancing the requested fixture')
         if isinstance(time_us,bool) or not isinstance(time_us,int) or time_us<self.now or time_us>60_000_000:
             raise ValueError('Native benchmark time must be monotonic0..60s')
         self.now=time_us

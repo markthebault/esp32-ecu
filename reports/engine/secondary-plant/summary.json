@@ -1,0 +1,1149 @@
+{
+  "scope": "enabled_secondary_coupled_plant",
+  "passed": true,
+  "sources": {
+    "config/engine/defaults.json": {
+      "snapshot": "sources/config/engine/defaults.json",
+      "sha256": "98edc81ac7c840d5f83c337dcab06a84a1642bf2ddf82c998b09481f18d434f6",
+      "bytes": 26502
+    },
+    "docs/engine-development.md": {
+      "snapshot": "sources/docs/engine-development.md",
+      "sha256": "82824b678edfdb9c19ab5d85f1d722e9c6189495a8bdf191687f9cb3b7c73932",
+      "bytes": 11986
+    },
+    "docs/engine-feature-coverage.md": {
+      "snapshot": "sources/docs/engine-feature-coverage.md",
+      "sha256": "25ebe004879d2a5d0ed3ef2a392a2d222bc52bac8abac48b4b91074a9d6dabfe",
+      "bytes": 14740
+    },
+    "docs/engine-secondary-plant.md": {
+      "snapshot": "sources/docs/engine-secondary-plant.md",
+      "sha256": "dca2535afb265023444f7c0baf72b273c055005c61ff6c030c329f66f202315a",
+      "bytes": 8701
+    },
+    "docs/engine-secondary-tables.md": {
+      "snapshot": "sources/docs/engine-secondary-tables.md",
+      "sha256": "b11040537fa136d739386f7c3fc1613c5c8b2ae05b2e25534cebba6eb0785c75",
+      "bytes": 15538
+    },
+    "firmware/include/ecu/capture_clock.hpp": {
+      "snapshot": "sources/firmware/include/ecu/capture_clock.hpp",
+      "sha256": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+      "bytes": 2211
+    },
+    "firmware/include/ecu/config.hpp": {
+      "snapshot": "sources/firmware/include/ecu/config.hpp",
+      "sha256": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39",
+      "bytes": 3939
+    },
+    "firmware/include/ecu/control.hpp": {
+      "snapshot": "sources/firmware/include/ecu/control.hpp",
+      "sha256": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b",
+      "bytes": 10954
+    },
+    "firmware/include/ecu/engine.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine.hpp",
+      "sha256": "92f57e82305b4db6fb098523a1951bff4e014cab0a1fa202bb9629e476db494c",
+      "bytes": 27998
+    },
+    "firmware/include/ecu/engine_binding.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_binding.hpp",
+      "sha256": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9",
+      "bytes": 3197
+    },
+    "firmware/include/ecu/engine_data.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_data.hpp",
+      "sha256": "962f0cb52eeb864fe904423eda84ebbb51c757a6382a53f7686812fe0aa499e3",
+      "bytes": 6200
+    },
+    "firmware/include/ecu/engine_data_json.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_data_json.hpp",
+      "sha256": "4c944171485bd95f8ac4f82d5d699b32c6824a5e5287b0cb64909205f0907776",
+      "bytes": 8136
+    },
+    "firmware/include/ecu/engine_json.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_json.hpp",
+      "sha256": "b579bd896c4672f6d6c7d299c6d316a9989324d6637461415b0c940efb73047d",
+      "bytes": 19194
+    },
+    "firmware/include/ecu/engine_limits.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_limits.hpp",
+      "sha256": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d",
+      "bytes": 107
+    },
+    "firmware/include/ecu/engine_log.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_log.hpp",
+      "sha256": "a7ba2b5b2aaa62cb2e36e3239106991b657ecdf3ae72ecd3b43bb02ab653b30f",
+      "bytes": 5430
+    },
+    "firmware/include/ecu/engine_log_json.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_log_json.hpp",
+      "sha256": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6",
+      "bytes": 3996
+    },
+    "firmware/include/ecu/engine_log_msl.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_log_msl.hpp",
+      "sha256": "a8aeff99b935c51ff1042dc04847937a73dce59c6c8b01900f521d89c521a359",
+      "bytes": 9217
+    },
+    "firmware/include/ecu/engine_log_service.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_log_service.hpp",
+      "sha256": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f",
+      "bytes": 754
+    },
+    "firmware/include/ecu/engine_phase.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_phase.hpp",
+      "sha256": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27",
+      "bytes": 8547
+    },
+    "firmware/include/ecu/engine_radio.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_radio.hpp",
+      "sha256": "70413d02362a1f5f960bbdc76bf1e789befca72e47a93887effd006b522b7758",
+      "bytes": 8441
+    },
+    "firmware/include/ecu/engine_scheduler.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_scheduler.hpp",
+      "sha256": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a",
+      "bytes": 10251
+    },
+    "firmware/include/ecu/engine_service.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_service.hpp",
+      "sha256": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0",
+      "bytes": 976
+    },
+    "firmware/include/ecu/engine_storage.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_storage.hpp",
+      "sha256": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e",
+      "bytes": 3104
+    },
+    "firmware/include/ecu/engine_target.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_target.hpp",
+      "sha256": "0cfcef7fa43cadaf105da094a4524aded50dcff0f88ddb6449799155e63b25b0",
+      "bytes": 1373
+    },
+    "firmware/include/ecu/engine_tuning.hpp": {
+      "snapshot": "sources/firmware/include/ecu/engine_tuning.hpp",
+      "sha256": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6",
+      "bytes": 120
+    },
+    "firmware/include/ecu/espnow.hpp": {
+      "snapshot": "sources/firmware/include/ecu/espnow.hpp",
+      "sha256": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc",
+      "bytes": 336
+    },
+    "firmware/include/ecu/espnow_protocol.hpp": {
+      "snapshot": "sources/firmware/include/ecu/espnow_protocol.hpp",
+      "sha256": "634bd5a99ddd8c682a20959720f5599a0e39f20c25d8cadf4b3e8024eca25b6a",
+      "bytes": 2749
+    },
+    "firmware/include/ecu/heap_object.hpp": {
+      "snapshot": "sources/firmware/include/ecu/heap_object.hpp",
+      "sha256": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51",
+      "bytes": 540
+    },
+    "firmware/include/ecu/idle_command.hpp": {
+      "snapshot": "sources/firmware/include/ecu/idle_command.hpp",
+      "sha256": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310",
+      "bytes": 1489
+    },
+    "firmware/include/ecu/idle_control.hpp": {
+      "snapshot": "sources/firmware/include/ecu/idle_control.hpp",
+      "sha256": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd",
+      "bytes": 10973
+    },
+    "firmware/include/ecu/idle_hardware.hpp": {
+      "snapshot": "sources/firmware/include/ecu/idle_hardware.hpp",
+      "sha256": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+      "bytes": 616
+    },
+    "firmware/include/ecu/idle_pwm.hpp": {
+      "snapshot": "sources/firmware/include/ecu/idle_pwm.hpp",
+      "sha256": "392ef3640df5e3ea64c465df7a6815c2272ead28570626bc9540aab8b58a8c42",
+      "bytes": 6460
+    },
+    "firmware/include/ecu/idle_pwm_json.hpp": {
+      "snapshot": "sources/firmware/include/ecu/idle_pwm_json.hpp",
+      "sha256": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b",
+      "bytes": 1434
+    },
+    "firmware/include/ecu/json.hpp": {
+      "snapshot": "sources/firmware/include/ecu/json.hpp",
+      "sha256": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+      "bytes": 2130
+    },
+    "firmware/include/ecu/load_json.hpp": {
+      "snapshot": "sources/firmware/include/ecu/load_json.hpp",
+      "sha256": "04048aac889a77b29beac77ba4d43b93694fe61a23a089bb2e09d87ec72de218",
+      "bytes": 8013
+    },
+    "firmware/include/ecu/load_model.hpp": {
+      "snapshot": "sources/firmware/include/ecu/load_model.hpp",
+      "sha256": "4ebcebe554ebf29f4dc7db29a8a51302d3ebbc8647ba9f73d5278ef85503074b",
+      "bytes": 11563
+    },
+    "firmware/include/ecu/pins.hpp": {
+      "snapshot": "sources/firmware/include/ecu/pins.hpp",
+      "sha256": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+      "bytes": 1139
+    },
+    "firmware/include/ecu/realtime.hpp": {
+      "snapshot": "sources/firmware/include/ecu/realtime.hpp",
+      "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+      "bytes": 387
+    },
+    "firmware/include/ecu/secondary_json.hpp": {
+      "snapshot": "sources/firmware/include/ecu/secondary_json.hpp",
+      "sha256": "54653a90fdbadeeebe926980bacbb25e54b6f61f93e83d4b97be5bf260a4c497",
+      "bytes": 11768
+    },
+    "firmware/include/ecu/secondary_tables.hpp": {
+      "snapshot": "sources/firmware/include/ecu/secondary_tables.hpp",
+      "sha256": "08aa9b41b7c424b3168d34350a31477ef2e44a3439209bf9cb38e0e151ef3613",
+      "bytes": 16273
+    },
+    "firmware/include/ecu/switch_acquisition.hpp": {
+      "snapshot": "sources/firmware/include/ecu/switch_acquisition.hpp",
+      "sha256": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb",
+      "bytes": 9371
+    },
+    "firmware/include/ecu/switch_service.hpp": {
+      "snapshot": "sources/firmware/include/ecu/switch_service.hpp",
+      "sha256": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e",
+      "bytes": 416
+    },
+    "firmware/include/ecu/switch_transport.hpp": {
+      "snapshot": "sources/firmware/include/ecu/switch_transport.hpp",
+      "sha256": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932",
+      "bytes": 2438
+    },
+    "firmware/include/ecu/timing_executor.hpp": {
+      "snapshot": "sources/firmware/include/ecu/timing_executor.hpp",
+      "sha256": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db",
+      "bytes": 15308
+    },
+    "firmware/include/ecu/transient_enrichment.hpp": {
+      "snapshot": "sources/firmware/include/ecu/transient_enrichment.hpp",
+      "sha256": "75250d519305aa604ebefb4a177ec64cf2c38d14a3d31f60e99cc88322052911",
+      "bytes": 11886
+    },
+    "firmware/include/ecu/transient_json.hpp": {
+      "snapshot": "sources/firmware/include/ecu/transient_json.hpp",
+      "sha256": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88",
+      "bytes": 3294
+    },
+    "firmware/include/ecu/trigger_log.hpp": {
+      "snapshot": "sources/firmware/include/ecu/trigger_log.hpp",
+      "sha256": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451",
+      "bytes": 2952
+    },
+    "firmware/include/ecu/trigger_log_json.hpp": {
+      "snapshot": "sources/firmware/include/ecu/trigger_log_json.hpp",
+      "sha256": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58",
+      "bytes": 4155
+    },
+    "firmware/include/ecu/tuning_document.hpp": {
+      "snapshot": "sources/firmware/include/ecu/tuning_document.hpp",
+      "sha256": "a89fb02ba3cc9accf31effda1b777df321f8628d7fb87195f6311fa0d6b4b3a3",
+      "bytes": 5896
+    },
+    "firmware/include/ecu/tuning_layout.hpp": {
+      "snapshot": "sources/firmware/include/ecu/tuning_layout.hpp",
+      "sha256": "bff9eff532e74de816af855e663991ca460e78807c16581b9821297b252b9e16",
+      "bytes": 24728
+    },
+    "firmware/include/ecu/tuning_live.hpp": {
+      "snapshot": "sources/firmware/include/ecu/tuning_live.hpp",
+      "sha256": "182f5fb61f697f8b1e6444b88b06dbb368f73d3c5e02e6cf4c4534085d74df1b",
+      "bytes": 5059
+    },
+    "firmware/include/ecu/tuning_session.hpp": {
+      "snapshot": "sources/firmware/include/ecu/tuning_session.hpp",
+      "sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e",
+      "bytes": 7958
+    },
+    "firmware/include/ecu/tuning_stream.hpp": {
+      "snapshot": "sources/firmware/include/ecu/tuning_stream.hpp",
+      "sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042",
+      "bytes": 3028
+    },
+    "firmware/include/ecu/web_config.hpp": {
+      "snapshot": "sources/firmware/include/ecu/web_config.hpp",
+      "sha256": "984d5447a6f07e626987819d2338489aa25004a15b529c460c29bde497e7a019",
+      "bytes": 1050
+    },
+    "firmware/main/app.cpp": {
+      "snapshot": "sources/firmware/main/app.cpp",
+      "sha256": "487d5e03a964f686939dcb46a148a91c02e516678cfd6c7d342ec0ba269ce9e6",
+      "bytes": 12967
+    },
+    "firmware/main/config_json.hpp": {
+      "snapshot": "sources/firmware/main/config_json.hpp",
+      "sha256": "1b8469d3ff7f750db50f731e209a184479fa4191ed6200a0a555aa0065e3c1ae",
+      "bytes": 2238
+    },
+    "firmware/main/engine_log_service.cpp": {
+      "snapshot": "sources/firmware/main/engine_log_service.cpp",
+      "sha256": "05666d7be694be72719515709a083b0cf65701ebcd410fdb32fc0aa0e9fbbd53",
+      "bytes": 2629
+    },
+    "firmware/main/engine_service.cpp": {
+      "snapshot": "sources/firmware/main/engine_service.cpp",
+      "sha256": "dfc0dce8066385f66da66224c194e2446d121c1f90ea9d83117c6547330083b4",
+      "bytes": 13414
+    },
+    "firmware/main/engine_target.cpp": {
+      "snapshot": "sources/firmware/main/engine_target.cpp",
+      "sha256": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738",
+      "bytes": 30320
+    },
+    "firmware/main/engine_tuning.cpp": {
+      "snapshot": "sources/firmware/main/engine_tuning.cpp",
+      "sha256": "24b846ed8cc4a03c7b323afd4b58eea7f411b243e71e569f5b9c08c9343d851a",
+      "bytes": 7880
+    },
+    "firmware/main/espnow.cpp": {
+      "snapshot": "sources/firmware/main/espnow.cpp",
+      "sha256": "9e4a59ffc635db754298153eb2ff4580b030ed7ef012994de4d2b580e4bb346a",
+      "bytes": 23395
+    },
+    "firmware/main/switch_service.cpp": {
+      "snapshot": "sources/firmware/main/switch_service.cpp",
+      "sha256": "813f488d127fb25dd3c2287b7bc53968dc9c5e821050159fbe2978e590aed25a",
+      "bytes": 6113
+    },
+    "firmware/main/web_assets.hpp": {
+      "snapshot": "sources/firmware/main/web_assets.hpp",
+      "sha256": "ed07247fd9db05c1a42ac17039b74badb75c21ecf93eaab1f8c86a82a974f90a",
+      "bytes": 296381
+    },
+    "firmware/main/web_config.cpp": {
+      "snapshot": "sources/firmware/main/web_config.cpp",
+      "sha256": "e4cb9459607eb480f951d8b688f9645f235ec63045d8e65bd0b9ebfba093cc64",
+      "bytes": 27954
+    },
+    "firmware/platformio.ini": {
+      "snapshot": "sources/firmware/platformio.ini",
+      "sha256": "579f4075495f9c070a80d14cdcedf1ec4f9de13c4d233ebd1a48b97947e3f3d0",
+      "bytes": 1636
+    },
+    "firmware/tests/control_test.cpp": {
+      "snapshot": "sources/firmware/tests/control_test.cpp",
+      "sha256": "f70daa1f94eb5caf27a26467e2f93ca84788470c0286e743bdf273c159a3cecf",
+      "bytes": 6497
+    },
+    "firmware/tests/engine_cylinder_test.cpp": {
+      "snapshot": "sources/firmware/tests/engine_cylinder_test.cpp",
+      "sha256": "a07acf0093afa510389dfa05b609c7d4c3e0f59814c11349bb51990d95d449d9",
+      "bytes": 6236
+    },
+    "firmware/tests/engine_load_test.cpp": {
+      "snapshot": "sources/firmware/tests/engine_load_test.cpp",
+      "sha256": "8ef3d6e0382b77c5eb0f81e9009294e6a141ff5f360cc7c89ef9f397bdcff5b6",
+      "bytes": 6984
+    },
+    "firmware/tests/engine_log_service_test.cpp": {
+      "snapshot": "sources/firmware/tests/engine_log_service_test.cpp",
+      "sha256": "adcce12f0b93a315d05894309c1e7df6c2df4592484ff41bee1cbfceb922e7d4",
+      "bytes": 2437
+    },
+    "firmware/tests/engine_observability_test.cpp": {
+      "snapshot": "sources/firmware/tests/engine_observability_test.cpp",
+      "sha256": "def1fc1eaead173c9b9fc37c333b693ec3e6aa84e3118051717820f84a1c4e95",
+      "bytes": 9315
+    },
+    "firmware/tests/engine_phase_test.cpp": {
+      "snapshot": "sources/firmware/tests/engine_phase_test.cpp",
+      "sha256": "1b9485b170ec1bedd8a73022d294e87bdc83c74be726da78de43ac0dea816d72",
+      "bytes": 7909
+    },
+    "firmware/tests/engine_secondary_test.cpp": {
+      "snapshot": "sources/firmware/tests/engine_secondary_test.cpp",
+      "sha256": "f609dbde1f1d6dc77421e947eb14bca87a80f797a3db1c44c71292a502c1b113",
+      "bytes": 10764
+    },
+    "firmware/tests/engine_semi_test.cpp": {
+      "snapshot": "sources/firmware/tests/engine_semi_test.cpp",
+      "sha256": "728a90d92b9ba9320b6adeaf85d6791d960bc55d62ce3663e55594521b134fd4",
+      "bytes": 4502
+    },
+    "firmware/tests/engine_storage_test.cpp": {
+      "snapshot": "sources/firmware/tests/engine_storage_test.cpp",
+      "sha256": "06e8c1149abd50f8bea41b22521517620345e4a66716b0446af15bc4fc9babe3",
+      "bytes": 4783
+    },
+    "firmware/tests/engine_test.cpp": {
+      "snapshot": "sources/firmware/tests/engine_test.cpp",
+      "sha256": "55f467d4f6e35ff9b018eabaf4cb938c9a1559ad5574e8e5c40236458120d93e",
+      "bytes": 8721
+    },
+    "firmware/tests/engine_transient_test.cpp": {
+      "snapshot": "sources/firmware/tests/engine_transient_test.cpp",
+      "sha256": "f6c4e08aafc47ef6ab7c6bad87f21bc381d39255ace08329c87e1e3ac57077e6",
+      "bytes": 3781
+    },
+    "firmware/tests/espnow_test.cpp": {
+      "snapshot": "sources/firmware/tests/espnow_test.cpp",
+      "sha256": "1f1ff8c1fcb50d16416d27e514c1eabf5c3cddb70814d0371089e5cc0d23bc26",
+      "bytes": 2454
+    },
+    "firmware/tests/idle_control_test.cpp": {
+      "snapshot": "sources/firmware/tests/idle_control_test.cpp",
+      "sha256": "2a805518e3438cc1d99c20a62e10b63dbdab9073a3c462e004488999683f0fe6",
+      "bytes": 3473
+    },
+    "firmware/tests/idle_pwm_test.cpp": {
+      "snapshot": "sources/firmware/tests/idle_pwm_test.cpp",
+      "sha256": "6a19fbfcbb3d562fefd07941521666fbe16f62cad26da0638c2828941c647f5a",
+      "bytes": 2845
+    },
+    "firmware/tests/load_model_test.cpp": {
+      "snapshot": "sources/firmware/tests/load_model_test.cpp",
+      "sha256": "9b3f549c91a6e1ba6d3af5e31ce3b1f74173f0819aeaaf00ad89e12da01ae295",
+      "bytes": 4019
+    },
+    "firmware/tests/secondary_tables_test.cpp": {
+      "snapshot": "sources/firmware/tests/secondary_tables_test.cpp",
+      "sha256": "20a724186a917d68c79b4a97f14b7b8ce50b57d9fe64b9c5c85e8c1bb665d7ca",
+      "bytes": 13537
+    },
+    "firmware/tests/switch_acquisition_test.cpp": {
+      "snapshot": "sources/firmware/tests/switch_acquisition_test.cpp",
+      "sha256": "ec3aeb8ad9fbf673c6a1ce65998db91a8727f745f8cc94a673a1c6f7ae76b569",
+      "bytes": 9770
+    },
+    "firmware/tests/switch_service_test.cpp": {
+      "snapshot": "sources/firmware/tests/switch_service_test.cpp",
+      "sha256": "822e38bc845d546ca2849705a696c2ed90ff4ec2f724825546a6cd5e92039845",
+      "bytes": 9850
+    },
+    "firmware/tests/switch_transport_test.cpp": {
+      "snapshot": "sources/firmware/tests/switch_transport_test.cpp",
+      "sha256": "ea7699a7f95193113c007e5f7dbc779d279f9cb70d01150d422a0660416979fa",
+      "bytes": 4291
+    },
+    "firmware/tests/timing_executor_test.cpp": {
+      "snapshot": "sources/firmware/tests/timing_executor_test.cpp",
+      "sha256": "ff61dabaaeceb99f23b7f16d5238126fafa4dfb849471b15f40fae0e8cf339b8",
+      "bytes": 8121
+    },
+    "firmware/tests/transient_enrichment_test.cpp": {
+      "snapshot": "sources/firmware/tests/transient_enrichment_test.cpp",
+      "sha256": "ef1b5ea7453d96cdcc602435470cda057efbd857d30ec721445227091b1c9c18",
+      "bytes": 4670
+    },
+    "firmware/tests/trigger_log_json_test.cpp": {
+      "snapshot": "sources/firmware/tests/trigger_log_json_test.cpp",
+      "sha256": "cd6523ac035ad884ef52f7d98281a90fb5a32bf711bea90bcaaabd8f9114590b",
+      "bytes": 3121
+    },
+    "firmware/tests/trigger_log_test.cpp": {
+      "snapshot": "sources/firmware/tests/trigger_log_test.cpp",
+      "sha256": "76dadab2610ad93b42508eb3019f009f92ebfbb6f8b0e4cebb7273b3d8e9e1db",
+      "bytes": 2489
+    },
+    "firmware/tests/tuning_allocation_test.cpp": {
+      "snapshot": "sources/firmware/tests/tuning_allocation_test.cpp",
+      "sha256": "5db029149e14ea1738d3655619198db0fdc3e23a2722c370c8c4a81603530d3a",
+      "bytes": 3841
+    },
+    "firmware/tests/tuning_test.cpp": {
+      "snapshot": "sources/firmware/tests/tuning_test.cpp",
+      "sha256": "95192b533310b94ce4143f0f36611c426d057938ad06eb08b55e23e7eced60f6",
+      "bytes": 8336
+    },
+    "scripts/build_engine_airpath.py": {
+      "snapshot": "sources/scripts/build_engine_airpath.py",
+      "sha256": "d63b2f9adc129ff23045440fb9e7455d319abe8f3e3acf7818b061897a7180cc",
+      "bytes": 2968
+    },
+    "scripts/build_speeduino_sim.py": {
+      "snapshot": "sources/scripts/build_speeduino_sim.py",
+      "sha256": "1c8c53bc55cb15cdbfb6186fd7b7fb4ed42058a99c3a1a70d943497af7f43e4a",
+      "bytes": 10354
+    },
+    "simulation/modelica/EngineAirPath.mo": {
+      "snapshot": "sources/simulation/modelica/EngineAirPath.mo",
+      "sha256": "303df3396c660d1c4f8da48f19c698a6f63c46d1050c7964b92fba56be653c3c",
+      "bytes": 2828
+    },
+    "tools/calibrate_load_benchmark.py": {
+      "snapshot": "sources/tools/calibrate_load_benchmark.py",
+      "sha256": "3fd3f65226715bbf4e8de768492708ce11be644ff99ea91f4184f0e4b2d89a88",
+      "bytes": 3239
+    },
+    "tools/check_idle_assembly.py": {
+      "snapshot": "sources/tools/check_idle_assembly.py",
+      "sha256": "e29aca5bd3d8ceba1a13bbf09a8e28e31160aa6c0255b6ac3c97e7e722c922de",
+      "bytes": 3361
+    },
+    "tools/check_secondary_experiments.py": {
+      "snapshot": "sources/tools/check_secondary_experiments.py",
+      "sha256": "2fe62cd23f33899bdd1102c6ceae859fd8c3221c2ccb572e4b4f7980c73159ff",
+      "bytes": 6178
+    },
+    "tools/compare_engine_controllers.py": {
+      "snapshot": "sources/tools/compare_engine_controllers.py",
+      "sha256": "2c2188b5b1916c700a6607191d0fffa9e5382ef771352eb4cabc3f793ef0bd30",
+      "bytes": 31493
+    },
+    "tools/compare_speeduino.py": {
+      "snapshot": "sources/tools/compare_speeduino.py",
+      "sha256": "7608e7672e1817705f310b5e0cacc5a7d4472ee33b7673888a1c96dc399f01cf",
+      "bytes": 2930
+    },
+    "tools/compare_trigger_loggers.py": {
+      "snapshot": "sources/tools/compare_trigger_loggers.py",
+      "sha256": "62add2645cc5dbd622904e157bb03bb9144d16cabf8f72a48d49d6b0b9d38498",
+      "bytes": 6921
+    },
+    "tools/config_bridge.cpp": {
+      "snapshot": "sources/tools/config_bridge.cpp",
+      "sha256": "d692084a8714de7ce9cf10474ce52d714b405de71702d784a4b3c5afafe58ff4",
+      "bytes": 1260
+    },
+    "tools/engine_bridge.cpp": {
+      "snapshot": "sources/tools/engine_bridge.cpp",
+      "sha256": "b8dbe41ab15d4ff3c2570abc6a1328ace733a2851f9619ac8e7bd17fea12b6d2",
+      "bytes": 11225
+    },
+    "tools/engine_log.py": {
+      "snapshot": "sources/tools/engine_log.py",
+      "sha256": "b9ac0ab2cf3a3b16f6b9bbd1d7dd605329ac7bc80b6bfddaf777319d5be90424",
+      "bytes": 6308
+    },
+    "tools/engine_msq.py": {
+      "snapshot": "sources/tools/engine_msq.py",
+      "sha256": "7645cefecc414b343e4199379e66e8f76ecc602ed6ec10476b45c547339080d7",
+      "bytes": 14840
+    },
+    "tools/engine_observability.py": {
+      "snapshot": "sources/tools/engine_observability.py",
+      "sha256": "ac78c62c0d9ecb796aaeb308a893ab87469376b64bef7f3a51e07b3c31067413",
+      "bytes": 4101
+    },
+    "tools/engine_observability_bridge.cpp": {
+      "snapshot": "sources/tools/engine_observability_bridge.cpp",
+      "sha256": "7d1ec36a020ef09b12f972bd6eb69d206efe44b21915d6ad6610d5626003b020",
+      "bytes": 11726
+    },
+    "tools/engine_protocol.py": {
+      "snapshot": "sources/tools/engine_protocol.py",
+      "sha256": "eb2a210a97cac08b50a81896e869140f87eb7dd395f28ce1ad61925dc4a45a69",
+      "bytes": 9873
+    },
+    "tools/engine_protocol_legacy.py": {
+      "snapshot": "sources/tools/engine_protocol_legacy.py",
+      "sha256": "0b8144daea19b5b201d5d49fed09f7215988b75122591d8ae9809c69c935a0c2",
+      "bytes": 9261
+    },
+    "tools/engine_receiver.py": {
+      "snapshot": "sources/tools/engine_receiver.py",
+      "sha256": "fafecef9926a44572d86688e21488da14bb39a44982e40b370ebd3cc250212cf",
+      "bytes": 17440
+    },
+    "tools/engine_research_plant.py": {
+      "snapshot": "sources/tools/engine_research_plant.py",
+      "sha256": "7ab3e0e921d24946de0de7b716949e5aa7e93562759d54ba32af099605d183b9",
+      "bytes": 13925
+    },
+    "tools/engine_runtime.py": {
+      "snapshot": "sources/tools/engine_runtime.py",
+      "sha256": "4ccfa5a1f2f32cd66e10fb86688033bac19ee6587dfcc062e1e00aa6c14b92c9",
+      "bytes": 18212
+    },
+    "tools/engine_sil.py": {
+      "snapshot": "sources/tools/engine_sil.py",
+      "sha256": "2d8b66408396b2bb40d648d6e218f3d5b2935f2ae9454e66bcfd1251eae952d2",
+      "bytes": 13534
+    },
+    "tools/espnow_protocol.py": {
+      "snapshot": "sources/tools/espnow_protocol.py",
+      "sha256": "90d806e472f54ab5d054629ab92162157064d461f34164f7b73bc5dde43176f9",
+      "bytes": 2807
+    },
+    "tools/idle_config.py": {
+      "snapshot": "sources/tools/idle_config.py",
+      "sha256": "175ee2cdd51c92c00edcb41cee210f257c0af0a66867fefc445ddd1c9994c459",
+      "bytes": 2437
+    },
+    "tools/idle_valve_plant.py": {
+      "snapshot": "sources/tools/idle_valve_plant.py",
+      "sha256": "ecf84faf3c556c200831bf361c59459dc8e3fc43fe3637022e0f64cc5d963b65",
+      "bytes": 3564
+    },
+    "tools/load_config.py": {
+      "snapshot": "sources/tools/load_config.py",
+      "sha256": "311e9d58dd243a38e4a109f67a3a99d45b06a29f36d3e4d15cc0c61bff42f9bc",
+      "bytes": 2751
+    },
+    "tools/plot_cylinder_comparison.py": {
+      "snapshot": "sources/tools/plot_cylinder_comparison.py",
+      "sha256": "67ee638f3117e1be5b9fae0bc2415b4c636f766948d1dfccd534f8da38723bf5",
+      "bytes": 3237
+    },
+    "tools/plot_engine_evidence.py": {
+      "snapshot": "sources/tools/plot_engine_evidence.py",
+      "sha256": "be7abd42422cf76a5f589d46e0b18054714c46385bf70c64c582224ef24d8b57",
+      "bytes": 3393
+    },
+    "tools/plot_idle_scenarios.py": {
+      "snapshot": "sources/tools/plot_idle_scenarios.py",
+      "sha256": "a67de6d3a24c1503853eca8e52e955ad58dbc57269d4c78224e72c8da784a37a",
+      "bytes": 6836
+    },
+    "tools/plot_load_comparison.py": {
+      "snapshot": "sources/tools/plot_load_comparison.py",
+      "sha256": "e512317e81e2b607a91960eb2f0cc291f2d49560f2f24f0da2495ce14709cd8d",
+      "bytes": 3519
+    },
+    "tools/plot_research_benchmark.py": {
+      "snapshot": "sources/tools/plot_research_benchmark.py",
+      "sha256": "47ae7dff6e0ba88b9820ebf36262be8c4ccf094bd870e5a6113117f8163c4e20",
+      "bytes": 4615
+    },
+    "tools/plot_semi_comparison.py": {
+      "snapshot": "sources/tools/plot_semi_comparison.py",
+      "sha256": "df6b28414b70f372880aa48f3232312545e32475bc3abd2e8342e71cf37db066",
+      "bytes": 3613
+    },
+    "tools/plot_sequential_comparison.py": {
+      "snapshot": "sources/tools/plot_sequential_comparison.py",
+      "sha256": "c2f6da73a85061fb201df86e98093bfd7bf51db6936f2ab2a8f054fee1937b7e",
+      "bytes": 2340
+    },
+    "tools/plot_target_timing.py": {
+      "snapshot": "sources/tools/plot_target_timing.py",
+      "sha256": "67c4c1f309ef54573f79f0d9d2fe6440a2a75763689d9a8a48f32ec8fa25e7d4",
+      "bytes": 3804
+    },
+    "tools/plot_transient_comparison.py": {
+      "snapshot": "sources/tools/plot_transient_comparison.py",
+      "sha256": "9108f781ee75ab278855e926bc9fbadb6816ae571e3c13a73e04fa48f4d18435",
+      "bytes": 2788
+    },
+    "tools/plot_trigger_comparison.py": {
+      "snapshot": "sources/tools/plot_trigger_comparison.py",
+      "sha256": "61b0899e7a6fe0fd7a5aac9587820726f565a3b6ce5a0669504ea4aa6ce0bb07",
+      "bytes": 4434
+    },
+    "tools/radio_simulator.py": {
+      "snapshot": "sources/tools/radio_simulator.py",
+      "sha256": "41489d177cd091923a3a20a385133b9c23fc1badbb46922492acf43edde2e3e3",
+      "bytes": 5068
+    },
+    "tools/render_idle_hardware.py": {
+      "snapshot": "sources/tools/render_idle_hardware.py",
+      "sha256": "553e19a94448b69c3591c846d0f814bdf7874bb4eb03d95c61c2bbef4c137bd0",
+      "bytes": 2625
+    },
+    "tools/render_switch_assembly.py": {
+      "snapshot": "sources/tools/render_switch_assembly.py",
+      "sha256": "d43f56f11ccadc9e4eb814b319c136649ffa8d9ecfc392351d1c930aaf429a26",
+      "bytes": 3164
+    },
+    "tools/review_sequential_results.py": {
+      "snapshot": "sources/tools/review_sequential_results.py",
+      "sha256": "40a49f2877050079b09c460c719a4a6e865424f3926802c2f1987752655e6f25",
+      "bytes": 2271
+    },
+    "tools/run_cylinder_scenarios.py": {
+      "snapshot": "sources/tools/run_cylinder_scenarios.py",
+      "sha256": "4602b36f946a7048e4ada6755b601e306497b813b8601289d10a7c81342bb54d",
+      "bytes": 8948
+    },
+    "tools/run_cylinder_transients.py": {
+      "snapshot": "sources/tools/run_cylinder_transients.py",
+      "sha256": "cfff13ddaa75135c26f11b8c699e5bf2a0f2a39f9234e3217ce92a9f3f2cc528",
+      "bytes": 6312
+    },
+    "tools/run_engine_observability_scenarios.py": {
+      "snapshot": "sources/tools/run_engine_observability_scenarios.py",
+      "sha256": "da5a2fd7c861e284abbc7d2f329d4944c9340f8b5693424156c514400941e2a0",
+      "bytes": 9115
+    },
+    "tools/run_engine_scenarios.py": {
+      "snapshot": "sources/tools/run_engine_scenarios.py",
+      "sha256": "9c19b475cfebf4cfe96b76893a2d248ce359d88d26bbaf170e9c048c47e2db78",
+      "bytes": 3336
+    },
+    "tools/run_idle_circuit.py": {
+      "snapshot": "sources/tools/run_idle_circuit.py",
+      "sha256": "aece1686d6f33c343f31d06f7d9ac566f8dcdf973b3d85ffbd6db7d041ecf711",
+      "bytes": 19854
+    },
+    "tools/run_idle_followups.py": {
+      "snapshot": "sources/tools/run_idle_followups.py",
+      "sha256": "0e9a640a05fb0eb1ed1f7b2f05d11830e3aa2986f6c87fd9484e0f764fe31ee3",
+      "bytes": 2676
+    },
+    "tools/run_idle_scenarios.py": {
+      "snapshot": "sources/tools/run_idle_scenarios.py",
+      "sha256": "4c38a5999fa70907a255ff8c0217c98a82373af82ee5f53ed425db4cc8a08322",
+      "bytes": 9337
+    },
+    "tools/run_load_scenarios.py": {
+      "snapshot": "sources/tools/run_load_scenarios.py",
+      "sha256": "ff4c16f0ab34d03437566df0c21f480601d509c78e814bed662cd0ce0c39854b",
+      "bytes": 8517
+    },
+    "tools/run_secondary_scenarios.py": {
+      "snapshot": "sources/tools/run_secondary_scenarios.py",
+      "sha256": "eabdb737c3557c9bae786676c64dfad52d1b58275e79a5698c1fa0deabc065f3",
+      "bytes": 17293
+    },
+    "tools/run_semi_scenarios.py": {
+      "snapshot": "sources/tools/run_semi_scenarios.py",
+      "sha256": "38fe49ab24450af9140073d2d60e13708a9c655f277058a06f95cc8f9fa547b8",
+      "bytes": 7976
+    },
+    "tools/run_sequential_scenarios.py": {
+      "snapshot": "sources/tools/run_sequential_scenarios.py",
+      "sha256": "35145636ed3d6b9507cb7a0cc233ced2fd3e707a27ceb19ec835c45db54be1fa",
+      "bytes": 7457
+    },
+    "tools/run_switch_circuit.py": {
+      "snapshot": "sources/tools/run_switch_circuit.py",
+      "sha256": "54891719d8ef357f573a57b6586a276ac39010c696cd7a76f798530a9e1af8fa",
+      "bytes": 10681
+    },
+    "tools/run_target_scenarios.py": {
+      "snapshot": "sources/tools/run_target_scenarios.py",
+      "sha256": "3428588cb46af80945632e71b97f0c889b1673768f82258929088517fa2bb7bf",
+      "bytes": 8723
+    },
+    "tools/run_transient_legacy.py": {
+      "snapshot": "sources/tools/run_transient_legacy.py",
+      "sha256": "c3d4f71867b5fb8aba0feaccd1cae7f61ec829a7939876fdbe305f58993e4601",
+      "bytes": 2034
+    },
+    "tools/run_transient_scenarios.py": {
+      "snapshot": "sources/tools/run_transient_scenarios.py",
+      "sha256": "4f3c10b043cef548ee079bfcf895cb7dc4657c47ce9ebb4fa5e279036293b9f5",
+      "bytes": 9513
+    },
+    "tools/run_tuning_scenarios.py": {
+      "snapshot": "sources/tools/run_tuning_scenarios.py",
+      "sha256": "efebb18d8ea973a6474fe37756feebb84e818e1eed5362c60f2601d92cd2e684",
+      "bytes": 2811
+    },
+    "tools/secondary_audit.py": {
+      "snapshot": "sources/tools/secondary_audit.py",
+      "sha256": "6ecc4612d856ee8fbca13b96ce664e57842ee4a3ae7ec15dea6c86c5335b8aba",
+      "bytes": 12503
+    },
+    "tools/secondary_config.py": {
+      "snapshot": "sources/tools/secondary_config.py",
+      "sha256": "304de359ac275a7c505a088d708a7f02d0e8b0c75300f7eefe29d83d885fb3af",
+      "bytes": 4022
+    },
+    "tools/secondary_legacy_probe.cpp": {
+      "snapshot": "sources/tools/secondary_legacy_probe.cpp",
+      "sha256": "03676aa88ad3a54b33a4b7a0c9b00d4ad6e903a973262b51badc9688b90eb264",
+      "bytes": 3498
+    },
+    "tools/secondary_stimulus.py": {
+      "snapshot": "sources/tools/secondary_stimulus.py",
+      "sha256": "a56685fd83a1f609bf2d1b4086b202c7846e631cddd01290978be214222f238d",
+      "bytes": 7594
+    },
+    "tools/sequential_metrics.py": {
+      "snapshot": "sources/tools/sequential_metrics.py",
+      "sha256": "190e5cf95c0821c5241d92dfa80aa4843fa1f311c3f4beaaa51f6714cffd39d4",
+      "bytes": 812
+    },
+    "tools/speeduino_reference.cpp": {
+      "snapshot": "sources/tools/speeduino_reference.cpp",
+      "sha256": "0106558b0dc510b9e7d047bdf332aab970f2cffdb0fcf0971ac52f4d72b0f744",
+      "bytes": 1266
+    },
+    "tools/speeduino_runtime.py": {
+      "snapshot": "sources/tools/speeduino_runtime.py",
+      "sha256": "0e3372a6a90cb6700eeecb1daab1fefe26cca3a4e7460e63f4ba4c5f6fe18372",
+      "bytes": 32019
+    },
+    "tools/speeduino_sim.cpp": {
+      "snapshot": "sources/tools/speeduino_sim.cpp",
+      "sha256": "dc5ef41e64539e18c21be2aa9cf748820969271117923569b592fc6ae3b42f50",
+      "bytes": 36845
+    },
+    "tools/speeduino_sim_hal.cpp": {
+      "snapshot": "sources/tools/speeduino_sim_hal.cpp",
+      "sha256": "0d28c0c73308f8ac1333b0e3eefa38d9b6bef4fe0e7ca31e6342c7a9e8074409",
+      "bytes": 2442
+    },
+    "tools/speeduino_sim_native.hpp": {
+      "snapshot": "sources/tools/speeduino_sim_native.hpp",
+      "sha256": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9",
+      "bytes": 381
+    },
+    "tools/speeduino_timer_model_test.cpp": {
+      "snapshot": "sources/tools/speeduino_timer_model_test.cpp",
+      "sha256": "fa24d40df2cef36139b2df39e2c5d3d3f6553fd5dbafaf1f6c5029fee30488cf",
+      "bytes": 1745
+    },
+    "tools/switch_acquisition_bridge.cpp": {
+      "snapshot": "sources/tools/switch_acquisition_bridge.cpp",
+      "sha256": "394c12df8e2b0442ec34d4084597ff7899bd75738add27c139ade995e55dcafe",
+      "bytes": 3325
+    },
+    "tools/switch_acquisition_runtime.py": {
+      "snapshot": "sources/tools/switch_acquisition_runtime.py",
+      "sha256": "a35c74af1763d6774f21950faa8c3e336fd3f3fd7db003adcdce2ae335c963db",
+      "bytes": 3580
+    },
+    "tools/target_runtime.py": {
+      "snapshot": "sources/tools/target_runtime.py",
+      "sha256": "9e2c3c38ebacc31e9c01b246da3cb17371257c14b53b27aeec41614f5ad79aed",
+      "bytes": 2832
+    },
+    "tools/target_timing_bridge.cpp": {
+      "snapshot": "sources/tools/target_timing_bridge.cpp",
+      "sha256": "f18b018ca64b810c960806fe1c889574072afb7f73c13079e6bbe28ce3105fd6",
+      "bytes": 12429
+    },
+    "tools/test_cylinder_ui.py": {
+      "snapshot": "sources/tools/test_cylinder_ui.py",
+      "sha256": "abee1300cc2a9fcb05d836df6c08f122d1a75a1f3d9786b5915f809ea5eef482",
+      "bytes": 5605
+    },
+    "tools/test_engine.py": {
+      "snapshot": "sources/tools/test_engine.py",
+      "sha256": "f96c093315f032dcbc4db85096930e9d9c70c0fc306b9be56405d498a31d5dbd",
+      "bytes": 13626
+    },
+    "tools/test_engine_cylinder.py": {
+      "snapshot": "sources/tools/test_engine_cylinder.py",
+      "sha256": "b0be4d98622a26cebec4afd93bf8d24b147f3e757c9cacc53ba409d9b2c688b8",
+      "bytes": 6582
+    },
+    "tools/test_engine_http.py": {
+      "snapshot": "sources/tools/test_engine_http.py",
+      "sha256": "a3bc28254e8ceaf229c872abb45045e65a851a2efd1a05c058de70b8fd7091ba",
+      "bytes": 9291
+    },
+    "tools/test_engine_observability.py": {
+      "snapshot": "sources/tools/test_engine_observability.py",
+      "sha256": "b01704c6fb7ca9e4f011141d3966e535dd5e433e50e7a520af4ef796d16578c5",
+      "bytes": 14887
+    },
+    "tools/test_engine_observability_ui.py": {
+      "snapshot": "sources/tools/test_engine_observability_ui.py",
+      "sha256": "cb73d7e78c0eed3b9b7dcec402c0ccb854d4aaad7b02499aef03cb5b752f2f13",
+      "bytes": 8968
+    },
+    "tools/test_engine_semi.py": {
+      "snapshot": "sources/tools/test_engine_semi.py",
+      "sha256": "373d2d8824fc9306d0904eedc41a26686f39f610753dbe5573a6d5cd530eed7f",
+      "bytes": 14404
+    },
+    "tools/test_engine_sequential.py": {
+      "snapshot": "sources/tools/test_engine_sequential.py",
+      "sha256": "5eac5e1ca7e30062fa7a94a4f0ba5733a9014284ad755d11c80799e6b98728b5",
+      "bytes": 7011
+    },
+    "tools/test_engine_ui.py": {
+      "snapshot": "sources/tools/test_engine_ui.py",
+      "sha256": "6ae9479fb31c2bbc99fafe2d009a7643746fb16052e616750444e6435c0fab15",
+      "bytes": 7664
+    },
+    "tools/test_idle.py": {
+      "snapshot": "sources/tools/test_idle.py",
+      "sha256": "b7e0224dd5dd6402576cbcd160e06e2e251cf97ddf90b314cf8ace1b5a0f0e58",
+      "bytes": 10368
+    },
+    "tools/test_idle_ui.py": {
+      "snapshot": "sources/tools/test_idle_ui.py",
+      "sha256": "0e8d5ba67b5703a6883fa18c694fdec72e7a555ddbb622f50bae96be90b38280",
+      "bytes": 7534
+    },
+    "tools/test_load_model.py": {
+      "snapshot": "sources/tools/test_load_model.py",
+      "sha256": "bd8f16f6a84dbc69f7b5f0488a70e888d18a990efd8dba8a34ec77f5ad3f2203",
+      "bytes": 8096
+    },
+    "tools/test_load_radio.py": {
+      "snapshot": "sources/tools/test_load_radio.py",
+      "sha256": "22a3abaff7a8cc5cdcc13a4d20f70f7e647b2b66765d02b279f01b7e6bd19e91",
+      "bytes": 5774
+    },
+    "tools/test_load_reference.py": {
+      "snapshot": "sources/tools/test_load_reference.py",
+      "sha256": "c11889fcece3f11a253563ad3b205eec0b6e847945ae433703aa60d9bdcde9a6",
+      "bytes": 4259
+    },
+    "tools/test_load_ui.py": {
+      "snapshot": "sources/tools/test_load_ui.py",
+      "sha256": "4c9825d7bb98b3f2d37a64f04f9a93d704db3d042826f9aa2318a7545a0d6349",
+      "bytes": 10150
+    },
+    "tools/test_radio.py": {
+      "snapshot": "sources/tools/test_radio.py",
+      "sha256": "2d72a4a57e6eb83e0c93976530aea6d4316040a10917f64fe09df3f8288d39cc",
+      "bytes": 3962
+    },
+    "tools/test_research_plant.py": {
+      "snapshot": "sources/tools/test_research_plant.py",
+      "sha256": "9b26ceef5556faa2fdf66cf8ba1f4940d790aa3a8434b57707d79780b090e8c1",
+      "bytes": 4205
+    },
+    "tools/test_secondary_model.py": {
+      "snapshot": "sources/tools/test_secondary_model.py",
+      "sha256": "b006b0327f1011b0d326fb54ae81eafc3996499780176acc3c203840cf276779",
+      "bytes": 13352
+    },
+    "tools/test_secondary_radio.py": {
+      "snapshot": "sources/tools/test_secondary_radio.py",
+      "sha256": "1efe09fd3005a8f72e496155f757cc5636c9403475dc6a6b511939c286937bf2",
+      "bytes": 5720
+    },
+    "tools/test_secondary_reference.py": {
+      "snapshot": "sources/tools/test_secondary_reference.py",
+      "sha256": "54dd690e8b06321a52b99768263e552313c7d4208036d13bc2c0b49f50603634",
+      "bytes": 4865
+    },
+    "tools/test_secondary_stimulus.py": {
+      "snapshot": "sources/tools/test_secondary_stimulus.py",
+      "sha256": "1b59831a415101381e165a09d2ad4c6903ef29b1628b223d7dcdf45aee233228",
+      "bytes": 5863
+    },
+    "tools/test_secondary_ui.py": {
+      "snapshot": "sources/tools/test_secondary_ui.py",
+      "sha256": "2cdc0389c4bf71dab0ededa5c677e02dbef94de766324a05b9b5209c770aa73e",
+      "bytes": 13437
+    },
+    "tools/test_semi_ui.py": {
+      "snapshot": "sources/tools/test_semi_ui.py",
+      "sha256": "5a78a8b9820f309bd2e87b2896edc227ca073b62e9a9396788b270d5adc723a9",
+      "bytes": 8126
+    },
+    "tools/test_sequential_ui.py": {
+      "snapshot": "sources/tools/test_sequential_ui.py",
+      "sha256": "63d50047c36f6fc2b275e225654619a4b23218c5b1e0a1ee9f3cb3aa7878aadf",
+      "bytes": 5295
+    },
+    "tools/test_speeduino_runtime.py": {
+      "snapshot": "sources/tools/test_speeduino_runtime.py",
+      "sha256": "cefe29e7697a8973e5e9821465aac6e3fd538d6dba449e007df0b458813d8369",
+      "bytes": 3489
+    },
+    "tools/test_speeduino_timer_model.py": {
+      "snapshot": "sources/tools/test_speeduino_timer_model.py",
+      "sha256": "7b019e90fa1e46e4521768f576b4820e6fb70d71ad3714dad5508a90fb5b70be",
+      "bytes": 1615
+    },
+    "tools/test_switch_circuit.py": {
+      "snapshot": "sources/tools/test_switch_circuit.py",
+      "sha256": "eb4758b12285110dfa42becbb9b97964567deb85bce281a3f5b8f0f6b6611b25",
+      "bytes": 2090
+    },
+    "tools/test_transient.py": {
+      "snapshot": "sources/tools/test_transient.py",
+      "sha256": "e1961b902e44598ad2a62cf8d314d7a8a19af62f3a60b1d22a9b13e7277f4b17",
+      "bytes": 10935
+    },
+    "tools/test_transient_ui.py": {
+      "snapshot": "sources/tools/test_transient_ui.py",
+      "sha256": "ae1876cd674aa92536d28ca03447314104f9597fa7d20b3ae8057983288a8af1",
+      "bytes": 8037
+    },
+    "tools/test_trigger_capture.py": {
+      "snapshot": "sources/tools/test_trigger_capture.py",
+      "sha256": "e675d8c38546a2397e166249eaeb4c3448a8609b5b3b5af6a98a0151238e3789",
+      "bytes": 6493
+    },
+    "tools/test_trigger_ui.py": {
+      "snapshot": "sources/tools/test_trigger_ui.py",
+      "sha256": "767d3f26f42af2764af3abef5f4194f8b27e31579db33901bb1af127771b3aa6",
+      "bytes": 8705
+    },
+    "tools/test_tuning.py": {
+      "snapshot": "sources/tools/test_tuning.py",
+      "sha256": "f24c5b62bd277c9ba9871a5b76a3960d1855356595b5a38b857382cbf36578ac",
+      "bytes": 9206
+    },
+    "tools/test_tuning_ui.py": {
+      "snapshot": "sources/tools/test_tuning_ui.py",
+      "sha256": "4a8c0d179473bc2efd7c1d6cdd24169dc84313a6006bc73e64f6158209ea890b",
+      "bytes": 6212
+    },
+    "tools/test_web_config.py": {
+      "snapshot": "sources/tools/test_web_config.py",
+      "sha256": "443d92a7fc6f4e0cb60f2c445a40e37476fd63551f279f007672203c9d8d8f0c",
+      "bytes": 8654
+    },
+    "tools/transient_config.py": {
+      "snapshot": "sources/tools/transient_config.py",
+      "sha256": "0989cb217731836d243c836835f1a93dfa17b7d2043658de64923b9c63b30ee0",
+      "bytes": 2260
+    },
+    "tools/trigger_capture.py": {
+      "snapshot": "sources/tools/trigger_capture.py",
+      "sha256": "11765a063924b1ef7eac9a71c3cefa7c53af0cb93854336aa1984cf48f10447c",
+      "bytes": 1401
+    },
+    "tools/trigger_capture_bridge.hpp": {
+      "snapshot": "sources/tools/trigger_capture_bridge.hpp",
+      "sha256": "15c809a38a2832da57ddaa8319dc0b10c9b623b6e8ad02beac472145641a957f",
+      "bytes": 1666
+    },
+    "tools/tuning_bridge.cpp": {
+      "snapshot": "sources/tools/tuning_bridge.cpp",
+      "sha256": "213107aa881292a48158cacab045b99a07000f8aed5d834dc304dbef0e65eed0",
+      "bytes": 5857
+    },
+    "tools/tuning_runtime.py": {
+      "snapshot": "sources/tools/tuning_runtime.py",
+      "sha256": "bd3863c3e8020d4f00617812929e501df97ea85c2f90b945b571c255e55bb31e",
+      "bytes": 8344
+    },
+    "tools/tuning_server.py": {
+      "snapshot": "sources/tools/tuning_server.py",
+      "sha256": "c1bfd2312e3eb64bf4cd33d5642dd3d0674a9fefa0a8266edc22225ef6e5518e",
+      "bytes": 4844
+    },
+    "tools/validate_engine_comparison.py": {
+      "snapshot": "sources/tools/validate_engine_comparison.py",
+      "sha256": "6b26aef6e04a82661dcda538ccdef88f05424491ecde533f3dfd9a9ab7c297e6",
+      "bytes": 7514
+    },
+    "tools/verify_idle_hardware_evidence.py": {
+      "snapshot": "sources/tools/verify_idle_hardware_evidence.py",
+      "sha256": "9c6c1f1ac9f095ab4344b57c1bdb709ac698c07b5d06f6350aa51f465c5cd494",
+      "bytes": 2232
+    },
+    "tools/verify_load_evidence.py": {
+      "snapshot": "sources/tools/verify_load_evidence.py",
+      "sha256": "56afbd88adf3a297a0c93ebd82c195c21fb1d3efa1711f0a3b9cb5efca09d51d",
+      "bytes": 7284
+    },
+    "tools/verify_secondary_core_evidence.py": {
+      "snapshot": "sources/tools/verify_secondary_core_evidence.py",
+      "sha256": "03bee1b27a2af1f0afd46258ae24800b7dbabda13d417eef510719fe34f49fae",
+      "bytes": 6553
+    },
+    "tools/verify_secondary_integration_evidence.py": {
+      "snapshot": "sources/tools/verify_secondary_integration_evidence.py",
+      "sha256": "e9af8bc95adac1e116e07d59914a40545c91afdb5263c1cd0de5cedc3fb74e3b",
+      "bytes": 11870
+    },
+    "tools/verify_secondary_plant_evidence.py": {
+      "snapshot": "sources/tools/verify_secondary_plant_evidence.py",
+      "sha256": "8133d6f939d5707798a07dafeb580946000119c6b44869c6db9f925abefab21f",
+      "bytes": 5493
+    },
+    "tools/verify_semi_evidence.py": {
+      "snapshot": "sources/tools/verify_semi_evidence.py",
+      "sha256": "7fd4e4de6bebd4b8d11f4504ede3391ae1ab73c66ff1adbd7e12d76e656d1e9c",
+      "bytes": 2832
+    },
+    "tools/verify_switch_inputs_evidence.py": {
+      "snapshot": "sources/tools/verify_switch_inputs_evidence.py",
+      "sha256": "31727194bdf1f37c5f492e3a99b62bc9f8d899cd2106622420226bfcbf595dd4",
+      "bytes": 6536
+    },
+    "tools/verify_transient_evidence.py": {
+      "snapshot": "sources/tools/verify_transient_evidence.py",
+      "sha256": "7f3be7a3c8265a5848970383b79022307a5eb3242963ae3a3a0c53b9bb060f19",
+      "bytes": 4350
+    },
+    "tools/web_server.py": {
+      "snapshot": "sources/tools/web_server.py",
+      "sha256": "e4e52546e82c36e81cbca0fc9d30cf3fc4c0cce654767b380b4138dbbad5cf76",
+      "bytes": 14827
+    },
+    "web/cylinder_tuning.js": {
+      "snapshot": "sources/web/cylinder_tuning.js",
+      "sha256": "4cdce733ebbe765f691fae50b2653650007a3ee83e0d30eb0d9c7270a4660bd3",
+      "bytes": 5831
+    },
+    "web/engine_logger.js": {
+      "snapshot": "sources/web/engine_logger.js",
+      "sha256": "170e5a21a15dc71dbabded411500ab418aa1420a3f63aa2afed72533599582b1",
+      "bytes": 20494
+    },
+    "web/idle_control.js": {
+      "snapshot": "sources/web/idle_control.js",
+      "sha256": "6527c03afb5e4ecd4d8a88907afb39bcee6ccd0a41d7d0c7cfce1d062b606f4b",
+      "bytes": 9835
+    },
+    "web/idle_control_logic.js": {
+      "snapshot": "sources/web/idle_control_logic.js",
+      "sha256": "7f69537f794a1ccedf504080101a8d88095c9068c31b5709a295fbcd73e8a054",
+      "bytes": 7761
+    },
+    "web/index.html": {
+      "snapshot": "sources/web/index.html",
+      "sha256": "77961709e2c43f571f5d8193c3f9ae62b105133e6f8bdfc048168fe82f13c2c8",
+      "bytes": 85124
+    },
+    "web/load_model.js": {
+      "snapshot": "sources/web/load_model.js",
+      "sha256": "e5218b9caf3ed2068a983665e1e291d8582cecdd13d1bcf99f253006be5b87b2",
+      "bytes": 14063
+    },
+    "web/load_model_logic.js": {
+      "snapshot": "sources/web/load_model_logic.js",
+      "sha256": "3d0e73cb89b03c34f3abc0ebc048b934249a53d582b1aa26f7483daa36ddd322",
+      "bytes": 11640
+    },
+    "web/secondary_tables.js": {
+      "snapshot": "sources/web/secondary_tables.js",
+      "sha256": "7a1b4b72ae0111f33a786a9a3573056a306e6de73ec8dde620d8d4e457422d9b",
+      "bytes": 21942
+    },
+    "web/secondary_tables_logic.js": {
+      "snapshot": "sources/web/secondary_tables_logic.js",
+      "sha256": "5f56325d280acb348ef530d48b737bad5518a067573e35c8c48af70cab8bb641",
+      "bytes": 17727
+    },
+    "web/transient_enrichment.js": {
+      "snapshot": "sources/web/transient_enrichment.js",
+      "sha256": "42b60c320c0d95a5535a8346e9b1bd7be0faef0d91007bc9468cf4f959566767",
+      "bytes": 10605
+    },
+    "web/transient_enrichment_logic.js": {
+      "snapshot": "sources/web/transient_enrichment_logic.js",
+      "sha256": "6bea83d5cdb6e7922efe0be7a4f7da27b5fc1af464568b8c417b9c0a3a13d68b",
+      "bytes": 8631
+    },
+    "web/trigger_logger.js": {
+      "snapshot": "sources/web/trigger_logger.js",
+      "sha256": "d9997905115af0cbecca5382b04694a4bd71c220e19e84b0b02bd9cd27e85c07",
+      "bytes": 15198
+    },
+    "web/tuning_diagnostics.js": {
+      "snapshot": "sources/web/tuning_diagnostics.js",
+      "sha256": "9c96152e9e9cae4f000fdc268f3512f9d915fe6dcdae4cef2ca37ac87651a1c8",
+      "bytes": 2883
+    }
+  },
+  "tooling_source_delta": {
+    "path": "tools/verify_secondary_plant_evidence.py",
+    "before_sha256": "c8275fbea592abf7b27bb8a17b4a0c2ada88592e3d463433cb0d9d3c403a7e56",
+    "after_sha256": "8133d6f939d5707798a07dafeb580946000119c6b44869c6db9f925abefab21f",
+    "before_snapshot": "validation/matrix-verifier-source.py",
+    "scope": "Publication verifier was strengthened after all models/checks completed. It is not imported or executed by those experiments. All controller, plant, stimulus and numerical-audit sources remain identical."
+  },
+  "controller_cases": 128,
+  "refinement_cases": 20,
+  "legacy_replays": 4,
+  "negative_controls": 20,
+  "neutral_causal_controls": 28,
+  "tests": {
+    "python": 205,
+    "secondary_native": 790,
+    "engine_secondary_native": 172,
+    "independent_crank": 2507,
+    "browser_observations": 791
+  },
+  "physical_qualification": false,
+  "full_speeduino_parity": false,
+  "online_tunerstudio_accepted": false,
+  "limits": [
+    "Uncalibrated MVEM air path plus empirical combustion/free shaft; no ideal tune or engine qualification",
+    "Virtual native execution has zero CPU/IRQ cost; declared transaction durations are assumptions",
+    "Reference integer oracle covers declared raw lookup domains<=255; larger ratio lookup uint8 bin-search wrapping is outside this matrix",
+    "ETH target/flex producer, wider control features, online tuning acceptance and physical/HIL gates remain open"
+  ]
+}

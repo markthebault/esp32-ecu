@@ -51,6 +51,21 @@ class SecondaryTests(unittest.TestCase):
   self.assertTrue(o['faults']&4);self.assertEqual(d['secondary_tables']['fuel']['reason'],'input_time_reversed');self.assertEqual(d['secondary_tables']['fuel']['input_observed_us'],'18446744073709551615');self.assertTrue(self.recorder().bridge.data_validate(json.dumps(d).encode()))
   bad=inputs(1040000);bad['table_switches'][0]['source']='target_protected_input'
   with self.assertRaises(ValueError):r.step(bad,1040000,use_decoder=False)
+ def test_cranking_input_diagnostics_roundtrip_and_log_before_running(self):
+  t=tune();configure(t,'spark','input');t['secondary_tables']['spark']['debounce_ms']=20;r=self.runtime(t);rec=self.recorder()
+  self.assertEqual(rec.command(dict(action='start',period_ms=20,duration_s=1),1000000),200)
+  for now in (1000000,1010000,1020000,1025000):
+   sample=inputs(now);sample['rpm']=220 if now<1025000 else 600
+   o=r.step(sample,now,use_decoder=False);d=r.data();spark=d['secondary_tables']['spark']
+   self.assertEqual(o['faults'],0);self.assertTrue(rec.bridge.data_validate(json.dumps(d).encode()))
+   self.assertEqual(spark['input_observed_us'],str(now));self.assertEqual(spark['input_qualified'],now>=1020000)
+   self.assertEqual(spark['reason'],'cranking_spark_bypass'if now<1025000 else'input_secondary')
+   if now<1025000:self.assertFalse(spark['active']);self.assertEqual(o['advance_deg'],5)
+   else:self.assertTrue(spark['active']);self.assertEqual(o['advance_deg'],20)
+   self.assertEqual(rec.append(d,now),now in(1000000,1020000))
+  rec.command(dict(action='stop',log_id=1),1025001)
+  rows=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));last=dict(zip(rows[2],rows[-1]))
+  self.assertEqual(last['SecSparkInputQualified'],'1');self.assertEqual(last['SecSparkActive'],'0');self.assertEqual(last['SecSparkObservedUs'],'1020000')
  def test_missing_target_style_input_and_ethanol_are_unknown_faults(self):
   t=tune();configure(t,'fuel','input');r=self.runtime(t);o=r.step(dict(rpm=1200,synced=True),1000000,use_decoder=False)
   self.assertTrue(o['faults']&4);self.assertEqual(o['secondary_tables']['fuel']['input_source'],'unavailable');self.assertIsNone(o['secondary_tables']['fuel']['input_observed_us'])

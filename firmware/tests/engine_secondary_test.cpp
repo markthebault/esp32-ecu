@@ -93,6 +93,29 @@ static void input_faults(){
  // Even an input fault during normal operation cannot alter the global gate.
  s.sampled_us=1070000;for(auto&sw:s.table_switches)sw.observed_us=s.sampled_us;s.table_switches[1].valid=false;o=c.step(t,s,s.sampled_us);check(o.faults&BadSensor);check(o.pulse_ms==0&&o.dwell_ms==0&&!o.proposed_enabled());
 }
+static void crank_input_handoff(){
+ auto t=tune();configure(t.secondary_tables.spark,sec::Mode::Input);t.secondary_tables.spark.debounce_ms=20;
+ t.secondary_spark.cells.fill(12);Controller c;
+ auto observe=[&](std::uint64_t now,double rpm,bool level,bool valid=true){
+  auto s=input(now);s.rpm=rpm;s.table_switches[1]={now,sec::InputSource::Synthetic,level,valid};return c.step(t,s,now);
+ };
+ for(unsigned n=0;n<=4;++n){const auto o=observe(1000000+n*5000,220,true);
+  check(!o.faults&&o.state==State::Cranking&&o.advance_deg==t.crank_advance_deg);
+  check(!o.secondary_spark.active&&o.secondary_spark.reason==sec::Reason::CrankingBypass);
+  check(o.secondary_spark.input_qualified==(n==4));
+ }
+ auto o=observe(1025000,500,true);check(!o.faults&&o.state==State::Cranking);
+ o=observe(1030000,550,true);check(!o.faults&&o.state==State::Running&&o.advance_deg==12&&o.secondary_spark.active);
+ // A qualified bouncing contact retains its previous running selection.
+ o=observe(1035000,2000,false);check(!o.faults&&o.advance_deg==12&&o.secondary_spark.pending);
+ o=observe(1040000,220,false);check(!o.faults&&o.state==State::Cranking&&o.advance_deg==t.crank_advance_deg);
+ o=observe(1045000,550,false);check(!o.faults&&o.advance_deg==12&&o.secondary_spark.pending);
+ o=observe(1055000,2000,false);check(!o.faults&&o.advance_deg==20&&!o.secondary_spark.active);
+ // Bypassed bad inputs are visible, but do not interrupt the cranking angle.
+ o=observe(1060000,220,true,false);check(!o.faults&&o.advance_deg==t.crank_advance_deg&&!o.secondary_spark.input_qualified);
+ o=observe(1065000,550,true);check(o.faults==BadSensor&&o.fuel_cut&&o.spark_cut&&!o.proposed_enabled());
+ o=observe(1085000,550,true);check(!o.faults&&o.advance_deg==12&&o.secondary_spark.input_qualified);
+}
 static void secondary_transport(){
  auto t=tune();configure(t.secondary_tables.fuel,sec::Mode::Multiply);t.secondary_ve.cells.fill(150);
  ecu::tuning::Page p;ecu::tuning::encode_page(t,9,p);auto enabled=tune();
@@ -100,4 +123,4 @@ static void secondary_transport(){
  check(enabled.secondary_tables.spark.mode==sec::Mode::Off&&enabled.secondary_spark.cells[0]==15);
  ecu::tuning::Page roundtrip;ecu::tuning::encode_page(enabled,9,roundtrip);check(p==roundtrip);
 }
-int main(){fuel_and_capacity();spark_order_and_cylinders();dependencies_and_units();input_faults();secondary_transport();std::cout<<"{\"passed\":true,\"engine_secondary_checks\":"<<checks<<"}\n";}
+int main(){fuel_and_capacity();spark_order_and_cylinders();dependencies_and_units();input_faults();crank_input_handoff();secondary_transport();std::cout<<"{\"passed\":true,\"engine_secondary_checks\":"<<checks<<"}\n";}

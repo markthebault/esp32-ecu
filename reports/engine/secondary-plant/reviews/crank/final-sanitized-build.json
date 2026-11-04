@@ -1,0 +1,37 @@
+{
+  "commands": [
+    [
+      "cc",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-pie",
+      "-c",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-sources/external/cJSON/cJSON.c",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-sanitized-cJSON.o"
+    ],
+    [
+      "c++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-pie",
+      "-no-pie",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-sources/firmware/include",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-sources/external/cJSON",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/probe.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-sanitized-cJSON.o",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-sanitized-probe"
+    ]
+  ],
+  "returncode": 0,
+  "probe_sha256": "7f95f81cce5604f782922967a7f0b80a53423638b11149836c6a4a0b9739866c"
+}

@@ -1,0 +1,460 @@
+{
+  "passed": true,
+  "source_bindings_stable": true,
+  "mutations": {
+    "passed": true,
+    "checks": [
+      {
+        "label": "portable",
+        "mutation": "inactive_selection",
+        "rejected": true,
+        "errors": [
+          "fuel independent composition/clamp",
+          "fuel secondary selection was never exercised",
+          "fuel selection differs from independent predicate"
+        ]
+      },
+      {
+        "label": "portable",
+        "mutation": "uncombined_value",
+        "rejected": true,
+        "errors": [
+          "fuel independent composition/clamp",
+          "fuel nonneutral composition was never exercised"
+        ]
+      },
+      {
+        "label": "portable",
+        "mutation": "inert_actuators_and_plant",
+        "rejected": true
+      },
+      {
+        "label": "portable",
+        "mutation": "unexercised_fault",
+        "rejected": true,
+        "errors": [
+          "fault window did not hit an acquisition operation"
+        ]
+      },
+      {
+        "label": "portable",
+        "mutation": "erased_fault_acknowledgement",
+        "rejected": true,
+        "errors": [
+          "consumed fault counter differs from exact ACK history",
+          "recoverable fault was never acknowledged"
+        ]
+      },
+      {
+        "label": "portable",
+        "mutation": "wrong_load_coordinate",
+        "rejected": true,
+        "errors": [
+          "fuel secondary table lookup"
+        ]
+      },
+      {
+        "label": "portable",
+        "mutation": "coherent_wrong_source_and_lookup",
+        "rejected": true,
+        "errors": [
+          "fuel physical sensor/source coordinate"
+        ]
+      },
+      {
+        "label": "target",
+        "mutation": "inactive_selection",
+        "rejected": true,
+        "errors": [
+          "fuel independent composition/clamp",
+          "fuel secondary selection was never exercised",
+          "fuel selection differs from independent predicate"
+        ]
+      },
+      {
+        "label": "target",
+        "mutation": "uncombined_value",
+        "rejected": true,
+        "errors": [
+          "fuel independent composition/clamp",
+          "fuel nonneutral composition was never exercised"
+        ]
+      },
+      {
+        "label": "target",
+        "mutation": "inert_actuators_and_plant",
+        "rejected": true
+      },
+      {
+        "label": "target",
+        "mutation": "unexercised_fault",
+        "rejected": true,
+        "errors": [
+          "fault window did not hit an acquisition operation"
+        ]
+      },
+      {
+        "label": "target",
+        "mutation": "erased_fault_acknowledgement",
+        "rejected": true,
+        "errors": [
+          "consumed fault counter differs from exact ACK history",
+          "recoverable fault was never acknowledged"
+        ]
+      },
+      {
+        "label": "target",
+        "mutation": "wrong_load_coordinate",
+        "rejected": true,
+        "errors": [
+          "fuel secondary table lookup"
+        ]
+      },
+      {
+        "label": "target",
+        "mutation": "coherent_wrong_source_and_lookup",
+        "rejected": true,
+        "errors": [
+          "fuel physical sensor/source coordinate"
+        ]
+      },
+      {
+        "label": "speeduino32",
+        "mutation": "inactive_selection",
+        "rejected": true,
+        "errors": [
+          "fuel reference selection differs from actual-input predicate"
+        ]
+      },
+      {
+        "label": "speeduino32",
+        "mutation": "uncombined_value",
+        "rejected": true,
+        "errors": [
+          "fuel nonneutral composition was never exercised",
+          "fuel reference independent integer composition"
+        ]
+      },
+      {
+        "label": "speeduino32",
+        "mutation": "inert_actuators_and_plant",
+        "rejected": true
+      },
+      {
+        "label": "speeduino16",
+        "mutation": "inactive_selection",
+        "rejected": true,
+        "errors": [
+          "fuel reference selection differs from actual-input predicate"
+        ]
+      },
+      {
+        "label": "speeduino16",
+        "mutation": "uncombined_value",
+        "rejected": true,
+        "errors": [
+          "fuel nonneutral composition was never exercised",
+          "fuel reference independent integer composition"
+        ]
+      },
+      {
+        "label": "speeduino16",
+        "mutation": "inert_actuators_and_plant",
+        "rejected": true
+      }
+    ]
+  },
+  "checks": [
+    {
+      "label": "portable",
+      "kind": "no-secondary-adapter Off replay",
+      "passed": true,
+      "file": "portable-legacy-off.json.gz",
+      "sha256": "3164f9b2a2fae9b307b107d6763018624e6327322c53995d7b56475c46151c71"
+    },
+    {
+      "label": "portable",
+      "case": "multiply",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 1.1256111118493417e-05,
+        "fuel_in_mg": 7.693414220521125e-05,
+        "combustion_shaft_j": 5.808334790197414e-05
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "895c9578bce665dcff849f97e276c2779c963329bc3a1c250f235cb6ed602ee9"
+    },
+    {
+      "label": "portable",
+      "case": "input_bounce",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 0.000333111128188323,
+        "fuel_in_mg": 0.0052235333153339385,
+        "combustion_shaft_j": 0.0029444936737156977
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "7662be7023e01891b5211706df0e236da5b9ab0bc5ae486ea3ee2e5c51d7c116"
+    },
+    {
+      "label": "portable",
+      "case": "ratio_mixed",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 5.824813517738912e-06,
+        "fuel_in_mg": 0.00019422525636379886,
+        "combustion_shaft_j": 7.476201263735395e-05
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "6f584a60c2e400c771814761fd9b0b636fcacc8b870ac611ad9758bfd9198b16"
+    },
+    {
+      "label": "portable",
+      "case": "trim_multiply",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 1.2143103921868964e-05,
+        "fuel_in_mg": 0.00012573631719823154,
+        "combustion_shaft_j": 3.2611306806388654e-05
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "8c0df7addbaf2a298d49c8edb7a819bd519ddc5a6da19bdbb804f1cba8d3a2c4"
+    },
+    {
+      "label": "portable",
+      "case": "producer_pause",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 3.0226760490033497e-05,
+        "fuel_in_mg": 5.298173517269786e-05,
+        "combustion_shaft_j": 0.00011661197050791374
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "3bdda973109b2ee9c3b8c2715abdd0c0016b463c76fd7ddbd87bee9e52d95669"
+    },
+    {
+      "label": "target",
+      "kind": "no-secondary-adapter Off replay",
+      "passed": true,
+      "file": "target-legacy-off.json.gz",
+      "sha256": "8132fef9e3323399263ce2461e6fe1ad9843008e31ef1f0aeb837fd0ea74efd8"
+    },
+    {
+      "label": "target",
+      "case": "multiply",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 1.1256111118493417e-05,
+        "fuel_in_mg": 7.693414220521125e-05,
+        "combustion_shaft_j": 5.808334790197414e-05
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "86fc76d82d03fc3e23b6cd7dd5f0b6d300ee50629c5ce4e2fdc19e5e2ac69e88"
+    },
+    {
+      "label": "target",
+      "case": "input_bounce",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 0.000333111128188323,
+        "fuel_in_mg": 0.0052235333153339385,
+        "combustion_shaft_j": 0.0029444936737156977
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "44d3bfe097dc58cb518003b8e6cf15bdcb3d7e5f7ba37ef8c4c14f84dbbb4bdd"
+    },
+    {
+      "label": "target",
+      "case": "ratio_mixed",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 5.824813517738912e-06,
+        "fuel_in_mg": 0.00019422525636379886,
+        "combustion_shaft_j": 7.476201263735395e-05
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "5402d66649be8b0d99d6fd5ac6cfb0122d85cb4cfd37ddd1c80b8e4a69607894"
+    },
+    {
+      "label": "target",
+      "case": "trim_multiply",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 1.2143103921868964e-05,
+        "fuel_in_mg": 0.00012573631719823154,
+        "combustion_shaft_j": 3.2611306806388654e-05
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "b749c8c9366e02684a18aed6a17db3735f5b29d75c1a09ef14c0f70d323037fd"
+    },
+    {
+      "label": "target",
+      "case": "producer_pause",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 3.0226760490033497e-05,
+        "fuel_in_mg": 5.298173517269786e-05,
+        "combustion_shaft_j": 0.00011661197050791374
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "cbd305754e1ceeebf1ebd0c5e886081b006ae13f124b598e895d94a308ac115f"
+    },
+    {
+      "label": "speeduino32",
+      "kind": "no-secondary-adapter Off replay",
+      "passed": true,
+      "file": "speeduino32-legacy-off.json.gz",
+      "sha256": "4d93698771ac35ab050e157faeae20d6383d7652312c1e2648c52183dc5a1ed1"
+    },
+    {
+      "label": "speeduino32",
+      "case": "multiply",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 2.2625862308748543e-05,
+        "fuel_in_mg": 0.0002488213715325904,
+        "combustion_shaft_j": 0.0003770271482128925
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "880339bd94c154582655b851890fc2e576c950279b3d6a6091a24a161e6be70c"
+    },
+    {
+      "label": "speeduino32",
+      "case": "input_bounce",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 0.0006107421876128863,
+        "fuel_in_mg": 0.001731012073708633,
+        "combustion_shaft_j": 8.130275903028074e-05
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "9ca9813e104b76396bf8bac20a3f8363ce7d53a0b499f1a2abd455ff3455935b"
+    },
+    {
+      "label": "speeduino32",
+      "case": "ratio_mixed",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 3.315668145590416e-05,
+        "fuel_in_mg": 2.6075278387420304e-05,
+        "combustion_shaft_j": 0.0004355342028548423
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "878ca35d3445b139f2f352feb267f21c689e6adacc176e7c5a7d75c8fc25e7a4"
+    },
+    {
+      "label": "speeduino32",
+      "case": "trim_multiply",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 0.00030675001342011984,
+        "fuel_in_mg": 0.00045319830943428167,
+        "combustion_shaft_j": 0.00014954381895560857
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "12d4500c1e3fd2d41e54d3e65ff1bfbf86d99417353547ac4f6c01b56d0feafa"
+    },
+    {
+      "label": "speeduino32",
+      "case": "producer_pause",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 0.0008964897184400118,
+        "fuel_in_mg": 0.0006234667452745277,
+        "combustion_shaft_j": 0.0010449059491977775
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "8c7a2cc086651424cb631b333b2277d9eb23fa56ac920f574f9c02f8667b3fe6"
+    },
+    {
+      "label": "speeduino16",
+      "kind": "no-secondary-adapter Off replay",
+      "passed": true,
+      "file": "speeduino16-legacy-off.json.gz",
+      "sha256": "f0107d95edbf83954cd3308ea917490952adf3fabaf45d43fdbee7a3689cb4c1"
+    },
+    {
+      "label": "speeduino16",
+      "case": "multiply",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 2.2625862308748543e-05,
+        "fuel_in_mg": 0.0002488213715325904,
+        "combustion_shaft_j": 0.0003770271482128925
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "a54eecbdb732ab5d4142d02b243b96f41801d4fcefe11efd438eac09cfe50116"
+    },
+    {
+      "label": "speeduino16",
+      "case": "input_bounce",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 0.0006107421876128863,
+        "fuel_in_mg": 0.001731012073708633,
+        "combustion_shaft_j": 8.130275903028074e-05
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "aa46d3d585ef4e214f408f47667160d427d1342e769bf64de55918f196893860"
+    },
+    {
+      "label": "speeduino16",
+      "case": "ratio_mixed",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 3.315668145590416e-05,
+        "fuel_in_mg": 2.6075278387420304e-05,
+        "combustion_shaft_j": 0.0004355342028548423
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "41292c8bf124b3c90bc2a82015b52a876978523c5a4dd6439bd085fe8130d093"
+    },
+    {
+      "label": "speeduino16",
+      "case": "trim_multiply",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 0.00030675001342011984,
+        "fuel_in_mg": 0.00045319830943428167,
+        "combustion_shaft_j": 0.00014954381895560857
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "4776b91bbd4ee9bd016ce2fc33b95cb1e7c2238897042551c64c6320b08af47f"
+    },
+    {
+      "label": "speeduino16",
+      "case": "producer_pause",
+      "kind": "250us to125us refinement",
+      "relative_differences": {
+        "mean_final_second_rpm": 0.0008964897184400118,
+        "fuel_in_mg": 0.0006234667452745277,
+        "combustion_shaft_j": 0.0010449059491977775
+      },
+      "tolerance": 0.03,
+      "passed": true,
+      "fine_trace_sha256": "033ab12cddf997ce533636da654430ebf235b9821caa8f1ebf273a693f2e18eb"
+    }
+  ],
+  "runtime_seconds": 17.893563567078672,
+  "physical_qualification": false,
+  "limits": "Same-platform virtual loops with zero CPU/IRQ cost. Halving plant steps also changes native Speeduino loop opportunities. Not physical ECU equivalence or calibrated tuning."
+}

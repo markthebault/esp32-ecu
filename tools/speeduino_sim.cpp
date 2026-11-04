@@ -14,6 +14,7 @@
 #include "scheduler_fuel_controller.h"
 #include "scheduler_ignition_controller.h"
 #include "units.h"
+#include "load_source.h"
 #include "src/controllers/idle/idle.h"
 #include <SimpleArduinoFake.h>
 #include <sstream>
@@ -45,11 +46,15 @@ bool semi_sequential_profile = false;
 bool idle_profile=false,idle_high=false;
 bool ae_profile=false;
 bool load_profile=false;unsigned load_maps=0;
+bool secondary_fixture=false,secondary_profile=false;unsigned secondary_channels[2]{0,1},secondary_maps=0;
+int pin_modes[256]{};uint64_t last_loop_us=0,loop_count=0;
+int loop_fuel_raw=0,loop_spark_raw=0,loop_rotation=0;
 volatile uint8_t* output_ports[8]{};
 uint8_t output_masks[8]{};
 uint8_t output_pins[8]{};
 bool output_high[8]{};
 void prepare_hal() {
+    std::fill(std::begin(pin_modes),std::end(pin_modes),-1);
     using namespace fakeit;
     auto& mock = SimpleArduinoFake::getContext()._Function;
     When(Method(mock, micros)).AlwaysDo([]() -> unsigned long { return uint32_t(speeduino_sim_micros()); });
@@ -58,6 +63,7 @@ void prepare_hal() {
     When(Method(mock, delayMicroseconds)).AlwaysDo([](unsigned int us) { speeduino_sim_advance(speeduino_sim_micros()+us); });
     When(Method(mock, analogRead)).AlwaysDo([](uint8_t pin) { return adc[pin]; });
     When(Method(mock, digitalRead)).AlwaysDo([](uint8_t pin) { return pins[pin]; });
+    When(Method(mock, pinMode)).AlwaysDo([](uint8_t pin,uint8_t mode){pin_modes[pin]=mode;});
     When(Method(mock, digitalWrite)).AlwaysDo([](uint8_t pin, uint8_t value) {
         pins[pin] = value;
         auto port=portOutputRegister(digitalPinToPort(pin));auto mask=digitalPinToBitMask(pin);
@@ -70,6 +76,15 @@ void configure() {
     setStorageAPI(getBoardStorageApi());
     setTuneToEmpty();
     configPage2.pinMapping = 3;
+    if(secondary_fixture){
+        // The upstream native pin-selection limit is20 despite FakeMega's
+        // larger port map.14/15 are distinct, nonreserved virtual inputs.
+        // Persist them before unmodified setup resolves and configures them.
+        configPage10.fuel2InputPin=14+secondary_channels[0];configPage10.spark2InputPin=14+secondary_channels[1];
+        configPage10.fuel2Mode=FUEL2_MODE_INPUT_SWITCH;configPage10.spark2Mode=SPARK2_MODE_INPUT_SWITCH;
+        configPage10.fuel2InputPullup=0;configPage10.spark2InputPullup=0;
+        configPage10.fuel2InputPolarity=1;configPage10.spark2InputPolarity=1;
+    }
     configPage2.nCylinders = 4;
     configPage2.nInjectors = 4;
     configPage2.strokes = FOUR_STROKE;
@@ -165,6 +180,10 @@ void status() {
               << unsigned(currentStatus.schedulerCutState.fuelChannels) << ' ' << unsigned(currentStatus.schedulerCutState.ignitionChannels) << ' '
               << unsigned(ignitionSchedule1._status) << ' ' << currentStatus.dwell << ' ' << CRANK_ANGLE_MAX_IGN << ' ' << CRANK_ANGLE_MAX_INJ << ' ' << unsigned(currentStatus.nSquirts) << '\n';
 }
+void run_loop(){
+    loop_fuel_raw=pins[pinNumbers.pinFuel2Input];loop_spark_raw=pins[pinNumbers.pinSpark2Input];loop_rotation=int(currentStatus.rotationStatus);
+    loop();last_loop_us=speeduino_sim_micros();++loop_count;
+}
 }
 extern "C" void speeduino_sim_observe() {
     if (!record_edges) return;
@@ -194,6 +213,10 @@ int main(int argc,char** argv) {
             else if(flag=="--logger-cam")logger_cam=true;
             else if(flag=="--sequential")sequential_profile=true;
             else if(flag=="--semi-sequential")semi_sequential_profile=true;
+            else if(flag.size()==21&&flag.compare(0,19,"--secondary-inputs=")==0&&
+                    (flag[19]=='0'||flag[19]=='1')&&(flag[20]=='0'||flag[20]=='1')){
+                secondary_fixture=true;secondary_channels[0]=flag[19]-'0';secondary_channels[1]=flag[20]-'0';
+            }
             else throw std::runtime_error("unsupported native profile flag");
         }
         if(semi_sequential_profile&&(sequential_profile||logger_cam))throw std::runtime_error("conflicting cycle profiles");
@@ -202,6 +225,16 @@ int main(int argc,char** argv) {
         setPinMapping(3);
         set_sensors(100,0,85,25,14,14.7);
         setup();
+        if(secondary_fixture){
+            const uint8_t selected[]={pinNumbers.pinFuel2Input,pinNumbers.pinSpark2Input};
+            for(unsigned i=0;i<2;++i){
+                const auto pin=selected[i];
+                if(pin!=14+secondary_channels[i]||pinIsOutput(pin)||pin_modes[pin]!=INPUT||
+                   pin==pinNumbers.pinTrigger||pin==pinNumbers.pinTrigger2||pin==pinNumbers.pinTPS||pin==pinNumbers.pinMAP||
+                   pin==pinNumbers.pinCLT||pin==pinNumbers.pinIAT||pin==pinNumbers.pinBat||pin==pinNumbers.pinO2)
+                    throw std::runtime_error("secondary virtual pin was not independently resolved/configured by setup");
+            }
+        }
         set_sensors(100,0,85,25,14,14.7);
         for(unsigned n=0;n<8;++n) {
             auto pin=n<4?pinNumbers.injectorPins[n]:pinNumbers.coilPins[n-4];
@@ -217,8 +250,8 @@ int main(int argc,char** argv) {
         std::cout << '\n' << std::flush;
         std::string command;
         while (std::cin >> command) {
-            if (command == "advance") { uint64_t us; std::cin>>us; speeduino_sim_advance(us); loop(); }
-            else if (command == "tooth") { uint64_t us; std::cin>>us; speeduino_sim_advance(us); auto cb=currentStatus.decoder.primary.callback; if(!cb) throw std::runtime_error("primary ISR missing"); pins[pinNumbers.pinTrigger]=HIGH; cb(); pins[pinNumbers.pinTrigger]=LOW; loop(); }
+            if (command == "advance") { uint64_t us; std::cin>>us; speeduino_sim_advance(us); run_loop(); }
+            else if (command == "tooth") { uint64_t us; std::cin>>us; speeduino_sim_advance(us); auto cb=currentStatus.decoder.primary.callback; if(!cb) throw std::runtime_error("primary ISR missing"); pins[pinNumbers.pinTrigger]=HIGH; cb(); pins[pinNumbers.pinTrigger]=LOW; run_loop(); }
             else if (command == "input") {
                 uint64_t us=0;unsigned channel=0,high=0;
                 if(!(std::cin>>us>>channel>>high)||channel>1||high>1)throw std::runtime_error("invalid virtual trigger input");
@@ -227,7 +260,7 @@ int main(int argc,char** argv) {
                 const bool changed=pins[pin]!=int(high);pins[pin]=high;
                 const auto interrupt=digitalPinToInterrupt(pin);auto cb=interrupts_by_pin[interrupt];const auto mode=interrupt_modes[interrupt];
                 if(changed&&cb&&(mode==CHANGE||(mode==RISING&&high)||(mode==FALLING&&!high)))cb();
-                loop();
+                run_loop();
             }
             else if (command == "logger") {
                 std::string action;std::cin>>action;
@@ -344,6 +377,46 @@ int main(int argc,char** argv) {
             else if(command=="loadstatus"){
                 std::cout<<"loadstatus "<<speeduino_sim_micros()<<' '<<currentStatus.fuelLoad<<' '<<currentStatus.ignLoad<<' '<<currentStatus.MAP<<' '<<unsigned(currentStatus.TPS)<<' '
                     <<currentStatus.EMAP<<' '<<unsigned(currentStatus.baro)<<' '<<unsigned(currentStatus.afrTarget)<<' '<<unsigned(currentStatus.O2)<<' '<<unsigned(currentStatus.runSecs)<<' '<<unsigned(currentStatus.VE)<<'\n';
+            }
+            else if(command=="secondaryconfig"){
+                if(!secondary_fixture||secondary_profile||speeduino_sim_micros()!=0)throw std::runtime_error("secondary profile is requested before-start once only");
+                unsigned a[12]{};for(auto&v:a)if(!(std::cin>>v))throw std::runtime_error("missing secondary configuration");
+                for(unsigned i:{0u,6u})if(a[i]>4||a[i+1]>2||a[i+2]>3||a[i+3]>65535||a[i+4]>1||a[i+5]>1||a[i+4]!=secondary_channels[i/6])throw std::runtime_error("secondary configuration range/channel");
+                configPage10.fuel2Mode=a[0];configPage10.fuel2Algorithm=static_cast<LoadSource>(a[1]);configPage10.fuel2SwitchVariable=a[2];configPage10.fuel2SwitchValue=a[3];configPage10.fuel2InputPolarity=a[5];
+                configPage10.spark2Mode=a[6];configPage10.spark2Algorithm=static_cast<LoadSource>(a[7]);configPage10.spark2SwitchVariable=a[8];configPage10.spark2SwitchValue=a[9];configPage10.spark2InputPolarity=a[11];secondary_profile=true;
+            }
+            else if(command=="secondaryprofile"){
+                std::cout<<"secondaryprofile "<<unsigned(configPage10.fuel2Mode)<<' '<<unsigned(configPage10.fuel2Algorithm)<<' '<<unsigned(configPage10.fuel2SwitchVariable)<<' '<<configPage10.fuel2SwitchValue<<' '<<secondary_channels[0]<<' '<<unsigned(configPage10.fuel2InputPolarity)<<' '
+                    <<unsigned(configPage10.spark2Mode)<<' '<<unsigned(configPage10.spark2Algorithm)<<' '<<unsigned(configPage10.spark2SwitchVariable)<<' '<<configPage10.spark2SwitchValue<<' '<<secondary_channels[1]<<' '<<unsigned(configPage10.spark2InputPolarity)<<' '
+                    <<unsigned(configPage10.fuel2InputPin)<<' '<<unsigned(configPage10.spark2InputPin)<<' '<<unsigned(pinNumbers.pinFuel2Input)<<' '<<unsigned(pinNumbers.pinSpark2Input)<<' '
+                    <<pin_modes[pinNumbers.pinFuel2Input]<<' '<<pin_modes[pinNumbers.pinSpark2Input]<<' '<<unsigned(configPage10.fuel2InputPullup)<<' '<<unsigned(configPage10.spark2InputPullup)<<'\n';
+            }
+            else if(command=="secondarymap"){
+                unsigned id=0;if(!secondary_profile||speeduino_sim_micros()!=0||!(std::cin>>id)||id>1||(secondary_maps&(1U<<id)))throw std::runtime_error("secondary map is before-start once only");
+                auto fill=[&](auto&table){
+                    for(auto*axis:{&table.axisX,&table.axisY})for(unsigned i=0;i<16;++i){unsigned v=0;if(!(std::cin>>v)||v>255||(i&&v<=(*axis)[i-1]))throw std::runtime_error("secondary map axis range/collapse");(*axis)[i]=v;}
+                    for(unsigned i=0;i<256;++i){unsigned v=0;if(!(std::cin>>v)||v>255)throw std::runtime_error("secondary map cell range");table.values[i]=v;}invalidate_cache(&table.get_value_cache);
+                };
+                if(id==0)fill(fuelTable2);else fill(ignitionTable2);secondary_maps|=1U<<id;
+            }
+            else if(command=="secondarymapread"){
+                unsigned id=0;if(!(std::cin>>id)||id>1)throw std::runtime_error("secondary map identifier");
+                std::cout<<"secondarymapread";auto read=[&](const auto&table){for(auto v:table.axisX)std::cout<<' '<<unsigned(v);for(auto v:table.axisY)std::cout<<' '<<unsigned(v);for(auto v:table.values)std::cout<<' '<<unsigned(v);};
+                if(id==0)read(fuelTable2);else read(ignitionTable2);std::cout<<'\n';
+            }
+            else if(command=="contacts"){
+                unsigned a=0,b=0;if(!secondary_profile||secondary_maps!=3||!(std::cin>>a>>b)||a>1||b>1)throw std::runtime_error("virtual contact level range/profile");
+                // Independent raw GPIO only. No debounce, status assignment,
+                // production loop, time advancement or synthetic fault policy.
+                pins[14]=a;pins[15]=b;
+            }
+            else if(command=="secondarystatus"){
+                std::cout<<"secondarystatus "<<speeduino_sim_micros()<<' '<<last_loop_us<<' '<<loop_count<<' '<<unsigned(currentStatus.VE1)<<' '<<unsigned(currentStatus.VE2)<<' '<<unsigned(currentStatus.VE)<<' '
+                    <<int(currentStatus.advance1)<<' '<<int(currentStatus.advance2)<<' '<<int(currentStatus.advance)<<' '<<currentStatus.secondFuelTableActive<<' '<<currentStatus.secondSparkTableActive<<' '
+                    <<currentStatus.RPM<<' '<<currentStatus.MAP<<' '<<unsigned(currentStatus.TPS)<<' '<<unsigned(currentStatus.ethanolPct)<<' '<<int(pins[pinNumbers.pinFuel2Input])<<' '<<int(pins[pinNumbers.pinSpark2Input])<<' '<<unsigned(currentStatus.rotationStatus)<<' '<<currentStatus.EMAP<<' '
+                    <<(configPage10.fuel2Algorithm==LOAD_SOURCE_IMAPEMAP&&!currentStatus.EMAP?-1:int(getLoad(configPage10.fuel2Algorithm,currentStatus)))<<' '
+                    <<(configPage10.spark2Algorithm==LOAD_SOURCE_IMAPEMAP&&!currentStatus.EMAP?-1:int(getLoad(configPage10.spark2Algorithm,currentStatus)))<<' '
+                    <<loop_fuel_raw<<' '<<loop_spark_raw<<' '<<loop_rotation<<'\n';
             }
             else if(command=="aeprofile"){
                 std::cout<<"aeprofile "<<unsigned(configPage2.aeMode)<<' '<<unsigned(configPage2.aeApplyMode)<<' '

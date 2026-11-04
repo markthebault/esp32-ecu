@@ -1,0 +1,134 @@
+{
+  "generated_at_utc": "2026-11-04T14:11:48.263121+00:00",
+  "disposition": "accepted_for_frozen_cranking_switch_prequalification_fix",
+  "source_head": "1c3e9eaa27820d4462289ba653394e6f30dc1b20",
+  "frozen_files": {
+    "firmware/include/ecu/secondary_tables.hpp": "08aa9b41b7c424b3168d34350a31477ef2e44a3439209bf9cb38e0e151ef3613",
+    "firmware/tests/secondary_tables_test.cpp": "20a724186a917d68c79b4a97f14b7b8ce50b57d9fe64b9c5c85e8c1bb665d7ca",
+    "firmware/tests/engine_secondary_test.cpp": "f609dbde1f1d6dc77421e947eb14bca87a80f797a3db1c44c71292a502c1b113",
+    "tools/test_secondary_model.py": "b006b0327f1011b0d326fb54ae81eafc3996499780176acc3c203840cf276779",
+    "tools/test_secondary_stimulus.py": "1b59831a415101381e165a09d2ad4c6903ef29b1628b223d7dcdf45aee233228"
+  },
+  "source_bindings": "final-frozen-source-bindings.json",
+  "independent_probe_bindings": {
+    "probe.cpp": "7f95f81cce5604f782922967a7f0b80a53423638b11149836c6a4a0b9739866c",
+    "runtime-probe.py": "03a734e00fba9b2d6e1fbafef3da880d06a4a79cd60f2d47fff6e3c8326ba554",
+    "browser-probe.py": "ec75536062b8ef365a846ffd48bbeb5b76f4080627711ee6b4b150f5a29a46bd"
+  },
+  "scope": "Independent core, native runtime/JSON, browser diagnostic validation/rendering and MSL compatibility for the cranking-to-running Input spark handoff and simultaneous coordinate/input-fault repair. Excludes full coupled controller parity and acquisition electrical/target timing qualification.",
+  "probe_runs": {
+    "before-change-head": {
+      "passed": false,
+      "checks": 2507,
+      "failures": 548,
+      "native_roundtrips": 792
+    },
+    "initial-working": {
+      "passed": false,
+      "checks": 2507,
+      "failures": 24,
+      "native_roundtrips": 792
+    },
+    "coordinate-fix-working": {
+      "passed": true,
+      "checks": 2507,
+      "failures": 0,
+      "native_roundtrips": 792
+    },
+    "final-frozen": {
+      "passed": true,
+      "checks": 2507,
+      "failures": 0,
+      "native_roundtrips": 792
+    }
+  },
+  "sanitizers": {
+    "address": true,
+    "undefined_behavior": true,
+    "checks": 2507,
+    "passed": true,
+    "stderr_bytes": 0
+  },
+  "browser": {
+    "passed": true,
+    "accepted": 791,
+    "rejected": 1,
+    "recordedRows": 7,
+    "mslColumns": 188,
+    "nativeBrowserMslParity": true,
+    "exactU64": "18446744073709541615",
+    "failures": []
+  },
+  "off_serialized_observation_parity": {
+    "passed": true,
+    "records_compared": 2,
+    "scope": "Actual selector Off output observations; not a whole-engine historical replay"
+  },
+  "findings": [
+    {
+      "id": "crank-reset-delay",
+      "severity": "driveability",
+      "status": "fixed",
+      "description": "Resetting Spark Input qualification on every cranking select forced new qualification after a stable contact crossed into running, cutting the whole controller.",
+      "resolution": "Every valid Input rule steps its actual filter once; cranking Spark always returns valid inactive CrankingBypass. A fresh qualified sample can select normally at run entry."
+    },
+    {
+      "id": "coordinate-fault-hides-invalid-switch",
+      "severity": "qualification_bypass_on_recovery",
+      "status": "fixed",
+      "description": "A running coordinate guard returned before observing a simultaneous invalid switch, leaving prior cranking qualification usable on the next healthy call.",
+      "reproduction": "Prime at 1000000/1010000/1020000 us while cranking; first running call at 1025000 us has unavailable MAP and an invalid switch; at 1030000 us both recover. The initial patch immediately selected secondary with retained qualification.",
+      "resolution": "Observe every valid Input rule before load-coordinate guards, preserve RequiredMap/Tps/Emap precedence, and reuse the one observed state for selection. Independent checks cover Fuel/Spark, MAP/TPS/EMAP, and invalid/unavailable/future/stale input combinations.",
+      "before_evidence": "initial-working-probe-r3.json",
+      "after_evidence": "final-frozen-probe-r3.json"
+    }
+  ],
+  "semantics_verified": [
+    "Cranking keeps secondary Spark inactive and uses the primary cranking angle for every secondary mode; invalid or absent switch does not add an input dependency during the bypass.",
+    "Initial qualification uses elapsed observed sample time; repeating a held sample cannot complete a debounce interval.",
+    "20 ms sample age and intersample gap are accepted inclusively;20 ms + 1 us invalidates freshness or restarts qualification.",
+    "Future samples, backward sample/now times and contradictory equal-time samples reset qualification.",
+    "Invalid/unavailable input, source changes, channel/debounce/polarity/rule changes, and Off transitions cannot leak prior qualification.",
+    "Fuel and Spark retain independent debounce/polarity state for distinct and shared channels.",
+    "An already qualified contact entering pending debounce retains its previous stable selection across cranking/run reentry; initial unqualified bounce inhibits until stable.",
+    "Static load sensor requirements and whole-controller running fault cuts remain in force.",
+    "Schema/layout fields remain unchanged; qualified inactive CrankingBypass diagnostics pass native and actual Chrome validation and rendering, and seven runtime records retain native/browser 188-column MSL parity."
+  ],
+  "open_findings": [],
+  "evidence": [
+    "before-change-head-source-bindings-complete.json",
+    "final-frozen-source-bindings.json",
+    "final-frozen-diff.patch",
+    "coordinate-fault-probe.cpp",
+    "coordinate-fault-probe.txt",
+    "coordinate-fault-fixed-probe.txt",
+    "before-change-head-probe-r3.json",
+    "initial-working-probe-r3.json",
+    "final-frozen-probe-r3.json",
+    "final-sanitized-build.json",
+    "final-sanitized-probe.json",
+    "final-sanitized-stderr.log",
+    "final-frozen-runtime-records.json",
+    "final-frozen-runtime-tune.json",
+    "final-frozen-runtime-fixture.json",
+    "final-frozen-browser-result.json",
+    "final-frozen-browser-dom.html",
+    "final-frozen-browser-status.png",
+    "final-frozen-native.msl",
+    "off-observation-parity.json"
+  ],
+  "limitations": [
+    "Target-protected source values in portable C++ fixtures test software provenance transitions only; they are not target hardware measurements.",
+    "Native runtime synthetic intake remains synthetic; no GPIO/I2C hardware or physical engine is exercised.",
+    "This review does not establish circuit, HIL, physical, ideal-tune, full Speeduino parity, whole-feature or coupled-matrix qualification.",
+    "The parent full native/target build and coupled integration reviews remain separate; no claim is made for their completion."
+  ],
+  "qualification": {
+    "physical": false,
+    "circuit": false,
+    "hil": false,
+    "whole_feature": false,
+    "full_controller_parity": false
+  },
+  "root_source_closure_rechecked": true
+}

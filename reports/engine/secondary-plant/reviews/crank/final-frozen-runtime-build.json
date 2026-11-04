@@ -1,0 +1,99 @@
+{
+  "commands": [
+    [
+      "c++",
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-shared",
+      "-fPIC",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-sources/external/cJSON",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-sources/firmware/main",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-sources/firmware/include",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-sources/tools/engine_bridge.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-pic-cJSON.o",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-libengine.so"
+    ],
+    [
+      "c++",
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-shared",
+      "-fPIC",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-sources/external/cJSON",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-sources/firmware/main",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-sources/firmware/include",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-sources/tools/engine_observability_bridge.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-pic-cJSON.o",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/final-frozen-libobservability.so",
+      "-lcrypto"
+    ]
+  ],
+  "passed": true,
+  "records": 7,
+  "summary": [
+    {
+      "now": 1000000,
+      "crank": true,
+      "faults": 0,
+      "reason": "cranking_spark_bypass",
+      "active": false,
+      "qualified": false
+    },
+    {
+      "now": 1020000,
+      "crank": true,
+      "faults": 0,
+      "reason": "cranking_spark_bypass",
+      "active": false,
+      "qualified": true
+    },
+    {
+      "now": 1040000,
+      "crank": false,
+      "faults": 0,
+      "reason": "input_secondary",
+      "active": true,
+      "qualified": true
+    },
+    {
+      "now": 1060000,
+      "crank": false,
+      "faults": 4,
+      "reason": "input_time_reversed",
+      "active": false,
+      "qualified": false
+    },
+    {
+      "now": 1080000,
+      "crank": true,
+      "faults": 0,
+      "reason": "cranking_spark_bypass",
+      "active": false,
+      "qualified": false
+    },
+    {
+      "now": 1100000,
+      "crank": false,
+      "faults": 4,
+      "reason": "input_initial_qualification",
+      "active": false,
+      "qualified": false
+    },
+    {
+      "now": 1120000,
+      "crank": false,
+      "faults": 0,
+      "reason": "input_secondary",
+      "active": true,
+      "qualified": true
+    }
+  ]
+}

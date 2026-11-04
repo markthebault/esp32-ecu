@@ -195,9 +195,24 @@ public:
   rules_[slot]=r;rule_seen_[slot]=true;
   auto fail=[&](Reason reason){o.reason=reason;return result;};
   if(!valid(r)){filter.reset();return fail(Reason::InvalidConfig);}
-  if(r.mode!=Mode::Input)filter.reset();
+  auto observe_input=[&](){
+   const auto&sample=i.switches[r.input_channel];o.input_observed_us=sample.observed_us;o.input_raw=sample.level;o.input_valid=sample.valid;
+   const auto state=filter.step(sample,r,now);
+   o.input_source=state.source;o.input_age_ms=static_cast<float>(state.age_ms);o.input_qualified=state.valid;
+   o.input_level=state.level;o.pending=state.pending;o.pending_level=state.pending_level;
+   return state;
+  };
+  // Observe every configured input even when another required sensor fails.
+  // A simultaneous load fault must not conceal a lost switch qualification.
+  SwitchState input_state;
+  if(r.mode==Mode::Input)input_state=observe_input();else filter.reset();
   if(r.mode==Mode::Off){result.ok=o.valid=true;return result;}
-  if(kind==Kind::Spark&&cranking){filter.reset();result.ok=o.valid=true;o.reason=Reason::CrankingBypass;return result;}
+  if(kind==Kind::Spark&&cranking){
+   // Observe the switch while the cranking angle bypasses secondary spark.
+   // Crossing into running must not erase an already fresh qualification.
+   // Invalid data resets the filter but never selects secondary spark here.
+   result.ok=o.valid=true;o.reason=Reason::CrankingBypass;return result;
+  }
   if(r.source==load::Source::Map||r.source==load::Source::PressureRatio){
    if(!i.map_qualified||!range(i.map_kpa,10,110))return fail(Reason::RequiredMap);
    result.coordinate=i.map_kpa;
@@ -222,10 +237,7 @@ public:
    o.condition_value=static_cast<float>(value);o.active=value>r.threshold;
    o.reason=o.active?Reason::ConditionSecondary:Reason::ConditionPrimary;
   }else if(r.mode==Mode::Input){
-   const auto&sample=i.switches[r.input_channel];o.input_observed_us=sample.observed_us;o.input_raw=sample.level;o.input_valid=sample.valid;
-   const auto state=filter.step(i.switches[r.input_channel],r,now);
-   o.input_source=state.source;o.input_age_ms=static_cast<float>(state.age_ms);o.input_qualified=state.valid;
-   o.input_level=state.level;o.pending=state.pending;o.pending_level=state.pending_level;
+   const auto&state=input_state;
    if(!state.valid)return fail(state.reason);
    o.condition_value=state.level?1:0;o.active=state.level==r.active_high;
    o.reason=o.active?Reason::InputSecondary:Reason::InputPrimary;

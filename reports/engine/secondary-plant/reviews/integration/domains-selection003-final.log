@@ -1,0 +1,180 @@
+{
+  "passed": true,
+  "runs": 128,
+  "errors": [],
+  "selection_witnesses": [
+    {
+      "label": "portable",
+      "case": "conditional_tps_plateau",
+      "sections": [
+        {
+          "name": "upward equality",
+          "count": 16,
+          "active": false
+        },
+        {
+          "name": "above",
+          "count": 26,
+          "active": true
+        },
+        {
+          "name": "downward equality",
+          "count": 26,
+          "active": false
+        }
+      ]
+    },
+    {
+      "label": "portable",
+      "case": "input",
+      "physical_gpio_pairs": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "portable",
+      "case": "input_opposite",
+      "distinct_selection_witness": true
+    },
+    {
+      "label": "portable",
+      "case": "input_shared_debounce",
+      "first_rise_us": {
+        "fuel": 3011800,
+        "spark": 3041800
+      },
+      "first_fall_us": {
+        "fuel": 4011800,
+        "spark": 4041800
+      }
+    },
+    {
+      "label": "speeduino16",
+      "case": "conditional_tps_plateau",
+      "sections": [
+        {
+          "name": "upward equality",
+          "count": 16,
+          "active": false
+        },
+        {
+          "name": "above",
+          "count": 26,
+          "active": true
+        },
+        {
+          "name": "downward equality",
+          "count": 26,
+          "active": false
+        }
+      ]
+    },
+    {
+      "label": "speeduino16",
+      "case": "input_opposite",
+      "distinct_selection_witness": true
+    },
+    {
+      "label": "speeduino32",
+      "case": "conditional_tps_plateau",
+      "sections": [
+        {
+          "name": "upward equality",
+          "count": 16,
+          "active": false
+        },
+        {
+          "name": "above",
+          "count": 26,
+          "active": true
+        },
+        {
+          "name": "downward equality",
+          "count": 26,
+          "active": false
+        }
+      ]
+    },
+    {
+      "label": "speeduino32",
+      "case": "input_opposite",
+      "distinct_selection_witness": true
+    },
+    {
+      "label": "target",
+      "case": "conditional_tps_plateau",
+      "sections": [
+        {
+          "name": "upward equality",
+          "count": 16,
+          "active": false
+        },
+        {
+          "name": "above",
+          "count": 26,
+          "active": true
+        },
+        {
+          "name": "downward equality",
+          "count": 26,
+          "active": false
+        }
+      ]
+    },
+    {
+      "label": "target",
+      "case": "input",
+      "physical_gpio_pairs": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "target",
+      "case": "input_opposite",
+      "distinct_selection_witness": true
+    },
+    {
+      "label": "target",
+      "case": "input_shared_debounce",
+      "first_rise_us": {
+        "fuel": 3011800,
+        "spark": 3041800
+      },
+      "first_fall_us": {
+        "fuel": 4011800,
+        "spark": 4041800
+      }
+    }
+  ],
+  "max_raw_lookup": 50
+}

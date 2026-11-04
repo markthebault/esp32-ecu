@@ -112,4 +112,56 @@ static void switches(){
  check(pair.select(Kind::Fuel,fuel_rule,i,1,false).observation.active);
  check(!pair.select(Kind::Spark,spark_rule,i,1,false).observation.active);
 }
-int main(){configuration();conditional_and_coordinates();arithmetic();switches();std::cout<<"{\"passed\":true,\"secondary_checks\":"<<checks<<"}\n";}
+static void crank_input_handoff(){
+ auto r=rule(Mode::Input);r.debounce_ms=20;auto i=inputs();Controller c;
+ for(unsigned n=0;n<=4;++n){
+  const auto now=1000000+n*5000;i.switches[0]=sample(now,true);
+  const auto s=c.select(Kind::Spark,r,i,now,true);
+  check(s.ok&&!s.observation.active&&s.observation.reason==Reason::CrankingBypass);
+  check(s.observation.input_qualified==(n==4));
+ }
+ i.switches[0]=sample(1025000,true);auto s=c.select(Kind::Spark,r,i,1025000,false);
+ check(s.ok&&s.observation.active&&s.observation.reason==Reason::InputSecondary);
+ // Re-entering cranking preserves qualification but never selects the table.
+ i.switches[0]=sample(1030000,false);s=c.select(Kind::Spark,r,i,1030000,true);
+ check(s.ok&&!s.observation.active&&s.observation.input_qualified&&s.observation.pending);
+ i.switches[0]=sample(1035000,false);s=c.select(Kind::Spark,r,i,1035000,false);
+ check(s.ok&&s.observation.active&&s.observation.pending);
+ i.switches[0]=sample(1050000,false);s=c.select(Kind::Spark,r,i,1050000,false);
+ check(s.ok&&!s.observation.active&&!s.observation.pending);
+ // A fault while bypassed must discard qualification before running resumes.
+ for(unsigned fault=0;fault<5;++fault){
+  Controller probe;auto in=inputs();in.switches[0]=sample(2000000,true);
+  probe.select(Kind::Spark,r,in,2000000,true);in.switches[0]=sample(2020000,true);
+  check(probe.select(Kind::Spark,r,in,2020000,true).observation.input_qualified);
+  in.switches[0]=sample(2025000,true);
+  if(fault==0)in.switches[0].valid=false;
+  if(fault==1)in.switches[0].observed_us=2000000; // Stale and reversed.
+  if(fault==2)in.switches[0].observed_us=2025001; // Future source time.
+  if(fault==3)in.switches[0].source=InputSource::Unavailable;
+  if(fault==4)in.switches[0].source=InputSource::TargetProtected;
+  s=probe.select(Kind::Spark,r,in,2025000,true);
+  check(s.ok&&!s.observation.active&&!s.observation.input_qualified&&s.observation.reason==Reason::CrankingBypass);
+  in.switches[0]=sample(2030000,true);s=probe.select(Kind::Spark,r,in,2030000,false);
+  check(!s.ok&&s.observation.reason==Reason::Debouncing);
+  in.switches[0]=sample(2050000,true);s=probe.select(Kind::Spark,r,in,2050000,false);
+  check(s.ok&&s.observation.active);
+ }
+ // Missing polls during cranking cannot bridge a fresh-looking running read.
+ c.reset();i.switches[0]=sample(3000000,true);c.select(Kind::Spark,r,i,3000000,true);
+ i.switches[0]=sample(3020000,true);check(c.select(Kind::Spark,r,i,3020000,true).observation.input_qualified);
+ i.switches[0]=sample(3040001,true);s=c.select(Kind::Spark,r,i,3040001,false);
+ check(!s.ok&&s.observation.reason==Reason::Debouncing);
+ // Another bad dependency cannot conceal a simultaneously invalid switch.
+ for(auto kind:{Kind::Fuel,Kind::Spark})for(bool cranking:{false,true}){
+  c.reset();i=inputs();i.switches[0]=sample(4000000,true);c.select(kind,r,i,4000000,cranking);
+  i.switches[0]=sample(4020000,true);check(c.select(kind,r,i,4020000,cranking).observation.input_qualified);
+  i.map_qualified=false;i.switches[0]=sample(4025000,true);i.switches[0].valid=false;
+  s=c.select(kind,r,i,4025000,false);
+  check(!s.ok&&s.observation.reason==Reason::RequiredMap&&!s.observation.input_qualified&&!s.observation.input_valid);
+  i.map_qualified=true;i.switches[0]=sample(4030000,true);s=c.select(kind,r,i,4030000,false);
+  check(!s.ok&&s.observation.reason==Reason::Debouncing);
+  i.switches[0]=sample(4050000,true);check(c.select(kind,r,i,4050000,false).ok);
+ }
+}
+int main(){configuration();conditional_and_coordinates();arithmetic();switches();crank_input_handoff();std::cout<<"{\"passed\":true,\"secondary_checks\":"<<checks<<"}\n";}
