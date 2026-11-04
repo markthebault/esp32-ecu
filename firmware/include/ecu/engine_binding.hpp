@@ -10,7 +10,7 @@ inline BoundInputs bind_inputs(const web::Sample&s,const config::Config&c,std::u
  if(!s.adc_ok)bound.reason="ADC acquisition unavailable";else if(s.overflow)bound.reason="Capture overflow latched";
  double values[6]{};bool valid[6]{};
  for(unsigned i=0;i<6;++i){const double av=s.raw[i]*c.adc_reference_v/4095;auto r=config::convert(c.sensors[i],av/.6,av,supply);values[i]=r.value;valid[i]=r.valid&&c.sensors[i].confirmed;}
- const bool map_required=!tune||load::requirements(tune->load_model,tune->cylinder_trims_enabled,tune->transient_enrichment.mode==transient::Mode::MapRate,tune->ego_enabled).map;
+ const bool map_required=!tune||input_requirements(*tune).map;
  in.map_qualified=valid[0]&&c.sensors[0].mode!=config::Mode::Voltage&&named_unit(c.sensors[0].unit,"kPa")&&s.adc_ok&&!s.overflow;
  in.aux_pressure_kpa=values[5];in.aux_pressure_qualified=valid[5]&&c.sensors[5].mode!=config::Mode::Voltage&&named_unit(c.sensors[5].unit,"kPa")&&s.adc_ok&&!s.overflow;
  if((map_required&&!named_unit(c.sensors[0].unit,"kPa"))||!named_unit(c.sensors[1].unit,"%")||!named_unit(c.sensors[2].unit,"C","°C")||!named_unit(c.sensors[3].unit,"C","°C")){in.sensors_valid=false;bound.reason="Required engine inputs need confirmed physical-unit conversions";}
@@ -19,7 +19,7 @@ inline BoundInputs bind_inputs(const web::Sample&s,const config::Config&c,std::u
   if(c.sensors[i].mode==config::Mode::Voltage){in.sensors_valid=false;bound.reason="Raw-voltage readings cannot be relabelled as engine physical quantities";}
  }
  if(in.sensors_valid&&!map_required&&!in.map_qualified)bound.reason="MAP unavailable; current table/pressure/transient dependencies do not require it";
- if(tune&&load::requirements(tune->load_model,tune->cylinder_trims_enabled,tune->transient_enrichment.mode==transient::Mode::MapRate,tune->ego_enabled).aux()){
+ if(tune&&input_requirements(*tune).aux()){
   const bool emap=tune->load_model.aux_role==load::AuxRole::Emap;
   if(!in.aux_pressure_qualified||!range(in.aux_pressure_kpa,emap?20:50,emap?500:110)){
    in.sensors_valid=false;bound.reason=emap?"Required J16 EMAP needs a confirmed, valid absolute-kPa pressure conversion":"Required J16 baro needs a confirmed, valid absolute-kPa pressure conversion";

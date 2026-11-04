@@ -15,6 +15,15 @@ inline void put_float(std::uint8_t*p,float v){static_assert(sizeof(float)==4&&st
 inline float get_float(const std::uint8_t*p){auto u=get_u32(p);float v;std::memcpy(&v,&u,4);return v;}
 inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||(n>=4756&&n<4768)||(n>=4940&&n<4992)||(n>=5116&&n<5120)||n>=5176;}
 inline bool revision_offset(std::size_t n){return n>=268&&n<272;}
+// own008 must not export a model/data it cannot preserve on the next burn.
+inline bool representable(const engine::Tune&t){
+ const secondary::Config disabled;static constexpr engine::Map axes{};
+ if(!secondary::same_rule(t.secondary_tables.fuel,disabled.fuel)||!secondary::same_rule(t.secondary_tables.spark,disabled.spark))return false;
+ for(const auto*m:{&t.secondary_ve,&t.secondary_spark})if(m->rpm!=axes.rpm||m->load!=axes.load)return false;
+ for(auto v:t.secondary_ve.cells)if(v!=85)return false;
+ for(auto v:t.secondary_spark.cells)if(v!=15)return false;
+ return true;
+}
 inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill(0);
  put_u32(p.data(),(std::uint32_t(t.ego_enabled)<<0)|(std::uint32_t(t.dfco_enabled)<<1)|(std::uint32_t(t.idle_enabled)<<2));
  put_float(p.data()+4,t.cylinders);
@@ -131,6 +140,7 @@ inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill
 inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  if(!origin||get_u32(p.data()+268)!=origin)return false;
  for(unsigned n=0;n<page_bytes;++n)if(reserved_offset(n)&&p[n])return false;
+ engine::reset_secondary_tables(t); // own008 has no secondary-table fields.
  const auto flags=get_u32(p.data());if(flags>>3)return false;
  t.ego_enabled=flags&(1U<<0);
  t.dfco_enabled=flags&(1U<<1);

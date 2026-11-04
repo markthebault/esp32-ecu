@@ -1,0 +1,22 @@
+{
+  "compile": [
+    "c++",
+    "-std=c++17",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-Wno-misleading-indentation",
+    "-pedantic",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-I/home/mark/persospace/esp32-ecu/firmware/include",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-core-review/allocation_probe.cpp",
+    "-Wl,--wrap=malloc",
+    "-Wl,--wrap=free",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-core-review/allocation_probe"
+  ],
+  "returncode": 0
+}

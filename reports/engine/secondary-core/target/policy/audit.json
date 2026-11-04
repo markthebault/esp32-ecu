@@ -1,0 +1,54 @@
+{
+  "environment": "compact_n16r8_web",
+  "passed": true,
+  "elf_sha256": "63c41b9267558de3d5e9d7c035276865a6055c66f9f94907947238227d0dd21d",
+  "binary_sha256": "62679ce8c8d4417d7761088d1c50a9c473455df3afba07600cde85f472739230",
+  "app_image_bytes": 1566400,
+  "factory_partition_bytes": 2097152,
+  "policy": "engine_scheduler_physical_writes_compile_time_inhibited",
+  "mapped_policy_strings": {
+    "DUMMY LOADS ONLY": [],
+    "COMPILE-TIME INHIBITED": [
+      {
+        "section": ".flash.rodata",
+        "address": "0x3c0d566c"
+      }
+    ],
+    "hardware_timer_virtual_outputs": [
+      {
+        "section": ".flash.rodata",
+        "address": "0x3c0d59b4"
+      }
+    ],
+    "hardware_timer_dummy_loads": []
+  },
+  "on_alarm_address": "0x40376b84",
+  "on_alarm_size": 15289,
+  "on_alarm_GPIO_literal_references": 0,
+  "compiled_engine_output_pins": null,
+  "source_sha256": {
+    "firmware/platformio.ini": "579f4075495f9c070a80d14cdcedf1ec4f9de13c4d233ebd1a48b97947e3f3d0",
+    "firmware/main/engine_target.cpp": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738",
+    "firmware/main/app.cpp": "a5d196a1e6140c1b5b68fdb2e2fdeab8048cb67eff6ef69799a6cddb5da4f272",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+  },
+  "allocated_sections": {
+    ".rtc.force_fast": 32,
+    ".rtc_reserved": 24,
+    ".iram0.vectors": 1028,
+    ".iram0.text": 134931,
+    ".dram0.dummy": 119808,
+    ".dram0.data": 156564,
+    ".noinit": 0,
+    ".dram0.bss": 25768,
+    ".flash.text": 847158,
+    ".flash_rodata_dummy": 851968,
+    ".flash.appdesc": 256,
+    ".flash.rodata": 426312,
+    ".flash.rodata_noload": 11753,
+    ".ext_ram.dummy": 1310688,
+    ".iram0.text_end": 233
+  },
+  "qualification": "Linked binary/data/static image checks only. Pin initialization and fail-safe low writes are separate from scheduler actuation. No physical flashing, USB, runtime heap/stack, interrupt latency, electrical, thermal or engine qualification. CMake macro absence is not used as evidence."
+}

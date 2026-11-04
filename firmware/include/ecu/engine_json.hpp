@@ -16,6 +16,8 @@ template<class Grid>inline bool map_parse(const cJSON*j,Grid&m){return web::keys
 inline bool parse_tune(const cJSON*j,Tune&t){
  using namespace web;unsigned schema;char strategy[32]{},physical[32]{};
  if(!integer(j,"schema_version",schema)||(schema<1||schema>7))return false;
+ // No historical JSON identity can enable an unrepresented secondary model.
+ reset_secondary_tables(t);
  if(!keys(j,schema==1?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps|":schema==2?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing|":schema==3?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims|":schema<6?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims||idle_control|":schema==6?"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims||idle_control||transient_enrichment|":"|schema_version||revision||strategy||physical_outputs||engine||settings||curves||maps||timing||cylinder_trims||idle_control||transient_enrichment||load_model|")||!integer(j,"revision",t.revision)||!string(j,"strategy",strategy)||!string(j,"physical_outputs",physical)||std::strcmp(physical,"inhibited"))return false;
  t.transient_enrichment=transient::Config{};
  t.load_model=load::Config{};

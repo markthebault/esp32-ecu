@@ -30,7 +30,7 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | Boost / overboost | Missing, current profile NA only | Boost tune rejected | Solenoid driver/connector allocation needed |
 | VVT | Missing | No controls | Phase sensing, driver, flyback and connector work |
 | Flex fuel | Missing | No ethanol blending/capture settings | Protected frequency input/pin allocation needed |
-| Secondary maps / blending | Missing | One map set | Switch input or authenticated strategy needed |
+| Secondary maps / blending | Shared core foundation: independent multiply/add/strict conditional/input selection, correction ordering and qualified debounce; exact disabled-path regressions | Current schema7/own008 explicitly keep it Off; versioned configuration, editors, logs/radio and coupled plant acceptance pending | Protected two-input J4 accessory proposed; circuit/driver/CAD/harness and physical tests missing; no continuous blend claimed |
 | Per-cylinder trims | Four6×6 fuel maps and signed spark offsets; physical-channel capacity/duty, latched coil advance;18 new plant runs | Sequential enable, browser/own005 MSQ, strict legacy migration, per-channel JSON/current126-field engine MSL and masks | Existing J9/J10 channels1–4; actual flow/deadtime/phase and electrical qualification pending |
 | Staged injection | Missing | No staging controls | Extra drivers and duty/flow qualification |
 | Launch / flat shift / nitrous | Missing | No enable options | Protected switch/speed/pressure inputs and output allocations |
@@ -83,3 +83,5 @@ DBW/OEM integration remain outside the current bench scope.
 [Transient fueling](engine-transient-enrichment.md) adds schema6/own007 while preserving legacy AE behavior and the first256 runtime bytes. This increment closes the basic TPS/MAP rate-table gap in software and UI; it does not establish wall-film calibration, online vendor acceptance or physical ECU equivalence.
 
 [Load, pressure and AFR](engine-load-model.md) is the current schema7/own008 increment. It includes independent source/unit choices, source-tagged logs and schema3 screens,64 declared primary/refinement runs,8 exact legacy replays, independent reviews and actual offline app checks. This does not close secondary tables, a separate baro correction curve or the wider engine/hardware qualification gaps.
+
+[Secondary-table core foundation](engine-secondary-tables.md) implements and independently reviews the next control/input model. It remains disabled in current operator transports; its versioned UI/tuning/debugging, switch accessory and new plant-comparison gates are still required.

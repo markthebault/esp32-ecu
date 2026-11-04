@@ -60,7 +60,7 @@ struct Observation {
  AfrState afr_state()const{return static_cast<AfrState>((flags>>afr_state_shift)&7);}
 };
 static_assert(sizeof(Observation)<=48,"Load observation exceeds its explicit RAM budget");
-struct Input {double map_kpa=NAN,tps_pct=NAN,aux_kpa=NAN;bool map_qualified=false,aux_qualified=false,trims_enabled=false,map_transient=false,ego_enabled=false;};
+struct Input {double map_kpa=NAN,tps_pct=NAN,aux_kpa=NAN;bool map_qualified=false,aux_qualified=false,trims_enabled=false,map_transient=false,ego_enabled=false,extra_map=false,extra_emap=false;};
 struct Evaluation {
  Observation observation;
  // Calculations retain double input precision; F32 diagnostics are not used
@@ -72,7 +72,8 @@ inline bool in_range(double v,double lo,double hi){return std::isfinite(v)&&v>=l
 inline Evaluation evaluate(const Config&c,const Input&i){
  Evaluation e;auto&o=e.observation;o.available=true;o.fuel=c.fuel_source;o.spark=c.spark_source;o.lambda=resolve(c.lambda_source,c);o.trim=resolve(c.trim_source,c);o.pressure=c.pressure;o.aux_role=c.aux_role;o.baro_source=c.baro_source;o.afr=c.afr;
  if(!valid(c,i.trims_enabled,i.ego_enabled)){o.reason=Reason::InvalidConfig;return e;}
- const auto needs=requirements(c,i.trims_enabled,i.map_transient,i.ego_enabled);
+ auto needs=requirements(c,i.trims_enabled,i.map_transient,i.ego_enabled);
+ needs.map|=i.extra_map||i.extra_emap;needs.emap|=i.extra_emap;
  if(needs.map)o.flags|=MapRequired;
  if(needs.aux())o.flags|=AuxRequired;
  const bool map_known=i.map_qualified&&std::isfinite(i.map_kpa),map_valid=map_known&&in_range(i.map_kpa,10,110),tps_valid=in_range(i.tps_pct,0,100);

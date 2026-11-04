@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "reports": {
+    "frozen": {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-misleading-indentation",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/secondary-core-review/frozen-head/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-core-review/wire_probe.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-core-review/frozen-wire-probe"
+      ],
+      "page_bytes": 5376,
+      "pages": 108,
+      "sha256": "dd170f044cee1daa9ff5fa81a268abb19b3cc3ee0e5dff36f0829a6244b31edb"
+    },
+    "current": {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-misleading-indentation",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/secondary-core-review/final-sources/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-core-review/wire_probe.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-core-review/current-wire-probe"
+      ],
+      "page_bytes": 5376,
+      "pages": 108,
+      "sha256": "dd170f044cee1daa9ff5fa81a268abb19b3cc3ee0e5dff36f0829a6244b31edb"
+    }
+  }
+}

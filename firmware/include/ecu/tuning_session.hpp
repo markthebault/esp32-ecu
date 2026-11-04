@@ -1,5 +1,6 @@
 #pragma once
 #include "ecu/tuning_layout.hpp"
+#include "ecu/heap_object.hpp"
 #include <algorithm>
 namespace ecu::tuning {
 // All operations are task-side. No tuning/parser/CRC callback belongs in an ISR.
@@ -25,7 +26,7 @@ struct Stats {
 };
 struct Reply {std::array<std::uint8_t,live_bytes+1> bytes{};std::size_t size=0;};
 class Session {
- Backend& backend_;Page page_{};engine::Tune scratch_;Stats stats_;
+ Backend& backend_;Page page_{};Stats stats_;
  std::uint8_t result(Result r){
   switch(r){case Result::Conflict:stats_.state=WriteState::Conflict;return 0x84;
    case Result::StorageBlocked:stats_.state=WriteState::StorageBlocked;return 0x84;
@@ -45,10 +46,16 @@ public:
  void abandon(){stats_.initialized=stats_.dirty=false;stats_.origin_revision=stats_.base_revision=stats_.active_revision=0;stats_.state=WriteState::Unavailable;stats_.last_code=0;page_.fill(0);}
  Result open(){
   ++stats_.resets;abandon();
-  const auto r=backend_.load(scratch_);
-  if((r!=Result::Ok&&r!=Result::StorageBlocked)||engine::validate(scratch_)){result(r==Result::Ok?Result::Invalid:r);return r==Result::Ok?Result::Invalid:r;}
-  stats_.origin_revision=stats_.base_revision=stats_.active_revision=scratch_.revision;
-  encode_page(scratch_,stats_.origin_revision,page_);stats_.initialized=true;stats_.last_code=result(r);return r;
+  // The temporary typed tune is larger than the binary page once secondary
+  // maps exist. Allocate it only while loading/burning, with checked failure;
+  // never place it on the service task's stack or retain it in every session.
+  auto scratch=ecu::heap_object<engine::Tune>();
+  if(!scratch){stats_.last_code=result(Result::NoMemory);return Result::NoMemory;}
+  const auto r=backend_.load(*scratch);
+  if((r==Result::Ok||r==Result::StorageBlocked)&&!representable(*scratch)){stats_.last_code=result(Result::Invalid);return Result::Invalid;}
+  if((r!=Result::Ok&&r!=Result::StorageBlocked)||engine::validate(*scratch)){const auto error=r==Result::Ok?Result::Invalid:r;stats_.last_code=result(error);return error;}
+  stats_.origin_revision=stats_.base_revision=stats_.active_revision=scratch->revision;
+  encode_page(*scratch,stats_.origin_revision,page_);stats_.initialized=true;stats_.last_code=result(r);return r;
  }
  const Stats& stats()const{return stats_;}
  const Page& staged_page()const{return page_;}
@@ -92,9 +99,10 @@ public:
   if(!current())return code(stats_.last_code);
   if(!stats_.dirty){stats_.state=WriteState::Ready;return code(4);} // A retried acknowledged burn is idempotent.
   if(stats_.base_revision==UINT32_MAX)return code(result(Result::Conflict));
-  if(!decode_page(page_,stats_.origin_revision,scratch_))return code(result(Result::Invalid));
-  scratch_.revision=stats_.base_revision;std::uint32_t saved=0;
-  const auto r=backend_.commit(scratch_,saved);if(r!=Result::Ok)return code(result(r));
+  auto scratch=ecu::heap_object<engine::Tune>();if(!scratch)return code(result(Result::NoMemory));
+  if(!decode_page(page_,stats_.origin_revision,*scratch))return code(result(Result::Invalid));
+  scratch->revision=stats_.base_revision;std::uint32_t saved=0;
+  const auto r=backend_.commit(*scratch,saved);if(r!=Result::Ok)return code(result(r));
   if(!saved||saved<=stats_.base_revision){stats_.state=WriteState::Unavailable;return code(0x84);}
   stats_.base_revision=stats_.active_revision=saved;stats_.dirty=false;stats_.state=WriteState::Ready;++stats_.burns;
   // Preserve all mapped bytes, including the connection's origin revision.

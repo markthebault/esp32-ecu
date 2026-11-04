@@ -1,0 +1,1024 @@
+{
+  "scope": "secondary_core_foundation",
+  "operator_configurable": false,
+  "physical_qualification": false,
+  "baseline_commit": "e2b7c832b92384caae6cf379092ac6944129e237",
+  "speeduino_commit": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+  "disabled_observations_sha256": "8931bc976bb9739f19fa6b093d44fd9ff28a1d979f10a0bf5d64316617b23a8e",
+  "tests": {
+    "python": 173,
+    "native_sanitizers": true,
+    "secondary": 738,
+    "engine_secondary": 148,
+    "allocation_failure_positions": 4,
+    "selected_target_build": true
+  },
+  "reviews": [
+    {
+      "name": "architecture",
+      "manifest_sha256": "b91ed491a2095a464c4465981b2611654ed7741aa1f54aa4a460e641228638f1",
+      "verified_original_artifacts": 37,
+      "archived_artifacts": 26,
+      "cache_only": 11
+    },
+    {
+      "name": "core",
+      "manifest_sha256": "6eaed76387191ca6ed2fe939fe1b7b26cf2716aa790f8d12348afc7bc144ddb2",
+      "verified_original_artifacts": 158,
+      "archived_artifacts": 145,
+      "cache_only": 13
+    }
+  ],
+  "sources": [
+    {
+      "path": "config/engine/defaults-v2.json",
+      "snapshot": "sources/config/engine/defaults-v2.json",
+      "sha256": "81195ce83acaafefc02ebe955c2d1d92656f41f015beb8c57bad6745139fd769"
+    },
+    {
+      "path": "config/engine/defaults-v3.json",
+      "snapshot": "sources/config/engine/defaults-v3.json",
+      "sha256": "9274e32ff7f0f0debe253f95304241a398b6b9c10fe04b868048fda4cf19d835"
+    },
+    {
+      "path": "config/engine/defaults-v4.json",
+      "snapshot": "sources/config/engine/defaults-v4.json",
+      "sha256": "5c18c92edab479ddafa47e207928a0bd29aa68fcdf7e55708ff9514ab8cee01e"
+    },
+    {
+      "path": "config/engine/defaults-v5.json",
+      "snapshot": "sources/config/engine/defaults-v5.json",
+      "sha256": "e169b5e20eb15f18cf4e61a8eb385c9cded0a0fcf9ca6bb65ad1df6abf58dda9"
+    },
+    {
+      "path": "config/engine/defaults-v6.json",
+      "snapshot": "sources/config/engine/defaults-v6.json",
+      "sha256": "c9007e8875392e436771cd64778d4ac1e17f8d85ff112d401d4293a6cfb46dba"
+    },
+    {
+      "path": "config/engine/defaults.json",
+      "snapshot": "sources/config/engine/defaults.json",
+      "sha256": "34f6fde4104352d9fb181c1b15a52e228e398946b54f7eba6651f92eb394ae4c"
+    },
+    {
+      "path": "config/engine/fixtures/legacy-near-limit-v2.json",
+      "snapshot": "sources/config/engine/fixtures/legacy-near-limit-v2.json",
+      "sha256": "aae06cf5c684837cd533d957bac536a972ee053a0e626b2a7cebaceb297fcbc6"
+    },
+    {
+      "path": "docs/engine-feature-coverage.md",
+      "snapshot": "sources/docs/engine-feature-coverage.md",
+      "sha256": "c2534715465c2c24a50f6f2f13cc8c1ab63416e6b77327fba3a12fcdf6cd20cb"
+    },
+    {
+      "path": "docs/engine-secondary-tables.md",
+      "snapshot": "sources/docs/engine-secondary-tables.md",
+      "sha256": "1027035da91f643ce4d21cfd84542be1abbd529d2d3048a8edd10a929e0c1217"
+    },
+    {
+      "path": "firmware/include/ecu/capture_clock.hpp",
+      "snapshot": "sources/firmware/include/ecu/capture_clock.hpp",
+      "sha256": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d"
+    },
+    {
+      "path": "firmware/include/ecu/config.hpp",
+      "snapshot": "sources/firmware/include/ecu/config.hpp",
+      "sha256": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39"
+    },
+    {
+      "path": "firmware/include/ecu/control.hpp",
+      "snapshot": "sources/firmware/include/ecu/control.hpp",
+      "sha256": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b"
+    },
+    {
+      "path": "firmware/include/ecu/engine.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine.hpp",
+      "sha256": "ef6246f6090821532cf053a507584f73868f4637e28fc097709b989760b71a89"
+    },
+    {
+      "path": "firmware/include/ecu/engine_binding.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_binding.hpp",
+      "sha256": "c80ad4f5d63e4ab0043cb34e4ee72e253e31da71c1db0669079b10b0309f7a80"
+    },
+    {
+      "path": "firmware/include/ecu/engine_data.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_data.hpp",
+      "sha256": "a1f899915823d064dad236e01d859e80e1f7d387ad98b30333a40456c982fa26"
+    },
+    {
+      "path": "firmware/include/ecu/engine_data_json.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_data_json.hpp",
+      "sha256": "978ec9f4972aea9b77b973676ae285e871133431146ac1c7bfe042da1cca26f6"
+    },
+    {
+      "path": "firmware/include/ecu/engine_json.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_json.hpp",
+      "sha256": "8c9d453b9ff4bff78808dd7c66ae8b5b95b66a94dbd4caffb36cc125ae205257"
+    },
+    {
+      "path": "firmware/include/ecu/engine_limits.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_limits.hpp",
+      "sha256": "aaaa07e76744f92cbf03f7ba07b5a297d813ffdceb7d5d5a68a8d6328d2dce14"
+    },
+    {
+      "path": "firmware/include/ecu/engine_log.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_log.hpp",
+      "sha256": "72211e1a71c3a3a9ec5fe3ae47d6c1c8397af4d2f2c402d51750ee64ef6ee040"
+    },
+    {
+      "path": "firmware/include/ecu/engine_log_json.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_log_json.hpp",
+      "sha256": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6"
+    },
+    {
+      "path": "firmware/include/ecu/engine_log_msl.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_log_msl.hpp",
+      "sha256": "f7f5545b94cee93cf3aeb2e20f7fc2a0ee566ec2e1372076b70f4477c48d688b"
+    },
+    {
+      "path": "firmware/include/ecu/engine_log_service.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_log_service.hpp",
+      "sha256": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f"
+    },
+    {
+      "path": "firmware/include/ecu/engine_phase.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_phase.hpp",
+      "sha256": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27"
+    },
+    {
+      "path": "firmware/include/ecu/engine_radio.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_radio.hpp",
+      "sha256": "8b512897c7b9b9b0b17af6987704f98dff4dc29610f9403fbccceedeaaa8db13"
+    },
+    {
+      "path": "firmware/include/ecu/engine_scheduler.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_scheduler.hpp",
+      "sha256": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a"
+    },
+    {
+      "path": "firmware/include/ecu/engine_service.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_service.hpp",
+      "sha256": "d7b34562c70e0aa60d5b2e9eca0cf01aac3005ffed7924cccbea00ddccc71bbe"
+    },
+    {
+      "path": "firmware/include/ecu/engine_storage.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_storage.hpp",
+      "sha256": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e"
+    },
+    {
+      "path": "firmware/include/ecu/engine_target.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_target.hpp",
+      "sha256": "0cfcef7fa43cadaf105da094a4524aded50dcff0f88ddb6449799155e63b25b0"
+    },
+    {
+      "path": "firmware/include/ecu/engine_tuning.hpp",
+      "snapshot": "sources/firmware/include/ecu/engine_tuning.hpp",
+      "sha256": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6"
+    },
+    {
+      "path": "firmware/include/ecu/espnow.hpp",
+      "snapshot": "sources/firmware/include/ecu/espnow.hpp",
+      "sha256": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc"
+    },
+    {
+      "path": "firmware/include/ecu/espnow_protocol.hpp",
+      "snapshot": "sources/firmware/include/ecu/espnow_protocol.hpp",
+      "sha256": "634bd5a99ddd8c682a20959720f5599a0e39f20c25d8cadf4b3e8024eca25b6a"
+    },
+    {
+      "path": "firmware/include/ecu/heap_object.hpp",
+      "snapshot": "sources/firmware/include/ecu/heap_object.hpp",
+      "sha256": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51"
+    },
+    {
+      "path": "firmware/include/ecu/idle_command.hpp",
+      "snapshot": "sources/firmware/include/ecu/idle_command.hpp",
+      "sha256": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310"
+    },
+    {
+      "path": "firmware/include/ecu/idle_control.hpp",
+      "snapshot": "sources/firmware/include/ecu/idle_control.hpp",
+      "sha256": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd"
+    },
+    {
+      "path": "firmware/include/ecu/idle_hardware.hpp",
+      "snapshot": "sources/firmware/include/ecu/idle_hardware.hpp",
+      "sha256": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+    },
+    {
+      "path": "firmware/include/ecu/idle_pwm.hpp",
+      "snapshot": "sources/firmware/include/ecu/idle_pwm.hpp",
+      "sha256": "392ef3640df5e3ea64c465df7a6815c2272ead28570626bc9540aab8b58a8c42"
+    },
+    {
+      "path": "firmware/include/ecu/idle_pwm_json.hpp",
+      "snapshot": "sources/firmware/include/ecu/idle_pwm_json.hpp",
+      "sha256": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b"
+    },
+    {
+      "path": "firmware/include/ecu/json.hpp",
+      "snapshot": "sources/firmware/include/ecu/json.hpp",
+      "sha256": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247"
+    },
+    {
+      "path": "firmware/include/ecu/load_json.hpp",
+      "snapshot": "sources/firmware/include/ecu/load_json.hpp",
+      "sha256": "04048aac889a77b29beac77ba4d43b93694fe61a23a089bb2e09d87ec72de218"
+    },
+    {
+      "path": "firmware/include/ecu/load_model.hpp",
+      "snapshot": "sources/firmware/include/ecu/load_model.hpp",
+      "sha256": "4ebcebe554ebf29f4dc7db29a8a51302d3ebbc8647ba9f73d5278ef85503074b"
+    },
+    {
+      "path": "firmware/include/ecu/pins.hpp",
+      "snapshot": "sources/firmware/include/ecu/pins.hpp",
+      "sha256": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad"
+    },
+    {
+      "path": "firmware/include/ecu/realtime.hpp",
+      "snapshot": "sources/firmware/include/ecu/realtime.hpp",
+      "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+    },
+    {
+      "path": "firmware/include/ecu/secondary_tables.hpp",
+      "snapshot": "sources/firmware/include/ecu/secondary_tables.hpp",
+      "sha256": "242dea872e73380e206d33d23303f985cde57ffb0fbaf0fc1189797f7620ed49"
+    },
+    {
+      "path": "firmware/include/ecu/timing_executor.hpp",
+      "snapshot": "sources/firmware/include/ecu/timing_executor.hpp",
+      "sha256": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db"
+    },
+    {
+      "path": "firmware/include/ecu/transient_enrichment.hpp",
+      "snapshot": "sources/firmware/include/ecu/transient_enrichment.hpp",
+      "sha256": "75250d519305aa604ebefb4a177ec64cf2c38d14a3d31f60e99cc88322052911"
+    },
+    {
+      "path": "firmware/include/ecu/transient_json.hpp",
+      "snapshot": "sources/firmware/include/ecu/transient_json.hpp",
+      "sha256": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88"
+    },
+    {
+      "path": "firmware/include/ecu/trigger_log.hpp",
+      "snapshot": "sources/firmware/include/ecu/trigger_log.hpp",
+      "sha256": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451"
+    },
+    {
+      "path": "firmware/include/ecu/trigger_log_json.hpp",
+      "snapshot": "sources/firmware/include/ecu/trigger_log_json.hpp",
+      "sha256": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58"
+    },
+    {
+      "path": "firmware/include/ecu/tuning_document.hpp",
+      "snapshot": "sources/firmware/include/ecu/tuning_document.hpp",
+      "sha256": "91939a23dc30a504bf4a1c073b8cc3a757bb5613f39bc0225579931746b0f7e1"
+    },
+    {
+      "path": "firmware/include/ecu/tuning_layout.hpp",
+      "snapshot": "sources/firmware/include/ecu/tuning_layout.hpp",
+      "sha256": "7ef4ea8dbe551ba44f55bade25a4de3072d188ace323008548a8c34314e97f0c"
+    },
+    {
+      "path": "firmware/include/ecu/tuning_live.hpp",
+      "snapshot": "sources/firmware/include/ecu/tuning_live.hpp",
+      "sha256": "518d2575b4e5f65bb6669ab0b3183bbdd58ce61917fd7a233490b1213a145888"
+    },
+    {
+      "path": "firmware/include/ecu/tuning_session.hpp",
+      "snapshot": "sources/firmware/include/ecu/tuning_session.hpp",
+      "sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e"
+    },
+    {
+      "path": "firmware/include/ecu/tuning_stream.hpp",
+      "snapshot": "sources/firmware/include/ecu/tuning_stream.hpp",
+      "sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042"
+    },
+    {
+      "path": "firmware/include/ecu/web_config.hpp",
+      "snapshot": "sources/firmware/include/ecu/web_config.hpp",
+      "sha256": "8d954bf30d639daa06cbae6e6cc41a2a4c0b0579d3d9914aff44327085243ca1"
+    },
+    {
+      "path": "firmware/main/app.cpp",
+      "snapshot": "sources/firmware/main/app.cpp",
+      "sha256": "a5d196a1e6140c1b5b68fdb2e2fdeab8048cb67eff6ef69799a6cddb5da4f272"
+    },
+    {
+      "path": "firmware/main/config_json.hpp",
+      "snapshot": "sources/firmware/main/config_json.hpp",
+      "sha256": "1b8469d3ff7f750db50f731e209a184479fa4191ed6200a0a555aa0065e3c1ae"
+    },
+    {
+      "path": "firmware/main/engine_log_service.cpp",
+      "snapshot": "sources/firmware/main/engine_log_service.cpp",
+      "sha256": "05666d7be694be72719515709a083b0cf65701ebcd410fdb32fc0aa0e9fbbd53"
+    },
+    {
+      "path": "firmware/main/engine_service.cpp",
+      "snapshot": "sources/firmware/main/engine_service.cpp",
+      "sha256": "03a7d47b04a85da69df0e150690aa90514dc7eede903e84f2547df13a10f8cec"
+    },
+    {
+      "path": "firmware/main/engine_target.cpp",
+      "snapshot": "sources/firmware/main/engine_target.cpp",
+      "sha256": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738"
+    },
+    {
+      "path": "firmware/main/engine_tuning.cpp",
+      "snapshot": "sources/firmware/main/engine_tuning.cpp",
+      "sha256": "24b846ed8cc4a03c7b323afd4b58eea7f411b243e71e569f5b9c08c9343d851a"
+    },
+    {
+      "path": "firmware/main/espnow.cpp",
+      "snapshot": "sources/firmware/main/espnow.cpp",
+      "sha256": "e306d055563a74a6209a0884bfb2a3982678e99ca3df02d25640b51c1e532152"
+    },
+    {
+      "path": "firmware/main/web_assets.hpp",
+      "snapshot": "sources/firmware/main/web_assets.hpp",
+      "sha256": "a22bb848e4c5e995422d324c44cef29560e8a3eb5af4ceb5c3e6178d4d7d2a1c"
+    },
+    {
+      "path": "firmware/main/web_config.cpp",
+      "snapshot": "sources/firmware/main/web_config.cpp",
+      "sha256": "b3f7301f3de4ec78f2c2f642b5f74add4807bdd0aa2f91209401fbfd4f29964d"
+    },
+    {
+      "path": "firmware/platformio.ini",
+      "snapshot": "sources/firmware/platformio.ini",
+      "sha256": "579f4075495f9c070a80d14cdcedf1ec4f9de13c4d233ebd1a48b97947e3f3d0"
+    },
+    {
+      "path": "firmware/tests/control_test.cpp",
+      "snapshot": "sources/firmware/tests/control_test.cpp",
+      "sha256": "f70daa1f94eb5caf27a26467e2f93ca84788470c0286e743bdf273c159a3cecf"
+    },
+    {
+      "path": "firmware/tests/engine_cylinder_test.cpp",
+      "snapshot": "sources/firmware/tests/engine_cylinder_test.cpp",
+      "sha256": "a07acf0093afa510389dfa05b609c7d4c3e0f59814c11349bb51990d95d449d9"
+    },
+    {
+      "path": "firmware/tests/engine_load_test.cpp",
+      "snapshot": "sources/firmware/tests/engine_load_test.cpp",
+      "sha256": "8ef3d6e0382b77c5eb0f81e9009294e6a141ff5f360cc7c89ef9f397bdcff5b6"
+    },
+    {
+      "path": "firmware/tests/engine_log_service_test.cpp",
+      "snapshot": "sources/firmware/tests/engine_log_service_test.cpp",
+      "sha256": "adcce12f0b93a315d05894309c1e7df6c2df4592484ff41bee1cbfceb922e7d4"
+    },
+    {
+      "path": "firmware/tests/engine_observability_test.cpp",
+      "snapshot": "sources/firmware/tests/engine_observability_test.cpp",
+      "sha256": "566ecebf459e51166214c3c9f53050042ac47c474c84af3a3ed4ac3e90e42d4a"
+    },
+    {
+      "path": "firmware/tests/engine_phase_test.cpp",
+      "snapshot": "sources/firmware/tests/engine_phase_test.cpp",
+      "sha256": "1b9485b170ec1bedd8a73022d294e87bdc83c74be726da78de43ac0dea816d72"
+    },
+    {
+      "path": "firmware/tests/engine_secondary_test.cpp",
+      "snapshot": "sources/firmware/tests/engine_secondary_test.cpp",
+      "sha256": "c2b405376087d661aef8237c5afcc3208a6ed88a2b64feffc3af1c7de7e1934d"
+    },
+    {
+      "path": "firmware/tests/engine_semi_test.cpp",
+      "snapshot": "sources/firmware/tests/engine_semi_test.cpp",
+      "sha256": "728a90d92b9ba9320b6adeaf85d6791d960bc55d62ce3663e55594521b134fd4"
+    },
+    {
+      "path": "firmware/tests/engine_storage_test.cpp",
+      "snapshot": "sources/firmware/tests/engine_storage_test.cpp",
+      "sha256": "06e8c1149abd50f8bea41b22521517620345e4a66716b0446af15bc4fc9babe3"
+    },
+    {
+      "path": "firmware/tests/engine_test.cpp",
+      "snapshot": "sources/firmware/tests/engine_test.cpp",
+      "sha256": "55f467d4f6e35ff9b018eabaf4cb938c9a1559ad5574e8e5c40236458120d93e"
+    },
+    {
+      "path": "firmware/tests/engine_transient_test.cpp",
+      "snapshot": "sources/firmware/tests/engine_transient_test.cpp",
+      "sha256": "f6c4e08aafc47ef6ab7c6bad87f21bc381d39255ace08329c87e1e3ac57077e6"
+    },
+    {
+      "path": "firmware/tests/espnow_test.cpp",
+      "snapshot": "sources/firmware/tests/espnow_test.cpp",
+      "sha256": "1f1ff8c1fcb50d16416d27e514c1eabf5c3cddb70814d0371089e5cc0d23bc26"
+    },
+    {
+      "path": "firmware/tests/fakes/nvs.h",
+      "snapshot": "sources/firmware/tests/fakes/nvs.h",
+      "sha256": "8ae4111796b3175b79d5c4ae9537bd75c49cd4351269706d3ad705bb1c81611c"
+    },
+    {
+      "path": "firmware/tests/fakes/nvs_flash.h",
+      "snapshot": "sources/firmware/tests/fakes/nvs_flash.h",
+      "sha256": "e290e693131eaf64d035dccb6cfb1e0be527233a4ce3b7f2f04d6d54315888ff"
+    },
+    {
+      "path": "firmware/tests/idle_control_test.cpp",
+      "snapshot": "sources/firmware/tests/idle_control_test.cpp",
+      "sha256": "2a805518e3438cc1d99c20a62e10b63dbdab9073a3c462e004488999683f0fe6"
+    },
+    {
+      "path": "firmware/tests/idle_pwm_test.cpp",
+      "snapshot": "sources/firmware/tests/idle_pwm_test.cpp",
+      "sha256": "6a19fbfcbb3d562fefd07941521666fbe16f62cad26da0638c2828941c647f5a"
+    },
+    {
+      "path": "firmware/tests/load_model_test.cpp",
+      "snapshot": "sources/firmware/tests/load_model_test.cpp",
+      "sha256": "9b3f549c91a6e1ba6d3af5e31ce3b1f74173f0819aeaaf00ad89e12da01ae295"
+    },
+    {
+      "path": "firmware/tests/log_fakes/esp_random.h",
+      "snapshot": "sources/firmware/tests/log_fakes/esp_random.h",
+      "sha256": "dcea98138360c20e84dd523c28427c819816263242e4176e38280437877fb91b"
+    },
+    {
+      "path": "firmware/tests/log_fakes/freertos/FreeRTOS.h",
+      "snapshot": "sources/firmware/tests/log_fakes/freertos/FreeRTOS.h",
+      "sha256": "0f7428ac0dfd9288552b66794c75a6ff31c915bfade756962022d2804855eca3"
+    },
+    {
+      "path": "firmware/tests/log_fakes/freertos/semphr.h",
+      "snapshot": "sources/firmware/tests/log_fakes/freertos/semphr.h",
+      "sha256": "abdd0fb8ea37d1fa8c04ce2ae0cb7ccabb462bd0177aeb24c8301e54f98df31f"
+    },
+    {
+      "path": "firmware/tests/secondary_tables_test.cpp",
+      "snapshot": "sources/firmware/tests/secondary_tables_test.cpp",
+      "sha256": "c7eeaf9351e02e499b5f909ef5e2f6d26011f559fddac4b48f8a11f60bc10f1c"
+    },
+    {
+      "path": "firmware/tests/timing_executor_test.cpp",
+      "snapshot": "sources/firmware/tests/timing_executor_test.cpp",
+      "sha256": "ff61dabaaeceb99f23b7f16d5238126fafa4dfb849471b15f40fae0e8cf339b8"
+    },
+    {
+      "path": "firmware/tests/transient_enrichment_test.cpp",
+      "snapshot": "sources/firmware/tests/transient_enrichment_test.cpp",
+      "sha256": "ef1b5ea7453d96cdcc602435470cda057efbd857d30ec721445227091b1c9c18"
+    },
+    {
+      "path": "firmware/tests/trigger_log_json_test.cpp",
+      "snapshot": "sources/firmware/tests/trigger_log_json_test.cpp",
+      "sha256": "cd6523ac035ad884ef52f7d98281a90fb5a32bf711bea90bcaaabd8f9114590b"
+    },
+    {
+      "path": "firmware/tests/trigger_log_test.cpp",
+      "snapshot": "sources/firmware/tests/trigger_log_test.cpp",
+      "sha256": "76dadab2610ad93b42508eb3019f009f92ebfbb6f8b0e4cebb7273b3d8e9e1db"
+    },
+    {
+      "path": "firmware/tests/tuning_allocation_test.cpp",
+      "snapshot": "sources/firmware/tests/tuning_allocation_test.cpp",
+      "sha256": "870337a9c7971e7809ccd8d1b9e97ffebe0f50742a4f2d3057544fc64e7ca1d7"
+    },
+    {
+      "path": "firmware/tests/tuning_test.cpp",
+      "snapshot": "sources/firmware/tests/tuning_test.cpp",
+      "sha256": "1f8a83f4e26513873e7268129366a1f2a6406a7eeafc7d0de19248d9ce7a39fd"
+    },
+    {
+      "path": "hardware/a4-n16r8/net_contract.json",
+      "snapshot": "sources/hardware/a4-n16r8/net_contract.json",
+      "sha256": "728f174b3596a631ae598d0786a34182068f7cfa94ae8f75f09cb27e11bd7682"
+    },
+    {
+      "path": "hardware/a5-idle-interface/net_contract.json",
+      "snapshot": "sources/hardware/a5-idle-interface/net_contract.json",
+      "sha256": "09b64f8846412f16a8baea041b8d272180b52bbb2d34fbfb44eeade4b29953c4"
+    },
+    {
+      "path": "scripts/audit_engine_build.py",
+      "snapshot": "sources/scripts/audit_engine_build.py",
+      "sha256": "9a3b58735cb083a69ae10f9c3d748d78f52051e302056ef8e31ff102ea3944ba"
+    },
+    {
+      "path": "scripts/audit_target_isr.py",
+      "snapshot": "sources/scripts/audit_target_isr.py",
+      "sha256": "550781826ea29b6fe55f802278422cda70bb80cb61aab76c717904b26dd83f4d"
+    },
+    {
+      "path": "scripts/generate_tuning_wire.py",
+      "snapshot": "sources/scripts/generate_tuning_wire.py",
+      "sha256": "910a335a6a22398fd08f6badad23e9a27e2eecb349cdd00f47f5c3bec58e7f90"
+    },
+    {
+      "path": "scripts/publish_secondary_core_evidence.py",
+      "snapshot": "sources/scripts/publish_secondary_core_evidence.py",
+      "sha256": "93030ea81710019534955f1fad4822d9308edf024854d9f1fbda7b00b4c791e7"
+    },
+    {
+      "path": "scripts/test_firmware.sh",
+      "snapshot": "sources/scripts/test_firmware.sh",
+      "sha256": "0f2c95ce4ea8c8613793973255c0e0a0d60aacc93e614073d3007abbfeba6bf4"
+    },
+    {
+      "path": "tools/calibrate_load_benchmark.py",
+      "snapshot": "sources/tools/calibrate_load_benchmark.py",
+      "sha256": "3fd3f65226715bbf4e8de768492708ce11be644ff99ea91f4184f0e4b2d89a88"
+    },
+    {
+      "path": "tools/check_idle_assembly.py",
+      "snapshot": "sources/tools/check_idle_assembly.py",
+      "sha256": "e29aca5bd3d8ceba1a13bbf09a8e28e31160aa6c0255b6ac3c97e7e722c922de"
+    },
+    {
+      "path": "tools/compare_engine_controllers.py",
+      "snapshot": "sources/tools/compare_engine_controllers.py",
+      "sha256": "5220a4d2df4a8fed6daa7cabd6a95053cd3770f379875cbda7af6b0d75f705d3"
+    },
+    {
+      "path": "tools/compare_speeduino.py",
+      "snapshot": "sources/tools/compare_speeduino.py",
+      "sha256": "7608e7672e1817705f310b5e0cacc5a7d4472ee33b7673888a1c96dc399f01cf"
+    },
+    {
+      "path": "tools/compare_trigger_loggers.py",
+      "snapshot": "sources/tools/compare_trigger_loggers.py",
+      "sha256": "62add2645cc5dbd622904e157bb03bb9144d16cabf8f72a48d49d6b0b9d38498"
+    },
+    {
+      "path": "tools/config_bridge.cpp",
+      "snapshot": "sources/tools/config_bridge.cpp",
+      "sha256": "d692084a8714de7ce9cf10474ce52d714b405de71702d784a4b3c5afafe58ff4"
+    },
+    {
+      "path": "tools/engine_bridge.cpp",
+      "snapshot": "sources/tools/engine_bridge.cpp",
+      "sha256": "9c7761d106aa98d998cad6b9ba02bff79ba8c467ad2f4d98719a4006e7cc029c"
+    },
+    {
+      "path": "tools/engine_log.py",
+      "snapshot": "sources/tools/engine_log.py",
+      "sha256": "2219ece5516a88ca4c09205a3ccee6b5bf1c09fc4c1ac04bac4ed7ffcac831ad"
+    },
+    {
+      "path": "tools/engine_msq.py",
+      "snapshot": "sources/tools/engine_msq.py",
+      "sha256": "6db5ba8d928c4d3110fe9ed229d3b7bc0304828dd161a2df6f2d9f479688e106"
+    },
+    {
+      "path": "tools/engine_observability.py",
+      "snapshot": "sources/tools/engine_observability.py",
+      "sha256": "aceda98f528f3dbb407dd71db52763de14b86dcc48c9153681ef635549b4d210"
+    },
+    {
+      "path": "tools/engine_observability_bridge.cpp",
+      "snapshot": "sources/tools/engine_observability_bridge.cpp",
+      "sha256": "af9788cc50faddbecf177ac5739d8872d2708917d3da3fb394e781b3d4d4d6ae"
+    },
+    {
+      "path": "tools/engine_protocol.py",
+      "snapshot": "sources/tools/engine_protocol.py",
+      "sha256": "bcca7741fec3509ec1d9c1beaaaace046e6b3fbd4d075982d32dbb9681842c19"
+    },
+    {
+      "path": "tools/engine_protocol_legacy.py",
+      "snapshot": "sources/tools/engine_protocol_legacy.py",
+      "sha256": "0b8144daea19b5b201d5d49fed09f7215988b75122591d8ae9809c69c935a0c2"
+    },
+    {
+      "path": "tools/engine_receiver.py",
+      "snapshot": "sources/tools/engine_receiver.py",
+      "sha256": "4af24258caeb378361aecef28464c39241e1796e1f0746d23bdcd0f00ba41829"
+    },
+    {
+      "path": "tools/engine_research_plant.py",
+      "snapshot": "sources/tools/engine_research_plant.py",
+      "sha256": "7ab3e0e921d24946de0de7b716949e5aa7e93562759d54ba32af099605d183b9"
+    },
+    {
+      "path": "tools/engine_runtime.py",
+      "snapshot": "sources/tools/engine_runtime.py",
+      "sha256": "804a0aae598b0e39c8e713bcbf0e8f57fa06480909e4d6d6549ea5419ddc015e"
+    },
+    {
+      "path": "tools/engine_sil.py",
+      "snapshot": "sources/tools/engine_sil.py",
+      "sha256": "2d8b66408396b2bb40d648d6e218f3d5b2935f2ae9454e66bcfd1251eae952d2"
+    },
+    {
+      "path": "tools/espnow_protocol.py",
+      "snapshot": "sources/tools/espnow_protocol.py",
+      "sha256": "90d806e472f54ab5d054629ab92162157064d461f34164f7b73bc5dde43176f9"
+    },
+    {
+      "path": "tools/idle_config.py",
+      "snapshot": "sources/tools/idle_config.py",
+      "sha256": "175ee2cdd51c92c00edcb41cee210f257c0af0a66867fefc445ddd1c9994c459"
+    },
+    {
+      "path": "tools/idle_valve_plant.py",
+      "snapshot": "sources/tools/idle_valve_plant.py",
+      "sha256": "ecf84faf3c556c200831bf361c59459dc8e3fc43fe3637022e0f64cc5d963b65"
+    },
+    {
+      "path": "tools/load_config.py",
+      "snapshot": "sources/tools/load_config.py",
+      "sha256": "311e9d58dd243a38e4a109f67a3a99d45b06a29f36d3e4d15cc0c61bff42f9bc"
+    },
+    {
+      "path": "tools/plot_cylinder_comparison.py",
+      "snapshot": "sources/tools/plot_cylinder_comparison.py",
+      "sha256": "67ee638f3117e1be5b9fae0bc2415b4c636f766948d1dfccd534f8da38723bf5"
+    },
+    {
+      "path": "tools/plot_engine_evidence.py",
+      "snapshot": "sources/tools/plot_engine_evidence.py",
+      "sha256": "be7abd42422cf76a5f589d46e0b18054714c46385bf70c64c582224ef24d8b57"
+    },
+    {
+      "path": "tools/plot_idle_scenarios.py",
+      "snapshot": "sources/tools/plot_idle_scenarios.py",
+      "sha256": "a67de6d3a24c1503853eca8e52e955ad58dbc57269d4c78224e72c8da784a37a"
+    },
+    {
+      "path": "tools/plot_load_comparison.py",
+      "snapshot": "sources/tools/plot_load_comparison.py",
+      "sha256": "e512317e81e2b607a91960eb2f0cc291f2d49560f2f24f0da2495ce14709cd8d"
+    },
+    {
+      "path": "tools/plot_research_benchmark.py",
+      "snapshot": "sources/tools/plot_research_benchmark.py",
+      "sha256": "47ae7dff6e0ba88b9820ebf36262be8c4ccf094bd870e5a6113117f8163c4e20"
+    },
+    {
+      "path": "tools/plot_semi_comparison.py",
+      "snapshot": "sources/tools/plot_semi_comparison.py",
+      "sha256": "df6b28414b70f372880aa48f3232312545e32475bc3abd2e8342e71cf37db066"
+    },
+    {
+      "path": "tools/plot_sequential_comparison.py",
+      "snapshot": "sources/tools/plot_sequential_comparison.py",
+      "sha256": "c2f6da73a85061fb201df86e98093bfd7bf51db6936f2ab2a8f054fee1937b7e"
+    },
+    {
+      "path": "tools/plot_target_timing.py",
+      "snapshot": "sources/tools/plot_target_timing.py",
+      "sha256": "67c4c1f309ef54573f79f0d9d2fe6440a2a75763689d9a8a48f32ec8fa25e7d4"
+    },
+    {
+      "path": "tools/plot_transient_comparison.py",
+      "snapshot": "sources/tools/plot_transient_comparison.py",
+      "sha256": "9108f781ee75ab278855e926bc9fbadb6816ae571e3c13a73e04fa48f4d18435"
+    },
+    {
+      "path": "tools/plot_trigger_comparison.py",
+      "snapshot": "sources/tools/plot_trigger_comparison.py",
+      "sha256": "61b0899e7a6fe0fd7a5aac9587820726f565a3b6ce5a0669504ea4aa6ce0bb07"
+    },
+    {
+      "path": "tools/radio_simulator.py",
+      "snapshot": "sources/tools/radio_simulator.py",
+      "sha256": "16833e07f5dd8a2ef6eec70b1211ddf30601db488c90e46f6ad76415b82e3c35"
+    },
+    {
+      "path": "tools/render_idle_hardware.py",
+      "snapshot": "sources/tools/render_idle_hardware.py",
+      "sha256": "553e19a94448b69c3591c846d0f814bdf7874bb4eb03d95c61c2bbef4c137bd0"
+    },
+    {
+      "path": "tools/review_sequential_results.py",
+      "snapshot": "sources/tools/review_sequential_results.py",
+      "sha256": "40a49f2877050079b09c460c719a4a6e865424f3926802c2f1987752655e6f25"
+    },
+    {
+      "path": "tools/run_cylinder_scenarios.py",
+      "snapshot": "sources/tools/run_cylinder_scenarios.py",
+      "sha256": "4602b36f946a7048e4ada6755b601e306497b813b8601289d10a7c81342bb54d"
+    },
+    {
+      "path": "tools/run_cylinder_transients.py",
+      "snapshot": "sources/tools/run_cylinder_transients.py",
+      "sha256": "cfff13ddaa75135c26f11b8c699e5bf2a0f2a39f9234e3217ce92a9f3f2cc528"
+    },
+    {
+      "path": "tools/run_engine_observability_scenarios.py",
+      "snapshot": "sources/tools/run_engine_observability_scenarios.py",
+      "sha256": "da5a2fd7c861e284abbc7d2f329d4944c9340f8b5693424156c514400941e2a0"
+    },
+    {
+      "path": "tools/run_engine_scenarios.py",
+      "snapshot": "sources/tools/run_engine_scenarios.py",
+      "sha256": "9c19b475cfebf4cfe96b76893a2d248ce359d88d26bbaf170e9c048c47e2db78"
+    },
+    {
+      "path": "tools/run_idle_circuit.py",
+      "snapshot": "sources/tools/run_idle_circuit.py",
+      "sha256": "aece1686d6f33c343f31d06f7d9ac566f8dcdf973b3d85ffbd6db7d041ecf711"
+    },
+    {
+      "path": "tools/run_idle_followups.py",
+      "snapshot": "sources/tools/run_idle_followups.py",
+      "sha256": "0e9a640a05fb0eb1ed1f7b2f05d11830e3aa2986f6c87fd9484e0f764fe31ee3"
+    },
+    {
+      "path": "tools/run_idle_scenarios.py",
+      "snapshot": "sources/tools/run_idle_scenarios.py",
+      "sha256": "4c38a5999fa70907a255ff8c0217c98a82373af82ee5f53ed425db4cc8a08322"
+    },
+    {
+      "path": "tools/run_load_scenarios.py",
+      "snapshot": "sources/tools/run_load_scenarios.py",
+      "sha256": "ff4c16f0ab34d03437566df0c21f480601d509c78e814bed662cd0ce0c39854b"
+    },
+    {
+      "path": "tools/run_semi_scenarios.py",
+      "snapshot": "sources/tools/run_semi_scenarios.py",
+      "sha256": "38fe49ab24450af9140073d2d60e13708a9c655f277058a06f95cc8f9fa547b8"
+    },
+    {
+      "path": "tools/run_sequential_scenarios.py",
+      "snapshot": "sources/tools/run_sequential_scenarios.py",
+      "sha256": "35145636ed3d6b9507cb7a0cc233ced2fd3e707a27ceb19ec835c45db54be1fa"
+    },
+    {
+      "path": "tools/run_target_scenarios.py",
+      "snapshot": "sources/tools/run_target_scenarios.py",
+      "sha256": "3428588cb46af80945632e71b97f0c889b1673768f82258929088517fa2bb7bf"
+    },
+    {
+      "path": "tools/run_transient_legacy.py",
+      "snapshot": "sources/tools/run_transient_legacy.py",
+      "sha256": "c3d4f71867b5fb8aba0feaccd1cae7f61ec829a7939876fdbe305f58993e4601"
+    },
+    {
+      "path": "tools/run_transient_scenarios.py",
+      "snapshot": "sources/tools/run_transient_scenarios.py",
+      "sha256": "4f3c10b043cef548ee079bfcf895cb7dc4657c47ce9ebb4fa5e279036293b9f5"
+    },
+    {
+      "path": "tools/run_tuning_scenarios.py",
+      "snapshot": "sources/tools/run_tuning_scenarios.py",
+      "sha256": "efebb18d8ea973a6474fe37756feebb84e818e1eed5362c60f2601d92cd2e684"
+    },
+    {
+      "path": "tools/secondary_legacy_probe.cpp",
+      "snapshot": "sources/tools/secondary_legacy_probe.cpp",
+      "sha256": "03676aa88ad3a54b33a4b7a0c9b00d4ad6e903a973262b51badc9688b90eb264"
+    },
+    {
+      "path": "tools/sequential_metrics.py",
+      "snapshot": "sources/tools/sequential_metrics.py",
+      "sha256": "190e5cf95c0821c5241d92dfa80aa4843fa1f311c3f4beaaa51f6714cffd39d4"
+    },
+    {
+      "path": "tools/speeduino_reference.cpp",
+      "snapshot": "sources/tools/speeduino_reference.cpp",
+      "sha256": "0106558b0dc510b9e7d047bdf332aab970f2cffdb0fcf0971ac52f4d72b0f744"
+    },
+    {
+      "path": "tools/speeduino_runtime.py",
+      "snapshot": "sources/tools/speeduino_runtime.py",
+      "sha256": "c1471f74a3c22df32aa3265228a895142058d62a3e63fe9aede35398bc69b2cd"
+    },
+    {
+      "path": "tools/speeduino_sim.cpp",
+      "snapshot": "sources/tools/speeduino_sim.cpp",
+      "sha256": "933b8ba6d7476d3f3957da0eb279a81f50b1e7bc297ec7952a222ac0ecef4de3"
+    },
+    {
+      "path": "tools/speeduino_sim_hal.cpp",
+      "snapshot": "sources/tools/speeduino_sim_hal.cpp",
+      "sha256": "0d28c0c73308f8ac1333b0e3eefa38d9b6bef4fe0e7ca31e6342c7a9e8074409"
+    },
+    {
+      "path": "tools/speeduino_sim_native.hpp",
+      "snapshot": "sources/tools/speeduino_sim_native.hpp",
+      "sha256": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9"
+    },
+    {
+      "path": "tools/speeduino_timer_model_test.cpp",
+      "snapshot": "sources/tools/speeduino_timer_model_test.cpp",
+      "sha256": "fa24d40df2cef36139b2df39e2c5d3d3f6553fd5dbafaf1f6c5029fee30488cf"
+    },
+    {
+      "path": "tools/target_runtime.py",
+      "snapshot": "sources/tools/target_runtime.py",
+      "sha256": "9e2c3c38ebacc31e9c01b246da3cb17371257c14b53b27aeec41614f5ad79aed"
+    },
+    {
+      "path": "tools/target_timing_bridge.cpp",
+      "snapshot": "sources/tools/target_timing_bridge.cpp",
+      "sha256": "17b624310ff459caa5e3a32c3bd5167ad6a7ec4617b2a98131b1d13481b061f3"
+    },
+    {
+      "path": "tools/test_cylinder_ui.py",
+      "snapshot": "sources/tools/test_cylinder_ui.py",
+      "sha256": "e69a5221cc0cf415a31a2893cf0a8d72efdfa2eb49516a8f14d43e39f333adfc"
+    },
+    {
+      "path": "tools/test_engine.py",
+      "snapshot": "sources/tools/test_engine.py",
+      "sha256": "9b44069b7916cb1a94c0e6a57728ea59fdf48267ae717b23c3745d881806875f"
+    },
+    {
+      "path": "tools/test_engine_cylinder.py",
+      "snapshot": "sources/tools/test_engine_cylinder.py",
+      "sha256": "0b2bffd5815ddf7b48b47d213f3bd35e6cdd0cc77e74138d86535bca7abc90c2"
+    },
+    {
+      "path": "tools/test_engine_http.py",
+      "snapshot": "sources/tools/test_engine_http.py",
+      "sha256": "a3bc28254e8ceaf229c872abb45045e65a851a2efd1a05c058de70b8fd7091ba"
+    },
+    {
+      "path": "tools/test_engine_observability.py",
+      "snapshot": "sources/tools/test_engine_observability.py",
+      "sha256": "8745f0938ec6852f89f9524b17d5dace309eea7e35a3b78a85fbdb7c70143bc5"
+    },
+    {
+      "path": "tools/test_engine_observability_ui.py",
+      "snapshot": "sources/tools/test_engine_observability_ui.py",
+      "sha256": "765182659443b537a520c6b1774cbd216c650c76d5a1aa01d3288e9498c64a7e"
+    },
+    {
+      "path": "tools/test_engine_semi.py",
+      "snapshot": "sources/tools/test_engine_semi.py",
+      "sha256": "5066d4199f35445104c45515b437096aa9b8102a88a15ddcc63e710fe1e4787f"
+    },
+    {
+      "path": "tools/test_engine_sequential.py",
+      "snapshot": "sources/tools/test_engine_sequential.py",
+      "sha256": "77d18ade034ba53135dce1ab57c162ecae6e05908bc8a6ccc49e2cd8f457a765"
+    },
+    {
+      "path": "tools/test_engine_ui.py",
+      "snapshot": "sources/tools/test_engine_ui.py",
+      "sha256": "6ae9479fb31c2bbc99fafe2d009a7643746fb16052e616750444e6435c0fab15"
+    },
+    {
+      "path": "tools/test_idle.py",
+      "snapshot": "sources/tools/test_idle.py",
+      "sha256": "be9267d4ac90d981dd897a6025bbdedf0a5d937dcaf8ecca62f9556c504b2f06"
+    },
+    {
+      "path": "tools/test_idle_ui.py",
+      "snapshot": "sources/tools/test_idle_ui.py",
+      "sha256": "0e8d5ba67b5703a6883fa18c694fdec72e7a555ddbb622f50bae96be90b38280"
+    },
+    {
+      "path": "tools/test_load_model.py",
+      "snapshot": "sources/tools/test_load_model.py",
+      "sha256": "768692c06f8c2786c8be655124cffdf63adbf2769f33b43af75fd343a559e5eb"
+    },
+    {
+      "path": "tools/test_load_radio.py",
+      "snapshot": "sources/tools/test_load_radio.py",
+      "sha256": "2d786a9f576834bbd4ea604621c3b71ceaffbc78c0d7caf25a4636b99f270abf"
+    },
+    {
+      "path": "tools/test_load_reference.py",
+      "snapshot": "sources/tools/test_load_reference.py",
+      "sha256": "c11889fcece3f11a253563ad3b205eec0b6e847945ae433703aa60d9bdcde9a6"
+    },
+    {
+      "path": "tools/test_load_ui.py",
+      "snapshot": "sources/tools/test_load_ui.py",
+      "sha256": "31af9d373fda48a7e3c75ff0f2b4cd21f8197639248eb57f9d316fc145716d27"
+    },
+    {
+      "path": "tools/test_radio.py",
+      "snapshot": "sources/tools/test_radio.py",
+      "sha256": "2d72a4a57e6eb83e0c93976530aea6d4316040a10917f64fe09df3f8288d39cc"
+    },
+    {
+      "path": "tools/test_research_plant.py",
+      "snapshot": "sources/tools/test_research_plant.py",
+      "sha256": "9b26ceef5556faa2fdf66cf8ba1f4940d790aa3a8434b57707d79780b090e8c1"
+    },
+    {
+      "path": "tools/test_semi_ui.py",
+      "snapshot": "sources/tools/test_semi_ui.py",
+      "sha256": "37cabdb74111a8a3e953fcfbda5c27ea86034376129c86d75692dfcd29c756ca"
+    },
+    {
+      "path": "tools/test_sequential_ui.py",
+      "snapshot": "sources/tools/test_sequential_ui.py",
+      "sha256": "63d50047c36f6fc2b275e225654619a4b23218c5b1e0a1ee9f3cb3aa7878aadf"
+    },
+    {
+      "path": "tools/test_speeduino_runtime.py",
+      "snapshot": "sources/tools/test_speeduino_runtime.py",
+      "sha256": "cefe29e7697a8973e5e9821465aac6e3fd538d6dba449e007df0b458813d8369"
+    },
+    {
+      "path": "tools/test_speeduino_timer_model.py",
+      "snapshot": "sources/tools/test_speeduino_timer_model.py",
+      "sha256": "7b019e90fa1e46e4521768f576b4820e6fb70d71ad3714dad5508a90fb5b70be"
+    },
+    {
+      "path": "tools/test_transient.py",
+      "snapshot": "sources/tools/test_transient.py",
+      "sha256": "9aa12a8f94ee0e35646e3c842c86dceacd053a4f7340e7fdff183ace59bac433"
+    },
+    {
+      "path": "tools/test_transient_ui.py",
+      "snapshot": "sources/tools/test_transient_ui.py",
+      "sha256": "8117ce5b32e9fa7ff4d1b88179f885ff5dfb19f53ef1355cda9d811421d49be0"
+    },
+    {
+      "path": "tools/test_trigger_capture.py",
+      "snapshot": "sources/tools/test_trigger_capture.py",
+      "sha256": "e675d8c38546a2397e166249eaeb4c3448a8609b5b3b5af6a98a0151238e3789"
+    },
+    {
+      "path": "tools/test_trigger_ui.py",
+      "snapshot": "sources/tools/test_trigger_ui.py",
+      "sha256": "767d3f26f42af2764af3abef5f4194f8b27e31579db33901bb1af127771b3aa6"
+    },
+    {
+      "path": "tools/test_tuning.py",
+      "snapshot": "sources/tools/test_tuning.py",
+      "sha256": "f24c5b62bd277c9ba9871a5b76a3960d1855356595b5a38b857382cbf36578ac"
+    },
+    {
+      "path": "tools/test_tuning_ui.py",
+      "snapshot": "sources/tools/test_tuning_ui.py",
+      "sha256": "9ff6b7c2aabafa986ae71859e29630bfe3139d3a21afcc7be472628200c974c4"
+    },
+    {
+      "path": "tools/test_web_config.py",
+      "snapshot": "sources/tools/test_web_config.py",
+      "sha256": "443d92a7fc6f4e0cb60f2c445a40e37476fd63551f279f007672203c9d8d8f0c"
+    },
+    {
+      "path": "tools/transient_config.py",
+      "snapshot": "sources/tools/transient_config.py",
+      "sha256": "0989cb217731836d243c836835f1a93dfa17b7d2043658de64923b9c63b30ee0"
+    },
+    {
+      "path": "tools/trigger_capture.py",
+      "snapshot": "sources/tools/trigger_capture.py",
+      "sha256": "11765a063924b1ef7eac9a71c3cefa7c53af0cb93854336aa1984cf48f10447c"
+    },
+    {
+      "path": "tools/trigger_capture_bridge.hpp",
+      "snapshot": "sources/tools/trigger_capture_bridge.hpp",
+      "sha256": "15c809a38a2832da57ddaa8319dc0b10c9b623b6e8ad02beac472145641a957f"
+    },
+    {
+      "path": "tools/tuning_bridge.cpp",
+      "snapshot": "sources/tools/tuning_bridge.cpp",
+      "sha256": "1d1279b821039bdb842ea4b2538722917f8e9a3501d33997a9bc3e2ee5805c5f"
+    },
+    {
+      "path": "tools/tuning_runtime.py",
+      "snapshot": "sources/tools/tuning_runtime.py",
+      "sha256": "5271947b11c2c67c36b6625526b74c5015960b93eaec14a4d61e271d586bf331"
+    },
+    {
+      "path": "tools/tuning_server.py",
+      "snapshot": "sources/tools/tuning_server.py",
+      "sha256": "c1bfd2312e3eb64bf4cd33d5642dd3d0674a9fefa0a8266edc22225ef6e5518e"
+    },
+    {
+      "path": "tools/validate_engine_comparison.py",
+      "snapshot": "sources/tools/validate_engine_comparison.py",
+      "sha256": "6b26aef6e04a82661dcda538ccdef88f05424491ecde533f3dfd9a9ab7c297e6"
+    },
+    {
+      "path": "tools/verify_idle_hardware_evidence.py",
+      "snapshot": "sources/tools/verify_idle_hardware_evidence.py",
+      "sha256": "9c6c1f1ac9f095ab4344b57c1bdb709ac698c07b5d06f6350aa51f465c5cd494"
+    },
+    {
+      "path": "tools/verify_load_evidence.py",
+      "snapshot": "sources/tools/verify_load_evidence.py",
+      "sha256": "56afbd88adf3a297a0c93ebd82c195c21fb1d3efa1711f0a3b9cb5efca09d51d"
+    },
+    {
+      "path": "tools/verify_secondary_core_evidence.py",
+      "snapshot": "sources/tools/verify_secondary_core_evidence.py",
+      "sha256": "03bee1b27a2af1f0afd46258ae24800b7dbabda13d417eef510719fe34f49fae"
+    },
+    {
+      "path": "tools/verify_semi_evidence.py",
+      "snapshot": "sources/tools/verify_semi_evidence.py",
+      "sha256": "7fd4e4de6bebd4b8d11f4504ede3391ae1ab73c66ff1adbd7e12d76e656d1e9c"
+    },
+    {
+      "path": "tools/verify_transient_evidence.py",
+      "snapshot": "sources/tools/verify_transient_evidence.py",
+      "sha256": "7f3be7a3c8265a5848970383b79022307a5eb3242963ae3a3a0c53b9bb060f19"
+    },
+    {
+      "path": "tools/web_server.py",
+      "snapshot": "sources/tools/web_server.py",
+      "sha256": "75088e4f50383e4d4120456bfbedd958c6d554b7aa36c1960b126eeee83812ec"
+    },
+    {
+      "path": ".gitattributes",
+      "snapshot": "source-metadata/root.gitattributes",
+      "sha256": "5aa86eee0b4fa0b00e697489ef262966f99820beb866badc6f2bbde121d55017"
+    }
+  ]
+}
