@@ -1,0 +1,171 @@
+{
+  "passed": true,
+  "negative_controls": 8,
+  "positive_replay": true,
+  "results": [
+    {
+      "name": "positive_native_and_four_saved_ELF_replay",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/packet-verifier-001",
+        "--check-live-sources",
+        "--replay"
+      ],
+      "returncode": 0,
+      "stdout": "Replayed frozen native sanitizer scenarios and four saved Xtensa ELF audits\nVerified 74 artifacts and 22 source snapshots; real target/circuit/HIL remain open\n",
+      "stderr": ""
+    },
+    {
+      "name": "review_source_mismatch",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/packet-verifier-001",
+        "--check-live-sources"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 119, in <module>\n    verify(arguments.report, arguments.check_live_sources, arguments.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 72, in verify\n    require(name in by_name and by_name[name] == digest, \"Independent review source mismatch: \" + name)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 23, in require\n    raise ValueError(message)\nValueError: Independent review source mismatch: firmware/include/ecu/flex_ingress.hpp\n"
+    },
+    {
+      "name": "physical_overclaim",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/packet-verifier-001",
+        "--check-live-sources"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 119, in <module>\n    verify(arguments.report, arguments.check_live_sources, arguments.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 48, in verify\n    require(summary[field] is False, \"Overstated qualification: \" + field)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 23, in require\n    raise ValueError(message)\nValueError: Overstated qualification: physical_qualification\n"
+    },
+    {
+      "name": "broken_source_attestation",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/packet-verifier-001",
+        "--check-live-sources"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 119, in <module>\n    verify(arguments.report, arguments.check_live_sources, arguments.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 51, in verify\n    require(json.loads((report / \"validation/inputs-before.json\").read_text()) == sources == json.loads((report / \"validation/inputs-after.json\").read_text()), \"Input attestations differ\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 23, in require\n    raise ValueError(message)\nValueError: Input attestations differ\n"
+    },
+    {
+      "name": "forged_negative_acceptance",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/packet-verifier-001",
+        "--check-live-sources"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 119, in <module>\n    verify(arguments.report, arguments.check_live_sources, arguments.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 77, in verify\n    require(saved[\"passed\"] == (name == \"xtensa\"), \"Static positive/negative mismatch\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 23, in require\n    raise ValueError(message)\nValueError: Static positive/negative mismatch\n"
+    },
+    {
+      "name": "unimplemented_architecture_overclaim",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/packet-verifier-001",
+        "--check-live-sources"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 119, in <module>\n    verify(arguments.report, arguments.check_live_sources, arguments.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 57, in verify\n    require(snapshot.stat().st_size == row[\"bytes\"] and sha(snapshot) == row[\"sha256\"], \"Changed source binding\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 23, in require\n    raise ValueError(message)\nValueError: Changed source binding\n"
+    },
+    {
+      "name": "native_receipt_change",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/packet-verifier-001",
+        "--check-live-sources"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 119, in <module>\n    verify(arguments.report, arguments.check_live_sources, arguments.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 83, in verify\n    require(native.strip().splitlines() == summary[\"native\"] and not (report / \"validation/native-run.stderr\").read_text(), \"Native receipt mismatch\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 23, in require\n    raise ValueError(message)\nValueError: Native receipt mismatch\n"
+    },
+    {
+      "name": "duplicate_artifact",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/packet-verifier-001",
+        "--check-live-sources"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 119, in <module>\n    verify(arguments.report, arguments.check_live_sources, arguments.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 37, in verify\n    require(len(expected) == len(rows), \"Duplicate artifact\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 23, in require\n    raise ValueError(message)\nValueError: Duplicate artifact\n"
+    },
+    {
+      "name": "unexpected_artifact",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/packet-verifier-001",
+        "--check-live-sources"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 119, in <module>\n    verify(arguments.report, arguments.check_live_sources, arguments.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 41, in verify\n    require(actual == expected, \"Artifact set differs\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py\", line 23, in require\n    raise ValueError(message)\nValueError: Artifact set differs\n"
+    },
+    {
+      "name": "restored_positive",
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/tools/verify_flex_ingress_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/packet-verifier-001",
+        "--check-live-sources"
+      ],
+      "returncode": 0,
+      "stdout": "Verified 74 artifacts and 22 source snapshots; real target/circuit/HIL remain open\n",
+      "stderr": ""
+    }
+  ],
+  "minimal_accepted_review_sha256": "46a7e18424218780cc5b52d105bdf72805284c5dcaec17893f73c95d8ac40360",
+  "selected_source_hashes": {
+    "firmware/include/ecu/flex_ingress.hpp": "b1ac27c9f67ba334997f7be76f50f7ffa5c64ce042b2eeddcb86398c34ab5f09",
+    "firmware/tests/flex_ingress_test.cpp": "85f1ee955f99b848400f6ef237cf73acee33655c3b45f2a5c90b6da7d7e02a79",
+    "firmware/include/ecu/flex_fuel.hpp": "6bda00e1df16c9782245e74cabe67f4a4da75420b17e82a7cba80898e4ad2a38",
+    "firmware/include/ecu/capture_clock.hpp": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/tests/flex_ingress_xtensa_probe.cpp": "93ead0be76a50d8085458d6f8acdd7ea2299cf5b567efc060604a90dfde1b69f",
+    "scripts/check_flex_ingress.py": "69fecf6427567f75a1542dfe711de7f05dac7677018353bd0aaa8227e5033e8e",
+    "tools/verify_flex_ingress_evidence.py": "4f06fb35190d61118f319aa44bdae65286a08ead45b566a6bd53d054319cbfae",
+    "hardware/flex-input/architecture.json": "f0edc7130a0b1d22fa7337b01ea0068543f2fb01ae09ef623fbb73bdf2e68b06",
+    "hardware/flex-input/README.md": "050d47553ff81bc098fe6f7a7495bd9443ed295c1404fa6baa6f62551f9eebcf",
+    "docs/engine-flex-fuel.md": "c109704d46d453cc6ec692d901e2489ba86c80baa31a98b77ad260c0d731c2f5",
+    "docs/engine-feature-coverage.md": "f89ca3adbdea633caaf1187b13136e6ca4fbba2343de5f185bae377b983a9f85",
+    "scripts/test_firmware.sh": "b645fffc485f74a81458dcd823130ed5f0fadeb6080a1a2955ca3e159fd71215"
+  },
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/tmp"
+  },
+  "scope": "Owned copy only. Native compiled replay and saved static ELF re-audit; no Xtensa ELF/device execution."
+}

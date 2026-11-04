@@ -1,0 +1,58 @@
+{
+  "idf_version": "5.5.0",
+  "framework_package_version": "3.50500.0",
+  "capture_groups": 2,
+  "capture_timers_per_group": 1,
+  "capture_channels_per_timer": 3,
+  "U3_pins": {
+    "14": {
+      "GPIO": "46",
+      "net": null
+    },
+    "32": {
+      "GPIO": "38",
+      "net": null
+    },
+    "37": {
+      "GPIO": "45",
+      "net": null
+    },
+    "41": {
+      "GPIO": "20",
+      "net": null
+    },
+    "42": {
+      "GPIO": "19",
+      "net": null
+    }
+  },
+  "U7_spare_gates": {
+    "10": null,
+    "11": "GND",
+    "12": null,
+    "13": "GND"
+  },
+  "U7_supply": "+3V3",
+  "U7_part": "SN74HC14N",
+  "switch_address": 32,
+  "proposed_LED_address": 33,
+  "switch_period_us": 5000,
+  "current_switch_budget_us": 3000,
+  "pullup_pulldown_calculation": {
+    "supply_v": 3.3,
+    "R_up_ohm": 4700,
+    "R_down_ohm": 10000,
+    "result_v": 2.2448979591836733,
+    "GPIO_VIH_min_v": 2.4749999999999996,
+    "valid_high": false,
+    "minimum_Rdown_over_Rup": 3,
+    "example_47k_down_high_v": 3.0
+  },
+  "I2C_100kHz_ideal_wire_times_us": {
+    "J4_11byte_read_plus_1byte_guard": 1620,
+    "LED_1byte_OLAT_write": 270,
+    "LED_1byte_register_read": 360,
+    "combined_ideal": 2250,
+    "scope": "Wire clocks only; excludes START/STOP timing, CPU/driver overhead, stretching, retries, allocation/deletion and tick-quantized timeouts. Not a target WCET measurement."
+  }
+}

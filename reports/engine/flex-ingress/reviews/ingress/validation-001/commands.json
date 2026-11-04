@@ -1,0 +1,217 @@
+[
+  {
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-MM",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/firmware/include",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/firmware/tests/flex_ingress_test.cpp"
+    ],
+    "returncode": 0,
+    "stdout": "dependency-scan-0.stdout",
+    "stderr": "dependency-scan-0.stderr"
+  },
+  {
+    "command": [
+      "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-g++",
+      "-std=c++17",
+      "-DESP_PLATFORM",
+      "-DFLEX_PROBE_NEGATIVE_MODE=0",
+      "-MM",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/firmware/include",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/firmware/.pio/build/compact_n16r8_web/config",
+      "-I",
+      "/home/mark/.platformio/packages/framework-espidf/components/esp_common/include",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-002/firmware/tests/flex_ingress_xtensa_probe.cpp"
+    ],
+    "returncode": 0,
+    "stdout": "dependency-scan-1.stdout",
+    "stderr": "dependency-scan-1.stderr"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-MMD",
+      "-MF",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/native/dependencies.d",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/firmware/include",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/firmware/tests/flex_ingress_test.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/native/test"
+    ],
+    "returncode": 0,
+    "stdout": "native-build.stdout",
+    "stderr": "native-build.stderr"
+  },
+  {
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/native/test"
+    ],
+    "returncode": 0,
+    "stdout": "native-run.stdout",
+    "stderr": "native-run.stderr"
+  },
+  {
+    "command": [
+      "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-g++",
+      "-std=c++17",
+      "-Os",
+      "-mlongcalls",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-fno-exceptions",
+      "-fno-rtti",
+      "-fno-threadsafe-statics",
+      "-fno-unwind-tables",
+      "-fno-asynchronous-unwind-tables",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-DESP_PLATFORM",
+      "-DFLEX_PROBE_NEGATIVE_MODE=0",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/firmware/include",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/firmware/.pio/build/compact_n16r8_web/config",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/external/home/mark/.platformio/packages/framework-espidf/components/esp_common/include",
+      "-MMD",
+      "-MF",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/xtensa/dependencies.d",
+      "-c",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/firmware/tests/flex_ingress_xtensa_probe.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/xtensa/probe.o"
+    ],
+    "returncode": 0,
+    "stdout": "xtensa-compile.stdout",
+    "stderr": "xtensa-compile.stderr"
+  },
+  {
+    "command": [
+      "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-g++",
+      "-nostdlib",
+      "-Wl,-T,/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/probe.ld",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/xtensa/probe.o",
+      "-lgcc",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/xtensa/probe.elf"
+    ],
+    "returncode": 0,
+    "stdout": "xtensa-link.stdout",
+    "stderr": "xtensa-link.stderr"
+  },
+  {
+    "command": [
+      "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-g++",
+      "-std=c++17",
+      "-Os",
+      "-mlongcalls",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-fno-exceptions",
+      "-fno-rtti",
+      "-fno-threadsafe-statics",
+      "-fno-unwind-tables",
+      "-fno-asynchronous-unwind-tables",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-DESP_PLATFORM",
+      "-DFLEX_PROBE_NEGATIVE_MODE=1",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/firmware/include",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/firmware/.pio/build/compact_n16r8_web/config",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/external/home/mark/.platformio/packages/framework-espidf/components/esp_common/include",
+      "-MMD",
+      "-MF",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/xtensa-flash-negative/dependencies.d",
+      "-c",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/firmware/tests/flex_ingress_xtensa_probe.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/xtensa-flash-negative/probe.o"
+    ],
+    "returncode": 0,
+    "stdout": "xtensa-flash-negative-compile.stdout",
+    "stderr": "xtensa-flash-negative-compile.stderr"
+  },
+  {
+    "command": [
+      "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-g++",
+      "-nostdlib",
+      "-Wl,-T,/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/probe.ld",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/xtensa-flash-negative/probe.o",
+      "-lgcc",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/xtensa-flash-negative/probe.elf"
+    ],
+    "returncode": 0,
+    "stdout": "xtensa-flash-negative-link.stdout",
+    "stderr": "xtensa-flash-negative-link.stderr"
+  },
+  {
+    "command": [
+      "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-g++",
+      "-std=c++17",
+      "-Os",
+      "-mlongcalls",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-fno-exceptions",
+      "-fno-rtti",
+      "-fno-threadsafe-statics",
+      "-fno-unwind-tables",
+      "-fno-asynchronous-unwind-tables",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-DESP_PLATFORM",
+      "-DFLEX_PROBE_NEGATIVE_MODE=2",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/firmware/include",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/firmware/.pio/build/compact_n16r8_web/config",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/external/home/mark/.platformio/packages/framework-espidf/components/esp_common/include",
+      "-MMD",
+      "-MF",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/xtensa-call-negative/dependencies.d",
+      "-c",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/sources/firmware/tests/flex_ingress_xtensa_probe.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/xtensa-call-negative/probe.o"
+    ],
+    "returncode": 0,
+    "stdout": "xtensa-call-negative-compile.stdout",
+    "stderr": "xtensa-call-negative-compile.stderr"
+  },
+  {
+    "command": [
+      "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-g++",
+      "-nostdlib",
+      "-Wl,-T,/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/probe.ld",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/xtensa-call-negative/probe.o",
+      "-lgcc",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/validation-001/xtensa-call-negative/probe.elf"
+    ],
+    "returncode": 0,
+    "stdout": "xtensa-call-negative-link.stdout",
+    "stderr": "xtensa-call-negative-link.stderr"
+  }
+]

@@ -1,0 +1,191 @@
+{
+  "accepted": true,
+  "open_findings": [],
+  "reviewed_utc": "2026-11-04T20:26:05.793106+00:00",
+  "scope": "Portable integer flex ingress, its native tests, dedicated standalone Xtensa placement proof, evidence runner/verifier and explicitly unwired architecture/docs. This is not acceptance of a target producer, circuit, pin wiring, bus LED driver, actual IRQ callback, WCET, lossless hardware capture, physical ECU or full Speeduino parity.",
+  "source_hashes": {
+    "firmware/include/ecu/flex_ingress.hpp": "b1ac27c9f67ba334997f7be76f50f7ffa5c64ce042b2eeddcb86398c34ab5f09",
+    "firmware/tests/flex_ingress_test.cpp": "85f1ee955f99b848400f6ef237cf73acee33655c3b45f2a5c90b6da7d7e02a79",
+    "firmware/include/ecu/flex_fuel.hpp": "6bda00e1df16c9782245e74cabe67f4a4da75420b17e82a7cba80898e4ad2a38",
+    "firmware/include/ecu/capture_clock.hpp": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/tests/flex_ingress_xtensa_probe.cpp": "93ead0be76a50d8085458d6f8acdd7ea2299cf5b567efc060604a90dfde1b69f",
+    "scripts/check_flex_ingress.py": "69fecf6427567f75a1542dfe711de7f05dac7677018353bd0aaa8227e5033e8e",
+    "tools/verify_flex_ingress_evidence.py": "4f06fb35190d61118f319aa44bdae65286a08ead45b566a6bd53d054319cbfae",
+    "hardware/flex-input/architecture.json": "0fb6fba389dcc1ebbb963c715b4d90cfed871ecb62d8f637f9279350469c01f2",
+    "hardware/flex-input/README.md": "c70163098c284d18e6e05fe1c70993540a6f5f1eacb68c892d5f013429a45d0b",
+    "docs/engine-flex-fuel.md": "97755ea4ae955e88137ee1623946ec7e07ef6a913d60215b6958fc890f354e40",
+    "docs/engine-feature-coverage.md": "f89ca3adbdea633caaf1187b13136e6ca4fbba2343de5f185bae377b983a9f85",
+    "scripts/test_firmware.sh": "b645fffc485f74a81458dcd823130ed5f0fadeb6080a1a2955ca3e159fd71215"
+  },
+  "context_inventory": {
+    "note": "The65-file owned freeze is provenance/context, not blanket review of all unused headers. Only the13 functional/documentary paths in source_hashes are the final acceptance binding, and each occurs in the22 actual validation inputs.",
+    "manifest": "freeze-003/manifest.json",
+    "manifest_sha256": "ac5c485071415883693410f88a07f4da68380ab2528eed015c7951c905874724",
+    "context_hashes": {
+      "firmware/include/ecu/config.hpp": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39",
+      "firmware/include/ecu/control.hpp": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b",
+      "firmware/include/ecu/engine.hpp": "96782e593914078d96b2229c381d7de633c1cf2b676f7c70979b16651ca4d6fa",
+      "firmware/include/ecu/engine_binding.hpp": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9",
+      "firmware/include/ecu/engine_data.hpp": "1e9773a82c824839fa6d8fee2700840f993305424c7257a9b809cf070d11ada6",
+      "firmware/include/ecu/engine_data_json.hpp": "1928528b4f21dec94bd93df9c492314c07fbcc6daf1e7c6bbe5fa0c88aa911d8",
+      "firmware/include/ecu/engine_json.hpp": "e2ce934844850c3096db7acd974300521ec414f6d24cce1936f7d526a65eca37",
+      "firmware/include/ecu/engine_limits.hpp": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d",
+      "firmware/include/ecu/engine_log.hpp": "c17b1d3435879e4ac0fcb1b4621b85f58d9975d044952fc0b083284e56e1a4fc",
+      "firmware/include/ecu/engine_log_json.hpp": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6",
+      "firmware/include/ecu/engine_log_msl.hpp": "c44439aa9f3e863bb0c4468f8cfa10912d4f52a32f4a9d32714f483a5a17ef5c",
+      "firmware/include/ecu/engine_log_service.hpp": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f",
+      "firmware/include/ecu/engine_phase.hpp": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27",
+      "firmware/include/ecu/engine_radio.hpp": "57197c7776a9195a2df3f006ea4efe7a910a6bf91659fddfab4b5a7f903a57fe",
+      "firmware/include/ecu/engine_scheduler.hpp": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a",
+      "firmware/include/ecu/engine_service.hpp": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0",
+      "firmware/include/ecu/engine_storage.hpp": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e",
+      "firmware/include/ecu/engine_target.hpp": "0cfcef7fa43cadaf105da094a4524aded50dcff0f88ddb6449799155e63b25b0",
+      "firmware/include/ecu/engine_tuning.hpp": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6",
+      "firmware/include/ecu/espnow.hpp": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc",
+      "firmware/include/ecu/espnow_protocol.hpp": "634bd5a99ddd8c682a20959720f5599a0e39f20c25d8cadf4b3e8024eca25b6a",
+      "firmware/include/ecu/flex_engine.hpp": "a2348897d50e3de0c3c46989fbb75fdf1ccd2dda634cba90ca164ba4b9b533ca",
+      "firmware/include/ecu/flex_json.hpp": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45",
+      "firmware/include/ecu/flex_runtime.hpp": "abacf194ac5d0fc0b0512a351ca988f9aa12fee80adb6a9d73da9f9f2d2aa6f2",
+      "firmware/include/ecu/flex_runtime_json.hpp": "e125f511ad9b9b0e9a2ce8618c11decc6cf25c4a94f81506b7b44de2b606f99f",
+      "firmware/include/ecu/heap_object.hpp": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51",
+      "firmware/include/ecu/idle_command.hpp": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310",
+      "firmware/include/ecu/idle_control.hpp": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd",
+      "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+      "firmware/include/ecu/idle_pwm.hpp": "392ef3640df5e3ea64c465df7a6815c2272ead28570626bc9540aab8b58a8c42",
+      "firmware/include/ecu/idle_pwm_json.hpp": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b",
+      "firmware/include/ecu/json.hpp": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+      "firmware/include/ecu/load_json.hpp": "04048aac889a77b29beac77ba4d43b93694fe61a23a089bb2e09d87ec72de218",
+      "firmware/include/ecu/load_model.hpp": "4ebcebe554ebf29f4dc7db29a8a51302d3ebbc8647ba9f73d5278ef85503074b",
+      "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+      "firmware/include/ecu/secondary_json.hpp": "54653a90fdbadeeebe926980bacbb25e54b6f61f93e83d4b97be5bf260a4c497",
+      "firmware/include/ecu/secondary_tables.hpp": "08aa9b41b7c424b3168d34350a31477ef2e44a3439209bf9cb38e0e151ef3613",
+      "firmware/include/ecu/switch_acquisition.hpp": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb",
+      "firmware/include/ecu/switch_service.hpp": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e",
+      "firmware/include/ecu/switch_transport.hpp": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932",
+      "firmware/include/ecu/timing_executor.hpp": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db",
+      "firmware/include/ecu/transient_enrichment.hpp": "75250d519305aa604ebefb4a177ec64cf2c38d14a3d31f60e99cc88322052911",
+      "firmware/include/ecu/transient_json.hpp": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88",
+      "firmware/include/ecu/trigger_log.hpp": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451",
+      "firmware/include/ecu/trigger_log_json.hpp": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58",
+      "firmware/include/ecu/tuning_document.hpp": "96e6e5bfde427f5f7d0e4ad8959b4b5db534f31079754cd0118279e17b9ce957",
+      "firmware/include/ecu/tuning_layout.hpp": "2dffbc95204918efe2fde6d6ee98438978ddd91d4f49c65bcb7fde70854b62f5",
+      "firmware/include/ecu/tuning_live.hpp": "6d9dc7b328631e20c1e99d513efdebec6b9448532baaab26361f7dc8b4f873e1",
+      "firmware/include/ecu/tuning_session.hpp": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e",
+      "firmware/include/ecu/tuning_stream.hpp": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042",
+      "firmware/include/ecu/web_config.hpp": "984d5447a6f07e626987819d2338489aa25004a15b529c460c29bde497e7a019",
+      "firmware/.pio/build/compact_n16r8_web/config/sdkconfig.h": "2bebff8e4c85e21c132291636af848830debc3ae7379038d342970edbdff183b"
+    },
+    "additional_A5_U7_context_sha256": "09b64f8846412f16a8baea041b8d272180b52bbb2d34fbfb44eeade4b29953c4"
+  },
+  "core_conclusion": {
+    "pending_and_ACK": "snapshot() is const and does not offer/consume faults. Unoffered, stale-context, stale-generation, duplicate and terminal tickets reject. Stop, time passage, rearm attempts and idempotent context requests do not clear pending. offer_fault()/acknowledge() only enforce the offered version: the trusted owner must prove completed matching invalid control consumption.",
+    "contexts_and_clock": "Nonzero increasing contexts invalidate queues and offered tickets; zero/recycled lower context is terminal. Matching active event clocks must be monotonic and captured<=observed with age<=5000us. Foreign/inactive callbacks do not import an untrusted clock. Owner arm/ACK calls apply their global monotonic clock fence even when metadata is stale; time must be sampled inside the common serialization.",
+    "queue_and_sequences": "Ring size remains<=64; accepted=dequeued+discarded+queued in30000 mixed randomized lifecycle operations without saturation. Delivered sequence numbers are nonzero and increasing; loss discards the complete queued series without sequence reuse. Last U64 sequence is usable, then exhaustion suppresses terminally without wrapping.",
+    "exhaustion": "Reviewer-only private-state seeding exercised otherwise unreachable boundaries. Diagnostic counters saturate without wrapping or consuming faults. Fault generation UINT64_MAX can be offered/ACKed once; the next fault is terminal and pending remains true even if acknowledged_generation equals fault_generation. Context wrap is terminal. Seeding changes access control in the reviewer TU only; project headers were not edited.",
+    "boundaries": "50us minimum spacing and5000us maximum latch age are inclusive. Prearm timestamps at/before arm are ignored but matching active callbacks still consume budget. The32/10ms callback window is fixed and per armed episode; adjacent windows may admit64. It excludes foreign/inactive callbacks and can be restarted by trusted normal stop/arm. Noise retry must use actual suppression plus ACK/50ms holdoff; masked time does not prove electrical quiet.",
+    "stop_rearm": "Stop/rearm resets only ingress queue/edge history. It does not invalidate a separate Capture worker. The contract now explicitly requires that invalidation and a fresh complete waveform window. Last-observed retry_holdoff is not a live-time diagnostic age."
+  },
+  "native_validation": {
+    "parent_scenarios_independently_compiled_and_run": 62297,
+    "independent_assertions": 160202,
+    "flags": "C++17 -O1 -g -Wall -Wextra -Werror -pedantic ASan/UBSan, explicit owned GCOV_PREFIX before execution",
+    "results": "All passed; no sanitizer diagnostics. Independent probe covers diagnostic reads/tickets, context/clock fences, stop/rearm, prearm latches, age/interval boundaries, fixed-window bursts, U64 sequence/generation exhaustion and saturated statistics, plus30000 invariant/conservation operations.",
+    "native_ingress_bytes": 2808,
+    "native_edge_bytes": 40,
+    "sources": "independent_ingress_probe.cpp; exact commands/environments/compiler outputs/binary hashes in the recorded JSON/logs.",
+    "final_code_vs_initial_freeze": "Ingress differences are comments/whitespace only; test code is unchanged. Final independent-002 run uses the same ingress implementation hash as freeze003; only three later documentary files changed."
+  },
+  "static_validation": {
+    "dedicated_root": "flex_ingress_isr_probe",
+    "root_bytes": 1442,
+    "reachable_instructions": 557,
+    "state": {
+      "probe_ingress": {
+        "address": "0x3fc90018",
+        "bytes": 2808,
+        "section": ".dram0.data"
+      },
+      "probe_clock": {
+        "address": "0x3fc90000",
+        "bytes": 24,
+        "section": ".dram0.data"
+      }
+    },
+    "ELF_sha256": {
+      "xtensa": "e7663bfe91374e0b2048dc4c9458050a4821b683afdbeae56c205451b4fa5328",
+      "xtensa-flash-negative": "8f69ed3c13c7946f71c54241875710f0c94fb796c7b9247b8520183e21afaf69",
+      "xtensa-call-negative": "b4ba7a3541efd5af99f4fde0b0741116ff333ee3ad91b6500621f7632222b379",
+      "xtensa-unmapped-flash-negative": "f2475072afbde0ac329e23e52a3474dc4bdc58cbcd7255b6822f5930c24ae017"
+    },
+    "conclusion": "Owned rebuild passed. Manual opcode/literal inspection agrees: integer instructions only, no calls/FPU, code/literal pool in assigned IRAM, two state bases in assigned internal DRAM, reviewed scalar5000. Dedicated probe states are2808B Ingress and24B CaptureClock.",
+    "negative_controls": [
+      "mapped flash pointer rejected",
+      "external call rejected",
+      "independently discovered unmapped0x3c100000 state pointer rejected"
+    ],
+    "closed_blocker": "Original section-name-only check accepted the owned unmapped flash mutation (audit-negative-001.json). Fixed runner uses explicit known-state/scalar whitelist and cache-backed address ranges plus code/state address bounds. This remains a dedicated probe auditor, not a general ELF/target memory-safety proof.",
+    "limits": "No Xtensa ELF was executed. SDK ISR dispatch, lock/queue/mask wrapper, actual target memory placement, runtime initialization, interference and WCET remain untested."
+  },
+  "provenance_and_verifier": {
+    "closed_source_stability_gap": "Runner now discovers non-system inputs, snapshots before compilation, compiles only those copies, verifies compiler .d inputs and hashes original/snapshot/tool inputs afterward. System toolchain headers/libraries are recorded compiler environment, not a hermetic distribution claim.",
+    "closed_verifier_binding_gap": "Verifier source now included in the22 selected input snapshots, so its final review hash binds normally.",
+    "owned_rebuild": "validation-001 was built from owned freeze002 and independently reproduces all four final run005 ELF bytes exactly. Final run005 adds only the three documentary publication-fence changes; executable inputs/tools are unchanged.",
+    "final_capture": "validation-final005 is an owned copy of parent run005. Its22 input hashes match final freeze003 for the accepted13 paths. Before/after source and tool receipts agree.",
+    "verifier_probe": "Owned packet-verifier-002 uses an actual accepted minimal review with the same13 selected hashes. Frozen native replay and all four saved ELF re-audits passed with live-source checks. Eight refreshed-manifest corruptions reject: review source mismatch, physical overclaim, broken source attestation, forged negative pass, changed source-bound architecture, changed native receipt, duplicate artifact and unexpected artifact. Original parent report was not edited.",
+    "verifier_limits": "--replay recompiles native tests and re-audits saved Xtensa ELFs; it does not execute target code or claim to rebuild a real callback."
+  },
+  "future_owner_publication_fence": {
+    "status": "Required but unimplemented, now explicit in the three final documentary files.",
+    "obligation": "Latch context, ingress fault generation and arm boundary with pop under the shared serialization. Processing Capture outside the lock does not authorize publication. Before publish, atomically revalidate current context/generation/armed state and the popped event timestamp against the current arm boundary, then commit under the same lock or equivalent versioned commit. A mismatch discards the result and invalidates/reacquires the separate Capture series.",
+    "reason": "IngressEdge has no fault-generation field. ISR suppression or same-context stop/rearm can occur after pop. The companion snapshot/version must be retained; single floating-point ownership alone does not close this race."
+  },
+  "architecture_claim_review": {
+    "accepted": "FLEX-G38-DRAFT1 is an architecture preference only. GPIO38 protected capture and MCP23008 at0x21 advisory RGB are explicitly not wired. GPIO45/46 stay NC; old GPIO38 RMT/ARM builds remain unchanged and incompatible with the future input wiring.",
+    "required_future_work": [
+      "Actual local interrupt masking/status clearing without affecting crank/cam/shared timer",
+      "Real source/calibration/revision producer binding and completed-control dual-ticket ACK",
+      "Atomic post-pop publication fence and separate Capture invalidation",
+      "Protected frontend/polarity/skew/power-off behavior and native CAD/fit/routing",
+      "Single-owner0x20/0x21 I2C sharing, one3ms total budget, legal IO7 direction and stale LED diagnostics",
+      "Actual callback/IRAM/DRAM/runtime/latency/heap/stack/noise/BOOT/reset/electrical/HIL qualification"
+    ],
+    "not_repeated": "Earlier production raw-edge, controller/UI/config and plant evidence was not re-executed or reaccepted by this increment. No new chemistry, target or full-parity claim follows."
+  },
+  "execution_constraints": {
+    "no_children": true,
+    "no_project_SDK_or_external_source_edits": true,
+    "no_production_reference_execution": true,
+    "no_hardware_eFuse_flashing_services_or_external_messages": true,
+    "only_owned_native_binaries_executed": true,
+    "Xtensa_ELFs_compiled_and_inspected_only": true,
+    "no_broad_legacy_matrix_rerun": true
+  },
+  "coverage_side_effect_disclosure": {
+    "record": "prior-coverage-side-effect.json",
+    "sha256": "67e23bda6af687c8c37658016df138b70bb2cd09d3abfba39e1524d694f739df",
+    "note": "The earlier acquisition review updated exactly16 generated upstream.gcda counters. They remain preserved; generated coverage is excluded from unchanged-cache statements. All linked probes here used an owned GCOV_PREFIX before startup, and no upstream production binary/object was executed."
+  },
+  "evidence_sha256": {
+    "parent-test-001.json": "e91f05ba2331728e591d0951d6d8572f87c84898e3406d3b6aab34fea1b38553",
+    "independent-001.json": "fd7a8426a3e23419e1a3c0b14039f16702099be253f8e181f70fc519b01b5341",
+    "independent-002.json": "fd016e9865ce397e44f313e801c2745878b4db8eb0a855b4adbba9a0d9452aae",
+    "tool-replay-001.json": "453206b76d56f0b0d5b227e02d6e3c7b97bba152304896374d319e4ad2fcfe4c",
+    "audit-negative-001.json": "f1232ec95b576f9b6b60e96bd7e56d84a2c7bcdbb48073d09b9a0110ff0d4b8e",
+    "verifier-probe-001.json": "7f506c5c03f995a37d901600f562ece3fd35a8390739b0694ee7a5d3f41f9d7f",
+    "verifier-probe-002.json": "e55d2f72e47a29455303cdab0a89faa25fe0873cd1dfa45c035677e434ab6f5f",
+    "verifier-run-002.json": "199e99b35f1a0ec0c2f31590c45e578b2ca29c17a429dc1c58b075e4420cb8b5",
+    "verifier-minimal-acceptance.json": "46a7e18424218780cc5b52d105bdf72805284c5dcaec17893f73c95d8ac40360",
+    "verifier-minimal-acceptance-002.json": "e25bde43f830de137329ba5dd4a22c4db35477de75a308d4ad3ea04187a41d4d",
+    "prior-coverage-side-effect.json": "67e23bda6af687c8c37658016df138b70bb2cd09d3abfba39e1524d694f739df"
+  },
+  "owned_probe_source_hashes": {
+    "independent_ingress_probe.cpp": "94a61368f6c41451c0ab2e00b353cdf7ea49f673e3cc5531e3c9eaf45ef9d6fc",
+    "verifier_probe.py": "fcdeab803df85ef2e597f8f01e6c9d95d4b25166b70dcc3aea9ea2c9164af979",
+    "verifier_probe_002.py": "ad5aebda3fa8b1f32e1d007618a771a0f6b745864be394ba60af011532f1dc33"
+  },
+  "validation_summary_hashes": {
+    "owned_rebuild": "5b6ad9d9b1634ffaa92daadb73ab3cbcfb8c1a37a6e4b313d7ecbdab99f53d5b",
+    "final_parent_capture": "e18afa95aaf95c36c2cecb31f9a112f09fc00c45f7a27f61d41f59fa3a81ccc6"
+  }
+}

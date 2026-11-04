@@ -1,0 +1,184 @@
+{
+  "reviewed_utc": "2026-11-04T19:46:36.830898+00:00",
+  "scope": "Independent preflight design comparison, no implementation or manufacturing acceptance. No child agents, project/SDK edits, production ECU executables, device/eFuse access, flashing, services or external messages. Sources and analytical calculations only.",
+  "recommendation": "Prefer protected GPIO38 flex capture plus a new on-carrier THT MCP23008 at7-bit address0x21 for the advisory RGB LED. Keep GPIO45 and GPIO46 unallocated. Make this a separately identified hardware/firmware revision; retain historical WS2812 builds for their historical wiring.",
+  "recommended_for_development_draft": true,
+  "physical_allocation_qualified": false,
+  "gpio45_46_all_reset_claim_accepted": false,
+  "source_hashes": {
+    "firmware/platformio.ini": "579f4075495f9c070a80d14cdcedf1ec4f9de13c4d233ebd1a48b97947e3f3d0",
+    "firmware/sdkconfig.n16r8.defaults": "37c991d9d77903dd35055cae02c765078ceb676234520f1a6db1800907932a48",
+    "firmware/sdkconfig.compact_n16r8_web": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/capture_clock.hpp": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+    "firmware/include/ecu/switch_acquisition.hpp": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb",
+    "firmware/include/ecu/switch_transport.hpp": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932",
+    "firmware/include/ecu/web_config.hpp": "984d5447a6f07e626987819d2338489aa25004a15b529c460c29bde497e7a019",
+    "firmware/main/engine_target.cpp": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738",
+    "firmware/main/app.cpp": "487d5e03a964f686939dcb46a148a91c02e516678cfd6c7d342ec0ba269ce9e6",
+    "firmware/main/espnow.cpp": "9e4a59ffc635db754298153eb2ff4580b030ed7ef012994de4d2b580e4bb346a",
+    "firmware/main/switch_service.cpp": "813f488d127fb25dd3c2287b7bc53968dc9c5e821050159fbe2978e590aed25a",
+    "hardware/a4-n16r8/net_contract.json": "728f174b3596a631ae598d0786a34182068f7cfa94ae8f75f09cb27e11bd7682",
+    "hardware/a4-n16r8/BOM.md": "6fd1347eee08b39d04086f67348ed2781684bcc141f67f5bfac8e4dfed905f88",
+    "hardware/a4-n16r8/README.md": "8a08dcafd9c7e1b713e817340e70c687da0d385205bde24d0605ff00dbf9051d",
+    "scripts/prepare_n16r8_carrier.py": "0e97cc67ed27a23373ab115b4a742683db87dab670d71f5f9811614c96140fc0"
+  },
+  "sdk_hashes": {
+    "version.txt": "6474d3ae428762830d36e3b179c6e1622f8f5dc7d32ea94f47be9c122c467979",
+    "package.json": "1cc05e4ea172de6be2e6b961994de42a0f7433406619f6474811b11066718908",
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "components/soc/esp32s3/include/soc/soc_caps.h": "dc510583003c41e74d8a2d759c920037a18297c531ef62c5d53f6cf1ab146690",
+    "components/esp_driver_gpio/include/driver/gpio.h": "08a146ad1e4755f570ccbe5c9eb0b6b9f8d50715490a022a0248c255dcae2fd7",
+    "components/esp_driver_gpio/src/gpio.c": "702eea65f9bf85666a979178a27768068f133813db45527e144252f4a24ea4e9",
+    "components/esp_system/port/soc/esp32s3/system_internal.c": "651e1f3f66401c9c210e09143ab0894a0d01bf54ca7363ee3ad0dd645e7933ba",
+    "components/esp_driver_mcpwm/src/mcpwm_cap.c": "d02bbe2251fdba5d4c14c79bf852101cb45b636e0c5cd286fba07a1f3af8cbd2",
+    "components/esp_driver_mcpwm/src/mcpwm_com.c": "190b0cfce1c6fd2687f04f2f58604f4e441eb6bd4b9d84047654e9c7bb56e395",
+    "components/esp_driver_mcpwm/src/mcpwm_private.h": "4513dc83f66bcdd96be518114f98cab813a5c4f31604997453c5df5123ae213e",
+    "components/esp_driver_mcpwm/include/driver/mcpwm_cap.h": "15ba29bc77e843993bc95867098755335ce8aca11f6dcf8a14af177713c13f62"
+  },
+  "source_freeze_sha256": "ddb4663c893c01d47e0bba6f51de5da6af361f04d6022987bbb83c60bb75550e",
+  "primary_documents_sha256": "b79733566e06a08a0eedd8066c3029b9bf167b85fb3dd62031f94f3a620ad755",
+  "facts_sha256": "9bb5f17ea25e7829d7e0b4221c22400f6545acec670c35d349d996fdf8f67459",
+  "references": {
+    "espressif_chip": "https://documentation.espressif.com/esp32-s3_datasheet_en.pdf",
+    "espressif_trm": "https://documentation.espressif.com/esp32-s3_technical_reference_manual_en.pdf",
+    "espressif_module": "https://documentation.espressif.com/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf",
+    "idf55_gpio": "https://docs.espressif.com/projects/esp-idf/en/v5.5/esp32s3/api-reference/peripherals/gpio.html",
+    "idf55_mcpwm": "https://docs.espressif.com/projects/esp-idf/en/v5.5/esp32s3/api-reference/peripherals/mcpwm.html",
+    "mcp23008": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/MCP23008-and-MCP23008-Data-Sheet-DS20001919.pdf",
+    "hc08": "https://www.ti.com/lit/ds/symlink/sn74hc08.pdf",
+    "hc14": "https://www.ti.com/lit/ds/symlink/sn74hc14.pdf",
+    "hct08": "https://www.ti.com/lit/ds/symlink/sn74hct08.pdf"
+  },
+  "primary_facts": [
+    {
+      "fact": "The current chip datasheet identifies GPIO0/3/45/46 as straps; GPIO38 is a VDD3P3_CPU GPIO without a strap function. GPIO45 and46 default weak pull-down/input-enabled. Joint download needs GPIO0=0 and46=0. Strap hold is at least3ms after CHIP_PU rises. GPIO45 selects VDD_SPI at reset unless eFuse overrides; runtime output-high is not a continuous flash-voltage selector.",
+      "source": "espressif_chip",
+      "locator": "v2.2 Table2-1, Section3, Tables3-2..3-4"
+    },
+    {
+      "fact": "CPU, Core, System and Chip resets affect different domains. CPU reset does not reset GPIO; Core includes digital GPIO; Chip reset samples straps. Do not describe all resets as one HiZ transition.",
+      "source": "espressif_trm",
+      "locator": "v1.8 Section7.1, Table7.1-1, Section8"
+    },
+    {
+      "fact": "The genuine WROOM module document says PSRAM-module VDD_SPI is factory-fixed by eFuse. That does not establish the selected third-party44-pin supplier board or any particular assembly/eFuse readback.",
+      "source": "espressif_module",
+      "locator": "v1.8 reference schematic note, PDF page39 (zero-based index38)"
+    },
+    {
+      "fact": "MCP23008 offers18-pin PDIP,3.3V/100kHz operation, externally strapped addresses and reset control. GP7 is output-only on MCP23008; using GP0..2 for RGB avoids that limitation. GPIO/OLAT remain latched between writes.",
+      "source": "mcp23008",
+      "locator": "DS20001919I features, pin descriptions, IODIR/GPIO/OLAT descriptions"
+    },
+    {
+      "fact": "HC08 and HC14 support3.3V operation and PDIP options; HCT08 specifies4.5..5.5V supply. The existing5V HCT actuator gates cannot be directly reused as a3.3V GPIO input buffer.",
+      "source": [
+        "hc08",
+        "hc14",
+        "hct08"
+      ],
+      "locator": "recommended operating conditions/package tables"
+    }
+  ],
+  "pinned_sdk_findings": [
+    {
+      "finding": "Installed IDF5.5.0 / PlatformIO framework3.50500.0:2 MCPWM groups,1 capture timer/group,3 capture channels/timer. Existing group0 APB capture timer uses2 rising-edge crank/cam channels at priority3. Group1 logger has separate priority1 channels.",
+      "paths": [
+        "components/soc/esp32s3/include/soc/soc_caps.h",
+        "firmware/main/engine_target.cpp"
+      ]
+    },
+    {
+      "finding": "GPIO hold can retain an actively driven level across reset/power-domain transitions. esp_restart_noos resets CPUs and selected peripherals including MCPWM but does not reset GPIO. A resistor cannot overpower a held/high driver; GPIO45=HiZ through every restart is not established.",
+      "paths": [
+        "components/esp_driver_gpio/include/driver/gpio.h",
+        "components/esp_system/port/soc/esp32s3/system_internal.c"
+      ]
+    },
+    {
+      "finding": "gpio_reset_pin selects pull-up and disables pull-down. A safe GPIO45 initializer must instead preload output-low and explicitly set pull-down/pull-up-disable before enabling output; never use default gpio_reset_pin as the strap-safe state.",
+      "paths": [
+        "components/esp_driver_gpio/src/gpio.c"
+      ]
+    },
+    {
+      "finding": "mcpwm_new_capture_channel routes input but does not disable an existing output driver. It also explicitly turns internal pulls off unless configured. Historical GPIO38 RMT ownership must be absent in the new build, and GPIO38 output explicitly disabled before input capture.",
+      "paths": [
+        "components/esp_driver_mcpwm/src/mcpwm_cap.c",
+        "firmware/main/espnow.cpp"
+      ]
+    },
+    {
+      "finding": "Group interrupt priority must match its first allocation. Capture channel enable/disable does not clear its pending status. The ISR reads a single capture register/edge per channel; there is no software/hardware edge FIFO in this path.",
+      "paths": [
+        "components/esp_driver_mcpwm/src/mcpwm_cap.c",
+        "components/esp_driver_mcpwm/src/mcpwm_com.c"
+      ]
+    },
+    {
+      "finding": "CONFIG_MCPWM_ISR_CACHE_SAFE is enabled; callbacks/context must be IRAM/internal RAM. CONFIG_MCPWM_CTRL_FUNC_IN_IRAM is disabled. Public task-side enable/disable/configuration APIs are not an assumed cache-safe ISR suppression path. CONFIG_PM_ENABLE is currently disabled.",
+      "paths": [
+        "firmware/sdkconfig.compact_n16r8_web",
+        "components/esp_driver_mcpwm/src/mcpwm_cap.c"
+      ]
+    }
+  ],
+  "alternatives": [
+    {
+      "allocation": "GPIO38 capture; MCP23008 RGB at0x21",
+      "choice": "preferred",
+      "reason": "Moves the noncritical indicator to a bus peripheral and removes flex dependence on both reset straps; source ownership and bounded I2C work are explicit, reviewable software contracts.",
+      "cost": "One18-pin DIP, address/reset bias/decoupling/LED resistors and a new physical revision. LED faults can consume shared bus slack and leave stale color."
+    },
+    {
+      "allocation": "GPIO45 gate; GPIO46 capture;3.3V HC08 AND plus conditioned waveform",
+      "choice": "conditional fallback only",
+      "reason": "Normal cold/EN-reset default levels support a gate-off approach, but all-reset pad retention, strap timing, module/eFuse identity and fail-low output under partial power need proof. GPIO45 may be used after strapping; it is not categorically forbidden.",
+      "required_extra_proof": "An independent reset/POR/BOOT inhibit of the waveform covering at least the strap hold interval, no external high drive into45, no unsafe GPIO holds/sleep path, and assembly-specific flash-voltage/eFuse read-only verification. No eFuse programming is recommended."
+    },
+    {
+      "allocation": "Open-collector or tri-state THT gate topology",
+      "choice": "unselected topology",
+      "reason": "Disabled must force capture low or disconnect every pull-up. High-impedance alone with a permanent pull-up is unsafe for46. Pull-up/pull-down ratios and leakage/power sequencing must be calculated. A4.7k pull-up with10k pull-down gives2.245V at3.3V, below the2.475V input-high minimum;47k gives3.0V but is not an independent boot clamp.",
+      "part_selection": "No transistor/opto/open-drain part or circuit is electrically qualified by this preflight."
+    }
+  ],
+  "recommended_hardware_constraints": [
+    "New board revision: U3 pad32 GPIO38 to a protected flex conditioner only; remove the legacy external WS2812 lead/connector function. Keep pads37 GPIO45 and14 GPIO46 NC. Retain GPIO3 idle, GPIO0 BOOT/PAIR, UART43/44 and USB19/20.",
+    "A4 U7 SN74HC14N at3.3V has two spare inverters: inputs11/13 currently GND; outputs10/12 NC. Reuse as a non-inverting Schmitt pair is a plausible new-revision topology. It requires new routing and input protection review; it is not a patch instruction or approval of copied Hall component values.",
+    "Protect against harness voltage, surge, off-state back-power and ground offsets before the3.3V Schmitt input. Preserve sensor LOW-pulse polarity through two inversions or explicitly restore it in capture hardware. Characterize RC/Schmitt skew at1/3/5ms and frequency endpoints; native \u00b1us quantization evidence does not qualify the physical frontend.",
+    "MCP23008 at0x21: bias A0 high and A1/A2 low; no address scan and no reuse of0x20. Use the shared3.3V bus/pull-ups; do not add parallel pull-ups without checking the combined resistance/capacitance. Bias RESET, add local decoupling and keep reset/LED default-off behavior explicit.",
+    "Select an exact leaded RGB LED/polarity and per-channel resistors with guaranteed forward-voltage/headroom and conservative drive current.3.3V supply is not an automatic guarantee of blue/green brightness; use a separately reviewed transistor stage if needed. Do not use absolute-maximum25mA as an operating target."
+  ],
+  "recommended_bus_contract": [
+    "One owner for the physical41/42 I2C bus and both0x20/0x21 handles. Keep the external SW2-J4 marker/register/loopback contract unchanged. Release bus/device resources only when neither consumer needs them.",
+    "Use one tick-start/deadline and at most the existing total3ms budget per5ms main-loop tick. Service required switch acquisition first. LED writes/readback occur only in remaining slack and are skipped/coalesced when no complete bounded operation fits. A second3ms allowance or competing LED task is unacceptable.",
+    "At100kHz, ideal J4 guarded reads take1.62ms and an LED OLAT write+one-byte register read about0.63ms, total2.25ms. This excludes software overhead, stretching and1ms timeout granularity. It is a feasibility calculation, not measured WCET; retry/configuration/recovery can span ticks.",
+    "Send LED state changes/low-rate blink commands via a latest-value mailbox to the owner; no I2C calls from ISR, radio callback or timing worker. Bound retries and backoff. Device allocation/deletion have no hard timeout contract; do not hide them inside an asserted hard real-time guarantee.",
+    "Initialize desired off OLAT before output IODIR; verify expected configuration/latch values before declaring a command confirmed. Detect reset/configuration mismatch and reacquire across ticks. Distinguish an absent0x21 device from failure of the shared bus; LED absence alone adds no fuel/spark dependency.",
+    "Expose desired command, last successful latch/readback, timestamp/age, error/backoff and unknown state. MCP outputs can hold green after a failed bus or CPU; red/off cannot be guaranteed through that same broken bus. Color is advisory. If current-health green is a requirement, add an independent timeout/enable or an explicit live-blink convention; neither readback nor a UI label proves emitted light."
+  ],
+  "recommended_capture_contract": [
+    "Use the existing group0 capture timer third channel with priority3, prescale1 and both edges. Read actual APB capture resolution and reuse the existing bracketed CaptureClock mapping. Never stop/reset/resync the common timer for flex enable, disable, stale recovery or tune changes.",
+    "Configure GPIO38 input with output explicitly disabled. Mutually exclude GPIO38 RMT status output and generic non-compact ARM38 builds. A new hardware flag must guard both allocation and producer; do not let runtime tune selection choose a physical producer or synthesize TargetCapture provenance.",
+    "Allocate callback/queue/internal state before enabling the channel. Keep acquisition disabled until required by enabled corrections or ETH conditional selection and input confirmation is true. Every configure advances producer revision/context, invalidates old queued data and old completed windows. Off leaves the historical arithmetic and capture workload unchanged.",
+    "ISR does integer timestamp mapping and bounded edge enqueue only. No floating point, JSON, logging, allocation or I2C. Overflow, bad clock and short-edge storms must latch a fault and rapidly suppress only the flex channel using an IRAM-audited mechanism; later task-side cleanup must preserve crank/cam channels.",
+    "Disable acceptance/advance epoch before masking, discard queued pre-epoch events, and clear only the flex pending capture bit before restart. Do not copy group1 logger all-channel status clearing into active group0. Document/verify channel2 allocation in the pinned SDK if direct register masks are necessary.",
+    "After switching/inverting/rerouting, discard any synthetic gate/initial partial cycle and require a fresh complete coherent window. Publish observation+exact calibration+stored producer revision from one snapshot. Target binding accepts only actual TargetCapture; host sources remain distinct.",
+    "Complete control must publish/observe invalid data before ACKing that exact pending fault generation. Clear/reacquire cannot retag an old valid window. Record accepted/ignored/overflow/stale/clock reasons. Single capture latches and bounded software queues do not establish lossless physical edge acquisition."
+  ],
+  "remaining_gates": [
+    "Exact board revision/wiring/connector and module pin identity must be measured. Historical firmware is only compatible with historical WS2812 wiring; old GPIO38 RMT firmware on new capture wiring can electrically contend and must be excluded by image/assembly identification.",
+    "New schematic, net contract, routing/ERC/DRC, THT part/LED selection, sealing and assembly documentation require independent review. Existing fabrication/module/RF holds remain.",
+    "Before later target acceptance: negative build ownership guards, fake-driver I2C budget/failure/no-starvation probes, stale LED status tests, capture queue/fault/revision/ACK tests, source/IRAM/memory/build audits, then separately authorized physical startup/BOOT/reset/brownout/USB download and waveform/noise tests.",
+    "No electrical, thermal, vehicle, road-use, target timing, minimum heap/stack or complete-flex qualification follows from this preflight."
+  ],
+  "prior_coverage_side_effect": {
+    "disclosed": true,
+    "record": "prior-coverage-side-effect.json",
+    "sha256": "67e23bda6af687c8c37658016df138b70bb2cd09d3abfba39e1524d694f739df",
+    "note": "Earlier acquisition review updated16 generated.gcda counters. They remain preserved; generated coverage is excluded from unchanged-cache claims. This preflight runs no production code."
+  },
+  "reset_scope_clarification": "Retained high GPIO45 across CPU/Core restart is not itself a fresh VDD_SPI selection: those resets do not re-sample Chip Reset straps. The normal cold/EN-reset pull-down default is supported by the datasheet. The unaccepted part is an unqualified universal reset/hold/partial-power guarantee; Core-reset hold semantics and producer restart/context still require explicit handling."
+}

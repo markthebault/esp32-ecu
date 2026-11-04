@@ -1,0 +1,41 @@
+{
+  "compile": {
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/freeze-001/firmware/include",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/dependencies-001",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/independent_ingress_probe.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/independent-001"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  },
+  "source_sha256": "94a61368f6c41451c0ab2e00b353cdf7ea49f673e3cc5531e3c9eaf45ef9d6fc",
+  "run": {
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-ingress-review/independent-001"
+    ],
+    "returncode": 0,
+    "stdout": "{\"passed\":true,\"checks\":160202,\"ingress_bytes\":2808,\"edge_bytes\":40,\"scope\":\"Portable ingress only; reviewer state seeding for U64 exhaustion\"}\n",
+    "stderr": "",
+    "binary_sha256": "c48ef00ece9b294172d2ecac151b863b1b31d72e835ba234987bafc9f8df85c7"
+  }
+}
