@@ -14,6 +14,7 @@
 #include "scheduler_fuel_controller.h"
 #include "scheduler_ignition_controller.h"
 #include "units.h"
+#include "src/controllers/idle/idle.h"
 #include <SimpleArduinoFake.h>
 #include <sstream>
 #include <iostream>
@@ -40,6 +41,7 @@ bool record_edges = false;
 bool use_per_tooth = false;
 bool logger_cam = false;
 bool sequential_profile = false;
+bool idle_profile=false,idle_high=false;
 volatile uint8_t* output_ports[8]{};
 uint8_t output_masks[8]{};
 uint8_t output_pins[8]{};
@@ -169,6 +171,10 @@ extern "C" void speeduino_sim_observe() {
             std::cout << "edge " << speeduino_sim_micros() << ' ' << unsigned(output_pins[n]) << ' ' << unsigned(high) << ' ' << unsigned(currentStatus.decoder.getStatus().syncStatus) << ' ' << CRANK_ANGLE_MAX_IGN << '\n';
         }
     }
+    if(idle_profile){
+        const bool high=(*portOutputRegister(digitalPinToPort(pinNumbers.pinIdle1))&digitalPinToBitMask(pinNumbers.pinIdle1))!=0;
+        if(high!=idle_high){idle_high=high;std::cout<<"edge "<<speeduino_sim_micros()<<' '<<unsigned(pinNumbers.pinIdle1)<<' '<<unsigned(high)<<" 0 0\n";}
+    }
 }
 int main(int argc,char** argv) {
     try {
@@ -269,7 +275,30 @@ int main(int argc,char** argv) {
                 std::cout<<"cycleprofile "<<unsigned(configPage2.injLayout)<<' '<<unsigned(configPage4.sparkMode)<<' '<<unsigned(configPage4.TrigSpeed)<<' '<<unsigned(configPage4.trigPatternSec)<<' '<<unsigned(configPage2.injTiming);
                 for(unsigned n=0;n<4;++n)std::cout<<' '<<configPage2.injAng[n];std::cout<<'\n';
             }
-            else if (command == "halt") { stopFuelSchedulers();stopIgnitionSchedulers();closeAllInjectors();stopAllCoilsCharging(); }
+            else if(command=="idleconfig"){
+                unsigned algorithm,hz,kp,ki,kd,tps,hysteresis,taper,minimum,maximum,fasttemp,seed,invert;
+                if(!(std::cin>>algorithm>>hz>>kp>>ki>>kd>>tps>>hysteresis>>taper>>minimum>>maximum>>fasttemp>>seed>>invert)||algorithm>6||!hz||hz>250||hz%2||kp>255||ki>255||kd>255||tps>200||hysteresis>150||taper>100||minimum>=maximum||maximum>100||fasttemp>130||seed>1||invert>1)throw std::runtime_error("invalid idle profile");
+                if(idle_profile)throw std::runtime_error("idle configuration is before-start only");
+                configPage6.iacAlgorithm=algorithm;configPage6.idleFreq=FREQUENCY.toRaw(hz);configPage6.iacChannels=0;configPage6.iacPWMdir=invert;configPage6.iacPWMrun=false;
+                configPage6.idleKP=kp;configPage6.idleKI=ki;configPage6.idleKD=kd;configPage2.iacTPSlimit=tps;configPage2.iacRPMlimitHysteresis=hysteresis;configPage2.idleTaperTime=taper;
+                configPage2.iacCLminValue=minimum;configPage2.iacCLmaxValue=maximum;configPage6.iacFastTemp=fasttemp;
+                configPage2.idleUpEnabled=false;configPage2.idleUpAdder=0;configPage2.idleUpOutputEnabled=false;configPage15.airConIdleSteps=0;
+                for(unsigned i=0;i<10;++i){unsigned duty,target;if(!(std::cin>>duty>>target)||duty>100||target<60||target>250)throw std::runtime_error("invalid idle table");configPage6.iacBins[i]=20*i;configPage6.iacOLPWMVal[i]=duty;configPage6.iacCLValues[i]=target;}
+                for(unsigned i=0;i<4;++i){unsigned duty;if(!(std::cin>>duty)||duty>100)throw std::runtime_error("invalid idle crank table");configPage6.iacCrankBins[i]=60*i;configPage6.iacCrankDuty[i]=duty;}
+                idle_profile=true;initialiseIdle(true);
+                std::cout<<"idleregisters "<<speeduino_sim_micros()<<' '<<IDLE_COUNTER.load()<<' '<<IDLE_COMPARE.load()<<' '<<ECU_SIM_TIMER_BITS<<' '<<ECU_SIM_IDLE_TICK_US<<' '<<unsigned(pinNumbers.pinIdle1)<<' '<<unsigned(seed)<<' '<<unsigned(invert)<<'\n';
+                if(seed)IDLE_COMPARE=static_cast<software_timer_t::counter_t>(IDLE_COUNTER.load()+1);
+            }
+            else if(command=="idlestatus"){
+                std::cout<<"idlestatus "<<unsigned(configPage6.iacAlgorithm)<<' '<<unsigned(FREQUENCY.toUser(configPage6.idleFreq))<<' '<<unsigned(currentStatus.idleLoad)<<' '<<unsigned(currentStatus.CLIdleTarget)*10<<' '<<unsigned(currentStatus.idleOn)<<' '<<unsigned(idle_high)<<' '<<IDLE_COUNTER.load()<<' '<<IDLE_COMPARE.load()<<'\n';
+            }
+            else if(command=="idledisable"){disableIdle();}
+            else if(command=="idleclock"){uint64_t us;std::cin>>us;speeduino_sim_advance(us);}
+            else if(command=="idleprobe"){
+                unsigned rpm,rotation,tps;int clt;if(!(std::cin>>rpm>>rotation>>clt>>tps)||rpm>8000||rotation>2||clt< -40||clt>140||tps>200)throw std::runtime_error("invalid isolated idle input");
+                currentStatus.RPM=rpm;currentStatus.coolant=clt;currentStatus.TPS=tps;currentStatus.rotationStatus=static_cast<EngineRotationStatus>(rotation);idleControl();
+            }
+            else if (command == "halt") { stopFuelSchedulers();stopIgnitionSchedulers();closeAllInjectors();stopAllCoilsCharging();if(idle_profile)disableIdle(); }
             else if (command == "quit") break;
             else throw std::runtime_error("unknown command");
             speeduino_sim_observe();

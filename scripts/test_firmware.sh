@@ -42,6 +42,13 @@ mkdir -p "$task_root/build"
     -I "$task_root/firmware/include" "$task_root/firmware/tests/trigger_log_test.cpp" \
     -o "$task_root/build/trigger-log-test"
 "$task_root/build/trigger-log-test"
+for task_idle_name in idle_control idle_pwm; do
+    "${CXX:-g++}" -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic \
+        -fsanitize=address,undefined -fno-omit-frame-pointer \
+        -I "$task_root/firmware/include" "$task_root/firmware/tests/${task_idle_name}_test.cpp" \
+        -o "$task_root/build/${task_idle_name}-test"
+    "$task_root/build/${task_idle_name}-test"
+done
 task_cjson="${PLATFORMIO_CORE_DIR:-$HOME/.platformio}/packages/framework-espidf/components/json/cJSON"
 "${CC:-cc}" -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer \
     -c "$task_cjson/cJSON.c" -o "$task_root/build/trigger-cjson.o"

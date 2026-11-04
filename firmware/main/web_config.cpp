@@ -83,6 +83,7 @@ esp_err_t index_get(httpd_req_t*r){
 }
 esp_err_t trigger_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");httpd_resp_set_hdr(r,"Cache-Control","no-store");return httpd_resp_send(r,assets::trigger_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t tuning_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::tuning_js,HTTPD_RESP_USE_STRLEN);}
+esp_err_t idle_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::idle_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t cylinder_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::cylinder_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t engine_log_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");httpd_resp_set_hdr(r,"Cache-Control","no-store");return httpd_resp_send(r,assets::engine_log_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t manual_get(httpd_req_t*r){httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,assets::manual,HTTPD_RESP_USE_STRLEN);}
@@ -297,7 +298,7 @@ void service_task(){
   {"/api/engine/defaults",HTTP_GET,engine_defaults_get,nullptr},{"/api/engine/config",HTTP_GET,engine_config_get,nullptr},{"/api/engine/config",HTTP_PUT,engine_config_put,nullptr},{"/api/engine/status",HTTP_GET,engine_status_get,nullptr},
   {"/api/engine/timing",HTTP_GET,engine_timing_get,nullptr},
   {"/api/engine/sample",HTTP_GET,engine_sample_get,nullptr},
-  {"/api/engine/tuning",HTTP_GET,engine_tuning_get,nullptr},{"/tuning_diagnostics.js",HTTP_GET,tuning_script_get,nullptr},
+  {"/api/engine/tuning",HTTP_GET,engine_tuning_get,nullptr},{"/tuning_diagnostics.js",HTTP_GET,tuning_script_get,nullptr},{"/idle_control.js",HTTP_GET,idle_script_get,nullptr},
   {"/api/engine/data-log",HTTP_GET,engine_data_log_get,nullptr},{"/api/engine/data-log",HTTP_POST,engine_data_log_post,nullptr},
   {"/api/engine/data-log.msl",HTTP_GET,engine_data_log_msl_get,nullptr},{"/cylinder_tuning.js",HTTP_GET,cylinder_script_get,nullptr},{"/engine_logger.js",HTTP_GET,engine_log_script_get,nullptr},
   {"/api/engine/trigger-log",HTTP_GET,engine_trigger_get,nullptr},{"/api/engine/trigger-log",HTTP_POST,engine_trigger_post,nullptr},

@@ -56,6 +56,11 @@ bool sample(const char*text,ecu::engine::RuntimeSample&out){
    if(ok&&(r.cylinder_valid&(1U<<i)))ok=std::isfinite(r.cylinder_pulse_ms[i])&&std::isfinite(r.cylinder_advance_deg[i])&&std::isfinite(r.cylinder_fuel_pct[i])&&std::isfinite(r.cylinder_duty_pct[i]);
   }
  }
+ const auto*idle=cJSON_GetObjectItemCaseSensitive(j,"idle");
+ if(idle){bool known=false;ok=ok&&cJSON_IsObject(idle)&&ecu::web::boolean(idle,"available",known)&&(!known||available)&&integer(idle,"state_code",r.idle_state,10)&&integer(idle,"reason_code",r.idle_reason,12)&&integer(idle,"algorithm_code",r.idle_algorithm,2)&&integer(idle,"flags",r.idle_flags,255)&&u64(idle,"pid_updates",r.idle_pid_updates);
+  for(unsigned i=0;ok&&i<6;++i)ok=value(idle,ecu::engine::idle_names[i],r.idle_proposals[i])&&(known?std::isfinite(r.idle_proposals[i]):cJSON_IsNull(cJSON_GetObjectItemCaseSensitive(idle,ecu::engine::idle_names[i])));
+  r.idle_available=known;
+ }
  const auto*inputs=cJSON_GetObjectItemCaseSensitive(j,"inputs");const auto*proposals=cJSON_GetObjectItemCaseSensitive(j,"proposals");
  ok=ok&&cJSON_IsObject(inputs)&&cJSON_IsObject(proposals);
  for(unsigned i=0;ok&&i<ecu::engine::input_count;++i)ok=value(inputs,ecu::engine::input_names[i],r.inputs[i])&&(!(r.input_valid&(1U<<i))||std::isfinite(r.inputs[i]));

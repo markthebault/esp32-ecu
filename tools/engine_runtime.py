@@ -66,6 +66,7 @@ class EngineRuntime:
  def next_event_us(self):return self.bridge.engine_next_time(self.handle)
  def pop_event(self):
   code=self.bridge.engine_pop(self.handle)
+  if code==0x40000:return -1,False,0,0 # Native PWM cycle boundary with no pin transition.
   if not code&0x10000:return None
   if code&0x20000:return None,False,0,0
   return code&255,bool(code&0x100),self.bridge.engine_event_advance(self.handle),self.bridge.engine_event_dwell(self.handle)

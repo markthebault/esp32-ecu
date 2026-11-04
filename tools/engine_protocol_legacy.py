@@ -1,5 +1,5 @@
 """Retained own003 codec and offsets. Its Session/Stream are historical records.
-Current endpoints use the own004 target-shared core in engine_protocol.py.
+Current endpoints use the own005 target-shared core in engine_protocol.py.
 """
 import copy,json,struct,zlib,time
 from pathlib import Path
@@ -12,7 +12,7 @@ SERIAL_PROTOCOL=b'002'
 STRATEGIES=('batch_wasted_4cyl','sequential_4cyl')
 TIMING_FIELDS=(('injection_end_deg',276),('cam_sync_deg',280),('cam_window_deg',284))
 VERSION=b'ESP32ECU completed SIL snapshot; physical outputs inhibited'
-DEFAULT=json.loads((R/'config/engine/defaults.json').read_text())
+DEFAULT=json.loads((R/'config/engine/defaults-v3.json').read_text())
 NUMBERS=[('engine',k) for k,v in DEFAULT['engine'].items()]+[('settings',k) for k,v in DEFAULT['settings'].items() if not isinstance(v,bool)]
 FLAGS=[k for k,v in DEFAULT['settings'].items() if isinstance(v,bool)]
 CURVES=[(k,len(v)) for k,v in DEFAULT['curves'].items()]

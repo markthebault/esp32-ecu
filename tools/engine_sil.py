@@ -8,13 +8,16 @@ from engine_runtime import EngineRuntime
 
 SCENARIOS=('warm_start','cold_start','throttle_step','load_step','trigger_dropout','sensor_short','overrev','stall_restart','load_stall_restart')
 class Plant:
- def __init__(self,cold=False,seed=1):
+ def __init__(self,cold=False,seed=1,idle_valve=False):
+  from idle_valve_plant import IdleValve
+  self.idle_valve=IdleValve() if idle_valve else None
   rng=random.Random(seed);self.injector_flow_cc_min=300*rng.uniform(.98,1.02);self.rotor_inertia=.18*rng.uniform(.97,1.03)
   self.rpm=0.;self.angle=0.;self.map_kpa=99.;self.tps=2.;self.clt=0. if cold else 85.;self.iat=25.;self.battery=13.8
   self.fuel_rate=0.;self.air_rate=0.;self.lambda_sensor=1.;self.last_spark=-1e9;self.advance=15.;self.started=False
   self.injector_on=[None]*4;self.fuel_mg=0.;self.sparks=0;self.spk_errors=[]
   self.coil_on=[None]*4;self.coil_requests=[0]*4;self.dwell_events=[];self.spark_errors=[];self.charge_mg=[0.]*4;self.wall_mg=[0.]*4;self.combustions=[];self.exhaust_lambda=1.;self.burned_work_j=0.
  def edge(self,ch,high,time_s,commanded_advance=0,latest_demand=0,requested_dwell_us=0):
+  if ch==8 and self.idle_valve is not None:self.idle_valve.edge(high);return
   if ch<4:self.injector_on[ch]=time_s if high else None
   elif high:
    self.coil_on[ch-4]=time_s;self.coil_requests[ch-4]=requested_dwell_us
@@ -45,9 +48,14 @@ class Plant:
    efficiency=.27*math.exp(-((advance-optimum)/30)**2)*max(0,1-1.3*(lam-.95)**2)*(.75 if self.clt<30 else 1)
    work=fuel*44*efficiency*min(1,energy/.04);duration=max(.005,30/max(self.rpm,80))
    self.combustions.append((time_s,time_s+duration,work/duration));self.burned_work_j+=work
- def cut(self):self.injector_on=[None]*4;self.coil_on=[None]*4
+ def cut(self):
+  self.injector_on=[None]*4;self.coil_on=[None]*4
+  if self.idle_valve is not None:self.idle_valve.cut()
  def sample(self,t):return dict(map_kpa=self.map_kpa,tps_pct=self.tps,clt_c=self.clt,iat_c=self.iat,**{'lambda':min(1.5,max(.65,self.lambda_sensor))},battery_v=self.battery,sensor_v=5,sensors_valid=True,lambda_ready=t>3)
  def integrate(self,t,dt,starter=False,load=5,idle_pct=0):
+  if self.idle_valve is not None:
+   if idle_pct!=0:raise ValueError('Requested duty is not an actuator observation')
+   idle_pct=self.idle_valve.step(dt,self.battery)
   # Compressible quasi-steady throttle orifice and ideal-gas manifold filling.
   r=287.05;temp=self.iat+273.15;ambient=100000.;ratio=min(.999999,max(.01,self.map_kpa*1000/ambient));gamma=1.4
   area=17e-6+6e-4*self.tps/100+2e-5*idle_pct/100
@@ -89,15 +97,18 @@ class Simulation:
   if isinstance(seed,bool) or not isinstance(seed,int) or not 0<=seed<=4294967295:raise ValueError('Seed must be a uint32 integer')
   self.tune=copy.deepcopy(tune);self.scenario=scenario;self.duration=duration_s;self.seed=seed
  def run(self):
-  runtime=EngineRuntime(self.tune);runtime.wheel();plant=Plant(self.scenario=='cold_start',self.seed)
-  states=[False]*8;trace=[];edge_trace=[];trigger_trace=[];cam_trace=[];timing_stops=[];failure_recorded=False;fault_or=0;sync_seen=False;late=0;max_high=[0]*8;rise=[0]*8
+  idle=bool(self.tune['settings']['idle_enabled'])
+  from target_runtime import TargetRuntime
+  runtime=(TargetRuntime if idle else EngineRuntime)(self.tune);runtime.wheel();plant=Plant(self.scenario=='cold_start',self.seed,idle)
+  channels=9 if idle else 8
+  states=[False]*channels;trace=[];edge_trace=[];trigger_trace=[];cam_trace=[];timing_stops=[];failure_recorded=False;fault_or=0;sync_seen=False;late=0;max_high=[0]*channels;rise=[0]*channels
   def cut_outputs(time_us,cause):
    nonlocal states
    for ch,high in enumerate(states):
     if high:
      max_high[ch]=max(max_high[ch],max(0,time_us-rise[ch]))
      edge_trace.append([time_us,ch,False,'cut:'+cause])
-   runtime.cut();plant.cut();states=[False]*8
+   runtime.cut();plant.cut();states=[False]*channels
   sequential=self.tune['strategy']=='sequential_4cyl';cam_angle=540.
   dt=.00025;t=0.;next_sample=0.;tooth_index=1;proposals=0;sample={};result={};latest_lambda=1.
   try:
@@ -111,7 +122,9 @@ class Simulation:
     if t+1e-9>=next_sample:
      sample=plant.sample(t)
      if self.scenario=='sensor_short' and 4<t<5:sample['map_kpa']=0
-     result=runtime.step(sample,round(t*1e6),use_decoder=True);failure_recorded=failure_recorded and bool(result['faults']&128);fault_or|=result['faults'];sync_seen|=result['synced'];next_sample+=.001
+     result=runtime.step(sample,round(t*1e6),use_decoder=True);
+     if idle:result.update(idle_pwm=runtime.idle_status(),idle_valve=plant.idle_valve.snapshot())
+     failure_recorded=failure_recorded and bool(result['faults']&128);fault_or|=result['faults'];sync_seen|=result['synced'];next_sample+=.001
      if result['faults'] or result['state']=='stopped':
       cut_outputs(round(t*1e6),'control_inhibit')
      if int(round(t*1000))%20==0:
@@ -126,15 +139,16 @@ class Simulation:
     # same timestamp; fractional integration endpoints can differ by <0.5us.
     while runtime.next_event_us()<=round(end*1e6):
      us=runtime.next_event_us();ch,high,commanded_advance,requested_dwell_us=runtime.pop_event();
-     if ch is None:cut_outputs(us,'control_deadline');continue
+     if ch==-1:continue
      event_t=max(t,min(end,us/1e6))
-     latest_lambda=plant.integrate(t,event_t-t,starter,load,result.get('idle_pct',0));t=event_t
+     latest_lambda=plant.integrate(t,event_t-t,starter,load);t=event_t
+     if ch is None:cut_outputs(us,'control_deadline');continue
      if high==states[ch]:raise RuntimeError(f'Duplicate virtual channel edge at {us} us: channel={ch} high={high} state={states[ch]} time={t} status={result}')
      if high:rise[ch]=us
      elif states[ch]:max_high[ch]=max(max_high[ch],us-rise[ch])
      states[ch]=high;plant.edge(ch,high,t,commanded_advance,result.get('advance_deg',0),requested_dwell_us)
      edge_trace.append([us,ch,high,'scheduled'])
-    before=plant.angle;old_t=t;latest_lambda=plant.integrate(t,end-t,starter,load,result.get('idle_pct',0));t=end
+    before=plant.angle;old_t=t;latest_lambda=plant.integrate(t,end-t,starter,load);t=end
     while tooth_index*6<=plant.angle:
      target=tooth_index*6;tooth=tooth_index%60;tooth_index+=1
      if tooth>=58 or dropout:continue
@@ -154,5 +168,6 @@ class Simulation:
    before_stop=sum(states);cut_outputs(round(t*1e6),'simulation_end')
    errors=sorted(abs(e['error_deg']) for e in plant.spark_errors);warm_errors=[abs(e['error_deg']) for e in plant.spark_errors if e['time_s']>=3]
    summary=dict(strategy=self.tune['strategy'],wrong_stroke_sparks=sum(abs(e['phase_error_deg'])>180 for e in plant.spark_errors) if sequential else None,max_spark_720_error_deg=max((abs(e['phase_error_deg']) for e in plant.spark_errors),default=0) if sequential else None,scenario=self.scenario,duration_s=self.duration,seed=self.seed,model='unvalidated reduced-order SI plant v1',ecu='native production engine.hpp + MissingTooth decoder',physical_outputs_enabled=False,plant_parameters=dict(injector_flow_cc_min=plant.injector_flow_cc_min,rotor_inertia_kg_m2=plant.rotor_inertia),sync_acquired=sync_seen,max_rpm=max((p['plant_rpm'] for p in trace),default=0),final_rpm=plant.rpm,fuel_mg=plant.fuel_mg,sparks=plant.sparks,planned_revolutions=proposals,rejected_plans=late,max_injector_high_us=max(max_high[:4]),max_dwell_high_us=max(max_high[4:]),min_completed_dwell_us=min((d['dwell_us'] for d in plant.dwell_events),default=0),max_dwell_shortfall_us=max((d['requested_us']-d['dwell_us'] for d in plant.dwell_events),default=0),max_spark_error_deg=max(errors,default=0),max_spark_error_to_latest_demand_deg=max((abs(e['demand_error_deg']) for e in plant.spark_errors),default=0),p95_spark_error_deg=errors[int(.95*(len(errors)-1))] if errors else 0,max_spark_error_after_3s_deg=max(warm_errors,default=0),fault_mask_seen=fault_or,final_state=result.get('state'),final_faults=result.get('faults'),outputs_high_before_stop=before_stop,executor_stopped=True,final_outputs_high=sum(states),timing_recoveries=result.get('timing_recoveries',0),timing_protection_stops=result.get('timing_stops',0))
+   if idle:summary.update(idle_pwm=runtime.idle_status(),idle_valve=plant.idle_valve.snapshot());summary['max_dwell_high_us']=max(max_high[4:8])
    return dict(summary=summary,trace=trace,edges=edge_trace,trigger_edges=trigger_trace,cam_edges=cam_trace,timing_stops=timing_stops,spark_timing=plant.spark_errors,dwell_events=plant.dwell_events,final=result)
   finally:runtime.close()

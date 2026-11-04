@@ -1,0 +1,6 @@
+{
+  "tested_sha256": "c895d033a04f46886dcd207fe9e01708888f9ddc7cf7d4fe92668d69c7822de9",
+  "current_sha256": "3387dab922dd8a88b6bb10ab9a9fb5af33cd3505dae98c9a3c231c1f651c31bc",
+  "diff": "--- tested offline INI\n+++ current generated INI\n@@ -52,9 +52,9 @@\n  dfco_hysteresis = scalar, F32, 100, \"RPM\", 1, 0, -1000, 10000, 3\n  dfco_tps = scalar, F32, 104, \"%\", 1, 0, -1000, 10000, 3\n  dfco_delay_s = scalar, F32, 108, \"s\", 1, 0, -1000, 10000, 3\n- idle_target_rpm = scalar, F32, 112, \"RPM\", 1, 0, -1000, 10000, 3\n- idle_kp = scalar, F32, 116, \"%/RPM\", 1, 0, -1000, 10000, 3\n- idle_ki = scalar, F32, 120, \"%/(RPM*s)\", 1, 0, -1000, 10000, 3\n+ idle_target_rpm = scalar, F32, 112, \"RPM\", 1, 0, 600, 1500, 3\n+ idle_kp = scalar, F32, 116, \"%/RPM\", 1, 0, 0, 0.2, 3\n+ idle_ki = scalar, F32, 120, \"%/(RPM*s)\", 1, 0, 0, 0.2, 3\n  fan_on_c = scalar, F32, 124, \"C\", 1, 0, -1000, 10000, 3\n  fan_off_c = scalar, F32, 128, \"C\", 1, 0, -1000, 10000, 3\n  pump_prime_s = scalar, F32, 132, \"s\", 1, 0, -1000, 10000, 3\n",
+  "scope": "Three master idle editor min/max bounds only; no wire offset, identity, page or channel change. Current definition independently rechecked; tested original preserved."
+}

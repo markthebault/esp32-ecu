@@ -39,7 +39,7 @@ def build_locked(source: Path,timer_bits=32) -> Path:
     cache = ROOT / ('.cache/engine/speeduino-sim' if timer_bits==32 else '.cache/engine/speeduino-sim16')
     archive = subprocess.check_output(['git', '-C', str(source), 'archive', PIN, 'speeduino', 'lib/ArduinoFake'])
     archive_hash = hashlib.sha256(archive).hexdigest()
-    copy = cache / ('source-'+archive_hash[:16])
+    copy = cache / ('source-'+archive_hash[:16]+'-idle-aux-v1')
     copy.mkdir(parents=True, exist_ok=True)
     with tarfile.open(fileobj=io.BytesIO(archive)) as packed:
         members = {p.name for p in packed.getmembers() if p.isfile()}
@@ -56,6 +56,11 @@ def build_locked(source: Path,timer_bits=32) -> Path:
         if generated_timer.count(b'using counter_t = uint32_t;')!=1:raise RuntimeError('Native timer type changed')
         generated_timer=generated_timer.replace(b'using counter_t = uint32_t;',b'using counter_t = uint16_t;')
     timer.write_bytes(generated_timer)
+    native_board=copy/'speeduino/board_native.cpp';original_board=native_board.read_bytes()
+    old=b'uint8_t getPwmTimerResolution(void)\n{\n  return 2;\n}'
+    aux_tick=16 if timer_bits==16 else 4
+    if original_board.count(old)!=1:raise RuntimeError('Native PWM conversion HAL changed')
+    native_board.write_bytes(original_board.replace(old,old.replace(b'return 2;',('return '+str(aux_tick)+';').encode())))
     deps = source / '.pio/libdeps/native_code_coverage'
     upstream_build = source / '.pio/build/native_code_coverage'
     if not deps.is_dir():
@@ -65,7 +70,7 @@ def build_locked(source: Path,timer_bits=32) -> Path:
     includes += [p for lib in sorted(deps.iterdir()) if lib.is_dir()
                  for p in [lib, lib/'src', lib/'include'] if p.is_dir()]
     flags = ['-std=c++14', '-O2', '-fshort-enums', '-fexceptions', '-DUSE_LIBDIVIDE',
-             '-DECU_SIM_TIMER_BITS='+str(timer_bits),'-DNATIVE_BOARD', '-DEXTERNAL_BOARD_H="board_native.h"', '-DARDUINO=101',
+             '-DECU_SIM_TIMER_BITS='+str(timer_bits),'-DECU_SIM_IDLE_TICK_US='+str(aux_tick),'-DNATIVE_BOARD', '-DEXTERNAL_BOARD_H="board_native.h"', '-DARDUINO=101',
              '-DUSBCON', '-DINJ_CHANNELS=8', '-DIGN_CHANNELS=8']
     flags += ['-I'+str(p) for p in includes]
     native_header=ROOT/'tools/speeduino_sim_native.hpp'
@@ -111,6 +116,10 @@ def build_locked(source: Path,timer_bits=32) -> Path:
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
         list(pool.map(compile_one, commands))
     executable = cache/'speeduino-sim'
+    if executable.exists() and (cache/'build-manifest.json').exists():
+        previous=cache/'history'/hashlib.sha256(executable.read_bytes()).hexdigest();previous.mkdir(parents=True,exist_ok=True)
+        for p in (executable,cache/'build-manifest.json'):
+            if not (previous/p.name).exists():shutil.copy2(p,previous/p.name)
     temporary=cache/'speeduino-sim.new'
     subprocess.run(['c++', *map(str, objects), '-Wl,--start-group', *map(str, libraries),
                     '-Wl,--end-group', '-lgcov', '-pthread', '-o', str(temporary)], check=True)
@@ -118,6 +127,7 @@ def build_locked(source: Path,timer_bits=32) -> Path:
     manifest = {'speeduino_sha': sha, 'unit_test': False,
                 'execution': 'production setup, loop, decoder and schedulers in native process',
                 'hal_changes': ['SoftwareTimer.h TIMER_RESOLUTION 100us to 4us',
+                                f'native idleTimer auxiliary clock and getPwmTimerResolution aligned at {aux_tick}us; engine timers remain4us',
                                 'override Uno digitalPinToInterrupt macro with Arduino Mega mapping for native GPIO callbacks',
                                 'replace wall-clock timer implementation with deterministic single-thread HAL',
                                 'drive production oneMSInterval every 1000 virtual microseconds']+(['SoftwareTimer.h counter_t uint32 to uint16, modulo tick, equality compare'] if timer_bits==16 else []),
@@ -126,6 +136,8 @@ def build_locked(source: Path,timer_bits=32) -> Path:
                            'benchmark tooth command injects primary decoder callback directly; diagnostic input command dispatches native attached callbacks by configured edge; physical wiring untested',
                            'timer callbacks before coincident tooth callback, then production loop',
                            'fast PORT outputs observed after each4us timer tick and loop call'],
+                'idle_tick_us':aux_tick,'idle_initial_compare':'unseeded default; explicit benchmark idleconfig may seed counter+1 once and reports registers; not AVR power-on emulation',
+                'native_board_original_sha256':hashlib.sha256(original_board).hexdigest(),
                 'timer_counter_bits':timer_bits,'timer_compare':('equality, modulo65536' if timer_bits==16 else 'upstream-native >=,32bit'),'archive_sha256':archive_hash,'source_hashes': source_hashes,
                 'header_hashes':headers,'dependency_hashes':dependency_hashes,
                 'compiler':compiler,'compiler_version':compiler_version,'compile_flags':flags,

@@ -1,0 +1,777 @@
+{
+  "reviewed_at_utc": "2026-11-04T00:06:34.974658+00:00",
+  "reviewer": "Independent read-only /root/target_executor_architecture_review",
+  "scope": "Final idle common-timer owner ELF/IRAM/data placement and static frame/RAM recheck. New review of current images; no reliance on the previous USB image approval. Cache-only audit/probe outputs, no production edits, target rebuilds, services, external messages, subagents or hardware execution.",
+  "verdict": "PASS for the reviewed source/native/static final image scope. No concrete new issue found. All3 independently rerun engine ISR closures pass; owner state is internal DRAM; shipped idle GPIO output policy remains compiled inhibited. Physical timing and runtime resource margins are unmeasured.",
+  "array_fix": {
+    "source_sha256": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db",
+    "diff_artifact": "array-change.json",
+    "assessment": "The only change in this reviewed core header since the prior owner probe replaces two8-element std::array<uint64_t> rise/deadline members with zero-initialized raw fixed arrays. Indexing is intrinsic rather than an outlined flash helper. No scheduling limits, recovery state or command logic changed. Final closure contains no external/flash helper path.",
+    "native_recheck": {
+      "stopped_fault_recovery_master_off": true,
+      "stopped_fault_recovery_master_on": true,
+      "core_recoveries_off": 1,
+      "core_recoveries_on": 1,
+      "phase_context_wait_reenabled_idle": false,
+      "full_duty_next_due": 10000,
+      "full_duty_pop_code": 262144,
+      "full_duty_next_due_after_empty_pop": 20000,
+      "expiry_before_refresh": true
+    }
+  },
+  "images": {
+    "compact_n16r8_web": {
+      "elf_sha256": "8bcac74ea53bce7829d3c3fa5145a03962559ad4ccafd918e901388f8fd6d99a",
+      "binary_sha256": "9216f3de1d4ca43e1133f819bfcd614b832dd4ebe0340f1cc74176b6fdd6e212",
+      "static_internal_data_bss_bytes": 156276,
+      "iram_code_bytes": 133623,
+      "entry_frames": [
+        {
+          "name": "std::unique_ptr<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text, ecu::HeapObjectDelete<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text> > ecu::heap_object<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text>()",
+          "address": "0x4200c414",
+          "entry_bytes": "364100",
+          "frame_bytes": 32,
+          "code_bytes": 36
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x40375b20",
+          "entry_bytes": "360101",
+          "frame_bytes": 128,
+          "code_bytes": 3953
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::on_trigger_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x403758f4",
+          "entry_bytes": "36c100",
+          "frame_bytes": 96,
+          "code_bytes": 554
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::run(void*)",
+          "address": "0x42020c20",
+          "entry_bytes": "36c11c",
+          "frame_bytes": 3680,
+          "code_bytes": 14878
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+          "address": "0x40376a94",
+          "entry_bytes": "36e100",
+          "frame_bytes": 112,
+          "code_bytes": 14221
+        },
+        {
+          "name": "ecu::engine_tuning::(anonymous namespace)::run(void*)",
+          "address": "0x4202746c",
+          "entry_bytes": "366102",
+          "frame_bytes": 304,
+          "code_bytes": 459
+        },
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::persist_prepared(ecu::engine::Tune const&, unsigned long, std::unique_ptr<char, void (*)(void*)>, char const*&)",
+          "address": "0x420104f8",
+          "entry_bytes": "36e102",
+          "frame_bytes": 368,
+          "code_bytes": 409
+        },
+        {
+          "name": "ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)",
+          "address": "0x420168a8",
+          "entry_bytes": "368100",
+          "frame_bytes": 64,
+          "code_bytes": 464
+        },
+        {
+          "name": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+          "address": "0x420145ac",
+          "entry_bytes": "36a10a",
+          "frame_bytes": 1360,
+          "code_bytes": 1322
+        },
+        {
+          "name": "void ecu::tuning::Stream::feed<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&>(unsigned char const*, unsigned int, unsigned long long, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "address": "0x42027240",
+          "entry_bytes": "36a102",
+          "frame_bytes": 336,
+          "code_bytes": 554
+        },
+        {
+          "name": "void ecu::tuning::Stream::send<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(unsigned char const*, unsigned int, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "address": "0x42024f18",
+          "entry_bytes": "364100",
+          "frame_bytes": 32,
+          "code_bytes": 72
+        },
+        {
+          "name": "void ecu::tuning::Stream::error<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(unsigned char, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "address": "0x420271c4",
+          "entry_bytes": "366102",
+          "frame_bytes": 304,
+          "code_bytes": 38
+        },
+        {
+          "name": "void ecu::tuning::Stream::expire<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&>(unsigned long long, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "address": "0x420271ec",
+          "entry_bytes": "364100",
+          "frame_bytes": 32,
+          "code_bytes": 83
+        },
+        {
+          "name": "void ecu::tuning::Stream::framed<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(ecu::tuning::Reply const&, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "address": "0x42027160",
+          "entry_bytes": "366102",
+          "frame_bytes": 304,
+          "code_bytes": 100
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+          "address": "0x42020248",
+          "entry_bytes": "36e112",
+          "frame_bytes": 2416,
+          "code_bytes": 2519
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+          "address": "0x4201ad90",
+          "entry_bytes": "364100",
+          "frame_bytes": 32,
+          "code_bytes": 75
+        },
+        {
+          "name": "ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}::operator()(unsigned char const*, unsigned int) const",
+          "address": "0x42024e90",
+          "entry_bytes": "364100",
+          "frame_bytes": 32,
+          "code_bytes": 136
+        },
+        {
+          "name": "app_main",
+          "address": "0x42003758",
+          "entry_bytes": "364135",
+          "frame_bytes": 6816,
+          "code_bytes": 2020
+        }
+      ],
+      "ISR_state_placement": [
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::cam_context",
+          "address": "0x3fca7e08",
+          "bytes": 1,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::idle_output",
+          "address": "0x3fcabf00",
+          "bytes": 1,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::capture_clock",
+          "address": "0x3fcabee8",
+          "bytes": 24,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::idle_executor",
+          "address": "0x3fcabf08",
+          "bytes": 240,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::trigger_clock",
+          "address": "0x3fca7e98",
+          "bytes": 24,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::external_epoch",
+          "address": "0x3fca7e88",
+          "bytes": 4,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::installed_alarm",
+          "address": "0x3fca7e80",
+          "bytes": 8,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::trigger_capture",
+          "address": "0x3fca7eb0",
+          "bytes": 16440,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::configuration_hold",
+          "address": "0x3fcb2910",
+          "bytes": 1,
+          "section": ".dram0.bss"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::lock",
+          "address": "0x3fca7e90",
+          "bytes": 8,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::timer",
+          "address": "0x3fcb2940",
+          "bytes": 4,
+          "section": ".dram0.bss"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::output",
+          "address": "0x3fca7e8c",
+          "bytes": 4,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::executor",
+          "address": "0x3fcabff8",
+          "bytes": 5456,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::measured",
+          "address": "0x3fca7e10",
+          "bytes": 112,
+          "section": ".dram0.data"
+        }
+      ],
+      "engine_dummy_flag": false,
+      "idle_physical_flag_explicitly_enabled": false,
+      "selected_board_flag": false,
+      "compile_command_sha256": "eedc58a14442937b9fe48dc94e1d5a1147d162e5c8f7d0777341581965c4010b",
+      "closure": {
+        "path": ".cache/engine/idle-owner-review/final/isr-selected/closure.json",
+        "sha256": "201ca4b0b175a0d1980c2de620a7c1618c2ff294e61d59b5756e82b991ab2168",
+        "roots": 5,
+        "functions": 30,
+        "flash_literals": 0,
+        "unclassified_flash_pointers": 0,
+        "external": [],
+        "passed": true
+      }
+    },
+    "compact_a3_web": {
+      "elf_sha256": "e1ce9d980ad3e71d1953232584275b1e76a3926e93342524dbc42776d753f621",
+      "binary_sha256": "fea0d1a33415b22ec21afea5de42853e4ed8940fc76ce9a65facfba06bac567c",
+      "static_internal_data_bss_bytes": 155024,
+      "iram_code_bytes": 127683,
+      "entry_frames": [
+        {
+          "name": "std::unique_ptr<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text, ecu::HeapObjectDelete<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text> > ecu::heap_object<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text>()",
+          "address": "0x4200c418",
+          "entry_bytes": "364100",
+          "frame_bytes": 32,
+          "code_bytes": 36
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x403759d0",
+          "entry_bytes": "360101",
+          "frame_bytes": 128,
+          "code_bytes": 3953
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::on_trigger_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x403757a4",
+          "entry_bytes": "36c100",
+          "frame_bytes": 96,
+          "code_bytes": 554
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::run(void*)",
+          "address": "0x42020c24",
+          "entry_bytes": "36c11c",
+          "frame_bytes": 3680,
+          "code_bytes": 14878
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+          "address": "0x40376944",
+          "entry_bytes": "36e100",
+          "frame_bytes": 112,
+          "code_bytes": 14221
+        },
+        {
+          "name": "ecu::engine_tuning::(anonymous namespace)::run(void*)",
+          "address": "0x42027468",
+          "entry_bytes": "366102",
+          "frame_bytes": 304,
+          "code_bytes": 459
+        },
+        {
+          "name": "ecu::engine_service::(anonymous namespace)::persist_prepared(ecu::engine::Tune const&, unsigned long, std::unique_ptr<char, void (*)(void*)>, char const*&)",
+          "address": "0x420104fc",
+          "entry_bytes": "36e102",
+          "frame_bytes": 368,
+          "code_bytes": 409
+        },
+        {
+          "name": "ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)",
+          "address": "0x420168ac",
+          "entry_bytes": "368100",
+          "frame_bytes": 64,
+          "code_bytes": 464
+        },
+        {
+          "name": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+          "address": "0x420145b0",
+          "entry_bytes": "36a10a",
+          "frame_bytes": 1360,
+          "code_bytes": 1322
+        },
+        {
+          "name": "void ecu::tuning::Stream::feed<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&>(unsigned char const*, unsigned int, unsigned long long, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "address": "0x4202723c",
+          "entry_bytes": "36a102",
+          "frame_bytes": 336,
+          "code_bytes": 554
+        },
+        {
+          "name": "void ecu::tuning::Stream::send<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(unsigned char const*, unsigned int, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "address": "0x42024f14",
+          "entry_bytes": "364100",
+          "frame_bytes": 32,
+          "code_bytes": 72
+        },
+        {
+          "name": "void ecu::tuning::Stream::error<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(unsigned char, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "address": "0x420271c0",
+          "entry_bytes": "366102",
+          "frame_bytes": 304,
+          "code_bytes": 38
+        },
+        {
+          "name": "void ecu::tuning::Stream::expire<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&>(unsigned long long, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "address": "0x420271e8",
+          "entry_bytes": "364100",
+          "frame_bytes": 32,
+          "code_bytes": 83
+        },
+        {
+          "name": "void ecu::tuning::Stream::framed<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(ecu::tuning::Reply const&, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+          "address": "0x4202715c",
+          "entry_bytes": "366102",
+          "frame_bytes": 304,
+          "code_bytes": 100
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+          "address": "0x4202024c",
+          "entry_bytes": "36e112",
+          "frame_bytes": 2416,
+          "code_bytes": 2519
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+          "address": "0x4201ad94",
+          "entry_bytes": "364100",
+          "frame_bytes": 32,
+          "code_bytes": 75
+        },
+        {
+          "name": "ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}::operator()(unsigned char const*, unsigned int) const",
+          "address": "0x42024e8c",
+          "entry_bytes": "364100",
+          "frame_bytes": 32,
+          "code_bytes": 136
+        },
+        {
+          "name": "app_main",
+          "address": "0x420036e8",
+          "entry_bytes": "364135",
+          "frame_bytes": 6816,
+          "code_bytes": 2020
+        }
+      ],
+      "ISR_state_placement": [
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::cam_context",
+          "address": "0x3fca65f8",
+          "bytes": 1,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::idle_output",
+          "address": "0x3fcaa6f0",
+          "bytes": 1,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::capture_clock",
+          "address": "0x3fcaa6d8",
+          "bytes": 24,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::idle_executor",
+          "address": "0x3fcaa6f8",
+          "bytes": 240,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::trigger_clock",
+          "address": "0x3fca6688",
+          "bytes": 24,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::external_epoch",
+          "address": "0x3fca6678",
+          "bytes": 4,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::installed_alarm",
+          "address": "0x3fca6670",
+          "bytes": 8,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::trigger_capture",
+          "address": "0x3fca66a0",
+          "bytes": 16440,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::configuration_hold",
+          "address": "0x3fcb0ca8",
+          "bytes": 1,
+          "section": ".dram0.bss"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::lock",
+          "address": "0x3fca6680",
+          "bytes": 8,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::timer",
+          "address": "0x3fcb0cd8",
+          "bytes": 4,
+          "section": ".dram0.bss"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::output",
+          "address": "0x3fca667c",
+          "bytes": 4,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::executor",
+          "address": "0x3fcaa7e8",
+          "bytes": 5456,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::measured",
+          "address": "0x3fca6600",
+          "bytes": 112,
+          "section": ".dram0.data"
+        }
+      ],
+      "engine_dummy_flag": false,
+      "idle_physical_flag_explicitly_enabled": false,
+      "selected_board_flag": false,
+      "compile_command_sha256": "0f61f214e6cffe9941e1056bd27c21ca001d1689519eac74a318b3b56516a38f",
+      "closure": {
+        "path": ".cache/engine/idle-owner-review/final/isr-generic/closure.json",
+        "sha256": "7c0545502bb2a4eab899700b8fd4b8ccf1b138d792d7f3b9b07967bc4908b028",
+        "roots": 5,
+        "functions": 30,
+        "flash_literals": 0,
+        "unclassified_flash_pointers": 0,
+        "external": [],
+        "passed": true
+      }
+    },
+    "compact_a3_timing_bench": {
+      "elf_sha256": "dec4f1d182a0259a388b0fc5c1d1fdc6ed6599038dd222e3a3c7496b9c723576",
+      "binary_sha256": "cdbe59b0398f238cf61eca72e29fe708947f2313038e6c02f6ba5fdd05f4e217",
+      "static_internal_data_bss_bytes": 129880,
+      "iram_code_bytes": 93695,
+      "entry_frames": [
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x40375484",
+          "entry_bytes": "360101",
+          "frame_bytes": 128,
+          "code_bytes": 4289
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::run(void*)",
+          "address": "0x42015580",
+          "entry_bytes": "36c11c",
+          "frame_bytes": 3680,
+          "code_bytes": 16618
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+          "address": "0x40376548",
+          "entry_bytes": "36e100",
+          "frame_bytes": 112,
+          "code_bytes": 17365
+        },
+        {
+          "name": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+          "address": "0x4200ba60",
+          "entry_bytes": "36a10a",
+          "frame_bytes": 1360,
+          "code_bytes": 1322
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+          "address": "0x42014aa0",
+          "entry_bytes": "36e112",
+          "frame_bytes": 2416,
+          "code_bytes": 2783
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+          "address": "0x42011490",
+          "entry_bytes": "364100",
+          "frame_bytes": 32,
+          "code_bytes": 75
+        },
+        {
+          "name": "app_main",
+          "address": "0x42002358",
+          "entry_bytes": "364135",
+          "frame_bytes": 6816,
+          "code_bytes": 1916
+        }
+      ],
+      "ISR_state_placement": [
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::cam_context",
+          "address": "0x3fc9cadc",
+          "bytes": 1,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::idle_output",
+          "address": "0x3fca0bd8",
+          "bytes": 1,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::capture_clock",
+          "address": "0x3fca0bc0",
+          "bytes": 24,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::idle_executor",
+          "address": "0x3fca0be0",
+          "bytes": 240,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::external_epoch",
+          "address": "0x3fc9cb58",
+          "bytes": 4,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::installed_alarm",
+          "address": "0x3fc9cb50",
+          "bytes": 8,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::trigger_capture",
+          "address": "0x3fc9cb88",
+          "bytes": 16440,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::configuration_hold",
+          "address": "0x3fca5a80",
+          "bytes": 1,
+          "section": ".dram0.bss"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::lock",
+          "address": "0x3fc9cb80",
+          "bytes": 8,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::timer",
+          "address": "0x3fca5aa8",
+          "bytes": 4,
+          "section": ".dram0.bss"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::output",
+          "address": "0x3fc9cb5c",
+          "bytes": 4,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::executor",
+          "address": "0x3fca0cd0",
+          "bytes": 5456,
+          "section": ".dram0.data"
+        },
+        {
+          "name": "ecu::engine_target::(anonymous namespace)::measured",
+          "address": "0x3fc9cae0",
+          "bytes": 112,
+          "section": ".dram0.data"
+        }
+      ],
+      "engine_dummy_flag": false,
+      "idle_physical_flag_explicitly_enabled": false,
+      "selected_board_flag": false,
+      "compile_command_sha256": "ef6b789c219c1c8869e2b14c67ce24783b7412b971087e22a90bdca6081a1de9",
+      "closure": {
+        "path": ".cache/engine/idle-owner-review/final/isr-dummy/closure.json",
+        "sha256": "bc7406273a7e2481aa0a50e2e62c35e1af85fed0b90909b21953012643c41bd5",
+        "roots": 4,
+        "functions": 29,
+        "flash_literals": 0,
+        "unclassified_flash_pointers": 0,
+        "external": [],
+        "passed": true
+      }
+    }
+  },
+  "linked_type_sizes": {
+    "RuntimeSample": 312,
+    "Recorder": 84056,
+    "Tune": 4720,
+    "Output": 328,
+    "PwmExecutor": 240,
+    "Executor": 5456,
+    "State": 10160
+  },
+  "stack_assessment": {
+    "timer_ISR_entry_bytes": 112,
+    "capture_ISR_entry_bytes": 128,
+    "diagnostic_capture_ISR_entry_bytes": 96,
+    "timing_worker_entry_bytes": 3680,
+    "worker_command_helper_entry_bytes": 2416,
+    "worker_obvious_nested_frames_bytes": 6096,
+    "timing_task_allocated_stack_bytes": 16384,
+    "app_main_entry_bytes": 6816,
+    "observe_entry_bytes": 1360,
+    "app_main_plus_observe_frames_bytes": 8176,
+    "main_allocated_stack_bytes": 16384,
+    "USB_task_entry_bytes": 304,
+    "USB_task_allocated_stack_bytes": 12288,
+    "assessment": "Static prologues show no new unreasonable stack frame. The timing worker and command helper nest, so their frames are added rather than compared individually against16KiB. Main/observe also nest. These figures do not include every descendant, interrupted task/context save, SDK fatal path or measured high-water."
+  },
+  "memory_assessment": {
+    "selected_static_internal_data_bss_bytes": 156276,
+    "generic_static_internal_data_bss_bytes": 155024,
+    "dummy_static_internal_data_bss_bytes": 129880,
+    "idle_dispatcher_bytes": 240,
+    "core_dispatcher_bytes": 5456,
+    "runtime_sample_bytes": 312,
+    "fixed_recorder_bytes": 84056,
+    "USB_state_bytes": 10160,
+    "assessment": "Fixed idle state is small and explicitly internal DRAM. The expanded recorder dominates the static increase. USB session and other runtime RTOS/driver/document allocations are outside static data+BSS. Link success and these sizes do not establish runtime free heap or stack high-water."
+  },
+  "physical_policy": {
+    "ECU_IDLE_DUMMY_LOADS_default": 0,
+    "explicit_enable_in_any_shipped_compile_command": false,
+    "selected_N16R8_compile_block_retained": true,
+    "generic_dummy_engine_channels_enabled_but_idle_disabled": true,
+    "qualification": "The final command/source gate inspection supplements the earlier negative compile probes. No GPIO voltage, module routing, eFuse, valve or physical activation was measured."
+  },
+  "source_sha256": {
+    "firmware/include/ecu/idle_control.hpp": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd",
+    "firmware/include/ecu/idle_pwm.hpp": "392ef3640df5e3ea64c465df7a6815c2272ead28570626bc9540aab8b58a8c42",
+    "firmware/include/ecu/idle_command.hpp": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+    "firmware/include/ecu/idle_pwm_json.hpp": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b",
+    "firmware/include/ecu/timing_executor.hpp": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db",
+    "firmware/include/ecu/engine.hpp": "a777b75a18586de9d8d239efc7fd2b85f0f1a90e069c2a96879b570bad6202bc",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/main/engine_target.cpp": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738",
+    "firmware/main/engine_service.cpp": "ef8e074a5bdee7e61beb82768c72ab84e0731c52833aceca090c5f4cef7a928d",
+    "tools/target_timing_bridge.cpp": "f5574fb4d5a0334a18eb43e9accec5623fdd89bd1fb2e61c9542e1e8e0c2acef",
+    "scripts/audit_target_isr.py": "550781826ea29b6fe55f802278422cda70bb80cb61aab76c717904b26dd83f4d"
+  },
+  "prior_owner_review_binding": {
+    "path": ".cache/engine/idle-owner-review/review.json",
+    "sha256": "84602b6eb510c82addd32e5ebee2dce2bcc31939c05fe4956cf9b2165fc5fd57",
+    "changed_relevant_core_sources": [
+      "firmware/include/ecu/timing_executor.hpp"
+    ],
+    "source_snapshot_matches_current": {
+      "firmware/include/ecu/idle_control.hpp": true,
+      "firmware/include/ecu/idle_pwm.hpp": true,
+      "firmware/include/ecu/idle_command.hpp": true,
+      "firmware/include/ecu/idle_hardware.hpp": true,
+      "firmware/include/ecu/idle_pwm_json.hpp": true,
+      "firmware/include/ecu/timing_executor.hpp": true,
+      "firmware/include/ecu/engine.hpp": true,
+      "firmware/include/ecu/realtime.hpp": true,
+      "tools/target_timing_bridge.cpp": true
+    }
+  },
+  "exact_checks": {
+    "ISR_audits": [
+      [
+        "python3",
+        "scripts/audit_target_isr.py",
+        "firmware/.pio/build/compact_n16r8_web/firmware.elf",
+        ".cache/engine/idle-owner-review/final/isr-selected"
+      ],
+      [
+        "python3",
+        "scripts/audit_target_isr.py",
+        "firmware/.pio/build/compact_a3_web/firmware.elf",
+        ".cache/engine/idle-owner-review/final/isr-generic"
+      ],
+      [
+        "python3",
+        "scripts/audit_target_isr.py",
+        "firmware/.pio/build/compact_a3_timing_bench/firmware.elf",
+        ".cache/engine/idle-owner-review/final/isr-dummy"
+      ]
+    ],
+    "static_inspection": [
+      "xtensa-esp32s3-elf-nm -C -S for symbols, mapped to ELF32 section and PT_LOAD data",
+      "Read first3 linked bytes; low12 bits0x136 identify entry a1; frame=(instruction>>12)*8",
+      "readelf --debug-dump=info for linked type byte sizes",
+      "Generated per-environment compile_commands.json and current idle_hardware.hpp for physical flags"
+    ],
+    "native_compile": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I.cache/engine/idle-owner-review/final/include",
+      "-I/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+      ".cache/engine/idle-owner-review/owner_recheck.cpp",
+      ".cache/engine/idle-owner-review/cJSON.o",
+      "-o",
+      ".cache/engine/idle-owner-review/final/owner_recheck"
+    ],
+    "native_run": [
+      ".cache/engine/idle-owner-review/final/owner_recheck"
+    ]
+  },
+  "artifacts_sha256": {
+    "array-change.json": "b1fcbff5c4d04df055a99bad0d700c7dbf576dc1aa0b8d79b2fa340ffa339fb2",
+    "image-layout.json": "432dd07ed58a66af8b789b28ff882df013c685a190a4b8afd3e39d1d2a2a8723",
+    "linked-types.json": "49aeef09fefc8df7185204b6614182fef2bd789abdcb2f4bfddd582fa32bfe5d",
+    "owner_recheck.json": "791e39b43b00109f7e5800eada3ae479615fbae94e33f94e6f2ac40303135cc6"
+  },
+  "remaining_limits": [
+    "No physical execution, GPIO activation, PWM jitter, interrupt duration/latency, cache-stall behavior, stack high-water or heap-minimum measurements.",
+    "SDK assertion metadata classification and source-registered driver callbacks retain the audit qualifications. No physical fail-low claim is established for SDK fatal assertions.",
+    "The final scope does not expand to the concurrently changed plant/UI/reference implementations. Source/native owner behavior remains as tested by the previous owner review and the repeated final-header probe."
+  ]
+}

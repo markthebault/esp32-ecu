@@ -6,6 +6,7 @@
 #include <functional>
 #include <stdexcept>
 #include <cstdint>
+extern software_timer_t idleTimer;
 
 namespace {
 using Tick = software_timer_t::counter_t;
@@ -32,7 +33,10 @@ extern "C" void speeduino_sim_advance(uint64_t target) {
 }
 software_timer_t::software_timer_t() : counter(now_us/TIMER_RESOLUTION) {
     tickCallbackId = next_id++;
-    callbacks()[tickCallbackId] = [this](Tick tick) { onNextTick(tick); };
+    callbacks()[tickCallbackId] = [this](Tick) {
+        const auto resolution=this==&idleTimer?ECU_SIM_IDLE_TICK_US:TIMER_RESOLUTION;
+        if(now_us%resolution==0)onNextTick(static_cast<Tick>(now_us/resolution));
+    };
 }
 software_timer_t::~software_timer_t() { callbacks().erase(tickCallbackId); }
 void software_timer_t::setCallback(const callback_t& cb) { callback = cb; }

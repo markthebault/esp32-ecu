@@ -67,7 +67,9 @@ class ResearchPlant:
     One positive shaft direction; no compression ripple, knock, emissions or
     exhaust gas dynamics. Spark timing response and cold behavior are empirical.
     """
-    def __init__(self,cold=False,injector_flow_factors=None,optimum_spark_offsets=None):
+    def __init__(self,cold=False,injector_flow_factors=None,optimum_spark_offsets=None,idle_valve=None):
+        from idle_valve_plant import IdleValve
+        self.idle_valve=IdleValve(idle_valve) if idle_valve is not None else None
         self.injector_flow_factors=list(injector_flow_factors or [1]*4)
         self.optimum_spark_offsets=list(optimum_spark_offsets or [0]*4)
         if len(self.injector_flow_factors)!=4 or any(not math.isfinite(v) or not .5<=v<=1.5 for v in self.injector_flow_factors):raise ValueError('Four bounded independent injector flow factors required')
@@ -88,6 +90,7 @@ class ResearchPlant:
         self.cylinder_fuel_mg=[0.]*4;self.cylinder_burned_mg=[0.]*4;self.cylinder_scheduled_work_j=[0.]*4;self.cylinder_shaft_j=[0.]*4;self.cylinder_combustions=[]
 
     def edge(self,ch,high,t,commanded_advance=10,latest_demand=10,requested_dwell_us=2800):
+        if ch==8 and self.idle_valve is not None:self.idle_valve.edge(high);return
         if not 0<=ch<8:raise ValueError('Virtual channel outside0..7')
         events=self.injector_on if ch<4 else self.coil_on
         index=ch%4
@@ -135,6 +138,7 @@ class ResearchPlant:
         # External removal of electrical drive is an inhibit, no fabricated
         # normal coil discharge/spark is added to the combustion model.
         self.injector_on=[None]*4;self.coil_on=[None]*4
+        if self.idle_valve is not None:self.idle_valve.cut()
 
     def sample(self,t):
         return dict(map_kpa=self.map_kpa,tps_pct=self.tps,clt_c=self.clt,iat_c=self.iat,
@@ -143,6 +147,9 @@ class ResearchPlant:
 
     def integrate(self,t,dt,starter=False,load=5,idle_pct=0):
         if dt<=0:return
+        if self.idle_valve is not None:
+            if idle_pct!=0:raise ValueError('Controller-duty shortcut is forbidden with the executed-edge valve model')
+            idle_pct=self.idle_valve.step(dt,self.battery)
         omega=self.rpm*math.pi/30
         self.air_state=self.air.step(t,dt,omega,self.tps,idle_pct)
         self.map_kpa=self.air_state['map_kpa']

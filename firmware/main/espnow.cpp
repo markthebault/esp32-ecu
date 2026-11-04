@@ -260,6 +260,7 @@ void publish(const web::Sample&s,const config::Config&c,const std::array<double,
  l.engine_sample_age=engine::data_age_us(s.engine,s.engine.sampled_us,gp_now);l.engine_control_age=engine::data_age_us(s.engine,s.engine.control_us,gp_now);
  if(s.engine.worker_sequence||s.engine.worker_observed_us)l.worker_age=engine::data_age_us(s.engine,s.engine.worker_observed_us,gp_now);
  l.fault=!s.adc_ok||s.overflow||s.timing_fault;
+ if(s.engine.idle_available&&(s.engine.idle_flags&idle::Enabled)&&s.engine.idle_state==static_cast<unsigned>(idle::State::Fault))l.fault=true;
  header(l.data,Telemetry,88);u32(l.data+20,c.revision);
  // Always bit 4: outputs inhibited. No received packet can change it.
  u16(l.data+24,(s.adc_ok?1:0)|(s.safe?2:0)|(s.interlock?4:0)|(s.synced?8:0)|16|(s.overflow?32:0));

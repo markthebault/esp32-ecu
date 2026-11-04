@@ -8,6 +8,7 @@
 namespace ecu::engine {
 inline constexpr const char* input_names[]={"rpm","map_kpa","tps_pct","clt_c","iat_c","lambda","battery_v","sensor_v"};
 inline constexpr const char* proposal_names[]={"rpm","ve_pct","target_lambda","advance_deg","pulse_ms","dwell_ms","deadtime_ms","air_mg","warmup","afterstart","accel","ego","duty_pct","idle_pct"};
+inline constexpr const char* idle_names[]={"target_rpm","duty_pct","feedforward_pct","p_term","i_term","d_term"};
 inline constexpr const char* input_units[]={"RPM","kPa","%","C","C","lambda","V","V"};
 inline constexpr const char* proposal_units[]={"RPM","%","lambda","deg","ms","ms","ms","mg","ratio","ratio","ratio","ratio","%","%"};
 inline const char* source_name(DataSource source){return source==DataSource::Target?"target_control_observation":source==DataSource::Synthetic?"synthetic_control_observation":"no_observation";}
@@ -49,6 +50,9 @@ inline cJSON* data_json(const RuntimeSample&r,std::uint64_t observed_us){
   ok=cJSON_AddNumberToObject(row,"cylinder",i+1)&&json_value(row,"pulse_ms",known?r.cylinder_pulse_ms[i]:NAN)&&json_value(row,"advance_deg",known?r.cylinder_advance_deg[i]:NAN)&&json_value(row,"fuel_pct",known?r.cylinder_fuel_pct[i]:NAN)&&json_value(row,"duty_pct",known?r.cylinder_duty_pct[i]:NAN)&&cJSON_AddItemToArray(channels,row);
   if(!ok)cJSON_Delete(row);
  }
+ auto*idle=ok?cJSON_AddObjectToObject(j,"idle"):nullptr;if(!idle)ok=false;
+ if(ok)ok=cJSON_AddBoolToObject(idle,"available",present&&r.idle_available)&&cJSON_AddStringToObject(idle,"state",idle::state_name(static_cast<idle::State>(r.idle_state)))&&cJSON_AddStringToObject(idle,"reason",idle::reason_name(static_cast<idle::Reason>(r.idle_reason)))&&cJSON_AddStringToObject(idle,"algorithm",idle::algorithm_name(static_cast<idle::Algorithm>(r.idle_algorithm)))&&cJSON_AddNumberToObject(idle,"state_code",r.idle_state)&&cJSON_AddNumberToObject(idle,"reason_code",r.idle_reason)&&cJSON_AddNumberToObject(idle,"algorithm_code",r.idle_algorithm)&&cJSON_AddNumberToObject(idle,"flags",r.idle_flags)&&json_u64(idle,"pid_updates",r.idle_pid_updates);
+ for(unsigned i=0;ok&&i<6;++i)ok=json_value(idle,idle_names[i],present&&r.idle_available?r.idle_proposals[i]:NAN);
  auto*raw=ok?cJSON_AddArrayToObject(j,"raw_adc"):nullptr;if(!raw)ok=false;
  for(unsigned i=0;ok&&i<8;++i){auto*value=present&&(r.board_flags&1)?cJSON_CreateNumber(r.raw_adc[i]):cJSON_CreateNull();if(!value||!cJSON_AddItemToArray(raw,value)){cJSON_Delete(value);ok=false;}}
  auto*worker=ok?cJSON_AddObjectToObject(j,"worker_observation"):nullptr;if(!worker)ok=false;

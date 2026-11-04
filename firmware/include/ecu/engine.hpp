@@ -1,4 +1,5 @@
 #pragma once
+#include "ecu/idle_control.hpp"
 // Engine-development core shared by the ESP32 shadow monitor and native SIL.
 // Independent implementation. Physical outputs are NOT enabled by this module.
 #include <algorithm>
@@ -64,6 +65,7 @@ struct Tune {
  std::array<float,6> coolant_c{-40,0,20,40,70,110},warmup_pct{180,150,130,115,100,100},crank_pct{250,210,180,160,140,130};
  std::array<float,5> battery_v{8,10,12,14,16},deadtime_ms{2,1.5f,1.15f,.9f,.7f},dwell_ms{3.5f,3.3f,3,2.8f,2.5f};
  Map ve{},spark{},lambda{};
+ idle::Config idle_control;
  bool cylinder_trims_enabled=false;
  std::array<TrimMap,4> cylinder_fuel{};
  std::array<float,4> cylinder_spark_deg{}; // Physical cylinders1..4, not order slots.
@@ -86,7 +88,8 @@ inline const char* validate(const Tune&t){
  if(!range(t.afterstart_pct,0,100)||!range(t.afterstart_s,0,120)||!range(t.accel_threshold_pct_s,1,1000)||!range(t.accel_gain,0,.02)||!range(t.accel_decay_s,.05,2))return "Invalid enrichment settings";
  if(!range(t.ego_kp,0,1)||!range(t.ego_ki,0,1)||!range(t.ego_limit,0,.25)||!range(t.ego_min_clt,0,110))return "Invalid closed-loop lambda settings";
  if(!range(t.dfco_rpm,1200,5000)||!range(t.dfco_hysteresis,50,1000)||!range(t.dfco_tps,0,5)||!range(t.dfco_delay_s,.1,5)||t.dfco_rpm-t.dfco_hysteresis<=t.cranking_rpm)return "Invalid overrun settings";
- if(!range(t.idle_target_rpm,600,1500)||!range(t.idle_kp,0,.2)||!range(t.idle_ki,0,.2)||!range(t.fan_on_c,70,110)||!range(t.fan_off_c,60,105)||t.fan_off_c>=t.fan_on_c||!range(t.pump_prime_s,0,5))return "Invalid auxiliary settings";
+ if(!idle::valid(t.idle_control,{t.idle_enabled,t.idle_target_rpm,t.idle_kp,t.idle_ki}))return "Invalid idle control configuration";
+ if(!range(t.idle_target_rpm,600,1500)||!range(t.idle_kp,0,double(.2f))||!range(t.idle_ki,0,double(.2f))||!range(t.fan_on_c,70,110)||!range(t.fan_off_c,60,105)||t.fan_off_c>=t.fan_on_c||!range(t.pump_prime_s,0,5))return "Invalid auxiliary settings";
  if(!ascending(t.coolant_c)||!ascending(t.battery_v))return "Curve axes must increase strictly";
  for(unsigned i=0;i<6;++i)if(!range(t.coolant_c[i],-40,140)||!range(t.warmup_pct[i],80,300)||!range(t.crank_pct[i],100,400))return "Invalid coolant enrichment curve";
  for(unsigned i=0;i<5;++i)if(!range(t.battery_v[i],7,18)||!range(t.deadtime_ms[i],.1,3)||!range(t.dwell_ms[i],.5,t.max_dwell_ms))return "Invalid battery compensation curve";
@@ -107,6 +110,7 @@ struct Inputs {
 };
 struct Output {
  State state=State::Stopped;std::uint32_t faults=0;
+ idle::Output idle;
  double rpm=0,ve_pct=0,target_lambda=1,advance_deg=0,pulse_ms=0,dwell_ms=0,deadtime_ms=0,air_mg=0;
  double warmup=1,afterstart=1,accel=1,ego=1,duty_pct=0,idle_pct=0;
  bool fuel_cut=false,spark_cut=false,pump=false,fan=false;
@@ -123,17 +127,22 @@ struct Output {
 class Controller {
  bool seen_=false,was_crank_=true,rev_cut_=false,dfco_=false,fan_=false;
  std::uint64_t last_=0,started_=0,dfco_since_=0,boot_=0;
- double previous_tps_=0,ae_=1,ego_i_=0,idle_i_=0;
+ double previous_tps_=0,ae_=1,ego_i_=0;idle::Controller idle_control_;
 public:
  void reset(){*this=Controller{};}
  Output step(const Tune&t,const Inputs&s,std::uint64_t now){
   Output o;o.rpm=s.rpm;o.cylinder_trims_enabled=t.cylinder_trims_enabled;
+  auto finish=[&](){
+   idle::Input input;input.rpm=s.rpm;input.tps_pct=s.tps_pct;input.clt_c=s.clt_c;input.battery_v=s.battery_v;input.sampled_us=s.sampled_us;input.valid=s.sensors_valid;
+   input.running=o.state==State::Running||o.state==State::Warmup||o.state==State::Overrun;input.cranking=o.state==State::Cranking;input.overrun=o.state==State::Overrun;input.engine_fault=o.faults!=0;
+   o.idle=idle_control_.step(t.idle_control,{t.idle_enabled,t.idle_target_rpm,t.idle_kp,t.idle_ki},input,now);o.idle_pct=o.idle.duty_pct;return o;
+  };
   const double dt=seen_&&now>=last_?(now-last_)/1e6:0;
   const bool timing=(!seen_||now>last_)&&dt<=.1;
   if(!seen_)boot_=now;
   const double rate=dt>0?(s.tps_pct-previous_tps_)/dt:0;
   previous_tps_=s.tps_pct;last_=now;seen_=true;
-  if(validate(t)){o.faults=BadTune;o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;return o;}
+  if(validate(t)){o.faults=BadTune;o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;return finish();}
   if(!timing)o.faults|=Timing;
   const bool sensor_ok=s.sensors_valid&&range(s.rpm,0,12000)&&range(s.map_kpa,10,110)&&range(s.tps_pct,0,100)&&range(s.clt_c,-40,140)&&range(s.iat_c,-40,110)&&range(s.battery_v,7,18)&&range(s.sensor_v,4.75,5.25);
   if(!sensor_ok)o.faults|=BadSensor;
@@ -147,8 +156,8 @@ public:
   o.pump=((o.faults&~std::uint32_t(OverRev))==0)&&((now>=boot_&&(now-boot_)/1e6<t.pump_prime_s)||(s.synced&&s.rpm>0));
   if(!stopped&&!s.synced)o.faults|=NoSync;
   if(!stopped&&t.strategy==Strategy::Sequential&&!s.phase_synced)o.faults|=CamPhase;
-  if(o.faults){o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;ego_i_=idle_i_=0;ae_=1;dfco_=false;dfco_since_=0;return o;}
-  if(stopped){o.state=State::Stopped;o.fuel_cut=o.spark_cut=true;ego_i_=idle_i_=0;ae_=1;was_crank_=true;dfco_=false;dfco_since_=0;return o;}
+  if(o.faults){o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;ego_i_=0;ae_=1;dfco_=false;dfco_since_=0;return finish();}
+  if(stopped){o.state=State::Stopped;o.fuel_cut=o.spark_cut=true;ego_i_=0;ae_=1;was_crank_=true;dfco_=false;dfco_since_=0;return finish();}
   const bool cranking=was_crank_?s.rpm<t.cranking_rpm+100:s.rpm<t.cranking_rpm;
   if(was_crank_&&!cranking)started_=now;
   was_crank_=cranking;
@@ -193,10 +202,10 @@ public:
   }
   // Judge capacity on actual channel demand, so safe negative trims can reduce
   // an otherwise excessive base demand. One failed channel inhibits all eight.
-  if(o.cylinder_capacity_mask||o.dwell_ms>t.max_dwell_ms||o.dwell_ms>=rev_ms){o.faults|=Capacity;o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;o.pulse_ms=o.dwell_ms=0;o.cylinder_pulse_ms.fill(0);o.cylinder_duty_pct.fill(0);return o;}
+  if(o.cylinder_capacity_mask||o.dwell_ms>t.max_dwell_ms||o.dwell_ms>=rev_ms){o.faults|=Capacity;o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;o.pulse_ms=o.dwell_ms=0;o.cylinder_pulse_ms.fill(0);o.cylinder_duty_pct.fill(0);return finish();}
   if(dfco_){o.state=State::Overrun;o.fuel_cut=true;o.pulse_ms=0;o.duty_pct=0;o.cylinder_pulse_ms.fill(0);o.cylinder_duty_pct.fill(0);}
-  if(t.idle_enabled&&!cranking&&s.tps_pct<2){const double error=t.idle_target_rpm-s.rpm;idle_i_=std::clamp(idle_i_+error*t.idle_ki*dt,-20.0,40.0);o.idle_pct=std::clamp(20+error*t.idle_kp+idle_i_,0.0,100.0);}else idle_i_=0;
-  return o;
+
+  return finish();
  }
 };
 struct Edge {std::uint64_t time_us=0;unsigned channel=0;bool high=false;};

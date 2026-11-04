@@ -1,7 +1,7 @@
 {
-  "signature": "ESP32ECU DEV 004 INHIBITED",
+  "signature": "ESP32ECU DEV 005 INHIBITED",
   "pages": {
-    "1": 4768
+    "1": 4992
   },
   "numeric_fields": [
     [
@@ -168,6 +168,32 @@
       5
     ]
   ],
+  "idle_scalars": {
+    "frequency_hz": 4772,
+    "control_period_ms": 4776,
+    "min_pct": 4780,
+    "max_pct": 4784,
+    "tps_closed_pct": 4788,
+    "tps_hysteresis_pct": 4792,
+    "entry_rpm_above": 4796,
+    "exit_rpm_above": 4800,
+    "entry_delay_s": 4804,
+    "afterstart_taper_s": 4808,
+    "dashpot_pct": 4812,
+    "dashpot_decay_pct_s": 4816,
+    "slew_pct_s": 4820,
+    "integral_limit_pct": 4824,
+    "kd": 4828,
+    "derivative_filter_s": 4832,
+    "fast_idle_temp_c": 4836,
+    "fast_idle_hysteresis_c": 4840
+  },
+  "idle_arrays": {
+    "coolant_c": 4844,
+    "run_pct": 4868,
+    "crank_pct": 4892,
+    "target_add_rpm": 4916
+  },
   "live_fields": [
     "time",
     "rpm",
@@ -181,7 +207,7 @@
     "target_lambda",
     "ego"
   ],
-  "live_block_bytes": 216,
+  "live_block_bytes": 256,
   "timing_fields": [
     [
       "injection_end_deg",
@@ -205,7 +231,8 @@
     "ve": 512,
     "spark": 1664,
     "lambda_target": 2816,
-    "cylinder": 3968
+    "cylinder": 3968,
+    "idle": 4768
   },
   "origin_revision_read_only": true,
   "commit_behavior": "whole-tune stage; burn persists/activates and resets control; stable session origin",

@@ -1,0 +1,267 @@
+{
+  "revision": "IAC-DRAFT1",
+  "status": "unrouted_placement_and_netlist_draft_not_for_fabrication",
+  "board_mm": [
+    80,
+    50
+  ],
+  "layers": 2,
+  "mounting": "4x M3, 3.2mm holes, 72x42mm centres",
+  "physical_default": false,
+  "gpio": 3,
+  "u3_socket_pad13": "NC in archived A4 carrier, requires separate take-off",
+  "parts": [
+    {
+      "reference": "J1",
+      "value": "CARRIER LOGIC ONLY",
+      "footprint": "ECU:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical",
+      "mpn": "B4B-XH-A(LF)(SN)",
+      "pins": {
+        "1": "GPIO3",
+        "2": "RUN_5V",
+        "3": "+5V_LOGIC",
+        "4": "GND"
+      },
+      "pin_names": {
+        "1": "GPIO3 / U3 pad13",
+        "2": "RUN_5V / TP6",
+        "3": "+5V",
+        "4": "GND"
+      },
+      "note": "Carrier take-offs require a reviewed harness; no native carrier connector exists"
+    },
+    {
+      "reference": "J2",
+      "value": "PROTECTED ACTUATOR SUPPLY",
+      "footprint": "ECU:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+      "mpn": "1715721",
+      "pins": {
+        "1": "IAC_12V_PROTECTED",
+        "2": "GND"
+      },
+      "pin_names": {
+        "1": "EXTERNAL FUSED SWITCHED +12V",
+        "2": "POWER RETURN"
+      },
+      "note": "Fixed screw supply entry cannot accept J3 valve plug; 9\u201316V, externally fused <=2A load contract; reverse/transient protection is external; verify torque/strain relief"
+    },
+    {
+      "reference": "J3",
+      "value": "NC PWM VALVE",
+      "footprint": "ECU:JST_VH_B2P-VH_1x02_P3.96mm_Vertical",
+      "mpn": "B2P-VH(LF)(SN)",
+      "pins": {
+        "1": "IAC_12V_PROTECTED",
+        "2": "IAC_LS"
+      },
+      "pin_names": {
+        "1": "VALVE +",
+        "2": "VALVE LOW SIDE"
+      },
+      "note": "Two-wire continuous-duty NC energize-to-open only; verify polarity and R/L"
+    },
+    {
+      "reference": "U1",
+      "value": "UCC27524P",
+      "footprint": "ECU:DIP-8_W7.62mm_LongPads",
+      "mpn": "UCC27524P.B",
+      "pins": {
+        "1": "ENA",
+        "2": "INA",
+        "3": "GND",
+        "4": "GND",
+        "5": null,
+        "6": "+5V_LOGIC",
+        "7": "DRIVE_A",
+        "8": "GND"
+      },
+      "pin_names": {
+        "1": "ENA",
+        "2": "INA",
+        "3": "GND",
+        "4": "INB",
+        "5": "OUTB_NC",
+        "6": "VDD",
+        "7": "OUTA",
+        "8": "ENB"
+      },
+      "note": "Direct solder PDIP8, no socket; input-independent VDD and UVLO; external EN pulldown mandatory"
+    },
+    {
+      "reference": "Q1",
+      "value": "VNP35N07-E",
+      "footprint": "ECU:TO-220-3_Vertical",
+      "mpn": "VNP35N07-E",
+      "pins": {
+        "1": "SWITCH_INPUT",
+        "2": "IAC_LS",
+        "3": "GND"
+      },
+      "pin_names": {
+        "1": "INPUT",
+        "2": "DRAIN / LIVE TAB",
+        "3": "SOURCE"
+      },
+      "note": "TO220 metal tab is IAC_LS, insulate from case/mounting hardware; thermal/current tests pending"
+    },
+    {
+      "reference": "D1",
+      "value": "SB5H100-E3",
+      "footprint": "ECU:D_DO-201AD_P15.24mm_Horizontal",
+      "mpn": "SB5H100-E3/54",
+      "pins": {
+        "1": "IAC_12V_PROTECTED",
+        "2": "IAC_LS"
+      },
+      "pin_names": {
+        "1": "K / BAND",
+        "2": "A"
+      },
+      "note": "Axial DO201AD 100V 5A candidate; flyback cathode to valve positive, anode to low side"
+    },
+    {
+      "reference": "R1",
+      "value": "1k",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "mpn": "",
+      "pins": {
+        "1": "GPIO3",
+        "2": "INA"
+      },
+      "pin_names": {},
+      "note": "GPIO input series; exact leaded part/power/height procurement pending"
+    },
+    {
+      "reference": "R2",
+      "value": "2k2",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "mpn": "",
+      "pins": {
+        "1": "GPIO3",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "note": "GPIO-side reset pulldown, not after R1; exact leaded part/power/height procurement pending"
+    },
+    {
+      "reference": "R3",
+      "value": "1k",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "mpn": "",
+      "pins": {
+        "1": "RUN_5V",
+        "2": "ENA"
+      },
+      "pin_names": {},
+      "note": "Hardware enable series; exact leaded part/power/height procurement pending"
+    },
+    {
+      "reference": "R4",
+      "value": "4k7",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "mpn": "",
+      "pins": {
+        "1": "ENA",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "note": "Mandatory ENA pulldown overrides driver internal pullup; exact leaded part/power/height procurement pending"
+    },
+    {
+      "reference": "R5",
+      "value": "10k",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "mpn": "",
+      "pins": {
+        "1": "INA",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "note": "Local driver input pulldown; exact leaded part/power/height procurement pending"
+    },
+    {
+      "reference": "R6",
+      "value": "220R",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "mpn": "",
+      "pins": {
+        "1": "DRIVE_A",
+        "2": "SWITCH_INPUT"
+      },
+      "pin_names": {},
+      "note": "Smart-switch input series; exact leaded part/power/height procurement pending"
+    },
+    {
+      "reference": "R7",
+      "value": "10k",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "mpn": "",
+      "pins": {
+        "1": "SWITCH_INPUT",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "note": "Switch input pulldown; exact leaded part/power/height procurement pending"
+    },
+    {
+      "reference": "C1",
+      "value": "100nF",
+      "footprint": "ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "mpn": "",
+      "pins": {
+        "1": "+5V_LOGIC",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "note": "Local VDD decoupling; leaded ceramic 10V+; exact part/fit pending"
+    },
+    {
+      "reference": "C2",
+      "value": "1uF",
+      "footprint": "ECU:C_Rect_L7.2mm_W5.0mm_P5.00mm",
+      "mpn": "",
+      "pins": {
+        "1": "+5V_LOGIC",
+        "2": "GND"
+      },
+      "pin_names": {},
+      "note": "Local VDD decoupling; leaded nonpolar film 10V+ candidate envelope; exact part/fit pending"
+    },
+    {
+      "reference": "H1",
+      "value": "M3 MOUNT",
+      "footprint": "ECU:MountingHole_3.2mm_M3",
+      "mpn": "",
+      "pins": {},
+      "pin_names": {},
+      "note": "Screw mounted accessory; case location/stand-offs/clearance not finalized"
+    },
+    {
+      "reference": "H2",
+      "value": "M3 MOUNT",
+      "footprint": "ECU:MountingHole_3.2mm_M3",
+      "mpn": "",
+      "pins": {},
+      "pin_names": {},
+      "note": "Screw mounted accessory; case location/stand-offs/clearance not finalized"
+    },
+    {
+      "reference": "H3",
+      "value": "M3 MOUNT",
+      "footprint": "ECU:MountingHole_3.2mm_M3",
+      "mpn": "",
+      "pins": {},
+      "pin_names": {},
+      "note": "Screw mounted accessory; case location/stand-offs/clearance not finalized"
+    },
+    {
+      "reference": "H4",
+      "value": "M3 MOUNT",
+      "footprint": "ECU:MountingHole_3.2mm_M3",
+      "mpn": "",
+      "pins": {},
+      "pin_names": {},
+      "note": "Screw mounted accessory; case location/stand-offs/clearance not finalized"
+    }
+  ]
+}

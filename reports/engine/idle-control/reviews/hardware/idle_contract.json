@@ -1,0 +1,80 @@
+{
+  "review_head": "cbfbe4a",
+  "status": "draft_review_not_for_fabrication",
+  "physical_output_default": false,
+  "carrier_outline_limit_mm": [
+    120,
+    120
+  ],
+  "implementation_recommendation": "Separate screw-mounted accessory; integrate into A5 only after fit/routing review",
+  "gpio": 3,
+  "u3_pad": "13",
+  "gpio_pulldown_ohm": 2200,
+  "input_series_ohm": 1000,
+  "driver": "UCC27524P.B PDIP8",
+  "driver_pin_contract": {
+    "1": "ENA:RUN_5V via1k;4.7k pulldown",
+    "2": "INA:GPIO3 via1k;optional local10k pulldown",
+    "3": "PGND/reference",
+    "4": "GND",
+    "5": "NC",
+    "6": "+5V_LOGIC;100n+1u local",
+    "7": "OUTA:220R to switch INPUT",
+    "8": "GND"
+  },
+  "switch": "VNP35N07-E TO220",
+  "switch_pin_contract": {
+    "1": "INPUT;10k to SOURCE",
+    "2": "IAC_LS;metal tab live",
+    "3": "PGND"
+  },
+  "flyback": {
+    "candidate": "SB5H100-E3 DO201AD",
+    "anode": "IAC_LS",
+    "cathode": "IAC_12V_PROTECTED"
+  },
+  "load": {
+    "type": "two-wire normally-closed energize-to-open continuous-duty12V PWM solenoid",
+    "input_range_v": [
+      9,
+      16
+    ],
+    "maximum_current_a": 2,
+    "bound_measured": false,
+    "inductance_h": null,
+    "coil_polarity_verified": false,
+    "current_regulation": false,
+    "position_feedback": false,
+    "current_feedback": false
+  },
+  "supply": "External fused relay-switched reverse/transient-protected actuator branch; never logic/sensor supply",
+  "pwm": {
+    "default_hz": 100,
+    "candidate_range_hz": [
+      50,
+      250
+    ],
+    "resolution_bits": 10,
+    "duty_default_pct": 0,
+    "actual_valve_frequency_qualified": false,
+    "control_stale_policy": "Bind to existing executor heartbeat/fault; driver hardware enable RUN_5V must fall independently"
+  },
+  "prerequisites": [
+    "Read actual eFuse JTAG routing; no eFuse writing",
+    "Check GPIO3 low strap does not activate conflicting pad JTAG",
+    "Freeze exact DIP package data and procurement",
+    "Characterize actual coil R/L/polarity/duty/frequency/closure",
+    "Bench power/reset/backfeed/PWM/current/thermal/EMI tests",
+    "Accessory mounting/insulation and module/antenna/printed-fit review"
+  ],
+  "not_qualified": [
+    "physical_car",
+    "surge",
+    "EMI",
+    "thermal",
+    "splash",
+    "printed_fit",
+    "short_circuit",
+    "coil_control"
+  ]
+}

@@ -87,5 +87,5 @@ private:
  Header header_;std::array<Row,capacity> rows_{};
  std::uint64_t next_due_=0,last_observed_=0,last_snapshot_=0;
 };
-static_assert(sizeof(Recorder)<74*1024,"Engine recorder exceeds its static RAM budget");
+static_assert(sizeof(Recorder)<88*1024,"Engine recorder exceeds its static RAM budget");
 }

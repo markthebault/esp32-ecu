@@ -6,7 +6,7 @@
 
 namespace ecu::timing {
 enum class Cause : std::uint8_t {None,Control,Configuration,Clock,Timebase,CaptureAge,CaptureOverflow,
- ProducerTimeout,CommandTimeout,ToothTimeout,LateInterrupt,HighLimit,Plan,Contention,Gate,TraceBudget,CamPhase};
+ ProducerTimeout,CommandTimeout,ToothTimeout,LateInterrupt,HighLimit,Plan,Contention,Gate,TraceBudget,CamPhase,IdlePwm};
 inline const char* cause_name(Cause c){switch(c){
  case Cause::Control:return "control_inhibit";case Cause::Configuration:return "configuration_change";
  case Cause::Clock:return "clock_reversed";case Cause::Timebase:return "capture_timebase";
@@ -15,7 +15,7 @@ inline const char* cause_name(Cause c){switch(c){
  case Cause::ToothTimeout:return "tooth_timeout";case Cause::LateInterrupt:return "late_interrupt";
  case Cause::HighLimit:return "maximum_high_time";case Cause::Plan:return "invalid_angle_plan";
  case Cause::Contention:return "commit_contention";case Cause::Gate:return "hardware_gate";
- case Cause::TraceBudget:return "interrupt_budget";case Cause::CamPhase:return "cam_phase_lost";default:return "none";}}
+ case Cause::TraceBudget:return "interrupt_budget";case Cause::CamPhase:return "cam_phase_lost";case Cause::IdlePwm:return "idle_pwm_fault";default:return "none";}}
 
 struct Command {
  engine::AngleConfig angle;
@@ -25,6 +25,7 @@ struct Command {
  std::uint32_t phase_epoch=0,configuration_epoch=0;
  unsigned max_injector_high_us=15000,max_coil_high_us=3500;
  unsigned slots=60,missing=2,max_rpm=8000;
+ unsigned idle_period_us=10000,idle_high_us=0;
 };
 struct TimingStats {
  std::uint64_t dispatched=0,cuts=0,faults=0,recoveries=0,retries=0,
@@ -237,7 +238,9 @@ private:
  engine::Edge current_event_{};
  Command command_;
  TimingStats stats_;
- std::array<std::uint64_t,8> rise_us_{},high_deadlines_{};
+ // Raw fixed arrays keep ISR indexing intrinsic even when the larger shared
+ // timer callback makes the compiler outline std::array::operator[] to flash.
+ std::uint64_t rise_us_[8]{},high_deadlines_[8]{};
  std::array<TimingEvent,trace_capacity> trace_{};
  std::uint64_t trace_sequence_=0,command_deadline_=none,producer_deadline_=none,
   tooth_deadline_=none,phase_deadline_=none,last_dispatch_us_=0,quiet_since_=none,last_recovery_check_us_=0;

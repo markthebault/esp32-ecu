@@ -1,0 +1,941 @@
+{
+  "mode_normal": {
+    "after_100ms_drive": {
+      "mode": "normal",
+      "gpio_high": true,
+      "current_a": 1.7499999999999987,
+      "opening_pct": 80.83056666387039,
+      "edges": 1,
+      "source_j": 2.413249999999986,
+      "copper_j": 2.394874999999986,
+      "flyback_j": 0.0,
+      "disconnect_j": 0.0,
+      "stored_j": 0.018374999999999975,
+      "electrical_residual_j": -1.6653345369377348e-16,
+      "energized_s": 0.1,
+      "max_current_a": 1.7499999999999987,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    },
+    "after_600ms_low": {
+      "mode": "normal",
+      "gpio_high": false,
+      "current_a": 0.0,
+      "opening_pct": 0.0037651047353366015,
+      "edges": 2,
+      "source_j": 2.413249999999986,
+      "copper_j": 2.411692215498952,
+      "flyback_j": 0.0015577845010341603,
+      "disconnect_j": 0.0,
+      "stored_j": 0.0,
+      "electrical_residual_j": -2.172741153660951e-16,
+      "energized_s": 0.1,
+      "max_current_a": 1.7499999999999987,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    }
+  },
+  "mode_disconnected": {
+    "after_100ms_drive": {
+      "mode": "disconnected",
+      "gpio_high": true,
+      "current_a": 0.0,
+      "opening_pct": 0.0,
+      "edges": 1,
+      "source_j": 0.0,
+      "copper_j": 0.0,
+      "flyback_j": 0.0,
+      "disconnect_j": 0.0,
+      "stored_j": 0.0,
+      "electrical_residual_j": 0.0,
+      "energized_s": 0.1,
+      "max_current_a": 0.0,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    },
+    "after_600ms_low": {
+      "mode": "disconnected",
+      "gpio_high": false,
+      "current_a": 0.0,
+      "opening_pct": 0.0,
+      "edges": 2,
+      "source_j": 0.0,
+      "copper_j": 0.0,
+      "flyback_j": 0.0,
+      "disconnect_j": 0.0,
+      "stored_j": 0.0,
+      "electrical_residual_j": 0.0,
+      "energized_s": 0.1,
+      "max_current_a": 0.0,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    }
+  },
+  "mode_stuck_closed": {
+    "after_100ms_drive": {
+      "mode": "stuck_closed",
+      "gpio_high": true,
+      "current_a": 1.7499999999999987,
+      "opening_pct": 0.0,
+      "edges": 1,
+      "source_j": 2.413249999999986,
+      "copper_j": 2.394874999999986,
+      "flyback_j": 0.0,
+      "disconnect_j": 0.0,
+      "stored_j": 0.018374999999999975,
+      "electrical_residual_j": -1.6653345369377348e-16,
+      "energized_s": 0.1,
+      "max_current_a": 1.7499999999999987,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    },
+    "after_600ms_low": {
+      "mode": "stuck_closed",
+      "gpio_high": false,
+      "current_a": 0.0,
+      "opening_pct": 0.0,
+      "edges": 2,
+      "source_j": 2.413249999999986,
+      "copper_j": 2.411692215498952,
+      "flyback_j": 0.0015577845010341603,
+      "disconnect_j": 0.0,
+      "stored_j": 0.0,
+      "electrical_residual_j": -2.172741153660951e-16,
+      "energized_s": 0.1,
+      "max_current_a": 1.7499999999999987,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    }
+  },
+  "mode_stuck_open": {
+    "after_100ms_drive": {
+      "mode": "stuck_open",
+      "gpio_high": true,
+      "current_a": 1.7499999999999987,
+      "opening_pct": 100.0,
+      "edges": 1,
+      "source_j": 2.413249999999986,
+      "copper_j": 2.394874999999986,
+      "flyback_j": 0.0,
+      "disconnect_j": 0.0,
+      "stored_j": 0.018374999999999975,
+      "electrical_residual_j": -1.6653345369377348e-16,
+      "energized_s": 0.1,
+      "max_current_a": 1.7499999999999987,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    },
+    "after_600ms_low": {
+      "mode": "stuck_open",
+      "gpio_high": false,
+      "current_a": 0.0,
+      "opening_pct": 100.0,
+      "edges": 2,
+      "source_j": 2.413249999999986,
+      "copper_j": 2.411692215498952,
+      "flyback_j": 0.0015577845010341603,
+      "disconnect_j": 0.0,
+      "stored_j": 0.0,
+      "electrical_residual_j": -2.172741153660951e-16,
+      "energized_s": 0.1,
+      "max_current_a": 1.7499999999999987,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    }
+  },
+  "mode_reversed_polarity": {
+    "after_100ms_drive": {
+      "mode": "reversed_polarity",
+      "gpio_high": true,
+      "current_a": 0.0,
+      "opening_pct": 0.0,
+      "edges": 1,
+      "source_j": 0.0,
+      "copper_j": 0.0,
+      "flyback_j": 0.0,
+      "disconnect_j": 0.0,
+      "stored_j": 0.0,
+      "electrical_residual_j": 0.0,
+      "energized_s": 0.0,
+      "max_current_a": 0.0,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    },
+    "after_600ms_low": {
+      "mode": "reversed_polarity",
+      "gpio_high": false,
+      "current_a": 1.7499999999999987,
+      "opening_pct": 99.99539225334573,
+      "edges": 2,
+      "source_j": 14.663250000001405,
+      "copper_j": 14.644875000001402,
+      "flyback_j": 0.0,
+      "disconnect_j": 0.0,
+      "stored_j": 0.018374999999999975,
+      "electrical_residual_j": 2.4980018054066022e-15,
+      "energized_s": 0.5999999999999922,
+      "max_current_a": 1.7499999999999987,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    }
+  },
+  "steady_dt_0.001": {
+    "mode": "normal",
+    "gpio_high": true,
+    "current_a": 1.7499999999999998,
+    "opening_pct": 80.86105778776317,
+    "edges": 1,
+    "source_j": 2.41325,
+    "copper_j": 2.3948750000000003,
+    "flyback_j": 0.0,
+    "disconnect_j": 0.0,
+    "stored_j": 0.018374999999999996,
+    "electrical_residual_j": -1.8735013540549517e-16,
+    "energized_s": 0.1,
+    "max_current_a": 1.7499999999999998,
+    "parameters": {
+      "resistance_ohm": 8.0,
+      "inductance_h": 0.012,
+      "diode_v": 0.7,
+      "mechanical_tau_s": 0.06,
+      "opening_current_a": 0.2,
+      "full_open_current_a": 1.1
+    }
+  },
+  "steady_dt_0.00025": {
+    "mode": "normal",
+    "gpio_high": true,
+    "current_a": 1.7499999999999993,
+    "opening_pct": 80.83042869733625,
+    "edges": 1,
+    "source_j": 2.413249999999986,
+    "copper_j": 2.3948749999999857,
+    "flyback_j": 0.0,
+    "disconnect_j": 0.0,
+    "stored_j": 0.01837499999999999,
+    "electrical_residual_j": 2.636779683484747e-16,
+    "energized_s": 0.1,
+    "max_current_a": 1.7499999999999993,
+    "parameters": {
+      "resistance_ohm": 8.0,
+      "inductance_h": 0.012,
+      "diode_v": 0.7,
+      "mechanical_tau_s": 0.06,
+      "opening_current_a": 0.2,
+      "full_open_current_a": 1.1
+    }
+  },
+  "steady_dt_0.000125": {
+    "mode": "normal",
+    "gpio_high": true,
+    "current_a": 1.7499999999999987,
+    "opening_pct": 80.83056666387039,
+    "edges": 1,
+    "source_j": 2.413249999999986,
+    "copper_j": 2.394874999999986,
+    "flyback_j": 0.0,
+    "disconnect_j": 0.0,
+    "stored_j": 0.018374999999999975,
+    "electrical_residual_j": -1.6653345369377348e-16,
+    "energized_s": 0.1,
+    "max_current_a": 1.7499999999999987,
+    "parameters": {
+      "resistance_ohm": 8.0,
+      "inductance_h": 0.012,
+      "diode_v": 0.7,
+      "mechanical_tau_s": 0.06,
+      "opening_current_a": 0.2,
+      "full_open_current_a": 1.1
+    }
+  },
+  "steady_dt_6.25e-05": {
+    "mode": "normal",
+    "gpio_high": true,
+    "current_a": 1.7499999999999973,
+    "opening_pct": 80.83073572029664,
+    "edges": 1,
+    "source_j": 2.4132500000000485,
+    "copper_j": 2.394875000000046,
+    "flyback_j": 0.0,
+    "disconnect_j": 0.0,
+    "stored_j": 0.018374999999999943,
+    "electrical_residual_j": 2.5292268279741847e-15,
+    "energized_s": 0.09999999999999591,
+    "max_current_a": 1.7499999999999973,
+    "parameters": {
+      "resistance_ohm": 8.0,
+      "inductance_h": 0.012,
+      "diode_v": 0.7,
+      "mechanical_tau_s": 0.06,
+      "opening_current_a": 0.2,
+      "full_open_current_a": 1.1
+    }
+  },
+  "random_electrical_balance": {
+    "mode": "normal",
+    "gpio_high": true,
+    "current_a": 1.3894261283681015,
+    "opening_pct": 48.1904398937197,
+    "edges": 249,
+    "source_j": 6.26805953464473,
+    "copper_j": 6.150918586988792,
+    "flyback_j": 0.10555791785879005,
+    "disconnect_j": 0.0,
+    "stored_j": 0.011583029797151834,
+    "electrical_residual_j": -3.256075964408467e-15,
+    "energized_s": 0.4704556705646679,
+    "max_current_a": 1.7395373740726772,
+    "parameters": {
+      "resistance_ohm": 8.0,
+      "inductance_h": 0.012,
+      "diode_v": 0.7,
+      "mechanical_tau_s": 0.06,
+      "opening_current_a": 0.2,
+      "full_open_current_a": 1.1
+    }
+  },
+  "replay_first-ours.json": {
+    "transition_count": 2274,
+    "first": [
+      [
+        631000,
+        8,
+        true,
+        "scheduled"
+      ],
+      [
+        634500,
+        8,
+        false,
+        "scheduled"
+      ],
+      [
+        641000,
+        8,
+        true,
+        "scheduled"
+      ]
+    ],
+    "source_delta_j": 3.6841640849161195e-12,
+    "copper_delta_j": -1.893596390800667e-12,
+    "flyback_delta_j": 4.418687638008123e-14,
+    "opening_delta_pct": 0.005679025709171448,
+    "current_delta_a": 0.0,
+    "replayed_final": {
+      "mode": "normal",
+      "gpio_high": false,
+      "current_a": 0.0,
+      "opening_pct": 5.297876030354776,
+      "edges": 2274,
+      "source_j": 25.050527508620156,
+      "copper_j": 23.865447328603434,
+      "flyback_j": 1.185080180010186,
+      "disconnect_j": 0.0,
+      "stored_j": 0.0,
+      "electrical_residual_j": 6.536549079783072e-12,
+      "energized_s": 2.220089999999837,
+      "max_current_a": 1.5802990562372905,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    }
+  },
+  "replay_first-speeduino.json": {
+    "transition_count": 2320,
+    "first": [
+      [
+        400004,
+        8,
+        true,
+        "scheduled"
+      ],
+      [
+        403504,
+        8,
+        false,
+        "scheduled"
+      ],
+      [
+        410004,
+        8,
+        true,
+        "scheduled"
+      ]
+    ],
+    "source_delta_j": 7.229772336359019e-13,
+    "copper_delta_j": 5.115907697472721e-13,
+    "flyback_delta_j": 1.1102230246251565e-14,
+    "opening_delta_pct": 0.0032957481959949853,
+    "current_delta_a": 0.0,
+    "replayed_final": {
+      "mode": "normal",
+      "gpio_high": false,
+      "current_a": 0.0,
+      "opening_pct": 2.377269330378663,
+      "edges": 2320,
+      "source_j": 10.85049352176596,
+      "copper_j": 10.063969164816298,
+      "flyback_j": 0.786524356949432,
+      "disconnect_j": 0.0,
+      "stored_j": 0.0,
+      "electrical_residual_j": 2.3070434451710753e-13,
+      "energized_s": 1.2882399999999845,
+      "max_current_a": 1.5802990562372905,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    }
+  },
+  "replay_half-step-ours.json": {
+    "transition_count": 2274,
+    "first": [
+      [
+        631000,
+        8,
+        true,
+        "scheduled"
+      ],
+      [
+        634500,
+        8,
+        false,
+        "scheduled"
+      ],
+      [
+        641000,
+        8,
+        true,
+        "scheduled"
+      ]
+    ],
+    "source_delta_j": 1.801225835151854e-12,
+    "copper_delta_j": -1.3642420526593924e-12,
+    "flyback_delta_j": -1.4654943925052066e-14,
+    "opening_delta_pct": -0.0009501048065310158,
+    "current_delta_a": 0.0,
+    "replayed_final": {
+      "mode": "normal",
+      "gpio_high": false,
+      "current_a": 0.0,
+      "opening_pct": 5.297888030910106,
+      "edges": 2274,
+      "source_j": 25.056348301055213,
+      "copper_j": 23.871128901697155,
+      "flyback_j": 1.185219399351886,
+      "disconnect_j": 0.0,
+      "stored_j": 0.0,
+      "electrical_residual_j": 6.171729793891245e-12,
+      "energized_s": 2.2204499999998366,
+      "max_current_a": 1.5802990562372905,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    }
+  },
+  "replay_half-step-speeduino.json": {
+    "transition_count": 2320,
+    "first": [
+      [
+        400004,
+        8,
+        true,
+        "scheduled"
+      ],
+      [
+        403504,
+        8,
+        false,
+        "scheduled"
+      ],
+      [
+        410004,
+        8,
+        true,
+        "scheduled"
+      ]
+    ],
+    "source_delta_j": 4.725109192804666e-13,
+    "copper_delta_j": -7.993605777301127e-13,
+    "flyback_delta_j": -2.6645352591003757e-15,
+    "opening_delta_pct": 0.00011505175977033488,
+    "current_delta_a": 0.0,
+    "replayed_final": {
+      "mode": "normal",
+      "gpio_high": false,
+      "current_a": 0.0,
+      "opening_pct": 2.383444243106104,
+      "edges": 2320,
+      "source_j": 10.864859145746708,
+      "copper_j": 10.07808241012186,
+      "flyback_j": 0.7867767356241409,
+      "disconnect_j": 0.0,
+      "stored_j": 0.0,
+      "electrical_residual_j": 7.069900220812997e-13,
+      "energized_s": 1.2889999999999777,
+      "max_current_a": 1.5802990562372905,
+      "parameters": {
+        "resistance_ohm": 8.0,
+        "inductance_h": 0.012,
+        "diode_v": 0.7,
+        "mechanical_tau_s": 0.06,
+        "opening_current_a": 0.2,
+        "full_open_current_a": 1.1
+      }
+    }
+  },
+  "reference_16_seed_False": {
+    "profile": {
+      "algorithm": 6,
+      "requested_hz": 100,
+      "represented_hz": 100,
+      "tick_us": 16,
+      "raw_kp": 24,
+      "raw_ki": 16,
+      "raw_kd": 0,
+      "initial_registers": [
+        0,
+        0,
+        65535,
+        16,
+        16,
+        5,
+        0,
+        0
+      ],
+      "seeded": false,
+      "invert": false,
+      "gain_mapping": "nominal normalized gain; actual integer PID cadence/rounding retained"
+    },
+    "initial": [],
+    "probe": [],
+    "clock": [],
+    "before_halt": {
+      "algorithm": 6,
+      "frequency_hz": 100,
+      "reported_duty_pct": 35,
+      "target_rpm": 0,
+      "on": 1,
+      "physical_level": 0,
+      "counter": 1562,
+      "compare": 65535
+    },
+    "halt": [],
+    "after_halt": {
+      "algorithm": 6,
+      "frequency_hz": 100,
+      "reported_duty_pct": 0,
+      "target_rpm": 0,
+      "on": 0,
+      "physical_level": 0,
+      "counter": 1562,
+      "compare": 65535
+    },
+    "post_halt_clock": [],
+    "post_halt_status": {
+      "algorithm": 6,
+      "frequency_hz": 100,
+      "reported_duty_pct": 0,
+      "target_rpm": 0,
+      "on": 0,
+      "physical_level": 0,
+      "counter": 3125,
+      "compare": 65535
+    }
+  },
+  "reference_16_seed_True": {
+    "profile": {
+      "algorithm": 6,
+      "requested_hz": 100,
+      "represented_hz": 100,
+      "tick_us": 16,
+      "raw_kp": 24,
+      "raw_ki": 16,
+      "raw_kd": 0,
+      "initial_registers": [
+        0,
+        0,
+        65535,
+        16,
+        16,
+        5,
+        1,
+        0
+      ],
+      "seeded": true,
+      "invert": false,
+      "gain_mapping": "nominal normalized gain; actual integer PID cadence/rounding retained"
+    },
+    "initial": [],
+    "probe": [],
+    "clock": [
+      [
+        16,
+        8,
+        true,
+        null,
+        null
+      ],
+      [
+        3520,
+        8,
+        false,
+        null,
+        null
+      ],
+      [
+        10016,
+        8,
+        true,
+        null,
+        null
+      ],
+      [
+        13520,
+        8,
+        false,
+        null,
+        null
+      ],
+      [
+        20016,
+        8,
+        true,
+        null,
+        null
+      ],
+      [
+        23520,
+        8,
+        false,
+        null,
+        null
+      ]
+    ],
+    "before_halt": {
+      "algorithm": 6,
+      "frequency_hz": 100,
+      "reported_duty_pct": 35,
+      "target_rpm": 0,
+      "on": 1,
+      "physical_level": 0,
+      "counter": 1562,
+      "compare": 1876
+    },
+    "halt": [],
+    "after_halt": {
+      "algorithm": 6,
+      "frequency_hz": 100,
+      "reported_duty_pct": 0,
+      "target_rpm": 0,
+      "on": 0,
+      "physical_level": 0,
+      "counter": 1562,
+      "compare": 1876
+    },
+    "post_halt_clock": [
+      [
+        30016,
+        8,
+        true,
+        null,
+        null
+      ],
+      [
+        33520,
+        8,
+        false,
+        null,
+        null
+      ],
+      [
+        40016,
+        8,
+        true,
+        null,
+        null
+      ],
+      [
+        43520,
+        8,
+        false,
+        null,
+        null
+      ]
+    ],
+    "post_halt_status": {
+      "algorithm": 6,
+      "frequency_hz": 100,
+      "reported_duty_pct": 0,
+      "target_rpm": 0,
+      "on": 0,
+      "physical_level": 0,
+      "counter": 3125,
+      "compare": 3126
+    }
+  },
+  "reference_32_seed_False": {
+    "profile": {
+      "algorithm": 6,
+      "requested_hz": 100,
+      "represented_hz": 100,
+      "tick_us": 4,
+      "raw_kp": 96,
+      "raw_ki": 64,
+      "raw_kd": 0,
+      "initial_registers": [
+        0,
+        0,
+        4294967295,
+        32,
+        4,
+        5,
+        0,
+        0
+      ],
+      "seeded": false,
+      "invert": false,
+      "gain_mapping": "nominal normalized gain; actual integer PID cadence/rounding retained"
+    },
+    "initial": [],
+    "probe": [],
+    "clock": [],
+    "before_halt": {
+      "algorithm": 6,
+      "frequency_hz": 100,
+      "reported_duty_pct": 35,
+      "target_rpm": 0,
+      "on": 1,
+      "physical_level": 0,
+      "counter": 6250,
+      "compare": 4294967295
+    },
+    "halt": [],
+    "after_halt": {
+      "algorithm": 6,
+      "frequency_hz": 100,
+      "reported_duty_pct": 0,
+      "target_rpm": 0,
+      "on": 0,
+      "physical_level": 0,
+      "counter": 6250,
+      "compare": 4294967295
+    },
+    "post_halt_clock": [],
+    "post_halt_status": {
+      "algorithm": 6,
+      "frequency_hz": 100,
+      "reported_duty_pct": 0,
+      "target_rpm": 0,
+      "on": 0,
+      "physical_level": 0,
+      "counter": 12500,
+      "compare": 4294967295
+    }
+  },
+  "reference_32_seed_True": {
+    "profile": {
+      "algorithm": 6,
+      "requested_hz": 100,
+      "represented_hz": 100,
+      "tick_us": 4,
+      "raw_kp": 96,
+      "raw_ki": 64,
+      "raw_kd": 0,
+      "initial_registers": [
+        0,
+        0,
+        4294967295,
+        32,
+        4,
+        5,
+        1,
+        0
+      ],
+      "seeded": true,
+      "invert": false,
+      "gain_mapping": "nominal normalized gain; actual integer PID cadence/rounding retained"
+    },
+    "initial": [],
+    "probe": [],
+    "clock": [
+      [
+        4,
+        8,
+        true,
+        null,
+        null
+      ],
+      [
+        3504,
+        8,
+        false,
+        null,
+        null
+      ],
+      [
+        10004,
+        8,
+        true,
+        null,
+        null
+      ],
+      [
+        13504,
+        8,
+        false,
+        null,
+        null
+      ],
+      [
+        20004,
+        8,
+        true,
+        null,
+        null
+      ],
+      [
+        23504,
+        8,
+        false,
+        null,
+        null
+      ]
+    ],
+    "before_halt": {
+      "algorithm": 6,
+      "frequency_hz": 100,
+      "reported_duty_pct": 35,
+      "target_rpm": 0,
+      "on": 1,
+      "physical_level": 0,
+      "counter": 6250,
+      "compare": 7501
+    },
+    "halt": [],
+    "after_halt": {
+      "algorithm": 6,
+      "frequency_hz": 100,
+      "reported_duty_pct": 0,
+      "target_rpm": 0,
+      "on": 0,
+      "physical_level": 0,
+      "counter": 6250,
+      "compare": 7501
+    },
+    "post_halt_clock": [
+      [
+        30004,
+        8,
+        true,
+        null,
+        null
+      ],
+      [
+        33504,
+        8,
+        false,
+        null,
+        null
+      ],
+      [
+        40004,
+        8,
+        true,
+        null,
+        null
+      ],
+      [
+        43504,
+        8,
+        false,
+        null,
+        null
+      ]
+    ],
+    "post_halt_status": {
+      "algorithm": 6,
+      "frequency_hz": 100,
+      "reported_duty_pct": 0,
+      "target_rpm": 0,
+      "on": 0,
+      "physical_level": 0,
+      "counter": 12500,
+      "compare": 12501
+    }
+  }
+}

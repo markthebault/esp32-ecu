@@ -17,6 +17,7 @@ from sequential_metrics import sequential_metrics
 ROOT=Path(__file__).resolve().parents[1]
 CAM_SCENARIOS=('cam_dropout','cam_extra','cam_wrong_phase','cam_missing_start')
 SCENARIOS=('warm_start','throttle_step','load_step','trigger_dropout','sensor_short','stall_restart','overrev')
+IDLE_SCENARIOS=('idle_load_step','idle_throttle_blip','idle_cold_start')
 
 
 def benchmark_tune():
@@ -32,21 +33,28 @@ def benchmark_tune():
 
 class OurController:
     def __init__(self,tune=None):
-        self.runtime=EngineRuntime(tune or benchmark_tune());self.runtime.wheel()
-        self.status={};self.high=[False]*8;self.stops=[]
+        tune=tune or benchmark_tune()
+        from target_runtime import TargetRuntime
+        self.runtime=(TargetRuntime if tune['settings']['idle_enabled'] else EngineRuntime)(tune);self.runtime.wheel()
+        self.channels=9 if tune['settings']['idle_enabled'] else 8
+        self.worker_us=1000 if self.channels==9 else None
+        self.status={};self.high=[False]*self.channels;self.stops=[]
 
     def sample(self,sample,us):
         self.status=self.runtime.step(sample,us,use_decoder=True)
         if self.status['faults'] or self.status['state']=='stopped':
-            self.runtime.cut();self.high=[False]*8;return True
+            self.runtime.cut();self.high=[False]*self.channels;return True
         return False
 
     def advance(self,us):
         edges=[]
-        while self.runtime.next_event_us()<=us:
+        while min(self.runtime.next_event_us(),self.worker_us if self.worker_us is not None else 2**64-1)<=us:
+            if self.worker_us is not None and self.worker_us<self.runtime.next_event_us():
+                self.runtime.progress(self.worker_us);self.worker_us+=1000;continue
             when=self.runtime.next_event_us();ch,high,advance,dwell=self.runtime.pop_event()
+            if ch==-1:continue
             if ch is None:
-                self.runtime.cut();self.high=[False]*8
+                self.runtime.cut();self.high=[False]*self.channels
                 edges.append((when,None,False,None,None));continue
             self.high[ch]=high;edges.append((when,ch,high,advance,dwell))
         return edges
@@ -55,39 +63,49 @@ class OurController:
         state=self.runtime.cam(us)
         if state in (2,3):
             if state==3:self.stops.append(dict(time_us=us,reason=self.runtime.timing_reason()))
-            self.runtime.cut();self.high=[False]*8;return True
+            self.runtime.cut();self.high=[False]*self.channels;return True
         return False
 
     def trigger(self,us):
         state=self.runtime.trigger(us)
         if state in (2,3):
             if state==3:self.stops.append(dict(time_us=us,reason=self.runtime.timing_reason()))
-            self.runtime.cut();self.high=[False]*8;return True
+            self.runtime.cut();self.high=[False]*self.channels;return True
         return False
 
     def close(self):self.runtime.close()
 
 
-def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32):
-    if controller not in ('ours','speeduino','speeduino_per_tooth') or scenario not in (SCENARIOS+CAM_SCENARIOS if sequential else SCENARIOS):raise ValueError('Unknown benchmark case')
+def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32,idle_options=None):
+    if controller not in ('ours','speeduino','speeduino_per_tooth') or scenario not in (SCENARIOS+(CAM_SCENARIOS if sequential else ())+ (IDLE_SCENARIOS if idle_options is not None else ())):raise ValueError('Unknown benchmark case')
     if step_us not in (100,125,250,500) or not 1<=duration<=30:raise ValueError('Invalid benchmark duration/step')
     if control_period_us not in (1000,5000):raise ValueError('Unsupported control sampling period')
     if tune is not None and controller!='ours':raise ValueError('Custom tune is supported only by the project controller')
-    plant=ResearchPlant()
+    idle=idle_options is not None
+    if idle:
+        idle_options=dict(idle_options);idle_tune=copy.deepcopy(idle_options.get('tune') or benchmark_tune());idle_tune['settings']['idle_enabled']=True
+        if controller=='ours':tune=idle_tune
+    plant=ResearchPlant(cold=scenario=='idle_cold_start',idle_valve=idle_options.get('valve_mode','normal') if idle else None)
     if sequential and controller=='ours':
         tune=copy.deepcopy(tune or benchmark_tune());tune['strategy']='sequential_4cyl'
     try:ecu=OurController(tune) if controller=='ours' else SpeeduinoRuntime(per_tooth=controller=='speeduino_per_tooth',sequential=sequential,timer_bits=reference_timer_bits)
     except Exception:plant.close();raise
     trace=[];edges_all=[];trigger_edges=[];cam_edges=[];cam_angles=[900. if scenario=='cam_wrong_phase' else 540.,900.];now=0;next_sample=0;tooth_index=1
-    state={};high=[False]*8;rise=[0]*8;max_high=[0]*8;inhibits=[];hard_cut_samples=0;fault_mask=0
+    channels=9 if idle else 8
+    state={};high=[False]*channels;rise=[0]*channels;max_high=[0]*channels;inhibits=[];hard_cut_samples=0;fault_mask=0
+    if idle and controller!='ours':
+        initial=ecu.configure_idle(idle_tune,seeded=idle_options.get('seeded',True),invert=idle_options.get('invert',False))
+        for us,ch,value,_,_ in initial:
+            if ch!=8 or us!=0:raise RuntimeError('Unexpected before-start idle transition')
+            high[ch]=value;plant.edge(ch,value,0)
     def inhibit(us,cause):
         for ch,value in enumerate(high):
             if value:
                 max_high[ch]=max(max_high[ch],us-rise[ch]);edges_all.append([us,ch,False,'cut:'+cause])
-        high[:]=[False]*8;plant.cut();inhibits.append([us,cause])
+        high[:]=[False]*channels;plant.cut();inhibits.append([us,cause])
     def plant_edge(ch,value,us,advance,latest,dwell):
         plant.edge(ch,value,us/1e6,advance,latest,dwell)
-        if ch>=4 and not value:
+        if 4<=ch<8 and not value:
             if controller=='ours':mode=dict(sync_status=2 if state.get('phase_synced') else 1 if state.get('crank_synced',state.get('synced')) else 0,ignition_cycle_deg=720 if sequential else 360,effective_sequential=sequential and bool(state.get('phase_synced')))
             else:
                 mode=ecu.edge_modes.get((us,ch,value),{})
@@ -97,7 +115,9 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
         while now<round(duration*1e6):
             t=now/1e6
             plant.tps=(12 if scenario=='throttle_step' else 100) if t>=3 and scenario in ('throttle_step','overrev') else 0
+            if scenario=='idle_throttle_blip':plant.tps=8 if 4<=t<4.5 else 0
             load=35 if scenario=='load_step' and t>=4 else 5
+            if scenario=='idle_load_step':load=idle_options.get('step_load_nm',9) if 5<=t<9 else 5
             # A declared motoring dynamometer forces the shaft across the hard
             # limit even if soft retard would otherwise settle below it. Its
             # supplied work is explicit as negative resisting-load work.
@@ -113,6 +133,9 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                     fault_mask|=state.get('faults',0)
                 else:
                     ecu.sensors(sample);state=ecu.status()
+                if idle:
+                    state['idle_valve']=plant.idle_valve.snapshot()
+                    state['idle_pwm']=ecu.runtime.idle_status() if controller=='ours' else ecu.idle_status()
                 if (controller=='ours' and state.get('faults',0)&32) or (controller!='ours' and state.get('rpm',0)>=6450 and state.get('fuel_channels',255)==0 and state.get('ignition_channels',255)==0):
                     hard_cut_samples+=1
                 next_sample=now+control_period_us
@@ -187,8 +210,15 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                 if not high[ch]:raise RuntimeError('Duplicate native termination fall')
                 max_high[ch]=max(max_high[ch],us-rise[ch]);high[ch]=False
                 edges_all.append([us,ch,False,'cut:production_halt'])
-            if any(high):raise RuntimeError('Native production halt left an output high')
+            if any(high[:8]):raise RuntimeError('Native production halt left an engine output high')
         else:ecu.runtime.cut()
+        idle_halt_high=bool(high[8]) if idle and controller!='ours' else False
+        idle_post_halt=[]
+        if idle and controller!='ours':
+            # Observe the unmodified production disable path for >2 periods.
+            # This diagnostic interval is outside the coupled plant horizon.
+            idle_post_halt=ecu._edges(ecu.command('idleclock '+str(now+50000)))
+            if any(ch!=8 for _,ch,_,_,_ in idle_post_halt):raise RuntimeError('Engine output restarted after production halt')
         inhibit(now,'simulation_end')
         summary=dict(strategy='sequential_4cyl' if sequential else 'batch_wasted_4cyl',cam_profile=('one rising edge at90deg ATDC C1 compression TDC (deliberately wrong by360)' if scenario=='cam_wrong_phase' else 'one rising edge at450deg ATDC C1 compression TDC') if sequential else None,reference_timer_bits=reference_timer_bits if controller!='ours' else None,controller=controller,scenario=scenario,duration_s=duration,step_us=step_us,
                      control_period_us=control_period_us,
@@ -196,7 +226,7 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                      physical_outputs_enabled=False,final_rpm=final_rpm,max_rpm=max((r['plant_rpm'] for r in trace),default=0),
                      sparks=plant.sparks,edges=len(edges_all),trigger_edges=len(trigger_edges),
                      max_trigger_quantization_deg=max((r[2] for r in trigger_edges),default=0),
-                     max_injector_high_us=max(max_high[:4]),max_dwell_high_us=max(max_high[4:]),
+                     max_injector_high_us=max(max_high[:4]),max_dwell_high_us=max(max_high[4:8]),
                      max_spark_error_deg=max((abs(r['error_deg']) for r in plant.spark_errors),default=0),
                      max_spark_error_after_3s_deg=max((abs(r['error_deg']) for r in plant.spark_errors if r['time_s']>=3),default=0),
                      spark_error_reference='latched dwell-start demand' if controller=='ours' else 'last sampled production demand; not event-latched',
@@ -211,6 +241,11 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                      outputs_high_before_stop=before_end_high,termination='explicit virtual production halt/cut',
                      final_outputs_high=sum(high),ledger=ledger)
         if sequential:summary.update(sequential_metrics(plant.spark_errors))
+        if idle:
+            summary.update(idle_valve=plant.idle_valve.snapshot(),idle_profile=ecu.idle_profile if controller!='ours' else dict(tune=idle_tune['idle_control'],settings={k:v for k,v in idle_tune['settings'].items() if k.startswith('idle_')}),
+                           idle_high_after_production_halt=idle_halt_high,
+                           idle_post_halt_probe=dict(duration_us=50000,edges=idle_post_halt,pwm_restarts_or_stays_high=idle_halt_high or any(row[2] for row in idle_post_halt),basis='timer-only diagnostic after coupled horizon; no plant integration in this separate probe'),
+                           idle_electrical_ledger_basis='before explicit external simulation-end cut; NC mechanical/current decay is finite')
         return dict(summary=summary,trace=trace,edges=edges_all,triggers=trigger_edges,
                     cams=cam_edges,spark_timing=plant.spark_errors,dwell=plant.dwell_events,final_ecu=state)
     finally:

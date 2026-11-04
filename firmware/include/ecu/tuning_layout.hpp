@@ -5,15 +5,15 @@
 #include <cstring>
 #include <limits>
 namespace ecu::tuning {
-inline constexpr std::size_t page_bytes=4768,live_bytes=216,chunk_bytes=256;
-inline constexpr const char signature[]="ESP32ECU DEV 004 INHIBITED";
+inline constexpr std::size_t page_bytes=4992,live_bytes=256,chunk_bytes=256;
+inline constexpr const char signature[]="ESP32ECU DEV 005 INHIBITED";
 inline constexpr const char serial_protocol[]="002";
 using Page=std::array<std::uint8_t,page_bytes>;
 inline void put_u32(std::uint8_t*p,std::uint32_t v){for(unsigned i=0;i<4;++i)p[i]=std::uint8_t(v>>(8*i));}
 inline std::uint32_t get_u32(const std::uint8_t*p){std::uint32_t v=0;for(unsigned i=0;i<4;++i)v|=std::uint32_t(p[i])<<(8*i);return v;}
 inline void put_float(std::uint8_t*p,float v){static_assert(sizeof(float)==4&&std::numeric_limits<float>::is_iec559);std::uint32_t u;std::memcpy(&u,&v,4);put_u32(p,u);}
 inline float get_float(const std::uint8_t*p){auto u=get_u32(p);float v;std::memcpy(&v,&u,4);return v;}
-inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||n>=4756;}
+inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||(n>=4756&&n<4768)||n>=4940;}
 inline bool revision_offset(std::size_t n){return n>=268&&n<272;}
 inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill(0);
  put_u32(p.data(),(std::uint32_t(t.ego_enabled)<<0)|(std::uint32_t(t.dfco_enabled)<<1)|(std::uint32_t(t.idle_enabled)<<2));
@@ -72,6 +72,29 @@ inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill
   for(unsigned i=0;i<6;++i){put_float(p.data()+o+i*4,m.rpm[i]);put_float(p.data()+o+24+i*4,m.load[i]);}
   for(unsigned i=0;i<36;++i){put_float(p.data()+o+48+i*4,m.cells[i]);}put_float(p.data()+4736+c*4,t.cylinder_spark_deg[c]);}
  put_u32(p.data()+4752,t.cylinder_trims_enabled);
+ put_u32(p.data()+4768,std::uint32_t(t.idle_control.algorithm));
+ put_float(p.data()+4772,t.idle_control.frequency_hz);
+ put_float(p.data()+4776,t.idle_control.control_period_ms);
+ put_float(p.data()+4780,t.idle_control.min_pct);
+ put_float(p.data()+4784,t.idle_control.max_pct);
+ put_float(p.data()+4788,t.idle_control.tps_closed_pct);
+ put_float(p.data()+4792,t.idle_control.tps_hysteresis_pct);
+ put_float(p.data()+4796,t.idle_control.entry_rpm_above);
+ put_float(p.data()+4800,t.idle_control.exit_rpm_above);
+ put_float(p.data()+4804,t.idle_control.entry_delay_s);
+ put_float(p.data()+4808,t.idle_control.afterstart_taper_s);
+ put_float(p.data()+4812,t.idle_control.dashpot_pct);
+ put_float(p.data()+4816,t.idle_control.dashpot_decay_pct_s);
+ put_float(p.data()+4820,t.idle_control.slew_pct_s);
+ put_float(p.data()+4824,t.idle_control.integral_limit_pct);
+ put_float(p.data()+4828,t.idle_control.kd);
+ put_float(p.data()+4832,t.idle_control.derivative_filter_s);
+ put_float(p.data()+4836,t.idle_control.fast_idle_temp_c);
+ put_float(p.data()+4840,t.idle_control.fast_idle_hysteresis_c);
+ for(unsigned i=0;i<6;++i)put_float(p.data()+4844+i*4,t.idle_control.coolant_c[i]);
+ for(unsigned i=0;i<6;++i)put_float(p.data()+4868+i*4,t.idle_control.run_pct[i]);
+ for(unsigned i=0;i<6;++i)put_float(p.data()+4892+i*4,t.idle_control.crank_pct[i]);
+ for(unsigned i=0;i<6;++i)put_float(p.data()+4916+i*4,t.idle_control.target_add_rpm[i]);
 }
 inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  if(!origin||get_u32(p.data()+268)!=origin)return false;
@@ -134,9 +157,32 @@ inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
   for(unsigned i=0;i<6;++i){m.rpm[i]=get_float(p.data()+o+i*4);m.load[i]=get_float(p.data()+o+24+i*4);}
   for(unsigned i=0;i<36;++i){m.cells[i]=get_float(p.data()+o+48+i*4);}t.cylinder_spark_deg[c]=get_float(p.data()+4736+c*4);}
  const auto enabled=get_u32(p.data()+4752);if(enabled>1)return false;t.cylinder_trims_enabled=enabled;
+ const auto idle_algorithm=get_u32(p.data()+4768);if(idle_algorithm>2)return false;t.idle_control.algorithm=idle::Algorithm(idle_algorithm);
+ t.idle_control.frequency_hz=get_float(p.data()+4772);
+ t.idle_control.control_period_ms=get_float(p.data()+4776);
+ t.idle_control.min_pct=get_float(p.data()+4780);
+ t.idle_control.max_pct=get_float(p.data()+4784);
+ t.idle_control.tps_closed_pct=get_float(p.data()+4788);
+ t.idle_control.tps_hysteresis_pct=get_float(p.data()+4792);
+ t.idle_control.entry_rpm_above=get_float(p.data()+4796);
+ t.idle_control.exit_rpm_above=get_float(p.data()+4800);
+ t.idle_control.entry_delay_s=get_float(p.data()+4804);
+ t.idle_control.afterstart_taper_s=get_float(p.data()+4808);
+ t.idle_control.dashpot_pct=get_float(p.data()+4812);
+ t.idle_control.dashpot_decay_pct_s=get_float(p.data()+4816);
+ t.idle_control.slew_pct_s=get_float(p.data()+4820);
+ t.idle_control.integral_limit_pct=get_float(p.data()+4824);
+ t.idle_control.kd=get_float(p.data()+4828);
+ t.idle_control.derivative_filter_s=get_float(p.data()+4832);
+ t.idle_control.fast_idle_temp_c=get_float(p.data()+4836);
+ t.idle_control.fast_idle_hysteresis_c=get_float(p.data()+4840);
+ for(unsigned i=0;i<6;++i)t.idle_control.coolant_c[i]=get_float(p.data()+4844+i*4);
+ for(unsigned i=0;i<6;++i)t.idle_control.run_pct[i]=get_float(p.data()+4868+i*4);
+ for(unsigned i=0;i<6;++i)t.idle_control.crank_pct[i]=get_float(p.data()+4892+i*4);
+ for(unsigned i=0;i<6;++i)t.idle_control.target_add_rpm[i]=get_float(p.data()+4916+i*4);
  return !engine::validate(t);
 }
-// Update only an owned, already canonical schema3 tree. No global data mutates.
+// Update only an owned, already canonical schema4 tree. No global data mutates.
 template<class Json> bool update_document(Json&j,const engine::Tune&t){
  if(!j.header(t.revision,engine::strategy_name(t.strategy)))return false;
  if(!j.number("engine","cylinders",t.cylinders))return false;
@@ -189,6 +235,7 @@ template<class Json> bool update_document(Json&j,const engine::Tune&t){
  if(!j.number("timing","cam_window_deg",t.cam_window_deg))return false;
  if(!j.array("timing","firing_order",t.firing_order)||!j.boolean("cylinder_trims","enabled",t.cylinder_trims_enabled)||!j.array("cylinder_trims","spark_deg",t.cylinder_spark_deg))return false;
  for(unsigned i=0;i<4;++i)if(!j.trim(i,t.cylinder_fuel[i]))return false;
+ if(!j.idle(t.idle_control))return false;
  return true;
 }
 } // namespace ecu::tuning

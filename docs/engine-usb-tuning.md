@@ -16,7 +16,7 @@ The project-local pinned ESP-IDF USB component fixes one TX-ring allocation chec
 
 ## Layout and commits
 
-The controller signature is `ESP32ECU DEV 004 INHIBITED`. Raw and framed `F` return serial protocol `002`; `f` advertises protocol 2 with 256-byte data chunks. The MS-envelope uses a big-endian length and CRC32 around command payloads. Calibration and runtime values are little-endian. [Layout manifest](../tuning/protocol-layout.json) and [current INI](../tuning/esp32-ecu-development.ini) match the shared generated codec.
+The controller signature is `ESP32ECU DEV 005 INHIBITED`. Raw and framed `F` return serial protocol `002`; `f` advertises protocol 2 with 256-byte data chunks. The MS-envelope uses a big-endian length and CRC32 around command payloads. Calibration and runtime values are little-endian. [Layout manifest](../tuning/protocol-layout.json) and [current INI](../tuning/esp32-ecu-idle.ini) match the shared generated codec.
 
 | Page 1 region | Offset | Bytes |
 | --- | ---: | ---: |
@@ -25,12 +25,13 @@ The controller signature is `ESP32ECU DEV 004 INHIBITED`. Raw and framed `F` ret
 | Spark axes and map | 1664 | 1152 |
 | Lambda axes and map | 2816 | 1152 |
 | Four physical-cylinder trim maps, spark offsets and enable | 3968 | 800 |
+| Idle algorithm, scalars, curves and reserved tail | 4768 | 224 |
 
-One complete 4768-byte page avoids TunerStudio's automatic burn between pages splitting a valid strategy/trim transition. `M` modifies staged bytes only. A successful `b` validates the complete native tune, repeats the atomic backend revision check, persists, activates, resets controller state and reacquires phase. It can happen automatically when a dialog closes. It is not a promise of seamless hot tuning or a separate manual-only apply step.
+One complete 4992-byte page avoids TunerStudio's automatic burn between pages splitting a valid strategy/trim transition. `M` modifies staged bytes only. A successful `b` validates the complete native tune, repeats the atomic backend revision check, persists, activates, resets controller state and reacquires phase. It can happen automatically when a dialog closes. It is not a promise of seamless hot tuning or a separate manual-only apply step.
 
 The mapped origin revision at offset 268 is read-only and remains byte-for-byte stable until explicit rediscovery. A successful burn advances only the internal expected backend revision and active revision. Thus CRCs do not change behind an application's cache. Repeated clean burns are idempotent only while the backend revision still matches. An HTTP/other-session save causes permanent conflict 84 even for a clean session; it never silently rebases cached values.
 
-Changed read-only/reserved bytes reject the entire write chunk. Invalid whole tunes retain both staged edits and the active tune. Conflict, invalid tune and storage-blocked conditions return 84; temporary contention/allocation failure returns85. Successful burn returns 04. Persistence failure retains active calibration, closes the configuration fence at the old revision and blocks further saves until restart/inspection. The fence may deliberately cut virtual outputs before a failed flash operation; retaining calibration does not imply uninterrupted execution.
+Changed read-only/reserved bytes reject the entire write chunk. Invalid whole tunes retain both staged edits and the active tune. Conflict, invalid tune and storage-blocked conditions return 84; temporary contention/allocation failure returns 85. Successful burn returns 04. Persistence failure retains active calibration, closes the configuration fence at the old revision and blocks further saves until restart/inspection. The fence may deliberately cut virtual outputs before a failed flash operation; retaining calibration does not imply uninterrupted execution.
 
 Preparation uses checked owned text and typed tune allocations. USB commit avoids unchecked project-side string allocation. Independent failure injection covers cJSON allocation positions and the checked document copy, final-CAS races and NVS API failures. It does not cover every internal SDK allocation or physical flash/power-loss behavior. Existing boot-load and HTTP-response string allocation limits are outside that USB commit result.
 
@@ -38,7 +39,7 @@ An idle raw `F`, optionally prefixed by `F0`, explicitly discards staged edits a
 
 ## Runtime and UI
 
-The runtime block is 216 bytes. The existing 184-byte proposal/phase/cylinder layout is retained, followed by:
+The runtime block is 256 bytes. The existing 184-byte proposal/phase/cylinder layout is retained, followed by:
 
 | Offset | U32 value |
 | ---: | --- |
@@ -51,11 +52,13 @@ The runtime block is 216 bytes. The existing 184-byte proposal/phase/cylinder la
 | 208 | Input-valid mask |
 | 212 | Coherent observation flags |
 
+Own005 appends six F32 values at 216..239: target, feedforward, P, I, D and proposed duty. U32 flags/state/reason/algorithm occupy 240..255. Flags bit 8 supplies `iacAvailable`; missing idle data must not appear as a valid zero. Source/age and availability are logged explicitly. The 216-byte prefix and historical own004 definition remain records.
+
 Sample revision at 56 is independent of active/session revisions. A save clears the old completed control observation. An absent sample has `hasResult=0` and unknown age; zeros are not a measurement. This wire's source codes retain the older domain: 0 none, 1 completed synthetic, 2 target. JSON/radio `DataSource` codes use a different domain: 0 none, 1 target, 2 synthetic. Do not interchange them. A target observation is still a software proposal, not proof of a pin transition.
 
 The Engine development page has authenticated read-only tuning diagnostics and JSON export at `/api/engine/tuning`. It shows state, revisions, burn/rejection counters, CRC/timeouts/framing/TX errors, bus-presence meaning and unknown driver drops. Multiple host sessions are exported separately; they are not presented as one connected screen or a real USB device.
 
-Own004 MSQ origin is metadata. The browser displays it and retains the editor's already-loaded revision for the normal Save CAS. An intervening writer still causes 409. Saving is explicit after review. TunerStudio omits the read-only origin from its saved MSQ. The browser shows it as unavailable and retains the loaded editor revision. Python import accepts an explicit already-loaded `base_revision`; without one it uses revision1 as an offline placeholder, never a discovered current revision. Exact historical own001/002/003 MSQs remain importable, with their existing revision guards and neutral migration of absent features. Other ECU identities are rejected. Engine JSON remains schema 3.
+Own004/005 MSQ origin is metadata. The browser displays it and retains the editor's already-loaded revision for the normal Save CAS. An intervening writer still causes 409. Saving is explicit after review. TunerStudio omits the read-only origin from its saved MSQ. The browser shows it as unavailable and retains the loaded editor revision. Python import accepts an explicit already-loaded `base_revision`; without one it uses revision 1 as an offline placeholder, never a discovered current revision. Exact historical own001/002/003/004 MSQs remain importable, with their existing revision guards and neutral migration of absent features. Other ECU identities are rejected. Engine JSON is schema 4; historical engine JSON/MSQs migrate with new idle disabled.
 
 ## Reproduction and evidence
 
@@ -74,3 +77,5 @@ python3 scripts/audit_tuning_build.py compact_n16r8_web NEW_OUTPUT.json
 Use new output paths when preserving a published run. [Evidence](../reports/engine/tuning-usb/) binds reviewed sources, application logs/wire captures, native tests, Chrome checks, nine before-start plant comparisons and three firmware builds. The external benchmark uses the hash-verified MVEM air path plus local uncalibrated combustion/free shaft, with actual pinned Speeduino production control in a zero-CPU-cost native HAL. The different fuel/deadtime policies and wrong-cylinder negative control remain explicit. USB commits during a running plant are not modeled by this benchmark; real service configuration fences are separately exercised with fakes.
 
 [Prepared vendor request](../tuning/vendor-integration-request.md) remains unsent. Full Speeduino feature parity, target/HIL measurements and vehicle electrical/environmental qualification remain open in the [coverage ledger](engine-feature-coverage.md).
+
+The [idle increment](engine-idle-control.md) records own005 offline application edits, 91-field bounded engine logging, 48-field direct SIL logging and current validation. Historical USB evidence in the directory above remains unchanged.

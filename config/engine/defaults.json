@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "revision": 1,
   "strategy": "batch_wasted_4cyl",
   "physical_outputs": "inhibited",
@@ -99,5 +99,30 @@
         "cells": [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
       }
     ]
+  },
+  "idle_control": {
+    "algorithm": "closed_loop",
+    "frequency_hz": 100,
+    "control_period_ms": 100,
+    "min_pct": 0,
+    "max_pct": 100,
+    "tps_closed_pct": 2,
+    "tps_hysteresis_pct": 0.5,
+    "entry_rpm_above": 300,
+    "exit_rpm_above": 500,
+    "entry_delay_s": 0.25,
+    "afterstart_taper_s": 2,
+    "dashpot_pct": 8,
+    "dashpot_decay_pct_s": 10,
+    "slew_pct_s": 200,
+    "integral_limit_pct": 40,
+    "kd": 0,
+    "derivative_filter_s": 0.1,
+    "fast_idle_temp_c": 50,
+    "fast_idle_hysteresis_c": 5,
+    "coolant_c": [-40, 0, 20, 40, 70, 110],
+    "run_pct": [65, 50, 38, 30, 20, 20],
+    "crank_pct": [75, 65, 55, 45, 35, 35],
+    "target_add_rpm": [400, 300, 200, 100, 0, 0]
   }
 }

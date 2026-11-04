@@ -18,6 +18,8 @@ inline void live_block(const engine::RuntimeSample&s,std::uint64_t now,std::arra
  put_u32(b.data()+76,s.has(engine::CrankSynced));put_u32(b.data()+80,s.has(engine::PhaseSynced));put_u32(b.data()+84,s.has(engine::PhaseRequired));put_u32(b.data()+88,s.phase_losses);put_u32(b.data()+92,s.strategy);put_u32(b.data()+96,s.cam_rejected);
  for(unsigned c=0;c<4;++c){const bool known=s.cylinder_valid&(1U<<c);value(100+c*16,known?s.cylinder_pulse_ms[c]:0);value(104+c*16,known?s.cylinder_advance_deg[c]:0);value(108+c*16,known?s.cylinder_fuel_pct[c]:0);value(112+c*16,known?s.cylinder_duty_pct[c]:0);}
  put_u32(b.data()+164,s.cylinder_valid);put_u32(b.data()+168,s.cylinder_enabled);put_u32(b.data()+172,s.cylinder_capacity_mask);put_u32(b.data()+176,s.cylinder_spark_clamp_mask);put_u32(b.data()+180,s.cylinder_retard_floor_mask);
+ const unsigned idle_index[]={0,2,3,4,5,1};for(unsigned i=0;i<6;++i)value(216+i*4,s.idle_proposals[idle_index[i]]);
+ put_u32(b.data()+240,s.idle_flags|(s.idle_available&&s.has(engine::Present)?256U:0U));put_u32(b.data()+244,s.idle_state);put_u32(b.data()+248,s.idle_reason);put_u32(b.data()+252,s.idle_algorithm);
  put_u32(b.data()+208,s.input_valid);
  const auto sample_age=engine::data_age_us(s,s.sampled_us,now);
  const bool fresh=age<=1000000&&sample_age<=1000000;

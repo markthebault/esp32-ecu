@@ -26,3 +26,9 @@ tuning/examples/tunerstudio-cylinder-roundtrip.msq -whitespace
 # Retain raw USB/application evidence and the own004 application export.
 reports/engine/tuning-usb/*.log -whitespace
 tuning/examples/tunerstudio-development-roundtrip.msq -whitespace
+# Keep exact idle evidence bytes and application/tool exporter formatting.
+hardware/idle-accessory/bom.csv -text -whitespace
+reports/engine/idle-control/metrics.csv -text -whitespace
+reports/engine/idle-control/applications/*.msq -whitespace
+reports/engine/idle-control/**/*.log -whitespace
+tuning/examples/tunerstudio-idle-roundtrip.msq -whitespace

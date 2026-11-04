@@ -3,6 +3,7 @@
 #include "ecu/engine_binding.hpp"
 #include "ecu/engine_storage.hpp"
 #include "ecu/engine_target.hpp"
+#include "ecu/idle_command.hpp"
 #include "ecu/engine_data_json.hpp"
 #include "ecu/heap_object.hpp"
 #include "ecu/tuning_document.hpp"
@@ -54,10 +55,11 @@ bool observe(const web::Sample&s,const config::Config&c,std::uint64_t now,std::u
  command.phase_epoch=s.phase_epoch;
  command.max_injector_high_us=std::llround(active.max_injection_ms*1000);command.max_coil_high_us=std::llround(active.max_dwell_ms*1000);
  command.slots=c.slots;command.missing=c.missing;command.max_rpm=c.max_rpm;
+ idle::prepare_pwm(command,active);
  const bool submitted=engine_target::submit(command);
  engine::RuntimeSample data;engine::data_values(data,in,latest);
  data.sequence=command.sequence;data.control_us=now;data.sampled_us=sampled;data.tune_revision=active.revision;data.sensor_revision=c.revision;
- data.source=engine::DataSource::Target;data.strategy=static_cast<std::uint8_t>(active.strategy);data.phase_epoch=s.phase_epoch;
+ data.idle_algorithm=static_cast<std::uint8_t>(active.idle_control.algorithm);data.source=engine::DataSource::Target;data.strategy=static_cast<std::uint8_t>(active.strategy);data.phase_epoch=s.phase_epoch;
  data.input_valid=engine::data_input_mask(in,bound.qualified);if(s.overflow)data.input_valid&=~(1U<<engine::DecodedRpm);
  data.flags|=(storage_ok?engine::StorageOk:0)|(in.synced?engine::CrankSynced:0)|(in.phase_synced?engine::PhaseSynced:0)|
   (active.strategy==engine::Strategy::Sequential?engine::PhaseRequired:0)|(submitted?engine::Submitted:0)|

@@ -1,0 +1,14 @@
+#include "current/tools/target_timing_bridge.cpp"
+#include <cassert>
+#include <iostream>
+using namespace ecu;
+const char*stopped="{\"rpm\":0,\"map_kpa\":45,\"tps_pct\":0,\"clt_c\":85,\"iat_c\":25,\"lambda\":1,\"battery_v\":14,\"sensor_v\":5,\"synced\":false,\"sensors_valid\":true,\"lambda_ready\":true,\"use_decoder\":true}";
+int main(){
+ bool recovered[2]{};unsigned core_recovers[2]{};
+ for(unsigned master=0;master<2;++master){Context c;c.tune.idle_enabled=master;c.pwm.trip(0,idle::PwmCause::LateInterrupt,c.idle_io);idle_fault(c);for(unsigned now=200000;now<=400000;now+=5000)engine_step(&c,stopped,now,now);recovered[master]=c.pwm.stats().fault==idle::PwmCause::None;core_recovers[master]=c.core.stats().recoveries;assert(!c.idle_io.high);}
+ Context phase;timing::Command cmd;cmd.sequence=1;cmd.tune_revision=cmd.sensor_revision=1;cmd.configuration_epoch=2;cmd.phase_epoch=1;cmd.angle.strategy=engine::Strategy::Sequential;cmd.output.state=engine::State::Running;cmd.output.rpm=1000;cmd.output.pulse_ms=1;cmd.output.dwell_ms=1;cmd.output.advance_deg=10;cmd.output.idle.flags=idle::Enabled;cmd.idle_high_us=5000;phase.core.progress(0,phase.io);phase.core.command(cmd,0,phase.io);assert(phase.core.stats().fault==timing::Cause::None&&!phase.core.current_command().output.proposed_enabled());const auto p=idle::pwm_command(cmd,phase.core.current_command(),0,phase.core.stats());phase.pwm.submit(p,0,phase.idle_io);const bool phase_wait_reenabled=phase.idle_io.high;
+ Context full;idle::PwmCommand c;c.sequence=1;c.tune_revision=c.sensor_revision=1;c.enabled=true;c.high_us=c.period_us;assert(full.pwm.submit(c,0,full.idle_io));assert(engine_pop(&full)==0x10108);const auto first_due=engine_next_time(&full);const auto pop_code=engine_pop(&full);const auto after_due=engine_next_time(&full);assert(pop_code==0x40000&&full.idle_io.high&&full.pwm.stats().rises==1&&full.pwm.stats().falls==0);assert(engine_pop(&full)==0x10008&&!full.idle_io.high);assert(engine_pop(&full)==0x30000);assert(engine_next_time(&full)==UINT64_MAX);
+ // PWM heartbeat deadline is independent of producer progress and expires first.
+ idle::PwmExecutor guard;struct Sink{bool high=false;bool write(bool h){high=h;return true;}void all_low(){high=false;}}sink;assert(guard.submit(c,0,sink));guard.dispatch(10000,sink);c.sequence=2;c.command_us=c.sampled_us=20000;assert(!guard.submit(c,20000,sink)&&!sink.high&&guard.stats().fault==idle::PwmCause::CommandExpired);
+ std::cout<<"{\"stopped_fault_recovery_master_off\":"<<(recovered[0]?"true":"false")<<",\"stopped_fault_recovery_master_on\":"<<(recovered[1]?"true":"false")<<",\"core_recoveries_off\":"<<core_recovers[0]<<",\"core_recoveries_on\":"<<core_recovers[1]<<",\"phase_context_wait_reenabled_idle\":"<<(phase_wait_reenabled?"true":"false")<<",\"full_duty_next_due\":"<<first_due<<",\"full_duty_pop_code\":"<<pop_code<<",\"full_duty_next_due_after_empty_pop\":"<<after_due<<",\"expiry_before_refresh\":true}\n";
+}

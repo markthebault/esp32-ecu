@@ -401,6 +401,18 @@
         "If SAFE_N repeatedly drops, scope it with the supply rails and WDI. Do not defeat the MAX1232 or 3V3 supervisor.",
         "Use a properly referenced or isolated scope arrangement; do not clip an earth-referenced scope ground to an arbitrary live output."
       ]
+    },
+    {
+      "connector": "IAC-DRAFT1",
+      "title": "Idle PWM accessory / unrouted draft",
+      "checks": [
+        "Engine development contains the idle mode, gains, six-point coolant curves and source/age diagnostics. All shipped builds keep physical idle GPIO writes disabled.",
+        "Draft J1 logic: pin1 GPIO3 from module socket pad13; pin2 RUN_5V from TP6; pin3 logic5V from TP3; pin4 ground from TP1. No take-off connector is implemented on the archived carrier.",
+        "Draft J2 is a fixed screw terminal: protected, externally fused/switched actuator12V and dedicated return. J3 VH carries valve positive and IAC_LS. Do not use carrier J1 or sensor/logic rails for valve power.",
+        "The draft uses a PDIP8 driver, TO220 smart low-side switch and axial flyback, for a normally closed two-wire continuous-duty valve,9\u201316V and <=2A. Exact valve and passive parts remain unqualified.",
+        "Do not power this unrouted draft. Open actuator-return current can bypass through logic ground. Resolve that path and install permanent carrier-side GPIO3 bias; read actual JTAG/eFuse routing without burns. Routing, thermal, reset/backfeed and case-fit tests remain pending.",
+        "Compare proposed idle duty with the separate cycle-latched PWM high time and fault. Synthetic current/opening are model estimates; there is no physical valve feedback."
+      ]
     }
   ],
   "config_help": [

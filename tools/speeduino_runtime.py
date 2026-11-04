@@ -1,5 +1,6 @@
 """Bounded text IPC to actual non-UNIT_TEST Speeduino in a virtual native HAL."""
 import math
+import json,hashlib
 import os
 from pathlib import Path
 import select
@@ -12,10 +13,13 @@ class SpeeduinoRuntime:
     def __init__(self,per_tooth=False,logger_cam=False,sequential=False,timer_bits=32):
         if timer_bits not in (16,32):raise ValueError('Native timer width must be16or32')
         executable=ROOT/('.cache/engine/speeduino-sim/speeduino-sim' if timer_bits==32 else '.cache/engine/speeduino-sim16/speeduino-sim')
+        manifest=json.loads(executable.with_name('build-manifest.json').read_text())
+        if hashlib.sha256(executable.read_bytes()).hexdigest()!=manifest['binary_sha256']:raise RuntimeError('Reference executable differs from its build manifest')
         self.timer_bits=timer_bits;self.edge_modes={};self.sequential=sequential;self.spark_trims=[0]*4;self.last_status={}
         self.process=subprocess.Popen([str(executable),*(['--per-tooth'] if per_tooth else []),*(['--logger-cam'] if logger_cam else []),*(['--sequential'] if sequential else [])],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
                                       stderr=subprocess.PIPE,bufsize=0)
         self.buffer=b'';self.now=0
+        self.idle_profile=None
         try:
             self._initialize(per_tooth)
             if sequential:
@@ -73,6 +77,34 @@ class SpeeduinoRuntime:
         values=[sample[k] for k in ('map_kpa','tps_pct','clt_c','iat_c','battery_v')]+[sample['lambda']*14.7]
         if not all(isinstance(v,(int,float)) and math.isfinite(v) for v in values):raise ValueError('Invalid sensor values')
         self.command('sensors '+' '.join(format(v,'.12g') for v in values))
+
+    def configure_idle(self,tune,seeded=True,invert=False):
+        if self.idle_profile is not None:raise ValueError('Reference idle profile is before-start only')
+        c=tune['idle_control'];s=tune['settings'];tick=16 if self.timer_bits==16 else 4
+        hz=round(c['frequency_hz']/2)*2;counts=int(1e6/(tick*hz))
+        # Documented normalized gain mapping; actual upstream integer cadence is retained.
+        kp=round(s['idle_kp']*128*counts/100);ki=round(s['idle_ki']*128*counts/100);kd=round(c['kd']*128*counts/25)
+        if any(not 0<=v<=255 for v in (kp,ki,kd)):raise ValueError('Reference gains cannot be represented by uint8 raw gains')
+        def interp(values,x):
+            axis=c['coolant_c']
+            if x<=axis[0]:return values[0]
+            for i in range(1,len(axis)):
+                if x<=axis[i]:return values[i-1]+(values[i]-values[i-1])*(x-axis[i-1])/(axis[i]-axis[i-1])
+            return values[-1]
+        args=[{'on_off':1,'open_loop':2,'closed_loop':6}[c['algorithm']],hz,kp,ki,kd,round(c['tps_closed_pct']*2),round(c['exit_rpm_above']/10),round(c['afterstart_taper_s']*10),round(c['min_pct']),round(c['max_pct']),round(c['fast_idle_temp_c']+40),int(seeded),int(invert)]
+        for x in range(-40,141,20):args += [round(interp(c['run_pct'],x)),round((s['idle_target_rpm']+interp(c['target_add_rpm'],x))/10)]
+        args += [round(interp(c['crank_pct'],x)) for x in (-40,20,80,140)]
+        lines=self.command('idleconfig '+' '.join(map(str,args)));registers=[l for l in lines if l.startswith('idleregisters ')]
+        if len(registers)!=1:raise RuntimeError('Missing reference idle initialization registers')
+        fields=list(map(int,registers[0].split()[1:]));self.pin_map[fields[5]]=8
+        self.idle_profile=dict(algorithm=args[0],requested_hz=c['frequency_hz'],represented_hz=hz,tick_us=tick,raw_kp=kp,raw_ki=ki,raw_kd=kd,initial_registers=fields,seeded=seeded,invert=invert,gain_mapping='nominal normalized gain; actual integer PID cadence/rounding retained')
+        return self._edges([l for l in lines if l.startswith('edge ')])
+
+    def idle_status(self):
+        lines=self.command('idlestatus')
+        if len(lines)!=1 or not lines[0].startswith('idlestatus '):raise RuntimeError('Missing idle status')
+        fields=list(map(int,lines[0].split()[1:]))
+        return dict(zip(('algorithm','frequency_hz','reported_duty_pct','target_rpm','on','physical_level','counter','compare'),fields))
 
     def cylinder_trims(self,trims):
         if not self.sequential:raise ValueError('Reference cylinder trims require sequential profile')

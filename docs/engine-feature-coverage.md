@@ -23,20 +23,20 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | Rev limiting | Retard band, cut and hysteresis | Editable thresholds and fault logs | Target response and physical cut behavior pending |
 | Overrun fuel cut | Continuous entry delay/hysteresis | Enable/limits/state logs | Active pulses finish bounded closing edges |
 | Closed-loop lambda | Basic bounded PI | Gains/limits and correction logs | External wideband controller, no raw sensor heater/control |
-| Idle | Virtual PI only | Target/gains labelled virtual | No qualified PWM idle driver or stepper H-bridge |
+| Idle | On/off, open-loop and closed-loop PWM with executed-edge NC valve model; 33 coupled runs/38 reference checks | Coolant/duty curves, normalized gains, gates, applied/pending PWM diagnostics, own005 files and logs | Separate THT accessory pin/placement draft, 28 unrouted connections; return-fault/module/valve/fit checks remain; stepper/H-bridge missing |
 | Fuel pump / fan | Prime/hysteresis shadow proposals | Settings and status | Existing command stages, engine execution disabled |
 | Boost / overboost | Missing, current profile NA only | Boost tune rejected | Solenoid driver/connector allocation needed |
 | VVT | Missing | No controls | Phase sensing, driver, flyback and connector work |
 | Flex fuel | Missing | No ethanol blending/capture settings | Protected frequency input/pin allocation needed |
 | Secondary maps / blending | Missing | One map set | Switch input or authenticated strategy needed |
-| Per-cylinder trims | Four6×6 fuel maps and signed spark offsets; physical-channel capacity/duty, latched coil advance;18 new plant runs | Sequential enable, browser/own004 MSQ, strict legacy migration, per-channel JSON/79-field MSL and masks | Existing J9/J10 channels1–4; actual flow/deadtime/phase and electrical qualification pending |
+| Per-cylinder trims | Four6×6 fuel maps and signed spark offsets; physical-channel capacity/duty, latched coil advance;18 new plant runs | Sequential enable, browser/own005 MSQ, strict legacy migration, per-channel JSON/91-field MSL and masks | Existing J9/J10 channels1–4; actual flow/deadtime/phase and electrical qualification pending |
 | Staged injection | Missing | No staging controls | Extra drivers and duty/flow qualification |
 | Launch / flat shift / nitrous | Missing | No enable options | Protected switch/speed/pressure inputs and output allocations |
 | Knock | Missing | No misleading protection indicator | Analog front end and processing required |
 | Sensor calibration | Persistent linear/table/NTC with loading compensation | Guides, units, confirmation and raw diagnostics | Six analog inputs plus battery/5V; physical verification pending |
 | Engine sensor binding | Confirmed physical units; raw-voltage relabelling rejected | Binding/fault status | Fast raw samples, display filter cannot hide faults |
 | Supervision/recovery | Target independent command/producer/tooth/cam/high-time deadlines, transactional scheduling and configuration holds | Reasons/counters/bounded traces/revisions/storage | Target timing/watchdog/restart policy needs physical HIL |
-| TunerStudio offline | Own definition/MSQ exchange | Own004 complete-page settings/curve/map editing, origin metadata and stale-editor CAS | Actual offline application roundtrip; target USB hardware unmeasured |
+| TunerStudio offline | Own definition/MSQ exchange | Own005 complete-page settings/curve/map editing, origin metadata and stale-editor CAS | Actual offline application roundtrip; target USB hardware unmeasured |
 | TunerStudio online | Shared C++ whole-tune transport and dedicated inhibited USB service | Authenticated tuning diagnostics; bounded framing/CAS/storage tests; app rejects own identity | Vendor integration unresolved; physical USB/load/cache/timing tests pending |
 | MegaLogViewer HD | SIL, raw-trigger and bounded target engine MSL; actual application opens/plots browser engine/trigger exports | Source/loss/age/validity labels, collected versus retained downloads; derived missing-lambda display caveat | Physical target capture/logging behavior unmeasured |
 | Tooth/composite/ignition logging | Target finite512-edge crank/cam recorder, raw intervals and128-record output/cut ring | Trigger charts/zoom, JSON/MSL export, bounded paging and fault counts; no TS high-speed logger | Independent capture channels implemented; capture integrity/per-pin timing need HIL |
@@ -70,4 +70,6 @@ DBW/OEM integration remain outside the current bench scope.
 
 [Individual cylinder tuning and comparison](engine-cylinder-trims.md) describes physical mapping, trim/deadtime semantics, migration and the current evidence.
 
-[USB tuning](engine-usb-tuning.md) covers the shared own004 codec, dedicated target transport, offline file workflow, diagnostics and unresolved online application gate.
+[USB tuning](engine-usb-tuning.md) covers the shared own005 codec, dedicated target transport, offline file workflow, diagnostics and unresolved online application gate.
+
+[Idle evidence](engine-idle-control.md) extends the software/control comparison and exposes remaining hardware release blockers. It does not close other control, OEM trigger, cylinder-count, online-vendor or physical-qualification gaps.

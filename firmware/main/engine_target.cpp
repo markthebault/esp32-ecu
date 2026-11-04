@@ -3,6 +3,10 @@
 #include "ecu/trigger_log_json.hpp"
 #include "ecu/engine_phase.hpp"
 #include "ecu/pins.hpp"
+#include "ecu/idle_command.hpp"
+#include "ecu/idle_pwm_json.hpp"
+#include "ecu/idle_hardware.hpp"
+#include "driver/gpio.h"
 #include "driver/gptimer.h"
 #include "driver/mcpwm_cap.h"
 #include "driver/mcpwm_sync.h"
@@ -26,6 +30,10 @@
 namespace ecu::engine_target {
 namespace {
 DRAM_ATTR timing::Executor executor;
+DRAM_ATTR idle::PwmExecutor idle_executor;
+ECU_ISR_CODE void idle_engine_stop();
+struct IdleIO {bool physical_high=false;ECU_ISR_CODE void all_low();ECU_ISR_CODE bool write(bool high);};
+DRAM_ATTR IdleIO idle_output;
 DRAM_ATTR timing::CaptureClock capture_clock;
 DRAM_ATTR trigger_log::Capture trigger_capture;
 DRAM_ATTR timing::CaptureClock trigger_clock;
@@ -44,6 +52,7 @@ struct OutputIO {
   gpio_ll_set_level(&GPIO,pins::pump_cmd,0);gpio_ll_set_level(&GPIO,pins::fan_cmd,0);
 #endif
   physical_mask=0;
+  idle_engine_stop();
  }
  ECU_ISR_CODE bool write(unsigned ch,bool high){
 #if ECU_ENGINE_DUMMY_LOADS
@@ -90,8 +99,32 @@ struct TaggedCommand {timing::Command command;std::uint32_t epoch;};
 ECU_ISR_CODE std::uint64_t now_locked(){
  std::uint64_t now=0;if(timer)gptimer_get_raw_count(timer,&now);return now;
 }
+ECU_ISR_CODE void IdleIO::all_low(){
+#if ECU_IDLE_DUMMY_LOADS
+ gpio_ll_set_level(&GPIO,idle::gpio,0);
+#endif
+ physical_high=false;
+}
+ECU_ISR_CODE bool IdleIO::write(bool high){
+#if ECU_IDLE_DUMMY_LOADS
+ if(high&&(!output.armed||output.failed||!gpio_ll_get_level(&GPIO,pins::safe_n_mon)||!gpio_ll_get_level(&GPIO,pins::interlock)))return false;
+ if(high)gpio_ll_set_level(&GPIO,pins::arm,1);
+ gpio_ll_set_level(&GPIO,idle::gpio,high);physical_high=high;
+#else
+ (void)high;
+#endif
+ return true;
+}
+ECU_ISR_CODE void idle_engine_stop(){
+ if(idle_executor.stats().active||idle_executor.stats().high)idle_executor.stop(now_locked(),idle::PwmCause::EngineFault,idle_output);
+ else idle_output.all_low(); // Repeated already-low Stopped commands preserve supervised-zero continuity.
+}
+ECU_ISR_CODE void idle_fault(){
+ if(idle_executor.stats().fault!=idle::PwmCause::None&&executor.stats().fault==timing::Cause::None)
+  executor.trip(now_locked(),timing::Cause::IdlePwm,output);
+}
 ECU_ISR_CODE void alarm_locked(){
- auto deadline=executor.next_alarm();
+ auto deadline=std::min(executor.next_alarm(),idle_executor.next_alarm());
  if(deadline==timing::Executor::none){
   if(installed_alarm!=deadline)gptimer_set_alarm_action(timer,nullptr);
   installed_alarm=deadline;return;
@@ -113,7 +146,7 @@ bool IRAM_ATTR on_alarm(gptimer_handle_t,const gptimer_alarm_event_data_t*,void*
   output.failed=true;output.armed=false;executor.trip(now_locked(),timing::Cause::Gate,output);
  }
 #endif
- executor.dispatch(now_locked(),output);alarm_locked();
+ const auto now=now_locked();executor.dispatch(now,output);idle_executor.dispatch(now,idle_output);idle_fault();alarm_locked();
  portEXIT_CRITICAL_ISR(&lock);return false;
 }
 bool IRAM_ATTR on_capture(mcpwm_cap_channel_handle_t,const mcpwm_capture_event_data_t* event,void* context){
@@ -197,6 +230,10 @@ void init_trigger_logger(){
 #endif
 }
 void init_peripherals(){
+#if ECU_IDLE_DUMMY_LOADS
+ ESP_ERROR_CHECK(gpio_set_level(static_cast<gpio_num_t>(idle::gpio),0));
+ ESP_ERROR_CHECK(gpio_set_direction(static_cast<gpio_num_t>(idle::gpio),GPIO_MODE_OUTPUT));
+#endif
  gptimer_config_t cfg{};cfg.clk_src=GPTIMER_CLK_SRC_APB;cfg.direction=GPTIMER_COUNT_UP;
  cfg.resolution_hz=1000000;cfg.intr_priority=3;
  ESP_ERROR_CHECK(gptimer_new_timer(&cfg,&timer));
@@ -253,6 +290,10 @@ void run(void*){
   if(!have_command||accepted_epoch!=tagged.epoch||c.slots!=latest.slots||c.missing!=latest.missing||c.max_rpm!=latest.max_rpm||c.tune_revision!=latest.tune_revision)
    decoder=engine::PhaseDecoder({c.slots,c.missing,c.max_rpm},c.angle);
   latest=c;have_command=true;accepted_epoch=tagged.epoch;observed_epoch=tagged.epoch;executor.command(latest,now,output);
+  const bool healthy=decoder.synced()&&now>=latest.sampled_us&&now-latest.sampled_us<20000&&
+   !(latest.output.faults&~std::uint32_t(engine::OverRev))&&executor.stats().fault==timing::Cause::None;
+  output.supervise(healthy);
+  idle_executor.submit(idle::pwm_command(latest,executor.current_command(),now,executor.stats(),configuration_hold),now,idle_output);idle_fault();
   alarm_locked();portEXIT_CRITICAL(&lock);
  };
  for(;;){
@@ -311,7 +352,7 @@ void run(void*){
   }
   const auto now=clock_us();decoder.tick(now);
   const auto rpm=decoder.rpm();const bool synced=decoder.synced();
-  portENTER_CRITICAL(&lock);const auto checked_now=now_locked();executor.progress(checked_now,output);trigger_capture.expire(checked_now);
+  portENTER_CRITICAL(&lock);const auto checked_now=now_locked();executor.progress(checked_now,output);idle_executor.dispatch(checked_now,idle_output);idle_fault();trigger_capture.expire(checked_now);
   measured.rpm=accepted_epoch==external_epoch&&!configuration_hold?rpm:0;
   measured.synced=accepted_epoch==external_epoch&&!configuration_hold&&decoder.crank_synced();
   measured.phase_synced=accepted_epoch==external_epoch&&!configuration_hold&&decoder.phase_synced();
@@ -362,14 +403,14 @@ void inhibit(timing::Cause cause){
 void begin_configuration(){
  configASSERT(configuration_mutex);xSemaphoreTake(configuration_mutex,portMAX_DELAY);
  portENTER_CRITICAL(&lock);configuration_hold=true;++external_epoch;
- executor.stop(now_locked(),timing::Cause::Configuration,output);alarm_locked();portEXIT_CRITICAL(&lock);
+ executor.stop(now_locked(),timing::Cause::Configuration,output);idle_executor.configuration(now_locked(),idle_output);alarm_locked();portEXIT_CRITICAL(&lock);
 }
 void finish_configuration(std::uint32_t tune_revision,std::uint32_t sensor_revision){
  portENTER_CRITICAL(&lock);
  if(tune_revision>required_tune_revision)required_tune_revision=tune_revision;
  if(sensor_revision>required_sensor_revision)required_sensor_revision=sensor_revision;
  ++external_epoch;configuration_hold=false;
- executor.stop(now_locked(),timing::Cause::Configuration,output);alarm_locked();portEXIT_CRITICAL(&lock);
+ executor.stop(now_locked(),timing::Cause::Configuration,output);idle_executor.configuration(now_locked(),idle_output);alarm_locked();portEXIT_CRITICAL(&lock);
  xSemaphoreGive(configuration_mutex);
 }
 cJSON* snapshot(){
@@ -394,6 +435,9 @@ cJSON* snapshot(){
  cJSON_AddNumberToObject(j,"producer_age_us",stats.last_progress_us&&now>=stats.last_progress_us?now-stats.last_progress_us:-1.);
  cJSON_AddNumberToObject(j,"command_sequence",command.sequence);cJSON_AddNumberToObject(j,"tune_revision",command.tune_revision);
  cJSON_AddNumberToObject(j,"trace_sequence",sequence);cJSON_AddNumberToObject(j,"trace_overwritten",sequence>timing::Executor::trace_capacity?sequence-timing::Executor::trace_capacity:0);
+ idle::PwmStats idle_stats;bool idle_high;portENTER_CRITICAL(&lock);idle_stats=idle_executor.stats();idle_high=idle_output.physical_high;portEXIT_CRITICAL(&lock);
+ auto*idle_json=idle::pwm_json(idle_stats,ECU_IDLE_DUMMY_LOADS,idle_high);
+ if(!idle_json||!cJSON_AddItemToObject(j,"idle_pwm",idle_json)){cJSON_Delete(idle_json);cJSON_Delete(j);return nullptr;}
  cJSON_AddStringToObject(j,"qualification","Source/native tests only; actual_us is dispatcher observation time. Per-pin edges, target jitter and electrical behavior are unmeasured");return j;
 }
 cJSON* trace_json(){
