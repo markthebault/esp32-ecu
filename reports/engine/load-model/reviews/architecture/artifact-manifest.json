@@ -1,0 +1,1187 @@
+{
+  "created_utc": "2026-11-04T05:51:33.443002+00:00",
+  "baseline_commit": "1d6a9acb34838ea175f2dfa7ccd9786e96d2d11b",
+  "reference_commit": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+  "production_changes_by_reviewer": false,
+  "baseline_msq_native_bridge_sha256": "87f1342570f0605a879d06320043d43c112b143bbcaa8272d141b75b93a56222",
+  "scope": "Architecture and controlled native functions only; no implementation signoff or physical qualification",
+  "reference_actual_include_checks": [
+    {
+      "source": "/home/mark/persospace/esp32-ecu/.cache/engine/speeduino-sim/source-91957f646a2707d7-idle-aux-v1/speeduino/load_source.h",
+      "sha256": "b6454950638ba0d8570d074e88f268ddb2decf1bf1cf4b13e438102dd44af050",
+      "matches_pinned_git_object": true
+    },
+    {
+      "source": "/home/mark/persospace/esp32-ecu/.cache/engine/speeduino-sim/source-91957f646a2707d7-idle-aux-v1/speeduino/fuel_calcs.h",
+      "sha256": "5fbabbda2c54a8c1a320834cc6147e4d11a7c9532fcd04f0c94159da972bcd6d",
+      "matches_pinned_git_object": true
+    },
+    {
+      "source": "/home/mark/persospace/esp32-ecu/.cache/engine/speeduino-sim/source-91957f646a2707d7-idle-aux-v1/speeduino/corrections.h",
+      "sha256": "595d83c9b71a7c9f9796ce35d206f7972ed53dfc09b5edbbe625405a37470eca",
+      "matches_pinned_git_object": true
+    },
+    {
+      "source": "/home/mark/persospace/esp32-ecu/.cache/engine/speeduino-sim/source-91957f646a2707d7-idle-aux-v1/speeduino/secondaryTables.h",
+      "sha256": "c28a9b8642d4d6738996e77527ec6577924891699f649587f221b86aca18f2b1",
+      "matches_pinned_git_object": true
+    },
+    {
+      "source": "/home/mark/persospace/esp32-ecu/.cache/engine/speeduino-sim/source-91957f646a2707d7-idle-aux-v1/speeduino/table3d.h",
+      "sha256": "7584c1cceaa9d522c6e6a964c2b9fc2ceb9b0ebc7857180c5e05265819c739af",
+      "matches_pinned_git_object": true
+    },
+    {
+      "source": "/home/mark/persospace/esp32-ecu/.cache/engine/speeduino-sim/source-91957f646a2707d7-idle-aux-v1/speeduino/table3d_axes.h",
+      "sha256": "89039a90cfc081db453ee809a9f4848e065f92e1c4bb8516c2ad722239d39373",
+      "matches_pinned_git_object": true
+    }
+  ],
+  "files": [
+    {
+      "path": "architecture-assessment.md",
+      "bytes": 24900,
+      "sha256": "5d0b36e59225cce9429c58cb164bbeb1707a0c74569aa7047eedef7eb2b66ff1"
+    },
+    {
+      "path": "baseline-golden.csv",
+      "bytes": 99948,
+      "sha256": "ebd0b027addb18b8f975643be0ef116a72b3c03081428a6dcdf72c21126cac8c"
+    },
+    {
+      "path": "baseline-golden.json",
+      "bytes": 562,
+      "sha256": "8ba79633533cdcaa75447509fb10693003871b55920259c3b6229eef0d53a6a5"
+    },
+    {
+      "path": "baseline-input-oracle.csv",
+      "bytes": 1125,
+      "sha256": "55437d0d74fcf2237fa3c539e1ac3ffd645e3e28850155450897ab882a981dca"
+    },
+    {
+      "path": "baseline-invalid-oracle.json",
+      "bytes": 3974,
+      "sha256": "0c6014ed8f0c84628bb3d53621f5d32659cb00210ebff6614979940ba1b1669e"
+    },
+    {
+      "path": "baseline-memory.json",
+      "bytes": 191,
+      "sha256": "9ecd3ccd2e5913da3f205e1d803353d09db7e8283c936fc28fa627ebbfafe4d6"
+    },
+    {
+      "path": "baseline-msq-oracle.json",
+      "bytes": 9635,
+      "sha256": "24e4b8c1c491dd571dbf955c6dfb3e34ec9b5ad7a719bbc96cd5c6ba27522b80"
+    },
+    {
+      "path": "baseline-own007.msq",
+      "bytes": 11659,
+      "sha256": "13ad347270ebded6213b86ad62eafc832c7e6287b0bd92529a705bead094f97d"
+    },
+    {
+      "path": "baseline-source/config/engine/defaults-v2.json",
+      "bytes": 12213,
+      "sha256": "81195ce83acaafefc02ebe955c2d1d92656f41f015beb8c57bad6745139fd769"
+    },
+    {
+      "path": "baseline-source/config/engine/defaults-v3.json",
+      "bytes": 6301,
+      "sha256": "9274e32ff7f0f0debe253f95304241a398b6b9c10fe04b868048fda4cf19d835"
+    },
+    {
+      "path": "baseline-source/config/engine/defaults-v4.json",
+      "bytes": 7007,
+      "sha256": "5c18c92edab479ddafa47e207928a0bd29aa68fcdf7e55708ff9514ab8cee01e"
+    },
+    {
+      "path": "baseline-source/config/engine/defaults-v5.json",
+      "bytes": 16493,
+      "sha256": "e169b5e20eb15f18cf4e61a8eb385c9cded0a0fcf9ca6bb65ad1df6abf58dda9"
+    },
+    {
+      "path": "baseline-source/config/engine/defaults.json",
+      "bytes": 17227,
+      "sha256": "c9007e8875392e436771cd64778d4ac1e17f8d85ff112d401d4293a6cfb46dba"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/capture_clock.hpp",
+      "bytes": 2211,
+      "sha256": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/config.hpp",
+      "bytes": 3939,
+      "sha256": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/control.hpp",
+      "bytes": 10954,
+      "sha256": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine.hpp",
+      "bytes": 21299,
+      "sha256": "7af82ae6eabe4d1371a028bd6138c5e952dbced2c13e8fbdfed333f9218240b5"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_binding.hpp",
+      "bytes": 2063,
+      "sha256": "f1e8d39d850b70e4f8de70bc61c89f161305aa48a4cec4258333710484a0aa92"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_data.hpp",
+      "bytes": 5828,
+      "sha256": "c251b572dfa9eb91e32fae6bee71ac31f4d037fccec33fdaedc95d8d0c8dc4d6"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_data_json.hpp",
+      "bytes": 7729,
+      "sha256": "e5219b85ca069e76ff1c41241f6868902f5a642ca8fa8dd6ba6c9b268cd792e6"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_json.hpp",
+      "bytes": 17454,
+      "sha256": "ed835355d725865eb77b2b057850a7f36d0773e19e2f0026dd657c177c26ef02"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_limits.hpp",
+      "bytes": 107,
+      "sha256": "aaaa07e76744f92cbf03f7ba07b5a297d813ffdceb7d5d5a68a8d6328d2dce14"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_log.hpp",
+      "bytes": 5423,
+      "sha256": "f4dc3d4641c35c90f9fe3a46ec6c6300a4baadc7372d4989dad90837aef20d82"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_log_json.hpp",
+      "bytes": 3996,
+      "sha256": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_log_msl.hpp",
+      "bytes": 6385,
+      "sha256": "d0407900dd58bb8efe8bf063cd59b467804d3f15c2fdbbadd366214fdccdfb75"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_log_service.hpp",
+      "bytes": 754,
+      "sha256": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_phase.hpp",
+      "bytes": 8547,
+      "sha256": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_radio.hpp",
+      "bytes": 6161,
+      "sha256": "c9835cd575b8a24ba0c6969e6f7adcf860b0e1ed7eac1bd80442e821acc8adb2"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_scheduler.hpp",
+      "bytes": 10251,
+      "sha256": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_service.hpp",
+      "bytes": 853,
+      "sha256": "d7b34562c70e0aa60d5b2e9eca0cf01aac3005ffed7924cccbea00ddccc71bbe"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_storage.hpp",
+      "bytes": 3104,
+      "sha256": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_target.hpp",
+      "bytes": 1373,
+      "sha256": "0cfcef7fa43cadaf105da094a4524aded50dcff0f88ddb6449799155e63b25b0"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/engine_tuning.hpp",
+      "bytes": 120,
+      "sha256": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/espnow.hpp",
+      "bytes": 336,
+      "sha256": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/espnow_protocol.hpp",
+      "bytes": 2749,
+      "sha256": "634bd5a99ddd8c682a20959720f5599a0e39f20c25d8cadf4b3e8024eca25b6a"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/heap_object.hpp",
+      "bytes": 540,
+      "sha256": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/idle_command.hpp",
+      "bytes": 1489,
+      "sha256": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/idle_control.hpp",
+      "bytes": 10973,
+      "sha256": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/idle_hardware.hpp",
+      "bytes": 616,
+      "sha256": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/idle_pwm.hpp",
+      "bytes": 6460,
+      "sha256": "392ef3640df5e3ea64c465df7a6815c2272ead28570626bc9540aab8b58a8c42"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/idle_pwm_json.hpp",
+      "bytes": 1434,
+      "sha256": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/json.hpp",
+      "bytes": 2130,
+      "sha256": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/pins.hpp",
+      "bytes": 1139,
+      "sha256": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/realtime.hpp",
+      "bytes": 387,
+      "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/timing_executor.hpp",
+      "bytes": 15308,
+      "sha256": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/transient_enrichment.hpp",
+      "bytes": 11684,
+      "sha256": "f7ae37a4ce2187d3874597f97176a6a482b0e7fc576af1620c8b95cda0bbf6c3"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/transient_json.hpp",
+      "bytes": 3294,
+      "sha256": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/trigger_log.hpp",
+      "bytes": 2952,
+      "sha256": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/trigger_log_json.hpp",
+      "bytes": 4155,
+      "sha256": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/tuning_document.hpp",
+      "bytes": 4039,
+      "sha256": "fbec5d9f8f134a2fa28f11b8a0f82246664f4a17f33ad6b879f7a957df98f514"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/tuning_layout.hpp",
+      "bytes": 17379,
+      "sha256": "f12eefbf0f0317e21651eda1b0368517b77bf4ac51b54df3c450b90bf328ef1f"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/tuning_live.hpp",
+      "bytes": 3322,
+      "sha256": "f5910c10c581dd53d9fe16229474ba6c3ced6b8d380212901e53f49fea84210a"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/tuning_session.hpp",
+      "bytes": 7329,
+      "sha256": "ab3dc15ed4c0b1e838eef9c935769357bc7d3b2ed206e63c138e3e58f4670765"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/tuning_stream.hpp",
+      "bytes": 3028,
+      "sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042"
+    },
+    {
+      "path": "baseline-source/firmware/include/ecu/web_config.hpp",
+      "bytes": 993,
+      "sha256": "8d954bf30d639daa06cbae6e6cc41a2a4c0b0579d3d9914aff44327085243ca1"
+    },
+    {
+      "path": "baseline-source/firmware/main/app.cpp",
+      "bytes": 12401,
+      "sha256": "a5d196a1e6140c1b5b68fdb2e2fdeab8048cb67eff6ef69799a6cddb5da4f272"
+    },
+    {
+      "path": "baseline-source/firmware/main/config_json.hpp",
+      "bytes": 2238,
+      "sha256": "1b8469d3ff7f750db50f731e209a184479fa4191ed6200a0a555aa0065e3c1ae"
+    },
+    {
+      "path": "baseline-source/firmware/main/engine_service.cpp",
+      "bytes": 12174,
+      "sha256": "b48c5a7a77f7d03505fb3e6898ad0ab76ae09171c59d84eafaf1f7eb0b7245dd"
+    },
+    {
+      "path": "baseline-source/firmware/main/engine_target.cpp",
+      "bytes": 30320,
+      "sha256": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738"
+    },
+    {
+      "path": "baseline-source/hardware/a3-compact/net_contract.json",
+      "bytes": 127895,
+      "sha256": "adb4826fc072023a81ea72309689aa503fea2a6531d35bc6b834996c62b477a3"
+    },
+    {
+      "path": "baseline-source/scripts/generate_tunerstudio_ini.py",
+      "bytes": 13211,
+      "sha256": "4104bdc82ef4f13b2a5e0cd9de6441466ecd6316bff36861d786a3f5361cecab"
+    },
+    {
+      "path": "baseline-source/simulation/modelica/EngineAirPath.mo",
+      "bytes": 2828,
+      "sha256": "303df3396c660d1c4f8da48f19c698a6f63c46d1050c7964b92fba56be653c3c"
+    },
+    {
+      "path": "baseline-source/tools/check_idle_assembly.py",
+      "bytes": 3361,
+      "sha256": "e29aca5bd3d8ceba1a13bbf09a8e28e31160aa6c0255b6ac3c97e7e722c922de"
+    },
+    {
+      "path": "baseline-source/tools/compare_engine_controllers.py",
+      "bytes": 22662,
+      "sha256": "a78de92496b35f51be17b279c6583585111b4555893f848431f596d24186afa1"
+    },
+    {
+      "path": "baseline-source/tools/compare_speeduino.py",
+      "bytes": 2930,
+      "sha256": "7608e7672e1817705f310b5e0cacc5a7d4472ee33b7673888a1c96dc399f01cf"
+    },
+    {
+      "path": "baseline-source/tools/compare_trigger_loggers.py",
+      "bytes": 6921,
+      "sha256": "62add2645cc5dbd622904e157bb03bb9144d16cabf8f72a48d49d6b0b9d38498"
+    },
+    {
+      "path": "baseline-source/tools/config_bridge.cpp",
+      "bytes": 1260,
+      "sha256": "d692084a8714de7ce9cf10474ce52d714b405de71702d784a4b3c5afafe58ff4"
+    },
+    {
+      "path": "baseline-source/tools/engine_bridge.cpp",
+      "bytes": 10434,
+      "sha256": "2dba5632c0a3b40e9eceeea66e60a631e4f61a619ab2d22875dad7b1dbbfdd21"
+    },
+    {
+      "path": "baseline-source/tools/engine_log.py",
+      "bytes": 4223,
+      "sha256": "c04e4876cfc0bef1bc307e06e02bafa108239c2dccd84c08f40af82484a66625"
+    },
+    {
+      "path": "baseline-source/tools/engine_msq.py",
+      "bytes": 10915,
+      "sha256": "7a9345e042ae187838b1690f86a7f6d8df460f1102a0f67e5c391047b78b67f4"
+    },
+    {
+      "path": "baseline-source/tools/engine_observability.py",
+      "bytes": 3978,
+      "sha256": "2e04f851e712cc8a223719154d519b0664111db3edf794399f0afb82bee5482f"
+    },
+    {
+      "path": "baseline-source/tools/engine_observability_bridge.cpp",
+      "bytes": 11315,
+      "sha256": "d198b754e068859d084020c1cf8fe3e4de9ae72cdae4df54b724e733a26c87cc"
+    },
+    {
+      "path": "baseline-source/tools/engine_protocol.py",
+      "bytes": 5900,
+      "sha256": "3908574ec01def35711a13ab10f278500a151db4024e80f8aaf436458c093814"
+    },
+    {
+      "path": "baseline-source/tools/engine_protocol_legacy.py",
+      "bytes": 9261,
+      "sha256": "0b8144daea19b5b201d5d49fed09f7215988b75122591d8ae9809c69c935a0c2"
+    },
+    {
+      "path": "baseline-source/tools/engine_receiver.py",
+      "bytes": 14019,
+      "sha256": "d612903d8fe1feb2a980f104368f20a338e75e62197222c94218891508365948"
+    },
+    {
+      "path": "baseline-source/tools/engine_research_plant.py",
+      "bytes": 13518,
+      "sha256": "a849b9b84e4be9d5a02d91a6315b77b9c0953a922312bf3d877faa03038fb74a"
+    },
+    {
+      "path": "baseline-source/tools/engine_runtime.py",
+      "bytes": 17858,
+      "sha256": "804a0aae598b0e39c8e713bcbf0e8f57fa06480909e4d6d6549ea5419ddc015e"
+    },
+    {
+      "path": "baseline-source/tools/engine_sil.py",
+      "bytes": 13534,
+      "sha256": "2d8b66408396b2bb40d648d6e218f3d5b2935f2ae9454e66bcfd1251eae952d2"
+    },
+    {
+      "path": "baseline-source/tools/espnow_protocol.py",
+      "bytes": 2807,
+      "sha256": "90d806e472f54ab5d054629ab92162157064d461f34164f7b73bc5dde43176f9"
+    },
+    {
+      "path": "baseline-source/tools/idle_config.py",
+      "bytes": 2437,
+      "sha256": "175ee2cdd51c92c00edcb41cee210f257c0af0a66867fefc445ddd1c9994c459"
+    },
+    {
+      "path": "baseline-source/tools/idle_valve_plant.py",
+      "bytes": 3564,
+      "sha256": "ecf84faf3c556c200831bf361c59459dc8e3fc43fe3637022e0f64cc5d963b65"
+    },
+    {
+      "path": "baseline-source/tools/plot_cylinder_comparison.py",
+      "bytes": 3237,
+      "sha256": "67ee638f3117e1be5b9fae0bc2415b4c636f766948d1dfccd534f8da38723bf5"
+    },
+    {
+      "path": "baseline-source/tools/plot_engine_evidence.py",
+      "bytes": 3393,
+      "sha256": "be7abd42422cf76a5f589d46e0b18054714c46385bf70c64c582224ef24d8b57"
+    },
+    {
+      "path": "baseline-source/tools/plot_idle_scenarios.py",
+      "bytes": 6836,
+      "sha256": "a67de6d3a24c1503853eca8e52e955ad58dbc57269d4c78224e72c8da784a37a"
+    },
+    {
+      "path": "baseline-source/tools/plot_research_benchmark.py",
+      "bytes": 4615,
+      "sha256": "47ae7dff6e0ba88b9820ebf36262be8c4ccf094bd870e5a6113117f8163c4e20"
+    },
+    {
+      "path": "baseline-source/tools/plot_semi_comparison.py",
+      "bytes": 3613,
+      "sha256": "df6b28414b70f372880aa48f3232312545e32475bc3abd2e8342e71cf37db066"
+    },
+    {
+      "path": "baseline-source/tools/plot_sequential_comparison.py",
+      "bytes": 2340,
+      "sha256": "c2f6da73a85061fb201df86e98093bfd7bf51db6936f2ab2a8f054fee1937b7e"
+    },
+    {
+      "path": "baseline-source/tools/plot_target_timing.py",
+      "bytes": 3804,
+      "sha256": "67c4c1f309ef54573f79f0d9d2fe6440a2a75763689d9a8a48f32ec8fa25e7d4"
+    },
+    {
+      "path": "baseline-source/tools/plot_transient_comparison.py",
+      "bytes": 2788,
+      "sha256": "9108f781ee75ab278855e926bc9fbadb6816ae571e3c13a73e04fa48f4d18435"
+    },
+    {
+      "path": "baseline-source/tools/plot_trigger_comparison.py",
+      "bytes": 4434,
+      "sha256": "61b0899e7a6fe0fd7a5aac9587820726f565a3b6ce5a0669504ea4aa6ce0bb07"
+    },
+    {
+      "path": "baseline-source/tools/radio_simulator.py",
+      "bytes": 5068,
+      "sha256": "a92cd71d2379ab05f20f2e47f36b9d5d672573e96df3cb60452dad5912fc1087"
+    },
+    {
+      "path": "baseline-source/tools/render_idle_hardware.py",
+      "bytes": 2625,
+      "sha256": "553e19a94448b69c3591c846d0f814bdf7874bb4eb03d95c61c2bbef4c137bd0"
+    },
+    {
+      "path": "baseline-source/tools/review_sequential_results.py",
+      "bytes": 2271,
+      "sha256": "40a49f2877050079b09c460c719a4a6e865424f3926802c2f1987752655e6f25"
+    },
+    {
+      "path": "baseline-source/tools/run_cylinder_scenarios.py",
+      "bytes": 8948,
+      "sha256": "4602b36f946a7048e4ada6755b601e306497b813b8601289d10a7c81342bb54d"
+    },
+    {
+      "path": "baseline-source/tools/run_cylinder_transients.py",
+      "bytes": 6312,
+      "sha256": "cfff13ddaa75135c26f11b8c699e5bf2a0f2a39f9234e3217ce92a9f3f2cc528"
+    },
+    {
+      "path": "baseline-source/tools/run_engine_observability_scenarios.py",
+      "bytes": 9115,
+      "sha256": "da5a2fd7c861e284abbc7d2f329d4944c9340f8b5693424156c514400941e2a0"
+    },
+    {
+      "path": "baseline-source/tools/run_engine_scenarios.py",
+      "bytes": 3336,
+      "sha256": "9c19b475cfebf4cfe96b76893a2d248ce359d88d26bbaf170e9c048c47e2db78"
+    },
+    {
+      "path": "baseline-source/tools/run_idle_circuit.py",
+      "bytes": 19854,
+      "sha256": "aece1686d6f33c343f31d06f7d9ac566f8dcdf973b3d85ffbd6db7d041ecf711"
+    },
+    {
+      "path": "baseline-source/tools/run_idle_followups.py",
+      "bytes": 2676,
+      "sha256": "0e9a640a05fb0eb1ed1f7b2f05d11830e3aa2986f6c87fd9484e0f764fe31ee3"
+    },
+    {
+      "path": "baseline-source/tools/run_idle_scenarios.py",
+      "bytes": 9337,
+      "sha256": "4c38a5999fa70907a255ff8c0217c98a82373af82ee5f53ed425db4cc8a08322"
+    },
+    {
+      "path": "baseline-source/tools/run_semi_scenarios.py",
+      "bytes": 7976,
+      "sha256": "38fe49ab24450af9140073d2d60e13708a9c655f277058a06f95cc8f9fa547b8"
+    },
+    {
+      "path": "baseline-source/tools/run_sequential_scenarios.py",
+      "bytes": 7457,
+      "sha256": "35145636ed3d6b9507cb7a0cc233ced2fd3e707a27ceb19ec835c45db54be1fa"
+    },
+    {
+      "path": "baseline-source/tools/run_target_scenarios.py",
+      "bytes": 8598,
+      "sha256": "042cf2d7e9f7c181594c9c4212d757461a697ab1b83ec9bf7dddd133e3bd6aa6"
+    },
+    {
+      "path": "baseline-source/tools/run_transient_legacy.py",
+      "bytes": 2034,
+      "sha256": "c3d4f71867b5fb8aba0feaccd1cae7f61ec829a7939876fdbe305f58993e4601"
+    },
+    {
+      "path": "baseline-source/tools/run_transient_scenarios.py",
+      "bytes": 9513,
+      "sha256": "4f3c10b043cef548ee079bfcf895cb7dc4657c47ce9ebb4fa5e279036293b9f5"
+    },
+    {
+      "path": "baseline-source/tools/run_tuning_scenarios.py",
+      "bytes": 2811,
+      "sha256": "efebb18d8ea973a6474fe37756feebb84e818e1eed5362c60f2601d92cd2e684"
+    },
+    {
+      "path": "baseline-source/tools/sequential_metrics.py",
+      "bytes": 812,
+      "sha256": "190e5cf95c0821c5241d92dfa80aa4843fa1f311c3f4beaaa51f6714cffd39d4"
+    },
+    {
+      "path": "baseline-source/tools/speeduino_reference.cpp",
+      "bytes": 1266,
+      "sha256": "0106558b0dc510b9e7d047bdf332aab970f2cffdb0fcf0971ac52f4d72b0f744"
+    },
+    {
+      "path": "baseline-source/tools/speeduino_runtime.py",
+      "bytes": 18325,
+      "sha256": "a6b89a432cd50e5b06e72590ad4c256cb052135e0d755ce77cc4c407a34c85b5"
+    },
+    {
+      "path": "baseline-source/tools/speeduino_sim.cpp",
+      "bytes": 24607,
+      "sha256": "ccaeb6b884060ba12a1d51e7f4319ea1333d84ac46941ee022be012cce1394d7"
+    },
+    {
+      "path": "baseline-source/tools/speeduino_sim_hal.cpp",
+      "bytes": 2442,
+      "sha256": "0d28c0c73308f8ac1333b0e3eefa38d9b6bef4fe0e7ca31e6342c7a9e8074409"
+    },
+    {
+      "path": "baseline-source/tools/speeduino_sim_native.hpp",
+      "bytes": 381,
+      "sha256": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9"
+    },
+    {
+      "path": "baseline-source/tools/speeduino_timer_model_test.cpp",
+      "bytes": 1745,
+      "sha256": "fa24d40df2cef36139b2df39e2c5d3d3f6553fd5dbafaf1f6c5029fee30488cf"
+    },
+    {
+      "path": "baseline-source/tools/target_runtime.py",
+      "bytes": 2832,
+      "sha256": "9e2c3c38ebacc31e9c01b246da3cb17371257c14b53b27aeec41614f5ad79aed"
+    },
+    {
+      "path": "baseline-source/tools/target_timing_bridge.cpp",
+      "bytes": 11630,
+      "sha256": "45004577761bd958566e200f29d4b203684266e6bc6deeff53a8424d6631fa05"
+    },
+    {
+      "path": "baseline-source/tools/test_cylinder_ui.py",
+      "bytes": 5605,
+      "sha256": "e6cde27b8071eb073135b166b6da5fe68280b5ee13119d14816659a5bce460e1"
+    },
+    {
+      "path": "baseline-source/tools/test_engine.py",
+      "bytes": 13626,
+      "sha256": "9b44069b7916cb1a94c0e6a57728ea59fdf48267ae717b23c3745d881806875f"
+    },
+    {
+      "path": "baseline-source/tools/test_engine_cylinder.py",
+      "bytes": 6582,
+      "sha256": "00f4ebf219e1a31f0259551756be04f364c8258fe13b3419a9712b19fa57358e"
+    },
+    {
+      "path": "baseline-source/tools/test_engine_http.py",
+      "bytes": 9291,
+      "sha256": "a3bc28254e8ceaf229c872abb45045e65a851a2efd1a05c058de70b8fd7091ba"
+    },
+    {
+      "path": "baseline-source/tools/test_engine_observability.py",
+      "bytes": 14807,
+      "sha256": "7a46e5d77ebdb8468baa3a79fa9437a5e6acccdbcef607a760dcfcb6bf9f94b5"
+    },
+    {
+      "path": "baseline-source/tools/test_engine_observability_ui.py",
+      "bytes": 8968,
+      "sha256": "d450e927be97c31def4353fe2f9ef3a903f094a06348d0672e8e59e279be6c79"
+    },
+    {
+      "path": "baseline-source/tools/test_engine_semi.py",
+      "bytes": 14172,
+      "sha256": "6a8c38ad1579123688cfb2af615a0f8af2042b9dd832a45cb8228991730a41e4"
+    },
+    {
+      "path": "baseline-source/tools/test_engine_sequential.py",
+      "bytes": 6961,
+      "sha256": "b1e0bc118bc66f4b3c3284e401dbc3671c2d44a019f6646f55c0b0f9f82d0e3a"
+    },
+    {
+      "path": "baseline-source/tools/test_engine_ui.py",
+      "bytes": 7664,
+      "sha256": "6ae9479fb31c2bbc99fafe2d009a7643746fb16052e616750444e6435c0fab15"
+    },
+    {
+      "path": "baseline-source/tools/test_idle.py",
+      "bytes": 10366,
+      "sha256": "ce9ff73ab364813a19d4e435328aaceab139426941335dd0aad2c593985cbaba"
+    },
+    {
+      "path": "baseline-source/tools/test_idle_ui.py",
+      "bytes": 7534,
+      "sha256": "0e8d5ba67b5703a6883fa18c694fdec72e7a555ddbb622f50bae96be90b38280"
+    },
+    {
+      "path": "baseline-source/tools/test_radio.py",
+      "bytes": 3962,
+      "sha256": "2d72a4a57e6eb83e0c93976530aea6d4316040a10917f64fe09df3f8288d39cc"
+    },
+    {
+      "path": "baseline-source/tools/test_research_plant.py",
+      "bytes": 4205,
+      "sha256": "9b26ceef5556faa2fdf66cf8ba1f4940d790aa3a8434b57707d79780b090e8c1"
+    },
+    {
+      "path": "baseline-source/tools/test_semi_ui.py",
+      "bytes": 8126,
+      "sha256": "48a46754a7e6e1ec8f79317d78c71bff143d113377f417d1c340c1c24f90cea2"
+    },
+    {
+      "path": "baseline-source/tools/test_sequential_ui.py",
+      "bytes": 5295,
+      "sha256": "8e8fa20853c11ce9244af562b455be6a63cd6652968da3482cd0d849413a92d0"
+    },
+    {
+      "path": "baseline-source/tools/test_speeduino_runtime.py",
+      "bytes": 3489,
+      "sha256": "cefe29e7697a8973e5e9821465aac6e3fd538d6dba449e007df0b458813d8369"
+    },
+    {
+      "path": "baseline-source/tools/test_speeduino_timer_model.py",
+      "bytes": 1615,
+      "sha256": "7b019e90fa1e46e4521768f576b4820e6fb70d71ad3714dad5508a90fb5b70be"
+    },
+    {
+      "path": "baseline-source/tools/test_transient.py",
+      "bytes": 10580,
+      "sha256": "217555bbd2ae7c8037f20d269f3188d54dcf6e229176367488281b4e1c7d8028"
+    },
+    {
+      "path": "baseline-source/tools/test_transient_ui.py",
+      "bytes": 7920,
+      "sha256": "5e0853db4b36f947ed3930f94c678ee0681c99518568eb7e3593b2af79ad0e17"
+    },
+    {
+      "path": "baseline-source/tools/test_trigger_capture.py",
+      "bytes": 6493,
+      "sha256": "e675d8c38546a2397e166249eaeb4c3448a8609b5b3b5af6a98a0151238e3789"
+    },
+    {
+      "path": "baseline-source/tools/test_trigger_ui.py",
+      "bytes": 8705,
+      "sha256": "767d3f26f42af2764af3abef5f4194f8b27e31579db33901bb1af127771b3aa6"
+    },
+    {
+      "path": "baseline-source/tools/test_tuning.py",
+      "bytes": 9199,
+      "sha256": "8027b8a2ddd11918e760bce49a491ce212fdf752593d9dcf4a16c6cba2642070"
+    },
+    {
+      "path": "baseline-source/tools/test_tuning_ui.py",
+      "bytes": 6212,
+      "sha256": "3c0b0f76af0ee32878cb41fe3901cc4d8602e51ffb66e9b5f715e9ccec546ea3"
+    },
+    {
+      "path": "baseline-source/tools/test_web_config.py",
+      "bytes": 8654,
+      "sha256": "443d92a7fc6f4e0cb60f2c445a40e37476fd63551f279f007672203c9d8d8f0c"
+    },
+    {
+      "path": "baseline-source/tools/transient_config.py",
+      "bytes": 2260,
+      "sha256": "0989cb217731836d243c836835f1a93dfa17b7d2043658de64923b9c63b30ee0"
+    },
+    {
+      "path": "baseline-source/tools/trigger_capture.py",
+      "bytes": 1401,
+      "sha256": "11765a063924b1ef7eac9a71c3cefa7c53af0cb93854336aa1984cf48f10447c"
+    },
+    {
+      "path": "baseline-source/tools/trigger_capture_bridge.hpp",
+      "bytes": 1666,
+      "sha256": "15c809a38a2832da57ddaa8319dc0b10c9b623b6e8ad02beac472145641a957f"
+    },
+    {
+      "path": "baseline-source/tools/tuning_bridge.cpp",
+      "bytes": 5857,
+      "sha256": "579e65ddba0e6c75b1a933011c588ebd3f2e17934e1c9fd6996a46201f84cc72"
+    },
+    {
+      "path": "baseline-source/tools/tuning_runtime.py",
+      "bytes": 8250,
+      "sha256": "f1ec2758064ecc602f42849bf316d0c10813cd72327ad3ae1aa9b0b89936e77e"
+    },
+    {
+      "path": "baseline-source/tools/tuning_server.py",
+      "bytes": 4844,
+      "sha256": "c1bfd2312e3eb64bf4cd33d5642dd3d0674a9fefa0a8266edc22225ef6e5518e"
+    },
+    {
+      "path": "baseline-source/tools/validate_engine_comparison.py",
+      "bytes": 7514,
+      "sha256": "6b26aef6e04a82661dcda538ccdef88f05424491ecde533f3dfd9a9ab7c297e6"
+    },
+    {
+      "path": "baseline-source/tools/verify_idle_hardware_evidence.py",
+      "bytes": 2232,
+      "sha256": "9c6c1f1ac9f095ab4344b57c1bdb709ac698c07b5d06f6350aa51f465c5cd494"
+    },
+    {
+      "path": "baseline-source/tools/verify_semi_evidence.py",
+      "bytes": 2832,
+      "sha256": "7fd4e4de6bebd4b8d11f4504ede3391ae1ab73c66ff1adbd7e12d76e656d1e9c"
+    },
+    {
+      "path": "baseline-source/tools/verify_transient_evidence.py",
+      "bytes": 4350,
+      "sha256": "7f3be7a3c8265a5848970383b79022307a5eb3242963ae3a3a0c53b9bb060f19"
+    },
+    {
+      "path": "baseline-source/tools/web_server.py",
+      "bytes": 14549,
+      "sha256": "acc2a678213c274f47f47ed17c8fc634e303e9f6450ba04e50a91c9f2fd875f2"
+    },
+    {
+      "path": "baseline-source/tuning/esp32-ecu-transient.ini",
+      "bytes": 24511,
+      "sha256": "752fb5903d10dee6c0cedde2f638a7b3dd17fb48afa3d6a1b70637f360905ff9"
+    },
+    {
+      "path": "baseline-source/web/index.html",
+      "bytes": 80919,
+      "sha256": "4687174fcf2a4a86b60d2b27aeb45cb890ff30dc943337ac9a24aa17cb447857"
+    },
+    {
+      "path": "baseline_oracle",
+      "bytes": 64632,
+      "sha256": "610ffd7eefa66e17a201983096081619195f677fb010e4cb128a34bd787d11bd"
+    },
+    {
+      "path": "baseline_oracle.cpp",
+      "bytes": 4233,
+      "sha256": "5ce6157eab1a74be507e2f730282a6aa07aba13824c2418530abd2a8b8675dc2"
+    },
+    {
+      "path": "baseline_validate",
+      "bytes": 76680,
+      "sha256": "30e6d033263bb4e320dd929c7b5cf7a0397b6f6a884fb85320ed52febff60ca9"
+    },
+    {
+      "path": "baseline_validate.cpp",
+      "bytes": 641,
+      "sha256": "10927b85dce85e0e19350c0f32531f25775cf6e0be5add2a9549a05a0cd6e99a"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_duplicate_axis.json",
+      "bytes": 5616,
+      "sha256": "f155b1454892cb8a6a63bb6b32933727bc2fda8b09889a4a61024f555b610791"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_duplicate_revision.json",
+      "bytes": 6972,
+      "sha256": "e002d499a4fbc107f1aec08d8beca3df5069e8544d574ed469d55e652dbbeaf0"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_extra_axis_metadata.json",
+      "bytes": 5634,
+      "sha256": "8cadcc6e46fe7c44d8183cfffb47e72cee460a3b1ec413cd67d9b2cd3cf7d3e8"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_new_load_model_in_schema6.json",
+      "bytes": 5632,
+      "sha256": "fc245cd7386b50e502fba2b71259e61c95260c0485556d50e58aaf5fcdcfa613"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_null_map_cell.json",
+      "bytes": 5618,
+      "sha256": "475b1e1de27f82bc3946ac3519b450f365465e71b9caeb9c6534ac2af199f595"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_old_map_axis_0.json",
+      "bytes": 5615,
+      "sha256": "856a907082c23ba2e0de4c72ca252d3b76d53f784303dc05c94508eff7057a24"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_old_map_axis_110_001.json",
+      "bytes": 5620,
+      "sha256": "ccab62e3c51b4e5e88ac8b85fcc68724bb6fdd837b63d648086681ea7a5e2642"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_old_map_axis_4_999.json",
+      "bytes": 5619,
+      "sha256": "92f630f458cdf10fb2d61bb4beb6e6041a1a925a4a3096aa77261049f6d9b582"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_old_ve_0.json",
+      "bytes": 5615,
+      "sha256": "e71399d9f3f8d1a729de5ef56ddb5f0fd0f3bfe8000ff2356eb5979cdfd74f1e"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_old_ve_120_001.json",
+      "bytes": 5621,
+      "sha256": "6788089a4381aecdc5b250d59f97dd9130ec8d589dc7384ccc5870975b9bd411"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_old_ve_19_999.json",
+      "bytes": 5620,
+      "sha256": "073dcfb9acbf5cf0d65dcb099f8c0228432b54cd0c6ba46b17e409c245308ff4"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_old_zero_lambda.json",
+      "bytes": 5616,
+      "sha256": "51555a46323b106953fca1525342f07406286199093420770ca583049b3c5c40"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_schema7_unknown_baseline.json",
+      "bytes": 5616,
+      "sha256": "3661d89793fef6cdd6cdff1294d2c1a5e098719b67418bf4975462a9f1ff0d06"
+    },
+    {
+      "path": "invalid-oracle-cases/reject_string_map_cell.json",
+      "bytes": 5619,
+      "sha256": "56d1084bc658d23af5d71f6cc53e2f42e70a9cf9557bcc00f0a788d16273c476"
+    },
+    {
+      "path": "invalid-oracle-cases/valid_default.json",
+      "bytes": 5616,
+      "sha256": "81624e4e9cb513eaa84a30ea104ba8c46e38d578974d23fccfae544bc8d67273"
+    },
+    {
+      "path": "invalid-oracle-cases/valid_ve_120.json",
+      "bytes": 5617,
+      "sha256": "79ac6f8595ceca732ae04168747efa94666ad718d287904cb869da61600d0242"
+    },
+    {
+      "path": "invalid-oracle-cases/valid_ve_20.json",
+      "bytes": 5616,
+      "sha256": "5befe052a802ff7586a0047cdf3617c768b9fe72b43f7fb606df2fecbfc8c5c3"
+    },
+    {
+      "path": "legacy-msq-oracles/own001-valid.msq",
+      "bytes": 5298,
+      "sha256": "a517c2360d422ae7e713269e5a1a0fe93897fbe8f52300ce74a3294db650ef5b"
+    },
+    {
+      "path": "legacy-msq-oracles/own001-ve0.msq",
+      "bytes": 5297,
+      "sha256": "3508b0d65196e175ecdc0a47f7da57daefb2a6f2a64dba55068f716af2a6894a"
+    },
+    {
+      "path": "legacy-msq-oracles/own001-ve120_001.msq",
+      "bytes": 5303,
+      "sha256": "90b8a3e756d9d1411da01ff2b854c94c80924cdc3143d031bfc47417fa4ad94e"
+    },
+    {
+      "path": "legacy-msq-oracles/own002-valid.msq",
+      "bytes": 5655,
+      "sha256": "d1c93bad3010aec0a12c02fa5bfd532b29dd6992fdd8797b344639fe934da290"
+    },
+    {
+      "path": "legacy-msq-oracles/own002-ve0.msq",
+      "bytes": 5654,
+      "sha256": "4da46dd28a2451212da58a71b40bd791f6819847092425e520761b90f38424ee"
+    },
+    {
+      "path": "legacy-msq-oracles/own002-ve120_001.msq",
+      "bytes": 5660,
+      "sha256": "87964043ecc25834936c25f74f290d42d066844743f678cd6507e08bd7372c40"
+    },
+    {
+      "path": "legacy-msq-oracles/own003-valid.msq",
+      "bytes": 7329,
+      "sha256": "73acc6ef3d6c0d77a9bf33d64d09b40d5be54939b79d2e0dddafd7c9f8bd2533"
+    },
+    {
+      "path": "legacy-msq-oracles/own003-ve0.msq",
+      "bytes": 7328,
+      "sha256": "0c9060e8eb2a5c63295e862699a7b2e0ea7d6a4e7016b8b78325687e607632c4"
+    },
+    {
+      "path": "legacy-msq-oracles/own003-ve120_001.msq",
+      "bytes": 7334,
+      "sha256": "eea9d79cc2f0e1d03097f26ffbff260d4caaf713a9a4cba0fadce26ecd10f1dd"
+    },
+    {
+      "path": "legacy-msq-oracles/own004-valid.msq",
+      "bytes": 7233,
+      "sha256": "78225e1cd6f6a289fc9ec99eae2d9041d689d0cf7049ac6d18aa718aa7ca1881"
+    },
+    {
+      "path": "legacy-msq-oracles/own004-ve0.msq",
+      "bytes": 7232,
+      "sha256": "04f13056df1f8318b029d1a3e416d8f81aaba6b9df79f1cb98dfe727d638c119"
+    },
+    {
+      "path": "legacy-msq-oracles/own004-ve120_001.msq",
+      "bytes": 7238,
+      "sha256": "a905d403cf30ed6ebc3d92ed486dd79b0c8f9dd1c5325df826fe7e57b9fdf38f"
+    },
+    {
+      "path": "legacy-msq-oracles/own005-valid.msq",
+      "bytes": 8488,
+      "sha256": "ccd818fa54e3ebb2fdf4d1daa99bee13fe53c7c1d22e13239ced296aeadb1c28"
+    },
+    {
+      "path": "legacy-msq-oracles/own005-ve0.msq",
+      "bytes": 8487,
+      "sha256": "62a7b6aab85db35f55516d52926883d2ee6125e7e5fcfb538740ea1e106a5a61"
+    },
+    {
+      "path": "legacy-msq-oracles/own005-ve120_001.msq",
+      "bytes": 8493,
+      "sha256": "6a33263010774512dd81a28a40afdf231405151e8a954a1cdb04228bbf6b91b1"
+    },
+    {
+      "path": "legacy-msq-oracles/own006-valid.msq",
+      "bytes": 8488,
+      "sha256": "38852b7c479da1ea05f76e281bb727754640c86cf9fc3e3a65e69df098475372"
+    },
+    {
+      "path": "legacy-msq-oracles/own006-ve0.msq",
+      "bytes": 8487,
+      "sha256": "b8292071c2f142af69d2122a664cafcb4ac09c704212b0b738fd7c0fdc49a51b"
+    },
+    {
+      "path": "legacy-msq-oracles/own006-ve120_001.msq",
+      "bytes": 8493,
+      "sha256": "0daf3ebff16d12b690f6efa0516bdea023270bc5570cde416f81dfa7adf4a5c4"
+    },
+    {
+      "path": "legacy-msq-oracles/own007-valid.msq",
+      "bytes": 9551,
+      "sha256": "e01bb225c6e71da6970926a886fc065227cf79fd9316d46c3d3bfead3751b82b"
+    },
+    {
+      "path": "legacy-msq-oracles/own007-ve0.msq",
+      "bytes": 9550,
+      "sha256": "a83fe2b0e17dd13ba3bd91e64db05930a978625c944213cc6bca6e9dceed6694"
+    },
+    {
+      "path": "legacy-msq-oracles/own007-ve120_001.msq",
+      "bytes": 9556,
+      "sha256": "e95fb42aa32783d95b441ed7a2e0f8146d04a272cdfaea774b338030da1ba843"
+    },
+    {
+      "path": "msq_oracle.py",
+      "bytes": 3245,
+      "sha256": "08d231382ad7257844af6c1bcdb7976afff696020594c84abb85f2aef4c47fa7"
+    },
+    {
+      "path": "reference-linked-input-hashes.json",
+      "bytes": 23105,
+      "sha256": "529cb0793db4d7456c48462ad0e9bec02c3a29367cf564ce475b8c6002fd1fea"
+    },
+    {
+      "path": "reference-parent-build-manifest.json",
+      "bytes": 61636,
+      "sha256": "ef09364119477be0e7973f230b6fc86ca83b6b91ca3f5837a7141bc635d4c49b"
+    },
+    {
+      "path": "reference-probe.csv",
+      "bytes": 2196,
+      "sha256": "e083c7912394439091f316eb22db04cd56cef8863a1042ffef108f268a5e17eb"
+    },
+    {
+      "path": "reference-probe.json",
+      "bytes": 5259,
+      "sha256": "a186eda3d1198d9bfce230a26d53d7be5956b2333c480ac09e54a71be8bc3de6"
+    },
+    {
+      "path": "reference-source/reference/speeduino.ini",
+      "bytes": 477201,
+      "sha256": "60bb12a911281255667953a087c0ddd7ef8e69e1c250f5172d74eeb2752d298a"
+    },
+    {
+      "path": "reference-source/speeduino/config_pages.h",
+      "bytes": 38995,
+      "sha256": "97eed771a7da0c3f357adf1034e484bf1ea6ba54c3c1346f637e9b9aac1a5da2"
+    },
+    {
+      "path": "reference-source/speeduino/corrections.cpp",
+      "bytes": 55173,
+      "sha256": "f4423734830aacd50b5d7172fbe08e057889b91f3fbd997ae81a7a6e44d5f276"
+    },
+    {
+      "path": "reference-source/speeduino/fuel_calcs.cpp",
+      "bytes": 12710,
+      "sha256": "f5c6d867e995a8269fa3071e9719387052e1cfe0acaae350c865aa7f8fa59bb1"
+    },
+    {
+      "path": "reference-source/speeduino/fuel_calcs.h",
+      "bytes": 1002,
+      "sha256": "5fbabbda2c54a8c1a320834cc6147e4d11a7c9532fcd04f0c94159da972bcd6d"
+    },
+    {
+      "path": "reference-source/speeduino/load_source.h",
+      "bytes": 1268,
+      "sha256": "b6454950638ba0d8570d074e88f268ddb2decf1bf1cf4b13e438102dd44af050"
+    },
+    {
+      "path": "reference-source/speeduino/maths.h",
+      "bytes": 16825,
+      "sha256": "71c073c1818bd981eeff1f457a9fb9ce8220ce6003a7ff232280e205c295b570"
+    },
+    {
+      "path": "reference-source/speeduino/scheduler_fuel_controller.cpp",
+      "bytes": 27894,
+      "sha256": "625be32b39e521f4dad30495fab907bb5fa1cc2aad89e8c29df666d3ee09389a"
+    },
+    {
+      "path": "reference-source/speeduino/secondaryTables.cpp",
+      "bytes": 6895,
+      "sha256": "bd62fdbc77c5c77ce1efaae7176d23885a8dd5deace02d2d5e14c1bbd1088c83"
+    },
+    {
+      "path": "reference-source/speeduino/secondaryTables.h",
+      "bytes": 352,
+      "sha256": "c28a9b8642d4d6738996e77527ec6577924891699f649587f221b86aca18f2b1"
+    },
+    {
+      "path": "reference-source/speeduino/sensors.cpp",
+      "bytes": 37239,
+      "sha256": "bbd36fa91d5a432caf86b72fb58ad83750a7185d55b6b94b99ceb770ec531424"
+    },
+    {
+      "path": "reference-source/speeduino/sensors.h",
+      "bytes": 3303,
+      "sha256": "a07978f21db88255eb9a985978f4d6ae26accbb2ac6da198e6402554d69cd4a5"
+    },
+    {
+      "path": "reference-source/speeduino/speeduino.ino",
+      "bytes": 18316,
+      "sha256": "b355adc865317ab38c9b643e871644c4af40cf99fbe23e71bd3cc51bf83702a0"
+    },
+    {
+      "path": "reference-source/speeduino/statuses.h",
+      "bytes": 20869,
+      "sha256": "7898852cc8f062f56151e3b420ee459b6e604796a046b4c9424081c4dceb1eac"
+    },
+    {
+      "path": "reference-source/speeduino/table3d.h",
+      "bytes": 4070,
+      "sha256": "7584c1cceaa9d522c6e6a964c2b9fc2ceb9b0ebc7857180c5e05265819c739af"
+    },
+    {
+      "path": "reference-source/speeduino/table3d_axes.h",
+      "bytes": 464,
+      "sha256": "89039a90cfc081db453ee809a9f4848e065f92e1c4bb8516c2ad722239d39373"
+    },
+    {
+      "path": "reference-source/speeduino/table3d_interpolate.cpp",
+      "bytes": 7731,
+      "sha256": "cce925d15f8ea9b3019846ef0ef0a2204ecb08fdd60e6c6d4641c54bf1a684bf"
+    },
+    {
+      "path": "reference-source/speeduino/table3d_interpolate.h",
+      "bytes": 6039,
+      "sha256": "d6070388447232bc6e1ce0b9fcb36e9079c7d4f679b2050e1950bd6f7deb6f3f"
+    },
+    {
+      "path": "reference-source/speeduino/table3d_typedefs.h",
+      "bytes": 1283,
+      "sha256": "17de0038ecbf7bcb5c79cf1dca93907f58b5eb75824dacc4645a55851e99132b"
+    },
+    {
+      "path": "reference-source/speeduino/units.h",
+      "bytes": 7350,
+      "sha256": "d6a215c440fd941e8fdfacc7436cb6758d879975bd14d8c02ab095249f0a266c"
+    },
+    {
+      "path": "reference_probe",
+      "bytes": 11065680,
+      "sha256": "6f3827fe76bae612579ee79f19b924f67f512d9ec7a0b988398526cf70588ffc"
+    },
+    {
+      "path": "reference_probe.cpp",
+      "bytes": 12935,
+      "sha256": "e8446ed23cafc2a5f93f3380a655156f4401426f1a996d2a11fd08c3776d1629"
+    },
+    {
+      "path": "reference_probe.o",
+      "bytes": 1502248,
+      "sha256": "88484a1dff34e15f59e3124a3e47a4c4b55a77ef9b81024a85b5ccc249a4f14b"
+    },
+    {
+      "path": "reference_probe.py",
+      "bytes": 5591,
+      "sha256": "818a0d9d73854e7ccab74b5b1ba7d010bf2e5f85c1d976660fdf337331bfc1a8"
+    },
+    {
+      "path": "source-snapshot-index.json",
+      "bytes": 5887,
+      "sha256": "a75b64428058522d638772b0d43c782f394f7491909aef1d22ee0e8bb3d0ff2a"
+    },
+    {
+      "path": "vendor/cJSON/cJSON.c",
+      "bytes": 80399,
+      "sha256": "f892717f26cf3d21b7108de50cea95b6e48092950427615fe1d8d9c46ea09cca"
+    },
+    {
+      "path": "vendor/cJSON/cJSON.h",
+      "bytes": 16394,
+      "sha256": "fda63720ffad1d007802f62204831018d167084c26e2ce08ad36f11529a90682"
+    },
+    {
+      "path": "vendor/cJSON/cJSON.o",
+      "bytes": 36808,
+      "sha256": "54d7bafa40e380e02ee8e01d9e39a89eeeb054f573ebfbf986822fa80270d8ed"
+    },
+    {
+      "path": "verify-baseline-result.json",
+      "bytes": 1665,
+      "sha256": "fd9745197f09bc45f6011b027dc1bb0e3ab044c67a5d76b44b37d64fd6eb6d2b"
+    },
+    {
+      "path": "verify_baseline.py",
+      "bytes": 1929,
+      "sha256": "a6943aca2d67277248f8f6f4dd2607da58c98cbc257a5669da71df53862be365"
+    }
+  ]
+}

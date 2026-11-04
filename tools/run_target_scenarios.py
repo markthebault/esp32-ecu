@@ -19,7 +19,7 @@ class TargetController(benchmark.OurController):
         super().__init__(tune,target_dispatcher=True)
 
 
-def audit(result,target):
+def audit(result,target,expect_running=True,expect_all_channels=True):
     """Reconstruct actuator state independently from the complete edge stream."""
     s=result['summary'];errors=[];high={};widths=[0]*8;previous=0;channels=set()
     def require(condition,message):
@@ -34,19 +34,20 @@ def audit(result,target):
             require(ch in high,'fall without rise')
             if ch in high:widths[ch]=max(widths[ch],us-high.pop(ch))
     require(not high and not s['final_outputs_high'],'termination left an output high')
-    require(channels==set(range(8)),'not all eight virtual channels exercised')
+    if expect_all_channels:require(channels==set(range(8)),'not all eight virtual channels exercised')
     require(len(result['edges'])==s['edges'],'edge count differs from summary')
     require(max(widths[:4])==s['max_injector_high_us'] and max(widths[4:])==s['max_dwell_high_us'],'pulse summary differs from replay')
     for key,tolerance in [('fuel_residual_mg',1e-6),('chemical_residual_j',1e-4),
                           ('shaft_residual_j',1e-4),('air_residual_kg',1e-7),('air_energy_residual_j',.05)]:
         require(math.isfinite(s['ledger'][key]) and abs(s['ledger'][key])<tolerance,key+' balance')
     require(s['max_trigger_quantization_deg']<.05,'trigger quantization')
-    require(s['sparks']>100 and s['ledger']['combustion_shaft_j']>0,'combustion was not exercised')
+    if expect_running:require(s['sparks']>100 and s['ledger']['combustion_shaft_j']>0,'combustion was not exercised')
     scenario=s['scenario'];rpm=s['mean_final_second_rpm']
-    if scenario in ('warm_start','stall_restart'):require(650<rpm<1500,'sustained/recovered idle absent')
-    if scenario=='throttle_step':require(rpm>1500,'throttle response absent')
-    if scenario in ('load_step','trigger_dropout'):require(rpm<40,'expected coast to rest absent')
-    if scenario=='overrev':require(s['hard_cut_samples']>0,'hard rev cut not exercised')
+    if expect_running:
+        if scenario in ('warm_start','stall_restart'):require(650<rpm<1500,'sustained/recovered idle absent')
+        if scenario=='throttle_step':require(rpm>1500,'throttle response absent')
+        if scenario in ('load_step','trigger_dropout'):require(rpm<40,'expected coast to rest absent')
+        if scenario=='overrev':require(s['hard_cut_samples']>0,'hard rev cut not exercised')
     if target:
         require(max(widths[:4])<=15000 and max(widths[4:])<=3500,'target pulse bounds')
         require(s['max_spark_error_deg']<.2,'latched spark-angle error')

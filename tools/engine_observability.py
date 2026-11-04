@@ -53,8 +53,9 @@ class EngineRecorder:
   if not self.bridge.data_capability_reply(self.handle,request,len(request),key,session,nonce,floor,sent,out):raise ValueError('Capability request rejected')
   return out.raw
  def reset_capabilities(self):self.bridge.data_capability_reset(self.handle)
- def frame(self,sample,lmk,nonce,session,sequence,sample_age=0,control_age=0,worker_age=4294967295,sent=0,schema=2):
-  out=ctypes.create_string_buffer(232)
+ def frame(self,sample,lmk,nonce,session,sequence,sample_age=0,control_age=0,worker_age=4294967295,sent=0,schema=3):
+  if type(schema) is not int or schema not in (1,2,3):raise ValueError('Unsupported engine schema')
+  out=ctypes.create_string_buffer(232 if schema<3 else 250)
   if not self.bridge.data_radio_frame(encoded(sample),lmk,nonce,session,sequence,sample_age,control_age,worker_age,sent,schema,out):raise ValueError('Invalid engine observation fixture or unsupported wire schema')
   return out.raw
  def close(self):

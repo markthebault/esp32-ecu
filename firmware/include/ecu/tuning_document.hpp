@@ -1,5 +1,6 @@
 #pragma once
 #include "ecu/tuning_layout.hpp"
+#include "ecu/load_json.hpp"
 #include "cJSON.h"
 namespace ecu::tuning {
 class Document {
@@ -10,7 +11,7 @@ class Document {
  template<class Map>static bool grid(cJSON*j,const Map&m){return j&&values(item(j,"rpm"),m.rpm)&&values(item(j,"load"),m.load)&&values(item(j,"cells"),m.cells);}
 public:
  explicit Document(cJSON*j):root_(j){}
- bool header(std::uint32_t revision,const char*strategy){return set(item(root_,"schema_version"),6)&&set(item(root_,"revision"),revision)&&cJSON_SetValuestring(item(root_,"strategy"),strategy);}
+ bool header(std::uint32_t revision,const char*strategy){return set(item(root_,"schema_version"),7)&&set(item(root_,"revision"),revision)&&cJSON_SetValuestring(item(root_,"strategy"),strategy);}
  bool number(const char*group,const char*key,double v){return set(item(item(root_,group),key),v);}
  bool boolean(const char*group,const char*key,bool v){auto*j=item(item(root_,group),key);if(!cJSON_IsBool(j))return false;j->type=(j->type&~0xff)|(v?cJSON_True:cJSON_False);return true;}
  template<class Values>bool array(const char*group,const char*key,const Values&v){return values(item(item(root_,group),key),v);}
@@ -47,6 +48,14 @@ public:
   for(auto field:transient::scalar_fields)if(!number("transient_enrichment",field.name,c.*(field.member)))return false;
   for(auto field:transient::array_fields)if(!array("transient_enrichment",field.name,c.*(field.member)))return false;
   return true;
+ }
+ bool load_model(const ecu::load::Config&c){
+  auto*j=item(root_,"load_model");if(!j)return false;
+  for(auto f:load::source_fields)if(!cJSON_SetValuestring(item(j,f.name),load::source_name(c.*(f.member))))return false;
+  for(auto f:load::axis_fields)if(!cJSON_SetValuestring(item(j,f.name),load::axis_name(c.*(f.member))))return false;
+  return cJSON_SetValuestring(item(j,"pressure"),load::pressure_name(c.pressure))&&cJSON_SetValuestring(item(j,"aux_role"),load::aux_name(c.aux_role))&&
+   cJSON_SetValuestring(item(j,"baro_source"),load::baro_name(c.baro_source))&&cJSON_SetValuestring(item(j,"afr"),load::afr_name(c.afr))&&
+   number("load_model","fixed_baro_kpa",c.fixed_baro_kpa)&&number("load_model","afr_delay_s",c.afr_delay_s);
  }
 };
 } // namespace ecu::tuning

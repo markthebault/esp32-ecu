@@ -5,7 +5,7 @@ window.EcuCylinderTuning=(()=>{
   const out=[{page:4,name:'cylinderTrimsEnabled',value:t.cylinder_trims.enabled,flag:true,trimFlag:true}];
   for(let i=0;i<4;i++){
    out.push({page:4,name:`c${i+1}SparkTrim`,value:t.cylinder_trims.spark_deg[i],trimSpark:i,unit:'deg'});
-   for(const [suffix,field]of [['Rpm','rpm'],['Load','load'],['Table','cells']])out.push({page:4,name:`c${i+1}Fuel${suffix}`,value:t.cylinder_trims.fuel_maps[i][field],trimCylinder:i,field,bins:6,unit:field==='rpm'?'RPM':field==='load'?'kPa':'%'});
+   for(const [suffix,field]of [['Rpm','rpm'],['Load','load'],['Table','cells']])out.push({page:4,name:`c${i+1}Fuel${suffix}`,value:t.cylinder_trims.fuel_maps[i][field],trimCylinder:i,field,bins:6,unit:field==='rpm'?'RPM':field==='load'?'source_units':'%'});
   }
   return out;
  }
@@ -23,8 +23,8 @@ window.EcuCylinderTuning=(()=>{
   };
   trims.spark_deg.forEach((_,i)=>root.querySelector(`#cylinder-spark-${i+1}`).onchange=e=>{trims.spark_deg[i]=Number(e.target.value);changed();});
   const draw=()=>{
-   const m=trims.fuel_maps[selected],grid=root.querySelector('#cylinder-fuel-grid');
-   grid.innerHTML=`<div class="tablewrap"><table><thead><tr><th>kPa / RPM</th>${m.rpm.map((v,x)=>`<th><input aria-label="Cylinder ${selected+1} RPM axis ${x+1}" data-trim-axis="rpm" data-index="${x}" type="number" value="${v}" style="width:70px"></th>`).join('')}</tr></thead><tbody>${m.load.map((v,y)=>`<tr><th><input aria-label="Cylinder ${selected+1} load axis ${y+1}" data-trim-axis="load" data-index="${y}" type="number" step="any" value="${v}" style="width:70px"></th>${m.rpm.map((_,x)=>`<td><input aria-label="Cylinder ${selected+1} fuel trim row ${y+1} column ${x+1}" data-trim-cell="${y*6+x}" type="number" min="50" max="150" step="any" value="${m.cells[y*6+x]}" style="width:70px"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+   const m=trims.fuel_maps[selected],basis=window.EcuLoadModel.basis(t,'trim'),grid=root.querySelector('#cylinder-fuel-grid');
+   grid.innerHTML=`<div class="tablewrap"><table><thead><tr><th>${basis.unit} / RPM</th>${m.rpm.map((v,x)=>`<th><input aria-label="Cylinder ${selected+1} RPM axis ${x+1}" data-trim-axis="rpm" data-index="${x}" type="number" value="${v}" style="width:70px"></th>`).join('')}</tr></thead><tbody>${m.load.map((v,y)=>`<tr><th><input aria-label="Cylinder ${selected+1} load axis ${y+1} ${basis.unit}" data-trim-axis="load" data-index="${y}" min="${basis.min}" max="${basis.max}" type="number" step="any" value="${v}" style="width:70px"></th>${m.rpm.map((_,x)=>`<td><input aria-label="Cylinder ${selected+1} fuel trim row ${y+1} column ${x+1}" data-trim-cell="${y*6+x}" type="number" min="50" max="150" step="any" value="${m.cells[y*6+x]}" style="width:70px"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
    grid.querySelectorAll('[data-trim-axis],[data-trim-cell]').forEach(input=>input.onchange=()=>{if(input.dataset.trimAxis)m[input.dataset.trimAxis][Number(input.dataset.index)]=Number(input.value);else m.cells[Number(input.dataset.trimCell)]=Number(input.value);changed();});
   };
   root.querySelector('#cylinder-fuel-map').onchange=e=>{selected=Number(e.target.value);draw();};draw();

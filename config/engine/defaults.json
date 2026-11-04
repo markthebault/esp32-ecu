@@ -1,5 +1,5 @@
 {
-  "schema_version": 6,
+  "schema_version": 7,
   "revision": 1,
   "strategy": "batch_wasted_4cyl",
   "physical_outputs": "inhibited",
@@ -1319,5 +1319,21 @@
       30,
       50
     ]
+  },
+  "load_model": {
+    "fuel_source": "map",
+    "spark_source": "map",
+    "lambda_source": "follow_fuel",
+    "trim_source": "follow_fuel",
+    "pressure": "map_100kpa",
+    "aux_role": "postcat_monitor",
+    "baro_source": "fixed",
+    "ve_axis": "map_kpa",
+    "spark_axis": "map_kpa",
+    "lambda_axis": "map_kpa",
+    "trim_axis": "map_kpa",
+    "afr": "target",
+    "fixed_baro_kpa": 100,
+    "afr_delay_s": 10
   }
 }

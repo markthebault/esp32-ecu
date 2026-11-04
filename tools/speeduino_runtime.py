@@ -22,6 +22,7 @@ class SpeeduinoRuntime:
         self.buffer=b'';self.now=0
         self.idle_profile=None
         self.transient_profile=None
+        self.load_profile=None
         try:
             self._initialize(per_tooth)
             if sequential:
@@ -84,6 +85,58 @@ class SpeeduinoRuntime:
         values=[sample[k] for k in ('map_kpa','tps_pct','clt_c','iat_c','battery_v')]+[sample['lambda']*14.7]
         if not all(isinstance(v,(int,float)) and math.isfinite(v) for v in values):raise ValueError('Invalid sensor values')
         self.command('sensors '+' '.join(format(v,'.12g') for v in values))
+
+    def pressures(self,emap_kpa=100,baro_kpa=100):
+        if self.load_profile is None or any(type(v) not in (int,float) or not math.isfinite(v) for v in (emap_kpa,baro_kpa)) or not 20<=emap_kpa<=500 or not 50<=baro_kpa<=110:raise ValueError('Invalid configured virtual absolute-pressure fixture')
+        self.command(f'pressure {emap_kpa:.12g} {baro_kpa:.12g}')
+
+    def configure_load(self,tune,map_filter=0,tps_filter=0):
+        """Declare representable primary tables and production sensor paths.
+
+        Upstream TPS getLoad is physical percent*4, not percent. The common
+        upstream table domain then divides that coordinate by2 for raw axes.
+        This adapter translates table units, never replaces load/fuel math.
+        """
+        if self.load_profile is not None or self.now:raise ValueError('Reference load profile is before-start only')
+        c=tune['load_model'];source=('map','tps','imap_emap');fuel=c['fuel_source'];spark=c['spark_source']
+        if c['afr']!='off' and c['lambda_source'] not in ('follow_fuel',fuel):raise ValueError('Production reference lambda table follows primary fuel source')
+        if tune['cylinder_trims']['enabled']:raise ValueError('This declared load benchmark does not configure reference cylinder trims')
+        args=[source.index(fuel),source.index(spark),{'none':0,'map_baro':1,'map_100kpa':2}[c['pressure']],('off','target','measured').index(c['afr']),round(c['afr_delay_s']),int('imap_emap' in (fuel,spark)),map_filter,tps_filter]
+        if any(type(v) is not int or not 0<=v<=255 for v in args):raise ValueError('Reference profile cannot be represented in raw bytes')
+        maps={}
+        for id,name in enumerate(('ve','spark','lambda')):
+            m=tune['maps'][name];selected=spark if name=='spark' else fuel
+            rpm=[round(v/100) for v in m['rpm']];load=[round(v*(2 if selected=='tps' else .5)) for v in m['load']]
+            cells=[round(v+40 if name=='spark' else v*tune['engine']['stoich_afr']*10 if name=='lambda' else v) for v in m['cells']]
+            raw=rpm+load+cells
+            if len(rpm)!=16 or len(load)!=16 or len(cells)!=256 or any(not 0<=v<=255 for v in raw) or any(a[i]>=a[i+1] for a in (rpm,load) for i in range(15)):raise ValueError('Reference primary table axes/cells cannot be represented after quantization')
+            maps[name]=dict(selected_source=selected,raw_rpm=rpm,raw_load=load,raw_cells=cells,
+                            represented_rpm=[v*100 for v in rpm],represented_load=[v/(2 if selected=='tps' else .5) for v in load])
+        if self.command('loadconfig '+' '.join(map(str,args))):raise RuntimeError('Unexpected reference load configuration response')
+        expected=args+[1,2 if c['afr']=='measured' else 0,3,0,-20,620,0,200,201,202]
+        readback=self.command('loadprofile')
+        if len(readback)!=1 or readback[0].split()[0]!='loadprofile' or list(map(int,readback[0].split()[1:]))!=expected:raise RuntimeError('Reference load profile did not read back exactly: '+repr(readback))
+        for id,name in enumerate(('ve','spark','lambda')):
+            raw=maps[name]['raw_rpm']+maps[name]['raw_load']+maps[name]['raw_cells']
+            if self.command('loadmap '+str(id)+' '+' '.join(map(str,raw))):raise RuntimeError('Unexpected reference table configuration response')
+            readback=self.command('loadmapread '+str(id))
+            if len(readback)!=1 or readback[0].split()[0]!='loadmapread' or list(map(int,readback[0].split()[1:]))!=raw:raise RuntimeError('Reference primary table did not read back exactly')
+        self.load_profile=dict(requested=dict(c),raw_profile=expected,maps=maps,
+            raw_order=['fuel_source','spark_source','pressure','afr','delay_s','use_emap','map_filter','tps_filter','dedicated_baro','ego_type','ego_algorithm','baro_filter','emap_min','emap_max','baro_min','baro_max','emap_virtual_pin','baro_virtual_pin'],
+            rounding='Python nearest integer, ties to even; RPM/100; native coordinate/2; TPS native coordinate=physical percent*4; ignition+40; AFR=10*stoich*lambda',
+            emap_fixture='Virtual-20..620kPa/10bit transducer keeps requested20..500kPa away from production ADC rail rejection; actual production quantization retained; not a physical sensor choice',
+            baro_fixture='Dedicated virtual calibrated ADC input, constant for fixed manual baro; actual production read cadence retained; no physical connector equivalence',
+            unrepresented=['independent lambda/trim source','project wideband-ready qualification','project microsecond running delay; upstream integer runSecs uses strict greater-than','project known-MAP guard and sensor fault policy'],
+            execution='Unchanged pinned production sensor, table, AFR, pressure, normal loop and schedulers in native HAL')
+        return self.load_profile
+
+    def load_status(self):
+        lines=self.command('loadstatus')
+        keys=('time_us','fuel_load','spark_load','map_kpa','tps_raw_half_pct','emap_kpa','baro_kpa','target_afr10','measured_afr10','run_seconds','ve_pct')
+        if len(lines)!=1 or lines[0].split()[0]!='loadstatus':raise RuntimeError('Missing production load status')
+        values=list(map(int,lines[0].split()[1:]))
+        if len(values)!=len(keys):raise RuntimeError('Incomplete production load status')
+        return dict(zip(keys,values))
 
     def configure_idle(self,tune,seeded=True,invert=False):
         if self.idle_profile is not None:raise ValueError('Reference idle profile is before-start only')

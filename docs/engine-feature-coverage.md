@@ -8,6 +8,8 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | --- | --- | --- | --- |
 | VE, spark, lambda maps | Shared 16×16 interpolation/validation; target timer source/native dispatcher | Axes/cells editable, JSON/own MSQ | Target pulse/jitter measurements pending |
 | Speed-density fuel | Shared core; fuel-kernel and external-plant controller comparisons | Engine/injector settings and correction readouts | Four high-Z saturated drivers, electrical behavior unmeasured |
+| Primary load sources and pressure | Independent fuel/spark MAP, physical TPS or IMAP/EMAP coordinates; optional fixed-reference/MAP/baro normalization;56 cases plus8 step checks | Schema7/own008, explicit axis units and review, source-tagged diagnostics and126/83-field MSL005 | Existing J16 may supply EMAP or live baro, with calibrated absolute-kPa input; simultaneous extra pressure path and separate baro curve missing |
+| AFR incorporation | Off, target and readiness/delay-gated measured/target factor, separate from EGO PI; zero ordinary fuel suppresses deadtime-only openings | AFR state/factor, restart delay, unknown ratios and legacy migration in UI/JSON/tuning/logs | External wideband remains required; these compatibility calculations do not establish target-lambda tracking or engine calibration |
 | Batch/wasted four-cylinder | Shared native and ESP32 MCPWM/GPTimer executor | Explicit strategy, inhibited-output labels, timing trace | Four injector/four smart-coil commands; selected N16R8 physical policy inhibited |
 | Other cylinder counts | Missing; Speeduino publishes 1–8 support | Validator rejects other counts | Channel/strategy review required |
 | Full sequential four-cylinder | Shared720° phase/scheduler; strict cam-loss cut,33 external-plant cases plus6 step checks | Strategy/order/injection/cam settings, phase reasons/logs, schema migration and own003 MSQ | Existing protected Hall cam/four injector/four smart-coil commands; N16R8 physical policy inhibited |
@@ -17,7 +19,7 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | VR crank/cam | Raw VR conditioning missing | Hall-specific guides | External conditioned module or reviewed new front end |
 | Cranking fuel/spark | Shared shadow/SIL | Threshold/timing/coolant curve | Cranking voltage/noise and timing-light tests pending |
 | Warmup/afterstart | Shared shadow/SIL | Curves, magnitude/duration, correction logs | Physical cold calibration pending |
-| Acceleration/deceleration enrichment | Legacy decay plus acquisition-window TPS/MAP tables, multiplier/reference-adder, latched RPM/coolant taper and zero-decel fuel cut;48 coupled cases plus8 refinement and8 neutral controls | Schema6/own007, curves/gates, source-rate/phase/dose diagnostics,105-field engine and62-field SIL MSL004 | Existing protected J11/J12; real sensor noise, injector behavior and engine/film calibration remain unqualified |
+| Acceleration/deceleration enrichment | Legacy decay plus acquisition-window TPS/MAP tables, multiplier/reference-adder, latched RPM/coolant taper and zero-decel fuel cut;48 coupled cases plus8 refinement and8 neutral controls | Introduced in schema6/own007; curves/gates and source-rate/phase/dose diagnostics retained in current own008 and126/83-field MSL005 | Existing protected J11/J12; real sensor noise, injector behavior and engine/film calibration remain unqualified |
 | Dead-time compensation | Battery curve and pulse bounds | Curve and pulse diagnostics | Injector flow/dead-time/flyback characterization missing |
 | Dwell compensation/protection | Battery curve, bounded high time, late-demand handling | Dwell/angle diagnostics, event traces | Smart coils only, no dumb-coil power driver |
 | Rev limiting | Retard band, cut and hysteresis | Editable thresholds and fault logs | Target response and physical cut behavior pending |
@@ -29,14 +31,14 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | VVT | Missing | No controls | Phase sensing, driver, flyback and connector work |
 | Flex fuel | Missing | No ethanol blending/capture settings | Protected frequency input/pin allocation needed |
 | Secondary maps / blending | Missing | One map set | Switch input or authenticated strategy needed |
-| Per-cylinder trims | Four6×6 fuel maps and signed spark offsets; physical-channel capacity/duty, latched coil advance;18 new plant runs | Sequential enable, browser/own005 MSQ, strict legacy migration, per-channel JSON/91-field MSL and masks | Existing J9/J10 channels1–4; actual flow/deadtime/phase and electrical qualification pending |
+| Per-cylinder trims | Four6×6 fuel maps and signed spark offsets; physical-channel capacity/duty, latched coil advance;18 new plant runs | Sequential enable, browser/own005 MSQ, strict legacy migration, per-channel JSON/current126-field engine MSL and masks | Existing J9/J10 channels1–4; actual flow/deadtime/phase and electrical qualification pending |
 | Staged injection | Missing | No staging controls | Extra drivers and duty/flow qualification |
 | Launch / flat shift / nitrous | Missing | No enable options | Protected switch/speed/pressure inputs and output allocations |
 | Knock | Missing | No misleading protection indicator | Analog front end and processing required |
 | Sensor calibration | Persistent linear/table/NTC with loading compensation | Guides, units, confirmation and raw diagnostics | Six analog inputs plus battery/5V; physical verification pending |
 | Engine sensor binding | Confirmed physical units; raw-voltage relabelling rejected | Binding/fault status | Fast raw samples, display filter cannot hide faults |
 | Supervision/recovery | Target independent command/producer/tooth/cam/high-time deadlines, transactional scheduling and configuration holds | Reasons/counters/bounded traces/revisions/storage | Target timing/watchdog/restart policy needs physical HIL |
-| TunerStudio offline | Own definition/MSQ exchange | Own007 complete-page settings/curve/map editing, origin metadata and stale-editor CAS | Actual offline application roundtrip; target USB hardware unmeasured |
+| TunerStudio offline | Own definition/MSQ exchange | Own008 complete-page settings/curve/map editing, origin metadata and stale-editor CAS | Actual offline application roundtrip; target USB hardware unmeasured |
 | TunerStudio online | Shared C++ whole-tune transport and dedicated inhibited USB service | Authenticated tuning diagnostics; bounded framing/CAS/storage tests; app rejects own identity | Vendor integration unresolved; physical USB/load/cache/timing tests pending |
 | MegaLogViewer HD | SIL, raw-trigger and bounded target engine MSL; actual application opens/plots browser engine/trigger exports | Source/loss/age/validity labels, collected versus retained downloads; derived missing-lambda display caveat | Physical target capture/logging behavior unmeasured |
 | Tooth/composite/ignition logging | Target finite512-edge crank/cam recorder, raw intervals and128-record output/cut ring | Trigger charts/zoom, JSON/MSL export, bounded paging and fault counts; no TS high-speed logger | Independent capture channels implemented; capture integrity/per-pin timing need HIL |
@@ -76,6 +78,8 @@ DBW/OEM integration remain outside the current bench scope.
 
 [Isolated idle hardware](engine-idle-isolation.md) records the routed carrier/accessory, independent review corrections and conditional return/brownout/pulse circuit experiments.
 
-[Selectable semi-sequential](engine-semi-sequential.md) adds the current schema5/own006 configuration and schema2 screen contract. Historical per-feature identities and evidence above remain records; current exports use own006. This increment does not establish broader Speeduino parity or physical engine operation.
+[Selectable semi-sequential](engine-semi-sequential.md) adds the current schema5/own006 configuration and schema2 screen contract. Historical per-feature identities and evidence above remain records; that evidence used own006; current exports use own008. This increment does not establish broader Speeduino parity or physical engine operation.
 
 [Transient fueling](engine-transient-enrichment.md) adds schema6/own007 while preserving legacy AE behavior and the first256 runtime bytes. This increment closes the basic TPS/MAP rate-table gap in software and UI; it does not establish wall-film calibration, online vendor acceptance or physical ECU equivalence.
+
+[Load, pressure and AFR](engine-load-model.md) is the current schema7/own008 increment. It includes independent source/unit choices, source-tagged logs and schema3 screens,64 declared primary/refinement runs,8 exact legacy replays, independent reviews and actual offline app checks. This does not close secondary tables, a separate baro correction curve or the wider engine/hardware qualification gaps.

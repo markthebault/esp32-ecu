@@ -1,13 +1,14 @@
-"""Own007 development protocol, shared with the inhibited target USB service.
+"""Own008 development protocol, shared with the inhibited target USB service.
 
 One complete calibration page avoids automatic cross-page burn transitions.
 Historical own001/002/003 INIs and own003 codec remain separate records.
 """
-import struct,copy,json
+import struct,copy,json,math
 from types import SimpleNamespace
 from engine_runtime import R
 from idle_config import ALGORITHMS,SCALARS,ARRAYS,SCALAR_OFFSETS,ARRAY_OFFSETS,USED_END as IDLE_USED_END
-from transient_config import PAGE_BYTES,LIVE_BYTES,OFFSET as AE_OFFSET,USED_END as AE_USED_END,SCALARS as AE_SCALARS,ARRAYS as AE_ARRAYS,SCALAR_OFFSETS as AE_SCALAR_OFFSETS,ARRAY_OFFSETS as AE_ARRAY_OFFSETS,MODES,APPLIES,VALUE_NAMES
+from transient_config import OFFSET as AE_OFFSET,USED_END as AE_USED_END,SCALARS as AE_SCALARS,ARRAYS as AE_ARRAYS,SCALAR_OFFSETS as AE_SCALAR_OFFSETS,ARRAY_OFFSETS as AE_ARRAY_OFFSETS,MODES,APPLIES,VALUE_NAMES
+from load_config import PAGE_BYTES,LIVE_BYTES,OFFSET as LOAD_OFFSET,USED_END as LOAD_USED_END,ENUM_FIELDS as LOAD_ENUM_FIELDS,SCALARS as LOAD_SCALARS,ENUM_OFFSETS as LOAD_ENUM_OFFSETS,SCALAR_OFFSETS as LOAD_SCALAR_OFFSETS,ENUMS as LOAD_ENUMS,VALUE_NAMES as LOAD_VALUE_NAMES
 import engine_protocol_legacy as legacy
 from engine_protocol_legacy import (NUMBERS,FLAGS,CURVES,REVISION_OFFSET,
  TIMING_FIELDS,LIVE_FIELDS,field_units as legacy_field_units,envelope,LEGACY_SIGNATURE,
@@ -19,7 +20,8 @@ WHOLE_SIGNATURE=b'ESP32ECU DEV 004 INHIBITED'
 CYLINDER_SIGNATURE=legacy.SIGNATURE
 IDLE_SIGNATURE=b'ESP32ECU DEV 005 INHIBITED'
 SEMI_SIGNATURE=b'ESP32ECU DEV 006 INHIBITED'
-SIGNATURE=b'ESP32ECU DEV 007 INHIBITED'
+TRANSIENT_SIGNATURE=b'ESP32ECU DEV 007 INHIBITED'
+SIGNATURE=b'ESP32ECU DEV 008 INHIBITED'
 STRATEGIES=legacy.STRATEGIES+('semi_sequential_4cyl',)
 STRATEGY_LABELS=('Batch / wasted','Sequential','Semi-sequential')
 VERSION=b'ESP32ECU development; staged whole-tune burn; outputs inhibited'
@@ -40,17 +42,20 @@ def pages(tune):
  ae=tune['transient_enrichment'];struct.pack_into('<II',page,AE_OFFSET,MODES.index(ae['mode']),APPLIES.index(ae['apply']))
  for name in AE_SCALARS:struct.pack_into('<f',page,AE_SCALAR_OFFSETS[name],ae[name])
  for name in AE_ARRAYS:struct.pack_into('<4f',page,AE_ARRAY_OFFSETS[name],*ae[name])
+ model=tune['load_model']
+ for name in LOAD_ENUM_FIELDS:struct.pack_into('<I',page,LOAD_ENUM_OFFSETS[name],LOAD_ENUMS[name].index(model[name]))
+ for name in LOAD_SCALARS:struct.pack_into('<f',page,LOAD_SCALAR_OFFSETS[name],model[name])
  return {1:page}
 
 def decode_pages(buffers,base):
- if set(buffers)!={1} or len(buffers[1])!=PAGE_BYTES:raise ValueError('Own007 requires one complete 5120-byte page')
+ if set(buffers)!={1} or len(buffers[1])!=PAGE_BYTES:raise ValueError('Own008 requires one complete 5376-byte page')
  p=buffers[1]
- if any(p[292:512]) or any(p[4756:4768]) or any(p[IDLE_USED_END:AE_OFFSET]) or any(p[AE_USED_END:]):raise ValueError('Reserved tune bytes must be zero')
+ if any(p[292:512]) or any(p[4756:4768]) or any(p[IDLE_USED_END:AE_OFFSET]) or any(p[AE_USED_END:LOAD_OFFSET]) or any(p[LOAD_USED_END:]):raise ValueError('Reserved tune bytes must be zero')
  strategy=struct.unpack_from('<I',p,272)[0]
  if strategy>=len(STRATEGIES):raise ValueError('Unknown engine strategy')
  old={i:bytearray(p[offset:offset+legacy.PAGE_SIZES[i]]) for i,offset in PAGE_OFFSETS.items()}
  struct.pack_into('<I',old[1],272,strategy if strategy<len(legacy.STRATEGIES) else 0)
- candidate=legacy.decode_pages(old,base);candidate['schema_version']=6;candidate['strategy']=STRATEGIES[strategy];candidate['idle_control']=copy.deepcopy(DEFAULT['idle_control'])
+ candidate=legacy.decode_pages(old,base);candidate['schema_version']=7;candidate['strategy']=STRATEGIES[strategy];candidate['idle_control']=copy.deepcopy(DEFAULT['idle_control'])
  algorithm=struct.unpack_from('<I',p,4768)[0]
  if algorithm>=len(ALGORITHMS):raise ValueError('Unknown idle algorithm')
  candidate['idle_control']['algorithm']=ALGORITHMS[algorithm]
@@ -61,6 +66,12 @@ def decode_pages(buffers,base):
  ae=candidate['transient_enrichment']=dict(mode=MODES[mode],apply=APPLIES[apply])
  for name in AE_SCALARS:ae[name]=struct.unpack_from('<f',p,AE_SCALAR_OFFSETS[name])[0]
  for name in AE_ARRAYS:ae[name]=list(struct.unpack_from('<4f',p,AE_ARRAY_OFFSETS[name]))
+ model=candidate['load_model']=copy.deepcopy(DEFAULT['load_model'])
+ for name in LOAD_ENUM_FIELDS:
+  value=struct.unpack_from('<I',p,LOAD_ENUM_OFFSETS[name])[0]
+  if value>=len(LOAD_ENUMS[name]):raise ValueError('Unknown load-model choice: '+name)
+  model[name]=LOAD_ENUMS[name][value]
+ for name in LOAD_SCALARS:model[name]=struct.unpack_from('<f',p,LOAD_SCALAR_OFFSETS[name])[0]
  # Keep offline binary helpers under the same native whole-tune validator.
  from engine_runtime import EngineRuntime
  runtime=EngineRuntime(candidate);candidate=runtime.tune;runtime.close()
@@ -77,4 +88,9 @@ def live_block(store):
   idle=sample.get('idle',{});values=[float(idle.get(k,0) or 0) for k in ('target_rpm','feedforward_pct','p_term','i_term','d_term','duty_pct')]
   prefix=bytes(block)+struct.pack('<8I',store.tune['revision'],0,0,0,6,0,sample.get('input_valid_mask',0),sample.get('flags',0))+struct.pack('<6f4I',*values,idle.get('flags',0)|(256 if idle.get('available',False) else 0),idle.get('state_code',0),idle.get('reason_code',0),idle.get('algorithm_code',0))
   ae=sample.get('transient_enrichment',{}) if sample.get('flags',0)&1 else {};known=bool(ae.get('available'));values=[float(ae.get(k,0) or 0) if known else 0. for k in VALUE_NAMES]
-  return prefix+struct.pack('<8f8I',*values,int(ae.get('flags',0))|(256 if known else 0),int(ae.get('mode_code',0)),int(ae.get('apply_code',0)),int(ae.get('phase_code',0)),int(ae.get('reason_code',0)),0,0,0)
+  prefix+=struct.pack('<8f8I',*values,int(ae.get('flags',0))|(256 if known else 0),int(ae.get('mode_code',0)),int(ae.get('apply_code',0)),int(ae.get('phase_code',0)),int(ae.get('reason_code',0)),0,0,0)
+  present=bool(sample.get('flags',0)&1);model=sample.get('load_model',{}) if present else {};known=bool(model.get('available'));afr=model.get('afr_factor')
+  values=[float(model[k]) if model.get(k) is not None else float('nan') for k in LOAD_VALUE_NAMES] if known else [float('nan') if present else 0.]*9
+  flags=int(model.get('flags',0))|(65536 if known else 0)|(131072 if known and isinstance(afr,(int,float)) and math.isfinite(afr) else 0)|(int(model.get('reason_code',0))<<24)
+  codes=[int(model.get(k+'_code',1 if present and k in ('pressure','afr') else 0)) for k in ('fuel_source','spark_source','lambda_source','trim_source','pressure','aux_role','baro_source','afr')]
+  return prefix+struct.pack('<9f9I',*values,flags,*codes)+bytes(24)

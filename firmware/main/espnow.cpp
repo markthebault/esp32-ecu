@@ -188,7 +188,7 @@ void update_view(bool fault){
   const bool blocked=cap.engine()&&live.engine.has(engine::Present)&&!engine_schema_supports(cap.schema(),live.engine);
   cJSON_AddBoolToObject(p,"connected",connected);cJSON_AddBoolToObject(p,"engine_telemetry",cap.engine());cJSON_AddNumberToObject(p,"engine_schema",cap.schema());
   cJSON_AddBoolToObject(p,"engine_telemetry_blocked",blocked);cJSON_AddBoolToObject(p,"engine_upgrade_needed",blocked&&cap.schema()<engine_schema);
-  cJSON_AddStringToObject(p,"engine_block_reason",blocked?"Current strategy or fault requires a newer engine schema":"");
+  cJSON_AddStringToObject(p,"engine_block_reason",blocked?"Current load model, strategy or fault requires a newer engine schema":"");
   cJSON_AddNumberToObject(p,"capability_counter",cap.counter());cJSON_AddNumberToObject(p,"last_ack_ms",acks[i]?(now()-acks[i])/1000:-1);cJSON_AddItemToArray(a,p);
  }
  xSemaphoreTake(view_mutex,portMAX_DELAY);cJSON_Delete(view);view=j;xSemaphoreGive(view_mutex);
@@ -238,8 +238,9 @@ void task(void*){
       if(engine_sequence==UINT64_MAX){last_error="Engine telemetry sequence exhausted; restart required";fault_until=stamp+3000000;}
       else{
        std::uint8_t packet[engine_size];const auto sequence=++engine_sequence;
+       const auto body_size=engine_frame_body_size(stream.capabilities.schema()),packet_size=engine_frame_size(stream.capabilities.schema());
        if(engine_body(packet,live.engine,session_id,sequence,transmitted_age(live.engine_sample_age,live.stamp,tx_now),transmitted_age(live.engine_control_age,live.stamp,tx_now),transmitted_age(live.worker_age,live.stamp,tx_now),tx_now,stream.capabilities.schema())&&
-          hmac_key(stream.key.data(),32,packet,engine_body_size,packet+engine_body_size)&&send(saved.peers[i].mac,packet,sizeof(packet))){stream.engine_sent.submitted(sequence,tx_now);++engine_packets;}
+          hmac_key(stream.key.data(),32,packet,body_size,packet+body_size)&&send(saved.peers[i].mac,packet,packet_size)){stream.engine_sent.submitted(sequence,tx_now);++engine_packets;}
       }
      }else if(tx_now-live.stamp<1000000){
       std::uint8_t packet[88];std::memcpy(packet,live.data,sizeof(packet));u32(packet+8,session_id);u32(packet+12,++sequence);u32(packet+16,std::uint32_t(live.stamp/1000));u32(packet+84,std::uint32_t((tx_now-live.stamp)/1000));

@@ -26,7 +26,7 @@ async def check(url,device,out):
    legacy_json=json.loads((R/'config/engine/defaults-v2.json').read_text());parsed=await page.evaluate('value=>upgradeLegacyEngine(value,engineTune)',legacy_json);assert not parsed['cylinder_trims']['enabled'];checks.append('Legacy JSON migration never inherits live trims')
    await page.locator('#engine-data-start').click();await page.wait_for_function('()=>window.EcuEngineLogger.inspect().rows>=119&&!window.EcuEngineLogger.inspect().collecting')
    async with page.expect_download() as d:await page.locator('#engine-data-msl').click()
-   path=out/'ui-cylinder.msl';await (await d.value).save_as(path);lines=path.read_text().splitlines();assert len(lines[2].split('\t'))==105 and 'C2FuelTrim' in lines[2];checks.append('Controller log exports per-cylinder demands, masks and base scalars separately')
+   path=out/'ui-cylinder.msl';await (await d.value).save_as(path);lines=path.read_text().splitlines();assert len(lines[2].split('\t'))==126 and 'C2FuelTrim' in lines[2];checks.append('Controller log exports per-cylinder demands, masks and base scalars separately')
    await page.locator('#cylinder-live').scroll_into_view_if_needed();await page.screenshot(path=out/'cylinder-desktop.png')
    await page.locator('#cylinder-fuel-map').select_option('1');bad=page.locator('[data-trim-cell="0"]');await bad.fill('151');await bad.dispatch_event('change');await page.locator('#engine-save').click();await page.locator('#toast').filter(has_text='Invalid engine tune').wait_for();assert device.engine.tune['revision']==2;checks.append('Out-of-range cylinder trim cannot change persisted tune')
    for width in (320,390,768,1440):

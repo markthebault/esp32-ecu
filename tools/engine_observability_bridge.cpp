@@ -62,6 +62,8 @@ bool sample(const char*text,ecu::engine::RuntimeSample&out){
   r.idle_available=known;
  }
  const auto*inputs=cJSON_GetObjectItemCaseSensitive(j,"inputs");const auto*proposals=cJSON_GetObjectItemCaseSensitive(j,"proposals");
+ const auto*model=cJSON_GetObjectItemCaseSensitive(j,"load_model");
+ if(model)ok=ok&&ecu::load::parse_observation(model,r.load_model,available);
  const auto*ae=cJSON_GetObjectItemCaseSensitive(j,"transient_enrichment");
  if(ae){
   auto&d=r.transient_enrichment;bool known=false;std::uint8_t mode=0,apply=0,phase=0,reason=0;
@@ -136,5 +138,6 @@ extern "C" int data_capability_reply(void*p,const std::uint8_t*request,unsigned 
 extern "C" int data_radio_frame(const char*text,const std::uint8_t*lmk,const std::uint8_t*nonce,std::uint32_t session,std::uint64_t seq,std::uint32_t sample_age,std::uint32_t control_age,std::uint32_t worker_age,std::uint64_t sent,std::uint32_t schema,std::uint8_t*out){
  ecu::engine::RuntimeSample r;if(!sample(text,r))return 0;
  const auto transcript=ecu::radio::wire::engine_key_transcript(nonce,session);std::uint8_t key[32];
- return mac(lmk,16,transcript.data(),transcript.size(),key)&&ecu::radio::wire::engine_body(out,r,session,seq,sample_age,control_age,worker_age,sent,schema)&&mac(key,32,out,200,out+200);
+ const auto body_size=ecu::radio::wire::engine_frame_body_size(schema);
+ return mac(lmk,16,transcript.data(),transcript.size(),key)&&ecu::radio::wire::engine_body(out,r,session,seq,sample_age,control_age,worker_age,sent,schema)&&mac(key,32,out,body_size,out+body_size);
 }

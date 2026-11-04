@@ -23,6 +23,7 @@ struct RuntimeSample {
  std::array<float,6> idle_proposals{};std::uint64_t idle_pid_updates=0;
  std::uint32_t idle_flags=0;std::uint8_t idle_state=0,idle_reason=0,idle_algorithm=0;bool idle_available=false;
  transient::Output transient_enrichment;
+ load::Observation load_model;
  std::array<float,4> cylinder_pulse_ms{},cylinder_advance_deg{},cylinder_fuel_pct{},cylinder_duty_pct{};
  float cam_error_deg=0;
  std::array<std::uint16_t,8> raw_adc{};
@@ -33,7 +34,7 @@ struct RuntimeSample {
  std::uint8_t cylinder_valid=0,cylinder_enabled=0,cylinder_capacity_mask=0,cylinder_spark_clamp_mask=0,cylinder_retard_floor_mask=0;
  bool has(DataFlag flag)const{return (flags&flag)!=0;}
 };
-static_assert(sizeof(RuntimeSample)<=360,"Runtime/log sample exceeds its explicit transient diagnostic budget");
+static_assert(sizeof(RuntimeSample)<=408,"Runtime/log sample exceeds its explicit load-model diagnostic budget");
 inline float data_float(double value){return finite(value)&&std::abs(value)<=FLT_MAX?static_cast<float>(value):NAN;}
 inline void data_values(RuntimeSample& r,const Inputs& in,const Output& out){
  const double inputs[]={in.rpm,in.map_kpa,in.tps_pct,in.clt_c,in.iat_c,in.lambda,in.battery_v,in.sensor_v};
@@ -47,6 +48,7 @@ inline void data_values(RuntimeSample& r,const Inputs& in,const Output& out){
  for(unsigned i=0;i<6;++i){r.idle_proposals[i]=data_float(idle_values[i]);}r.idle_available=true;r.idle_pid_updates=out.idle.pid_updates;r.idle_flags=out.idle.flags;r.idle_state=static_cast<std::uint8_t>(out.idle.state);r.idle_reason=static_cast<std::uint8_t>(out.idle.reason);
  r.controller_faults=out.faults;r.state=static_cast<std::uint8_t>(out.state);
  r.transient_enrichment=out.transient_enrichment;
+ r.load_model=out.load_model;
  r.flags=Present|(out.proposed_enabled()?ProposedActive:0)|(out.fuel_cut?FuelCut:0)|(out.spark_cut?SparkCut:0)|(out.pump?Pump:0)|(out.fan?Fan:0);
 }
 inline std::uint8_t data_input_mask(const Inputs& in,std::uint8_t qualified){
@@ -54,14 +56,15 @@ inline std::uint8_t data_input_mask(const Inputs& in,std::uint8_t qualified){
  if(range(in.rpm,0,12000))mask|=1U<<DecodedRpm;
  const double value[]={in.rpm,in.map_kpa,in.tps_pct,in.clt_c,in.iat_c,in.lambda,in.battery_v,in.sensor_v};
  const double low[]={0,10,0,-40,-40,.65,7,4.75},high[]={12000,110,100,140,110,1.5,18,5.25};
- for(unsigned i=1;i<input_count;++i)if((qualified&(1U<<i))&&range(value[i],low[i],high[i]))mask|=1U<<i;
+ for(unsigned i=1;i<input_count;++i)if((qualified&(1U<<i))&&(i!=MapKpa||in.map_qualified)&&range(value[i],low[i],high[i]))mask|=1U<<i;
  return mask;
 }
 inline RuntimeSample synthetic_data(const Tune&t,const Inputs&in,const Output&out,std::uint64_t sequence,std::uint64_t now){
  RuntimeSample r;data_values(r,in,out);r.source=DataSource::Synthetic;r.sequence=sequence;r.control_us=now;r.sampled_us=in.sampled_us;r.tune_revision=t.revision;
  r.idle_algorithm=static_cast<std::uint8_t>(t.idle_control.algorithm);r.strategy=static_cast<std::uint8_t>(t.strategy);auto qualified=static_cast<std::uint8_t>(in.sensors_valid?255:0);if(!in.lambda_ready)qualified&=~(1U<<Lambda);
  r.input_valid=data_input_mask(in,qualified);r.flags|=StorageOk|(in.synced?CrankSynced:0)|(in.phase_synced?PhaseSynced:0)|
-  (t.strategy==Strategy::Sequential?PhaseRequired:0)|(now>=in.sampled_us&&now-in.sampled_us<=20000?InputsFresh:0)|(in.sensors_valid?InputsQualified:0);
+  (t.strategy==Strategy::Sequential?PhaseRequired:0)|(now>=in.sampled_us&&now-in.sampled_us<=20000?InputsFresh:0)|
+  (in.sensors_valid&&(!(out.load_model.flags&load::AuxRequired)||(out.load_model.flags&load::AuxInRange))?InputsQualified:0);
  return r;
 }
 inline std::uint64_t data_age_us(const RuntimeSample&r,std::uint64_t point,std::uint64_t now){return r.has(Present)&&r.sequence&&now>=point?now-point:UINT64_MAX;}

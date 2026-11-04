@@ -43,7 +43,7 @@ void init(){
 }
 bool observe(const web::Sample&s,const config::Config&c,std::uint64_t now,std::uint64_t sampled,engine::RuntimeSample& published){
  if(!mutex||xSemaphoreTake(mutex,0)!=pdTRUE)return false;
- auto bound=engine::bind_inputs(s,c,now);binding=bound.reason;auto&in=bound.input;
+ auto bound=engine::bind_inputs(s,c,now,&active);binding=bound.reason;auto&in=bound.input;
  in.sampled_us=sampled;
  in.phase_synced=in.phase_synced&&s.phase_tune_revision==active.revision&&s.phase_sensor_revision==c.revision;
  if(sensor_revision!=c.revision){controller.reset();sensor_revision=c.revision;}

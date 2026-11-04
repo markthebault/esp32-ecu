@@ -3,12 +3,14 @@ import argparse
 import copy
 import json
 import math
+import struct
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-from engine_protocol import DEFAULT,NUMBERS,FLAGS,CURVES,SIGNATURE,SEMI_SIGNATURE,IDLE_SIGNATURE,WHOLE_SIGNATURE,LEGACY_SIGNATURE,SEQUENTIAL_SIGNATURE,CYLINDER_SIGNATURE,TIMING_FIELDS,STRATEGIES,STRATEGY_LABELS,PAGE_SIZES,field_units
+from engine_protocol import DEFAULT,NUMBERS,FLAGS,CURVES,SIGNATURE,TRANSIENT_SIGNATURE,SEMI_SIGNATURE,IDLE_SIGNATURE,WHOLE_SIGNATURE,LEGACY_SIGNATURE,SEQUENTIAL_SIGNATURE,CYLINDER_SIGNATURE,TIMING_FIELDS,STRATEGIES,STRATEGY_LABELS,PAGE_SIZES,field_units
 from idle_config import ALGORITHMS,SCALARS,ARRAYS,UNITS,name as idle_name
 from transient_config import MODES,MODE_LABELS,APPLIES,APPLY_LABELS,SCALARS as AE_SCALARS,ARRAYS as AE_ARRAYS,UNITS as AE_UNITS,name as ae_name
+from load_config import ENUM_FIELDS as LOAD_ENUM_FIELDS,SCALARS as LOAD_SCALARS,ENUMS as LOAD_ENUMS,LABELS as LOAD_LABELS,UNITS as LOAD_UNITS,name as load_name
 
 NS='http://www.msefi.com/:msq'
 ET.register_namespace('',NS)
@@ -17,7 +19,7 @@ def tag(name):return '{'+NS+'}'+name
 def valid_revision(value):
  return type(value) in (int,float) and 1<=value<=4294967295 and math.isfinite(value) and int(value)==value
 
-def constants(tune,legacy=False,sequential=False,whole=True,idle=True,transient=True):
+def constants(tune,legacy=False,sequential=False,whole=True,idle=True,transient=True,model=True):
  revision=tune['revision']
  if not valid_revision(revision):raise ValueError('Invalid MSQ base revision')
  result=[(0,'baseRevision',[int(revision)],None)]
@@ -45,6 +47,9 @@ def constants(tune,legacy=False,sequential=False,whole=True,idle=True,transient=
   ae=tune['transient_enrichment'];result += [(0,'ae_mode',['"'+MODE_LABELS[MODES.index(ae['mode'])]+'"'],None),(0,'ae_apply',['"'+APPLY_LABELS[APPLIES.index(ae['apply'])]+'"'],None)]
   result += [(0,ae_name(k),[ae[k]],None) for k in AE_SCALARS]
   result += [(0,ae_name(k),ae[k],(4,1)) for k in AE_ARRAYS]
+ if model and whole and not legacy and not sequential:
+  c=tune['load_model'];result += [(0,load_name(k),['"'+LOAD_LABELS[k][LOAD_ENUMS[k].index(c[k])]+'"'],None) for k in LOAD_ENUM_FIELDS]
+  result += [(0,load_name(k),[c[k]],None) for k in LOAD_SCALARS]
  return [(0,name,values,shape) for _,name,values,shape in result] if whole and not legacy and not sequential else result
 
 def export_msq(tune):
@@ -55,7 +60,7 @@ def export_msq(tune):
  ET.SubElement(root,tag('versionInfo'),fileFormat='5.0',firmwareInfo='ESP32ECU development',nPages='1',signature=SIGNATURE.decode())
  elements={i:ET.SubElement(root,tag('page'),number=str(i),size=str(PAGE_SIZES[i+1])) for i in range(1)}
  for page,name,values,shape in constants(tune):
-  units=AE_UNITS.get(name[3:],'') if name.startswith('ae_') else UNITS.get(name[4:],'') if name.startswith('iac_') else field_units(name) if name in ({k for _,k in NUMBERS}|{k for k,_ in TIMING_FIELDS}) else 'RPM' if name.endswith('Rpm') else 'kPa' if name.endswith('Load') else {'veTable':'%','sparkTable':'deg','lambdaTable':'lambda'}.get(name,'deg' if name.endswith('SparkTrim') else '%' if name.endswith('FuelTable') else '')
+  units=LOAD_UNITS.get(name[5:],'') if name.startswith('load_') else AE_UNITS.get(name[3:],'') if name.startswith('ae_') else UNITS.get(name[4:],'') if name.startswith('iac_') else field_units(name) if name in ({k for _,k in NUMBERS}|{k for k,_ in TIMING_FIELDS}) else 'RPM' if name.endswith('Rpm') else 'source_units' if name.endswith('Load') else {'veTable':'%','sparkTable':'deg','lambdaTable':'lambda'}.get(name,'deg' if name.endswith('SparkTrim') else '%' if name.endswith('FuelTable') else '')
   element=ET.SubElement(elements[page],tag('constant'),name=name,units=units)
   if shape:element.set('rows',str(shape[0]));element.set('cols',str(shape[1]))
   formatted=[str(v) if isinstance(v,int) else format(v,'.9g') if isinstance(v,float) else v for v in values]
@@ -71,10 +76,10 @@ def import_msq(body,base_revision=None):
  try:root=ET.fromstring(body)
  except ET.ParseError as error:raise ValueError('Malformed MSQ XML') from error
  info=root.find(tag('versionInfo'))
- if root.tag!=tag('msq') or info is None or info.get('signature') not in (SIGNATURE.decode(),SEMI_SIGNATURE.decode(),IDLE_SIGNATURE.decode(),WHOLE_SIGNATURE.decode(),LEGACY_SIGNATURE.decode(),SEQUENTIAL_SIGNATURE.decode(),CYLINDER_SIGNATURE.decode()) or info.get('nPages')!=('1' if info.get('signature') in (SIGNATURE.decode(),SEMI_SIGNATURE.decode(),IDLE_SIGNATURE.decode(),WHOLE_SIGNATURE.decode()) else '5' if info.get('signature')==CYLINDER_SIGNATURE.decode() else '4'):raise ValueError('MSQ must match this ESP32ECU definition; other ECU tunes are incompatible')
+ if root.tag!=tag('msq') or info is None or info.get('signature') not in (SIGNATURE.decode(),TRANSIENT_SIGNATURE.decode(),SEMI_SIGNATURE.decode(),IDLE_SIGNATURE.decode(),WHOLE_SIGNATURE.decode(),LEGACY_SIGNATURE.decode(),SEQUENTIAL_SIGNATURE.decode(),CYLINDER_SIGNATURE.decode()) or info.get('nPages')!=('1' if info.get('signature') in (SIGNATURE.decode(),TRANSIENT_SIGNATURE.decode(),SEMI_SIGNATURE.decode(),IDLE_SIGNATURE.decode(),WHOLE_SIGNATURE.decode()) else '5' if info.get('signature')==CYLINDER_SIGNATURE.decode() else '4'):raise ValueError('MSQ must match this ESP32ECU definition; other ECU tunes are incompatible')
  legacy=info.get('signature')==LEGACY_SIGNATURE.decode();sequential=info.get('signature')==SEQUENTIAL_SIGNATURE.decode()
- current=info.get('signature')==SIGNATURE.decode();has_semi=info.get('signature') in (SIGNATURE.decode(),SEMI_SIGNATURE.decode());has_idle=info.get('signature') in (SIGNATURE.decode(),SEMI_SIGNATURE.decode(),IDLE_SIGNATURE.decode());whole=info.get('signature') in (SIGNATURE.decode(),SEMI_SIGNATURE.decode(),IDLE_SIGNATURE.decode(),WHOLE_SIGNATURE.decode())
- expected={name:(page,len(values),shape) for page,name,values,shape in constants(DEFAULT,legacy=legacy,sequential=sequential,whole=whole,idle=has_idle,transient=current)}
+ current=info.get('signature')==SIGNATURE.decode();has_transient=info.get('signature') in (SIGNATURE.decode(),TRANSIENT_SIGNATURE.decode());has_semi=info.get('signature') in (SIGNATURE.decode(),TRANSIENT_SIGNATURE.decode(),SEMI_SIGNATURE.decode());has_idle=info.get('signature') in (SIGNATURE.decode(),TRANSIENT_SIGNATURE.decode(),SEMI_SIGNATURE.decode(),IDLE_SIGNATURE.decode());whole=info.get('signature') in (SIGNATURE.decode(),TRANSIENT_SIGNATURE.decode(),SEMI_SIGNATURE.decode(),IDLE_SIGNATURE.decode(),WHOLE_SIGNATURE.decode())
+ expected={name:(page,len(values),shape) for page,name,values,shape in constants(DEFAULT,legacy=legacy,sequential=sequential,whole=whole,idle=has_idle,transient=has_transient,model=current)}
  values={}
  for page in root.findall(tag('page')):
   for element in page.findall(tag('constant')):
@@ -83,7 +88,12 @@ def import_msq(body,base_revision=None):
    page_number,count,shape=expected[name]
    if page.get('number')!=str(page_number):raise ValueError('MSQ constant on wrong page')
    text=(element.text or '').strip()
-   if name in ('ae_mode','ae_apply'):
+   if name.startswith('load_') and name[5:] in LOAD_ENUM_FIELDS:
+    field=name[5:];labels=LOAD_LABELS[field]
+    if text in tuple('"'+label+'"' for label in labels):values[name]=LOAD_ENUMS[field][labels.index(text.strip('"'))]
+    elif text in tuple(str(i) for i in range(len(labels))):values[name]=LOAD_ENUMS[field][int(text)]
+    else:raise ValueError('Invalid load-model selection')
+   elif name in ('ae_mode','ae_apply'):
     labels=MODE_LABELS if name=='ae_mode' else APPLY_LABELS
     if text in tuple('"'+label+'"' for label in labels):values[name]=labels.index(text.strip('"'))
     elif text in tuple(str(i) for i in range(len(labels))):values[name]=int(text)
@@ -134,11 +144,14 @@ def import_msq(body,base_revision=None):
  else:
   # Historical idle was a virtual proposal. Migration cannot authorize the new actuator.
   tune['settings']['idle_enabled']=False
- if current:
+ if has_transient:
   ae=tune['transient_enrichment'];ae['mode']=MODES[values['ae_mode']];ae['apply']=APPLIES[values['ae_apply']]
   for name in AE_SCALARS+AE_ARRAYS:ae[name]=values[ae_name(name)]
+ if current:
+  for name in LOAD_ENUM_FIELDS+LOAD_SCALARS:tune['load_model'][name]=values[load_name(name)]
  for name,n in CURVES:tune['curves'][name]=values[name]
  for name in ('ve','spark','lambda'):tune['maps'][name]=dict(rpm=values[name+'Rpm'],load=values[name+'Load'],cells=values[name+'Table'])
+ if not current and any(abs(v)>1e6 or not 20<=struct.unpack('<f',struct.pack('<f',v))[0]<=120 for v in tune['maps']['ve']['cells']):raise ValueError('Historical identity retains20..120 F32 fuel-coefficient bounds')
  from engine_runtime import EngineRuntime
  runtime=EngineRuntime(tune);tune=runtime.tune;runtime.close()
  return tune

@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "scope": "Actual installed vendor applications, owned isolated profiles/displays, offline files only",
+  "tunerstudio": {
+    "version": "MS Lite3.3.01",
+    "identity": "ESP32ECU DEV 008 INHIBITED",
+    "edits": {
+      "afr": [
+        "target",
+        "measured"
+      ],
+      "fixed_baro_kpa": [
+        100,
+        99.5
+      ],
+      "afr_delay_s": [
+        1.25,
+        2.5
+      ]
+    },
+    "complete_f32_page_exact": true,
+    "file_sha256": "9015b9184ac56a6507042db72e8e32e0a08290ce71d387e139763493896bed60",
+    "definition_sha256": "b30635f1171a57a468ff69277a58022267717c798ecd756e14f6acb049026b09",
+    "limits": "No online acceptance, USB enumeration, physical flashing or vendor-contact workflow"
+  },
+  "megalogviewer": {
+    "version": "HD Lite4.6.14",
+    "files": {
+      "ui-logger/browser-collected.msl": {
+        "fields": 126,
+        "rows": 120,
+        "sha256": "97c855a4c6c4f643c2202a861857615d46aac6e95492fdfe6d3de31df1da818b"
+      },
+      "ui-transient/transient-browser.msl": {
+        "fields": 83,
+        "rows": 600,
+        "sha256": "641f7fa18ffd0cc92046fcd3ee48ee166a31f9aa593c9d212b58cb87273c153d"
+      }
+    },
+    "viewed_fields": [
+      "LoadFuel",
+      "LoadFuelSource"
+    ],
+    "limits": "Synthetic files; MLV built-in calculated fields and large integer identity precision are not validated; source/validity/unknown flags must be checked"
+  },
+  "owned_applications_closed": true
+}

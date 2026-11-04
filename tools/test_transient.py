@@ -101,22 +101,22 @@ class TransientTests(unittest.TestCase):
    self.assertTrue(down['fuel_cut']);self.assertFalse(down['spark_cut']);self.assertEqual(down['pulse_ms'],0)
    self.assertTrue(recorder.append(r.data(),40000));self.assertEqual(recorder.command(dict(action='stop',log_id=1),41000),200)
    page=recorder.page(1,0);self.assertEqual(page['records'][0]['sample']['transient_enrichment']['added_fuel_mg'],d['added_fuel_mg'])
-   rows=list(csv.reader(io.StringIO(recorder.msl(1)),delimiter='\t'));self.assertEqual([len(row) for row in rows[2:]],[105]*4)
+   rows=list(csv.reader(io.StringIO(recorder.msl(1)),delimiter='\t'));self.assertEqual([len(row) for row in rows[2:]],[126]*4)
    row=dict(zip(rows[2],rows[-1]));self.assertEqual(row['AeMode'],'2');self.assertEqual(row['AePhase'],'2');self.assertEqual(row['AeAvailable'],'1')
   finally:r.close();recorder.close()
 
  def test_tune_page_and_atomic_runtime_reply_retain_old_prefix_offsets(self):
   t=tune('map_rate');t['transient_enrichment'].update(apply='add_reference',duration_ms=123.5)
-  p=pages(t);self.assertEqual(len(p[1]),5120);self.assertEqual(struct.unpack_from('<II',p[1],4992),(3,1));self.assertEqual(struct.unpack_from('<f',p[1],5020)[0],123.5)
+  p=pages(t);self.assertEqual(len(p[1]),5376);self.assertEqual(struct.unpack_from('<II',p[1],4992),(3,1));self.assertEqual(struct.unpack_from('<f',p[1],5020)[0],123.5)
   self.assertEqual(pages(decode_pages(p,t)),p);self.assertEqual(import_msq(export_msq(t)),t)
   with tempfile.TemporaryDirectory() as directory:
    store=EngineStore(Path(directory)/'t.json');stream=Stream(store);self.addCleanup(stream.close)
-   for offset in range(0,5120,256):
+   for offset in range(0,len(p[1]),256):
     body=p[1][offset:offset+256];command=b'M'+struct.pack('<BBHH',0,1,offset,len(body))+body;self.assertEqual(stream.session.command(command),b'\0')
    self.assertEqual(stream.session.command(b'b\0\1'),b'\4');self.assertEqual(store.tune['transient_enrichment']['mode'],'map_rate')
    request=b'r'+struct.pack('<BBHH',0,0x30,0,LIVE_BYTES);answer=stream.feed(envelope(request),1000)
-   self.assertEqual(len(answer),1);self.assertEqual(len(answer[0]),327);self.assertEqual(struct.unpack_from('>H',answer[0])[0],321)
-   self.assertEqual(stream.session.command(b'r'+struct.pack('<BBHH',0,0x30,0,321)),b'\x84')
+   self.assertEqual(len(answer),1);self.assertEqual(len(answer[0]),423);self.assertEqual(struct.unpack_from('>H',answer[0])[0],417)
+   self.assertEqual(stream.session.command(b'r'+struct.pack('<BBHH',0,0x30,0,417)),b'\x84')
    self.assertEqual(stream.session.command(b'p'+struct.pack('<BBHH',0,1,0,257)),b'\x84')
    before=bytes(stream.session.buffers[1]);self.assertEqual(stream.session.command(b'M'+struct.pack('<BBHH',0,1,5116,1)+b'\1'),b'\x84');self.assertEqual(bytes(stream.session.buffers[1]),before)
 
@@ -124,11 +124,11 @@ class TransientTests(unittest.TestCase):
   old=json.loads((R/'config/engine/defaults-v5.json').read_text());old['revision']=47;old['strategy']='semi_sequential_4cyl';old['settings']['accel_gain']=.007
   with tempfile.TemporaryDirectory() as directory:
    path=Path(directory)/'t.json';body=json.dumps(old,indent=1).encode();path.write_bytes(body);store=EngineStore(path)
-   self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);expected=copy.deepcopy(old);expected['schema_version']=6;expected['transient_enrichment']=copy.deepcopy(tune()['transient_enrichment']);expected['transient_enrichment'].update(mode='legacy_tps',tps_min_change_pct=.5,map_min_change_kpa=.5)
+   self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);expected=copy.deepcopy(old);expected['schema_version']=7;expected['load_model']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['load_model']);expected['transient_enrichment']=copy.deepcopy(tune()['transient_enrichment']);expected['transient_enrichment'].update(mode='legacy_tps',tps_min_change_pct=.5,map_min_change_kpa=.5)
    self.assertEqual(store.tune,expected)
   for path in (R/'tuning/examples').glob('*.msq'):
-   if 'transient' in path.name:continue
-   value=import_msq(path.read_bytes());self.assertEqual(value['schema_version'],6);self.assertEqual(value['transient_enrichment']['mode'],'legacy_tps')
+   if 'transient' in path.name or 'load-roundtrip' in path.name:continue
+   value=import_msq(path.read_bytes());self.assertEqual(value['schema_version'],7);self.assertEqual(value['transient_enrichment']['mode'],'legacy_tps')
 
  def test_actual_tunerstudio007_saved_edit_and_curves(self):
   t=import_msq((R/'tuning/examples/tunerstudio-transient-roundtrip.msq').read_bytes())

@@ -14,7 +14,8 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 class AirPath:
-    def __init__(self):
+    def __init__(self,ambient_kpa=100):
+        if type(ambient_kpa) not in (int,float) or not math.isfinite(ambient_kpa) or not 50<=ambient_kpa<=110:raise ValueError('Research ambient pressure outside50..110kPa absolute')
         from fmpy import extract, read_model_description
         from fmpy.fmi2 import FMU2Slave
         base=ROOT/'.cache/engine/modelica-mvem/airpath'
@@ -33,6 +34,7 @@ class AirPath:
         try:
             self.model.instantiate()
             self.model.setupExperiment(startTime=0,tolerance=1e-8)
+            if ambient_kpa!=100:self.model.setReal([self.vr['ambient_pa']],[ambient_kpa*1000])
             self.model.setReal([self.vr[k] for k in ('shaft_rad_s','throttle_pct','idle_pct')],[0,0,0])
             self.model.enterInitializationMode();self.model.exitInitializationMode()
             self.time=0.;self.initial=self.read()
@@ -67,16 +69,16 @@ class ResearchPlant:
     One positive shaft direction; no compression ripple, knock, emissions or
     exhaust gas dynamics. Spark timing response and cold behavior are empirical.
     """
-    def __init__(self,cold=False,injector_flow_factors=None,optimum_spark_offsets=None,idle_valve=None):
+    def __init__(self,cold=False,injector_flow_factors=None,optimum_spark_offsets=None,idle_valve=None,ambient_kpa=100):
         from idle_valve_plant import IdleValve
         self.idle_valve=IdleValve(idle_valve) if idle_valve is not None else None
         self.injector_flow_factors=list(injector_flow_factors or [1]*4)
         self.optimum_spark_offsets=list(optimum_spark_offsets or [0]*4)
         if len(self.injector_flow_factors)!=4 or any(not math.isfinite(v) or not .5<=v<=1.5 for v in self.injector_flow_factors):raise ValueError('Four bounded independent injector flow factors required')
         if len(self.optimum_spark_offsets)!=4 or any(not math.isfinite(v) or not -10<=v<=10 for v in self.optimum_spark_offsets):raise ValueError('Four bounded independent spark optimum offsets required')
-        self.air=AirPath();self.air_state=self.air.initial
+        self.air=AirPath() if ambient_kpa==100 else AirPath(ambient_kpa);self.air_state=self.air.initial
         self.rpm=0.;self.angle=0.;self.tps=0.;self.clt=0. if cold else 85.
-        self.iat=25.;self.battery=14.;self.map_kpa=100.;self.lambda_sensor=1.
+        self.iat=25.;self.battery=14.;self.map_kpa=100. if ambient_kpa==100 else self.air_state['map_kpa'];self.lambda_sensor=1.
         self.exhaust_lambda=1.;self.lambda_valid=False
         self.last_exhaust_t=-math.inf
         self.injector_flow_cc_min=300.;self.rotor_inertia=.18

@@ -97,9 +97,14 @@ extern "C" double engine_event_advance(void*p){return static_cast<Context*>(p)->
 extern "C" std::uint64_t engine_event_dwell(void*p){return static_cast<Context*>(p)->popped.dwell;}
 extern "C" const char* engine_step(void*p,const char*text,std::uint64_t now,std::uint64_t sampled){
  auto&c=*static_cast<Context*>(p);auto*j=cJSON_Parse(text);ecu::engine::Inputs in;bool wheel=false;
- bool ok=j&&ecu::web::keys(j,"|rpm||map_kpa||tps_pct||clt_c||iat_c||lambda||battery_v||sensor_v||synced||sensors_valid||lambda_ready||use_decoder||phase_synced|");
+ bool ok=j&&ecu::web::keys(j,"|rpm||map_kpa||tps_pct||clt_c||iat_c||lambda||battery_v||sensor_v||synced||sensors_valid||lambda_ready||use_decoder||phase_synced||aux_pressure_kpa||map_qualified||aux_pressure_qualified|");
+ if(cJSON_GetObjectItemCaseSensitive(j,"map_qualified"))ok=ok&&ecu::web::boolean(j,"map_qualified",in.map_qualified);
+ if(cJSON_GetObjectItemCaseSensitive(j,"aux_pressure_qualified"))ok=ok&&ecu::web::boolean(j,"aux_pressure_qualified",in.aux_pressure_qualified);
+ if(const auto*a=cJSON_GetObjectItemCaseSensitive(j,"aux_pressure_kpa"))if(!cJSON_IsNull(a))ok=ok&&ecu::web::number(j,"aux_pressure_kpa",in.aux_pressure_kpa);
 #define FIELD(k) ok=ok&&ecu::web::number(j,#k,in.k)
- FIELD(rpm);FIELD(map_kpa);FIELD(tps_pct);FIELD(clt_c);FIELD(iat_c);FIELD(lambda);FIELD(battery_v);FIELD(sensor_v);
+ FIELD(rpm);FIELD(tps_pct);FIELD(clt_c);FIELD(iat_c);FIELD(lambda);FIELD(battery_v);FIELD(sensor_v);
+ ok=ok&&((!in.map_qualified&&cJSON_IsNull(cJSON_GetObjectItemCaseSensitive(j,"map_kpa")))||ecu::web::number(j,"map_kpa",in.map_kpa));
+ if(!in.map_qualified&&cJSON_IsNull(cJSON_GetObjectItemCaseSensitive(j,"map_kpa")))in.map_kpa=NAN;
 #undef FIELD
  ok=ok&&ecu::web::boolean(j,"synced",in.synced)&&ecu::web::boolean(j,"sensors_valid",in.sensors_valid)&&
   ecu::web::boolean(j,"lambda_ready",in.lambda_ready)&&ecu::web::boolean(j,"use_decoder",wheel);

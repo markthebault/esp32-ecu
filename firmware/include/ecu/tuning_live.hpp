@@ -28,5 +28,14 @@ inline void live_block(const engine::RuntimeSample&s,std::uint64_t now,std::arra
  for(unsigned i=0;i<transient::value_count;++i)value(256+i*4,ae.available?ae.values[i]:0);
  put_u32(b.data()+288,ae.flags|(ae.available?256U:0U));put_u32(b.data()+292,static_cast<unsigned>(ae.mode));
  put_u32(b.data()+296,static_cast<unsigned>(ae.apply));put_u32(b.data()+300,static_cast<unsigned>(ae.phase));put_u32(b.data()+304,static_cast<unsigned>(ae.reason));
+ const auto&m=s.load_model;
+ for(unsigned i=0;i<load::value_count;++i){
+  if(m.available&&engine::finite(m.values[i]))put_float(b.data()+320+i*4,m.values[i]);
+  else put_u32(b.data()+320+i*4,0x7fc00000);
+ }
+ const auto model_flags=std::uint32_t(m.flags)|(m.available?65536U:0U)|(m.available&&engine::finite(m.values[load::AfrFactor])?131072U:0U)|(std::uint32_t(m.reason)<<24);
+ put_u32(b.data()+356,model_flags);put_u32(b.data()+360,static_cast<unsigned>(m.fuel));put_u32(b.data()+364,static_cast<unsigned>(m.spark));
+ put_u32(b.data()+368,static_cast<unsigned>(m.lambda));put_u32(b.data()+372,static_cast<unsigned>(m.trim));put_u32(b.data()+376,static_cast<unsigned>(m.pressure));
+ put_u32(b.data()+380,static_cast<unsigned>(m.aux_role));put_u32(b.data()+384,static_cast<unsigned>(m.baro_source));put_u32(b.data()+388,static_cast<unsigned>(m.afr));
 }
 } // namespace ecu::tuning

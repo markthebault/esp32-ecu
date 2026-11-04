@@ -35,6 +35,8 @@ base['guide_version']=extra['guide_version']
 base['sources']+=extra['sources_append'];base['services']+=extra['services_append']
 base['config_help']=extra['config_help']
 for trigger in base['triggers']:trigger['expected']=extra['trigger_expected']
+for row in base['sensors']:
+ for field,items in extra.get('sensor_append',{}).get(row['id'],{}).items():row[field]+=items
 (R/'config/interface-guide.json').write_text(json.dumps(base,indent=2))
 def sensor(s):return {'id':s['id'],'label':s['name'][:28],'mode':'voltage','unit':'V','confirmed':False,'fault_low_v':.02,'fault_high_v':5.15,'filter_ms':100,'v0':.5,'y0':0,'v1':4.5,'y1':100,'points':[{'v':.5,'value':0},{'v':4.5,'value':100}],'ntc_r0_ohm':10000,'ntc_t0_c':25,'ntc_beta_k':3950,'pullup_ohm':2490,'pullup_fitted':False}
 default={'schema_version':1,'revision':1,'name':'ECU bench profile','adc_reference_v':3.3,'ui_poll_ms':500,'trigger':{'slots':60,'missing':2,'max_rpm':8000},'sensors':[sensor(s) for s in base['sensors']]}

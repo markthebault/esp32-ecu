@@ -1,0 +1,36 @@
+#pragma once
+#include "ecu/engine.hpp"
+#include "ecu/web_config.hpp"
+namespace ecu::engine {
+struct BoundInputs {Inputs input;std::uint8_t qualified=0;const char* reason="physical inputs converted; proposals only";};
+inline bool named_unit(const char*s,const char*a,const char*b=""){return !std::strcmp(s,a)||(*b&&!std::strcmp(s,b));}
+inline BoundInputs bind_inputs(const web::Sample&s,const config::Config&c,std::uint64_t now,const Tune*tune=nullptr){
+ BoundInputs bound;auto&in=bound.input;const double supply=s.raw[7]*c.adc_reference_v/4095/.6;
+ in.rpm=s.rpm;in.synced=s.synced;in.phase_synced=s.phase_synced;in.sampled_us=now;in.battery_v=s.raw[6]*c.adc_reference_v/4095*13;in.sensor_v=supply;in.sensors_valid=s.adc_ok&&!s.overflow;
+ if(!s.adc_ok)bound.reason="ADC acquisition unavailable";else if(s.overflow)bound.reason="Capture overflow latched";
+ double values[6]{};bool valid[6]{};
+ for(unsigned i=0;i<6;++i){const double av=s.raw[i]*c.adc_reference_v/4095;auto r=config::convert(c.sensors[i],av/.6,av,supply);values[i]=r.value;valid[i]=r.valid&&c.sensors[i].confirmed;}
+ const bool map_required=!tune||load::requirements(tune->load_model,tune->cylinder_trims_enabled,tune->transient_enrichment.mode==transient::Mode::MapRate,tune->ego_enabled).map;
+ in.map_qualified=valid[0]&&c.sensors[0].mode!=config::Mode::Voltage&&named_unit(c.sensors[0].unit,"kPa")&&s.adc_ok&&!s.overflow;
+ in.aux_pressure_kpa=values[5];in.aux_pressure_qualified=valid[5]&&c.sensors[5].mode!=config::Mode::Voltage&&named_unit(c.sensors[5].unit,"kPa")&&s.adc_ok&&!s.overflow;
+ if((map_required&&!named_unit(c.sensors[0].unit,"kPa"))||!named_unit(c.sensors[1].unit,"%")||!named_unit(c.sensors[2].unit,"C","°C")||!named_unit(c.sensors[3].unit,"C","°C")){in.sensors_valid=false;bound.reason="Required engine inputs need confirmed physical-unit conversions";}
+ for(unsigned i=map_required?0:1;i<4;++i){
+  if(!valid[i]){in.sensors_valid=false;bound.reason="MAP/TPS/CLT/IAT conversions must be valid and independently confirmed";}
+  if(c.sensors[i].mode==config::Mode::Voltage){in.sensors_valid=false;bound.reason="Raw-voltage readings cannot be relabelled as engine physical quantities";}
+ }
+ if(in.sensors_valid&&!map_required&&!in.map_qualified)bound.reason="MAP unavailable; current table/pressure/transient dependencies do not require it";
+ if(tune&&load::requirements(tune->load_model,tune->cylinder_trims_enabled,tune->transient_enrichment.mode==transient::Mode::MapRate,tune->ego_enabled).aux()){
+  const bool emap=tune->load_model.aux_role==load::AuxRole::Emap;
+  if(!in.aux_pressure_qualified||!range(in.aux_pressure_kpa,emap?20:50,emap?500:110)){
+   in.sensors_valid=false;bound.reason=emap?"Required J16 EMAP needs a confirmed, valid absolute-kPa pressure conversion":"Required J16 baro needs a confirmed, valid absolute-kPa pressure conversion";
+  }
+ }
+ in.map_kpa=values[0];in.tps_pct=values[1];in.clt_c=values[2];in.iat_c=values[3];in.lambda=values[4];in.lambda_ready=valid[4]&&c.sensors[4].mode!=config::Mode::Voltage&&named_unit(c.sensors[4].unit,"lambda","λ");
+ const char* units[]={"kPa","%","C","C","lambda"};const char* alternate[]={"","","°C","°C","λ"};
+ if(s.adc_ok){
+  bound.qualified=(1U<<6)|(1U<<7);
+  for(unsigned i=0;i<5;++i)if(valid[i]&&c.sensors[i].mode!=config::Mode::Voltage&&named_unit(c.sensors[i].unit,units[i],alternate[i]))bound.qualified|=1U<<(i+1);
+ }
+ return bound;
+}
+}

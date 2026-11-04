@@ -5,6 +5,7 @@ IDLE_FIELDS=[('IdleTarget','RPM','target_rpm'),('IdleDuty','%','duty_pct'),('Idl
 PWM_FIELDS=[('IdlePwmActive','bool','active'),('IdlePwmHigh','bool','virtual_high'),('IdlePwmPeriod','us','period_us'),('IdlePwmHighTime','us','high_us'),('IdlePwmSequence','count','sequence'),('IdlePwmPendingSequence','count','pending_sequence'),('IdlePwmTuneRevision','count','tune_revision'),('IdlePwmSensorRevision','count','sensor_revision'),('IdlePwmLateness','us','max_lateness_us'),('IdlePwmRecoveries','count','recoveries')]
 VALVE_FIELDS=[('ValveCurrent','A','current_a'),('ValveOpening','%','opening_pct'),('ValveEnergized','s','energized_s'),('ValveElectricalResidual','J','electrical_residual_j')]
 AE_FIELDS=[('AeTpsDot','%/s','tps_dot_pct_s'),('AeMapDot','kPa/s','map_dot_kpa_s'),('AeWindowMs','ms','window_ms'),('AeTriggerDot','source_units/s','trigger_dot'),('AeCorrectionPct','%','correction_pct'),('AeUnclampedPct','%','unclamped_pct'),('AeRemainingAtSampleMs','ms','remaining_ms'),('AeAddedFuelMg','mg','added_fuel_mg'),('AeFlags','bitfield','flags'),('AeMode','code','mode_code'),('AeApply','code','apply_code'),('AePhase','code','phase_code'),('AeReason','code','reason_code')]
+LOAD_FIELDS=[('LoadFuel','source_units','fuel_load'),('LoadSpark','source_units','spark_load'),('LoadLambda','source_units','lambda_load'),('LoadTrim','source_units','trim_load'),('LoadPressureFactor','ratio','pressure_factor'),('LoadBaro','kPa','baro_kpa'),('LoadEmap','kPa','emap_kpa'),('LoadAux','kPa','aux_kpa'),('LoadAfrFactor','ratio','afr_factor'),('LoadFlags','bitfield','flags'),('LoadFuelSource','code','fuel_source_code'),('LoadSparkSource','code','spark_source_code'),('LoadLambdaSource','code','lambda_source_code'),('LoadTrimSource','code','trim_source_code'),('LoadPressure','code','pressure_code'),('LoadAuxRole','code','aux_role_code'),('LoadBaroSource','code','baro_source_code'),('LoadAfr','code','afr_code'),('LoadReason','code','reason_code'),('LoadAfrState','code','afr_state_code')]
 PWM_CAUSES=('none','disabled','configuration','engine_fault','command_expired','late_interrupt','invalid_command','clock_reversed','output_fault')
 def value_text(value):
  if isinstance(value,bool):return str(int(value))
@@ -15,7 +16,8 @@ def value_text(value):
 def export_msl(rows,scenario,strategy=None):
  if strategy is not None and strategy not in ('batch_wasted_4cyl','sequential_4cyl','semi_sequential_4cyl'):raise ValueError('Unknown log strategy')
  labels=[(name,unit) for name,unit,_ in FIELDS+IDLE_FIELDS]+[('IdleAvailable','bool')]+[(name,unit) for name,unit,_ in PWM_FIELDS]+[('IdlePwmAvailable','bool'),('IdlePwmFault','code')]+[(name,unit) for name,unit,_ in VALVE_FIELDS]+[('ValveModelAvailable','bool')]+[(name,unit) for name,unit,_ in AE_FIELDS]+[('AeAvailable','bool')]
- out=['"ESP32ECU SIL 004"','"UNVALIDATED REDUCED-ORDER SIMULATION / '+scenario+(' / '+strategy if strategy else '')+' / physical outputs inhibited; proposed controller terms, virtual dispatcher state and synthetic valve estimates are separate; electrical ledger only"','\t'.join(x[0] for x in labels),'\t'.join(x[1] for x in labels)]
+ labels += [(name,unit) for name,unit,_ in LOAD_FIELDS]+[('LoadAvailable','bool')]
+ out=['"ESP32ECU SIL 005"','"UNVALIDATED REDUCED-ORDER SIMULATION / '+scenario+(' / '+strategy if strategy else '')+' / physical outputs inhibited; proposed controller terms, virtual dispatcher state and synthetic valve estimates are separate; Load*=source-tagged table coordinates and modeled factors; electrical ledger only"','\t'.join(x[0] for x in labels),'\t'.join(x[1] for x in labels)]
  for row in rows:
   values=[row.get(key,0) for _,_,key in FIELDS]
   idle=row.get('engine_sample',{}).get('idle',{});known=idle.get('available') is True
@@ -23,5 +25,7 @@ def export_msl(rows,scenario,strategy=None):
   pwm=row.get('idle_pwm',{});values += [pwm.get(key) for _,_,key in PWM_FIELDS]+[bool(pwm),PWM_CAUSES.index(pwm['fault']) if pwm.get('fault') in PWM_CAUSES else None]
   valve=row.get('idle_valve',{});values += [valve.get(key) for _,_,key in VALVE_FIELDS]+[bool(valve)]
   ae=row.get('transient_enrichment',{});available=ae.get('available') is True;values += [ae.get(key) if available else None for _,_,key in AE_FIELDS]+[available]
+  model=row.get('load_model',row.get('engine_sample',{}).get('load_model',{}));known=model.get('available') is True
+  values += [model.get(key) if known else None for _,_,key in LOAD_FIELDS]+[known]
   out.append('\t'.join(value_text(value) for value in values))
  return '\n'.join(out)+'\n'

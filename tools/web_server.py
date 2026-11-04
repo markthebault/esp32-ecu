@@ -80,6 +80,7 @@ class Handler(BaseHTTPRequestHandler):
   if self.path in ('/','/index.html'):return self.reply(200,(R/'web/index.html').read_bytes(),'text/html; charset=utf-8')
   if self.path=='/trigger_logger.js':return self.reply(200,(R/'web/trigger_logger.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/cylinder_tuning.js':return self.reply(200,(R/'web/cylinder_tuning.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/load_model.js':return self.reply(200,(R/'web/load_model.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/transient_enrichment.js':return self.reply(200,(R/'web/transient_enrichment.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/idle_control.js':return self.reply(200,(R/'web/idle_control.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/tuning_diagnostics.js':return self.reply(200,(R/'web/tuning_diagnostics.js').read_bytes(),'application/javascript; charset=utf-8')

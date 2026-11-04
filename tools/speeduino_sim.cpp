@@ -44,6 +44,7 @@ bool sequential_profile = false;
 bool semi_sequential_profile = false;
 bool idle_profile=false,idle_high=false;
 bool ae_profile=false;
+bool load_profile=false;unsigned load_maps=0;
 volatile uint8_t* output_ports[8]{};
 uint8_t output_masks[8]{};
 uint8_t output_pins[8]{};
@@ -295,6 +296,54 @@ int main(int argc,char** argv) {
                 configPage4.ADCFILTER_TPS=a[14];configPage4.ADCFILTER_MAP=a[15];
                 for(unsigned i=0;i<4;++i){configPage4.taeBins[i]=a[16+i];configPage4.taeValues[i]=a[20+i];configPage4.maeBins[i]=a[24+i];configPage4.maeRates[i]=a[28+i];}
                 ae_profile=true;
+            }
+            else if(command=="loadconfig"){
+                // Before-start virtual sensor/tune fixture. Production sensor,
+                // lookup, fuel arithmetic and scheduling code remain intact.
+                if(load_profile||speeduino_sim_micros()!=0)throw std::runtime_error("load profile is before-start only");
+                unsigned a[8]{};for(auto&v:a)if(!(std::cin>>v)||v>255)throw std::runtime_error("load profile raw byte range");
+                if(a[0]>2||a[1]>2||a[2]>2||a[3]>2||a[4]>120||a[5]>1)throw std::runtime_error("load profile enum or delay range");
+                configPage2.fuelAlgorithm=static_cast<LoadSource>(a[0]);configPage2.ignAlgorithm=static_cast<LoadSource>(a[1]);configPage2.multiplyMAP=a[2];
+                configPage2.includeAFR=a[3]==2;configPage2.incorporateAFR=a[3]==1;
+                configPage6.egoType=a[3]==2?EGO_TYPE_WIDE:EGO_TYPE_OFF;configPage6.egoAlgorithm=EGO_ALGORITHM_NONE;configPage6.ego_sdelay=a[4];
+                configPage6.useEMAP=a[5];configPage2.EMAPMin=-20;configPage2.EMAPMax=620;pinNumbers.pinEMAP=201;adc[201]=192;
+                // A dedicated virtual absolute-pressure input represents the
+                // declared barometric datum, including a fixed manual fixture.
+                configPage6.useExtBaro=1;configPage2.baroMin=0;configPage2.baroMax=200;pinNumbers.pinBaro=202;adc[202]=512;
+                configPage4.ADCFILTER_MAP=a[6];configPage4.ADCFILTER_TPS=a[7];configPage4.ADCFILTER_BARO=0;
+                // Profile is selected after the legacy setup. Prime the new
+                // ADC paths through production initialization/read functions
+                // before the first loop can divide by the EMAP observation.
+                initialiseMAPBaro();readPolledSensors(1U<<MAP_READ_TIMER_BIT);load_profile=true;
+            }
+            else if(command=="loadprofile"){
+                std::cout<<"loadprofile "<<unsigned(configPage2.fuelAlgorithm)<<' '<<unsigned(configPage2.ignAlgorithm)<<' '<<unsigned(configPage2.multiplyMAP)<<' '
+                    <<(configPage2.includeAFR?2:configPage2.incorporateAFR?1:0)<<' '<<unsigned(configPage6.ego_sdelay)<<' '<<unsigned(configPage6.useEMAP)<<' '
+                    <<unsigned(configPage4.ADCFILTER_MAP)<<' '<<unsigned(configPage4.ADCFILTER_TPS)<<' '<<unsigned(configPage6.useExtBaro)<<' '
+                    <<unsigned(configPage6.egoType)<<' '<<unsigned(configPage6.egoAlgorithm)<<' '<<unsigned(configPage4.ADCFILTER_BARO)<<' '
+                    <<int(configPage2.EMAPMin)<<' '<<configPage2.EMAPMax<<' '<<int(configPage2.baroMin)<<' '<<configPage2.baroMax<<' '<<unsigned(pinNumbers.pinEMAP)<<' '<<unsigned(pinNumbers.pinBaro)<<'\n';
+            }
+            else if(command=="pressure"){
+                double emap=0,baro=0;if(!load_profile||!(std::cin>>emap>>baro)||!std::isfinite(emap)||!std::isfinite(baro)||emap<20||emap>500||baro<50||baro>110)throw std::runtime_error("virtual absolute-pressure range");
+                adc[201]=std::lround((emap+20)/640*1024);adc[202]=std::lround(baro/200*1024);
+                if(speeduino_sim_micros()==0)readPolledSensors(1U<<BARO_READ_TIMER_BIT);
+            }
+            else if(command=="loadmap"){
+                unsigned id=0;if(!load_profile||speeduino_sim_micros()!=0||!(std::cin>>id)||id>2||(load_maps&(1U<<id)))throw std::runtime_error("load map is before-start once only");
+                auto fill=[&](auto&table){
+                    for(auto*axis:{&table.axisX,&table.axisY})for(unsigned i=0;i<16;++i){unsigned v=0;if(!(std::cin>>v)||v>255||(i&&v<=(*axis)[i-1]))throw std::runtime_error("load map axis range or quantization collapse");(*axis)[i]=v;}
+                    for(unsigned i=0;i<256;++i){unsigned v=0;if(!(std::cin>>v)||v>255)throw std::runtime_error("load map cell range");table.values[i]=v;}invalidate_cache(&table.get_value_cache);
+                };
+                if(id==0)fill(fuelTable);else if(id==1)fill(ignitionTable);else fill(afrTable);load_maps|=1U<<id;
+            }
+            else if(command=="loadmapread"){
+                unsigned id=0;if(!(std::cin>>id)||id>2)throw std::runtime_error("load map identifier");
+                std::cout<<"loadmapread";auto read=[&](const auto&table){for(auto v:table.axisX)std::cout<<' '<<unsigned(v);for(auto v:table.axisY)std::cout<<' '<<unsigned(v);for(auto v:table.values)std::cout<<' '<<unsigned(v);};
+                if(id==0)read(fuelTable);else if(id==1)read(ignitionTable);else read(afrTable);std::cout<<'\n';
+            }
+            else if(command=="loadstatus"){
+                std::cout<<"loadstatus "<<speeduino_sim_micros()<<' '<<currentStatus.fuelLoad<<' '<<currentStatus.ignLoad<<' '<<currentStatus.MAP<<' '<<unsigned(currentStatus.TPS)<<' '
+                    <<currentStatus.EMAP<<' '<<unsigned(currentStatus.baro)<<' '<<unsigned(currentStatus.afrTarget)<<' '<<unsigned(currentStatus.O2)<<' '<<unsigned(currentStatus.runSecs)<<' '<<unsigned(currentStatus.VE)<<'\n';
             }
             else if(command=="aeprofile"){
                 std::cout<<"aeprofile "<<unsigned(configPage2.aeMode)<<' '<<unsigned(configPage2.aeApplyMode)<<' '

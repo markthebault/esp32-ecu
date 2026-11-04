@@ -1,5 +1,6 @@
 #pragma once
 #include "ecu/transient_json.hpp"
+#include "ecu/load_json.hpp"
 #include "ecu/engine_data.hpp"
 #include "ecu/engine_phase.hpp"
 #include "ecu/timing_executor.hpp"
@@ -56,6 +57,7 @@ inline cJSON* data_json(const RuntimeSample&r,std::uint64_t observed_us){
  for(unsigned i=0;ok&&i<6;++i)ok=json_value(idle,idle_names[i],present&&r.idle_available?r.idle_proposals[i]:NAN);
  auto*raw=ok?cJSON_AddArrayToObject(j,"raw_adc"):nullptr;if(!raw)ok=false;
  if(ok){auto*ae=transient::observation_json(r.transient_enrichment,present);if(!ae||!cJSON_AddItemToObject(j,"transient_enrichment",ae)){cJSON_Delete(ae);ok=false;}}
+ if(ok){auto*model=load::observation_json(r.load_model,present);if(!model||!cJSON_AddItemToObject(j,"load_model",model)){cJSON_Delete(model);ok=false;}}
  for(unsigned i=0;ok&&i<8;++i){auto*value=present&&(r.board_flags&1)?cJSON_CreateNumber(r.raw_adc[i]):cJSON_CreateNull();if(!value||!cJSON_AddItemToArray(raw,value)){cJSON_Delete(value);ok=false;}}
  auto*worker=ok?cJSON_AddObjectToObject(j,"worker_observation"):nullptr;if(!worker)ok=false;
  if(ok)ok=json_u64(worker,"command_sequence",r.worker_sequence)&&json_u64(worker,"observed_us",r.worker_observed_us)&&json_age(worker,"age_ms",worker_age)&&

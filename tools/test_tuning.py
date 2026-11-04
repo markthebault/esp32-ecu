@@ -28,7 +28,7 @@ class TuningTests(unittest.TestCase):
   fields={e.get('name'):e.get('units') for e in ET.fromstring(export_msq(self.store.tune)).iter(tag('constant'))}
   import csv
   expected={}
-  for line in (R/'tuning/esp32-ecu-semi.ini').read_text().split('[OutputChannels]')[0].splitlines():
+  for line in (R/'tuning/esp32-ecu-load.ini').read_text().split('[OutputChannels]')[0].splitlines():
    if '=' not in line:continue
    name,definition=line.split('=',1);parts=next(csv.reader([definition],skipinitialspace=True))
    if parts[0] in ('scalar','array'):expected[name.strip()]=parts[3 if parts[0]=='scalar' else 4]
@@ -100,7 +100,7 @@ class TuningTests(unittest.TestCase):
   completed=s.command(b'r'+struct.pack('<BBHH',0,0x30,0,LIVE_BYTES))[1:];self.assertEqual(struct.unpack_from('<II',completed,56),(1,1));self.assertGreater(struct.unpack_from('<I',completed,208)[0],0)
   tune=copy.deepcopy(self.store.tune);tune['maps']['ve']['cells'][0]=86;self.store.save(json.dumps(tune).encode())
   block=s.command(b'r'+struct.pack('<BBHH',0,0x30,0,LIVE_BYTES))[1:]
-  self.assertEqual(len(block),320);self.assertEqual(struct.unpack_from('<II',block,56),(0,0));self.assertEqual(struct.unpack_from('<III',block,184),(2,1,1));self.assertEqual(struct.unpack_from('<I',block,208)[0],0)
+  self.assertEqual(len(block),LIVE_BYTES);self.assertEqual(struct.unpack_from('<II',block,56),(0,0));self.assertEqual(struct.unpack_from('<III',block,184),(2,1,1));self.assertEqual(struct.unpack_from('<I',block,208)[0],0)
  def test_closed_session_registry_and_use_are_explicit(self):
   s=self.session();self.assertEqual(status(self.store)['session_count'],1);s.close();s.close();self.assertEqual(status(self.store)['session_count'],0)
   with self.assertRaises(RuntimeError):s.command(b'Q')

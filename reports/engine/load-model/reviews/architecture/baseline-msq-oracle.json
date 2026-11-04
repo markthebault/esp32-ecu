@@ -1,0 +1,371 @@
+{
+  "baseline_commit": "1d6a9acb34838ea175f2dfa7ccd9786e96d2d11b",
+  "scope": "Constructed signature-specific fixtures using frozen constants/import, validated with frozen native engine core; no TunerStudio GUI run",
+  "cases": [
+    {
+      "case": "own001-valid",
+      "signature": "ESP32ECU SIL 001 INHIBITED",
+      "actual": "accepted",
+      "expected": "accepted",
+      "sha256": "a517c2360d422ae7e713269e5a1a0fe93897fbe8f52300ce74a3294db650ef5b",
+      "semantic": {
+        "schema": 6,
+        "strategy": "batch_wasted_4cyl",
+        "ve0": 85,
+        "map_load": [
+          10,
+          15,
+          20,
+          25,
+          30,
+          35,
+          40,
+          45,
+          50,
+          55,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110
+        ],
+        "idle_enabled": false,
+        "ae_mode": "legacy_tps"
+      }
+    },
+    {
+      "case": "own001-ve0",
+      "signature": "ESP32ECU SIL 001 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "3508b0d65196e175ecdc0a47f7da57daefb2a6f2a64dba55068f716af2a6894a",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    },
+    {
+      "case": "own001-ve120_001",
+      "signature": "ESP32ECU SIL 001 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "90b8a3e756d9d1411da01ff2b854c94c80924cdc3143d031bfc47417fa4ad94e",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    },
+    {
+      "case": "own002-valid",
+      "signature": "ESP32ECU SIL 002 INHIBITED",
+      "actual": "accepted",
+      "expected": "accepted",
+      "sha256": "d1c93bad3010aec0a12c02fa5bfd532b29dd6992fdd8797b344639fe934da290",
+      "semantic": {
+        "schema": 6,
+        "strategy": "batch_wasted_4cyl",
+        "ve0": 85,
+        "map_load": [
+          10,
+          15,
+          20,
+          25,
+          30,
+          35,
+          40,
+          45,
+          50,
+          55,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110
+        ],
+        "idle_enabled": false,
+        "ae_mode": "legacy_tps"
+      }
+    },
+    {
+      "case": "own002-ve0",
+      "signature": "ESP32ECU SIL 002 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "4da46dd28a2451212da58a71b40bd791f6819847092425e520761b90f38424ee",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    },
+    {
+      "case": "own002-ve120_001",
+      "signature": "ESP32ECU SIL 002 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "87964043ecc25834936c25f74f290d42d066844743f678cd6507e08bd7372c40",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    },
+    {
+      "case": "own003-valid",
+      "signature": "ESP32ECU SIL 003 INHIBITED",
+      "actual": "accepted",
+      "expected": "accepted",
+      "sha256": "73acc6ef3d6c0d77a9bf33d64d09b40d5be54939b79d2e0dddafd7c9f8bd2533",
+      "semantic": {
+        "schema": 6,
+        "strategy": "batch_wasted_4cyl",
+        "ve0": 85,
+        "map_load": [
+          10,
+          15,
+          20,
+          25,
+          30,
+          35,
+          40,
+          45,
+          50,
+          55,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110
+        ],
+        "idle_enabled": false,
+        "ae_mode": "legacy_tps"
+      }
+    },
+    {
+      "case": "own003-ve0",
+      "signature": "ESP32ECU SIL 003 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "0c9060e8eb2a5c63295e862699a7b2e0ea7d6a4e7016b8b78325687e607632c4",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    },
+    {
+      "case": "own003-ve120_001",
+      "signature": "ESP32ECU SIL 003 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "eea9d79cc2f0e1d03097f26ffbff260d4caaf713a9a4cba0fadce26ecd10f1dd",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    },
+    {
+      "case": "own004-valid",
+      "signature": "ESP32ECU DEV 004 INHIBITED",
+      "actual": "accepted",
+      "expected": "accepted",
+      "sha256": "78225e1cd6f6a289fc9ec99eae2d9041d689d0cf7049ac6d18aa718aa7ca1881",
+      "semantic": {
+        "schema": 6,
+        "strategy": "batch_wasted_4cyl",
+        "ve0": 85,
+        "map_load": [
+          10,
+          15,
+          20,
+          25,
+          30,
+          35,
+          40,
+          45,
+          50,
+          55,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110
+        ],
+        "idle_enabled": false,
+        "ae_mode": "legacy_tps"
+      }
+    },
+    {
+      "case": "own004-ve0",
+      "signature": "ESP32ECU DEV 004 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "04f13056df1f8318b029d1a3e416d8f81aaba6b9df79f1cb98dfe727d638c119",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    },
+    {
+      "case": "own004-ve120_001",
+      "signature": "ESP32ECU DEV 004 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "a905d403cf30ed6ebc3d92ed486dd79b0c8f9dd1c5325df826fe7e57b9fdf38f",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    },
+    {
+      "case": "own005-valid",
+      "signature": "ESP32ECU DEV 005 INHIBITED",
+      "actual": "accepted",
+      "expected": "accepted",
+      "sha256": "ccd818fa54e3ebb2fdf4d1daa99bee13fe53c7c1d22e13239ced296aeadb1c28",
+      "semantic": {
+        "schema": 6,
+        "strategy": "batch_wasted_4cyl",
+        "ve0": 85,
+        "map_load": [
+          10,
+          15,
+          20,
+          25,
+          30,
+          35,
+          40,
+          45,
+          50,
+          55,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110
+        ],
+        "idle_enabled": false,
+        "ae_mode": "legacy_tps"
+      }
+    },
+    {
+      "case": "own005-ve0",
+      "signature": "ESP32ECU DEV 005 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "62a7b6aab85db35f55516d52926883d2ee6125e7e5fcfb538740ea1e106a5a61",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    },
+    {
+      "case": "own005-ve120_001",
+      "signature": "ESP32ECU DEV 005 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "6a33263010774512dd81a28a40afdf231405151e8a954a1cdb04228bbf6b91b1",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    },
+    {
+      "case": "own006-valid",
+      "signature": "ESP32ECU DEV 006 INHIBITED",
+      "actual": "accepted",
+      "expected": "accepted",
+      "sha256": "38852b7c479da1ea05f76e281bb727754640c86cf9fc3e3a65e69df098475372",
+      "semantic": {
+        "schema": 6,
+        "strategy": "batch_wasted_4cyl",
+        "ve0": 85,
+        "map_load": [
+          10,
+          15,
+          20,
+          25,
+          30,
+          35,
+          40,
+          45,
+          50,
+          55,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110
+        ],
+        "idle_enabled": false,
+        "ae_mode": "legacy_tps"
+      }
+    },
+    {
+      "case": "own006-ve0",
+      "signature": "ESP32ECU DEV 006 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "b8292071c2f142af69d2122a664cafcb4ac09c704212b0b738fd7c0fdc49a51b",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    },
+    {
+      "case": "own006-ve120_001",
+      "signature": "ESP32ECU DEV 006 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "0daf3ebff16d12b690f6efa0516bdea023270bc5570cde416f81dfa7adf4a5c4",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    },
+    {
+      "case": "own007-valid",
+      "signature": "ESP32ECU DEV 007 INHIBITED",
+      "actual": "accepted",
+      "expected": "accepted",
+      "sha256": "e01bb225c6e71da6970926a886fc065227cf79fd9316d46c3d3bfead3751b82b",
+      "semantic": {
+        "schema": 6,
+        "strategy": "batch_wasted_4cyl",
+        "ve0": 85,
+        "map_load": [
+          10,
+          15,
+          20,
+          25,
+          30,
+          35,
+          40,
+          45,
+          50,
+          55,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110
+        ],
+        "idle_enabled": false,
+        "ae_mode": "legacy_tps"
+      }
+    },
+    {
+      "case": "own007-ve0",
+      "signature": "ESP32ECU DEV 007 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "a83fe2b0e17dd13ba3bd91e64db05930a978625c944213cc6bca6e9dceed6694",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    },
+    {
+      "case": "own007-ve120_001",
+      "signature": "ESP32ECU DEV 007 INHIBITED",
+      "actual": "rejected",
+      "expected": "rejected",
+      "sha256": "e95fb42aa32783d95b441ed7a2e0f8146d04a272cdfaea774b338030da1ba843",
+      "semantic": {
+        "reason": "Engine tune violates schema or current hardware limits"
+      }
+    }
+  ],
+  "status": "pass"
+}

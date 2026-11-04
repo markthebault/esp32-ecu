@@ -5,15 +5,15 @@
 #include <cstring>
 #include <limits>
 namespace ecu::tuning {
-inline constexpr std::size_t page_bytes=5120,live_bytes=320,chunk_bytes=256;
-inline constexpr const char signature[]="ESP32ECU DEV 007 INHIBITED";
+inline constexpr std::size_t page_bytes=5376,live_bytes=416,chunk_bytes=256;
+inline constexpr const char signature[]="ESP32ECU DEV 008 INHIBITED";
 inline constexpr const char serial_protocol[]="002";
 using Page=std::array<std::uint8_t,page_bytes>;
 inline void put_u32(std::uint8_t*p,std::uint32_t v){for(unsigned i=0;i<4;++i)p[i]=std::uint8_t(v>>(8*i));}
 inline std::uint32_t get_u32(const std::uint8_t*p){std::uint32_t v=0;for(unsigned i=0;i<4;++i)v|=std::uint32_t(p[i])<<(8*i);return v;}
 inline void put_float(std::uint8_t*p,float v){static_assert(sizeof(float)==4&&std::numeric_limits<float>::is_iec559);std::uint32_t u;std::memcpy(&u,&v,4);put_u32(p,u);}
 inline float get_float(const std::uint8_t*p){auto u=get_u32(p);float v;std::memcpy(&v,&u,4);return v;}
-inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||(n>=4756&&n<4768)||(n>=4940&&n<4992)||n>=5116;}
+inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||(n>=4756&&n<4768)||(n>=4940&&n<4992)||(n>=5116&&n<5120)||n>=5176;}
 inline bool revision_offset(std::size_t n){return n>=268&&n<272;}
 inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill(0);
  put_u32(p.data(),(std::uint32_t(t.ego_enabled)<<0)|(std::uint32_t(t.dfco_enabled)<<1)|(std::uint32_t(t.idle_enabled)<<2));
@@ -113,6 +113,20 @@ inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill
  for(unsigned i=0;i<4;++i)put_float(p.data()+5068+i*4,t.transient_enrichment.tps_added_pct[i]);
  for(unsigned i=0;i<4;++i)put_float(p.data()+5084+i*4,t.transient_enrichment.map_rates[i]);
  for(unsigned i=0;i<4;++i)put_float(p.data()+5100+i*4,t.transient_enrichment.map_added_pct[i]);
+ put_u32(p.data()+5120,std::uint32_t(t.load_model.fuel_source));
+ put_u32(p.data()+5124,std::uint32_t(t.load_model.spark_source));
+ put_u32(p.data()+5128,std::uint32_t(t.load_model.lambda_source));
+ put_u32(p.data()+5132,std::uint32_t(t.load_model.trim_source));
+ put_u32(p.data()+5136,std::uint32_t(t.load_model.pressure));
+ put_u32(p.data()+5140,std::uint32_t(t.load_model.aux_role));
+ put_u32(p.data()+5144,std::uint32_t(t.load_model.baro_source));
+ put_u32(p.data()+5148,std::uint32_t(t.load_model.ve_axis));
+ put_u32(p.data()+5152,std::uint32_t(t.load_model.spark_axis));
+ put_u32(p.data()+5156,std::uint32_t(t.load_model.lambda_axis));
+ put_u32(p.data()+5160,std::uint32_t(t.load_model.trim_axis));
+ put_u32(p.data()+5164,std::uint32_t(t.load_model.afr));
+ put_float(p.data()+5168,t.load_model.fixed_baro_kpa);
+ put_float(p.data()+5172,t.load_model.afr_delay_s);
 }
 inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  if(!origin||get_u32(p.data()+268)!=origin)return false;
@@ -216,9 +230,23 @@ inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  for(unsigned i=0;i<4;++i)t.transient_enrichment.tps_added_pct[i]=get_float(p.data()+5068+i*4);
  for(unsigned i=0;i<4;++i)t.transient_enrichment.map_rates[i]=get_float(p.data()+5084+i*4);
  for(unsigned i=0;i<4;++i)t.transient_enrichment.map_added_pct[i]=get_float(p.data()+5100+i*4);
+ const auto load_fuel_source=get_u32(p.data()+5120);if(load_fuel_source>=3)return false;t.load_model.fuel_source=load::Source(load_fuel_source);
+ const auto load_spark_source=get_u32(p.data()+5124);if(load_spark_source>=3)return false;t.load_model.spark_source=load::Source(load_spark_source);
+ const auto load_lambda_source=get_u32(p.data()+5128);if(load_lambda_source>=4)return false;t.load_model.lambda_source=load::Source(load_lambda_source);
+ const auto load_trim_source=get_u32(p.data()+5132);if(load_trim_source>=4)return false;t.load_model.trim_source=load::Source(load_trim_source);
+ const auto load_pressure=get_u32(p.data()+5136);if(load_pressure>=3)return false;t.load_model.pressure=load::Pressure(load_pressure);
+ const auto load_aux_role=get_u32(p.data()+5140);if(load_aux_role>=3)return false;t.load_model.aux_role=load::AuxRole(load_aux_role);
+ const auto load_baro_source=get_u32(p.data()+5144);if(load_baro_source>=2)return false;t.load_model.baro_source=load::BaroSource(load_baro_source);
+ const auto load_ve_axis=get_u32(p.data()+5148);if(load_ve_axis>=3)return false;t.load_model.ve_axis=load::Axis(load_ve_axis);
+ const auto load_spark_axis=get_u32(p.data()+5152);if(load_spark_axis>=3)return false;t.load_model.spark_axis=load::Axis(load_spark_axis);
+ const auto load_lambda_axis=get_u32(p.data()+5156);if(load_lambda_axis>=3)return false;t.load_model.lambda_axis=load::Axis(load_lambda_axis);
+ const auto load_trim_axis=get_u32(p.data()+5160);if(load_trim_axis>=3)return false;t.load_model.trim_axis=load::Axis(load_trim_axis);
+ const auto load_afr=get_u32(p.data()+5164);if(load_afr>=3)return false;t.load_model.afr=load::Afr(load_afr);
+ t.load_model.fixed_baro_kpa=get_float(p.data()+5168);
+ t.load_model.afr_delay_s=get_float(p.data()+5172);
  return !engine::validate(t);
 }
-// Update only an owned, already canonical schema6 tree. No global data mutates.
+// Update only an owned, already canonical schema7 tree. No global data mutates.
 template<class Json> bool update_document(Json&j,const engine::Tune&t){
  if(!j.header(t.revision,engine::strategy_name(t.strategy)))return false;
  if(!j.number("engine","cylinders",t.cylinders))return false;
@@ -271,7 +299,7 @@ template<class Json> bool update_document(Json&j,const engine::Tune&t){
  if(!j.number("timing","cam_window_deg",t.cam_window_deg))return false;
  if(!j.array("timing","firing_order",t.firing_order)||!j.boolean("cylinder_trims","enabled",t.cylinder_trims_enabled)||!j.array("cylinder_trims","spark_deg",t.cylinder_spark_deg))return false;
  for(unsigned i=0;i<4;++i)if(!j.trim(i,t.cylinder_fuel[i]))return false;
- if(!j.idle(t.idle_control)||!j.transient_enrichment(t.transient_enrichment))return false;
+ if(!j.idle(t.idle_control)||!j.transient_enrichment(t.transient_enrichment)||!j.load_model(t.load_model))return false;
  return true;
 }
 } // namespace ecu::tuning

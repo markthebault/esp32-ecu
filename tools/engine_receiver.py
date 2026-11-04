@@ -6,8 +6,8 @@ before accepting sequence/freshness. Legacy sensor frames retain their own codec
 import hmac,math,secrets,struct
 from espnow_protocol import header,check,mac_bytes
 
-CAP_SIZE=76;REPLY_SIZE=108;ENGINE_SIZE=232;ENGINE_BODY=200;ACK_SIZE=56
-FEATURE_ENGINE=1;SCHEMA=2;SUPPORTED_SCHEMAS=(1,2);UINT32_MAX=2**32-1;UINT64_MAX=2**64-1
+CAP_SIZE=76;REPLY_SIZE=108;ENGINE_SIZE=250;ENGINE_BODY=218;ACK_SIZE=56
+FEATURE_ENGINE=1;SCHEMA=3;SUPPORTED_SCHEMAS=(1,2,3);UINT32_MAX=2**32-1;UINT64_MAX=2**64-1
 INPUT_NAMES=('rpm','map_kpa','tps_pct','clt_c','iat_c','lambda','battery_v','sensor_v')
 PROPOSAL_NAMES=('rpm','ve_pct','target_lambda','advance_deg','pulse_ms','dwell_ms','deadtime_ms','air_mg','warmup','afterstart','accel','ego','duty_pct','idle_pct')
 PRESENT=1;INPUTS_FRESH=2;STORAGE_OK=4;CRANK_SYNC=8;PHASE_SYNC=16;PHASE_REQUIRED=32;SUBMITTED=64;DUMMY_POLICY=128;PHASE_CONTEXT_MATCH=256;PROPOSED_ACTIVE=512;FUEL_CUT=1024;SPARK_CUT=2048;PUMP=4096;FAN=8192;INPUTS_QUALIFIED=16384;DISPLAY_FRESH=32768
@@ -42,14 +42,15 @@ def engine_acknowledgement(session,sequence,data_key):
     return body+hmac.digest(key_bytes(data_key,32),body,'sha256')
 
 def engine_telemetry(packet,data_key,expected_schema=None):
-    check(packet,9,ENGINE_SIZE)
-    if not hmac.compare_digest(packet[ENGINE_BODY:],hmac.digest(key_bytes(data_key,32),packet[:ENGINE_BODY],'sha256')):raise ValueError('Engine authentication failed')
+    if len(packet) not in (232,250):raise ValueError('Invalid engine packet length')
+    check(packet,9,len(packet));body_size=len(packet)-32
+    if not hmac.compare_digest(packet[body_size:],hmac.digest(key_bytes(data_key,32),packet[:body_size],'sha256')):raise ValueError('Engine authentication failed')
     session,packet_sequence,schema,flags,sample_age,control_age,tune,sensors=struct.unpack_from('<IQHHIIII',packet,8)
     proposal_sequence,worker_sequence,phase_epoch,worker_epoch,faults,losses,rejected,cam_error=struct.unpack_from('<QQIIIIIf',packet,40)
     state,strategy,source,phase_reason,valid,timing,last_timing,virtual,physical,board=struct.unpack_from('<10B',packet,80)
     sent,worker_tune,worker_sensors,worker_age=struct.unpack_from('<QIII',packet,92)
     inputs=struct.unpack_from('<8f',packet,112);proposals=struct.unpack_from('<14f',packet,144)
-    if schema not in SUPPORTED_SCHEMAS or expected_schema is not None and schema!=expected_schema or not session or not packet_sequence or not proposal_sequence or not flags&PRESENT or source not in (1,2) or state>5 or strategy>(1 if schema==1 else 2) or phase_reason>9 or timing>(16 if schema==1 else 17) or last_timing>(16 if schema==1 else 17) or board&~15 or packet[90:92]!=b'\0\0':raise ValueError('Invalid engine schema or enum')
+    if schema not in SUPPORTED_SCHEMAS or len(packet)!=(232 if schema<3 else 250) or expected_schema is not None and schema!=expected_schema or not session or not packet_sequence or not proposal_sequence or not flags&PRESENT or source not in (1,2) or state>5 or strategy>(1 if schema==1 else 2) or phase_reason>9 or timing>(16 if schema==1 else 17) or last_timing>(16 if schema==1 else 17) or board&~15 or packet[90:92]!=b'\0\0':raise ValueError('Invalid engine schema or enum')
     if bool(flags&DISPLAY_FRESH)!=(sample_age<=1000 and control_age<=1000):raise ValueError('Inconsistent source display freshness')
     limits=((0,12000),(10,110),(0,100),(-40,140),(-40,110),(.65,1.5),(7,18),(4.75,5.25))
     for i,value in enumerate(inputs):
@@ -60,7 +61,28 @@ def engine_telemetry(packet,data_key,expected_schema=None):
         elif not math.isnan(value):raise ValueError('Invalid input must remain NaN')
     if any(math.isinf(value) for value in proposals) or math.isinf(cam_error):raise ValueError('Infinite engine value')
     age=lambda n:None if n==UINT32_MAX else n
-    return dict(session=session,packet_sequence=packet_sequence,schema_version=schema,flags=flags,
+    model=None
+    if schema>=3:
+        sources=tuple((packet[200]>>(2*i))&3 for i in range(4));bits=packet[201]
+        pressure=bits&3;baro_source=(bits>>2)&1;available=bool(bits&8);arithmetic_valid=bool(bits&16);afr=(bits>>5)&3;guard=bool(bits&128)
+        fuel_load,afr_factor,baro,emap=struct.unpack_from('<4f',packet,202)
+        values=(fuel_load,afr_factor,baro,emap)
+        if 3 in sources or pressure>2 or afr>2 or any(math.isinf(v) for v in values) or not available and (arithmetic_valid or guard or any(not math.isnan(v) for v in values)):raise ValueError('Invalid compact load observation')
+        if arithmetic_valid and not math.isfinite(fuel_load) or math.isfinite(afr_factor) and afr_factor<0 or math.isfinite(baro) and not 50-1e-5<=baro<=110+1e-5 or math.isfinite(emap) and not 20-1e-5<=emap<=500+1e-5:raise ValueError('Invalid compact pressure or factor')
+        def coordinate(code):
+            if not available or not arithmetic_valid:return None
+            if code==0:return inputs[1] if valid&2 else None
+            if code==1:return inputs[2] if valid&4 else None
+            return 100*inputs[1]/emap if valid&2 and math.isfinite(emap) and emap>0 else None
+        model=dict(available=available,arithmetic_valid=arithmetic_valid,pressure_guard_available=guard,
+                   **{key+'_source_code':code for key,code in zip(('fuel','spark','lambda','trim'),sources)},
+                   pressure_code=pressure,baro_source_code=baro_source,afr_code=afr,
+                   fuel_load=fuel_load if math.isfinite(fuel_load) else None,
+                   spark_load=coordinate(sources[1]),lambda_load=coordinate(sources[2]),trim_load=coordinate(sources[3]),
+                   afr_factor=afr_factor if math.isfinite(afr_factor) else None,baro_kpa=baro if math.isfinite(baro) else None,emap_kpa=emap if math.isfinite(emap) else None,
+                   derived_coordinate_precision='spark/lambda/trim derived from authenticated F32 inputs; may differ from native F64 lookups; inactive sources may be unknown',
+                   detail_scope='Compact summary; AFR state, fault reason, auxiliary role, trims and transient terms require web/log diagnostics')
+    return dict(session=session,packet_sequence=packet_sequence,schema_version=schema,flags=flags,load_model=model,
                 source='target_control_observation' if source==1 else 'synthetic_control_observation',source_code=source,scalar_proposal_basis='untrimmed_base_demand',per_cylinder_available=False,
                 sample_age_ms=age(sample_age),control_age_ms=age(control_age),source_display_fresh=bool(flags&DISPLAY_FRESH),
                 tune_revision=tune,sensor_revision=sensors,proposal_sequence=proposal_sequence,phase_epoch=phase_epoch,phase_epoch_domain='external_configuration_context',
@@ -122,7 +144,7 @@ class EngineReceiver:
         if (self.received_ms is not None and (now_ms<self.received_ms or now_ms-self.received_ms>1000)) or (self.received_ms is None and now_ms-self.reply['received_ms']>1000):raise ValueError('Stale gap requires a fresh query')
         data=engine_telemetry(packet,self.data_key,self.reply['schema'])
         if data['session']!=self.session or data['packet_sequence']<=self.last_packet or data['proposal_sequence']<self.last_snapshot or data['sent_esp_us']<self.last_sent_esp:raise ValueError('Old session, duplicate, clock reversal or out-of-order observation')
-        immutable=(packet[20:22],data['flags']&~DISPLAY_FRESH,packet[32:92],packet[100:108],packet[112:200])
+        immutable=(packet[20:22],data['flags']&~DISPLAY_FRESH,packet[32:92],packet[100:108],packet[112:len(packet)-32])
         if data['proposal_sequence']==self.last_snapshot and immutable!=self.immutable:raise ValueError('Repeated snapshot payload changed')
         local_elapsed=now_ms-self.reply['query_sent_ms'];sender_elapsed=(data['sent_esp_us']-self.reply['sent_esp_us'])/1000
         uncertainty=2+math.ceil(local_elapsed*.02)

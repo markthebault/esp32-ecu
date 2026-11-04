@@ -27,4 +27,4 @@ Open the desktop simulator at `http://127.0.0.1:8765`. Read the [web/bench setup
 
 Historical A3 validation: [ERC/DRC and pin audit](reports/a3/validation-summary.json), [enclosure CAD fit](enclosure/a3/fit-check.json), [18 configuration/API tests](reports/web/config-tests.txt) and [116 control scenarios](reports/web/control-tests.txt). Some purchased-part 3D models are simplified assembly envelopes.
 
-[Earlier revisions](docs/history.md) · [Compact-board details](docs/compact.md)
+[Load-source, pressure and AFR development](docs/engine-load-model.md) · [Earlier revisions](docs/history.md) · [Compact-board details](docs/compact.md)

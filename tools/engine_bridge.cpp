@@ -52,9 +52,14 @@ extern "C" std::uint64_t engine_event_dwell(void*p){return static_cast<EngineCon
 extern "C" double engine_event_advance(void*p){return static_cast<EngineContext*>(p)->scheduler.event_advance();}
 extern "C" const char* engine_step(void*p,const char*text,std::uint64_t now,std::uint64_t sampled){
  auto*c=static_cast<EngineContext*>(p);ecu::engine::Inputs s;auto*j=cJSON_Parse(text);bool wheel=false;
- bool ok=j&&ecu::web::keys(j,"|rpm||map_kpa||tps_pct||clt_c||iat_c||lambda||battery_v||sensor_v||synced||sensors_valid||lambda_ready||use_decoder||phase_synced|");
+ bool ok=j&&ecu::web::keys(j,"|rpm||map_kpa||tps_pct||clt_c||iat_c||lambda||battery_v||sensor_v||synced||sensors_valid||lambda_ready||use_decoder||phase_synced||aux_pressure_kpa||map_qualified||aux_pressure_qualified|");
+ if(cJSON_GetObjectItemCaseSensitive(j,"map_qualified"))ok=ok&&ecu::web::boolean(j,"map_qualified",s.map_qualified);
+ if(cJSON_GetObjectItemCaseSensitive(j,"aux_pressure_qualified"))ok=ok&&ecu::web::boolean(j,"aux_pressure_qualified",s.aux_pressure_qualified);
+ if(const auto*a=cJSON_GetObjectItemCaseSensitive(j,"aux_pressure_kpa"))if(!cJSON_IsNull(a))ok=ok&&ecu::web::number(j,"aux_pressure_kpa",s.aux_pressure_kpa);
 #define INPUT(name) ok=ok&&ecu::web::number(j,#name,s.name)
- INPUT(rpm);INPUT(map_kpa);INPUT(tps_pct);INPUT(clt_c);INPUT(iat_c);INPUT(lambda);INPUT(battery_v);INPUT(sensor_v);
+ INPUT(rpm);INPUT(tps_pct);INPUT(clt_c);INPUT(iat_c);INPUT(lambda);INPUT(battery_v);INPUT(sensor_v);
+ ok=ok&&((!s.map_qualified&&cJSON_IsNull(cJSON_GetObjectItemCaseSensitive(j,"map_kpa")))||ecu::web::number(j,"map_kpa",s.map_kpa));
+ if(!s.map_qualified&&cJSON_IsNull(cJSON_GetObjectItemCaseSensitive(j,"map_kpa")))s.map_kpa=NAN;
 #undef INPUT
  ok=ok&&ecu::web::boolean(j,"synced",s.synced)&&ecu::web::boolean(j,"sensors_valid",s.sensors_valid)&&ecu::web::boolean(j,"lambda_ready",s.lambda_ready)&&ecu::web::boolean(j,"use_decoder",wheel);if(cJSON_GetObjectItemCaseSensitive(j,"phase_synced"))ok=ok&&ecu::web::boolean(j,"phase_synced",s.phase_synced);cJSON_Delete(j);
  if(!ok){c->last={};c->last.faults=ecu::engine::BadSensor;c->last.state=ecu::engine::State::Faulted;c->last.fuel_cut=c->last.spark_cut=true;c->scheduler.cut();c->have_control=false;c->stopped_since=UINT64_MAX;j=cJSON_CreateObject();cJSON_AddStringToObject(j,"error","Invalid native engine input");return encode(j);}

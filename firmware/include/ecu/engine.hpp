@@ -1,6 +1,7 @@
 #pragma once
 #include "ecu/idle_control.hpp"
 #include "ecu/transient_enrichment.hpp"
+#include "ecu/load_model.hpp"
 // Engine-development core shared by the ESP32 shadow monitor and native SIL.
 // Independent implementation. Physical outputs are NOT enabled by this module.
 #include <algorithm>
@@ -69,6 +70,7 @@ struct Tune {
  Map ve{},spark{},lambda{};
  idle::Config idle_control;
  transient::Config transient_enrichment;
+ load::Config load_model;
  bool cylinder_trims_enabled=false;
  std::array<TrimMap,4> cylinder_fuel{};
  std::array<float,4> cylinder_spark_deg{}; // Physical cylinders1..4, not order slots.
@@ -79,11 +81,12 @@ inline const char* validate(const Tune&t){
  if(!strategy_valid(t.strategy)||!firing_order_valid(t.firing_order)||!range(t.injection_end_deg,0,719)||!range(t.cam_sync_deg,0,719)||!range(t.cam_window_deg,5,45))return "Invalid strategy, firing order or cam/injection reference";
  if(t.cylinder_trims_enabled&&t.strategy!=Strategy::Sequential)return "Cylinder trims require the sequential four-cylinder strategy";
  if(!transient::valid(t.transient_enrichment))return "Invalid transient enrichment configuration";
+ if(!load::valid(t.load_model,t.cylinder_trims_enabled,t.ego_enabled))return "Load sources, table bases or shared pressure roles disagree";
  for(unsigned cylinder=0;cylinder<4;++cylinder){
   const auto&m=t.cylinder_fuel[cylinder];
   if(!range(t.cylinder_spark_deg[cylinder],-10,10)||!ascending(m.rpm)||!ascending(m.load))return "Invalid cylinder trim or axes";
   for(auto v:m.rpm)if(!range(v,50,10000))return "Cylinder trim RPM axis out of range";
-  for(auto v:m.load)if(!range(v,5,110))return "Cylinder trim load axis out of range";
+  for(auto v:m.load)if(!range(v,load::axis_min(t.load_model.trim_axis),load::axis_max(t.load_model.trim_axis)))return "Cylinder trim load axis disagrees with its declared basis";
   for(auto v:m.cells)if(!range(v,50,150))return "Cylinder fuel trim must be50-150percent";
  }
  if(!range(t.displacement_cc,500,4000)||!range(t.injector_cc_min,100,1500)||!range(t.fuel_density_g_cc,.6,.9)||!range(t.stoich_afr,9,16))return "Invalid engine or injector specification";
@@ -97,11 +100,11 @@ inline const char* validate(const Tune&t){
  if(!ascending(t.coolant_c)||!ascending(t.battery_v))return "Curve axes must increase strictly";
  for(unsigned i=0;i<6;++i)if(!range(t.coolant_c[i],-40,140)||!range(t.warmup_pct[i],80,300)||!range(t.crank_pct[i],100,400))return "Invalid coolant enrichment curve";
  for(unsigned i=0;i<5;++i)if(!range(t.battery_v[i],7,18)||!range(t.deadtime_ms[i],.1,3)||!range(t.dwell_ms[i],.5,t.max_dwell_ms))return "Invalid battery compensation curve";
- const Map*maps[]={&t.ve,&t.spark,&t.lambda};
+ const Map*maps[]={&t.ve,&t.spark,&t.lambda};const load::Axis bases[]={t.load_model.ve_axis,t.load_model.spark_axis,t.load_model.lambda_axis};
  for(unsigned k=0;k<3;++k){const auto&m=*maps[k];if(!ascending(m.rpm)||!ascending(m.load))return "Map axes must increase strictly";
   for(auto v:m.rpm)if(!range(v,50,10000))return "RPM axis out of range";
-  for(auto v:m.load)if(!range(v,5,110))return "This carrier profile is naturally aspirated: load axis 5-110 kPa";
-  for(auto v:m.cells)if(!range(v,k==0?20:k==1?-5:.75,k==0?120:k==1?40:1.2))return "Map cell outside supported range";
+  for(auto v:m.load)if(!range(v,load::axis_min(bases[k]),load::axis_max(bases[k])))return "Map load axis disagrees with its declared physical basis";
+  for(auto v:m.cells)if(!range(v,k==0?0:k==1?-5:.75,k==0?255:k==1?40:1.2))return "Map cell outside supported range";
  }
  return nullptr;
 }
@@ -111,11 +114,14 @@ inline const char* state_name(State s){switch(s){case State::Stopped:return "sto
 struct Inputs {
  double rpm=0,map_kpa=0,tps_pct=0,clt_c=0,iat_c=0,lambda=1,battery_v=0,sensor_v=0;
  std::uint64_t sampled_us=0;bool synced=false,sensors_valid=false,lambda_ready=false,phase_synced=false;
+ // Additive auxiliary input; the original input/quality field ordering stays.
+ double aux_pressure_kpa=NAN;bool map_qualified=true,aux_pressure_qualified=false;
 };
 struct Output {
  State state=State::Stopped;std::uint32_t faults=0;
  idle::Output idle;
  transient::Output transient_enrichment;
+ load::Observation load_model;
  double rpm=0,ve_pct=0,target_lambda=1,advance_deg=0,pulse_ms=0,dwell_ms=0,deadtime_ms=0,air_mg=0;
  double warmup=1,afterstart=1,accel=1,ego=1,duty_pct=0,idle_pct=0;
  bool fuel_cut=false,spark_cut=false,pump=false,fan=false;
@@ -130,8 +136,8 @@ struct Output {
  bool proposed_enabled()const{return faults==0&&state!=State::Stopped;}
 };
 class Controller {
- bool seen_=false,was_crank_=true,rev_cut_=false,dfco_=false,fan_=false;
- std::uint64_t last_=0,started_=0,dfco_since_=0,boot_=0;
+ bool seen_=false,was_crank_=true,rev_cut_=false,dfco_=false,fan_=false,afr_running_=false;
+ std::uint64_t last_=0,started_=0,dfco_since_=0,boot_=0,afr_started_=0;
  double previous_tps_=0,ae_=1,ego_i_=0;idle::Controller idle_control_;transient::Controller transient_control_;
 public:
  void reset(){*this=Controller{};}
@@ -153,8 +159,15 @@ public:
   const double rate=dt>0?(s.tps_pct-previous_tps_)/dt:0;
   previous_tps_=s.tps_pct;last_=now;seen_=true;
   if(validate(t)){o.faults=BadTune;o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;return finish();}
+  // A fresh possible stopped/cranking interval invalidates only the measured
+  // AFR epoch, even while another input is faulted. It does not certify a
+  // physical stop or change the historical ASE epoch. Stale ADC timestamps
+  // cannot repeatedly move this start timer.
+  if(now>=s.sampled_us&&now-s.sampled_us<=20000&&range(s.rpm,0,t.cranking_rpm))afr_running_=false;
+  const auto model=load::evaluate(t.load_model,{s.map_kpa,s.tps_pct,s.aux_pressure_kpa,s.map_qualified,s.aux_pressure_qualified,t.cylinder_trims_enabled,t.transient_enrichment.mode==transient::Mode::MapRate,t.ego_enabled});
+  o.load_model=model.observation;
   if(!timing)o.faults|=Timing;
-  const bool sensor_ok=s.sensors_valid&&range(s.rpm,0,12000)&&range(s.map_kpa,10,110)&&range(s.tps_pct,0,100)&&range(s.clt_c,-40,140)&&range(s.iat_c,-40,110)&&range(s.battery_v,7,18)&&range(s.sensor_v,4.75,5.25);
+  const bool sensor_ok=s.sensors_valid&&model.ok()&&range(s.rpm,0,12000)&&range(s.tps_pct,0,100)&&range(s.clt_c,-40,140)&&range(s.iat_c,-40,110)&&range(s.battery_v,7,18)&&range(s.sensor_v,4.75,5.25);
   if(!sensor_ok)o.faults|=BadSensor;
   if(now<s.sampled_us||now-s.sampled_us>20000)o.faults|=Stale;
   if(s.clt_c>=115)o.faults|=OverTemp;
@@ -171,9 +184,11 @@ public:
   const bool cranking=was_crank_?s.rpm<t.cranking_rpm+100:s.rpm<t.cranking_rpm;
   if(was_crank_&&!cranking)started_=now;
   was_crank_=cranking;
+  if(cranking)afr_running_=false;
+  else if(!afr_running_){afr_started_=now;afr_running_=true;}
   o.state=cranking?State::Cranking:(s.clt_c<70?State::Warmup:State::Running);
-  o.ve_pct=lookup(t.ve,s.rpm,s.map_kpa);o.target_lambda=lookup(t.lambda,s.rpm,s.map_kpa);
-  const double raw_advance=cranking?t.crank_advance_deg:lookup(t.spark,s.rpm,s.map_kpa);
+  o.ve_pct=lookup(t.ve,s.rpm,model.coordinates[0]);o.target_lambda=finite(model.coordinates[2])?lookup(t.lambda,s.rpm,model.coordinates[2]):NAN;
+  const double raw_advance=cranking?t.crank_advance_deg:lookup(t.spark,s.rpm,model.coordinates[1]);
   const double retard=!cranking&&t.soft_limit_band>0&&s.rpm>t.rpm_limit-t.soft_limit_band?10*(s.rpm-(t.rpm_limit-t.soft_limit_band))/t.soft_limit_band:0;
   o.advance_deg=std::max(-5.0,raw_advance-retard);
   o.deadtime_ms=interpolate(t.battery_v,t.deadtime_ms,s.battery_v);
@@ -190,35 +205,41 @@ public:
    o.transient_enrichment=transient_control_.inhibit(t.transient_enrichment,transient::Reason::Legacy);
    if(!cranking&&dt>0){auto&d=o.transient_enrichment;d.values[transient::TpsDot]=static_cast<float>(rate);d.values[transient::WindowMs]=static_cast<float>(dt*1000);d.values[transient::CorrectionPct]=d.values[transient::UnclampedPct]=static_cast<float>(ae_*100);d.flags=finite(rate)?transient::RateValid:0;if(ae_>1.000001){d.phase=transient::Phase::Acceleration;d.flags|=transient::Active;}}
   }else{
-   ae_=1;transient::Input input{s.tps_pct,s.map_kpa,s.rpm,s.clt_c,s.sampled_us,!cranking&&!dfco_};
+   ae_=1;const bool optional_map=!(o.load_model.flags&load::MapRequired);
+   transient::Input input{s.tps_pct,s.map_qualified&&range(s.map_kpa,10,110)?s.map_kpa:NAN,s.rpm,s.clt_c,s.sampled_us,!cranking&&!dfco_,optional_map};
    o.transient_enrichment=transient_control_.step(t.transient_enrichment,input,now);o.accel=o.transient_enrichment.correction();
   }
   transient_evaluated=true;
-  const bool ego=t.ego_enabled&&s.lambda_ready&&range(s.lambda,.65,1.5)&&s.clt_c>=t.ego_min_clt&&!cranking&&!dfco_&&s.tps_pct<60&&o.afterstart<=1.001&&(legacy_transient?ae_<1.02:!o.transient_enrichment.active());
+  const bool ego=t.ego_enabled&&s.lambda_ready&&range(s.lambda,.65,1.5)&&s.clt_c>=t.ego_min_clt&&!cranking&&!dfco_&&o.ve_pct>0&&s.tps_pct<60&&o.afterstart<=1.001&&(legacy_transient?ae_<1.02:!o.transient_enrichment.active());
   if(ego){const double e=s.lambda/o.target_lambda-1;ego_i_=std::clamp(ego_i_+e*t.ego_ki*dt,-double(t.ego_limit),double(t.ego_limit));o.ego=std::clamp(1+e*t.ego_kp+ego_i_,1-double(t.ego_limit),1+double(t.ego_limit));}else ego_i_=0;
-  // Ideal-gas speed-density trapped mass per cylinder and four-stroke cycle.
-  o.air_mg=s.map_kpa*1000*(t.displacement_cc/t.cylinders*1e-6)*(o.ve_pct/100)/(287.05*(s.iat_c+273.15))*1e6;
-  double fuel_mg=o.air_mg/(t.stoich_afr*o.target_lambda)*o.warmup*o.afterstart*o.accel*o.ego;
+  // Modeled charge basis per cylinder/cycle. Pure Alpha-N uses100kPa;
+  // the original MAP path retains its input precision and operation order.
+  const double afr=load::afr_factor(o.load_model,t.load_model,o.target_lambda,s.lambda,s.lambda_ready,cranking,afr_running_&&now>=afr_started_?(now-afr_started_)/1e6:NAN);
+  o.air_mg=model.fuel_pressure_kpa*1000*(t.displacement_cc/t.cylinders*1e-6)*(o.ve_pct/100)/(287.05*(s.iat_c+273.15))*1e6;
+  const double base=t.load_model.afr==load::Afr::Target?o.air_mg/(t.stoich_afr*o.target_lambda)*o.warmup*o.afterstart*o.ego:o.air_mg/t.stoich_afr*afr*o.warmup*o.afterstart*o.ego;
+  double fuel_mg=t.load_model.afr==load::Afr::Target?o.air_mg/(t.stoich_afr*o.target_lambda)*o.warmup*o.afterstart*o.accel*o.ego:o.air_mg/t.stoich_afr*afr*o.warmup*o.afterstart*o.accel*o.ego;
+  if(base==0)o.load_model.flags|=load::ZeroBaseFuel;
   if(!legacy_transient&&t.transient_enrichment.apply==transient::Apply::AddReference&&o.transient_enrichment.phase==transient::Phase::Acceleration&&o.accel>1){
    // Reference adder is a full-cycle dose at100kPa,25C,100%VE,lambda1.
    // It is independent of current MAP/VE/WUE/EGO. Split by actual openings
    // below, scale the complete dose by cylinder trim, then add deadtime once.
-   const double base=o.air_mg/(t.stoich_afr*o.target_lambda)*o.warmup*o.afterstart*o.ego;
    const double reference=100000*(t.displacement_cc/t.cylinders*1e-6)/(287.05*298.15)*1e6/t.stoich_afr;
    const double added=reference*(o.accel-1);fuel_mg=base+added;
    o.transient_enrichment.values[transient::AddedFuelMg]=static_cast<float>(added);
-   o.accel=fuel_mg/base; // Scalar remains the effective untrimmed dose ratio.
+   o.accel=base>0?fuel_mg/base:NAN;
+   if(!finite(o.accel)||o.accel>std::numeric_limits<float>::max()){o.accel=NAN;o.load_model.flags|=load::AccelRatioUnavailable;}
   }
   const bool transient_cut=!legacy_transient&&o.transient_enrichment.phase==transient::Phase::Deceleration&&o.transient_enrichment.correction()==0;
+  const bool zero_fuel=transient_cut||fuel_mg==0;
   const double flow_mg_ms=t.injector_cc_min*t.fuel_density_g_cc/60;
   // Dead time belongs to each opening, not to the four-stroke fuel mass.
   const double openings=t.strategy==Strategy::Sequential?1:2;
   o.pulse_ms=fuel_mg/(openings*flow_mg_ms)+o.deadtime_ms;
   const double rev_ms=60000/s.rpm,interval_ms=rev_ms*(t.strategy==Strategy::Sequential?2:1);o.duty_pct=o.pulse_ms/interval_ms*100;
-  if(transient_cut){o.fuel_cut=true;o.pulse_ms=o.duty_pct=0;}
+  if(zero_fuel){o.fuel_cut=true;o.pulse_ms=o.duty_pct=0;}
   o.cylinder_data=true;o.cylinder_trims_enabled=t.cylinder_trims_enabled;
   for(unsigned cylinder=0;cylinder<4;++cylinder){
-   const double pct=t.cylinder_trims_enabled?lookup(t.cylinder_fuel[cylinder],s.rpm,s.map_kpa):100;
+   const double pct=t.cylinder_trims_enabled?lookup(t.cylinder_fuel[cylinder],s.rpm,model.coordinates[3]):100;
    const double demand=raw_advance+(t.cylinder_trims_enabled?t.cylinder_spark_deg[cylinder]:0);
    const double nominal=std::clamp(demand,-5.0,cranking?15.0:40.0);
    const double advance=nominal-retard;
@@ -226,7 +247,7 @@ public:
    o.cylinder_advance_deg[cylinder]=std::clamp(advance,-5.0,40.0);
    if(demand!=nominal)o.cylinder_spark_clamp_mask|=1U<<cylinder;
    if(advance!=o.cylinder_advance_deg[cylinder])o.cylinder_retard_floor_mask|=1U<<cylinder;
-   const double pulse=transient_cut?0:fuel_mg/(openings*flow_mg_ms)*(pct/100)+o.deadtime_ms;
+   const double pulse=zero_fuel?0:fuel_mg/(openings*flow_mg_ms)*(pct/100)+o.deadtime_ms;
    const double duty=pulse/interval_ms*100;
    o.cylinder_pulse_ms[cylinder]=pulse;o.cylinder_duty_pct[cylinder]=duty;
    if(!finite(pulse)||pulse>t.max_injection_ms||duty>t.max_duty*100)o.cylinder_capacity_mask|=1U<<cylinder;

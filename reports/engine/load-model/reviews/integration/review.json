@@ -1,0 +1,137 @@
+{
+  "review": "Independent load-model integration assessment",
+  "created_utc": "2026-11-04T06:58:13.440111+00:00",
+  "baseline_head": "1d6a9acb34838ea175f2dfa7ccd9786e96d2d11b",
+  "status": "review_complete_with_three_findings_closed",
+  "remaining_medium_high_findings": [],
+  "findings": [
+    {
+      "id": "INT-1",
+      "severity": "medium",
+      "title": "Browser accepted observation fields and magnitudes the native recorder rejected",
+      "status": "closed_on_reviewed_closure_bytes",
+      "location": "web/load_model_logic.js:checkObservation",
+      "evidence": [
+        "observation-parity-results.json",
+        "observation-cases.json",
+        "parity_probe.py",
+        "observation-parity.js"
+      ],
+      "detail": "Unknown fields, spark_load3.5e38, afr_factor1e300 and pressure_factor1e-300 passed the browser guard but failed native parse_observation. Browser collection could therefore advance its cursor for rows the native recorder rejected.",
+      "fix": "Parent added allowed-key checks, FLT_MAX magnitude checks and F32 positive-pressure qualification, then regenerated the web bundle.",
+      "closure": [
+        "closure2-parity-results.json",
+        "closure2-snapshot.json"
+      ],
+      "closure_result": "The valid observation still accepts; all four reproduced malformed variants reject at both boundaries. Reason mismatch and null evaluated AFR also reject. Root is responsible for the fresh full Chrome cursor-atomicity workflow."
+    },
+    {
+      "id": "INT-2",
+      "severity": "low",
+      "title": "Optional-MAP explanation hid an earlier required-input failure",
+      "status": "closed_on_reviewed_closure_bytes",
+      "location": "firmware/include/ecu/engine_binding.hpp:bind_inputs",
+      "evidence": [
+        "binding_probe.cpp",
+        "binding-results.txt"
+      ],
+      "detail": "With pure TPS and unavailable MAP, an unconfirmed CLT or capture overflow correctly produced sensors_valid=false and controller fault4, but the binding explanation only said MAP was unavailable and not required. This impaired fault tracing; it did not permit output.",
+      "fix": "Parent conditioned the optional-MAP explanation on the remaining inputs being valid and supplied explicit ADC/overflow reasons.",
+      "closure": [
+        "binding-closure-results.txt",
+        "binding_closure",
+        "closure2-snapshot.json"
+      ],
+      "closure_result": "ASan/UBSan probe now reports the required conversion failure for unconfirmed CLT and Capture overflow latched for overflow. Healthy pure TPS remains valid. Fault flags are unchanged."
+    },
+    {
+      "id": "INT-3",
+      "severity": "low",
+      "title": "Accepted noncanonical F32 fixture values formatted differently in browser and native MSL",
+      "status": "closed_on_reviewed_closure_bytes",
+      "location": "web/engine_logger.js:exportMsl LOAD_VALUES",
+      "evidence": [
+        "f32-export-results.json",
+        "f32_export_probe.py",
+        "f32-export-browser-input.json"
+      ],
+      "detail": "Both parsers accepted in-range F64 fixtures, but native storage quantized to F32 before formatting. fuel_load45.000002 became native45.0000038 versus browser45.000002, and baro_kpa100.0000045 became100.000008 versus100.000005. Actual native-produced F32 observations were unaffected.",
+      "fix": "Parent applied Math.fround to load values before the browser MSL numeric formatter and matched AFR negative-factor qualification at F32 precision.",
+      "closure": [
+        "f32-export-closure-results.json",
+        "f32_export_closure_probe.py",
+        "closure2-snapshot.json"
+      ],
+      "closure_result": "Independent rerun now produces equal native/browser numeric rows for the two reproductions, with no differing columns. Null/NaN remain unavailable."
+    }
+  ],
+  "checks": [
+    {
+      "name": "Independent dependency matrix",
+      "result": "pass",
+      "count": 2048,
+      "evidence": [
+        "config_matrix.py",
+        "config-matrix-results.json",
+        "config-cases.json"
+      ],
+      "scope": "Deterministic fuel/spark/lambda/trim sources, pressure normalization, auxiliary roles, fixed/live baro, AFR off/target/measured, EGO and trim activation, plus deliberately mismatched axis bases. Independent Python expected dependencies agree with frozen native full-tune acceptance and generated browser validateTune."
+    },
+    {
+      "name": "Authenticated variable-length packet matrix",
+      "result": "pass",
+      "count": 81,
+      "evidence": [
+        "packet_probe.py",
+        "packet-results.json"
+      ],
+      "scope": "All3fuel\u00d73spark\u00d73pressure\u00d73AFR combinations in batch mode. Native schema3 frames are250bytes with218 authenticated bytes and32-byte HMAC; schemas1/2 use232/200 when their legacy model can represent the observation and otherwise reject. The Python receiver decodes the source/pressure/AFR tags."
+    },
+    {
+      "name": "Real native tuning callbacks and file persistence",
+      "result": "pass",
+      "evidence": [
+        "tuning_probe.py",
+        "tuning-results.json"
+      ],
+      "scope": "5376-byte source/basis transition, coefficient1.25, measured-AFR delay12.25, stable origin1 across base revisions2/3, stale second writer rejection, invalid basis burn rejection, old/new reserved-region chunk rejection and single416-byte runtime response with423-byte envelope."
+    },
+    {
+      "name": "Binding and host layout under sanitizers",
+      "result": "pass",
+      "evidence": [
+        "binding_probe.cpp",
+        "binding-results.txt",
+        "binding-closure-results.txt"
+      ],
+      "scope": "Healthy optional-MAP TPS input, unrelated required CLT qualification failure and capture overflow remain correctly allowed/inhibited. ASan/UBSan compilation and execution passed.",
+      "host_bytes": {
+        "RuntimeSample": 400,
+        "Recorder": 106584,
+        "Session": 10320,
+        "Tune": 4860
+      }
+    },
+    {
+      "name": "Source inspection",
+      "result": "no_remaining_medium_or_high_integration_finding",
+      "scope": "Reviewed source meanings, source/basis metadata, legacy JSON/MSQ F32 coefficient bounds, inactive lambda/EGO dependencies, J16 role requirements, native/browser observation boundaries, log fields, reserved wire areas, atomic burn/CAS, dynamic radio length/HMAC and immutable repeated-snapshot payload extent. USB task uses the shared compile-time live size and1024-byte driver rings; the inspected USB policy restricts it to inhibited builds."
+    }
+  ],
+  "source_revisions": [
+    "snapshot.json",
+    "supplement.json",
+    "closure-snapshot.json",
+    "closure2-snapshot.json"
+  ],
+  "limitations": [
+    "Read-only production review with cache-only probes. Parent implemented the fixes. No engineering changes or subagents were made by this reviewer.",
+    "This review does not replace the earlier independent load core/Speeduino architecture assessments and does not claim those reports covered the newly added integration.",
+    "No fresh engine-plant/Speeduino comparison was performed for the new model, no TunerStudio/MegaLogViewer GUI acceptance was independently exercised here, and no target firmware resource/IRAM/stack/USB measurement was done here. Parent has these checks pending.",
+    "No flashing, eFuse, electrical, RF, timing, engine, vehicle, EMI/surge, thermal, splash or fit qualification was performed or implied. The full user goal remains unfinished.",
+    "The source was frozen before probes. At finish, the live engine_research_plant.py and test_load_ui.py had changed for the parent\u2019s continuing work; those new revisions are outside this review. Other reviewed paths match the recorded closure state."
+  ],
+  "external_dependency_hashes": "dependencies.json",
+  "environment": "environment.json",
+  "live_differences": "live-differences-at-finish.json"
+}

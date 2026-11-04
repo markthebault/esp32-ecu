@@ -2,7 +2,7 @@
 
 This development branch moves toward Speeduino feature coverage. The project remains an inhibited bench monitor. No tune, MSQ, API or button enables physical engine outputs. A3 manufacturing records and the A4 N16R8 fit draft are unchanged.
 
-The shared C++ core computes four-cylinder, four-stroke batch/wasted or [cam-synchronized sequential fuel and spark](engine-sequential.md). The ESP32 now has a [MCPWM/GPTimer timing executor](engine-target-timing.md), with virtual outputs in the selected N16R8 build. Its shared dispatcher also runs on the external research plant through a native ABI. Physical target timing remains unmeasured. The old constant-speed revolution planner is a diagnostic helper.
+The shared C++ core computes four-cylinder, four-stroke batch/wasted, timed semi-sequential or [cam-synchronized sequential fuel and spark](engine-sequential.md). The ESP32 now has a [MCPWM/GPTimer timing executor](engine-target-timing.md), with virtual outputs in the selected N16R8 build. Its shared dispatcher also runs on the external research plant through a native ABI. Physical target timing remains unmeasured. The old constant-speed revolution planner is a diagnostic helper.
 
 [Feature coverage](engine-feature-coverage.md) distinguishes implemented software from missing features and hardware. This is not full ECU parity.
 
@@ -21,7 +21,7 @@ python3 tools/run_engine_scenarios.py
 python3 tools/web_server.py --port 8765 --tuner-port 29000 --tuner-pty .cache/engine/shared-tuner-serial
 ```
 
-Use free ports and a new PTY path. Optional local tuning endpoints share the web simulator's in-process engine store. A standalone tuning server has its own store. Two processes must not write the same state file. These host transports do not attach to physical serial ports or GPIO. The selected web firmware also has a separate [native USB tuning service](engine-usb-tuning.md); online TunerStudio still rejects our own controller identity.
+Use free ports and a new PTY path. Optional local tuning endpoints share the web simulator's in-process engine store. A standalone tuning server has its own store. Two processes must not write the same state file. These host transports do not attach to physical serial ports or GPIO. The selected web firmware also has a separate [native USB tuning service](engine-usb-tuning.md); online TunerStudio identity acceptance remains unresolved; own008 was checked offline.
 
 Open `http://127.0.0.1:8765` and select **Engine development**. Settings, coolant/battery curves, all three16×16 maps and sequential [individual cylinder trims](engine-cylinder-trims.md) are editable. Host and ESP32 use the same C++ tune validator. Engine storage/revision is separate from sensor profiles. Conflicting writers must reload. Malformed documents returned by storage block application writes. Host files are retained on validation failure; the application never asks NVS to erase a partition. NVS recovery may discard physically damaged entries, so raw corrupt flash preservation is not guaranteed.
 
@@ -89,3 +89,5 @@ Before engine actuation, required work includes physical target timer/ISR measur
 The [semi-sequential increment](engine-semi-sequential.md) adds the current schema5/own006 strategy and negotiated engine-radio schema2. Earlier identities/evidence described here remain historical records; byte offsets, CAS, bounded logging and selected physical-output inhibition are retained.
 
 Current [transient fueling development](engine-transient-enrichment.md) uses schema6/own007, one5120-byte tune page and a320-byte runtime block, with105-field engine MSL004 and62-field direct SIL MSL004. Earlier layout/evidence descriptions in this document are historical. Selected physical-output policy and online vendor limits remain unchanged.
+
+[Load-source development](engine-load-model.md) adds independent MAP/TPS/IMAP-EMAP coordinates, pressure/AFR choices, explicit table units, optional J16 absolute-pressure roles and matching UI/tuning/log/screen contracts. The selected physical-output policy and wider feature/qualification gaps remain open.

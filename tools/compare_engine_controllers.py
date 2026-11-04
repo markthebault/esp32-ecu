@@ -78,7 +78,7 @@ class OurController:
     def close(self):self.runtime.close()
 
 
-def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32,idle_options=None,semi_sequential=False,target_dispatcher=False,transient_options=None):
+def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32,idle_options=None,semi_sequential=False,target_dispatcher=False,transient_options=None,load_options=None):
     if sequential and semi_sequential:raise ValueError('Conflicting cycle profiles')
     if target_dispatcher and controller!='ours':raise ValueError('Target dispatcher applies only to the project')
     if tune is not None and not sequential and not semi_sequential:
@@ -95,7 +95,10 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
         transient_options=copy.deepcopy(transient_options)
         if controller=='ours':
             tune=copy.deepcopy(tune or benchmark_tune());tune['transient_enrichment']=transient_options['config']
-    plant=ResearchPlant(cold=scenario=='idle_cold_start' or bool(transient_options and transient_options.get('cold')),idle_valve=idle_options.get('valve_mode','normal') if idle else None)
+    if load_options is not None:
+        load_options=copy.deepcopy(load_options);load_tune=load_options['tune']
+        if controller=='ours':tune=copy.deepcopy(load_tune)
+    plant=ResearchPlant(cold=scenario=='idle_cold_start' or bool(transient_options and transient_options.get('cold')),idle_valve=idle_options.get('valve_mode','normal') if idle else None,**(dict(ambient_kpa=load_options.get('ambient_kpa',100)) if load_options is not None else {}))
     if (sequential or semi_sequential) and controller=='ours':
         tune=copy.deepcopy(tune or benchmark_tune());tune['strategy']='sequential_4cyl' if sequential else 'semi_sequential_4cyl'
     try:ecu=(OurController(tune,target_dispatcher=True) if target_dispatcher else OurController(tune)) if controller=='ours' else SpeeduinoRuntime(per_tooth=controller=='speeduino_per_tooth',sequential=sequential,timer_bits=reference_timer_bits,semi_sequential=semi_sequential)
@@ -131,6 +134,7 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
             plant.spark_errors[-1].update(mode)
     try:
         if transient_options is not None and controller!='ours':ecu.configure_transient(transient_options['config'],map_sampling=transient_options.get('reference_map_sampling',0))
+        if load_options is not None and controller!='ours':ecu.configure_load(load_tune)
         while now<round(duration*1e6):
             t=now/1e6
             plant.tps=(12 if scenario=='throttle_step' else 100) if t>=3 and scenario in ('throttle_step','overrev') else 0
@@ -150,6 +154,16 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                 sample=plant.sample(t)
                 if scenario=='sensor_short' and 4<t<5:sample['map_kpa']=0
                 if scenario=='transient_noise' and 3<=t<5:sample['tps_pct']+=.2 if (now//20000)%2 else 0
+                if load_options is not None:
+                    c=load_tune['load_model'];baro=load_options.get('ambient_kpa',100) if c['baro_source']=='aux' else c['fixed_baro_kpa'];emap=load_options.get('emap_kpa',100)
+                    if controller=='ours':sample.update(aux_pressure_kpa=emap if c['aux_role']=='emap' else load_options.get('ambient_kpa',100),aux_pressure_qualified=c['aux_role']!='postcat_monitor')
+                    else:ecu.pressures(emap,baro)
+                    interval=load_options.get('map_unavailable_window')
+                    if interval and interval[0]<=t<interval[1]:
+                        sample['map_kpa']=None if controller=='ours' else 0
+                        if controller=='ours':sample['map_qualified']=False
+                    interval=load_options.get('known_overpressure_window')
+                    if interval and interval[0]<=t<interval[1]:sample['map_kpa']=115
                 if controller=='ours':
                     if ecu.sample(sample,now):inhibit(now,'control')
                     state=copy.deepcopy(ecu.status)
@@ -157,6 +171,7 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                 else:
                     ecu.sensors(sample);state=ecu.status()
                     if transient_options is not None:state['transient_enrichment']=ecu.transient_status()
+                    if load_options is not None:state['load_model']=ecu.load_status()
                 if idle:
                     state['idle_valve']=plant.idle_valve.snapshot()
                     state['idle_pwm']=ecu.runtime.idle_status() if controller=='ours' else ecu.idle_status()
@@ -277,12 +292,15 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
         if transient_options is not None:
             summary['transient_profile']=dict(requested=transient_options,reference=ecu.transient_profile if controller!='ours' else None)
             summary['transient_scope']='Independent fixed plant, executed actuator edges only; empirical wall film, no calibration or physical qualification'
+        if load_options is not None:
+            summary['load_profile']=dict(requested=load_options,reference=ecu.load_profile if controller!='ours' else None)
+            summary['load_scope']='Declared source/pressure/AFR fixture; FMU ambient pressure is a physical parameter, EMAP is an exogenous sensor stimulus with no exhaust dynamics; pulse-driven empirical combustion; no calibration or physical qualification'
         if controller=='ours' and gap_start is not None:
             last=max((r for r in accepted_crank if r[0]<=gap_start),default=None)
             summary['dropout_accepted_crank_watchdog']=dict(last_accepted_us=last[0],timeout_us=last[1],deadline_us=last[0]+last[1],basis='Native production decoder timeout at last successfully accepted plan; period*(missing+2)*2 clamped20..150ms') if last else None
         return dict(summary=summary,trace=trace,edges=edges_all,injection_timing=injection_timing,triggers=trigger_edges,
                     accepted_crank_watchdogs=accepted_crank,cams=cam_edges,spark_timing=plant.spark_errors,dwell=plant.dwell_events,final_ecu=state,
-                    **(dict(combustions=plant.cylinder_combustions) if transient_options is not None else {}))
+                    **(dict(combustions=plant.cylinder_combustions) if transient_options is not None or load_options is not None else {}))
     finally:
         ecu.close();plant.close()
 

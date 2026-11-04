@@ -1,5 +1,5 @@
 {
-  "guide_version": "1.5",
+  "guide_version": "1.6",
   "sources_append": [
     {
       "title": "Vishay 6N137 optical input/detector data",
@@ -69,5 +69,17 @@
   "trigger_expected": [
     "The decoder uses rising edges. Trigger logging records both polarities on separate diagnostic capture channels. Both Hall paths use two Schmitt inversions, preserving the input polarity.",
     "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Batch/wasted and semi-sequential use crank only. Full sequential requires one rising cam pulse per720 degrees and two repeatable observations; phase loss after acquisition cuts and latches until a supervised stop. Confirm mechanical cylinder1 compression reference independently."
-  ]
+  ],
+  "sensor_append": {
+    "postcat": {
+      "checks": [
+        "Optional engine EMAP or baro role: disconnect the postcat buffer and assign J16 in Engine development. Connect one suitable absolute-pressure sensor: pin 1 ground, pin 2 protected 5 V only if its supply specification permits, pin 3 conditioned 0-5 V output. Do not parallel two signals.",
+        "Calibrate the postcat channel in exact unit kPa using a measured linear or table conversion, then confirm it. EMAP requires20..500 kPa absolute; baro requires50..110 kPa absolute. The about55 kohm input load and shared supply/current budget still apply. A voltage reading with a kPa label is not a pressure calibration."
+      ],
+      "expected": [
+        "The default engine role is postcat_monitor. An explicit EMAP or live baro assignment reuses this existing protected ADC channel, with no extra simultaneous channel. EMAP plus live baro requires an additional input path that is not implemented. No zero-RPM ambient capture is inferred.",
+        "Keep an exhaust-pressure transducer within its temperature rating with appropriate remote tubing. Pressure/thermal installation remains unqualified. Engine status, recorded logs and own008 tuning diagnostics identify the selected source, pressure normalization and unknown readings. Physical outputs remain inhibited."
+      ]
+    }
+  }
 }

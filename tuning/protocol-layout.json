@@ -1,7 +1,7 @@
 {
-  "signature": "ESP32ECU DEV 007 INHIBITED",
+  "signature": "ESP32ECU DEV 008 INHIBITED",
   "pages": {
-    "1": 5120
+    "1": 5376
   },
   "numeric_fields": [
     [
@@ -226,6 +226,123 @@
     "aeRemainingAtSampleMs",
     "aeAddedFuelMg"
   ],
+  "load_enum_offsets": {
+    "fuel_source": 5120,
+    "spark_source": 5124,
+    "lambda_source": 5128,
+    "trim_source": 5132,
+    "pressure": 5136,
+    "aux_role": 5140,
+    "baro_source": 5144,
+    "ve_axis": 5148,
+    "spark_axis": 5152,
+    "lambda_axis": 5156,
+    "trim_axis": 5160,
+    "afr": 5164
+  },
+  "load_scalar_offsets": {
+    "fixed_baro_kpa": 5168,
+    "afr_delay_s": 5172
+  },
+  "load_enums": {
+    "fuel_source": [
+      "map",
+      "tps",
+      "imap_emap"
+    ],
+    "spark_source": [
+      "map",
+      "tps",
+      "imap_emap"
+    ],
+    "lambda_source": [
+      "map",
+      "tps",
+      "imap_emap",
+      "follow_fuel"
+    ],
+    "trim_source": [
+      "map",
+      "tps",
+      "imap_emap",
+      "follow_fuel"
+    ],
+    "pressure": [
+      "none",
+      "map_100kpa",
+      "map_baro"
+    ],
+    "aux_role": [
+      "postcat_monitor",
+      "emap",
+      "baro"
+    ],
+    "baro_source": [
+      "fixed",
+      "aux"
+    ],
+    "ve_axis": [
+      "map_kpa",
+      "tps_pct",
+      "imap_emap_pct"
+    ],
+    "spark_axis": [
+      "map_kpa",
+      "tps_pct",
+      "imap_emap_pct"
+    ],
+    "lambda_axis": [
+      "map_kpa",
+      "tps_pct",
+      "imap_emap_pct"
+    ],
+    "trim_axis": [
+      "map_kpa",
+      "tps_pct",
+      "imap_emap_pct"
+    ],
+    "afr": [
+      "off",
+      "target",
+      "measured"
+    ]
+  },
+  "load_live_offset": 320,
+  "load_live_values": [
+    "fuel_load",
+    "spark_load",
+    "lambda_load",
+    "trim_load",
+    "pressure_factor",
+    "baro_kpa",
+    "emap_kpa",
+    "aux_kpa",
+    "afr_factor"
+  ],
+  "load_live_fields": [
+    "loadFuel",
+    "loadSpark",
+    "loadLambda",
+    "loadTrim",
+    "loadPressureFactor",
+    "loadBaro",
+    "loadEmap",
+    "loadAux",
+    "loadAfrFactor"
+  ],
+  "load_afr_states": [
+    "off",
+    "target_incorporation",
+    "running_delay",
+    "cranking_neutral",
+    "wideband_unavailable",
+    "measured_ratio",
+    "invalid_target",
+    "running_clock_unavailable"
+  ],
+  "load_flag_available_bit": 16,
+  "load_flag_afr_available_bit": 17,
+  "load_reason_shift": 24,
   "live_fields": [
     "time",
     "rpm",
@@ -239,7 +356,7 @@
     "target_lambda",
     "ego"
   ],
-  "live_block_bytes": 320,
+  "live_block_bytes": 416,
   "timing_fields": [
     [
       "injection_end_deg",

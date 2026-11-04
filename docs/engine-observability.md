@@ -67,3 +67,5 @@ The [idle update](engine-idle-control.md) documents the additive `idle.available
 The [semi-sequential increment](engine-semi-sequential.md) adds the current schema5/own006 strategy and negotiated engine-radio schema2. Earlier identities/evidence described here remain historical records; byte offsets, CAS, bounded logging and selected physical-output inhibition are retained.
 
 Current [transient fueling development](engine-transient-enrichment.md) uses schema6/own007, one5120-byte tune page and a320-byte runtime block, with105-field engine MSL004 and62-field direct SIL MSL004. Earlier layout/evidence descriptions in this document are historical. Selected physical-output policy and online vendor limits remain unchanged.
+
+Current [load-model development](engine-load-model.md) adds the source-tagged `load_model` object,126-column engine and83-column direct SIL MSL005, own0085376/416-byte tuning and negotiated250-byte engine-radio schema3. Earlier packet/log/identity descriptions above are historical; their source/report bytes are preserved. Availability and null/NaN semantics remain explicit.

@@ -4,11 +4,17 @@
 #include <limits>
 
 namespace ecu::radio::wire {
-constexpr unsigned capability_size=76,capability_reply_size=108,engine_size=232,engine_body_size=200,engine_ack_size=56;
-constexpr std::uint32_t engine_feature=1,engine_schema=2;
-inline bool engine_schema_valid(std::uint32_t schema){return schema==1||schema==2;}
+constexpr unsigned capability_size=76,capability_reply_size=108,engine_size=250,engine_body_size=218,engine_ack_size=56;
+constexpr std::uint32_t engine_feature=1,engine_schema=3;
+inline bool engine_schema_valid(std::uint32_t schema){return schema>=1&&schema<=3;}
+inline unsigned engine_frame_size(std::uint32_t schema){return engine_schema_valid(schema)?(schema<3?232:250):0;}
+inline unsigned engine_frame_body_size(std::uint32_t schema){return engine_schema_valid(schema)?engine_frame_size(schema)-32:0;}
+inline bool legacy_load_model(const engine::RuntimeSample&r){
+ const auto&o=r.load_model;
+ return !o.available||(o.fuel==load::Source::Map&&o.spark==load::Source::Map&&o.lambda==load::Source::Map&&o.trim==load::Source::Map&&o.pressure==load::Pressure::MapReference&&o.afr==load::Afr::Target&&o.aux_role==load::AuxRole::PostcatMonitor);
+}
 inline bool engine_schema_supports(std::uint32_t schema,const engine::RuntimeSample&r){
- return engine_schema_valid(schema)&&r.strategy<=(schema==1?1:2)&&r.timing_fault<=(schema==1?16:17)&&r.last_timing_fault<=(schema==1?16:17);
+ return engine_schema_valid(schema)&&r.strategy<=(schema==1?1:2)&&r.timing_fault<=(schema==1?16:17)&&r.last_timing_fault<=(schema==1?16:17)&&(schema>=3||legacy_load_model(r));
 }
 static_assert(engine_size<=max_packet&&capability_reply_size<=max_packet);
 static_assert(engine::input_count==8&&engine::proposal_count==14,"Schema1 base frame must not grow into its HMAC");
@@ -73,7 +79,7 @@ inline std::uint32_t transmitted_age(std::uint64_t gp_age_us,std::uint64_t publi
 }
 inline bool engine_body(std::uint8_t*p,const engine::RuntimeSample&r,std::uint32_t session,std::uint64_t packet_sequence,std::uint32_t sample_age_ms,std::uint32_t control_age_ms,std::uint32_t worker_age_ms,std::uint64_t sent_esp_us,std::uint32_t schema=engine_schema){
  if(!session||!r.has(engine::Present)||!r.sequence||(r.source!=engine::DataSource::Target&&r.source!=engine::DataSource::Synthetic)||!packet_sequence||r.state>5||!engine_schema_supports(schema,r)||r.phase_reason>9||(r.board_flags&~15))return false;
- std::memset(p,0,engine_size);header(p,EngineTelemetry,engine_size);u32(p+8,session);u64(p+12,packet_sequence);u16(p+20,schema);
+ const auto size=engine_frame_size(schema);std::memset(p,0,size);header(p,EngineTelemetry,size);u32(p+8,session);u64(p+12,packet_sequence);u16(p+20,schema);
  auto flags=static_cast<std::uint16_t>(r.flags&~engine::DisplayFresh);
  if(sample_age_ms<=1000&&control_age_ms<=1000)flags|=engine::DisplayFresh;
  u16(p+22,flags);u32(p+24,sample_age_ms);u32(p+28,control_age_ms);u32(p+32,r.tune_revision);u32(p+36,r.sensor_revision);
@@ -84,6 +90,12 @@ inline bool engine_body(std::uint8_t*p,const engine::RuntimeSample&r,std::uint32
  u64(p+92,sent_esp_us);u32(p+100,r.worker_tune_revision);u32(p+104,r.worker_sensor_revision);u32(p+108,worker_age_ms);
  for(unsigned i=0;i<engine::input_count;++i)f32(p+112+i*4,(r.input_valid&(1U<<i))?r.inputs[i]:NAN);
  for(unsigned i=0;i<engine::proposal_count;++i)f32(p+144+i*4,r.proposals[i]);
- return true; // Caller appends HMAC-SHA256(key32,p,200) at offset200.
+ if(schema>=3){
+  const auto&o=r.load_model;const bool known=o.available&&r.has(engine::Present);
+  p[200]=static_cast<unsigned>(o.fuel)|(static_cast<unsigned>(o.spark)<<2)|(static_cast<unsigned>(o.lambda)<<4)|(static_cast<unsigned>(o.trim)<<6);
+  p[201]=static_cast<unsigned>(o.pressure)|(static_cast<unsigned>(o.baro_source)<<2)|(unsigned(known)<<3)|(unsigned(known&&bool(o.flags&load::ArithmeticValid))<<4)|(static_cast<unsigned>(o.afr)<<5)|(unsigned(known&&bool(o.flags&load::PressureGuardAvailable))<<7);
+  for(unsigned i=0;i<4;++i){constexpr unsigned values[]={load::FuelLoad,load::AfrFactor,load::BaroKpa,load::EmapKpa};f32(p+202+i*4,known?o.values[values[i]]:NAN);}
+ }
+ return true; // Caller appends32-byte HMAC at the selected schema's body end.
 }
 }

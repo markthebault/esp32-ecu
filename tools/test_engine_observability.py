@@ -36,7 +36,7 @@ class ObservationTests(unittest.TestCase):
  def setUp(self):self.native=EngineRecorder()
  def tearDown(self):self.native.close()
  def negotiate(self,receiver=None,features=True,boot=BOOT,now=100):
-  r=receiver or EngineReceiver(MAC,LMK)
+  r=receiver or EngineReceiver(MAC,LMK,schema=2)
   query=r.query(now,bytes([1])*16)
   reply=self.native.capability_reply(query,LMK,SESSION,boot,FLOOR,5000000)
   r.receive_reply(reply,MAC,now+10)
@@ -45,7 +45,7 @@ class ObservationTests(unittest.TestCase):
    reply=self.native.capability_reply(update,LMK,SESSION,boot,FLOOR,5010000)
    r.receive_reply(reply,MAC,now+25)
   return r
- def frame(self,s=None,seq=FLOOR+1,**kw):return self.native.frame(s or self.sample,LMK,BOOT,SESSION,seq,sent=kw.pop('sent',5030000),**kw)
+ def frame(self,s=None,seq=FLOOR+1,**kw):return self.native.frame(s or self.sample,LMK,BOOT,SESSION,seq,sent=kw.pop('sent',5030000),schema=kw.pop('schema',2),**kw)
  def test_actual_core_snapshot_preserves_inputs_proposals_and_unknown_lambda(self):
   s=self.sample;self.assertEqual(s['source_code'],2);self.assertEqual(s['inputs']['rpm'],1234)
   self.assertAlmostEqual(s['inputs']['tps_pct'],12.5);self.assertIsNone(s['inputs']['lambda'])
@@ -68,11 +68,11 @@ class ObservationTests(unittest.TestCase):
   self.assertFalse(hmac.compare_digest(frame[200:],hmac.digest(key[:16],frame[:200],'sha256')))
  def test_capability_retries_counter_conflicts_and_query_recovery(self):
   r=self.negotiate();self.assertEqual(r.counter,1);self.assertEqual(r.features,1)
-  request=capability_request(LMK,SESSION,1,1,bytes([2])*16)
+  request=capability_request(LMK,SESSION,1,1,bytes([2])*16,schema=2)
   self.native.capability_reply(request,LMK,SESSION,BOOT,FLOOR,5010000)
   for old in [capability_request(LMK,SESSION,1,1,bytes([3])*16),capability_request(LMK,SESSION+1,2,0,bytes([4])*16),request[:-1]+bytes([request[-1]^1])]:
    with self.assertRaises(ValueError):self.native.capability_reply(old,LMK,SESSION,BOOT,FLOOR,5010000)
-  restarted=EngineReceiver(MAC,LMK);self.negotiate(restarted)
+  restarted=EngineReceiver(MAC,LMK,schema=2);self.negotiate(restarted)
   self.assertEqual(restarted.counter,1);update=restarted.update(False,130,bytes([3])*16)
   self.assertEqual(restarted.retry(),update)
   restarted.receive_reply(self.native.capability_reply(update,LMK,SESSION,BOOT,FLOOR,5020000),MAC,135)
@@ -80,7 +80,7 @@ class ObservationTests(unittest.TestCase):
   self.native.reset_capabilities();q=capability_request(LMK,nonce=bytes([9])*16)
   self.assertEqual(capability_reply(self.native.capability_reply(q,LMK,SESSION,BOOT,0,0),LMK,bytes([9])*16)['counter'],0)
  def test_authenticated_nonce_reply_must_match_request_and_deadline(self):
-  r=EngineReceiver(MAC,LMK);q=r.query(100,bytes([1])*16)
+  r=EngineReceiver(MAC,LMK,schema=2);q=r.query(100,bytes([1])*16)
   reply=self.native.capability_reply(q,LMK,SESSION,BOOT,FLOOR,5000000)
   for packet,mac,stamp in [(reply[:-1]+bytes([reply[-1]^1]),MAC,110),(reply,'02:EC:00:00:00:02',110),(reply,MAC,1101)]:
    with self.assertRaises(ValueError):r.receive_reply(packet,mac,stamp)
@@ -94,7 +94,7 @@ class ObservationTests(unittest.TestCase):
   with self.assertRaisesRegex(ValueError,'Stale gap'):r.receive(self.frame(seq=FLOOR+2,sent=6100000),MAC,1200)
   with self.assertRaisesRegex(ValueError,'clock query'):r.receive(self.frame(seq=FLOOR+2,sent=10000000),MAC,5200)
  def test_slow_source_clock_history_cannot_cross_freshness_threshold(self):
-  r=EngineReceiver(MAC,LMK);q=r.query(0,bytes([1])*16)
+  r=EngineReceiver(MAC,LMK,schema=2);q=r.query(0,bytes([1])*16)
   r.receive_reply(self.native.capability_reply(q,LMK,SESSION,BOOT,FLOOR,5000000),MAC,0)
   update=r.update(True,0,bytes([2])*16)
   r.receive_reply(self.native.capability_reply(update,LMK,SESSION,BOOT,FLOOR,5000000),MAC,0)
@@ -115,7 +115,7 @@ class ObservationTests(unittest.TestCase):
   old=self.frame();self.native.reset_capabilities();boot=bytes([55])*16
   r=self.negotiate(boot=boot)
   with self.assertRaisesRegex(ValueError,'authentication'):r.receive(old,MAC,150)
-  new=self.native.frame(self.sample,LMK,boot,SESSION,FLOOR+1,sent=5030000)
+  new=self.native.frame(self.sample,LMK,boot,SESSION,FLOOR+1,sent=5030000,schema=2)
   r.receive(new,MAC,150);self.assertTrue(r.status(150)['fresh'])
  def test_each_tampered_byte_fails_without_advancing_receiver_state(self):
   r=self.negotiate();frame=self.frame()
@@ -167,12 +167,12 @@ class ObservationTests(unittest.TestCase):
    self.assertEqual(self.native.command(body,0),422)
   bad=copy.deepcopy(self.sample);bad['sequence']='18446744073709551616'
   with self.assertRaises(ValueError):self.native.append(bad,0)
- def test_msl_has_equal_105_columns_and_unknown_values_are_nan(self):
+ def test_msl_has_equal_126_columns_and_unknown_values_are_nan(self):
   self.native.command(dict(action='start',period_ms=20,duration_s=1),0);self.native.append(self.sample,0)
   with self.assertRaises(ValueError):self.native.msl(1)
   self.native.command(dict(action='stop',log_id=1),1000)
   text=self.native.msl(1);rows=list(csv.reader(io.StringIO(text),delimiter='\t'))
-  self.assertIn('SYNTHETIC ENGINE REPLAY',text);self.assertEqual([len(r) for r in rows[2:]],[105,105,105])
+  self.assertIn('SYNTHETIC ENGINE REPLAY',text);self.assertEqual([len(r) for r in rows[2:]],[126,126,126])
   record=dict(zip(rows[2],rows[4]));self.assertEqual(record['SnapshotSequence'],str(2**53+1));self.assertEqual(record['Lambda'],'NaN');self.assertEqual(record['ADC0'],'NaN')
  def test_completed_sil_replay_preserves_original_revisions_after_tune_save(self):
   with tempfile.TemporaryDirectory() as directory:

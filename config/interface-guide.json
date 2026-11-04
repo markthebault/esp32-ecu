@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "guide_version": "1.5",
+  "guide_version": "1.6",
   "hardware_revision": "A3-120",
   "scope": "Bench configuration and diagnostics. Physical engine outputs remain inhibited; no vehicle qualification.",
   "general": [
@@ -235,10 +235,14 @@
       "checks": [
         "Connect only the buffer's conditioned 0-5 V output to pin 3 and its analog reference to pin 1. Leave pin 2 empty unless the buffer specifically permits this supply within the shared current budget.",
         "Do not connect heater wires, a raw wideband sensor, or assume every raw narrowband output can tolerate this load.",
-        "Compare the buffer output with a meter; enter its transfer curve or retain voltage display."
+        "Compare the buffer output with a meter; enter its transfer curve or retain voltage display.",
+        "Optional engine EMAP or baro role: disconnect the postcat buffer and assign J16 in Engine development. Connect one suitable absolute-pressure sensor: pin 1 ground, pin 2 protected 5 V only if its supply specification permits, pin 3 conditioned 0-5 V output. Do not parallel two signals.",
+        "Calibrate the postcat channel in exact unit kPa using a measured linear or table conversion, then confirm it. EMAP requires20..500 kPa absolute; baro requires50..110 kPa absolute. The about55 kohm input load and shared supply/current budget still apply. A voltage reading with a kPa label is not a pressure calibration."
       ],
       "expected": [
-        "Voltage is the directly supported diagnostic. This firmware does not implement catalyst-efficiency monitoring, emissions readiness or OEM rear-sensor diagnostics."
+        "Voltage is the directly supported diagnostic. This firmware does not implement catalyst-efficiency monitoring, emissions readiness or OEM rear-sensor diagnostics.",
+        "The default engine role is postcat_monitor. An explicit EMAP or live baro assignment reuses this existing protected ADC channel, with no extra simultaneous channel. EMAP plus live baro requires an additional input path that is not implemented. No zero-RPM ambient capture is inferred.",
+        "Keep an exhaust-pressure transducer within its temperature rating with appropriate remote tubing. Pressure/thermal installation remains unqualified. Engine status, recorded logs and own008 tuning diagnostics identify the selected source, pressure normalization and unknown readings. Physical outputs remain inhibited."
       ],
       "faults": [
         "Signal changes when shared with OEM ECU: stop and review input loading and the buffer interface.",
