@@ -71,7 +71,7 @@ for l in syms.splitlines():
 addresses=sorted(functions)
 for i,a in enumerate(addresses[:-1]):
  if not functions[a]['size']:functions[a]['size']=addresses[i+1]-a
-roots=[a for a,f in functions.items() if f['name'].startswith('ecu::engine_target::') and any('::'+name+'(' in f['name'] for name in ('on_capture','on_alarm','on_trigger_capture')) or f['name'] in ('gptimer_default_isr','mcpwm_capture_default_isr')]
+roots=[a for a,f in functions.items() if f['name'].startswith('ecu::engine_target::') and any('::'+name+'(' in f['name'] for name in ('on_capture','on_alarm','on_trigger_capture','on_flex_capture')) or f['name'] in ('gptimer_default_isr','mcpwm_capture_default_isr')]
 instructions={};audit=[];queue=list(roots);seen=set();external=[];indirect=[];bad_lit=[];bad_loaded=[];dumps=[]
 def section_for(a):
  for n,h in sections.items():
@@ -152,7 +152,14 @@ print(json.dumps({'elf_sha256':report['elf_sha256'],'functions':len(audit),'exte
  'assertion_argument_only':len(metadata),'unclassified_flash_pointers':unclassified},indent=2))
 
 failures=[]
-if len(roots) not in (4,5):failures.append('Expected two timing callbacks, optional diagnostic callback and both registered driver ISR roots')
+if len(roots) not in (4,5,6):failures.append('Expected two timing callbacks, optional diagnostic/flex callbacks and both registered driver ISR roots')
+floating=[]
+for address,ins in instructions.items():
+ for x in ins:
+  op=x['instruction'].split()[0]
+  if op.endswith(('.s','.d')) or op in ('rfr','wfr','lsi','lsiu','ssi','ssiu'):
+   floating.append(dict(caller=functions[address]['name'],pc=hex(x['pc']),instruction=x['instruction']))
+if floating:failures.append('Floating-point instruction in ISR closure')
 for required in ('::on_capture(','::on_alarm(','gptimer_default_isr','mcpwm_capture_default_isr'):
  if not any(required in functions[a]['name'] for a in roots):failures.append('Missing required ISR root: '+required)
 for function in audit:
@@ -172,6 +179,12 @@ for line in syms.splitlines():
  m=re.match(r'^([0-9a-f]+) ([0-9a-f]+) ([bBdDrR]) (.*)$',line)
  if m and m[4] in ('ecu::engine_target::(anonymous namespace)::executor',
                     'ecu::engine_target::(anonymous namespace)::capture_clock',
+                    'ecu::engine_target::(anonymous namespace)::flex_port',
+                    'ecu::engine_target::(anonymous namespace)::flex_command_ticket',
+                    'ecu::engine_target::(anonymous namespace)::flex_command_live',
+                    'ecu::engine_target::(anonymous namespace)::flex_channel_owned',
+                    'ecu::engine_target::(anonymous namespace)::idle_executor',
+                    'ecu::engine_target::(anonymous namespace)::idle_output',
                     'ecu::engine_target::(anonymous namespace)::trigger_capture',
                     'ecu::engine_target::(anonymous namespace)::trigger_clock',
                     'ecu::engine_target::(anonymous namespace)::cam_context',
@@ -188,11 +201,13 @@ for line in syms.splitlines():
   address=int(m[1],16);section=section_for(address)
   data.append(dict(name=m[4],address=hex(address),section=section))
   if not section.startswith('.dram'):failures.append('ISR state outside internal DRAM: '+m[4])
-required_state={'executor','capture_clock','output','lock','external_epoch','installed_alarm','measured','configuration_hold','commands','captures','timer','cam_context'}
+required_state={'executor','capture_clock','output','lock','external_epoch','installed_alarm','measured','configuration_hold','commands','captures','timer','cam_context','idle_executor','idle_output'}
 if any('::on_trigger_capture(' in functions[a]['name'] for a in roots):required_state|={'trigger_capture','trigger_clock'}
+if any('::on_flex_capture(' in functions[a]['name'] for a in roots):required_state|={'flex_port','flex_command_ticket','flex_command_live','flex_channel_owned'}
 present={row['name'].split('::')[-1] for row in data}
 for missing in sorted(required_state-present):failures.append('Required ISR state symbol not found: '+missing)
-report.update(passed_static_placement=not failures,failures=failures,data_symbols=data,
+if 'flex_port' in present and not any('::on_flex_capture(' in functions[a]['name'] for a in roots):failures.append('Flex state present without registered callback root')
+report.update(passed_static_placement=not failures,failures=failures,data_symbols=data,floating_point_instructions=floating,
  qualification='Static placement assistance only; assertion-only metadata is separately classified, not hidden. Driver callback targets matched to source registration. Heap allocation, indirect data accesses and physical timing require separate review/evidence.')
 (out/'closure.json').write_text(json.dumps(report,indent=2)+'\n')
 print('Static placement checks:', 'PASS' if not failures else 'FAIL',failures)

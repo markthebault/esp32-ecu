@@ -1,0 +1,34 @@
+{
+  "compile_command": [
+    "c++",
+    "-std=c++17",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-pedantic",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-MMD",
+    "-MF",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/fp-queue-003.d",
+    "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/fp_queue_probe.cpp",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/fp-queue-003"
+  ],
+  "compile_returncode": 0,
+  "compile_stderr": "",
+  "run_returncode": 0,
+  "stdout": "{\"same_ingress_version\":true,\"old_allowed_during_Capture_fault\":false,\"old_allowed_after_raw_recovery\":false,\"new_allowed_after_recovery\":true,\"Capture_fault_generation\":1}\n",
+  "stderr": "",
+  "probe_source_sha256": "98a12b58076c7162ce927fac947365380d1bca2771848cbb6c1dbd7826c3233c",
+  "source_freeze_manifest_sha256": "2142e9acc748de86bbfb4fc1f40507907671dcf094a41f1cee990adaad6f1722",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  }
+}

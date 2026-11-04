@@ -1,0 +1,34 @@
+{
+  "compile_command": [
+    "c++",
+    "-std=c++17",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-pedantic",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-MMD",
+    "-MF",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/publication-floor-001.d",
+    "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-004/firmware/include",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/publication_floor_probe.cpp",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/publication-floor-001"
+  ],
+  "compile_returncode": 0,
+  "compile_stderr": "",
+  "run_returncode": 0,
+  "stdout": "{\"old_eligible_after_good_publication\":true,\"view_current_after_failure\":false,\"old_eligible_during_rejection\":false,\"old_eligible_after_same_generation_recovery\":false,\"new_eligible\":true,\"fault_generation\":0,\"old_deadline_still_in_future\":true}\n",
+  "stderr": "",
+  "probe_source_sha256": "44aa5f13e537da06156015d6682ae24bb76876d747cc4daf889bbe5e0d5a3136",
+  "source_freeze_manifest_sha256": "fd24a1695b5f010e98833ffff0c687e1b798b6c559d3db53f8ec7d6b6595a1a4",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  }
+}

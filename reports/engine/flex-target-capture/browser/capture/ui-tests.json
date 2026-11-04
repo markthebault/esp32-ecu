@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "browser": "Installed Chrome via Playwright",
+  "qualification": "Actual Chrome diagnostics using fixtures from the actual native target services.\n\nThe API model does not measure a target or qualify physical capture timing.",
+  "checks": [
+    "Host status discloses that GPIO38 is not measured",
+    "acquiring: qualification and provenance rendered from native service fixture",
+    "capture-fault-recovered: qualification and provenance rendered from native service fixture",
+    "capture-fault-unconsumed: qualification and provenance rendered from native service fixture",
+    "deadline: qualification and provenance rendered from native service fixture",
+    "disabled: qualification and provenance rendered from native service fixture",
+    "ethanol-only: qualification and provenance rendered from native service fixture",
+    "overflow: qualification and provenance rendered from native service fixture",
+    "qualified: qualification and provenance rendered from native service fixture",
+    "reconfigured: qualification and provenance rendered from native service fixture",
+    "recovered: qualification and provenance rendered from native service fixture",
+    "unconfirmed: qualification and provenance rendered from native service fixture",
+    "46 malformed, stale, missing and escaped-text cases cannot claim a current publication",
+    "Actual polling clears current qualification on HTTP failure;320/390/768/1440px fit"
+  ],
+  "page_errors": [],
+  "fixture_sha256": {
+    "acquiring.json": "e3cbf6fd2cd83f71812dea58809db7bcd25c6df7ce9002c87523e81cb168f6bf",
+    "capture-fault-recovered.json": "aad94a6bf21eaa1d54635b4e4309d49bdd945792e7e8a30b337ac89760ab144a",
+    "capture-fault-unconsumed.json": "eea473417bb0452beaaba91749ba598545a87ece203b14999fec9853ff746464",
+    "deadline.json": "b1e6f4a2b4983dbe475e422d2f625f05cd0657e4d2bd3d6a1596616fe9fc07a4",
+    "disabled.json": "92f292f9ba6523ce405f230f91452422caf45d2e283e58af1c8f640f93e5d438",
+    "ethanol-only.json": "aa1ad4cabf765dd9a790043cd894979ed182e173b3000918fef77b153c615d3a",
+    "overflow.json": "a7bce286fc15978fe8548a94382fc251cf43ef5a4bcf3ccdc0c976d5a0e45e95",
+    "qualified.json": "0686b0ca1352f90b034881e518ad49f3d6e6d44729d5a61e34a2466316201e35",
+    "reconfigured.json": "722b37fdc07ba7768d7c77e45abe61ee21f78d8523c7b225b15430d35de5e422",
+    "recovered.json": "7666a954bd24669713a65e89b8a9225e20098a54e81df021708a75ab318b5dee",
+    "unconfirmed.json": "67c63bd4b37c9e9cfd3cfe114eb1909995b524eab5685485c756957e7725d7f7"
+  },
+  "source_sha256": {
+    "web/index.html": "0876875cc6a17766d750d44f4f57cbba1b947f59d9e3f4b6c3909c61a27a2798",
+    "web/flex_fuel.js": "264a9cca85ad712eb0ebad1bdfde8db5269118bc9ebce7ca9986e5ecabcb8801",
+    "web/flex_fuel_logic.js": "fb466e547ee1c0631c04c2fd7214422fa873978212c51593612421e05a700ec3",
+    "tools/test_flex_capture_ui.py": "7fff6a585050870893c39704e09e309545a5cbd5a95225a64cb3182f44ee4a26"
+  }
+}

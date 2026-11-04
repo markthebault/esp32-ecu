@@ -20,7 +20,7 @@ async def check(url,device,out):
    await page.locator('#flex-enabled').check();await page.locator('#flex-temperature_enabled').check()
    for key,value in [('fuel_pct','150'),('spark_deg','5'),('temperature_pct','80')]:
     for n in range(6):await page.locator(f'[data-flex-array="{key}"][data-index="{n}"]').fill(value);await page.locator(f'[data-flex-array="{key}"][data-index="{n}"]').dispatch_event('change')
-   await page.locator('#engine-flex-panel details').evaluate('e=>e.open=true')
+   await page.locator('#engine-flex-panel details').filter(has=page.locator('#flex-low_hz')).evaluate('e=>e.open=true')
    await page.locator('#flex-low_hz').fill('');await page.locator('#flex-low_hz').dispatch_event('change');await page.locator('#engine-save').click();await page.locator('#toast').filter(has_text='finite value').wait_for();assert device.engine.tune['revision']==1
    await page.locator('#flex-low_hz').fill('50');await page.locator('#flex-low_hz').dispatch_event('change');await page.locator('#engine-save').click();await page.locator('#engine-save-state').filter(has_text='Revision 2').wait_for()
    saved=copy.deepcopy(device.engine.tune);assert saved['schema_version']==9 and saved['flex_fuel']==tune()['flex_fuel'];checks.append('Blank calibration rejects without publication; complete curves and flags persist atomically')

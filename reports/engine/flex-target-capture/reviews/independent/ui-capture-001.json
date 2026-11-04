@@ -1,0 +1,322 @@
+{
+  "passed": false,
+  "checks": 37,
+  "source_sha256": "b8b19642703a225c49e6c51271602af6998d6510391aa398c45d04cbdf996452",
+  "checks_detail": [
+    {
+      "label": "native fixture acquiring.json",
+      "ok": true
+    },
+    {
+      "label": "native fixture capture-fault-recovered.json",
+      "ok": true
+    },
+    {
+      "label": "native fixture capture-fault-unconsumed.json",
+      "ok": true
+    },
+    {
+      "label": "native fixture deadline.json",
+      "ok": true
+    },
+    {
+      "label": "native fixture disabled.json",
+      "ok": true
+    },
+    {
+      "label": "native fixture ethanol-only.json",
+      "ok": true
+    },
+    {
+      "label": "native fixture overflow.json",
+      "ok": true
+    },
+    {
+      "label": "native fixture qualified.json",
+      "ok": true
+    },
+    {
+      "label": "native fixture reconfigured.json",
+      "ok": true
+    },
+    {
+      "label": "native fixture recovered.json",
+      "ok": true
+    },
+    {
+      "label": "native fixture unconfirmed.json",
+      "ok": true
+    },
+    {
+      "label": "malformed nonready_reason",
+      "ok": false
+    },
+    {
+      "label": "malformed nonready_capture_reason",
+      "ok": false
+    },
+    {
+      "label": "malformed failed_SDK",
+      "ok": false
+    },
+    {
+      "label": "malformed unacknowledged_ingress",
+      "ok": false
+    },
+    {
+      "label": "malformed zero_context",
+      "ok": false
+    },
+    {
+      "label": "malformed zero_tune_revision",
+      "ok": false
+    },
+    {
+      "label": "malformed zero_sensor_revision",
+      "ok": false
+    },
+    {
+      "label": "malformed zero_clock_uncertainty",
+      "ok": false
+    },
+    {
+      "label": "malformed synthetic_source",
+      "ok": true
+    },
+    {
+      "label": "malformed unknown_reason",
+      "ok": true
+    },
+    {
+      "label": "malformed future_publication",
+      "ok": true
+    },
+    {
+      "label": "malformed future_sample",
+      "ok": true
+    },
+    {
+      "label": "malformed expiry_extension",
+      "ok": true
+    },
+    {
+      "label": "malformed wrong_calibration",
+      "ok": true
+    },
+    {
+      "label": "malformed bad_calibration_type",
+      "ok": true
+    },
+    {
+      "label": "malformed missing_calibration",
+      "ok": true
+    },
+    {
+      "label": "malformed stale_publication",
+      "ok": true
+    },
+    {
+      "label": "malformed ready_but_pending_capture",
+      "ok": true
+    },
+    {
+      "label": "malformed ready_but_pending_ingress",
+      "ok": true
+    },
+    {
+      "label": "malformed acknowledge_future_generation",
+      "ok": true
+    },
+    {
+      "label": "malformed ready_but_not_active",
+      "ok": true
+    },
+    {
+      "label": "malformed numeric_U64",
+      "ok": true
+    },
+    {
+      "label": "malformed leading_zero",
+      "ok": true
+    },
+    {
+      "label": "malformed overflow_U64",
+      "ok": true
+    },
+    {
+      "label": "host not measured",
+      "ok": true
+    },
+    {
+      "label": "missing capture unavailable",
+      "ok": true
+    }
+  ],
+  "outcomes": [
+    {
+      "fixture": "acquiring.json",
+      "text": "GPIO38 capture unqualified: acquiring complete windows. Queue 0/64. Required flex data inhibits control."
+    },
+    {
+      "fixture": "capture-fault-recovered.json",
+      "text": "GPIO38 raw capture publication is current. Sample 620301 us; expires 870301 us. Physical timing and input circuitry remain unqualified."
+    },
+    {
+      "fixture": "capture-fault-unconsumed.json",
+      "text": "GPIO38 capture unqualified: pending low_pulse_width_out_of_range. Queue 0/64. Required flex data inhibits control."
+    },
+    {
+      "fixture": "deadline.json",
+      "text": "GPIO38 raw capture publication is current. Sample 80100 us; expires 330100 us. Physical timing and input circuitry remain unqualified."
+    },
+    {
+      "fixture": "disabled.json",
+      "text": "GPIO38 capture disabled because the tune has no required flex input. Pending notifications are retained."
+    },
+    {
+      "fixture": "ethanol-only.json",
+      "text": "GPIO38 raw capture publication is current. Sample 590301 us; expires 840301 us. Physical timing and input circuitry remain unqualified."
+    },
+    {
+      "fixture": "overflow.json",
+      "text": "GPIO38 capture unqualified: pending capture_overflow. Queue 0/64. Required flex data inhibits control."
+    },
+    {
+      "fixture": "qualified.json",
+      "text": "GPIO38 raw capture publication is current. Sample 70100 us; expires 320100 us. Physical timing and input circuitry remain unqualified."
+    },
+    {
+      "fixture": "reconfigured.json",
+      "text": "GPIO38 capture unqualified: pending configuration_changed. Queue 0/64. Required flex data inhibits control."
+    },
+    {
+      "fixture": "recovered.json",
+      "text": "GPIO38 raw capture publication is current. Sample 520201 us; expires 770201 us. Physical timing and input circuitry remain unqualified."
+    },
+    {
+      "fixture": "unconfirmed.json",
+      "text": "GPIO38 capture unqualified: protected input unconfirmed. Queue 0/64. Required flex data inhibits control."
+    },
+    {
+      "case": "nonready_reason",
+      "rejected": false,
+      "text": "GPIO38 raw capture publication is current. Sample 70100 us; expires 320100 us. Physical timing and input circuitry remain unqualified."
+    },
+    {
+      "case": "nonready_capture_reason",
+      "rejected": false,
+      "text": "GPIO38 raw capture publication is current. Sample 70100 us; expires 320100 us. Physical timing and input circuitry remain unqualified."
+    },
+    {
+      "case": "failed_SDK",
+      "rejected": false,
+      "text": "GPIO38 raw capture publication is current. Sample 70100 us; expires 320100 us. Physical timing and input circuitry remain unqualified."
+    },
+    {
+      "case": "unacknowledged_ingress",
+      "rejected": false,
+      "text": "GPIO38 raw capture publication is current. Sample 70100 us; expires 320100 us. Physical timing and input circuitry remain unqualified."
+    },
+    {
+      "case": "zero_context",
+      "rejected": false,
+      "text": "GPIO38 raw capture publication is current. Sample 70100 us; expires 320100 us. Physical timing and input circuitry remain unqualified."
+    },
+    {
+      "case": "zero_tune_revision",
+      "rejected": false,
+      "text": "GPIO38 raw capture publication is current. Sample 70100 us; expires 320100 us. Physical timing and input circuitry remain unqualified."
+    },
+    {
+      "case": "zero_sensor_revision",
+      "rejected": false,
+      "text": "GPIO38 raw capture publication is current. Sample 70100 us; expires 320100 us. Physical timing and input circuitry remain unqualified."
+    },
+    {
+      "case": "zero_clock_uncertainty",
+      "rejected": false,
+      "text": "GPIO38 raw capture publication is current. Sample 70100 us; expires 320100 us. Physical timing and input circuitry remain unqualified."
+    },
+    {
+      "case": "synthetic_source",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "unknown_reason",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "future_publication",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "future_sample",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "expiry_extension",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "wrong_calibration",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "bad_calibration_type",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "missing_calibration",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "stale_publication",
+      "rejected": true,
+      "text": "GPIO38 capture publication is stale. Current control qualification is unknown."
+    },
+    {
+      "case": "ready_but_pending_capture",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "ready_but_pending_ingress",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "acknowledge_future_generation",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "ready_but_not_active",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "numeric_U64",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "leading_zero",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    },
+    {
+      "case": "overflow_U64",
+      "rejected": true,
+      "text": "Target capture diagnostics are unknown or inconsistent."
+    }
+  ],
+  "scope": "Pure current-capture validator on own actual-service SDK-model captures. No browser, service or hardware execution."
+}

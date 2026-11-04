@@ -1,0 +1,33 @@
+{
+  "compile_command": [
+    "c++",
+    "-std=c++17",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-pedantic",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-001/firmware/include",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/clock_width_probe.cpp",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/clock-width-001"
+  ],
+  "compile_returncode": 0,
+  "compile_stderr": "",
+  "run_command": [
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/clock-width-001"
+  ],
+  "returncode": 0,
+  "stdout": "{\"physical_low_us\":1000,\"epoch_bracket_us\":10,\"clock_uncertainty_us\":6,\"clock_errors\":0,\"latency_options_us\":[0,5],\"measured_low_us\":995.0,\"reason\":\"low_pulse_width_out_of_range\",\"valid\":false}\n{\"physical_low_us\":5000,\"epoch_bracket_us\":10,\"clock_uncertainty_us\":6,\"clock_errors\":0,\"latency_options_us\":[0,5],\"measured_low_us\":5005.0,\"reason\":\"low_pulse_width_out_of_range\",\"valid\":false}\n",
+  "stderr": "",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  },
+  "scope": "Native source model with legally bracketed common timer and0/5us callback latency; no actual hardware measurement."
+}

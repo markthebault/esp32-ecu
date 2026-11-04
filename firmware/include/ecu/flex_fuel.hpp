@@ -62,7 +62,7 @@ struct Observation {
 class Capture {
  CaptureConfig config_;
  Observation value_;
- bool config_valid_=true,input_seen_=false,seeded_=false,level_=false;
+ bool config_valid_=true,input_seen_=false,continuity_=false,seeded_=false,level_=false;
  bool rise_seen_=false,fall_seen_=false,filtered_=false,query_seen_=false;
  std::uint64_t input_us_=0,edge_us_=0,rise_us_=0,fall_us_=0,query_us_=0;
  std::uint64_t sum_period_=0,sum_width_=0,observed_fault_=0;
@@ -125,6 +125,9 @@ public:
   if(!config_valid_)value_.capture_reason=Reason::InvalidConfig;
  }
  const CaptureConfig&config()const{return config_;}
+ // Mechanical stop/rearm discards the complete series without acknowledging
+ // faults or erasing monotonic clock, source or diagnostic history.
+ void restart(){clear_series();continuity_=false;value_.capture_reason=config_valid_?Reason::Acquiring:Reason::InvalidConfig;}
  void context_changed(){
   fault(Reason::ConfigurationChanged);
   if(value_.config_epoch==std::numeric_limits<std::uint64_t>::max())exhausted_=true;else ++value_.config_epoch;
@@ -147,8 +150,8 @@ public:
    if(value_.source!=Source::Unavailable)fault(Reason::SourceChanged);
    value_.source=source;value_.frequency_hz=value_.low_pulse_us=NAN;
   }
-  if(input_seen_&&now-input_us_>std::uint64_t(std::llround(config_.stale_ms*1000.)))fault(Reason::Gap);
-  input_seen_=true;input_us_=now;value_.last_edge_us=now;
+  if(continuity_&&now-input_us_>std::uint64_t(std::llround(config_.stale_ms*1000.)))fault(Reason::Gap);
+  input_seen_=continuity_=true;input_us_=now;value_.last_edge_us=now;
   if(!seeded_){seed(now,level);return;}
   if(level==level_){fault(Reason::RepeatedLevel);seed(now,level);return;}
   if(now-edge_us_<50){fault(Reason::Glitch);seed(now,level);return;}
@@ -172,7 +175,7 @@ public:
    else if(config_valid_){
     const auto stale=std::uint64_t(std::llround(config_.stale_ms*1000.));
     const bool old_sample=filtered_&&now>=value_.sample_us&&now-value_.sample_us>stale;
-    const bool old_edge=input_seen_&&now>=input_us_&&now-input_us_>stale;
+    const bool old_edge=continuity_&&now>=input_us_&&now-input_us_>stale;
     if((old_sample||old_edge)&&value_.capture_reason!=Reason::Stale)fault(Reason::Stale);
    }
   }

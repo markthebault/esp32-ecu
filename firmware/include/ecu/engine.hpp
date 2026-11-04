@@ -143,6 +143,7 @@ struct Inputs {
  double ethanol_pct=NAN;bool ethanol_qualified=false;
  std::array<secondary::SwitchSample,2> table_switches{};
  flex::Sample flex_sample{};
+ bool flex_context_match=true;
 };
 struct Output {
  State state=State::Stopped;std::uint32_t faults=0;
@@ -194,7 +195,7 @@ public:
   // cannot repeatedly move this start timer.
   if(now>=s.sampled_us&&now-s.sampled_us<=20000&&range(s.rpm,0,t.cranking_rpm))afr_running_=false;
   const auto extra=secondary::requirements(t.secondary_tables);
-  o.flex_fuel=flex::assess(t.flex_fuel,s.flex_sample,now,extra.ethanol,t.revision);
+  o.flex_fuel=flex::assess(t.flex_fuel,s.flex_sample,now,extra.ethanol,t.revision,s.flex_context_match);
   secondary::Input selection_input;selection_input.rpm=s.rpm;selection_input.map_kpa=s.map_kpa;selection_input.tps_pct=s.tps_pct;
   selection_input.emap_kpa=s.aux_pressure_kpa;selection_input.ethanol_pct=o.flex_fuel.sample.observation.ethanol_pct;
   selection_input.map_qualified=s.map_qualified;selection_input.emap_qualified=s.aux_pressure_qualified&&t.load_model.aux_role==load::AuxRole::Emap;

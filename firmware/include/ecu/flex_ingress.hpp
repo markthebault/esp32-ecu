@@ -36,6 +36,10 @@ struct IngressTicket {
  std::uint64_t context=0,generation=0;
  explicit operator bool()const{return context&&generation;}
 };
+struct IngressFence {
+ std::uint64_t context=0,generation=0,armed_after_us=0;
+ bool armed=false,pending=false,terminal=false;
+};
 struct IngressCounters {
  std::uint64_t callbacks=0,accepted=0,dequeued=0,discarded=0;
  std::uint64_t ignored_context=0,ignored_inactive=0,ignored_prearm=0;
@@ -152,6 +156,11 @@ public:
  bool pop(IngressEdge&edge){
   if(!size_)return false;
   edge=queue_[head_];head_=(head_+1)%capacity;--size_;increment(counters_.dequeued);return true;
+ }
+ // Small integer-only version view for ISR command/deadline guards. It does
+ // not copy the diagnostic counters and never offers or acknowledges faults.
+ ECU_ISR_CODE IngressFence fence()const{
+  return {context_,generation_,armed_after_,armed_,pending(),terminal_};
  }
  // Only the owner preparing an invalid control input offers a fault. Reading
  // diagnostics never makes an ACK eligible. The caller may ACK only AFTER a

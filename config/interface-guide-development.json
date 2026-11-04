@@ -1,5 +1,5 @@
 {
-  "guide_version": "1.6",
+  "guide_version": "1.7",
   "sources_append": [
     {
       "title": "Vishay 6N137 optical input/detector data",
@@ -54,6 +54,18 @@
         "Deceleration is fuel remaining:100% neutral,0% stops new injector starts after scheduler acceptance while spark continues unless another cut applies. Existing active closing edges finish normally. Dose/pulse/duty limits still inhibit the whole command.",
         "First observation and recovery after stop/crank/fault/DFCO clear history. Rate-valid differs from observation available. Check source age: hold remaining is measured at the observation time. Completed host runs are synthetic and retained logs are historical.",
         "Use engine MSL004 or JSON for detailed transient rates, phase and dose. Fixed ESP-NOW schema2 retains the existing effective accel ratio only. No physical measurement or vehicle base tune is implied."
+      ]
+    },
+    {
+      "connector": "FLEX-G38-DRAFT1 / no released connector",
+      "title": "Flex capture development and diagnostics",
+      "checks": [
+        "The current manufactured carriers have no released protected flex connection. Do not connect a sensor to GPIO38 using this software draft. The sensor supply, connector, conditioner, polarity, off-state back-power and pulse skew remain unqualified.",
+        "Only compact_n16r8_flex_dev assigns GPIO38 to both-edge MCPWM capture. It requires the new0x21 MCP23008 RGB architecture. Historical/default builds retain GPIO38 WS2812 wiring and have no target flex producer. BOOT/PAIR stays on GPIO0; RESET and the sealed buttons remain required.",
+        "Engine development has capture calibration, correction curves and an input confirmation. Confirmation records an assertion, not physical qualification. Corrections or an ethanol secondary-table condition require fresh genuine target capture. Missing, unconfirmed, stale or faulty data inhibits fuel and spark proposals; physical engine outputs remain OFF.",
+        "Inspect the flex capture panel and its counters: requested versus actual producer calibration/revision, context, arm boundary, original sample expiry, ingress queue, fault generations, discarded edges and rejected publications. The host simulator explicitly has no target capture. Its synthetic waveforms cannot qualify the target input.",
+        "Fault notifications clear only after the serialized controller consumes the matching invalid sample. A busy controller or a diagnostic read cannot clear them. Ingress suppression masks only channel2 and waits for completed-control ACK plus50ms before reacquisition of a complete new window. Quiet during masking does not prove the electrical input is quiet.",
+        "One hardware latch per channel has no FIFO. Native tests and compiled ISR placement do not measure target loss, latency, queue pressure, noise or interaction with Wi-Fi, I2C and USB. Record those HIL checks before any hardware qualification."
       ]
     }
   ],

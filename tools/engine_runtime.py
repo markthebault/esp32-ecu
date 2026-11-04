@@ -136,6 +136,7 @@ class EngineStore:
    if self.last_run:result['last_run']=self.last_run['summary']
    result['timing']=self.timing_status()
    result['switch_accessory']=dict(source='host_no_target_i2c',contract='SW2-J4-DRAFT1',phase='not_measured',fault='unknown',last_fault='unknown',requested_mask=None,raw_known=False,ready=False,fault_pending=False,fresh=False,bus_allocated=False,sample_age_ms=None,qualification='Host synthetic stimuli do not measure J4, an expander or contact wiring')
+   result['flex_capture']=dict(data_source='host_no_target_capture',built=False,available=False,qualification='Host synthetic stimuli do not measure GPIO38 or a target capture peripheral')
    return result
 
  def timing_status(self):

@@ -14,8 +14,8 @@ struct Evaluation {
  bool spark_bypassed=false,spark_clamped=false,zero_factor=false;
  bool input_confirmed=false,available=false;
 };
-inline Evaluation assess(const Config&c,const Sample&s,std::uint64_t now,bool ethanol_required,std::uint32_t tune_revision){
- Evaluation e;e.available=true;e.sample=s;e.required=c.correction.enabled||ethanol_required;e.input_confirmed=c.input_confirmed;e.configuration_match=tune_revision&&s.tune_revision==tune_revision&&same(c.capture,s.calibration);
+inline Evaluation assess(const Config&c,const Sample&s,std::uint64_t now,bool ethanol_required,std::uint32_t tune_revision,bool context_match=true){
+ Evaluation e;e.available=true;e.sample=s;e.required=c.correction.enabled||ethanol_required;e.input_confirmed=c.input_confirmed;e.configuration_match=context_match&&tune_revision&&s.tune_revision==tune_revision&&same(c.capture,s.calibration);
  if(s.observation.source!=Source::Unavailable&&now>=s.observation.sample_us)e.sample.observation.age_ms=double(now-s.observation.sample_us)/1000;
  e.corrections=evaluate(c.correction,c.capture,s.observation,now);
  auto fail=[&](Reason reason){e.reason=reason;e.control_ok=!e.required;if(c.correction.enabled){e.corrections.valid=false;e.corrections.reason=reason;e.corrections.fuel_factor=e.corrections.spark_add_deg=e.corrections.temperature_factor=NAN;}return e;};

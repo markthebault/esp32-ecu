@@ -3,6 +3,7 @@
 #include "ecu/engine_binding.hpp"
 #include "ecu/engine_storage.hpp"
 #include "ecu/engine_target.hpp"
+#include "ecu/flex_hardware.hpp"
 #include "ecu/switch_service.hpp"
 #include "ecu/idle_command.hpp"
 #include "ecu/engine_data_json.hpp"
@@ -21,6 +22,9 @@ namespace {
 SemaphoreHandle_t mutex;
 engine::Tune active;engine::Controller controller;engine::Output latest;
 engine::RuntimeSample latest_data;
+#if ECU_FLEX_G38_DRAFT
+flex::CaptureOwner flex_owner;
+#endif
 using Document=std::unique_ptr<char,decltype(&cJSON_free)>;
 Document document{nullptr,&cJSON_free};
 const char* document_text(){return document?document.get():web::assets::engine_defaults;}
@@ -58,7 +62,18 @@ bool switch_requirements(std::uint8_t&mask){
 }
 bool observe(const web::Sample&s,const config::Config&c,std::uint64_t now,std::uint64_t sampled,engine::RuntimeSample& published){
  if(!mutex||xSemaphoreTake(mutex,0)!=pdTRUE)return false;
+#if ECU_FLEX_G38_DRAFT
+ engine_target::FlexBackend flex_backend;flex::CaptureRequest flex_request;
+ flex_request.calibration=active.flex_fuel.capture;flex_request.tune_revision=active.revision;flex_request.sensor_revision=c.revision;
+ flex_request.required=active.flex_fuel.correction.enabled||secondary::requirements(active.secondary_tables).ethanol;
+ flex_request.confirmed=active.flex_fuel.input_confirmed;
+ const auto flex_view=flex_owner.tick(flex_backend,flex_request);
+ now=engine_target::clock_us();
+#endif
  auto bound=engine::bind_inputs(s,c,now,&active);binding=bound.reason;auto&in=bound.input;
+#if ECU_FLEX_G38_DRAFT
+ in.flex_sample=flex_view.sample;in.flex_context_match=flex_view.current;
+#endif
  in.sampled_us=sampled;
  in.phase_synced=in.phase_synced&&s.phase_tune_revision==active.revision&&s.phase_sensor_revision==c.revision;
  if(sensor_revision!=c.revision){controller.reset();sensor_revision=c.revision;}
@@ -71,7 +86,11 @@ bool observe(const web::Sample&s,const config::Config&c,std::uint64_t now,std::u
  command.max_injector_high_us=std::llround(active.max_injection_ms*1000);command.max_coil_high_us=std::llround(active.max_dwell_ms*1000);
  command.slots=c.slots;command.missing=c.missing;command.max_rpm=c.max_rpm;
  idle::prepare_pwm(command,active);
+#if ECU_FLEX_G38_DRAFT
+ const bool submitted=engine_target::submit_capture(command,flex_view.ticket);
+#else
  const bool submitted=engine_target::submit(command);
+#endif
  engine::RuntimeSample data;engine::data_values(data,in,latest);
  data.sequence=command.sequence;data.control_us=now;data.sampled_us=sampled;data.tune_revision=active.revision;data.sensor_revision=c.revision;
  data.idle_algorithm=static_cast<std::uint8_t>(active.idle_control.algorithm);data.source=engine::DataSource::Target;data.strategy=static_cast<std::uint8_t>(active.strategy);data.phase_epoch=s.phase_epoch;
@@ -89,7 +108,11 @@ bool observe(const web::Sample&s,const config::Config&c,std::uint64_t now,std::u
  data.timing_fault=s.timing_cause;data.last_timing_fault=s.last_timing_cause;data.virtual_high_mask=s.virtual_high_mask;data.physical_command_mask=s.physical_command_mask;
  data.board_flags=(s.adc_ok?1:0)|(s.safe?2:0)|(s.interlock?4:0)|(s.overflow?8:0);
  for(unsigned i=0;i<8;++i)data.raw_adc[i]=static_cast<std::uint16_t>(s.raw[i]);
- latest_data=data;published=data;xSemaphoreGive(mutex);return true;
+ latest_data=data;published=data;
+#if ECU_FLEX_G38_DRAFT
+ flex_owner.control_observed(flex_backend,flex_view,latest.flex_fuel,true);
+#endif
+ xSemaphoreGive(mutex);return true;
 }
 std::string tune_json(){xSemaphoreTake(mutex,portMAX_DELAY);std::string copy=document_text();xSemaphoreGive(mutex);return copy;}
 namespace {
@@ -160,6 +183,7 @@ cJSON* snapshot(){
  xSemaphoreTake(mutex,portMAX_DELAY);const auto output=latest;const auto revision=active.revision;const auto strategy=active.strategy;const bool stored=storage_ok;const auto sample_stamp=stamp;const auto* reason=binding;const auto* storage_message=storage_reason;xSemaphoreGive(mutex);
  auto*j=engine::output_json(output);if(!j)return nullptr;if(!cJSON_AddStringToObject(j,"error",stored?"":storage_message)){cJSON_Delete(j);return nullptr;}const auto now=engine_target::clock_us();cJSON_AddNumberToObject(j,"revision",revision);cJSON_AddBoolToObject(j,"storage_ok",stored);cJSON_AddStringToObject(j,"binding",reason);cJSON_AddNumberToObject(j,"sample_age_ms",sample_stamp&&now>=sample_stamp?(now-sample_stamp)/1000.0:-1);cJSON_AddBoolToObject(j,"simulator",false);cJSON_AddBoolToObject(j,"fresh",sample_stamp&&now>=sample_stamp&&now-sample_stamp<50000);auto*timing=engine_target::snapshot();if(!timing||!cJSON_AddItemToObject(j,"timing",timing)){cJSON_Delete(timing);cJSON_Delete(j);return nullptr;}
  auto*switches=switch_service::snapshot();if(!switches||!cJSON_AddItemToObject(j,"switch_accessory",switches)){cJSON_Delete(switches);cJSON_Delete(j);return nullptr;}
+ auto*flex=engine_target::flex_snapshot();if(!flex||!cJSON_AddItemToObject(j,"flex_capture",flex)){cJSON_Delete(flex);cJSON_Delete(j);return nullptr;}
  cJSON_AddStringToObject(j,"active_strategy",engine::strategy_name(strategy));
  const auto phase=engine_target::measurement();cJSON_AddBoolToObject(j,"crank_synced",phase.synced);cJSON_AddBoolToObject(j,"phase_synced",phase.phase_synced);cJSON_AddBoolToObject(j,"phase_required",phase.phase_required);
  cJSON_AddStringToObject(j,"phase_reason",engine::PhaseDecoder::reason_name(phase.phase_reason));cJSON_AddNumberToObject(j,"phase_losses",phase.phase_losses);cJSON_AddNumberToObject(j,"cam_rejected",phase.cam_rejected);cJSON_AddNumberToObject(j,"cam_error_deg",phase.cam_error_deg);return j;

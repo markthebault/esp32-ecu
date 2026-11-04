@@ -3,12 +3,15 @@
   "status": "software_integration_draft_not_for_fabrication_or_sensor_connection",
   "software_build": "compact_n16r8_flex_dev",
   "parent_carrier": "a5-idle-interface",
-  "board_limit_mm": [120, 120],
+  "board_limit_mm": [
+    120,
+    120
+  ],
   "module": "pluggable_44_pin_ESP32-S3_N16R8",
   "construction": "leaded_home_solderable_direct_solder_DIP_no_DIP_sockets",
   "implementation": {
     "portable_integer_ingress": true,
-    "target_producer": false,
+    "target_producer": true,
     "shared_bus_led_driver": true,
     "protected_input_circuit": false,
     "native_cad": false,
@@ -16,16 +19,39 @@
     "engine_outputs_enabled": false
   },
   "allocation": {
-    "flex_signal": {"gpio": 38, "module_pad": 32, "direction": "input_only_after_output_disable"},
-    "boot_pair": {"gpio": 0, "unchanged": true},
-    "idle": {"gpio": 3, "unchanged": true},
-    "reserved_straps": [45, 46],
+    "flex_signal": {
+      "gpio": 38,
+      "module_pad": 32,
+      "direction": "input_only_after_output_disable"
+    },
+    "boot_pair": {
+      "gpio": 0,
+      "unchanged": true
+    },
+    "idle": {
+      "gpio": 3,
+      "unchanged": true
+    },
+    "reserved_straps": [
+      45,
+      46
+    ],
     "status_led": {
       "interface": "MCP23008_PDIP18_at_0x21",
       "i2c_sda_gpio": 41,
       "i2c_scl_gpio": 42,
-      "rgb_outputs": [0, 1, 2],
-      "unused_outputs_NC_low": [3, 4, 5, 6, 7],
+      "rgb_outputs": [
+        0,
+        1,
+        2
+      ],
+      "unused_outputs_NC_low": [
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "IODIR_expected": 0,
       "IOCON_expected": 4,
       "gp7": "NC_but_IODIR_bit7_must_be_zero",
@@ -62,7 +88,14 @@
     "context": "strictly_increasing_nonzero_U64_owner_binding_identifier",
     "fault_ack": "exact_offered_context_generation_after_completed_matching_control",
     "publication_fence": "retain_context_fault_generation_arm_boundary_at_pop_then_atomic_revalidation_and_publish",
-    "acquire_when": "corrections_enabled_OR_secondary_ethanol_required"
+    "acquire_when": "corrections_enabled_OR_secondary_ethanol_required",
+    "worker": "serialized_engine_service_observe_under_engine_mutex",
+    "timestamp_conversion": "fixed_earlier_sync_bracket_epoch_preserves_raw_pulse_width_with_sub_us_quantization",
+    "publication_contains_actual_calibration_and_tune_revision": true,
+    "command_keeps_original_sample_deadline": true,
+    "new_invalid_publication_revokes_queued_commands": true,
+    "capture_fault_generation_fences_old_commands": true,
+    "read_only_diagnostics_never_offer_or_ack": true
   },
   "shared_i2c": {
     "owner_count": 1,
@@ -79,7 +112,12 @@
     "mask_IODIR_bit7_to_accept_reset_value": false,
     "LED_nonzero_IOCON_marker_rejects_byte_mode_alias": true,
     "led_initialize": "OLAT_off_before_direction_then_verify_full_legal_IODIR_and_latch",
-    "led_diagnostics": ["desired", "last_verified_latch", "verified_age", "bus_failure_or_unknown"],
+    "led_diagnostics": [
+      "desired",
+      "last_verified_latch",
+      "verified_age",
+      "bus_failure_or_unknown"
+    ],
     "failed_bus_guarantees_red_or_off": false
   },
   "unresolved_electrical_gates": [
@@ -94,9 +132,25 @@
     "routing_case_fit_EMI_surge_thermal_splash_and_vehicle_qualification"
   ],
   "references": [
-    {"title": "ESP32-S3 datasheet v2.2", "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf", "locators": "boot strapping pp32-34"},
-    {"title": "ESP32-S3 technical reference manual", "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3_technical_reference_manual_en.pdf", "locators": "reset domains, GPIO strap latches, MCPWM capture latches"},
-    {"title": "Pinned ESP-IDF5.5 MCPWM documentation", "url": "https://docs.espressif.com/projects/esp-idf/en/v5.5/esp32s3/api-reference/peripherals/mcpwm.html", "locators": "shared group interrupt source and capture configuration"},
-    {"title": "Microchip MCP23008 DS20001919I", "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/MCP23008-and-MCP23008-Data-Sheet-DS20001919.pdf", "locators": "GP7 output only, Register1-1 IO7=0, full-byte register semantics"}
+    {
+      "title": "ESP32-S3 datasheet v2.2",
+      "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf",
+      "locators": "boot strapping pp32-34"
+    },
+    {
+      "title": "ESP32-S3 technical reference manual",
+      "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3_technical_reference_manual_en.pdf",
+      "locators": "reset domains, GPIO strap latches, MCPWM capture latches"
+    },
+    {
+      "title": "Pinned ESP-IDF5.5 MCPWM documentation",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v5.5/esp32s3/api-reference/peripherals/mcpwm.html",
+      "locators": "shared group interrupt source and capture configuration"
+    },
+    {
+      "title": "Microchip MCP23008 DS20001919I",
+      "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/MCP23008-and-MCP23008-Data-Sheet-DS20001919.pdf",
+      "locators": "GP7 output only, Register1-1 IO7=0, full-byte register semantics"
+    }
   ]
 }

@@ -7,6 +7,7 @@
 #include "ecu/idle_pwm_json.hpp"
 #include "ecu/idle_hardware.hpp"
 #include "ecu/flex_hardware.hpp"
+#include "ecu/flex_capture_json.hpp"
 #include "driver/gpio.h"
 #include "driver/gptimer.h"
 #include "driver/mcpwm_cap.h"
@@ -36,6 +37,14 @@ ECU_ISR_CODE void idle_engine_stop();
 struct IdleIO {bool physical_high=false;ECU_ISR_CODE void all_low();ECU_ISR_CODE bool write(bool high);};
 DRAM_ATTR IdleIO idle_output;
 DRAM_ATTR timing::CaptureClock capture_clock;
+#if ECU_FLEX_G38_DRAFT
+DRAM_ATTR flex::CapturePort flex_port;
+DRAM_ATTR flex::CaptureTicket flex_command_ticket;
+DRAM_ATTR bool flex_command_live=false,flex_channel_owned=false;
+mcpwm_cap_channel_handle_t flex_channel=nullptr;
+bool flex_available=false;
+esp_err_t flex_error=ESP_OK;
+#endif
 DRAM_ATTR trigger_log::Capture trigger_capture;
 DRAM_ATTR timing::CaptureClock trigger_clock;
 DRAM_ATTR portMUX_TYPE lock=portMUX_INITIALIZER_UNLOCKED;
@@ -95,7 +104,11 @@ bool configuration_hold=false;
 std::uint32_t required_tune_revision=0,required_sensor_revision=0;
 std::uint64_t superseded_captures=0,rejected_commands=0,configuration_captures=0;
 struct Capture {std::uint64_t time_us;std::uint32_t epoch;bool cam;};
-struct TaggedCommand {timing::Command command;std::uint32_t epoch;};
+struct TaggedCommand {timing::Command command;std::uint32_t epoch;
+#if ECU_FLEX_G38_DRAFT
+ flex::CaptureTicket flex_ticket;
+#endif
+};
 
 ECU_ISR_CODE std::uint64_t now_locked(){
  std::uint64_t now=0;if(timer)gptimer_get_raw_count(timer,&now);return now;
@@ -124,8 +137,29 @@ ECU_ISR_CODE void idle_fault(){
  if(idle_executor.stats().fault!=idle::PwmCause::None&&executor.stats().fault==timing::Cause::None)
   executor.trip(now_locked(),timing::Cause::IdlePwm,output);
 }
+#if ECU_FLEX_G38_DRAFT
+ECU_ISR_CODE void flex_irq_off(){
+ if(flex_channel_owned){
+  mcpwm_ll_intr_enable(MCPWM_LL_GET_HW(0),MCPWM_LL_EVENT_CAPTURE(2),false);
+  mcpwm_ll_intr_clear_capture_status(MCPWM_LL_GET_HW(0),1U<<2);
+ }
+}
+ECU_ISR_CODE bool flex_command_allowed(std::uint64_t now){
+ const auto&c=executor.current_command();
+ return flex_port.can_dispatch(flex_command_ticket,now,c.output.fuel_cut&&c.output.spark_cut);
+}
+ECU_ISR_CODE void flex_progress(std::uint64_t now){
+ if(flex_command_live&&!flex_command_allowed(now)){
+  executor.stop(now,timing::Cause::Control,output);flex_command_live=false;
+ }
+}
+void flex_fence(std::uint64_t now){flex_irq_off();flex_port.fence(now);flex_command_live=false;}
+#endif
 ECU_ISR_CODE void alarm_locked(){
  auto deadline=std::min(executor.next_alarm(),idle_executor.next_alarm());
+#if ECU_FLEX_G38_DRAFT
+ if(flex_command_live)deadline=std::min(deadline,flex_command_ticket.valid_until_us+1);
+#endif
  if(deadline==timing::Executor::none){
   if(installed_alarm!=deadline)gptimer_set_alarm_action(timer,nullptr);
   installed_alarm=deadline;return;
@@ -147,7 +181,11 @@ bool IRAM_ATTR on_alarm(gptimer_handle_t,const gptimer_alarm_event_data_t*,void*
   output.failed=true;output.armed=false;executor.trip(now_locked(),timing::Cause::Gate,output);
  }
 #endif
- const auto now=now_locked();executor.dispatch(now,output);idle_executor.dispatch(now,idle_output);idle_fault();alarm_locked();
+ const auto now=now_locked();
+#if ECU_FLEX_G38_DRAFT
+ flex_progress(now);
+#endif
+ executor.dispatch(now,output);idle_executor.dispatch(now,idle_output);idle_fault();alarm_locked();
  portEXIT_CRITICAL_ISR(&lock);return false;
 }
 bool IRAM_ATTR on_capture(mcpwm_cap_channel_handle_t,const mcpwm_capture_event_data_t* event,void* context){
@@ -173,6 +211,42 @@ bool IRAM_ATTR on_trigger_capture(mcpwm_cap_channel_handle_t,const mcpwm_capture
   event->cap_edge==MCPWM_CAP_EDGE_POS,stamp.error==timing::CaptureClock::Error::None});
  portEXIT_CRITICAL_ISR(&lock);return false;
 }
+#if ECU_FLEX_G38_DRAFT
+bool IRAM_ATTR on_flex_capture(mcpwm_cap_channel_handle_t,const mcpwm_capture_event_data_t* event,void*){
+ portENTER_CRITICAL_ISR(&lock);
+ const auto now=now_locked();const auto stamp=capture_clock.map_interval(event->cap_value,now);
+ const bool polarity=event->cap_edge==MCPWM_CAP_EDGE_POS||event->cap_edge==MCPWM_CAP_EDGE_NEG;
+ const auto result=flex_port.push(stamp.time_us,now,event->cap_edge==MCPWM_CAP_EDGE_POS,
+  polarity&&stamp.error==timing::CaptureClock::Error::None,event->cap_value);
+ if(result==flex::Ingress::Result::Suppress){
+  flex_irq_off();
+  if(flex_port.required()){executor.stop(now,timing::Cause::Control,output);flex_command_live=false;alarm_locked();}
+ }
+ // Flex edges never refresh crank/cam producer/tooth deadlines.
+ portEXIT_CRITICAL_ISR(&lock);return false;
+}
+void init_flex_capture(bool synced){
+ // Pinned IDF allocates first-free: the two preceding group0 allocations own
+ // slots0/1. This private group has exactly three channels; reserve slot2.
+ static_assert(SOC_MCPWM_CAPTURE_CHANNELS_PER_TIMER==3,"Re-audit capture allocation");
+ if(!synced){flex_error=ESP_ERR_INVALID_STATE;return;}
+ mcpwm_capture_channel_config_t cfg{};cfg.gpio_num=flex::gpio;cfg.intr_priority=3;
+ cfg.prescale=1;cfg.flags.pos_edge=cfg.flags.neg_edge=true;
+ flex_error=mcpwm_new_capture_channel(cap_timer,&cfg,&flex_channel);
+ if(flex_error!=ESP_OK)return;
+ flex_channel_owned=true;mcpwm_capture_event_callbacks_t cb{};cb.on_cap=on_flex_capture;
+ flex_error=mcpwm_capture_channel_register_event_callbacks(flex_channel,&cb,nullptr);
+ if(flex_error==ESP_OK)flex_error=mcpwm_capture_channel_enable(flex_channel);
+ portENTER_CRITICAL(&lock);flex_irq_off();portEXIT_CRITICAL(&lock);
+ if(flex_error!=ESP_OK){
+  // Never stop/resync the common timer or clear crank/cam status. A failed
+  // optional allocation stays unavailable, with its SDK error observable.
+  if(mcpwm_del_capture_channel(flex_channel)==ESP_OK){flex_channel=nullptr;flex_channel_owned=false;}
+  return;
+ }
+ flex_available=true;
+}
+#endif
 bool disable_trigger_channels(){
  bool ok=true;
  for(unsigned i=0;i<trigger_channels.size();++i)if(trigger_channel_enabled[i]){
@@ -271,6 +345,9 @@ void init_peripherals(){
   ESP_ERROR_CHECK(mcpwm_capture_channel_register_event_callbacks(handle,&cb,i?&cam_context:nullptr));
   ESP_ERROR_CHECK(mcpwm_capture_channel_enable(handle));
  }
+#if ECU_FLEX_G38_DRAFT
+ init_flex_capture(synced);
+#endif
  init_trigger_logger();
  portENTER_CRITICAL(&lock);measured.ready=synced;portEXIT_CRITICAL(&lock);
  ESP_LOGI("ecu_timing","APB capture=%luHz; epoch bracket=%llu..%llu us; physical policy=%s",
@@ -293,11 +370,25 @@ void run(void*){
   portENTER_CRITICAL(&lock);
   if(configuration_hold||tagged.epoch!=external_epoch||tagged.command.tune_revision<required_tune_revision||
      tagged.command.sensor_revision<required_sensor_revision){++rejected_commands;portEXIT_CRITICAL(&lock);return;}
-  const auto now=now_locked();executor.progress(now,output);
+#if ECU_FLEX_G38_DRAFT
+  const bool both_cut=tagged.command.output.fuel_cut&&tagged.command.output.spark_cut;
+  if(!flex_port.can_dispatch(tagged.flex_ticket,now_locked(),both_cut)){
+   ++rejected_commands;executor.stop(now_locked(),timing::Cause::Control,output);flex_command_live=false;alarm_locked();portEXIT_CRITICAL(&lock);return;
+  }
+#endif
+  const auto now=now_locked();
+#if ECU_FLEX_G38_DRAFT
+  flex_progress(now);
+#endif
+  executor.progress(now,output);
   const auto& c=tagged.command;
   if(!have_command||accepted_epoch!=tagged.epoch||c.slots!=latest.slots||c.missing!=latest.missing||c.max_rpm!=latest.max_rpm||c.tune_revision!=latest.tune_revision)
    decoder=engine::PhaseDecoder({c.slots,c.missing,c.max_rpm},c.angle);
-  latest=c;have_command=true;accepted_epoch=tagged.epoch;observed_epoch=tagged.epoch;executor.command(latest,now,output);
+  latest=c;have_command=true;accepted_epoch=tagged.epoch;observed_epoch=tagged.epoch;
+#if ECU_FLEX_G38_DRAFT
+  flex_command_ticket=tagged.flex_ticket;flex_command_live=tagged.flex_ticket.required&&!both_cut;
+#endif
+  executor.command(latest,now,output);
   const bool healthy=decoder.synced()&&now>=latest.sampled_us&&now-latest.sampled_us<20000&&
    !(latest.output.faults&~std::uint32_t(engine::OverRev))&&executor.stats().fault==timing::Cause::None;
   output.supervise(healthy);
@@ -342,12 +433,23 @@ void run(void*){
        const auto stall_timeout=decoder.stall_timeout();
        for(unsigned attempt=0;attempt<4;++attempt){
         timing::Executor::Candidate candidate;
-        portENTER_CRITICAL(&lock);executor.progress(now_locked(),output);
-        const bool valid_epoch=accepted_epoch==external_epoch;
+        portENTER_CRITICAL(&lock);
+#if ECU_FLEX_G38_DRAFT
+        flex_progress(now_locked());
+#endif
+        executor.progress(now_locked(),output);
+        const bool valid_epoch=accepted_epoch==external_epoch
+#if ECU_FLEX_G38_DRAFT
+         &&flex_command_allowed(now_locked())
+#endif
+         ;
         executor.prepare(candidate,edge.time_us,stall_timeout);portEXIT_CRITICAL(&lock);
         if(!valid_epoch){cancelled=true;break;}
         candidate.calculate(decoder.required()?decoder.phase_tooth():decoder.tooth(),decoder.rpm());
         portENTER_CRITICAL(&lock);
+#if ECU_FLEX_G38_DRAFT
+        flex_progress(now_locked());
+#endif
         const auto result=executor.commit(candidate,now_locked(),output);alarm_locked();portEXIT_CRITICAL(&lock);
         if(result!=timing::Executor::Commit::Retry){committed=true;break;}
        }
@@ -360,7 +462,11 @@ void run(void*){
   }
   const auto now=clock_us();decoder.tick(now);
   const auto rpm=decoder.rpm();const bool synced=decoder.synced();
-  portENTER_CRITICAL(&lock);const auto checked_now=now_locked();executor.progress(checked_now,output);idle_executor.dispatch(checked_now,idle_output);idle_fault();trigger_capture.expire(checked_now);
+  portENTER_CRITICAL(&lock);const auto checked_now=now_locked();
+#if ECU_FLEX_G38_DRAFT
+  flex_progress(checked_now);
+#endif
+  executor.progress(checked_now,output);idle_executor.dispatch(checked_now,idle_output);idle_fault();trigger_capture.expire(checked_now);
   measured.rpm=accepted_epoch==external_epoch&&!configuration_hold?rpm:0;
   measured.synced=accepted_epoch==external_epoch&&!configuration_hold&&decoder.crank_synced();
   measured.phase_synced=accepted_epoch==external_epoch&&!configuration_hold&&decoder.phase_synced();
@@ -396,21 +502,38 @@ Measurement measurement(){
  portEXIT_CRITICAL(&lock);return copy;
 }
 bool submit(const timing::Command& command){
+ return submit_capture(command,{});
+}
+bool submit_capture(const timing::Command& command,const flex::CaptureTicket& ticket){
  if(!commands)return false;
  TaggedCommand tagged;tagged.command=command;
  portENTER_CRITICAL(&lock);
  if(configuration_hold||command.tune_revision<required_tune_revision||command.sensor_revision<required_sensor_revision){++rejected_commands;portEXIT_CRITICAL(&lock);return false;}
+#if ECU_FLEX_G38_DRAFT
+ if(!flex_port.can_issue(ticket,now_locked(),command.output.fuel_cut&&command.output.spark_cut)){
+  ++rejected_commands;portEXIT_CRITICAL(&lock);return false;
+ }
+ tagged.flex_ticket=ticket;
+#else
+ (void)ticket;
+#endif
  tagged.epoch=external_epoch;tagged.command.configuration_epoch=external_epoch;portEXIT_CRITICAL(&lock);
  return xQueueOverwrite(commands,&tagged)==pdTRUE;
 }
 void inhibit(timing::Cause cause){
  if(!timer)return;
  portENTER_CRITICAL(&lock);++external_epoch;
+#if ECU_FLEX_G38_DRAFT
+ flex_fence(now_locked());
+#endif
  executor.stop(now_locked(),cause,output);alarm_locked();portEXIT_CRITICAL(&lock);
 }
 void begin_configuration(){
  configASSERT(configuration_mutex);xSemaphoreTake(configuration_mutex,portMAX_DELAY);
  portENTER_CRITICAL(&lock);configuration_hold=true;++external_epoch;
+#if ECU_FLEX_G38_DRAFT
+ flex_fence(now_locked());
+#endif
  executor.stop(now_locked(),timing::Cause::Configuration,output);idle_executor.configuration(now_locked(),idle_output);alarm_locked();portEXIT_CRITICAL(&lock);
 }
 void finish_configuration(std::uint32_t tune_revision,std::uint32_t sensor_revision){
@@ -418,8 +541,90 @@ void finish_configuration(std::uint32_t tune_revision,std::uint32_t sensor_revis
  if(tune_revision>required_tune_revision)required_tune_revision=tune_revision;
  if(sensor_revision>required_sensor_revision)required_sensor_revision=sensor_revision;
  ++external_epoch;configuration_hold=false;
+#if ECU_FLEX_G38_DRAFT
+ flex_fence(now_locked());
+#endif
  executor.stop(now_locked(),timing::Cause::Configuration,output);idle_executor.configuration(now_locked(),idle_output);alarm_locked();portEXIT_CRITICAL(&lock);
  xSemaphoreGive(configuration_mutex);
+}
+flex::CaptureWork flex_configure(const flex::CaptureRequest&r,bool valid,std::uint64_t stale_us){
+#if ECU_FLEX_G38_DRAFT
+ portENTER_CRITICAL(&lock);
+ const bool binding=!configuration_hold&&r.tune_revision&&r.sensor_revision&&
+  r.tune_revision>=required_tune_revision&&r.sensor_revision>=required_sensor_revision;
+ if(flex_port.changes(r,external_epoch,binding,flex_available,valid,stale_us))flex_irq_off();
+ const auto now=now_locked();auto work=flex_port.configure(r,external_epoch,binding,flex_available,valid,stale_us,now);
+ if(!work.active||!work.version.armed)flex_irq_off();
+ flex_progress(now);alarm_locked();portEXIT_CRITICAL(&lock);return work;
+#else
+ (void)r;(void)valid;(void)stale_us;return {};
+#endif
+}
+bool flex_arm(flex::CaptureVersion expected){
+#if ECU_FLEX_G38_DRAFT
+ portENTER_CRITICAL(&lock);const auto work=flex_port.work();bool ok=false;
+ // A stale arm request must not mask a different, already live episode.
+ if(flex_available&&flex_channel_owned&&work.active&&!work.version.armed&&flex::same(expected,work.version)){
+  flex_irq_off();ok=flex_port.arm(expected,now_locked());
+  if(ok)mcpwm_ll_intr_enable(MCPWM_LL_GET_HW(0),MCPWM_LL_EVENT_CAPTURE(2),true);
+ }
+ portEXIT_CRITICAL(&lock);return ok;
+#else
+ (void)expected;return false;
+#endif
+}
+flex::CaptureWork flex_work(){
+#if ECU_FLEX_G38_DRAFT
+ portENTER_CRITICAL(&lock);auto work=flex_port.work();portEXIT_CRITICAL(&lock);return work;
+#else
+ return {};
+#endif
+}
+bool flex_pop(flex::CaptureVersion version,flex::IngressEdge&edge){
+#if ECU_FLEX_G38_DRAFT
+ portENTER_CRITICAL(&lock);const bool ok=flex_port.pop(version,edge);portEXIT_CRITICAL(&lock);return ok;
+#else
+ (void)version;(void)edge;return false;
+#endif
+}
+bool flex_publish(flex::CaptureVersion version,const flex::Sample&sample){
+#if ECU_FLEX_G38_DRAFT
+ portENTER_CRITICAL(&lock);const auto now=now_locked();const bool ok=flex_port.publish(version,sample,now);
+ if(!flex_port.armed())flex_irq_off();
+ const auto view=flex_port.view(now);
+ if(flex_port.required()&&(!ok||!view.current||!view.ticket.qualified)){
+  executor.stop(now,timing::Cause::Control,output);flex_command_live=false;
+ }
+ flex_progress(now);alarm_locked();portEXIT_CRITICAL(&lock);return ok;
+#else
+ (void)version;(void)sample;return false;
+#endif
+}
+flex::CaptureView flex_view(){
+#if ECU_FLEX_G38_DRAFT
+ portENTER_CRITICAL(&lock);auto view=flex_port.view(now_locked());portEXIT_CRITICAL(&lock);return view;
+#else
+ return {};
+#endif
+}
+bool flex_acknowledge(const flex::CaptureView&view){
+#if ECU_FLEX_G38_DRAFT
+ portENTER_CRITICAL(&lock);const bool ok=flex_port.acknowledge(view,now_locked());
+ if(!flex_port.armed())flex_irq_off();
+ portEXIT_CRITICAL(&lock);return ok;
+#else
+ (void)view;return false;
+#endif
+}
+cJSON* flex_snapshot(){
+#if ECU_FLEX_G38_DRAFT
+ portENTER_CRITICAL(&lock);const auto now=now_locked();const auto copy=flex_port.snapshot(now);
+ const auto available=flex_available;const auto error=flex_error;const auto uncertainty=capture_clock.uncertainty_us();
+ portEXIT_CRITICAL(&lock);
+ return flex::capture_json(copy,now,true,available,esp_err_to_name(error),uncertainty);
+#else
+ return flex::capture_json({},clock_us(),false,false,"profile_not_built",0);
+#endif
 }
 cJSON* snapshot(){
  timing::TimingStats stats;timing::Command command;std::uint8_t physical;bool armed,failed,ready,held;std::uint32_t uncertainty;std::uint64_t now,sequence,superseded,rejected,configuration_skipped;

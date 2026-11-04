@@ -1,0 +1,162 @@
+{
+  "passed": true,
+  "source_freeze_manifest_sha256": "2142e9acc748de86bbfb4fc1f40507907671dcf094a41f1cee990adaad6f1722",
+  "commands": [
+    {
+      "command": [
+        "cc",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-MMD",
+        "-MF",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/cjson.d",
+        "-c",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/dependencies/cjson/cJSON.c",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/cjson.o"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-pthread",
+        "-MMD",
+        "-MF",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/test.d",
+        "-DECU_COMPACT_A3=1",
+        "-DECU_SELECTED_N16R8=1",
+        "-DECU_FLEX_G38_DRAFT=1",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/dependencies/cjson",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/target_fakes",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/flex_target_service_test.cpp",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/cjson.o",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/test"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/test",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/fixtures-0",
+        "0"
+      ],
+      "returncode": 0,
+      "stdout": "flex_target_service_checks 26969 mode 0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/test",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/fixtures-1",
+        "1"
+      ],
+      "returncode": 0,
+      "stdout": "flex_target_service_checks 14 mode 1\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/test",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/fixtures-2",
+        "2"
+      ],
+      "returncode": 0,
+      "stdout": "flex_target_service_checks 14 mode 2\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/test",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/fixtures-3",
+        "3"
+      ],
+      "returncode": 0,
+      "stdout": "flex_target_service_checks 14 mode 3\n",
+      "stderr": ""
+    }
+  ],
+  "non_system_dependencies": [
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/dependencies/cjson/cJSON.c",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/dependencies/cjson/cJSON.h",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/capture_clock.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/config.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/control.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/engine.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/engine_binding.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/engine_data.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/engine_data_json.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/engine_json.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/engine_limits.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/engine_phase.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/engine_scheduler.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/engine_service.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/engine_storage.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/engine_target.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/flex_capture_json.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/flex_capture_owner.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/flex_engine.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/flex_fuel.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/flex_hardware.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/flex_ingress.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/flex_json.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/flex_runtime.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/heap_object.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/idle_command.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/idle_control.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/idle_hardware.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/idle_pwm.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/idle_pwm_json.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/json.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/load_json.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/load_model.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/pins.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/realtime.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/secondary_json.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/secondary_tables.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/switch_acquisition.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/switch_service.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/timing_executor.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/transient_enrichment.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/transient_json.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/trigger_log.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/trigger_log_json.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/tuning_document.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/tuning_layout.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/tuning_session.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include/ecu/web_config.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/../main/engine_service.cpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/../main/engine_target.cpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/../main/web_assets.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/flex_target_service_test.cpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/target_fakes/driver/gpio.h",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/target_fakes/esp_partition.h",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/target_fakes/fake_target.hpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/target_fakes/nvs.h",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/target_fakes/nvs_flash.h"
+  ],
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  }
+}

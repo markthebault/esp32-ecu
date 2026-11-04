@@ -1,0 +1,34 @@
+{
+  "compile_command": [
+    "c++",
+    "-std=c++17",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-pedantic",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-MMD",
+    "-MF",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/parent-protocol-002.d",
+    "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/flex_capture_owner_test.cpp",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/parent-protocol-002"
+  ],
+  "compile_returncode": 0,
+  "compile_stderr": "",
+  "run_returncode": 0,
+  "stdout": "flex_capture_owner_checks 12791\n",
+  "stderr": "",
+  "probe_source_sha256": "43d302808a73532019038a72a0af8776460d132956bb8fbff3e5470c68cb2997",
+  "source_freeze_manifest_sha256": "2142e9acc748de86bbfb4fc1f40507907671dcf094a41f1cee990adaad6f1722",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  }
+}

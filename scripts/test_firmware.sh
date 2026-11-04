@@ -52,7 +52,7 @@ mkdir -p "$task_root/build"
     -I "$task_root/firmware/include" "$task_root/firmware/tests/trigger_log_test.cpp" \
     -o "$task_root/build/trigger-log-test"
 "$task_root/build/trigger-log-test"
-for task_idle_name in idle_control idle_pwm transient_enrichment engine_transient load_model engine_load secondary_tables engine_secondary switch_acquisition switch_transport status_led flex_fuel flex_ingress engine_flex; do
+for task_idle_name in idle_control idle_pwm transient_enrichment engine_transient load_model engine_load secondary_tables engine_secondary switch_acquisition switch_transport status_led flex_fuel flex_ingress engine_flex flex_capture_owner; do
     "${CXX:-g++}" -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic \
         -fsanitize=address,undefined -fno-omit-frame-pointer \
         -I "$task_root/firmware/include" "$task_root/firmware/tests/${task_idle_name}_test.cpp" \
@@ -93,3 +93,5 @@ task_cjson="${PLATFORMIO_CORE_DIR:-$HOME/.platformio}/packages/framework-espidf/
     "$task_root/firmware/tests/shared_i2c_service_test.cpp" "$task_root/firmware/main/switch_service.cpp" \
     "$task_root/build/trigger-cjson.o" -o "$task_root/build/shared-i2c-service-test"
 "$task_root/build/shared-i2c-service-test"
+python3 -B "$task_root/scripts/test_flex_target_service.py" \
+    --output "$task_root/.cache/engine/flex-target-suite-$(date +%s)-$$"

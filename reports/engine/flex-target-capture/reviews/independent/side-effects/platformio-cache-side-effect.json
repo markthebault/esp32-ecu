@@ -1,0 +1,17 @@
+{
+  "observed_utc": "2026-11-04T20:54:37.210526+00:00",
+  "action": "pio run -d firmware -e compact_n16r8_flex_dev",
+  "trigger": "project platformio.ini environment list changed",
+  "automatic_effect": "PlatformIO removed prior firmware/.pio/build contents before creating new environment",
+  "known_prior_environment_caches_missing": [
+    "compact_n16r8_web",
+    "compact_a3_web",
+    "compact_a3_timing_bench"
+  ],
+  "prior_selected_elf_sha256": "10c99de1593a9114f8ffb7346ba62165a55876599ffa19ce0fb268fcb2ca48c5",
+  "original_prior_elf_recovered": false,
+  "source_history_and_frozen_reports_retained": true,
+  "device_flashing_or_remote_Mac_access": false,
+  "prevention": "scripts/build_firmware_preserved.py uses a fresh PLATFORMIO_BUILD_DIR, retains current default cache and verifies it unchanged",
+  "primary_reference": "https://docs.platformio.org/en/latest/projectconf/sections/platformio/options/directory/build_dir.html"
+}

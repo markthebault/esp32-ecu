@@ -1,0 +1,29 @@
+{
+  "compile_command": [
+    "c++",
+    "-std=c++17",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-pedantic",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-002/firmware/include",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/fp_queue_probe.cpp",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/fp-queue-001"
+  ],
+  "compile_returncode": 1,
+  "compile_stderr": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/fp_queue_probe.cpp: In function \u2018int main()\u2019:\n/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/fp_queue_probe.cpp:14:2: error: this \u2018if\u2019 clause does not guard... [-Werror=misleading-indentation]\n   14 |  if(!port.publish(port.version(),sample,32000))return 7;const auto bad=port.view(32000);\n      |  ^~\n/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/fp_queue_probe.cpp:14:57: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the \u2018if\u2019\n   14 |  if(!port.publish(port.version(),sample,32000))return 7;const auto bad=port.view(32000);\n      |                                                         ^~~~~\ncc1plus: all warnings being treated as errors\n",
+  "run_returncode": 1,
+  "stdout": "",
+  "stderr": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/fp_queue_probe.cpp: In function \u2018int main()\u2019:\n/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/fp_queue_probe.cpp:14:2: error: this \u2018if\u2019 clause does not guard... [-Werror=misleading-indentation]\n   14 |  if(!port.publish(port.version(),sample,32000))return 7;const auto bad=port.view(32000);\n      |  ^~\n/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/fp_queue_probe.cpp:14:57: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the \u2018if\u2019\n   14 |  if(!port.publish(port.version(),sample,32000))return 7;const auto bad=port.view(32000);\n      |                                                         ^~~~~\ncc1plus: all warnings being treated as errors\n",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  }
+}
