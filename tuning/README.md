@@ -1,14 +1,14 @@
 # Tuning and log interoperability
 
-Use [esp32-ecu-semi.ini](esp32-ecu-semi.ini) for the current own006 development layout. Offline MSQ editing/export and MegaLogViewer MSL workflows work in the tested applications. **TunerStudio 3.3.01 rejects our controller identity for online use.** The shared binary transport and dedicated target USB service do not remove that application gate. Vendor integration remains open.
+Use [esp32-ecu-transient.ini](esp32-ecu-transient.ini) for the current own007 development layout. Offline MSQ editing/export and MegaLogViewer MSL workflows work in the tested applications. **TunerStudio 3.3.01 rejects our controller identity for online use.** The shared binary transport and dedicated target USB service do not remove that application gate. Vendor integration remains open.
 
-The current identity is `ESP32ECU DEV 006 INHIBITED`. Serial protocol discovery returns `002`, independently of the tune layout revision. One 4992-byte page stages the complete tune; any successful burn validates, persists and activates it, resets control and reacquires phase. This is development configuration, not seamless hot tuning. Physical outputs remain inhibited in the selected build.
+The current identity is `ESP32ECU DEV 007 INHIBITED`. Serial protocol discovery returns `002`, independently of the tune layout revision. One 5120-byte page stages the complete tune; any successful burn validates, persists and activates it, resets control and reacquires phase. This is development configuration, not seamless hot tuning. Physical outputs remain inhibited in the selected build.
 
 [USB tuning guide](../docs/engine-usb-tuning.md) describes wiring/port selection, revision semantics, diagnostics, reproduction and physical limitations. [Vendor integration request](vendor-integration-request.md) is prepared locally and has not been sent.
 
-Retained own001/002/003/004/005 INIs and application-saved MSQs are historical definitions and import fixtures. The browser/Python importer accepts all six exact identities, with explicit neutral migration of absent fields. Current exports use own006. Other controllers' tune files are rejected.
+Retained own001/002/003/004/005/006 INIs and application-saved MSQs are historical definitions and import fixtures. The browser/Python importer accepts all seven exact identities, with explicit neutral migration of absent fields. Current exports use own007. Other controllers' tune files are rejected.
 
-Own004/005/006 `baseRevision` is read-only session-origin metadata. Active/backend revisions are separate runtime channels. TunerStudio omits the read-only origin from saved MSQs. Browser import displays that origin as unavailable and saves against the editor's loaded revision; a competing writer still causes 409. Python import uses an explicit `base_revision` when supplied, otherwise revision 1 is an offline placeholder. Legacy imports retain their strict matching-revision behavior.
+Own004/005/006/007 `baseRevision` is read-only session-origin metadata. Active/backend revisions are separate runtime channels. TunerStudio omits the read-only origin from saved MSQs. Browser import displays that origin as unavailable and saves against the editor's loaded revision; a competing writer still causes 409. Python import uses an explicit `base_revision` when supplied, otherwise revision 1 is an offline placeholder. Legacy imports retain their strict matching-revision behavior.
 
 ```sh
 python3 scripts/generate_tuning_wire.py
@@ -24,3 +24,5 @@ MSL exports retain the engine/trigger source labels and are usable in the tested
 [Idle control](../docs/engine-idle-control.md) adds versioned coolant/duty curves, normalized gains, state/gate diagnostics and an actual own005 application-saved fixture. Older own001..004 imports disable the new idle path. The direct SIL export has 48 fields, including separate PWM and synthetic valve observations. The 232-byte radio frame remains unchanged.
 
 Own006 adds selectable timed semi-sequential at enum2 (offset272), with the same4992-byte page and256-byte live block. Historic [own005 idle definition](esp32-ecu-idle.ini) and its fixtures remain unchanged. Old identities cannot represent mode2. JSON4 and own005 files preserve idle and trim values during migration; JSON1..3 and own001..004 retain the disabled-idle migration. [Strategy, wiring, debugging and evidence](../docs/engine-semi-sequential.md).
+
+[Transient fueling](../docs/engine-transient-enrichment.md) adds schema6, own007 rate curves, a320-byte atomic runtime block and14 appended MSL fields. Earlier identities and application files remain historical.

@@ -22,6 +22,7 @@ struct RuntimeSample {
  std::array<float,proposal_count> proposals{};
  std::array<float,6> idle_proposals{};std::uint64_t idle_pid_updates=0;
  std::uint32_t idle_flags=0;std::uint8_t idle_state=0,idle_reason=0,idle_algorithm=0;bool idle_available=false;
+ transient::Output transient_enrichment;
  std::array<float,4> cylinder_pulse_ms{},cylinder_advance_deg{},cylinder_fuel_pct{},cylinder_duty_pct{};
  float cam_error_deg=0;
  std::array<std::uint16_t,8> raw_adc{};
@@ -32,7 +33,7 @@ struct RuntimeSample {
  std::uint8_t cylinder_valid=0,cylinder_enabled=0,cylinder_capacity_mask=0,cylinder_spark_clamp_mask=0,cylinder_retard_floor_mask=0;
  bool has(DataFlag flag)const{return (flags&flag)!=0;}
 };
-static_assert(sizeof(RuntimeSample)<=320,"Runtime/log sample exceeds its fixed memory budget");
+static_assert(sizeof(RuntimeSample)<=360,"Runtime/log sample exceeds its explicit transient diagnostic budget");
 inline float data_float(double value){return finite(value)&&std::abs(value)<=FLT_MAX?static_cast<float>(value):NAN;}
 inline void data_values(RuntimeSample& r,const Inputs& in,const Output& out){
  const double inputs[]={in.rpm,in.map_kpa,in.tps_pct,in.clt_c,in.iat_c,in.lambda,in.battery_v,in.sensor_v};
@@ -45,6 +46,7 @@ inline void data_values(RuntimeSample& r,const Inputs& in,const Output& out){
  const double idle_values[]={out.idle.target_rpm,out.idle.duty_pct,out.idle.feedforward_pct,out.idle.p_term,out.idle.i_term,out.idle.d_term};
  for(unsigned i=0;i<6;++i){r.idle_proposals[i]=data_float(idle_values[i]);}r.idle_available=true;r.idle_pid_updates=out.idle.pid_updates;r.idle_flags=out.idle.flags;r.idle_state=static_cast<std::uint8_t>(out.idle.state);r.idle_reason=static_cast<std::uint8_t>(out.idle.reason);
  r.controller_faults=out.faults;r.state=static_cast<std::uint8_t>(out.state);
+ r.transient_enrichment=out.transient_enrichment;
  r.flags=Present|(out.proposed_enabled()?ProposedActive:0)|(out.fuel_cut?FuelCut:0)|(out.spark_cut?SparkCut:0)|(out.pump?Pump:0)|(out.fan?Fan:0);
 }
 inline std::uint8_t data_input_mask(const Inputs& in,std::uint8_t qualified){

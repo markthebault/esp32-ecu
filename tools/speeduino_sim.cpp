@@ -43,6 +43,7 @@ bool logger_cam = false;
 bool sequential_profile = false;
 bool semi_sequential_profile = false;
 bool idle_profile=false,idle_high=false;
+bool ae_profile=false;
 volatile uint8_t* output_ports[8]{};
 uint8_t output_masks[8]{};
 uint8_t output_pins[8]{};
@@ -275,6 +276,42 @@ int main(int argc,char** argv) {
             }
             else if(command=="channelpw"){
                 std::cout<<"channelpw "<<fuelSchedule1.pw<<' '<<fuelSchedule2.pw<<' '<<fuelSchedule3.pw<<' '<<fuelSchedule4.pw<<'\n';
+            }
+            else if(command=="aeconfig"){
+                // Explicit before-start benchmark configuration. No production
+                // sensor, correction or pulse-width algorithm is replaced.
+                if(ae_profile||speeduino_sim_micros()!=0)throw std::runtime_error("AE profile is before-start only");
+                unsigned a[32]{};
+                for(auto &v:a)if(!(std::cin>>v)||v>255)throw std::runtime_error("AE raw byte range");
+                if(a[0]>1||a[1]>1||a[7]>100||a[8]>a[9]||a[10]<100||a[11]>a[12]||a[13]>3)throw std::runtime_error("AE profile range");
+                for(unsigned offset:{16u,24u})for(unsigned i=1;i<4;++i)if(a[offset+i]<=a[offset+i-1])throw std::runtime_error("AE axes must increase");
+                configPage2.aeMode=a[0];configPage2.aeApplyMode=a[1];
+                configPage2.taeThresh=a[2];configPage2.maeThresh=a[3];
+                configPage2.taeMinChange=a[4];configPage2.maeMinChange=a[5];
+                configPage2.aeTime=a[6];configPage2.decelAmount=a[7];
+                configPage2.aeTaperMin=a[8];configPage2.aeTaperMax=a[9];
+                configPage2.aeColdPct=a[10];configPage2.aeColdTaperMin=a[11];configPage2.aeColdTaperMax=a[12];
+                configPage2.mapSample=static_cast<MAPSamplingMethod>(a[13]);
+                configPage4.ADCFILTER_TPS=a[14];configPage4.ADCFILTER_MAP=a[15];
+                for(unsigned i=0;i<4;++i){configPage4.taeBins[i]=a[16+i];configPage4.taeValues[i]=a[20+i];configPage4.maeBins[i]=a[24+i];configPage4.maeRates[i]=a[28+i];}
+                ae_profile=true;
+            }
+            else if(command=="aeprofile"){
+                std::cout<<"aeprofile "<<unsigned(configPage2.aeMode)<<' '<<unsigned(configPage2.aeApplyMode)<<' '
+                    <<unsigned(configPage2.taeThresh)<<' '<<unsigned(configPage2.maeThresh)<<' '<<unsigned(configPage2.taeMinChange)<<' '<<unsigned(configPage2.maeMinChange)<<' '
+                    <<unsigned(configPage2.aeTime)<<' '<<unsigned(configPage2.decelAmount)<<' '<<unsigned(configPage2.aeTaperMin)<<' '<<unsigned(configPage2.aeTaperMax)<<' '
+                    <<unsigned(configPage2.aeColdPct)<<' '<<unsigned(configPage2.aeColdTaperMin)<<' '<<unsigned(configPage2.aeColdTaperMax)<<' '
+                    <<unsigned(configPage2.mapSample)<<' '<<unsigned(configPage4.ADCFILTER_TPS)<<' '<<unsigned(configPage4.ADCFILTER_MAP);
+                for(unsigned i=0;i<4;++i)std::cout<<' '<<unsigned(configPage4.taeBins[i]);
+                for(unsigned i=0;i<4;++i)std::cout<<' '<<unsigned(configPage4.taeValues[i]);
+                for(unsigned i=0;i<4;++i)std::cout<<' '<<unsigned(configPage4.maeBins[i]);
+                for(unsigned i=0;i<4;++i)std::cout<<' '<<unsigned(configPage4.maeRates[i]);
+                std::cout<<'\n';
+            }
+            else if(command=="aestatus"){
+                std::cout<<"aestatus "<<speeduino_sim_micros()<<' '<<unsigned(currentStatus.TPS)<<' '<<unsigned(currentStatus.TPSlast)<<' '
+                    <<currentStatus.MAP<<' '<<getMAPDelta()<<' '<<getMAPDeltaTime()<<' '<<currentStatus.tpsDOT<<' '<<currentStatus.mapDOT<<' '
+                    <<currentStatus.AEamount<<' '<<currentStatus.isAcceleratingTPS<<' '<<currentStatus.isDeceleratingTPS<<' '<<currentStatus.AEStartTime<<'\n';
             }
             else if (command == "profile") {
                 std::cout << "profile " << unsigned(configPage2.reqFuel) << ' ' << unsigned(configPage4.HardRevLim) << ' '

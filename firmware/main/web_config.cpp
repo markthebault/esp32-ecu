@@ -83,6 +83,7 @@ esp_err_t index_get(httpd_req_t*r){
 }
 esp_err_t trigger_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");httpd_resp_set_hdr(r,"Cache-Control","no-store");return httpd_resp_send(r,assets::trigger_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t tuning_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::tuning_js,HTTPD_RESP_USE_STRLEN);}
+esp_err_t transient_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::transient_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t idle_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::idle_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t cylinder_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::cylinder_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t engine_log_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");httpd_resp_set_hdr(r,"Cache-Control","no-store");return httpd_resp_send(r,assets::engine_log_js,HTTPD_RESP_USE_STRLEN);}
@@ -236,7 +237,7 @@ esp_err_t engine_data_log_msl_get(httpd_req_t*r){
  engine_log::Header h;
  if(!engine_log_service::begin_export(id,h))return message(r,"Stop recording and select a nonempty current log before exporting.","409 Conflict");
  struct Lease {~Lease(){engine_log_service::end_export();}}lease;
- char buffer[2048];
+ char buffer[engine_log::text_capacity];
  if(!engine_log::msl_header(h,buffer,sizeof(buffer),engine_log_service::boot_id()))return message(r,"Log formatter limit exceeded.","500 Internal Server Error");
  httpd_resp_set_type(r,"text/plain; charset=utf-8");httpd_resp_set_hdr(r,"Cache-Control","no-store");
  httpd_resp_set_hdr(r,"Content-Disposition","attachment; filename=ecu-retained-engine.msl");
@@ -292,19 +293,20 @@ void service_task(){
  wifi.ap.ssid_len=std::strlen(reinterpret_cast<char*>(wifi.ap.ssid));wifi.ap.channel=6;wifi.ap.authmode=WIFI_AUTH_WPA2_PSK;wifi.ap.max_connection=2;wifi.ap.pmf_cfg.required=true;
  ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP,&wifi));ESP_ERROR_CHECK(esp_wifi_start());
  for(unsigned i=0;i<4;++i)std::snprintf(token+i*8,9,"%08lX",static_cast<unsigned long>(esp_random()));
- httpd_config_t http=HTTPD_DEFAULT_CONFIG();http.stack_size=16384;http.max_uri_handlers=32;http.lru_purge_enable=true;http.recv_wait_timeout=5;http.send_wait_timeout=5;
+ constexpr unsigned uri_capacity=40;httpd_config_t http=HTTPD_DEFAULT_CONFIG();http.stack_size=16384;http.max_uri_handlers=uri_capacity;http.lru_purge_enable=true;http.recv_wait_timeout=5;http.send_wait_timeout=5;
  httpd_handle_t server{};ESP_ERROR_CHECK(httpd_start(&server,&http));
  const httpd_uri_t routes[]={
   {"/api/engine/defaults",HTTP_GET,engine_defaults_get,nullptr},{"/api/engine/config",HTTP_GET,engine_config_get,nullptr},{"/api/engine/config",HTTP_PUT,engine_config_put,nullptr},{"/api/engine/status",HTTP_GET,engine_status_get,nullptr},
   {"/api/engine/timing",HTTP_GET,engine_timing_get,nullptr},
   {"/api/engine/sample",HTTP_GET,engine_sample_get,nullptr},
-  {"/api/engine/tuning",HTTP_GET,engine_tuning_get,nullptr},{"/tuning_diagnostics.js",HTTP_GET,tuning_script_get,nullptr},{"/idle_control.js",HTTP_GET,idle_script_get,nullptr},
+  {"/api/engine/tuning",HTTP_GET,engine_tuning_get,nullptr},{"/tuning_diagnostics.js",HTTP_GET,tuning_script_get,nullptr},{"/idle_control.js",HTTP_GET,idle_script_get,nullptr},{"/transient_enrichment.js",HTTP_GET,transient_script_get,nullptr},
   {"/api/engine/data-log",HTTP_GET,engine_data_log_get,nullptr},{"/api/engine/data-log",HTTP_POST,engine_data_log_post,nullptr},
   {"/api/engine/data-log.msl",HTTP_GET,engine_data_log_msl_get,nullptr},{"/cylinder_tuning.js",HTTP_GET,cylinder_script_get,nullptr},{"/engine_logger.js",HTTP_GET,engine_log_script_get,nullptr},
   {"/api/engine/trigger-log",HTTP_GET,engine_trigger_get,nullptr},{"/api/engine/trigger-log",HTTP_POST,engine_trigger_post,nullptr},
   {"/api/radio",HTTP_GET,radio_get,nullptr},{"/api/radio",HTTP_POST,radio_post,nullptr},
   {"/",HTTP_GET,index_get,nullptr},{"/trigger_logger.js",HTTP_GET,trigger_script_get,nullptr},{"/api/session",HTTP_GET,session_get,nullptr},{"/api/guide",HTTP_GET,guide_get,nullptr},{"/api/manual",HTTP_GET,manual_get,nullptr},
   {"/api/defaults",HTTP_GET,defaults_get,nullptr},{"/api/config",HTTP_GET,config_get,nullptr},{"/api/config",HTTP_PUT,config_put,nullptr},{"/api/status",HTTP_GET,status_get,nullptr}};
+ static_assert(sizeof(routes)/sizeof(routes[0])<=uri_capacity,"HTTP route budget exceeded");
  for(const auto&route:routes)ESP_ERROR_CHECK(httpd_register_uri_handler(server,&route));
  ESP_LOGW(tag,"BENCH ONLY. J3 open. No actuators. SSID=%s password=%s URL=http://192.168.4.1",wifi.ap.ssid,wifi.ap.password);
 }

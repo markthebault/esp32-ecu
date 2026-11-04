@@ -1,4 +1,5 @@
 #pragma once
+#include "ecu/transient_json.hpp"
 #include "ecu/engine_data.hpp"
 #include "ecu/engine_phase.hpp"
 #include "ecu/timing_executor.hpp"
@@ -54,6 +55,7 @@ inline cJSON* data_json(const RuntimeSample&r,std::uint64_t observed_us){
  if(ok)ok=cJSON_AddBoolToObject(idle,"available",present&&r.idle_available)&&cJSON_AddStringToObject(idle,"state",idle::state_name(static_cast<idle::State>(r.idle_state)))&&cJSON_AddStringToObject(idle,"reason",idle::reason_name(static_cast<idle::Reason>(r.idle_reason)))&&cJSON_AddStringToObject(idle,"algorithm",idle::algorithm_name(static_cast<idle::Algorithm>(r.idle_algorithm)))&&cJSON_AddNumberToObject(idle,"state_code",r.idle_state)&&cJSON_AddNumberToObject(idle,"reason_code",r.idle_reason)&&cJSON_AddNumberToObject(idle,"algorithm_code",r.idle_algorithm)&&cJSON_AddNumberToObject(idle,"flags",r.idle_flags)&&json_u64(idle,"pid_updates",r.idle_pid_updates);
  for(unsigned i=0;ok&&i<6;++i)ok=json_value(idle,idle_names[i],present&&r.idle_available?r.idle_proposals[i]:NAN);
  auto*raw=ok?cJSON_AddArrayToObject(j,"raw_adc"):nullptr;if(!raw)ok=false;
+ if(ok){auto*ae=transient::observation_json(r.transient_enrichment,present);if(!ae||!cJSON_AddItemToObject(j,"transient_enrichment",ae)){cJSON_Delete(ae);ok=false;}}
  for(unsigned i=0;ok&&i<8;++i){auto*value=present&&(r.board_flags&1)?cJSON_CreateNumber(r.raw_adc[i]):cJSON_CreateNull();if(!value||!cJSON_AddItemToArray(raw,value)){cJSON_Delete(value);ok=false;}}
  auto*worker=ok?cJSON_AddObjectToObject(j,"worker_observation"):nullptr;if(!worker)ok=false;
  if(ok)ok=json_u64(worker,"command_sequence",r.worker_sequence)&&json_u64(worker,"observed_us",r.worker_observed_us)&&json_age(worker,"age_ms",worker_age)&&

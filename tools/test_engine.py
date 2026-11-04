@@ -3,7 +3,7 @@ from unittest import mock
 from pathlib import Path
 from engine_runtime import EngineRuntime,EngineStore,R
 from engine_sil import Simulation
-from engine_protocol import Session,Stream,envelope,pages,decode_pages,SIGNATURE,SERIAL_PROTOCOL
+from engine_protocol import Session,Stream,envelope,pages,decode_pages,SIGNATURE,SERIAL_PROTOCOL,PAGE_SIZES
 from engine_msq import export_msq,import_msq
 
 class EngineTests(unittest.TestCase):
@@ -39,7 +39,7 @@ class EngineTests(unittest.TestCase):
    write=b'M'+struct.pack('<BBHH',0,1,640,4)+struct.pack('<f',91)
    self.assertEqual(session.command(write),b'\0');self.assertEqual(store.tune['maps']['ve']['cells'][0],85)
    self.assertEqual(session.command(b'b\0\1'),b'\x04');self.assertEqual(EngineStore(path).tune['maps']['ve']['cells'][0],91)
-   self.assertEqual(session.command(b'p'+struct.pack('<BBHH',0,1,4990,10)),b'\x84')
+   self.assertEqual(session.command(b'p'+struct.pack('<BBHH',0,1,PAGE_SIZES[1]-2,10)),b'\x84')
    self.assertEqual(session.command(b'M'+struct.pack('<BBHH',0,1,640,4)+struct.pack('<f',999)),b'\0')
    self.assertEqual(session.command(b'b\0\1'),b'\x84');self.assertEqual(store.tune['maps']['ve']['cells'][0],91)
  def test_tuner_and_http_writers_conflict_instead_of_overwriting(self):

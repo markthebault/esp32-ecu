@@ -21,6 +21,7 @@ class SpeeduinoRuntime:
                                       stderr=subprocess.PIPE,bufsize=0)
         self.buffer=b'';self.now=0
         self.idle_profile=None
+        self.transient_profile=None
         try:
             self._initialize(per_tooth)
             if sequential:
@@ -111,6 +112,43 @@ class SpeeduinoRuntime:
         if len(lines)!=1 or not lines[0].startswith('idlestatus '):raise RuntimeError('Missing idle status')
         fields=list(map(int,lines[0].split()[1:]))
         return dict(zip(('algorithm','frequency_hz','reported_duty_pct','target_rpm','on','physical_level','counter','compare'),fields))
+
+    def configure_transient(self,config,map_sampling=0,tps_filter=0,map_filter=0):
+        """Declare and read back the production AE profile before time advances.
+
+        This maps representable tune values, not sampling semantics. Actual
+        upstream33ms TPS and1ms MAP dispatch, ADC quantization and integer
+        arithmetic remain active. There is no upstream maximum-extra setting.
+        """
+        if self.transient_profile is not None or self.now:raise ValueError('Reference transient profile is before-start only')
+        if config['mode'] not in ('off','tps_rate','map_rate'):raise ValueError('No reference equivalent of legacy TPS exponential decay')
+        c=config
+        args=[int(c['mode']=='map_rate'),{'multiply':0,'add_reference':1}[c['apply']],
+              round(c['tps_threshold_pct_s']),round(c['map_threshold_kpa_s']),round(c['tps_min_change_pct']*2),round(c['map_min_change_kpa']),
+              round(c['duration_ms']/10),round(c['decel_fuel_pct']),round(c['rpm_taper_start']/100),round(c['rpm_taper_end']/100),
+              round(c['cold_multiplier_pct']),round(c['cold_taper_start_c']+40),round(c['cold_taper_end_c']+40),map_sampling,tps_filter,map_filter]
+        for key in ('tps_rates','tps_added_pct','map_rates','map_added_pct'):
+            args.extend(round(v/10 if key.endswith('_rates') else v) for v in c[key])
+        if c['mode']=='off':args[6]=0;args[7]=100;args[20:24]=[0]*4;args[28:32]=[0]*4
+        if any(type(v) is not int or not 0<=v<=255 for v in args):raise ValueError('Reference AE profile cannot be represented in raw bytes')
+        if args[8]>args[9] or args[11]>args[12] or any(args[start+i]>=args[start+i+1] for start in (16,24) for i in range(3)):raise ValueError('Reference AE axes collapse or reverse after quantization')
+        if self.command('aeconfig '+' '.join(map(str,args))):raise RuntimeError('Unexpected reference transient configuration response')
+        lines=self.command('aeprofile')
+        if len(lines)!=1 or lines[0].split()[0]!='aeprofile' or list(map(int,lines[0].split()[1:]))!=args:raise RuntimeError('Reference AE profile did not read back exactly')
+        self.transient_profile=dict(requested=config,raw_profile=args,
+            raw_order=['mode','apply','tps_threshold','map_threshold','tps_min_change_half_pct','map_min_change_kpa','duration_10ms','decel_total_pct','rpm_start_100','rpm_end_100','cold_multiplier_pct','cold_start_c_plus40','cold_end_c_plus40','map_sampling','tps_filter','map_filter','tps_rate_axes_div10[4]','tps_extra_pct[4]','map_rate_axes_div10[4]','map_extra_pct[4]'],
+            rounding='Python nearest integer, ties to even; thresholds raw units/s, rate axes units/s divided10',
+            unrepresented=['project acquisition window','project maximum extra fuel clamp','project opposite-sign cancellation'],
+            execution='Unchanged production sensors/corrections/fuel calculations, normal loop and real schedulers in native HAL')
+        return self.transient_profile
+
+    def transient_status(self):
+        lines=self.command('aestatus')
+        if len(lines)!=1 or not lines[0].startswith('aestatus '):raise RuntimeError('Missing reference transient status')
+        values=list(map(int,lines[0].split()[1:]))
+        keys=('time_us','tps_raw_half_pct','tps_last_raw_half_pct','map_kpa','map_delta_kpa','map_delta_us','tps_dot_pct_s','map_dot_kpa_s','correction_pct','accelerating','decelerating','started_us')
+        if len(values)!=len(keys):raise RuntimeError('Incomplete reference transient status')
+        return dict(zip(keys,values))
 
     def cylinder_trims(self,trims):
         if not self.sequential:raise ValueError('Reference cylinder trims require sequential profile')

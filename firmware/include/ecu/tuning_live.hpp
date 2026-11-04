@@ -24,5 +24,9 @@ inline void live_block(const engine::RuntimeSample&s,std::uint64_t now,std::arra
  const auto sample_age=engine::data_age_us(s,s.sampled_us,now);
  const bool fresh=age<=1000000&&sample_age<=1000000;
  put_u32(b.data()+212,(s.flags&~engine::DisplayFresh)|(fresh?engine::DisplayFresh:0));
+ const auto&ae=s.transient_enrichment;
+ for(unsigned i=0;i<transient::value_count;++i)value(256+i*4,ae.available?ae.values[i]:0);
+ put_u32(b.data()+288,ae.flags|(ae.available?256U:0U));put_u32(b.data()+292,static_cast<unsigned>(ae.mode));
+ put_u32(b.data()+296,static_cast<unsigned>(ae.apply));put_u32(b.data()+300,static_cast<unsigned>(ae.phase));put_u32(b.data()+304,static_cast<unsigned>(ae.reason));
 }
 } // namespace ecu::tuning

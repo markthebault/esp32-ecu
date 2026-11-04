@@ -62,6 +62,20 @@ bool sample(const char*text,ecu::engine::RuntimeSample&out){
   r.idle_available=known;
  }
  const auto*inputs=cJSON_GetObjectItemCaseSensitive(j,"inputs");const auto*proposals=cJSON_GetObjectItemCaseSensitive(j,"proposals");
+ const auto*ae=cJSON_GetObjectItemCaseSensitive(j,"transient_enrichment");
+ if(ae){
+  auto&d=r.transient_enrichment;bool known=false;std::uint8_t mode=0,apply=0,phase=0,reason=0;
+  ok=ok&&cJSON_IsObject(ae)&&ecu::web::boolean(ae,"available",known)&&(!known||available)&&
+   integer(ae,"mode_code",mode,3)&&integer(ae,"apply_code",apply,1)&&integer(ae,"phase_code",phase,2)&&integer(ae,"reason_code",reason,11)&&integer(ae,"flags",d.flags,31);
+  d.available=known;d.mode=static_cast<ecu::transient::Mode>(mode);d.apply=static_cast<ecu::transient::Apply>(apply);d.phase=static_cast<ecu::transient::Phase>(phase);d.reason=static_cast<ecu::transient::Reason>(reason);
+  for(unsigned i=0;ok&&i<ecu::transient::value_count;++i)ok=value(ae,ecu::transient::value_names[i],d.values[i])&&(known||cJSON_IsNull(cJSON_GetObjectItemCaseSensitive(ae,ecu::transient::value_names[i])));
+  if(ok&&known){
+   ok=bool(d.flags&ecu::transient::Active)==d.active()&&std::isfinite(d.values[ecu::transient::CorrectionPct])&&d.values[ecu::transient::CorrectionPct]>=0&&d.values[ecu::transient::CorrectionPct]<=750&&
+    std::isfinite(d.values[ecu::transient::RemainingMs])&&d.values[ecu::transient::RemainingMs]>=0&&d.values[ecu::transient::RemainingMs]<=2000&&
+    std::isfinite(d.values[ecu::transient::AddedFuelMg])&&d.values[ecu::transient::AddedFuelMg]>=0;
+   if(d.flags&ecu::transient::RateValid)ok=ok&&std::isfinite(d.values[d.mode==ecu::transient::Mode::MapRate?ecu::transient::MapDot:ecu::transient::TpsDot])&&std::isfinite(d.values[ecu::transient::WindowMs])&&d.values[ecu::transient::WindowMs]>0;
+  }
+ }
  ok=ok&&cJSON_IsObject(inputs)&&cJSON_IsObject(proposals);
  for(unsigned i=0;ok&&i<ecu::engine::input_count;++i)ok=value(inputs,ecu::engine::input_names[i],r.inputs[i])&&(!(r.input_valid&(1U<<i))||std::isfinite(r.inputs[i]));
  for(unsigned i=0;ok&&i<ecu::engine::proposal_count;++i)ok=value(proposals,ecu::engine::proposal_names[i],r.proposals[i]);
@@ -104,7 +118,7 @@ extern "C" const char* data_log_msl(void*p,std::uint32_t id,const char*boot){
  if(!recorder.current(id)||h.state==ecu::engine_log::State::Recording||!h.retained)return nullptr;
  if(!boot||std::strlen(boot)>32)return nullptr;
  for(const char*cursor=boot;*cursor;++cursor)if(!std::isxdigit(static_cast<unsigned char>(*cursor)))return nullptr;
- char buffer[2048];if(!ecu::engine_log::msl_header(h,buffer,sizeof(buffer),boot))return nullptr;
+ char buffer[ecu::engine_log::text_capacity];if(!ecu::engine_log::msl_header(h,buffer,sizeof(buffer),boot))return nullptr;
  response=buffer;ecu::engine_log::Row row;
  for(std::uint64_t seq=h.first_sequence();seq<=h.total;++seq){
   if(!recorder.read(id,static_cast<std::uint32_t>(seq),row)||!ecu::engine_log::msl_row(h,row,buffer,sizeof(buffer)))return nullptr;

@@ -23,7 +23,7 @@ struct Stats {
  std::uint8_t last_code=0;
  bool initialized=false,dirty=false;
 };
-struct Reply {std::array<std::uint8_t,chunk_bytes+1> bytes{};std::size_t size=0;};
+struct Reply {std::array<std::uint8_t,live_bytes+1> bytes{};std::size_t size=0;};
 class Session {
  Backend& backend_;Page page_{};engine::Tune scratch_;Stats stats_;
  std::uint8_t result(Result r){
@@ -64,7 +64,7 @@ public:
   if(n==2&&p[0]=='f'&&(p[1]==0||p[1]==255)){out.bytes={};out.bytes[1]=2;out.bytes[2]=out.bytes[4]=1;out.size=6;stats_.last_code=0;return out;}
   if(!n)return code(0x83);
   if(n==7&&p[0]=='r'){
-   const auto offset=u16(p+3),count=u16(p+5);if(p[1]||p[2]!=0x30||!count||count>chunk_bytes||offset+count>live_bytes)return code(0x84);
+   const auto offset=u16(p+3),count=u16(p+5);if(p[1]||p[2]!=0x30||!count||count>live_bytes||offset+count>live_bytes)return code(0x84);
    std::array<std::uint8_t,live_bytes> block{};backend_.sample(block);
    std::uint32_t revision=0;(void)backend_.current(revision);stats_.active_revision=revision;
    for(auto pair:{std::pair<unsigned,std::uint32_t>{184,revision},{188,stats_.origin_revision},{192,stats_.base_revision},{196,stats_.dirty},{200,std::uint32_t(stats_.state)},{204,stats_.last_code}})put_u32(block.data()+pair.first,pair.second);

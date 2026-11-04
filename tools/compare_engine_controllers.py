@@ -18,6 +18,7 @@ ROOT=Path(__file__).resolve().parents[1]
 CAM_SCENARIOS=('cam_dropout','cam_extra','cam_wrong_phase','cam_missing_start')
 SCENARIOS=('warm_start','throttle_step','load_step','trigger_dropout','sensor_short','stall_restart','overrev')
 IDLE_SCENARIOS=('idle_load_step','idle_throttle_blip','idle_cold_start')
+TRANSIENT_SCENARIOS=('transient_tip','transient_reverse','transient_noise','transient_load')
 
 
 def benchmark_tune():
@@ -77,12 +78,12 @@ class OurController:
     def close(self):self.runtime.close()
 
 
-def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32,idle_options=None,semi_sequential=False,target_dispatcher=False):
+def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32,idle_options=None,semi_sequential=False,target_dispatcher=False,transient_options=None):
     if sequential and semi_sequential:raise ValueError('Conflicting cycle profiles')
     if target_dispatcher and controller!='ours':raise ValueError('Target dispatcher applies only to the project')
     if tune is not None and not sequential and not semi_sequential:
         sequential=tune['strategy']=='sequential_4cyl';semi_sequential=tune['strategy']=='semi_sequential_4cyl'
-    if controller not in ('ours','speeduino','speeduino_per_tooth') or scenario not in (SCENARIOS+(CAM_SCENARIOS if sequential else ())+ (IDLE_SCENARIOS if idle_options is not None else ())):raise ValueError('Unknown benchmark case')
+    if controller not in ('ours','speeduino','speeduino_per_tooth') or scenario not in (SCENARIOS+(CAM_SCENARIOS if sequential else ())+ (IDLE_SCENARIOS if idle_options is not None else ())+(TRANSIENT_SCENARIOS if transient_options is not None else ())):raise ValueError('Unknown benchmark case')
     if step_us not in (100,125,250,500) or not 1<=duration<=30:raise ValueError('Invalid benchmark duration/step')
     if control_period_us not in (1000,5000):raise ValueError('Unsupported control sampling period')
     if tune is not None and controller!='ours':raise ValueError('Custom tune is supported only by the project controller')
@@ -90,7 +91,11 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
     if idle:
         idle_options=dict(idle_options);idle_tune=copy.deepcopy(idle_options.get('tune') or benchmark_tune());idle_tune['settings']['idle_enabled']=True
         if controller=='ours':tune=idle_tune
-    plant=ResearchPlant(cold=scenario=='idle_cold_start',idle_valve=idle_options.get('valve_mode','normal') if idle else None)
+    if transient_options is not None:
+        transient_options=copy.deepcopy(transient_options)
+        if controller=='ours':
+            tune=copy.deepcopy(tune or benchmark_tune());tune['transient_enrichment']=transient_options['config']
+    plant=ResearchPlant(cold=scenario=='idle_cold_start' or bool(transient_options and transient_options.get('cold')),idle_valve=idle_options.get('valve_mode','normal') if idle else None)
     if (sequential or semi_sequential) and controller=='ours':
         tune=copy.deepcopy(tune or benchmark_tune());tune['strategy']='sequential_4cyl' if sequential else 'semi_sequential_4cyl'
     try:ecu=(OurController(tune,target_dispatcher=True) if target_dispatcher else OurController(tune)) if controller=='ours' else SpeeduinoRuntime(per_tooth=controller=='speeduino_per_tooth',sequential=sequential,timer_bits=reference_timer_bits,semi_sequential=semi_sequential)
@@ -125,12 +130,16 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                 if sequential and not mode:raise RuntimeError('Missing reference event mode')
             plant.spark_errors[-1].update(mode)
     try:
+        if transient_options is not None and controller!='ours':ecu.configure_transient(transient_options['config'],map_sampling=transient_options.get('reference_map_sampling',0))
         while now<round(duration*1e6):
             t=now/1e6
             plant.tps=(12 if scenario=='throttle_step' else 100) if t>=3 and scenario in ('throttle_step','overrev') else 0
             if scenario=='idle_throttle_blip':plant.tps=8 if 4<=t<4.5 else 0
+            if scenario=='transient_tip':plant.tps=0 if t<3 or t>=4 else (min(12,(t-3)*60) if t<3.6 else max(0,12-(t-3.6)*30))
+            if scenario=='transient_reverse':plant.tps=0 if t<3 or t>=3.12 else ((t-3)*200 if t<3.04 else max(0,8-(t-3.04)*100))
             load=35 if scenario=='load_step' and t>=4 else 5
             if scenario=='idle_load_step':load=idle_options.get('step_load_nm',9) if 5<=t<9 else 5
+            if scenario=='transient_load':load=9 if 4<=t<5.6 else 5
             # A declared motoring dynamometer forces the shaft across the hard
             # limit even if soft retard would otherwise settle below it. Its
             # supplied work is explicit as negative resisting-load work.
@@ -140,12 +149,14 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
             if now>=next_sample:
                 sample=plant.sample(t)
                 if scenario=='sensor_short' and 4<t<5:sample['map_kpa']=0
+                if scenario=='transient_noise' and 3<=t<5:sample['tps_pct']+=.2 if (now//20000)%2 else 0
                 if controller=='ours':
                     if ecu.sample(sample,now):inhibit(now,'control')
                     state=copy.deepcopy(ecu.status)
                     fault_mask|=state.get('faults',0)
                 else:
                     ecu.sensors(sample);state=ecu.status()
+                    if transient_options is not None:state['transient_enrichment']=ecu.transient_status()
                 if idle:
                     state['idle_valve']=plant.idle_valve.snapshot()
                     state['idle_pwm']=ecu.runtime.idle_status() if controller=='ours' else ecu.idle_status()
@@ -263,11 +274,15 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                            idle_post_halt_probe=dict(duration_us=50000,edges=idle_post_halt,pwm_restarts_or_stays_high=idle_halt_high or any(row[2] for row in idle_post_halt),basis='timer-only diagnostic after coupled horizon; no plant integration in this separate probe'),
                            idle_electrical_ledger_basis='before explicit external simulation-end cut; NC mechanical/current decay is finite')
         if semi_sequential:summary['max_injection_closing_error_after_3s_deg']=max((abs(row['closing_error_deg']) for row in injection_timing if row['time_us']>=3000000),default=0)
+        if transient_options is not None:
+            summary['transient_profile']=dict(requested=transient_options,reference=ecu.transient_profile if controller!='ours' else None)
+            summary['transient_scope']='Independent fixed plant, executed actuator edges only; empirical wall film, no calibration or physical qualification'
         if controller=='ours' and gap_start is not None:
             last=max((r for r in accepted_crank if r[0]<=gap_start),default=None)
             summary['dropout_accepted_crank_watchdog']=dict(last_accepted_us=last[0],timeout_us=last[1],deadline_us=last[0]+last[1],basis='Native production decoder timeout at last successfully accepted plan; period*(missing+2)*2 clamped20..150ms') if last else None
         return dict(summary=summary,trace=trace,edges=edges_all,injection_timing=injection_timing,triggers=trigger_edges,
-                    accepted_crank_watchdogs=accepted_crank,cams=cam_edges,spark_timing=plant.spark_errors,dwell=plant.dwell_events,final_ecu=state)
+                    accepted_crank_watchdogs=accepted_crank,cams=cam_edges,spark_timing=plant.spark_errors,dwell=plant.dwell_events,final_ecu=state,
+                    **(dict(combustions=plant.cylinder_combustions) if transient_options is not None else {}))
     finally:
         ecu.close();plant.close()
 

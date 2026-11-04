@@ -21,7 +21,7 @@ async def check(url,device,out):
    saved=device.engine.tune;assert saved['settings']['idle_enabled'] and saved['idle_control']['frequency_hz']==80 and saved['idle_control']['run_pct'][4]==24
    checks.append('Enable, mode, frequency, throttle threshold and table edits persist through native whole-tune validation')
    async with page.expect_download() as d:await page.locator('#engine-msq').click()
-   path=out/'idle-browser.msq';await (await d.value).save_as(path);decoded=import_msq(path.read_bytes());assert decoded==saved;checks.append('Browser own006 MSQ preserves all idle settings and explicit physical gain units')
+   path=out/'idle-browser.msq';await (await d.value).save_as(path);decoded=import_msq(path.read_bytes());assert decoded==saved;checks.append('Browser own007 MSQ preserves all idle settings and explicit physical gain units')
    await page.locator('#engine-import-file').set_input_files(R/'tuning/examples/tunerstudio-idle-roundtrip.msq')
    await page.locator('#engine-save-state').filter(has_text='File origin unavailable, editor base 2').wait_for()
    assert await page.locator('#idle-frequency_hz').input_value()=='90' and await page.locator('[data-idle-array="run_pct"][data-idle-index="4"]').input_value()=='17.01'

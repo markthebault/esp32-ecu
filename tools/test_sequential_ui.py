@@ -19,14 +19,14 @@ async def check(url,device,out):
    async with page.expect_download() as download:await page.locator('#engine-msq').click()
    path=out/'ui-sequential.msq';await (await download.value).save_as(path);tune=import_msq(path.read_bytes());assert tune['strategy']=='sequential_4cyl' and tune['timing']['injection_end_deg']==535
    async with page.expect_download() as download:await page.locator('#engine-log').click()
-   path=out/'ui-sequential.msl';await (await download.value).save_as(path);assert 'PhaseSync' in path.read_text();checks.append('006 MSQ and phase-aware MSL exports retain source and configuration')
+   path=out/'ui-sequential.msl';await (await download.value).save_as(path);assert 'PhaseSync' in path.read_text();checks.append('007 MSQ and phase-aware MSL exports retain source and configuration')
    await page.screenshot(path=out/'sequential-ui-desktop.png')
    await page.locator('[data-page="triggers"]').click();await page.locator('#trigger-start').click();await page.locator('#trigger-json').wait_for(state='visible');await page.wait_for_function('()=>!document.querySelector("#trigger-json").disabled')
    async with page.expect_download() as download:await page.locator('#trigger-json').click()
    path=out/'ui-sequential-trigger.json';await (await download.value).save_as(path);frame=json.loads(path.read_text());assert frame['includes_cam'] and not frame['includes_falling_edges'];assert any(row['channel']=='cam' for row in frame['records']);checks.append('Synthetic trigger replay includes actual generated cam edges')
    await page.locator('[data-page="engine"]').click();await page.locator('#eng-strategy').wait_for()
    legacy=(R/'tuning/examples/tunerstudio-roundtrip.msq').read_text();decoded=await page.evaluate('text=>engineFromMsq(text,engineTune)',legacy);assert decoded['strategy']=='batch_wasted_4cyl' and decoded['timing']['injection_end_deg']==540;checks.append('001 migration uses fixed batch defaults even from a sequential editor')
-   assert await page.evaluate('()=>{const x=structuredClone(engineTune);x.schema_version=6;try{engineImportShape(x,engineTune);return false}catch{return true}}');checks.append('Unsupported import schema rejected before showing edits')
+   assert await page.evaluate('()=>{const x=structuredClone(engineTune);x.schema_version=7;try{engineImportShape(x,engineTune);return false}catch{return true}}');checks.append('Unsupported import schema rejected before showing edits')
    for width in (320,390,768,1440):
     await page.set_viewport_size({'width':width,'height':1000});await page.evaluate('()=>new Promise(requestAnimationFrame)');assert await page.evaluate('()=>document.documentElement.scrollWidth<=innerWidth')
    checks.append('Sequential forms fit320/390/768/1440 widths')

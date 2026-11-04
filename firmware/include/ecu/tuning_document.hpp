@@ -10,7 +10,7 @@ class Document {
  template<class Map>static bool grid(cJSON*j,const Map&m){return j&&values(item(j,"rpm"),m.rpm)&&values(item(j,"load"),m.load)&&values(item(j,"cells"),m.cells);}
 public:
  explicit Document(cJSON*j):root_(j){}
- bool header(std::uint32_t revision,const char*strategy){return set(item(root_,"schema_version"),5)&&set(item(root_,"revision"),revision)&&cJSON_SetValuestring(item(root_,"strategy"),strategy);}
+ bool header(std::uint32_t revision,const char*strategy){return set(item(root_,"schema_version"),6)&&set(item(root_,"revision"),revision)&&cJSON_SetValuestring(item(root_,"strategy"),strategy);}
  bool number(const char*group,const char*key,double v){return set(item(item(root_,group),key),v);}
  bool boolean(const char*group,const char*key,bool v){auto*j=item(item(root_,group),key);if(!cJSON_IsBool(j))return false;j->type=(j->type&~0xff)|(v?cJSON_True:cJSON_False);return true;}
  template<class Values>bool array(const char*group,const char*key,const Values&v){return values(item(item(root_,group),key),v);}
@@ -42,5 +42,11 @@ public:
   return true;
  }
  bool trim(unsigned index,const engine::TrimMap&m){return grid(cJSON_GetArrayItem(item(item(root_,"cylinder_trims"),"fuel_maps"),index),m);}
+ bool transient_enrichment(const ecu::transient::Config&c){
+  auto*j=item(root_,"transient_enrichment");if(!j||!cJSON_SetValuestring(item(j,"mode"),transient::mode_name(c.mode))||!cJSON_SetValuestring(item(j,"apply"),transient::apply_name(c.apply)))return false;
+  for(auto field:transient::scalar_fields)if(!number("transient_enrichment",field.name,c.*(field.member)))return false;
+  for(auto field:transient::array_fields)if(!array("transient_enrichment",field.name,c.*(field.member)))return false;
+  return true;
+ }
 };
 } // namespace ecu::tuning

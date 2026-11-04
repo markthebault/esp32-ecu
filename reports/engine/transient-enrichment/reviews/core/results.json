@@ -1,0 +1,134 @@
+{
+  "properties_fixed": {
+    "compile_command": [
+      "/usr/bin/c++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-g",
+      "-O1",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/fixed-snapshot",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/properties.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/properties_fixed"
+    ],
+    "compile_returncode": 0,
+    "compile_stderr": "",
+    "run_returncode": 0,
+    "stdout": "nonfinite_configs_rejected=87 dose_cases=448 capacity_cuts=38 decel_zero_battery_strategy_apply_cases=18 negative_trim_capacity=passed randomized_samples=400000\n",
+    "stderr": ""
+  },
+  "clocks_fixed": {
+    "compile_command": [
+      "/usr/bin/c++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-g",
+      "-O1",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/fixed-snapshot",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/clocks.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/clocks_fixed"
+    ],
+    "compile_returncode": 0,
+    "compile_stderr": "",
+    "run_returncode": 0,
+    "stdout": "Acquisition duplicates/future/stale/gap/reversal, control duplicate, deadline overflow and config history reset passed\n",
+    "stderr": ""
+  },
+  "probe_fixed": {
+    "compile_command": [
+      "/usr/bin/c++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-g",
+      "-O1",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/fixed-snapshot",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/probe.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/probe_fixed"
+    ],
+    "compile_returncode": 0,
+    "compile_stderr": "",
+    "run_returncode": 0,
+    "stdout": "expiry_collision immediate_active=1 immediate_reason=acceleration_hold delayed_active=1 delayed_reason=acceleration_hold rate=200/200 remaining=19\nsubthreshold_reversal rate=-30 threshold=40 active=0 reason=source_reversed\n",
+    "stderr": ""
+  },
+  "repository_transient_fixed": {
+    "compile_command": [
+      "/usr/bin/c++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-g",
+      "-O1",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/fixed-snapshot",
+      "/home/mark/persospace/esp32-ecu/firmware/tests/transient_enrichment_test.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/repository_transient_fixed"
+    ],
+    "compile_returncode": 0,
+    "compile_stderr": "",
+    "run_returncode": 0,
+    "stdout": "Acquisition-time rate windows, hold/expiry, retrigger/reversal, tapered/clamped demand and recovery history passed\n",
+    "stderr": ""
+  },
+  "repository_engine_fixed": {
+    "compile_command": [
+      "/usr/bin/c++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-g",
+      "-O1",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/fixed-snapshot",
+      "/home/mark/persospace/esp32-ecu/firmware/tests/engine_transient_test.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/repository_engine_fixed"
+    ],
+    "compile_returncode": 0,
+    "compile_stderr": "",
+    "run_returncode": 0,
+    "stdout": "Transient full-cycle multiplier/adder, openings/deadtime/trims, decel0, EGO, fault/restart and whole-command capacity passed\n",
+    "stderr": ""
+  },
+  "initial_reproduction": {
+    "run_command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/probe"
+    ],
+    "returncode": 0,
+    "stdout": "expiry_collision immediate_active=0 immediate_reason=event_expired delayed_active=1 delayed_reason=acceleration_hold rate=200/200 remaining=19\nsubthreshold_reversal rate=-30 threshold=40 active=0 reason=source_reversed\n",
+    "stderr": ""
+  },
+  "legacy_golden": {
+    "compile_command": [
+      "/usr/bin/c++",
+      "-std=c++17",
+      "-O2",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/fixed-snapshot",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/transient-architecture-review/legacy_golden.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/transient-core-review/legacy_fixed"
+    ],
+    "exact_csv_equal": true,
+    "rows": 21
+  },
+  "compiler_version": "c++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+}

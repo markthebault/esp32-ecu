@@ -63,21 +63,23 @@ void framing_and_msl_tests(){
  assert(radio::wire::engine_body(bytes,r,123,456,30,30,35,5000000));assert(radio::wire::valid(bytes,sizeof(bytes),radio::wire::EngineTelemetry,sizeof(bytes)));assert(radio::wire::read64(bytes+40)==r.sequence);
  assert(radio::wire::read32(bytes+112+4*engine::Lambda)==0x7fc00000);assert(radio::wire::read32(bytes+24)==30);
  assert((bytes[23]&128)!=0);assert(radio::wire::engine_body(bytes,r,123,457,1001,1001,1002,6000000));assert((bytes[23]&128)==0);
- engine_log::Header h;h.source=engine::DataSource::Synthetic;h.total=h.retained=1;engine_log::Row row{r,20000,1,1};char text[2048];assert(engine_log::msl_header(h,text,sizeof(text)));
- std::string header=text;const auto start=header.find('\n',header.find('\n')+1)+1;const auto end=header.find('\n',start);const auto count=fields(header.substr(start,end-start));assert(count==91);
+ engine_log::Header h;h.source=engine::DataSource::Synthetic;h.total=h.retained=1;engine_log::Row row{r,20000,1,1};char text[engine_log::text_capacity];assert(engine_log::msl_header(h,text,sizeof(text)));
+ std::string header=text;const auto start=header.find('\n',header.find('\n')+1)+1;const auto end=header.find('\n',start);const auto count=fields(header.substr(start,end-start));assert(count==105);
  assert(engine_log::msl_row(h,row,text,sizeof(text)));assert(fields(text)==count);assert(std::string(text).find("NaN")!=std::string::npos);assert(!engine_log::msl_row(h,row,text,10));
  engine_log::Request q;assert(engine_log::parse_request("{\"action\":\"start\",\"period_ms\":20,\"duration_s\":1}",49,q)==false); // Explicit lengths must match the actual envelope.
  std::string body="{\"action\":\"start\",\"period_ms\":20,\"duration_s\":1}";assert(engine_log::parse_request(body.c_str(),body.size(),q));
  body="{\"action\":\"stop\",\"log_id\":1,\"log_id\":2}";assert(!engine_log::parse_request(body.c_str(),body.size(),q));
  std::uint32_t id=0,after=0;assert(engine_log::parse_query("log_id=1&after=0",id,after));assert(!engine_log::parse_query("log_id=1&after=4294967296",id,after));
 }
-static std::unordered_map<void*,bool> allocations;static int budget=-1;
-void* allocate(std::size_t n){if(budget==0)return nullptr;if(budget>0)--budget;auto*p=std::malloc(n);if(p)allocations[p]=true;return p;}
-void release(void*p){if(!p)return;assert(allocations.erase(p)==1);std::free(p);}
+static std::unordered_map<void*,std::size_t> allocations;static int budget=-1;
+static std::size_t live_bytes=0,peak_bytes=0,allocation_count=0;
+void* allocate(std::size_t n){if(budget==0)return nullptr;if(budget>0)--budget;auto*p=std::malloc(n);if(p){allocations[p]=n;live_bytes+=n;peak_bytes=std::max(peak_bytes,live_bytes);++allocation_count;}return p;}
+void release(void*p){if(!p)return;const auto i=allocations.find(p);assert(i!=allocations.end());live_bytes-=i->second;allocations.erase(i);std::free(p);}
 void allocation_tests(){
  engine_log::Recorder r;assert(r.start(20,1,engine::DataSource::Synthetic,0));for(unsigned i=0;i<16;++i)r.append(sample(i+1,i*20000),i*20000);
  engine_log::Page page;r.page(r.header().log_id,0,page);cJSON_Hooks hooks{allocate,release};cJSON_InitHooks(&hooks);
- unsigned failed=0,passed=0;for(unsigned n=0;n<4500;++n){budget=n;auto*j=engine_log::page_json(page);if(j){++passed;assert(cJSON_GetArraySize(cJSON_GetObjectItemCaseSensitive(j,"records"))==16);}else ++failed;cJSON_Delete(j);assert(allocations.empty());}
- cJSON_InitHooks(nullptr);assert(failed&&passed);std::cout<<"JSON allocation positions: "<<failed<<" rejected, "<<passed<<" complete pages\n";
+ budget=-1;auto*complete=engine_log::page_json(page);assert(complete);const auto required=allocation_count;auto*encoded=cJSON_PrintUnformatted(complete);assert(encoded);const auto output_bytes=std::strlen(encoded),full_peak=peak_bytes;cJSON_free(encoded);cJSON_Delete(complete);assert(allocations.empty()&&!live_bytes);
+ unsigned failed=0,passed=0;for(std::size_t n=0;n<=required;++n){budget=static_cast<int>(n);auto*j=engine_log::page_json(page);if(j){++passed;assert(n==required&&cJSON_GetArraySize(cJSON_GetObjectItemCaseSensitive(j,"records"))==16);}else ++failed;cJSON_Delete(j);assert(allocations.empty()&&!live_bytes);}
+ cJSON_InitHooks(nullptr);assert(failed==required&&passed==1);std::cout<<"JSON allocation positions: "<<failed<<" rejected, "<<passed<<" complete page; native cJSON peak="<<full_peak<<" bytes, output="<<output_bytes<<" bytes (allocator overhead excluded)\n";
 }
 int main(){recorder_tests();clock_and_sampling_tests();capabilities_and_ack_tests();framing_and_msl_tests();allocation_tests();std::cout<<"Engine observation, bounded log, ages, negotiation, ACK rollover and formatting tests passed\n";}

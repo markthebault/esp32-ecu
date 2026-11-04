@@ -1,0 +1,108 @@
+{
+  "review": "Independent read-only transient storage/config/tuning/log integration review",
+  "completed_at_utc": "2026-11-04T05:12:17.865849+00:00",
+  "status": "No unresolved blocker in reviewed scope after logger corrections",
+  "baseline_commit": "64c21ed29d5bf5b5a44c471bcc321b88c8ac5d38",
+  "source_binding": {
+    "initial": "snapshot-hashes.json (captured source before probes)",
+    "correction_1": "recheck-1/hashes.json",
+    "final_corrections": "recheck-2/hashes.json",
+    "audit": "source-drift.json",
+    "note": "Core/controller change after initial snapshot only permits a newly acquired event coincident with hold expiry; reviewed diff changes no Config/Output layout, JSON migration, storage, CAS or ownership. Behavioral expiry qualification belongs to the core reviewer/root. Test files changed during review; root runs the final complete suite."
+  },
+  "findings": [
+    {
+      "id": "TR-STORE-1",
+      "severity": "medium",
+      "status": "fixed and independently reproduced",
+      "source": "web/engine_logger.js exportMsl/acceptPage",
+      "initial_hash": "fa15136493b1b880ad8b73c01ce37e3890aa1373aca68d3173f5e5e00d53ca2e",
+      "problem": "Browser collected MSL retained LOG003/91 columns and silently omitted the 14 transient columns; malformed transient metadata was accepted and advanced the cursor. Target/native retained export had LOG004/105 columns.",
+      "initial_evidence": "ui-results.json, logger-browser.msl, logger-native.msl; node ui_probe.js",
+      "resolution": "Final source emits LOG004/105 columns. Header labels, units, and a real native fixture row match the native export exactly. Bad AE enum/flags/phase/rate/value cases leave cursor unchanged.",
+      "final_hash": "5e3d71b8ad4fc2329e85603025c04704564a69ba135c55c4bb5f70776c6d5963",
+      "verification": "recheck-2/logger-results.json; node .cache/engine/transient-storage-review/logger_recheck.js recheck-2"
+    },
+    {
+      "id": "TR-STORE-2",
+      "severity": "low",
+      "status": "fixed and independently reproduced",
+      "source": "web/engine_logger.js acceptPage",
+      "problem": "First correction guarded if(ae), so present null,0,false bypassed validation and advanced the cursor while being exported as unavailable.",
+      "evidence": "recheck-1/logger-results.json",
+      "resolution": "Final guard distinguishes absent legacy data from a present malformed value. All ten malformed cases reject at cursor0; a malformed second row commits none of a page, and failure after previously collected data retains the existing cursor/rows. An absent legacy AE object remains supported.",
+      "final_hash": "5e3d71b8ad4fc2329e85603025c04704564a69ba135c55c4bb5f70776c6d5963"
+    }
+  ],
+  "verified": {
+    "legacy_storage": "Frozen-source native EngineStore probes schema1..5: raw file bytes remain identical on load, revision37 retained, legacy AE threshold/gain/decay retained, fixed legacy_tps/multiply defaults added, existing idle/trim migration rules preserved; explicit Save writes schema6 and revision38 exactly once.",
+    "strictness": "All19 schema6 transient fields are mandatory. Extra transient object rejects under schemas1..5; malformed enum/bounds/nonascending axes reject. Embedded NUL save rejects without replacing runtime/file; malformed loaded file is preserved and saving blocked.",
+    "cas_and_activation": "4992..5115 transient block stages privately. A successful whole-tune burn increments once and retains connection origin. Invalid mode cannot burn or replace active runtime/file. An intervening HTTP Save makes the staged burn conflict. Reserved-only and mixed boundary writes reject without changing staging.",
+    "wire": "Old006 first4992 page bytes remain byte-identical. Page5120 live320 chunk256; appended data ends5116, last4 bytes reserved. A single r320 calls the sample backend once, returns321 payload/327 framed bytes; length and CRC independently checked. Zero,321,and out-of-range slices reject. ASan/UBSan stream/memory/log probe clean.",
+    "imports": "All captured historical own001..006 fixtures import to legacy_tps/multiply. New007 missing any19 AE constants rejects. Valid file origin retained; missing origin permits offline placeholder1; explicit already-loaded caller base overrides current whole identity; malformed present origin rejects before override; old001..003 still require origin. Pure JS schema1..5 migration preserves source/revision and legacy AE, rejects extra legacy AE data, schema6 requires exact shape/known enums.",
+    "log_availability": "Native105 labels/units/rows append to unchanged old91-column prefix. Unknown AE values produce JSON null, MSL NaN, wire zero with clear availability. RateValid and availability remain separate; live reserved308..319 zero. Corrected browser export and cursor validation independently reprobed.",
+    "generators": "Initial captured codec/transient UI/INI/layout generators reproduce all output bytes with write interception. Corrected007 INI generator likewise reproduces recheck-2 artifacts; AE curves now have explicit axes,size,and live-axis channel. Actual application UI compatibility remains root testing scope.",
+    "oom": "cJSON canonicalization sweeps every budget0..3399 for legacy schemas1 and5:2340 and2585 fail positions respectively, subsequent success positions, zero live allocations after each. Memory probe fails every311 single-row and4946 full-page allocation positions, no partial object/print success and no leaks."
+  },
+  "memory": {
+    "native": "memory-results.json (64-bit pointers/cJSON64-byte nodes, requested-byte allocation counts exclude libc allocator overhead)",
+    "one_row": {
+      "allocations": 311,
+      "dom_requested_bytes": 11497,
+      "peak_requested_bytes": 19671,
+      "printed_bytes": 3989
+    },
+    "full16_native_page": {
+      "allocations": 4946,
+      "dom_requested_bytes": 185999,
+      "peak_requested_bytes": 320787,
+      "printed_bytes": 64419
+    },
+    "target_sizes": {
+      "cJSON": 40,
+      "Reply": 328,
+      "RuntimeSample": 352,
+      "Stream": 360,
+      "Row": 368,
+      "Tune": 4840,
+      "Page16": 5976,
+      "Session": 10040,
+      "Recorder256": 94296
+    },
+    "target_path": "web_config.cpp heap-allocates the5976-byte Page snapshot, serializes/deletes only one row cJSON DOM at a time, sends/free printed row then yields. Full page_json is native tooling only. Recorder94296 bytes is fixed static RAM, not task stack. No evidence here supports reducing16-row page capacity.",
+    "compiler_frames_bytes": {
+      "http_streamed_log_handler": 112,
+      "http_msl_handler": 3552,
+      "http_stack_config": 16384,
+      "usb_run": 304,
+      "session_command": 784,
+      "usb_backend_sample": 400,
+      "stream_feed": 400,
+      "stream_framed": 368,
+      "usb_stack_config": 12288,
+      "engine_observe": 1472
+    },
+    "compiler_evidence": "target-compile-record.json and *.review.su: captured source, pinned N16R8 SDK compiler/config, recorded flags and USB gates. Function frames are not complete call-chain bounds or measured stack high-water marks; native byte peaks are not measured ESP heap peaks.",
+    "msl_capacity": "105-column maximum numeric stress row1167 bytes; max-counter/header/32-character boot string2066 bytes; both below3072-byte buffer."
+  },
+  "transport_limitations": [
+    "Session/Stream full320 read is atomic for one command only; separately requested slices may come from different control samples. Native backend sample-count proof does not establish how actual vendor software requests channels.",
+    "Reference comms.cpp identifies f response factors as BLOCKING_FACTOR/TABLE_BLOCKING_FACTOR; no evidence to reinterpret them as hard live-response maximum. INI blockingFactor256 remains page staging.",
+    "Pinned/local USB driver write path enqueues whole buffer or returns0;327-byte response structurally fits configured1024-byte TX ring. Local override differs from pinned source only by corrected TX allocation-null check. No physical USB throughput/drop/boot-traffic qualification was performed.",
+    "Own007 online vendor identity integration remains unresolved in parent context; this review makes no actual-online-vendor acceptance claim."
+  ],
+  "limits": [
+    "No production source edited, no server started, no child agents, no vendor/external messages.",
+    "No flash/NVS hardware,power-loss,physical outputs,free-heap or task-stack high-water measurements. Fake/native NVS or host atomic-file probes do not establish physical persistence qualification.",
+    "Root retains responsibility for regenerated embedded assets and final builds/browser/simulator suites after the last guard fix. Initial captured source and all correction snapshots are preserved."
+  ],
+  "commands": [
+    "python3 .cache/engine/transient-storage-review/native_probe.py",
+    "python3 .cache/engine/transient-storage-review/import_edge_probe.py",
+    "python3 .cache/engine/transient-storage-review/generator_probe.py",
+    "node .cache/engine/transient-storage-review/ui_probe.js",
+    "node .cache/engine/transient-storage-review/logger_recheck.js recheck-2",
+    ".cache/engine/transient-storage-review/memory_probe",
+    "python3 .cache/engine/transient-storage-review/target_compile.py"
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "guide_version": "1.4",
+  "guide_version": "1.5",
   "sources_append": [
     {
       "title": "Vishay 6N137 optical input/detector data",
@@ -41,6 +41,19 @@
         "After saving, check active strategy separately from unsaved editor settings. Compare executed rising/falling timestamps for both members of each pair, full electrical width, duty, fault cause, revision and source age. Injector low deadlines stay fixed after opening, so changing RPM can move the actual closing angle. A missing cam is expected in this mode; a missing crank must cut. Old latched faults still require stopped/quiet recovery.",
         "Pairs can overlap above50 percent duty. Do not assume lower peak supply/return current. Existing1.2A injector and4mA smart-coil targets remain unqualified; saturated high-impedance PFI only. Actual flow/deadtime, current/flyback, loaded supply/gates, timing/jitter, temperature and engine phase need physical dummy-load/HIL acceptance.",
         "The host reduced and research plants have fixed physical1-3-4-2 geometry. Changing the tune order does not change that engine. Coupled comparison uses a neutral test tune, not a vehicle calibration. Screen engine schema2 is required for this mode; schema1 peers fall back to sensors and show upgrade needed."
+      ]
+    },
+    {
+      "connector": "J11 / J12 transient fueling",
+      "title": "MAP/TPS transient acquisition and dose",
+      "checks": [
+        "Use Engine development > Transient fueling. Older tunes retain Legacy TPS decay; Off, TPS rate table and MAP rate table are explicit choices. Selected web images inhibit physical outputs. No new connector or PCB route is required.",
+        "J11 is protected MAP and J12 is protected TPS. Reference each signal to its connector pin1 ground and verify the actual sensor supply, mating pinout and calibrated kPa or percent. Do not infer wiring from the sensor body color.",
+        "New modes use nominal5ms fast calibrated acquisitions and the scan-start timestamp, independently of display smoothing. Compare raw voltage, calibrated values, window length, source rate, threshold/minimum-change gates and phase/reason. Bad wiring and noise can trigger enrichment.",
+        "Extra curve values are percentages. Multiply scales effective current fuel. Add reference fuel uses per-cylinder720-degree mass at100kPa,25C,100%VE and lambda1, independent of current MAP/VE/warmup. Trims scale the complete dose; opening count and deadtime follow.",
+        "Deceleration is fuel remaining:100% neutral,0% stops new injector starts after scheduler acceptance while spark continues unless another cut applies. Existing active closing edges finish normally. Dose/pulse/duty limits still inhibit the whole command.",
+        "First observation and recovery after stop/crank/fault/DFCO clear history. Rate-valid differs from observation available. Check source age: hold remaining is measured at the observation time. Completed host runs are synthetic and retained logs are historical.",
+        "Use engine MSL004 or JSON for detailed transient rates, phase and dose. Fixed ESP-NOW schema2 retains the existing effective accel ratio only. No physical measurement or vehicle base tune is implied."
       ]
     }
   ],

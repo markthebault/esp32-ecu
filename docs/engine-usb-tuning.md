@@ -81,3 +81,5 @@ Use new output paths when preserving a published run. [Evidence](../reports/engi
 The [idle increment](engine-idle-control.md) records own005 offline application edits, 91-field bounded engine logging, 48-field direct SIL logging and current validation. Historical USB evidence in the directory above remains unchanged.
 
 The [semi-sequential increment](engine-semi-sequential.md) adds the current schema5/own006 strategy and negotiated engine-radio schema2. Earlier identities/evidence described here remain historical records; byte offsets, CAS, bounded logging and selected physical-output inhibition are retained.
+
+Current [transient fueling development](engine-transient-enrichment.md) uses schema6/own007, one5120-byte tune page and a320-byte runtime block, with105-field engine MSL004 and62-field direct SIL MSL004. Earlier layout/evidence descriptions in this document are historical. Selected physical-output policy and online vendor limits remain unchanged.

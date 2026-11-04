@@ -6,7 +6,7 @@ class Stream {
  Session& session_;std::array<std::uint8_t,chunk_bytes+13> rx_{};std::size_t used_=0;std::uint64_t last_us_=0,last_rx_us_=0;bool seen_=false,tx_fault_=false;StreamStats stats_;
  template<class Send>void send(const std::uint8_t*p,std::size_t n,Send&fn){if(fn(p,n))stats_.transmitted+=n;else{++stats_.tx_errors;tx_fault_=true;}}
  template<class Send>void framed(const Reply&r,Send&fn){
-  std::array<std::uint8_t,chunk_bytes+7> wire{};wire[0]=std::uint8_t(r.size>>8);wire[1]=std::uint8_t(r.size);std::copy_n(r.bytes.data(),r.size,wire.data()+2);
+  std::array<std::uint8_t,live_bytes+7> wire{};wire[0]=std::uint8_t(r.size>>8);wire[1]=std::uint8_t(r.size);std::copy_n(r.bytes.data(),r.size,wire.data()+2);
   const auto crc=Session::crc32(r.bytes.data(),r.size);for(unsigned i=0;i<4;++i)wire[2+r.size+i]=std::uint8_t(crc>>(24-8*i));send(wire.data(),r.size+6,fn);
  }
  template<class Send>void error(std::uint8_t code,Send&fn){Reply r;r.bytes[0]=code;r.size=1;framed(r,fn);}

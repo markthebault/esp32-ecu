@@ -1,7 +1,7 @@
 {
-  "signature": "ESP32ECU DEV 006 INHIBITED",
+  "signature": "ESP32ECU DEV 007 INHIBITED",
   "pages": {
-    "1": 4992
+    "1": 5120
   },
   "numeric_fields": [
     [
@@ -194,6 +194,38 @@
     "crank_pct": 4892,
     "target_add_rpm": 4916
   },
+  "transient_scalars": {
+    "sample_period_ms": 5000,
+    "tps_threshold_pct_s": 5004,
+    "map_threshold_kpa_s": 5008,
+    "tps_min_change_pct": 5012,
+    "map_min_change_kpa": 5016,
+    "duration_ms": 5020,
+    "max_enrichment_pct": 5024,
+    "decel_fuel_pct": 5028,
+    "rpm_taper_start": 5032,
+    "rpm_taper_end": 5036,
+    "cold_multiplier_pct": 5040,
+    "cold_taper_start_c": 5044,
+    "cold_taper_end_c": 5048
+  },
+  "transient_arrays": {
+    "tps_rates": 5052,
+    "tps_added_pct": 5068,
+    "map_rates": 5084,
+    "map_added_pct": 5100
+  },
+  "transient_offset": 4992,
+  "transient_live_fields": [
+    "aeTpsDot",
+    "aeMapDot",
+    "aeWindowMs",
+    "aeTriggerDot",
+    "aeCorrectionPct",
+    "aeUnclampedPct",
+    "aeRemainingAtSampleMs",
+    "aeAddedFuelMg"
+  ],
   "live_fields": [
     "time",
     "rpm",
@@ -207,7 +239,7 @@
     "target_lambda",
     "ego"
   ],
-  "live_block_bytes": 256,
+  "live_block_bytes": 320,
   "timing_fields": [
     [
       "injection_end_deg",

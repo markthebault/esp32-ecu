@@ -17,7 +17,7 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | VR crank/cam | Raw VR conditioning missing | Hall-specific guides | External conditioned module or reviewed new front end |
 | Cranking fuel/spark | Shared shadow/SIL | Threshold/timing/coolant curve | Cranking voltage/noise and timing-light tests pending |
 | Warmup/afterstart | Shared shadow/SIL | Curves, magnitude/duration, correction logs | Physical cold calibration pending |
-| Acceleration enrichment | Basic decaying TPS-rate model | Threshold/gain/decay and logs | Wall-film/MAP-rate/per-engine tuning remain |
+| Acceleration/deceleration enrichment | Legacy decay plus acquisition-window TPS/MAP tables, multiplier/reference-adder, latched RPM/coolant taper and zero-decel fuel cut;48 coupled cases plus8 refinement and8 neutral controls | Schema6/own007, curves/gates, source-rate/phase/dose diagnostics,105-field engine and62-field SIL MSL004 | Existing protected J11/J12; real sensor noise, injector behavior and engine/film calibration remain unqualified |
 | Dead-time compensation | Battery curve and pulse bounds | Curve and pulse diagnostics | Injector flow/dead-time/flyback characterization missing |
 | Dwell compensation/protection | Battery curve, bounded high time, late-demand handling | Dwell/angle diagnostics, event traces | Smart coils only, no dumb-coil power driver |
 | Rev limiting | Retard band, cut and hysteresis | Editable thresholds and fault logs | Target response and physical cut behavior pending |
@@ -36,7 +36,7 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | Sensor calibration | Persistent linear/table/NTC with loading compensation | Guides, units, confirmation and raw diagnostics | Six analog inputs plus battery/5V; physical verification pending |
 | Engine sensor binding | Confirmed physical units; raw-voltage relabelling rejected | Binding/fault status | Fast raw samples, display filter cannot hide faults |
 | Supervision/recovery | Target independent command/producer/tooth/cam/high-time deadlines, transactional scheduling and configuration holds | Reasons/counters/bounded traces/revisions/storage | Target timing/watchdog/restart policy needs physical HIL |
-| TunerStudio offline | Own definition/MSQ exchange | Own005 complete-page settings/curve/map editing, origin metadata and stale-editor CAS | Actual offline application roundtrip; target USB hardware unmeasured |
+| TunerStudio offline | Own definition/MSQ exchange | Own007 complete-page settings/curve/map editing, origin metadata and stale-editor CAS | Actual offline application roundtrip; target USB hardware unmeasured |
 | TunerStudio online | Shared C++ whole-tune transport and dedicated inhibited USB service | Authenticated tuning diagnostics; bounded framing/CAS/storage tests; app rejects own identity | Vendor integration unresolved; physical USB/load/cache/timing tests pending |
 | MegaLogViewer HD | SIL, raw-trigger and bounded target engine MSL; actual application opens/plots browser engine/trigger exports | Source/loss/age/validity labels, collected versus retained downloads; derived missing-lambda display caveat | Physical target capture/logging behavior unmeasured |
 | Tooth/composite/ignition logging | Target finite512-edge crank/cam recorder, raw intervals and128-record output/cut ring | Trigger charts/zoom, JSON/MSL export, bounded paging and fault counts; no TS high-speed logger | Independent capture channels implemented; capture integrity/per-pin timing need HIL |
@@ -77,3 +77,5 @@ DBW/OEM integration remain outside the current bench scope.
 [Isolated idle hardware](engine-idle-isolation.md) records the routed carrier/accessory, independent review corrections and conditional return/brownout/pulse circuit experiments.
 
 [Selectable semi-sequential](engine-semi-sequential.md) adds the current schema5/own006 configuration and schema2 screen contract. Historical per-feature identities and evidence above remain records; current exports use own006. This increment does not establish broader Speeduino parity or physical engine operation.
+
+[Transient fueling](engine-transient-enrichment.md) adds schema6/own007 while preserving legacy AE behavior and the first256 runtime bytes. This increment closes the basic TPS/MAP rate-table gap in software and UI; it does not establish wall-film calibration, online vendor acceptance or physical ECU equivalence.

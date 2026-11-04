@@ -1,0 +1,73 @@
+{
+  "guide_version": "1.5",
+  "sources_append": [
+    {
+      "title": "Vishay 6N137 optical input/detector data",
+      "url": "https://www.vishay.com/docs/84732/6n137_vo2601_vo2611.pdf"
+    },
+    {
+      "title": "TI UCC27524 gate-driver data and layout guidance",
+      "url": "https://www.ti.com/lit/ds/symlink/ucc27524.pdf"
+    },
+    {
+      "title": "Microchip MCP100 supply supervisor",
+      "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/11187f.pdf"
+    }
+  ],
+  "services_append": [
+    {
+      "connector": "A5 J21 / IAC-DRAFT2",
+      "title": "Isolated idle PWM",
+      "checks": [
+        "Engine development contains idle modes, gains, coolant curves and source/age diagnostics. All shipped builds keep physical idle GPIO writes disabled. A3/A4 and the old manual/ZIP do not contain this new carrier connector.",
+        "A5 J21 PH4 maps pin 1 GPIO3/IDLE_CMD, pin 2 RUN_5V, pin 3 carrier 5V, pin 4 carrier GND to IAC-DRAFT2 J1 XH4 pins1 through 4. R154 is the permanent 2.2 kohm carrier bias and stays present with the harness unplugged. Verify the keyed mating view and continuity with power removed.",
+        "Two input-side transistor buffers and 6N137 optocouplers separate carrier power/return from actuator logic. Do not bridge these domains with wires, case foil, heatsinks or scope ground clips. This is low-voltage return separation, not certified isolation.",
+        "Accessory J2 fixed screw terminal: pin 1 separate externally protected, fused, relay-switched 9-16 V; pin 2 dedicated return. J3 VH2: pin 1 valve positive, pin 2 IAC_LS. Use an actual <=2 A normally closed two-wire continuous-PWM valve; carrier J1 and sensor rails cannot supply it.",
+        "IRLZ44NPBF has no current/thermal shutdown or valve feedback. A drain-source short can energize a normal-current coil without clearing a fuse. Provide an independently operable actuator-branch disconnect. Q1 drain tab and U6 regulator-output tab are live at different voltages.",
+        "C1-C5, C10, R13 and R14 mount on the back. C4/C10 bypass the driver locally; LOGIC_GND joins ACT_GND only at NT1/Q1 source. Do not add a second return strap. Actual passive parts, trimmed leads, finished TO220 holes, underside height and case clearance require assembly acceptance.",
+        "Keep this draft unpowered pending release of the protected branch, exact PDIP driver guarantee, loaded GPIO/RUN/opto timing, minimum 1 us pulse, supervisor brownout, temperature and mounting checks. MCP100 assertion 10 us is typical with no specified maximum. Read actual GPIO3/JTAG eFuses without burns; N16R8 socket/antenna fit remains provisional. The RUN source also feeds carrier R47/R50/R53, Q7 and HCT inputs; measure loaded RUN and MAIN_IN with both boards attached. The Q7 500 uA figure at 10 V/25 C is not a 5 V/full-temperature/fault bound.",
+        "Use a current-limited resistor fixture first with proper isolated/differential probes and an independent cutoff. Observe local rail, supervisor, ENA, gate/source, drain and both return currents during startup, reset, RUN/command loss, disconnected inputs and opened returns. Preserve scope protective earth.",
+        "Compare proposed duty with separate cycle-latched PWM high time and fault. Synthetic current/opening are model estimates; no physical valve feedback exists. Command0% does not prove valve closure."
+      ]
+    },
+    {
+      "connector": "J9 / J10 semi-sequential",
+      "title": "Semi-sequential fuel and wasted COP",
+      "checks": [
+        "This is a software development strategy. Selected web builds keep physical engine outputs OFF. The separate dummy-load bench build has no web service and is not installed here. Keep J3 open and real injector/ignition harnesses disconnected. The unchanged carrier needs four independent injector drivers and four smart-coil logic channels; no extra pair wiring is required.",
+        "J9 pins1-4 remain physical injector cylinders1-4; pins5-8 are return. J19 is the dedicated power return. J10 pins1-4 remain physical smart-coil commands1-4, pin5 ground. Check each harness by continuity with both ends unplugged. Never bridge low-side outputs or move two injectors onto one driver.",
+        "For firing order1-3-4-2 the scheduled fuel pairs are cylinders1+4 and3+2. Other valid four-cylinder orders derive pairs from order slots1+3 and2+4. Each injector opens once per crank revolution, giving two half-effective-fuel openings per720 degrees. Dead time is added to each opening.",
+        "Semi-sequential needs crank synchronization from J17, without compression phase from J18. Its closing reference repeats modulo360 degrees:540 means180 each revolution. The two groups are180 degrees apart. Full sequential alone uses the720-degree cam reference and individual trims; enabled trims must be disabled explicitly before saving a paired mode. Stored trim maps are retained.",
+        "After saving, check active strategy separately from unsaved editor settings. Compare executed rising/falling timestamps for both members of each pair, full electrical width, duty, fault cause, revision and source age. Injector low deadlines stay fixed after opening, so changing RPM can move the actual closing angle. A missing cam is expected in this mode; a missing crank must cut. Old latched faults still require stopped/quiet recovery.",
+        "Pairs can overlap above50 percent duty. Do not assume lower peak supply/return current. Existing1.2A injector and4mA smart-coil targets remain unqualified; saturated high-impedance PFI only. Actual flow/deadtime, current/flyback, loaded supply/gates, timing/jitter, temperature and engine phase need physical dummy-load/HIL acceptance.",
+        "The host reduced and research plants have fixed physical1-3-4-2 geometry. Changing the tune order does not change that engine. Coupled comparison uses a neutral test tune, not a vehicle calibration. Screen engine schema2 is required for this mode; schema1 peers fall back to sensors and show upgrade needed."
+      ]
+    },
+    {
+      "connector": "J11 / J12 transient fueling",
+      "title": "MAP/TPS transient acquisition and dose",
+      "checks": [
+        "Use Engine development > Transient fueling. Older tunes retain Legacy TPS decay; Off, TPS rate table and MAP rate table are explicit choices. Selected web images inhibit physical outputs. No new connector or PCB route is required.",
+        "J11 is protected MAP and J12 is protected TPS. Reference each signal to its connector pin1 ground and verify the actual sensor supply, mating pinout and calibrated kPa or percent. Do not infer wiring from the sensor body color.",
+        "New modes use nominal5ms fast calibrated acquisitions and the scan-start timestamp, independently of display smoothing. Compare raw voltage, calibrated values, window length, source rate, threshold/minimum-change gates and phase/reason. Bad wiring and noise can trigger enrichment.",
+        "Extra curve values are percentages. Multiply scales effective current fuel. Add reference fuel uses per-cylinder720-degree mass at100kPa,25C,100%VE and lambda1, independent of current MAP/VE/warmup. Trims scale the complete dose; opening count and deadtime follow.",
+        "Deceleration is fuel remaining:100% neutral,0% stops new injector starts after scheduler acceptance while spark continues unless another cut applies. Existing active closing edges finish normally. Dose/pulse/duty limits still inhibit the whole command.",
+        "First observation and recovery after stop/crank/fault/DFCO clear history. Rate-valid differs from observation available. Check source age: hold remaining is measured at the observation time. Completed host runs are synthetic and retained logs are historical.",
+        "Use engine MSL004 or JSON for detailed transient rates, phase and dose. Fixed ESP-NOW schema2 retains the existing effective accel ratio only. No physical measurement or vehicle base tune is implied."
+      ]
+    }
+  ],
+  "config_help": [
+    "Voltage mode shows the reconstructed connector voltage; it does not require a sensor transfer curve.",
+    "Linear mode uses two measured input voltages and two physical values. Set the actual units and validate a third reference point.",
+    "Table mode interpolates between 2-16 ascending voltage/value pairs. Values outside the table range are faults, not extrapolated measurements.",
+    "NTC beta mode is for CLT/IAT only and requires the physical pull-up. It uses the measured sensor supply and compensates the 55 kohm divider load. A voltage table is preferable when the real curve is available.",
+    "Filtering is for readout smoothing, not a substitute for fixing wiring/noise. Electrical fault checks use the instantaneous input.",
+    "Saved calibration feeds readouts and shadow engine calculations. Physical engine outputs remain inhibited. DBW, catalyst diagnostics and OEM protocols are not implemented.",
+    "Saving trigger geometry or engine timing fences virtual output plans and requires fresh synchronization. Batch and semi-sequential use crank-only360-degree synchronization; full sequential uses two repeatable cam observations for720-degree phase. Capture age, overflow and stopped/quiet recovery still apply."
+  ],
+  "trigger_expected": [
+    "The decoder uses rising edges. Trigger logging records both polarities on separate diagnostic capture channels. Both Hall paths use two Schmitt inversions, preserving the input polarity.",
+    "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Batch/wasted and semi-sequential use crank only. Full sequential requires one rising cam pulse per720 degrees and two repeatable observations; phase loss after acquisition cuts and latches until a supervised stop. Confirm mechanical cylinder1 compression reference independently."
+  ]
+}

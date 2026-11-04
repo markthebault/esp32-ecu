@@ -43,3 +43,7 @@ hardware/idle-isolated/lib/ecu.pretty/*.kicad_mod -whitespace
 # Preserve exact semi-sequential evidence and application export bytes.
 reports/engine/semi-sequential/** -text -whitespace
 tuning/examples/tunerstudio-semi-roundtrip.msq -text -whitespace
+
+# Preserve source-bound transient traces, reviewer archives and vendor output.
+reports/engine/transient-enrichment/** -text -whitespace
+tuning/examples/tunerstudio-transient-roundtrip.msq -text -whitespace
