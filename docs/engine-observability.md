@@ -41,7 +41,7 @@ Current MSL006 engine exports have188 fields; direct SIL006 has145. The preserve
 
 MegaLogViewer HD Lite4.6.14 opens/plots the new source, selection, qualification, reason and value fields in both formats. The actual application fixtures are fixed-input synthetic native probes, not coupled engine acceptance. A channel containing unknown samples can showNaN extrema. The earlier viewer's calculated AFR graph also displayed misleading values for unavailable lambda; inspect input/source/availability/validity fields and JSON before interpreting vendor-calculated summaries. Opening a log does not validate calibration or physical fuel/spark.
 
-The earlier ENGINE LOG003 (91 fields) and direct SIL003 (48 fields) evidence remains historical. Current [own009 offline editing and inhibited USB service](engine-usb-tuning.md) preserve the older fields and add secondary metadata. Earlier online identity rejection remains unresolved; own009 online vendor acceptance is unverified. Trigger MSL remains available.
+The earlier ENGINE LOG003 (91 fields) and direct SIL003 (48 fields) evidence remains historical. Current [own009 offline editing and inhibited USB service](engine-usb-tuning.md) preserve the older fields and add secondary metadata. [Fresh application captures](engine-tuning-application.md) verify own009 online rejection and a separate genuine-reference positive control; vendor integration remains unresolved. Trigger MSL remains available.
 
 ## Validation and remaining work
 

@@ -1,0 +1,23 @@
+To: support@efianalytics.com
+Subject: Independent ESP32-S3 controller: supported TunerStudio integration
+Attachment: vendor-support.zip
+Status: LOCAL UNSENT DRAFT
+
+Hello EFI Analytics team,
+
+We are developing an open-source ESP32-S3 bench ECU research controller and would like supported TunerStudio integration using our own controller identity: ESP32ECU DEV 009 INHIBITED.
+
+Unmodified TunerStudio MS Lite 3.3.01 on Linux accepts our current INI and MSQs offline. Online, it completes valid F/I/f/Q discovery but reports "Unsupported Controller Firmware: ESP32ECU DEV 009 INHIBITED" before requesting calibration or runtime. A fresh trial captured 1,640 valid exchanges and 328 such warnings, with no page reads, runtime reads, writes or burns.
+
+As a separate positive control, the same unmodified application connects to genuine pinned Speeduino production code through a native PTY fixture. It reads pages and runtime, edits a VE cell from 85 to 86, receives write/burn acknowledgements, confirms the resulting page CRC and saves the matching MSQ. That reference keeps its own Speeduino identity. Our controller keeps its own ESP32ECU identity.
+
+Our transport uses protocol 002, MS-envelope lengths/CRC32, 256-byte chunks, one 8192-byte little-endian calibration page and a 640-byte runtime block. Our staged burn validates, persists and activates the whole tune. Physical engine outputs are compiled out. All current online evidence is from native Linux software fixtures; physical USB and engine operation remain unqualified.
+
+Could you advise on the supported onboarding process for an independent controller, identity registration, protocol/definition requirements, and any commercial or license terms? Is a supported own-controller transport or driver available, and which integration tests should we perform?
+
+The diagnostic attachment contains the current INI, wire captures, application debug logs, screenshots and the separate reference's saved MSQ, with source and artifact hashes. It includes no application executable or proprietary definition PDF.
+
+Project: https://github.com/markthebault/esp32-ecu/tree/feature/engine-development-sil
+Diagnosis and reproduction: https://github.com/markthebault/esp32-ecu/blob/feature/engine-development-sil/docs/engine-tuning-application.md
+
+Thank you.

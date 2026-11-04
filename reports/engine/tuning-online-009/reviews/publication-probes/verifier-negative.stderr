@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/verify_tuning_online_evidence.py", line 227, in <module>
+    verify(args.report, args.check_live_sources, args.replay)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mark/persospace/esp32-ecu/tools/verify_tuning_online_evidence.py", line 129, in verify
+    require(len(body) == row["bytes"] and sha(body) == row["sha256"], "Changed artifact: " + row["path"])
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mark/persospace/esp32-ecu/tools/verify_tuning_online_evidence.py", line 30, in require
+    raise ValueError(message)
+ValueError: Changed artifact: own/mainController.ini

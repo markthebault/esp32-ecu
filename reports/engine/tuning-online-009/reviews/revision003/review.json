@@ -1,0 +1,165 @@
+{
+  "reviewed_at_utc": "2026-11-04T15:57:14.418242+00:00",
+  "status": "Pre-freeze independent concrete implementation review. Parent may revise builder/runtime and rerun actual application; preserve this revision.",
+  "scope": "Native/source/application evidence only; exact copied serial binary and unedited copied runtime run under owned cache. No parent-source edits or physical interfaces.",
+  "verdict": "Concrete fixture faithfully relays pinned production rawF/framed commands and actual TunerStudio reaches online reads/runtime. No queue/thread/shutdown blocker found in added probes. Current107 production objects independently bound to original benchmark by exact baseline relink. Build helper lacks automatic object-to-base binding and runtime concurrent-send wire hook ordering is reproducibly wrong; parent notified. Current one-sender application evidence unaffected by the latter.",
+  "snapshot": "snapshot.json",
+  "source_review": {
+    "algorithm": "Production setup/loop and comms objects reused; adapter includes normal numerical setup helpers with renamed main, overrides only serial fake queue/time seams. Static ADC passes production sensors/calibration; no ECU-protocol facade.",
+    "threading": "Mock setup and epoch/base initialization happen before worker creation; production globals are worker-only. RX/TX deque operations use io_mutex; line output uses separate output_mutex without observed lock cycle.",
+    "timing": "Wall clock services busy-read deadlines; virtual timers catch up between loop calls. Safe interpretation is stopped-engine serial characterization, not plant/timing equivalence.",
+    "persistence": "Production M changes RAM immediately; b may defer native EEPROM writes. New fixture process configures independent fake EEPROM; no restart/physical persistence claim.",
+    "reference_limit": "16KiB adapter queue bounds do not validate pinned upstream serialPayloadLength against517-byte native payload buffer. Fixture is owned-app valid-traffic positive control; upstream malformed-frame parser behavior is not qualified."
+  },
+  "findings": [
+    {
+      "id": "BUILD-001",
+      "priority": "required for reusable provenance claim",
+      "source": "scripts/build_speeduino_serial.py33..37",
+      "finding": "Current builder checks reused object existence and records hashes after link, without binding those bytes to attested base binary. Separate serial lock leaves base-cache rebuild race.",
+      "current_evidence": "Independent109-object/four-library baseline relink exactly matches SHA046389d754c996c34cb7e7171b1e42088f5ae6c0615133a3c5e74743f9f6d52c; before/after input hashes stable. This proves current objects but not future helper behavior.",
+      "recommendation": "Hold base build.lock, relink original complete object set into serial cache, compare exact attested base binary hash, bind input hashes before/after use."
+    },
+    {
+      "id": "TRACE-001",
+      "priority": "nonblocking current app run; reusable API defect",
+      "source": "tools/speeduino_serial_runtime.py49..53",
+      "finding": "RX wire hook runs before write_lock; concurrent sends may be logged in an order different from injection. Deterministic callback barrier reproduced logged Q,C with production C,Q replies.",
+      "evidence": "concurrent-wire-order.json",
+      "recommendation": "Run RX wire hook under write_lock before pipe write; actual public PTY is single RX sender so captured app run is unaffected."
+    }
+  ],
+  "extra_probes": [
+    {
+      "name": "coalesced-fifo-and-no-echo",
+      "passed": true,
+      "detail": {
+        "stats": {
+          "loops": 7,
+          "received": 43,
+          "transmitted": 131
+        },
+        "reply_lengths": [
+          2,
+          21,
+          6,
+          65,
+          4
+        ],
+        "raw_F_inherited_print": true,
+        "no_TX_echo": true
+      },
+      "elapsed_s": 0.09748127195052803
+    },
+    {
+      "name": "all-single-byte-M-splits",
+      "passed": true,
+      "detail": {
+        "split_boundaries": 13,
+        "gap_s": 0.02
+      },
+      "elapsed_s": 1.0376780580263585
+    },
+    {
+      "name": "close-during-partial-length",
+      "passed": true,
+      "detail": {
+        "close_elapsed_s": 0.4152932029683143,
+        "returncode": 0
+      },
+      "elapsed_s": 0.4953061299165711
+    },
+    {
+      "name": "rx-capacity-controlled-failure",
+      "passed": true,
+      "detail": {
+        "controlled_rejection": true,
+        "returncode": 1,
+        "failure": "Native reference ended before closure",
+        "stderr": "serial fixture failed: serial fixture RX capacity\n"
+      },
+      "elapsed_s": 0.04972995107527822
+    },
+    {
+      "name": "callback-failure-cleanup",
+      "passed": true,
+      "detail": {
+        "failure": "owned callback rejection",
+        "returncode": 0,
+        "reader_joined": true
+      },
+      "elapsed_s": 0.06176673003938049
+    },
+    {
+      "name": "pty-open-close-churn",
+      "passed": true,
+      "detail": {
+        "cycles": 50,
+        "process_returncode": 0,
+        "reader_threads_joined": true,
+        "owned_link_removed": true
+      },
+      "elapsed_s": 0.1736941570416093
+    }
+  ],
+  "baseline_relink": {
+    "matches_attested": true,
+    "inputs_unchanged": true,
+    "objects": 109,
+    "archives": 4
+  },
+  "numerical_noninterference": {
+    "all_baseline_files_unchanged": true,
+    "external_checkout_status": "",
+    "coverage_root": "/home/mark/persospace/esp32-ecu/.cache/engine/tuning-online-protocol-review/revision003/fixture-root/.cache/engine/speeduino-serial-sim/gcov"
+  },
+  "actual_reference002": {
+    "request_count": 3583,
+    "response_count": 3583,
+    "commands": {
+      "F": 1,
+      "I": 1,
+      "f": 2,
+      "Q": 1,
+      "S": 1,
+      "d": 15,
+      "p": 22,
+      "r": 3540
+    },
+    "issues": [],
+    "page_crc_matches": 9,
+    "page_coverage": {
+      "1": 128,
+      "2": 288,
+      "3": 288,
+      "4": 128,
+      "5": 288,
+      "6": 128,
+      "9": 192,
+      "10": 192,
+      "15": 256
+    },
+    "runtime_sample_count": 6,
+    "runtime_values": {
+      "rpm": [
+        0
+      ],
+      "map_kpa": [
+        100
+      ],
+      "iat_c": [
+        24
+      ],
+      "clt_c": [
+        85
+      ]
+    },
+    "application_binding": "reference002-application-review.json",
+    "application_edit_or_burn": false
+  },
+  "own009_comparison": "revision002: unchanged same JAR explicitly rejects own009 after1640 valid discovery exchanges;0page/runtime/write/burn requests.",
+  "remaining": [
+    "Review final builder/runtime changes and bind final source/binary/test freeze.",
+    "Independently validate final actual-app public-PTY rerun, including app edit/burn if performed."
+  ]
+}

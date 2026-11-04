@@ -1,0 +1,76 @@
+{
+  "old_bug_reproduced": true,
+  "current_fix_verified": true,
+  "old": {
+    "trace": [
+      [
+        "RX",
+        "000151ce6e8eef"
+      ],
+      [
+        "RX",
+        "0001433dd7ffa7"
+      ],
+      [
+        "TX",
+        "000200ff6cdbfd72"
+      ],
+      [
+        "TX",
+        "001500737065656475696e6f203230323530342d6465769c811549"
+      ]
+    ],
+    "before_barrier_release": [
+      [
+        "RX",
+        "000151ce6e8eef"
+      ],
+      [
+        "RX",
+        "0001433dd7ffa7"
+      ],
+      [
+        "TX",
+        "000200ff6cdbfd72"
+      ]
+    ],
+    "responses": [
+      "00ff",
+      "00737065656475696e6f203230323530342d646576"
+    ],
+    "errors": [],
+    "failure": ""
+  },
+  "current": {
+    "trace": [
+      [
+        "RX",
+        "000151ce6e8eef"
+      ],
+      [
+        "RX",
+        "0001433dd7ffa7"
+      ],
+      [
+        "TX",
+        "001500737065656475696e6f203230323530342d6465769c811549"
+      ],
+      [
+        "TX",
+        "000200ff6cdbfd72"
+      ]
+    ],
+    "before_barrier_release": [
+      [
+        "RX",
+        "000151ce6e8eef"
+      ]
+    ],
+    "responses": [
+      "00737065656475696e6f203230323530342d646576",
+      "00ff"
+    ],
+    "errors": [],
+    "failure": ""
+  }
+}

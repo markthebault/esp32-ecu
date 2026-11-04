@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/.cache/engine/tuning-online-protocol-review/revision004/build-validation-root/scripts/build_speeduino_serial.py", line 77, in <module>
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--source',type=Path);args=parser.parse_args();print(build(args.source))
+                                                                                                                                 ~~~~~^^^^^^^^^^^^^
+  File "/home/mark/persospace/esp32-ecu/.cache/engine/tuning-online-protocol-review/revision004/build-validation-root/scripts/build_speeduino_serial.py", line 52, in build
+    if digest(relink)!=m['binary_sha256']:raise RuntimeError('Cached objects do not reproduce the attested numerical reference binary')
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Cached objects do not reproduce the attested numerical reference binary

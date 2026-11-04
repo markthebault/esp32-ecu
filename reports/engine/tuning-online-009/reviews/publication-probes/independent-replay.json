@@ -1,0 +1,215 @@
+{
+  "sanitizer_command": [
+    "g++",
+    "-std=c++17",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-I/home/mark/persospace/esp32-ecu/.cache/engine/tuning-online-protocol-review/revision006/candidate-packet/sources/firmware/include",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/tuning-online-protocol-review/revision006/candidate-packet/reviews/revision001/protocol_probe.cpp",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/tuning-online-protocol-review/revision006/independent-replay/own-protocol-probe"
+  ],
+  "compile_exit": 0,
+  "compile_stdout": "",
+  "compile_stderr": "",
+  "run_exit": 0,
+  "run_stderr": "",
+  "actual_result": {
+    "passed": true,
+    "discovery_responses": 7,
+    "page_read_bytes": 8192,
+    "maximum_M_frame_bytes": 269,
+    "split_boundaries": 268,
+    "full_runtime_wire_bytes": 647,
+    "crc_fixture": "cbf43926",
+    "burn_origin_stable": true,
+    "external_save_conflict": true,
+    "timeout_crc_no_execution": true,
+    "failed_burn_reply_stops_following_commands": true,
+    "storage_rejection_retains_active_tune": true,
+    "disconnect_drops_stage_but_next_M_lazy_opens": true
+  },
+  "saved_expected_result_matches": true,
+  "independent_stream_decoder_sha256": "8b62d5a94df259c01026fb71be58e62726ad66dc0684e3f5537524731c8b7faa",
+  "streams": {
+    "own": {
+      "wire_path": "/home/mark/persospace/esp32-ecu/.cache/engine/tuning-online-protocol-review/revision006/independent-replay/own.log",
+      "wire_sha256": "0324a8e68e216741675fbd7672fa1a87bcea17dcf76df8c819509ef1d67dec58",
+      "request_count": 1640,
+      "response_count": 1640,
+      "commands": {
+        "F": 328,
+        "I": 328,
+        "f": 656,
+        "Q": 328
+      },
+      "response_statuses": {
+        "0x0": 1312
+      },
+      "issues": [],
+      "q_responses": [
+        "ESP32ECU DEV 009 INHIBITED"
+      ],
+      "page_coverage": {},
+      "page_crc_checks": [],
+      "runtime_sample_count": 0,
+      "runtime_sample_values": {
+        "rpm": [],
+        "map_kpa": [],
+        "iat_c": [],
+        "clt_c": []
+      }
+    },
+    "reference": {
+      "wire_path": "/home/mark/persospace/esp32-ecu/.cache/engine/tuning-online-protocol-review/revision006/independent-replay/reference.log",
+      "wire_sha256": "38e3d8e8ac660cab066e57448843bacad151141c8f80cfc927b8679a76d43584",
+      "request_count": 10838,
+      "response_count": 10838,
+      "commands": {
+        "F": 1,
+        "I": 1,
+        "f": 2,
+        "Q": 1,
+        "S": 1,
+        "d": 18,
+        "p": 22,
+        "r": 10790,
+        "M": 1,
+        "b": 1
+      },
+      "response_statuses": {
+        "0x0": 10836,
+        "0x4": 1
+      },
+      "issues": [],
+      "q_responses": [
+        "speeduino 202504-dev"
+      ],
+      "page_coverage": {
+        "1": 128,
+        "2": 288,
+        "3": 288,
+        "4": 128,
+        "5": 288,
+        "6": 128,
+        "9": 192,
+        "10": 192,
+        "15": 256
+      },
+      "page_crc_checks": [
+        {
+          "page": 1,
+          "wire_crc": 1125717851,
+          "page_crc": 1125717851,
+          "matches": true,
+          "line": 18
+        },
+        {
+          "page": 2,
+          "wire_crc": 4174830167,
+          "page_crc": 4174830167,
+          "matches": true,
+          "line": 26
+        },
+        {
+          "page": 3,
+          "wire_crc": 4007393708,
+          "page_crc": 4007393708,
+          "matches": true,
+          "line": 34
+        },
+        {
+          "page": 4,
+          "wire_crc": 4230439459,
+          "page_crc": 4230439459,
+          "matches": true,
+          "line": 40
+        },
+        {
+          "page": 5,
+          "wire_crc": 3461753448,
+          "page_crc": 3461753448,
+          "matches": true,
+          "line": 48
+        },
+        {
+          "page": 6,
+          "wire_crc": 286152959,
+          "page_crc": 286152959,
+          "matches": true,
+          "line": 54
+        },
+        {
+          "page": 9,
+          "wire_crc": 1826795109,
+          "page_crc": 1826795109,
+          "matches": true,
+          "line": 64
+        },
+        {
+          "page": 10,
+          "wire_crc": 1572977527,
+          "page_crc": 1572977527,
+          "matches": true,
+          "line": 70
+        },
+        {
+          "page": 15,
+          "wire_crc": 227968344,
+          "page_crc": 227968344,
+          "matches": true,
+          "line": 86
+        },
+        {
+          "page": 1,
+          "wire_crc": 1125717851,
+          "page_crc": 1125717851,
+          "matches": true,
+          "line": 4404
+        },
+        {
+          "page": 2,
+          "wire_crc": 4174830167,
+          "page_crc": 4174830167,
+          "matches": true,
+          "line": 4406
+        },
+        {
+          "page": 2,
+          "wire_crc": 3187994419,
+          "page_crc": 3187994419,
+          "matches": true,
+          "line": 10420
+        }
+      ],
+      "runtime_sample_count": 8,
+      "runtime_sample_values": {
+        "rpm": [
+          0
+        ],
+        "map_kpa": [
+          100
+        ],
+        "iat_c": [
+          24
+        ],
+        "clt_c": [
+          85
+        ]
+      }
+    }
+  },
+  "application_write_transaction": 4349,
+  "application_burn_transaction": 5208,
+  "matching_crc_transaction": 5209,
+  "MSQ_complete_page_matches": true,
+  "page_bytes": 288,
+  "after_crc32": "be04ef33",
+  "saved_MSQ_sha256": "fef17c4bd702dfc882dc379dd8f403d535eeb3f79fa3298d773210e90e226b0a",
+  "scope": "Saved captures and frozen memory/native own Session/Stream only; no app/hardware/production-reference rerun."
+}
