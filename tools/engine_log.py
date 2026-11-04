@@ -1,5 +1,6 @@
 """Text MSL export for recorded SIL traces; no invented physical measurements."""
 import math
+from secondary_config import KINDS,VALUE_NAMES as SEC_VALUES,log_fields
 FIELDS=[('Time','s','time'),('RPM','RPM','plant_rpm'),('MAP','kPa','map_kpa'),('TPS','%','tps'),('Lambda','','lambda_measured'),('PulseWidth','ms','pulse_ms'),('Advance','deg','advance_deg'),('Dwell','ms','dwell_ms'),('VE','%','ve_pct'),('LambdaTarget','','target_lambda'),('EGO','','ego'),('Faults','bitfield','faults'),('Sync','','synced'),('CrankSync','','crank_synced'),('PhaseSync','','phase_synced'),('PhaseRequired','','phase_required'),('PhaseLosses','count','phase_losses'),('CamRejected','count','cam_rejected'),('CamError','deg','cam_error_deg')]
 IDLE_FIELDS=[('IdleTarget','RPM','target_rpm'),('IdleDuty','%','duty_pct'),('IdleFeedforward','%','feedforward_pct'),('IdleP','%','p_term'),('IdleI','%','i_term'),('IdleD','%','d_term'),('IdleFlags','bitfield','flags'),('IdleState','code','state_code'),('IdleReason','code','reason_code'),('IdleAlgorithm','code','algorithm_code'),('IdlePidUpdates','count','pid_updates')]
 PWM_FIELDS=[('IdlePwmActive','bool','active'),('IdlePwmHigh','bool','virtual_high'),('IdlePwmPeriod','us','period_us'),('IdlePwmHighTime','us','high_us'),('IdlePwmSequence','count','sequence'),('IdlePwmPendingSequence','count','pending_sequence'),('IdlePwmTuneRevision','count','tune_revision'),('IdlePwmSensorRevision','count','sensor_revision'),('IdlePwmLateness','us','max_lateness_us'),('IdlePwmRecoveries','count','recoveries')]
@@ -17,7 +18,8 @@ def export_msl(rows,scenario,strategy=None):
  if strategy is not None and strategy not in ('batch_wasted_4cyl','sequential_4cyl','semi_sequential_4cyl'):raise ValueError('Unknown log strategy')
  labels=[(name,unit) for name,unit,_ in FIELDS+IDLE_FIELDS]+[('IdleAvailable','bool')]+[(name,unit) for name,unit,_ in PWM_FIELDS]+[('IdlePwmAvailable','bool'),('IdlePwmFault','code')]+[(name,unit) for name,unit,_ in VALVE_FIELDS]+[('ValveModelAvailable','bool')]+[(name,unit) for name,unit,_ in AE_FIELDS]+[('AeAvailable','bool')]
  labels += [(name,unit) for name,unit,_ in LOAD_FIELDS]+[('LoadAvailable','bool')]
- out=['"ESP32ECU SIL 005"','"UNVALIDATED REDUCED-ORDER SIMULATION / '+scenario+(' / '+strategy if strategy else '')+' / physical outputs inhibited; proposed controller terms, virtual dispatcher state and synthetic valve estimates are separate; Load*=source-tagged table coordinates and modeled factors; electrical ledger only"','\t'.join(x[0] for x in labels),'\t'.join(x[1] for x in labels)]
+ labels += [(name,unit) for kind in KINDS for name,unit,_ in log_fields(kind)]
+ out=['"ESP32ECU SIL 006"','"UNVALIDATED REDUCED-ORDER SIMULATION / '+scenario+(' / '+strategy if strategy else '')+' / physical outputs inhibited; proposals/virtual state/synthetic estimates are separate; Load*=fuel model; Sec*=source-tagged secondary values/selection/input diagnostics; check availability/validity; electrical ledger only"','\t'.join(x[0] for x in labels),'\t'.join(x[1] for x in labels)]
  for row in rows:
   values=[row.get(key,0) for _,_,key in FIELDS]
   idle=row.get('engine_sample',{}).get('idle',{});known=idle.get('available') is True
@@ -27,5 +29,15 @@ def export_msl(rows,scenario,strategy=None):
   ae=row.get('transient_enrichment',{});available=ae.get('available') is True;values += [ae.get(key) if available else None for _,_,key in AE_FIELDS]+[available]
   model=row.get('load_model',row.get('engine_sample',{}).get('load_model',{}));known=model.get('available') is True
   values += [model.get(key) if known else None for _,_,key in LOAD_FIELDS]+[known]
+  second=row.get('secondary_tables',row.get('engine_sample',{}).get('secondary_tables',{}))
+  for kind in KINDS:
+   observation=second.get(kind,{})
+   if not observation.get('available'):observation=dict(available=False,active_high=True,flags=1024)
+   for _,_,key in log_fields(kind):
+    value=observation.get(key)
+    if key in SEC_VALUES:value=value if observation.get('available') else None
+    elif key=='input_observed_us':value=value if observation.get('mode_code')==4 and observation.get('input_source_code') else None
+    elif key!='flags':value=value if value is not None else False if key in ('available','evaluated','active','clamped','pending','input_qualified','input_level','pending_level','input_valid','input_raw','valid') else 0
+    values.append(value)
   out.append('\t'.join(value_text(value) for value in values))
  return '\n'.join(out)+'\n'

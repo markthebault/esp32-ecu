@@ -7,7 +7,7 @@ import hmac,math,secrets,struct
 from espnow_protocol import header,check,mac_bytes
 
 CAP_SIZE=76;REPLY_SIZE=108;ENGINE_SIZE=250;ENGINE_BODY=218;ACK_SIZE=56
-FEATURE_ENGINE=1;SCHEMA=3;SUPPORTED_SCHEMAS=(1,2,3);UINT32_MAX=2**32-1;UINT64_MAX=2**64-1
+FEATURE_ENGINE=1;SCHEMA=4;SUPPORTED_SCHEMAS=(1,2,3,4);UINT32_MAX=2**32-1;UINT64_MAX=2**64-1
 INPUT_NAMES=('rpm','map_kpa','tps_pct','clt_c','iat_c','lambda','battery_v','sensor_v')
 PROPOSAL_NAMES=('rpm','ve_pct','target_lambda','advance_deg','pulse_ms','dwell_ms','deadtime_ms','air_mg','warmup','afterstart','accel','ego','duty_pct','idle_pct')
 PRESENT=1;INPUTS_FRESH=2;STORAGE_OK=4;CRANK_SYNC=8;PHASE_SYNC=16;PHASE_REQUIRED=32;SUBMITTED=64;DUMMY_POLICY=128;PHASE_CONTEXT_MATCH=256;PROPOSED_ACTIVE=512;FUEL_CUT=1024;SPARK_CUT=2048;PUMP=4096;FAN=8192;INPUTS_QUALIFIED=16384;DISPLAY_FRESH=32768
@@ -50,7 +50,7 @@ def engine_telemetry(packet,data_key,expected_schema=None):
     state,strategy,source,phase_reason,valid,timing,last_timing,virtual,physical,board=struct.unpack_from('<10B',packet,80)
     sent,worker_tune,worker_sensors,worker_age=struct.unpack_from('<QIII',packet,92)
     inputs=struct.unpack_from('<8f',packet,112);proposals=struct.unpack_from('<14f',packet,144)
-    if schema not in SUPPORTED_SCHEMAS or len(packet)!=(232 if schema<3 else 250) or expected_schema is not None and schema!=expected_schema or not session or not packet_sequence or not proposal_sequence or not flags&PRESENT or source not in (1,2) or state>5 or strategy>(1 if schema==1 else 2) or phase_reason>9 or timing>(16 if schema==1 else 17) or last_timing>(16 if schema==1 else 17) or board&~15 or packet[90:92]!=b'\0\0':raise ValueError('Invalid engine schema or enum')
+    if schema not in SUPPORTED_SCHEMAS or len(packet)!=(232 if schema<3 else 250) or expected_schema is not None and schema!=expected_schema or not session or not packet_sequence or not proposal_sequence or not flags&PRESENT or source not in (1,2) or state>5 or strategy>(1 if schema==1 else 2) or phase_reason>9 or timing>(16 if schema==1 else 17) or last_timing>(16 if schema==1 else 17) or board&~15 or schema<4 and packet[90:92]!=b'\0\0':raise ValueError('Invalid engine schema or enum')
     if bool(flags&DISPLAY_FRESH)!=(sample_age<=1000 and control_age<=1000):raise ValueError('Inconsistent source display freshness')
     limits=((0,12000),(10,110),(0,100),(-40,140),(-40,110),(.65,1.5),(7,18),(4.75,5.25))
     for i,value in enumerate(inputs):
@@ -82,7 +82,16 @@ def engine_telemetry(packet,data_key,expected_schema=None):
                    afr_factor=afr_factor if math.isfinite(afr_factor) else None,baro_kpa=baro if math.isfinite(baro) else None,emap_kpa=emap if math.isfinite(emap) else None,
                    derived_coordinate_precision='spark/lambda/trim derived from authenticated F32 inputs; may differ from native F64 lookups; inactive sources may be unknown',
                    detail_scope='Compact summary; AFR state, fault reason, auxiliary role, trims and transient terms require web/log diagnostics')
-    return dict(session=session,packet_sequence=packet_sequence,schema_version=schema,flags=flags,load_model=model,
+    secondary=None
+    if schema>=4:
+        modes=('off','multiply','add','conditional','input');sources=('map','tps','imap_emap');secondary={}
+        for index,kind in enumerate(('fuel','spark')):
+            mode=(packet[90]>>(index*3))&7;source_code=(packet[91]>>(index*2))&3
+            active=bool(packet[90]&(64<<index));available=bool(packet[91]&(16<<index));evaluated=bool(packet[91]&(64<<index))
+            if mode>4 or source_code>2 or not available and (active or evaluated or mode or source_code) or active and mode==0:raise ValueError('Invalid compact secondary observation')
+            secondary[kind]=dict(mode_code=mode,mode=modes[mode],source_code=source_code,source=sources[source_code],active=active,available=available,evaluated=evaluated)
+        secondary['detail_scope']='Modes/source/selection summary only; flags, table coordinates/values, input age/qualification, correction order and reasons require web/logs. Active may precede calculation; check evaluated and controller faults.'
+    return dict(session=session,packet_sequence=packet_sequence,schema_version=schema,flags=flags,load_model=model,secondary_tables=secondary,
                 source='target_control_observation' if source==1 else 'synthetic_control_observation',source_code=source,scalar_proposal_basis='untrimmed_base_demand',per_cylinder_available=False,
                 sample_age_ms=age(sample_age),control_age_ms=age(control_age),source_display_fresh=bool(flags&DISPLAY_FRESH),
                 tune_revision=tune,sensor_revision=sensors,proposal_sequence=proposal_sequence,phase_epoch=phase_epoch,phase_epoch_domain='external_configuration_context',

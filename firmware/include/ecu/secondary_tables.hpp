@@ -14,6 +14,7 @@ enum class Mode:std::uint8_t {Off,Multiply,Add,Conditional,Input};
 enum class Condition:std::uint8_t {Rpm,Map,Tps,Ethanol};
 enum class Cells:std::uint8_t {Absolute,Multiplier,Adder};
 enum class InputSource:std::uint8_t {Unavailable,TargetProtected,Synthetic};
+inline const char* input_source_name(InputSource s){return s==InputSource::Unavailable?"unavailable":s==InputSource::TargetProtected?"target_protected_input":s==InputSource::Synthetic?"synthetic_input":"unknown";}
 enum class Reason:std::uint8_t {
  Disabled,Multiply,Add,ConditionPrimary,ConditionSecondary,InputPrimary,
  InputSecondary,Debouncing,InputUnavailable,InputStale,InputTimeReversed,
@@ -158,9 +159,23 @@ public:
 struct Observation {
  Mode mode=Mode::Off;Cells cells=Cells::Absolute;load::Source source=load::Source::Map;
  Reason reason=Reason::Disabled;InputSource input_source=InputSource::Unavailable;
- bool available=false,evaluated=false,active=false,clamped=false,pending=false,input_qualified=false,input_level=false,pending_level=false;
- float primary=NAN,secondary=NAN,combined=NAN,coordinate=NAN,condition_value=NAN,input_age_ms=NAN,primary_corrected=NAN;
+ Condition condition=Condition::Rpm;load::Axis axis=load::Axis::MapKpa;std::uint8_t input_channel=0;
+ bool available=false,evaluated=false,active=false,clamped=false,pending=false,input_qualified=false,input_level=false,pending_level=false,input_valid=false,input_raw=false,active_high=true,valid=false;
+ float primary=NAN,secondary=NAN,combined=NAN,coordinate=NAN,condition_value=NAN,input_age_ms=NAN,primary_corrected=NAN,threshold=NAN,debounce_ms=NAN;
+ std::uint64_t input_observed_us=0;
 };
+inline constexpr const char*value_names[]={"primary","primary_corrected","secondary","combined","coordinate","condition_value","input_age_ms","threshold","debounce_ms"};
+inline constexpr const char*value_labels[]={"Primary","PrimaryCorrected","Secondary","Combined","Coordinate","ConditionValue","InputAgeMs","Threshold","DebounceMs"};
+inline constexpr const char*code_labels[]={"Mode","Cells","Source","Reason","InputSource","Condition","Axis","InputChannel"};
+inline constexpr const char*boolean_labels[]={"Available","Evaluated","Active","Clamped","Pending","InputQualified","InputLevel","PendingLevel","InputValid","InputRaw","ActiveHigh","Valid"};
+inline constexpr float Observation::*value_members[]={&Observation::primary,&Observation::primary_corrected,&Observation::secondary,&Observation::combined,&Observation::coordinate,&Observation::condition_value,&Observation::input_age_ms,&Observation::threshold,&Observation::debounce_ms};
+inline constexpr const char*boolean_names[]={"available","evaluated","active","clamped","pending","input_qualified","input_level","pending_level","input_valid","input_raw","active_high","valid"};
+inline constexpr bool Observation::*boolean_members[]={&Observation::available,&Observation::evaluated,&Observation::active,&Observation::clamped,&Observation::pending,&Observation::input_qualified,&Observation::input_level,&Observation::pending_level,&Observation::input_valid,&Observation::input_raw,&Observation::active_high,&Observation::valid};
+inline std::uint32_t flags(const Observation&o){
+ const bool values[]={o.available,o.evaluated,o.active,o.clamped,o.pending,o.input_qualified,o.input_level,o.pending_level,o.input_valid,o.input_raw,o.active_high,o.valid};
+ std::uint32_t result=0;for(unsigned n=0;n<12;++n)if(values[n])result|=1U<<n;
+ return result|(std::uint32_t(o.input_channel)<<16)|(std::uint32_t(o.axis)<<20);
+}
 struct Selection {
  Observation observation;
  double coordinate=NAN;
@@ -174,14 +189,15 @@ public:
  void reset(){*this=Controller{};}
  Selection select(Kind kind,const Rule&r,const Input&i,std::uint64_t now,bool cranking){
   Selection result;auto&o=result.observation;o.available=true;o.mode=r.mode;o.cells=r.cells;o.source=r.source;
+  o.condition=r.condition;o.axis=r.axis;o.input_channel=r.input_channel;o.active_high=r.active_high;o.threshold=r.threshold;o.debounce_ms=r.debounce_ms;
   const unsigned slot=kind==Kind::Fuel?0:1;auto&filter=filters_[slot];
   if(!rule_seen_[slot]||!same_rule(rules_[slot],r))filter.reset();
   rules_[slot]=r;rule_seen_[slot]=true;
   auto fail=[&](Reason reason){o.reason=reason;return result;};
   if(!valid(r)){filter.reset();return fail(Reason::InvalidConfig);}
   if(r.mode!=Mode::Input)filter.reset();
-  if(r.mode==Mode::Off){result.ok=true;return result;}
-  if(kind==Kind::Spark&&cranking){filter.reset();result.ok=true;o.reason=Reason::CrankingBypass;return result;}
+  if(r.mode==Mode::Off){result.ok=o.valid=true;return result;}
+  if(kind==Kind::Spark&&cranking){filter.reset();result.ok=o.valid=true;o.reason=Reason::CrankingBypass;return result;}
   if(r.source==load::Source::Map||r.source==load::Source::PressureRatio){
    if(!i.map_qualified||!range(i.map_kpa,10,110))return fail(Reason::RequiredMap);
    result.coordinate=i.map_kpa;
@@ -206,6 +222,7 @@ public:
    o.condition_value=static_cast<float>(value);o.active=value>r.threshold;
    o.reason=o.active?Reason::ConditionSecondary:Reason::ConditionPrimary;
   }else if(r.mode==Mode::Input){
+   const auto&sample=i.switches[r.input_channel];o.input_observed_us=sample.observed_us;o.input_raw=sample.level;o.input_valid=sample.valid;
    const auto state=filter.step(i.switches[r.input_channel],r,now);
    o.input_source=state.source;o.input_age_ms=static_cast<float>(state.age_ms);o.input_qualified=state.valid;
    o.input_level=state.level;o.pending=state.pending;o.pending_level=state.pending_level;
@@ -213,14 +230,14 @@ public:
    o.condition_value=state.level?1:0;o.active=state.level==r.active_high;
    o.reason=o.active?Reason::InputSecondary:Reason::InputPrimary;
   }else{o.active=true;o.reason=r.mode==Mode::Multiply?Reason::Multiply:Reason::Add;}
-  result.ok=true;return result;
+  result.ok=o.valid=true;return result;
  }
 };
 inline double record(Selection&s,double primary,double corrected,double secondary,double combined,double low,double high){
  auto&o=s.observation;
  const auto representable=[](double v){return std::isfinite(v)&&std::abs(v)<=std::numeric_limits<float>::max();};
  if(!s.ok||!representable(primary)||!representable(corrected)||(o.active&&!representable(secondary))||!std::isfinite(combined)){
-  s.ok=false;o.reason=Reason::Arithmetic;return NAN;
+  s.ok=o.valid=false;o.reason=Reason::Arithmetic;return NAN;
  }
  o.primary=static_cast<float>(primary);o.primary_corrected=static_cast<float>(corrected);
  if(o.active)o.secondary=static_cast<float>(secondary);

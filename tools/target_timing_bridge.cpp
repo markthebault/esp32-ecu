@@ -97,7 +97,8 @@ extern "C" double engine_event_advance(void*p){return static_cast<Context*>(p)->
 extern "C" std::uint64_t engine_event_dwell(void*p){return static_cast<Context*>(p)->popped.dwell;}
 extern "C" const char* engine_step(void*p,const char*text,std::uint64_t now,std::uint64_t sampled){
  auto&c=*static_cast<Context*>(p);auto*j=cJSON_Parse(text);ecu::engine::Inputs in;bool wheel=false;
- bool ok=j&&ecu::web::keys(j,"|rpm||map_kpa||tps_pct||clt_c||iat_c||lambda||battery_v||sensor_v||synced||sensors_valid||lambda_ready||use_decoder||phase_synced||aux_pressure_kpa||map_qualified||aux_pressure_qualified|");
+ bool ok=j&&ecu::web::keys(j,"|rpm||map_kpa||tps_pct||clt_c||iat_c||lambda||battery_v||sensor_v||synced||sensors_valid||lambda_ready||use_decoder||phase_synced||aux_pressure_kpa||map_qualified||aux_pressure_qualified||ethanol_pct||ethanol_qualified||table_switches|");
+ ok=ok&&ecu::secondary::parse_synthetic_inputs(j,in);
  if(cJSON_GetObjectItemCaseSensitive(j,"map_qualified"))ok=ok&&ecu::web::boolean(j,"map_qualified",in.map_qualified);
  if(cJSON_GetObjectItemCaseSensitive(j,"aux_pressure_qualified"))ok=ok&&ecu::web::boolean(j,"aux_pressure_qualified",in.aux_pressure_qualified);
  if(const auto*a=cJSON_GetObjectItemCaseSensitive(j,"aux_pressure_kpa"))if(!cJSON_IsNull(a))ok=ok&&ecu::web::number(j,"aux_pressure_kpa",in.aux_pressure_kpa);

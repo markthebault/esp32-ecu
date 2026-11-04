@@ -72,8 +72,8 @@ struct Tune {
  idle::Config idle_control;
  transient::Config transient_enrichment;
  load::Config load_model;
- // Core foundation only. Schema1..7/own001..008 cannot represent these fields
- // and explicitly reset them to Off. UI/tuning/hardware integration is pending.
+ // Historical schemas1..7 migrate these fields to Off. Schema8/own009
+ // carry the full model; protected target switch acquisition is separate.
  secondary::Config secondary_tables;
  Map secondary_ve{},secondary_spark{};
  bool cylinder_trims_enabled=false;
@@ -196,11 +196,15 @@ public:
   const bool crank_selection=was_crank_?s.rpm<t.cranking_rpm+100:s.rpm<t.cranking_rpm;
   auto second_fuel=secondary_control_.select(secondary::Kind::Fuel,t.secondary_tables.fuel,selection_input,now,crank_selection);
   auto second_spark=secondary_control_.select(secondary::Kind::Spark,t.secondary_tables.spark,selection_input,now,crank_selection);
+  const bool ethanol_ok=!extra.ethanol||(s.ethanol_qualified&&range(s.ethanol_pct,0,100));
+  if(!ethanol_ok){
+   const secondary::Rule*rules[]={&t.secondary_tables.fuel,&t.secondary_tables.spark};secondary::Selection*observations[]={&second_fuel,&second_spark};
+   for(unsigned n=0;n<2;++n)if(rules[n]->mode==secondary::Mode::Conditional&&rules[n]->condition==secondary::Condition::Ethanol){observations[n]->ok=observations[n]->observation.valid=false;observations[n]->observation.reason=secondary::Reason::RequiredEthanol;}
+  }
   o.secondary_fuel=second_fuel.observation;o.secondary_spark=second_spark.observation;
   const auto model=load::evaluate(t.load_model,{s.map_kpa,s.tps_pct,s.aux_pressure_kpa,s.map_qualified,s.aux_pressure_qualified,t.cylinder_trims_enabled,t.transient_enrichment.mode==transient::Mode::MapRate,t.ego_enabled,extra.map,extra.emap});
   o.load_model=model.observation;
   if(!timing)o.faults|=Timing;
-  const bool ethanol_ok=!extra.ethanol||(s.ethanol_qualified&&range(s.ethanol_pct,0,100));
   const bool sensor_ok=s.sensors_valid&&model.ok()&&second_fuel.ok&&second_spark.ok&&ethanol_ok&&range(s.rpm,0,12000)&&range(s.tps_pct,0,100)&&range(s.clt_c,-40,140)&&range(s.iat_c,-40,110)&&range(s.battery_v,7,18)&&range(s.sensor_v,4.75,5.25);
   if(!sensor_ok)o.faults|=BadSensor;
   if(now<s.sampled_us||now-s.sampled_us>20000)o.faults|=Stale;

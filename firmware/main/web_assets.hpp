@@ -2,7 +2,7 @@
 #pragma once
 namespace ecu::web::assets {
 inline constexpr char engine_defaults[]=R"ECU_ASSET({
-  "schema_version": 7,
+  "schema_version": 8,
   "revision": 1,
   "strategy": "batch_wasted_4cyl",
   "physical_outputs": "inhibited",
@@ -1338,6 +1338,622 @@ inline constexpr char engine_defaults[]=R"ECU_ASSET({
     "afr": "target",
     "fixed_baro_kpa": 100,
     "afr_delay_s": 10
+  },
+  "secondary_tables": {
+    "fuel": {
+      "mode": "off",
+      "source": "map",
+      "axis": "map_kpa",
+      "cells": "absolute",
+      "condition": "rpm",
+      "threshold": 3000,
+      "debounce_ms": 20,
+      "input_channel": 0,
+      "active_high": true,
+      "map": {
+        "rpm": [
+          80,
+          200,
+          400,
+          600,
+          800,
+          1000,
+          1200,
+          1600,
+          2000,
+          2500,
+          3000,
+          3500,
+          4000,
+          5000,
+          6000,
+          8000
+        ],
+        "load": [
+          10,
+          15,
+          20,
+          25,
+          30,
+          35,
+          40,
+          45,
+          50,
+          55,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110
+        ],
+        "cells": [
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85,
+          85
+        ]
+      }
+    },
+    "spark": {
+      "mode": "off",
+      "source": "map",
+      "axis": "map_kpa",
+      "cells": "absolute",
+      "condition": "rpm",
+      "threshold": 3000,
+      "debounce_ms": 20,
+      "input_channel": 1,
+      "active_high": true,
+      "map": {
+        "rpm": [
+          80,
+          200,
+          400,
+          600,
+          800,
+          1000,
+          1200,
+          1600,
+          2000,
+          2500,
+          3000,
+          3500,
+          4000,
+          5000,
+          6000,
+          8000
+        ],
+        "load": [
+          10,
+          15,
+          20,
+          25,
+          30,
+          35,
+          40,
+          45,
+          50,
+          55,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110
+        ],
+        "cells": [
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15,
+          15
+        ]
+      }
+    }
   }
 }
 )ECU_ASSET";
@@ -2009,11 +2625,13 @@ inline constexpr char index[]=R"ECU_ASSET(<!doctype html>
 @media(min-width:1500px){.content{padding-top:38px}.chart{height:150px}}
 @media(max-width:1050px){.shell{grid-template-columns:190px 1fr}.sidebar{width:190px;padding:24px 10px}.content{padding:24px 20px}.topbar{padding:0 20px}.grid{grid-template-columns:1fr}.sensorgrid{grid-template-columns:repeat(2,1fr)}.metrics{grid-template-columns:repeat(2,1fr)}.grid>.stack{grid-template-columns:1fr 1fr;align-items:start}.debuggrid{grid-template-columns:1fr}}
 @media(max-width:680px){.shell{display:block}.workspace{display:block}.sidebar{position:static;width:auto;display:block;padding:14px;border-right:0;border-bottom:1px solid var(--line)}.brand{padding:0 4px;margin-bottom:16px}.brand small{display:none}.navlabel,.sidebottom{display:none}.nav{display:flex;overflow:auto;gap:3px}.nav button{white-space:nowrap;font-size:11px;padding:9px}.nav svg{display:none}.topbar{height:60px;padding:0 16px}.topright .tag{display:none}.content{padding:22px 16px}.heading{display:block}.heading .actions{margin-top:14px}h1{font-size:24px}.metrics{gap:10px}.metric{padding:14px}.metric .value{font-size:23px}.grid>.stack{grid-template-columns:1fr}.formgrid{gap:14px}.panelbody{padding:16px}.panelhead{padding:16px}.sensorgrid{grid-template-columns:1fr}.debuggrid{grid-template-columns:1fr}.footerbar{display:block;line-height:2}.toast{left:16px;right:16px;bottom:16px}.crumb{font-size:10px}}
+@media(max-width:640px){.secondary-fields{grid-template-columns:1fr}}
 </style></head><body>
 <div class="shell"><aside class="sidebar"><div class="brand"><svg width="31" height="34" viewBox="0 0 32 34" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 7h22v20H5zM11 1v6m10-6v6M11 27v6m10-6v6M0 13h5m-5 8h5m22-8h5m-5 8h5"/><path d="M11 13h10v8H11z"/></svg><div><strong>ECU Studio<span style="color:var(--green)">.</span></strong><small>ESP32-S3 / SERVICE</small></div></div><div><p class="navlabel">WORKSPACE</p><nav class="nav" id="nav"></nav></div><div class="sidebottom"><div><span class="statusdot" id="connection-dot"></span><span id="connection">Connecting...</span></div><div class="mono" id="side-revision">Profile revision --</div><div style="margin-top:12px">Bench configuration monitor<br>All actuator outputs inhibited</div></div></aside>
 <div class="workspace"><header class="topbar"><div class="crumb">Device workspace <span>/ <b id="breadcrumb">Sensor calibration</b></span></div><div class="topright"><span class="tag" id="environment">CONNECTING</span><button class="primary small" id="save" disabled>Save to device</button></div></header><main class="content"><div class="heading"><div><h1 id="title">Sensor calibration</h1><p class="subtitle" id="subtitle">Configure the electrical signal. Verify it against a known reference.</p></div><div class="actions"><button class="ghost small" id="export">Export profile</button><button class="ghost small" id="import">Import profile</button><input id="import-file" type="file" accept=".json,application/json" class="hidden"></div></div><div class="banner" id="scope"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m12 3 10 18H2L12 3Z"/><path d="M12 9v5m0 3v1"/></svg><div><b>Bench service mode.</b> J3 open, actuator harnesses disconnected. Sensor settings change diagnostic readouts. Physical engine outputs remain inhibited.</div></div><div id="page"><div class="panel panelbody">Loading device profile and connection guides...</div></div><div class="footerbar"><span id="save-state">Waiting for device</span><span class="mono" id="last-sample">LIVE / --</span></div></main></div></div><div id="toast" class="toast hidden" role="status"></div>
 <script src="/trigger_logger.js"></script>
 <script src="/load_model.js"></script>
+<script src="/secondary_tables.js"></script>
 <script src="/engine_logger.js"></script>
 <script src="/cylinder_tuning.js"></script>
 <script src="/tuning_diagnostics.js"></script>
@@ -2056,11 +2674,12 @@ function renderDiagnostics(p){p.innerHTML=`<div class="metrics">${metric('ADC in
 
 
 
-const LEGACY_ENGINE_SIGNATURE='ESP32ECU SIL 001 INHIBITED',SEQUENTIAL_ENGINE_SIGNATURE='ESP32ECU SIL 002 INHIBITED',CYLINDER_ENGINE_SIGNATURE='ESP32ECU SIL 003 INHIBITED',WHOLE_ENGINE_SIGNATURE='ESP32ECU DEV 004 INHIBITED',IDLE_ENGINE_SIGNATURE='ESP32ECU DEV 005 INHIBITED',SEMI_ENGINE_SIGNATURE='ESP32ECU DEV 006 INHIBITED',TRANSIENT_ENGINE_SIGNATURE='ESP32ECU DEV 007 INHIBITED',ENGINE_SIGNATURE='ESP32ECU DEV 008 INHIBITED',MSQ_NS='http://www.msefi.com/:msq';
+const LEGACY_ENGINE_SIGNATURE='ESP32ECU SIL 001 INHIBITED',SEQUENTIAL_ENGINE_SIGNATURE='ESP32ECU SIL 002 INHIBITED',CYLINDER_ENGINE_SIGNATURE='ESP32ECU SIL 003 INHIBITED',WHOLE_ENGINE_SIGNATURE='ESP32ECU DEV 004 INHIBITED',IDLE_ENGINE_SIGNATURE='ESP32ECU DEV 005 INHIBITED',SEMI_ENGINE_SIGNATURE='ESP32ECU DEV 006 INHIBITED',TRANSIENT_ENGINE_SIGNATURE='ESP32ECU DEV 007 INHIBITED',LOAD_ENGINE_SIGNATURE='ESP32ECU DEV 008 INHIBITED',ENGINE_SIGNATURE='ESP32ECU DEV 009 INHIBITED',MSQ_NS='http://www.msefi.com/:msq';
+function engineCapabilities(signature){const index=[LEGACY_ENGINE_SIGNATURE,SEQUENTIAL_ENGINE_SIGNATURE,CYLINDER_ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE,IDLE_ENGINE_SIGNATURE,SEMI_ENGINE_SIGNATURE,TRANSIENT_ENGINE_SIGNATURE,LOAD_ENGINE_SIGNATURE,ENGINE_SIGNATURE].indexOf(signature);return {known:index>=0,legacy:index===0,sequential:index===1,whole:index>=3,idle:index>=4,semi:index>=5,transient:index>=6,model:index>=7,secondary:index>=8,pages:index<2?'4':index===2?'5':'1'};}
 const ENGINE_STRATEGIES=['batch_wasted_4cyl','sequential_4cyl','semi_sequential_4cyl'],ENGINE_STRATEGY_LABELS=['Batch / wasted','Sequential','Semi-sequential'];
 function engineStrategyCode(strategy){const n=ENGINE_STRATEGIES.indexOf(strategy);if(n<0)throw Error('Unknown engine strategy.');return n;}
 function engineTimingDefaults(){return {firing_order:[1,3,4,2],injection_end_deg:540,cam_sync_deg:450,cam_window_deg:20};}
-function engineConstants(t,legacy=false,sequential=false,whole=true,idle=true,transient=true,model=true){
+function engineConstants(t,legacy=false,sequential=false,whole=true,idle=true,transient=true,model=true,secondary=true){
  const values=[{page:0,name:'baseRevision',value:t.revision}];
  for(const group of ['engine','settings'])for(const [name,value] of Object.entries(t[group]))values.push({page:0,name,value,flag:typeof value==='boolean',group});
  if(!legacy){values.push({page:0,name:'engineStrategy',value:engineStrategyCode(t.strategy),strategy:true});for(const key of ['injection_end_deg','cam_sync_deg','cam_window_deg'])values.push({page:0,name:key,value:t.timing[key],group:'timing'});t.timing.firing_order.forEach((value,i)=>values.push({page:0,name:'fireOrder'+(i+1),value,order:i}));}
@@ -2070,6 +2689,7 @@ function engineConstants(t,legacy=false,sequential=false,whole=true,idle=true,tr
  if(idle&&whole&&!legacy&&!sequential)values.push(...window.EcuIdleControl.constants(t));
  if(transient&&whole&&!legacy&&!sequential)values.push(...window.EcuTransientEnrichment.constants(t));
  if(model&&whole&&!legacy&&!sequential)values.push(...window.EcuLoadModel.constants(t));
+ if(secondary&&whole&&!legacy&&!sequential)values.push(...window.EcuSecondaryTables.constants(t));
  return whole&&!legacy&&!sequential?values.map(x=>({...x,page:0})):values;
 }
 function engineFieldUnits(name){
@@ -2077,62 +2697,64 @@ function engineFieldUnits(name){
  return special[name]??(name.includes('rpm')?'RPM':name.endsWith('_ms')?'ms':name.includes('deg')?'deg':name.endsWith('_s')?'s':name.endsWith('_c')?'C':'');
 }
 function engineToMsq(t){
- window.EcuLoadModel.validateTune(t);
+ window.EcuLoadModel.validateTune(t);window.EcuSecondaryTables.validateTune(t);
  const doc=document.implementation.createDocument(MSQ_NS,'msq'),root=doc.documentElement;
  function add(parent,name,attrs){const e=doc.createElementNS(MSQ_NS,name);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);parent.appendChild(e);return e;}
  add(root,'bibliography',{author:'ESP32ECU',tuneComment:'SHADOW ONLY; physical outputs inhibited; illustrative development tune'});
  add(root,'versionInfo',{fileFormat:'5.0',nPages:'1',signature:ENGINE_SIGNATURE});
- const ps=[5376].map((size,i)=>add(root,'page',{number:i,size}));
+ const ps=[8192].map((size,i)=>add(root,'page',{number:i,size}));
  for(const item of engineConstants(t)){
   const units=item.unit??(item.group?engineFieldUnits(item.name):item.field==='rpm'?'RPM':item.field==='load'?'source_units':item.field==='cells'?{ve:'%',spark:'deg',lambda:'lambda'}[item.map]:'');
   const attrs={name:item.name,units};if(Array.isArray(item.value)){attrs.rows=item.field==='cells'?(item.bins||16):item.value.length;attrs.cols=item.field==='cells'?(item.bins||16):1;}
   const e=add(ps[item.page],'constant',attrs);
-  e.textContent=item.loadEnum?window.EcuLoadModel.enumText(item.loadKey,item.value):item.aeMode?'"'+window.EcuTransientEnrichment.modeLabels[item.value]+'"':item.aeApply?'"'+window.EcuTransientEnrichment.applyLabels[item.value]+'"':item.idleAlgorithm?'"'+item.value+'"':item.strategy?'"'+ENGINE_STRATEGY_LABELS[item.value]+'"':item.flag?(item.value?'"On"':'"Off"'):Array.isArray(item.value)?'\n'+Array.from({length:attrs.rows},(_,i)=>item.value.slice(i*attrs.cols,(i+1)*attrs.cols).join(' ')).join('\n')+'\n':String(item.value);
+  e.textContent=item.secEnum?window.EcuSecondaryTables.enumText(item.secKey,item.value):item.secPolarity?(item.value?'"Active high"':'"Active low"'):item.loadEnum?window.EcuLoadModel.enumText(item.loadKey,item.value):item.aeMode?'"'+window.EcuTransientEnrichment.modeLabels[item.value]+'"':item.aeApply?'"'+window.EcuTransientEnrichment.applyLabels[item.value]+'"':item.idleAlgorithm?'"'+item.value+'"':item.strategy?'"'+ENGINE_STRATEGY_LABELS[item.value]+'"':item.flag?(item.value?'"On"':'"Off"'):Array.isArray(item.value)?'\n'+Array.from({length:attrs.rows},(_,i)=>item.value.slice(i*attrs.cols,(i+1)*attrs.cols).join(' ')).join('\n')+'\n':String(item.value);
  }
  return '<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(doc)+'\n';
 }
 function engineFromMsq(text,template){
  if(/<!DOCTYPE|<!ENTITY/i.test(text)||text.includes('\0'))throw Error('MSQ XML declarations rejected.');
  const doc=new DOMParser().parseFromString(text,'application/xml'),root=doc.documentElement,info=doc.getElementsByTagNameNS(MSQ_NS,'versionInfo')[0];
- if(doc.getElementsByTagName('parsererror').length||root.localName!=='msq'||root.namespaceURI!==MSQ_NS||!info||![ENGINE_SIGNATURE,TRANSIENT_ENGINE_SIGNATURE,SEMI_ENGINE_SIGNATURE,IDLE_ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE,CYLINDER_ENGINE_SIGNATURE,LEGACY_ENGINE_SIGNATURE,SEQUENTIAL_ENGINE_SIGNATURE].includes(info.getAttribute('signature'))||info.getAttribute('nPages')!==([ENGINE_SIGNATURE,TRANSIENT_ENGINE_SIGNATURE,SEMI_ENGINE_SIGNATURE,IDLE_ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE].includes(info.getAttribute('signature'))?'1':info.getAttribute('signature')===CYLINDER_ENGINE_SIGNATURE?'5':'4'))throw Error('Use an MSQ for this ESP32ECU definition. Other ECU tunes are incompatible.');
- const legacy=info.getAttribute('signature')===LEGACY_ENGINE_SIGNATURE,sequential=info.getAttribute('signature')===SEQUENTIAL_ENGINE_SIGNATURE,result=JSON.parse(JSON.stringify(template));result.schema_version=7;result.load_model=window.EcuLoadModel.defaults();result.transient_enrichment=window.EcuTransientEnrichment.defaults();result.idle_control=window.EcuIdleControl.defaults();if(legacy||sequential)result.cylinder_trims=window.EcuCylinderTuning.defaults();if(legacy){result.strategy='batch_wasted_4cyl';result.timing=engineTimingDefaults();}
- const ownCurrent=info.getAttribute('signature')===ENGINE_SIGNATURE,hasTransient=[ENGINE_SIGNATURE,TRANSIENT_ENGINE_SIGNATURE].includes(info.getAttribute('signature')),hasSemi=[ENGINE_SIGNATURE,TRANSIENT_ENGINE_SIGNATURE,SEMI_ENGINE_SIGNATURE].includes(info.getAttribute('signature')),hasIdle=[ENGINE_SIGNATURE,TRANSIENT_ENGINE_SIGNATURE,SEMI_ENGINE_SIGNATURE,IDLE_ENGINE_SIGNATURE].includes(info.getAttribute('signature')),ownWhole=[ENGINE_SIGNATURE,TRANSIENT_ENGINE_SIGNATURE,SEMI_ENGINE_SIGNATURE,IDLE_ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE].includes(info.getAttribute('signature'));
- const expected=new Map(engineConstants(result,legacy,sequential,ownWhole,hasIdle,hasTransient,ownCurrent).map(x=>[x.name,x])),seen=new Set();
+ const caps=engineCapabilities(info?.getAttribute('signature'));
+ if(doc.getElementsByTagName('parsererror').length||root.localName!=='msq'||root.namespaceURI!==MSQ_NS||!info||!caps.known||info.getAttribute('nPages')!==caps.pages)throw Error('Use an MSQ for this ESP32ECU definition. Other ECU tunes are incompatible.');
+ const legacy=caps.legacy,sequential=caps.sequential,ownCurrent=caps.secondary,hasLoad=caps.model,hasTransient=caps.transient,hasSemi=caps.semi,hasIdle=caps.idle,ownWhole=caps.whole,result=structuredClone(template);result.schema_version=8;result.secondary_tables=window.EcuSecondaryTables.defaults();result.load_model=window.EcuLoadModel.defaults();result.transient_enrichment=window.EcuTransientEnrichment.defaults();result.idle_control=window.EcuIdleControl.defaults();if(legacy||sequential)result.cylinder_trims=window.EcuCylinderTuning.defaults();if(legacy){result.strategy='batch_wasted_4cyl';result.timing=engineTimingDefaults();}
+ const expected=new Map(engineConstants(result,legacy,sequential,ownWhole,hasIdle,hasTransient,hasLoad,ownCurrent).map(x=>[x.name,x])),seen=new Set();
  for(const e of doc.getElementsByTagNameNS(MSQ_NS,'constant')){
   const item=expected.get(e.getAttribute('name'));if(!item||seen.has(item.name)||e.parentNode.localName!=='page'||e.parentNode.getAttribute('number')!==String(item.page))throw Error('Unknown, duplicate or misplaced MSQ constant.');
   seen.add(item.name);const raw=e.textContent.trim();let value;
-  if(item.loadEnum)value=window.EcuLoadModel.parseEnum(item.loadKey,raw);
+  if(item.secEnum)value=window.EcuSecondaryTables.parseEnum(item.secKey,raw);
+  else if(item.secPolarity){if(!['"Active high"','"Active low"','0','1'].includes(raw))throw Error('Invalid secondary polarity.');value=['"Active high"','1'].includes(raw);}
+  else if(item.loadEnum)value=window.EcuLoadModel.parseEnum(item.loadKey,raw);
   else if(item.aeMode||item.aeApply){const labels=item.aeMode?window.EcuTransientEnrichment.modeLabels:window.EcuTransientEnrichment.applyLabels;const quoted=labels.map(x=>'"'+x+'"');value=quoted.includes(raw)?quoted.indexOf(raw):labels.map((_,i)=>String(i)).includes(raw)?Number(raw):-1;if(value<0)throw Error('Invalid transient selection.');}
   else if(item.idleAlgorithm){const a=window.EcuIdleControl.algorithms;value=['0','1','2'].includes(raw)?a[Number(raw)]:a.find(x=>'"'+x+'"'===raw);if(!value)throw Error('Invalid idle algorithm.');}
   else if(item.strategy){const labels=hasSemi?ENGINE_STRATEGY_LABELS:ENGINE_STRATEGY_LABELS.slice(0,2),quoted=labels.map(x=>'"'+x+'"');value=quoted.includes(raw)?quoted.indexOf(raw):labels.map((_,i)=>String(i)).includes(raw)?Number(raw):-1;if(value<0)throw Error('Invalid MSQ strategy for its identity.');}
   else if(item.flag){if(!['"On"','"Off"','0','1'].includes(raw))throw Error('Invalid MSQ flag.');value=['"On"','1'].includes(raw);}
   else{const list=raw?raw.split(/\s+/).map(Number):[];if(list.some(x=>!Number.isFinite(x))||list.length!==(Array.isArray(item.value)?item.value.length:1))throw Error('MSQ value count or number invalid.');value=Array.isArray(item.value)?list:list[0];}
-  if(item.loadKey)result.load_model[item.loadKey]=value;else if(item.aeMode)result.transient_enrichment.mode=window.EcuTransientEnrichment.modes[value];else if(item.aeApply)result.transient_enrichment.apply=window.EcuTransientEnrichment.applies[value];else if(item.aeKey)result.transient_enrichment[item.aeKey]=value;else if(item.idleKey)result.idle_control[item.idleKey]=value;else if(item.trimFlag||item.trimSpark!==undefined||item.trimCylinder!==undefined)window.EcuCylinderTuning.apply(result,item,value);else if(item.name==='baseRevision')result.revision=value;else if(item.strategy)result.strategy=ENGINE_STRATEGIES[value];else if(item.order!==undefined)result.timing.firing_order[item.order]=value;else if(item.group)result[item.group][item.name]=value;else if(item.curve)result.curves[item.name]=value;else result.maps[item.map][item.field]=value;
+  if(item.secKind){if(item.secMap)result.secondary_tables[item.secKind].map[item.field]=value;else result.secondary_tables[item.secKind][item.secKey]=value;}else if(item.loadKey)result.load_model[item.loadKey]=value;else if(item.aeMode)result.transient_enrichment.mode=window.EcuTransientEnrichment.modes[value];else if(item.aeApply)result.transient_enrichment.apply=window.EcuTransientEnrichment.applies[value];else if(item.aeKey)result.transient_enrichment[item.aeKey]=value;else if(item.idleKey)result.idle_control[item.idleKey]=value;else if(item.trimFlag||item.trimSpark!==undefined||item.trimCylinder!==undefined)window.EcuCylinderTuning.apply(result,item,value);else if(item.name==='baseRevision')result.revision=value;else if(item.strategy)result.strategy=ENGINE_STRATEGIES[value];else if(item.order!==undefined)result.timing.firing_order[item.order]=value;else if(item.group)result[item.group][item.name]=value;else if(item.curve)result.curves[item.name]=value;else result.maps[item.map][item.field]=value;
  }
  if(ownWhole&&!seen.has('baseRevision'))seen.add('baseRevision');
  if(seen.size!==expected.size)throw Error('Incomplete MSQ tune.');
  if(!hasIdle)result.settings.idle_enabled=false;
- if(!ownCurrent)legacyEngineFuelBounds(result);
+ if(!hasLoad)legacyEngineFuelBounds(result);
  return result;
 }
 function engineImportShape(value,template,path=""){
  if(path==='schema_version'&&value!==template)throw Error('Unsupported engine schema version.');
  if(typeof template==='number'){if(typeof value!=='number'||!Number.isFinite(value))throw Error('Engine import contains an invalid number.');return;}
  if(typeof template==='boolean'){if(typeof value!=='boolean')throw Error('Engine import contains an invalid flag.');return;}
- if(typeof template==='string'){if(path.startsWith('load_model.')){const choices=window.EcuLoadModel.enums[path.slice(11)];if(!choices?.includes(value))throw Error('Unknown load-model selection.');return;}if(path==='idle_control.algorithm'){if(!window.EcuIdleControl.algorithms.includes(value))throw Error('Unknown idle algorithm.');return;}if(path==='transient_enrichment.mode'){if(!window.EcuTransientEnrichment.modes.includes(value))throw Error('Unknown transient mode.');return;}if(path==='transient_enrichment.apply'){if(!window.EcuTransientEnrichment.applies.includes(value))throw Error('Unknown transient application.');return;}if(path==='strategy'){if(!ENGINE_STRATEGIES.includes(value))throw Error('Unknown engine strategy.');return;}if(value!==template)throw Error('Engine tune identity or output inhibition changed.');return;}
+ if(typeof template==='string'){if(path.startsWith('secondary_tables.')){const choices=window.EcuSecondaryTables.enums[path.split('.')[2]];if(!choices?.includes(value))throw Error('Unknown secondary selection.');return;}if(path.startsWith('load_model.')){const choices=window.EcuLoadModel.enums[path.slice(11)];if(!choices?.includes(value))throw Error('Unknown load-model selection.');return;}if(path==='idle_control.algorithm'){if(!window.EcuIdleControl.algorithms.includes(value))throw Error('Unknown idle algorithm.');return;}if(path==='transient_enrichment.mode'){if(!window.EcuTransientEnrichment.modes.includes(value))throw Error('Unknown transient mode.');return;}if(path==='transient_enrichment.apply'){if(!window.EcuTransientEnrichment.applies.includes(value))throw Error('Unknown transient application.');return;}if(path==='strategy'){if(!ENGINE_STRATEGIES.includes(value))throw Error('Unknown engine strategy.');return;}if(value!==template)throw Error('Engine tune identity or output inhibition changed.');return;}
  if(!value||typeof value!=='object'||Array.isArray(value)!==Array.isArray(template)||Object.keys(value).sort().join('|')!==Object.keys(template).sort().join('|'))throw Error('Engine tune schema or array size does not match.');
  for(const k of Object.keys(template))engineImportShape(value[k],template[k],path?path+'.'+k:k);
 }
 function legacyEngineFuelBounds(value){if(value.maps.ve.cells.some(v=>!Number.isFinite(v)||Math.fround(v)<20||Math.fround(v)>120))throw Error('Historical tune retains20..120 F32 fuel-coefficient bounds.');}
 function upgradeLegacyEngine(value,template){
- if(![1,2,3,4,5,6].includes(value?.schema_version))return value;
+ if(![1,2,3,4,5,6,7].includes(value?.schema_version))return value;
  if(!(value.schema_version>=5?ENGINE_STRATEGIES:['batch_wasted_4cyl','sequential_4cyl']).includes(value.strategy))throw Error('Legacy schema cannot represent semi-sequential mode.');
- const old=structuredClone(template);delete old.load_model;if(value.schema_version<6)delete old.transient_enrichment;if(value.schema_version<4)delete old.idle_control;old.schema_version=value.schema_version;
+ const old=structuredClone(template);delete old.secondary_tables;if(value.schema_version<7)delete old.load_model;if(value.schema_version<6)delete old.transient_enrichment;if(value.schema_version<4)delete old.idle_control;old.schema_version=value.schema_version;
  if(value.schema_version<3)delete old.cylinder_trims;
  if(value.schema_version===1){delete old.timing;old.strategy='batch_wasted_4cyl';}
  engineImportShape(value,old);if(value.schema_version===1&&value.strategy!=='batch_wasted_4cyl')throw Error('Legacy tune must use batch / wasted.');
- legacyEngineFuelBounds(value);
- return {...value,schema_version:7,load_model:window.EcuLoadModel.defaults(),transient_enrichment:value.schema_version<6?window.EcuTransientEnrichment.defaults():value.transient_enrichment,settings:value.schema_version<4?{...value.settings,idle_enabled:false}:value.settings,timing:value.schema_version===1?engineTimingDefaults():value.timing,cylinder_trims:value.schema_version<3?window.EcuCylinderTuning.defaults():value.cylinder_trims,idle_control:value.schema_version<4?window.EcuIdleControl.defaults():value.idle_control};
+ if(value.schema_version<7)legacyEngineFuelBounds(value);
+ return {...value,schema_version:8,secondary_tables:window.EcuSecondaryTables.defaults(),load_model:value.schema_version<7?window.EcuLoadModel.defaults():value.load_model,transient_enrichment:value.schema_version<6?window.EcuTransientEnrichment.defaults():value.transient_enrichment,settings:value.schema_version<4?{...value.settings,idle_enabled:false}:value.settings,timing:value.schema_version===1?engineTimingDefaults():value.timing,cylinder_trims:value.schema_version<3?window.EcuCylinderTuning.defaults():value.cylinder_trims,idle_control:value.schema_version<4?window.EcuIdleControl.defaults():value.idle_control};
 }
 function engineCycleSummary(t){
  const node=$('#engine-cycle-summary');if(!node)return;
@@ -2152,13 +2774,13 @@ async function renderEngine(p){
  p.innerHTML='<section class="panel panelbody"><p>Loading engine development tools...</p></section>';
  try{if(!engineTune)engineTune=await api('/api/engine/config');if(current!=='engine')return;
  const t=engineTune;
- p.innerHTML=`<div class="banner"><b>SHADOW / SIL ONLY</b><span>Four-cylinder batch, semi-sequential or cam-synchronized sequential proposals. This page cannot enable physical outputs. Defaults are illustrative, not an engine tune. The regression plant is unvalidated.</span></div><div class="actions" style="margin-bottom:18px"><button class="primary" id="engine-save">Save engine tune</button><button id="engine-reload">Reload saved tune</button><button id="engine-export">Export tune JSON</button><button id="engine-msq">Export TunerStudio MSQ</button><button id="engine-import">Import engine tune</button><input id="engine-import-file" type="file" accept=".json,.msq,application/json,application/xml" class="hidden"><span class="fine" id="engine-save-state">Revision ${t.revision}</span></div><div class="grid"><div class="stack"><section class="panel"><div class="panelhead"><h2>Engine and operating settings</h2></div><div class="panelbody"><div class="field"><label for="eng-strategy">Fuel and spark strategy</label><select id="eng-strategy"><option value="batch_wasted_4cyl" ${t.strategy==='batch_wasted_4cyl'?'selected':''}>Batch injection / wasted COP (360°)</option><option value="sequential_4cyl" ${t.strategy==='sequential_4cyl'?'selected':''}>Sequential fuel and spark (720°)</option><option value="semi_sequential_4cyl" ${t.strategy==='semi_sequential_4cyl'?'selected':''}>Semi-sequential fuel / wasted COP (360°)</option></select></div><details open><summary>Cycle, firing order and cam reference</summary><div class="field" style="margin-top:12px"><label for="eng-order">Firing order, starting with cylinder 1</label><input id="eng-order" value="${esc(t.timing.firing_order.join(', '))}" placeholder="1, 3, 4, 2"></div><div class="formgrid">${[['injection_end_deg','Injector closing angle, °ATDC of each cylinder compression TDC'],['cam_sync_deg','Cam rising edge, crank °ATDC of cylinder 1 compression TDC'],['cam_window_deg','Cam acceptance window, ±crank degrees']].map(([k,label])=>`<div class="field"><label for="eng-${k}">${label}</label><input id="eng-${k}" data-eng-group="timing" data-eng-key="${k}" type="number" step="any" value="${t.timing[k]}"></div>`).join('')}</div><div id="engine-cycle-summary"></div><p class="hint">Only full sequential mode requires a missing-tooth crank wheel and one rising cam pulse per 720°. Two valid cam pulses establish phase. Cam loss cuts and latches until a supervised stop. A reference 360° wrong cannot be detected from one cam pulse alone. Confirm compression TDC mechanically. J17 is crank, J18 is cam.</p><p class="hint">Sequential fuel uses one opening per 720°, with dead time once per opening. The 15 ms limit still applies; cold default enrichment can exceed it and inhibit fuel. The host regression plant uses a fixed 1-3-4-2 engine; use that order for its coupled runs. A cam edge is generated only for full sequential mode.</p></details><div class="formgrid">${Object.entries(t.engine).map(([k,v])=>`<div class="field"><label for="eng-${k}">${esc(k.replaceAll('_',' '))}</label><input id="eng-${k}" data-eng-group="engine" data-eng-key="${k}" type="number" step="any" value="${v}" ${k==='cylinders'?'readonly':''}></div>`).join('')}</div><details><summary>Starting, enrichment, protection and auxiliary proposals</summary><div class="formgrid" style="margin-top:16px">${Object.entries(t.settings).filter(([k])=>!k.startsWith('idle_')&&!k.startsWith('accel_')).map(([k,v])=>`<div class="field"><label for="eng-${k}">${esc(k.replaceAll('_',' '))}</label><input id="eng-${k}" data-eng-group="settings" data-eng-key="${k}" type="${typeof v==='boolean'?'checkbox':'number'}" ${typeof v==='boolean'?(v?'checked':''):`step="any" value="${v}"`}></div>`).join('')}</div></details><details><summary>Coolant and battery compensation curves</summary><div class="field" style="margin-top:12px"><label for="engine-curves">Curve arrays (JSON, increasing axes)</label><textarea id="engine-curves" rows="12" spellcheck="false">${esc(JSON.stringify(t.curves,null,2))}</textarea></div><p class="hint">Values are physical units. All curves are validated by the same C++ parser on target and host.</p></details><p class="hint">Current carrier limits: 15 ms injection, 3.5 ms dwell. Idle control drives virtual PWM in enabled SIL runs. Fan and pump remain proposals; physical engine outputs are inhibited.</p></div></section><section class="panel"><div class="panelhead"><h2>16 × 16 maps</h2><select id="engine-map-kind" style="width:auto"><option value="ve">Fuel coefficient (%)</option><option value="spark">Spark (degrees BTDC)</option><option value="lambda">Lambda target</option></select></div><div class="panelbody"><div id="engine-map"></div><p class="hint">Rows use the explicitly declared table basis. Columns: RPM. Bilinear interpolation; edge values clamp. Fuel coefficients allow0..255%; changing the source requires calibration review. Axes and all cells are validated on save.</p></div></section></div><div class="stack"><section class="panel"><div class="panelhead"><h2>Control diagnostics</h2><span class="tag">OUTPUTS INHIBITED</span></div><div class="panelbody" id="engine-live"></div></section><section class="panel"><div class="panelhead"><h2>Timing execution</h2><button class="small ghost" id="engine-timing-export">Export timing trace</button></div><div class="panelbody" id="engine-timing"><p class="hint">Waiting for timing diagnostics.</p></div></section><section class="panel"><div class="panelhead"><h2>Software-in-the-loop</h2><span class="tag">SYNTHETIC PLANT</span></div><div class="panelbody"><div class="field"><label for="engine-scenario">Regression scenario</label><select id="engine-scenario">${['warm_start','cold_start','throttle_step','load_step','trigger_dropout','sensor_short','overrev','stall_restart','load_stall_restart'].map(x=>`<option value="${x}">${x.replaceAll('_',' ')}</option>`).join('')}</select></div><div class="actions" style="margin-top:12px"><button id="engine-run">Run 12 virtual seconds</button><button id="engine-log">Export MSL log</button></div><p class="hint">Host simulator only. The native C++ ECU consumes generated 60-2 tooth events; virtual injector and spark edges feed an independent reduced-order plant. No predetermined RPM trace is played back.</p><pre id="engine-run-result" class="log" style="margin-top:14px">No SIL run yet.</pre></div></section></div></div>`;
+ p.innerHTML=`<div class="banner"><b>SHADOW / SIL ONLY</b><span>Four-cylinder batch, semi-sequential or cam-synchronized sequential proposals. This page cannot enable physical outputs. Defaults are illustrative, not an engine tune. The regression plant is unvalidated.</span></div><div class="actions" style="margin-bottom:18px"><button class="primary" id="engine-save">Save engine tune</button><button id="engine-reload">Reload saved tune</button><button id="engine-export">Export tune JSON</button><button id="engine-msq">Export TunerStudio MSQ</button><button id="engine-import">Import engine tune</button><input id="engine-import-file" type="file" accept=".json,.msq,application/json,application/xml" class="hidden"><span class="fine" id="engine-save-state">Revision ${t.revision}</span></div><div class="grid"><div class="stack"><section class="panel"><div class="panelhead"><h2>Engine and operating settings</h2></div><div class="panelbody"><div class="field"><label for="eng-strategy">Fuel and spark strategy</label><select id="eng-strategy"><option value="batch_wasted_4cyl" ${t.strategy==='batch_wasted_4cyl'?'selected':''}>Batch injection / wasted COP (360°)</option><option value="sequential_4cyl" ${t.strategy==='sequential_4cyl'?'selected':''}>Sequential fuel and spark (720°)</option><option value="semi_sequential_4cyl" ${t.strategy==='semi_sequential_4cyl'?'selected':''}>Semi-sequential fuel / wasted COP (360°)</option></select></div><details open><summary>Cycle, firing order and cam reference</summary><div class="field" style="margin-top:12px"><label for="eng-order">Firing order, starting with cylinder 1</label><input id="eng-order" value="${esc(t.timing.firing_order.join(', '))}" placeholder="1, 3, 4, 2"></div><div class="formgrid">${[['injection_end_deg','Injector closing angle, °ATDC of each cylinder compression TDC'],['cam_sync_deg','Cam rising edge, crank °ATDC of cylinder 1 compression TDC'],['cam_window_deg','Cam acceptance window, ±crank degrees']].map(([k,label])=>`<div class="field"><label for="eng-${k}">${label}</label><input id="eng-${k}" data-eng-group="timing" data-eng-key="${k}" type="number" step="any" value="${t.timing[k]}"></div>`).join('')}</div><div id="engine-cycle-summary"></div><p class="hint">Only full sequential mode requires a missing-tooth crank wheel and one rising cam pulse per 720°. Two valid cam pulses establish phase. Cam loss cuts and latches until a supervised stop. A reference 360° wrong cannot be detected from one cam pulse alone. Confirm compression TDC mechanically. J17 is crank, J18 is cam.</p><p class="hint">Sequential fuel uses one opening per 720°, with dead time once per opening. The 15 ms limit still applies; cold default enrichment can exceed it and inhibit fuel. The host regression plant uses a fixed 1-3-4-2 engine; use that order for its coupled runs. A cam edge is generated only for full sequential mode.</p></details><div class="formgrid">${Object.entries(t.engine).map(([k,v])=>`<div class="field"><label for="eng-${k}">${esc(k.replaceAll('_',' '))}</label><input id="eng-${k}" data-eng-group="engine" data-eng-key="${k}" type="number" step="any" value="${v}" ${k==='cylinders'?'readonly':''}></div>`).join('')}</div><details><summary>Starting, enrichment, protection and auxiliary proposals</summary><div class="formgrid" style="margin-top:16px">${Object.entries(t.settings).filter(([k])=>!k.startsWith('idle_')&&!k.startsWith('accel_')).map(([k,v])=>`<div class="field"><label for="eng-${k}">${esc(k.replaceAll('_',' '))}</label><input id="eng-${k}" data-eng-group="settings" data-eng-key="${k}" type="${typeof v==='boolean'?'checkbox':'number'}" ${typeof v==='boolean'?(v?'checked':''):`step="any" value="${v}"`}></div>`).join('')}</div></details><details><summary>Coolant and battery compensation curves</summary><div class="field" style="margin-top:12px"><label for="engine-curves">Curve arrays (JSON, increasing axes)</label><textarea id="engine-curves" rows="12" spellcheck="false">${esc(JSON.stringify(t.curves,null,2))}</textarea></div><p class="hint">Values are physical units. All curves are validated by the same C++ parser on target and host.</p></details><p class="hint">Current carrier limits: 15 ms injection, 3.5 ms dwell. Idle control drives virtual PWM in enabled SIL runs. Fan and pump remain proposals; physical engine outputs are inhibited.</p></div></section><section class="panel"><div class="panelhead"><h2>16 × 16 maps</h2><select id="engine-map-kind" style="width:auto"><option value="ve">Fuel coefficient (%)</option><option value="spark">Spark (degrees BTDC)</option><option value="lambda">Lambda target</option><option value="secondary_fuel">Secondary fuel map</option><option value="secondary_spark">Secondary spark map</option></select></div><div class="panelbody"><div id="engine-map"></div><p class="hint">Rows use the explicitly declared table basis. Columns: RPM. Bilinear interpolation; edge values clamp. Fuel coefficients allow0..255%; changing the source requires calibration review. Axes and all cells are validated on save.</p></div></section></div><div class="stack"><section class="panel"><div class="panelhead"><h2>Control diagnostics</h2><span class="tag">OUTPUTS INHIBITED</span></div><div class="panelbody" id="engine-live"></div></section><section class="panel"><div class="panelhead"><h2>Timing execution</h2><button class="small ghost" id="engine-timing-export">Export timing trace</button></div><div class="panelbody" id="engine-timing"><p class="hint">Waiting for timing diagnostics.</p></div></section><section class="panel"><div class="panelhead"><h2>Software-in-the-loop</h2><span class="tag">SYNTHETIC PLANT</span></div><div class="panelbody"><div class="field"><label for="engine-scenario">Regression scenario</label><select id="engine-scenario">${['warm_start','cold_start','throttle_step','load_step','trigger_dropout','sensor_short','overrev','stall_restart','load_stall_restart'].map(x=>`<option value="${x}">${x.replaceAll('_',' ')}</option>`).join('')}</select></div><div class="actions" style="margin-top:12px"><button id="engine-run">Run 12 virtual seconds</button><button id="engine-log">Export MSL log</button></div><p class="hint">Host simulator only. The native C++ ECU consumes generated 60-2 tooth events; virtual injector and spark edges feed an independent reduced-order plant. No predetermined RPM trace is played back.</p><pre id="engine-run-result" class="log" style="margin-top:14px">No SIL run yet.</pre></div></section></div></div>`;
  $('#eng-strategy').onchange=e=>{t.strategy=e.target.value;engineDirty=true;set('engine-save-state','Unsaved engine tune');engineCycleSummary(t);};
  $('#eng-order').onchange=e=>{t.timing.firing_order=e.target.value.trim().split(/[\s,]+/).map(Number);engineDirty=true;set('engine-save-state','Unsaved engine tune');engineCycleSummary(t);};
  document.querySelectorAll('[data-eng-key]').forEach(i=>i.onchange=()=>{t[i.dataset.engGroup][i.dataset.engKey]=i.type==='checkbox'?i.checked:Number(i.value);engineDirty=true;set('engine-save-state','Unsaved engine tune');engineCycleSummary(t);});
  $('#engine-curves').onchange=e=>{try{t.curves=JSON.parse(e.target.value);engineDirty=true;set('engine-save-state','Unsaved engine tune')}catch(err){toast('Invalid curve JSON: '+err.message,true)}};
  $('#engine-map-kind').onchange=()=>drawEngineMap();
- $('#engine-save').onclick=async()=>{try{for(const i of p.querySelectorAll('[data-eng-key][type=number]'))if(!i.value.trim()||!Number.isFinite(Number(i.value)))throw Error('Engine settings: enter a finite value in every numeric field.');window.EcuIdleControl.validate($('#engine-idle-panel'));window.EcuTransientEnrichment.validate($('#engine-transient-panel'));window.EcuLoadModel.validate($('#engine-load-panel'),t);const curves=JSON.parse($('#engine-curves').value);t.curves=curves;engineTune=await api('/api/engine/config',{method:'PUT',body:JSON.stringify(t)});engineDirty=false;engineImportOrigin=undefined;toast('Engine tune validated and saved. Physical outputs remain inhibited.');renderEngine(p)}catch(e){toast(e.message,true)}};
+ $('#engine-save').onclick=async()=>{try{for(const i of p.querySelectorAll('[data-eng-key][type=number]'))if(!i.value.trim()||!Number.isFinite(Number(i.value)))throw Error('Engine settings: enter a finite value in every numeric field.');window.EcuIdleControl.validate($('#engine-idle-panel'));window.EcuTransientEnrichment.validate($('#engine-transient-panel'));window.EcuLoadModel.validate($('#engine-load-panel'),t);window.EcuSecondaryTables.validate($('#engine-secondary-panel'),t);const curves=JSON.parse($('#engine-curves').value);t.curves=curves;engineTune=await api('/api/engine/config',{method:'PUT',body:JSON.stringify(t)});engineDirty=false;engineImportOrigin=undefined;toast('Engine tune validated and saved. Physical outputs remain inhibited.');renderEngine(p)}catch(e){toast(e.message,true)}};
  $('#engine-reload').onclick=async()=>{try{engineTune=await api('/api/engine/config');engineDirty=false;engineImportOrigin=undefined;renderEngine(p)}catch(e){toast(e.message,true)}};
  $('#engine-export').onclick=()=>download('ecu-shadow-engine-tune.json',t);
 
@@ -2168,7 +2790,7 @@ async function renderEngine(p){
   if(file.size>65536)throw Error('Engine tune file exceeds 64 KiB.');
   const text=await file.text(),candidate=file.name.toLowerCase().endsWith('.msq')?engineFromMsq(text,t):upgradeLegacyEngine(JSON.parse(text),t);engineImportShape(candidate,t);
   if(!Number.isInteger(candidate.revision)||candidate.revision<1||candidate.revision>4294967295)throw Error('Invalid tune origin revision.');
-  const ownWholeFile=file.name.toLowerCase().endsWith('.msq')&&[ENGINE_SIGNATURE,TRANSIENT_ENGINE_SIGNATURE,SEMI_ENGINE_SIGNATURE,IDLE_ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE].includes(new DOMParser().parseFromString(text,'application/xml').getElementsByTagNameNS(MSQ_NS,'versionInfo')[0]?.getAttribute('signature'));
+  const ownWholeFile=file.name.toLowerCase().endsWith('.msq')&&engineCapabilities(new DOMParser().parseFromString(text,'application/xml').getElementsByTagNameNS(MSQ_NS,'versionInfo')[0]?.getAttribute('signature')).whole;
   if(!ownWholeFile&&candidate.revision!==t.revision)throw Error('Tune base revision differs. Reload and export a current tune before editing it.');
   const originElement=ownWholeFile?[...new DOMParser().parseFromString(text,'application/xml').getElementsByTagNameNS(MSQ_NS,'constant')].find(e=>e.getAttribute('name')==='baseRevision'):null;
   engineImportOrigin=ownWholeFile?(originElement?candidate.revision:null):undefined;
@@ -2183,6 +2805,7 @@ async function renderEngine(p){
  $('#engine-log').onclick=async()=>{try{const response=await fetch('/api/engine/log');if(!response.ok)throw Error('Run a SIL scenario before exporting.');const blob=await response.blob(),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ecu-sil.msl';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}catch(e){toast(e.message,true)}};
  $('#engine-timing-export').onclick=async()=>{try{download('ecu-timing-trace.json',await api('/api/engine/timing'))}catch(e){toast(e.message,true)}};
  const loadPane=document.createElement('div');loadPane.id='engine-load-panel';p.append(loadPane);window.EcuLoadModel.attach(loadPane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune')},()=>{drawEngineMap();const c=$('#engine-cylinder-panel');if(c)window.EcuCylinderTuning.attach(c,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune');engineCycleSummary(t)},toast);});
+ const secondaryPane=document.createElement('div');secondaryPane.id='engine-secondary-panel';p.append(secondaryPane);window.EcuSecondaryTables.attach(secondaryPane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune');drawEngineMap();},kind=>{$('#engine-map-kind').value='secondary_'+kind;drawEngineMap();});
  const aePane=document.createElement('div');aePane.id='engine-transient-panel';p.append(aePane);window.EcuTransientEnrichment.attach(aePane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune')});
  const cylinderPane=document.createElement('div');cylinderPane.id='engine-cylinder-panel';p.append(cylinderPane);window.EcuCylinderTuning.attach(cylinderPane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune');engineCycleSummary(t)},toast);
  const idlePane=document.createElement('div');idlePane.id='engine-idle-panel';p.append(idlePane);window.EcuIdleControl.attach(idlePane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune')});
@@ -2191,8 +2814,8 @@ async function renderEngine(p){
  engineCycleSummary(t);drawEngineMap();pollEngine();
  }catch(e){if(current==='engine')p.innerHTML='<section class="panel panelbody"><p>'+esc(e.message)+'</p></section>';}
 }
-function drawEngineMap(){const kind=$('#engine-map-kind').value,m=engineTune.maps[kind],basis=window.EcuLoadModel.basis(engineTune,kind),unit=esc(basis.unit),limits=kind==='ve'?[0,255]:kind==='spark'?[-5,40]:[.75,1.2];$('#engine-map').innerHTML=`<p class="hint ${basis.matched?'':'warn'}">Stored rows: ${unit}. ${basis.matched?'Basis matches selected source.':'Source differs; review and acknowledge in Load sources & fuel model.'}</p><div class="tablewrap"><table><thead><tr><th>${unit} / RPM</th>${m.rpm.map((x,i)=>`<th><input aria-label="RPM axis ${i+1}" data-axis="rpm" data-idx="${i}" type="number" style="width:64px" value="${x}"></th>`).join('')}</tr></thead><tbody>${m.load.map((load,y)=>`<tr><th><input aria-label="Load axis ${y+1} ${unit}" data-axis="load" data-idx="${y}" type="number" step="any" min="${basis.min}" max="${basis.max}" style="width:64px" value="${load}"></th>${m.rpm.map((rpm,x)=>`<td><input aria-label="${kind} at ${load} ${unit} ${rpm} RPM" data-cell="${y*16+x}" type="number" step="any" min="${limits[0]}" max="${limits[1]}" style="width:64px" value="${m.cells[y*16+x]}"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;document.querySelectorAll('[data-cell],[data-axis]').forEach(i=>i.onchange=()=>{const v=i.value.trim()?Number(i.value):NaN;if(i.dataset.axis)m[i.dataset.axis][Number(i.dataset.idx)]=v;else m.cells[Number(i.dataset.cell)]=v;engineDirty=true;set('engine-save-state','Unsaved engine tune');});}
-async function pollEngine(){clearTimeout(engineStatusTimer);if(current!=='engine')return;try{const e=await api('/api/engine/status');if(current!=='engine')return;window.EcuCylinderTuning?.status(document.querySelector('#page'),e.cylinders);window.EcuIdleControl?.status(document.querySelector('#page'),e);window.EcuTransientEnrichment?.status(document.querySelector('#page'),e);window.EcuLoadModel?.status(document.querySelector('#page'),e);const fields=['active_strategy','state','faults','crank_synced','phase_synced','phase_required','phase_reason','phase_losses','cam_rejected','cam_error_deg','rpm','ve_pct','target_lambda','pulse_ms','advance_deg','dwell_ms','deadtime_ms','warmup','afterstart','accel','ego','duty_pct','idle_pct','timing_stop_reason','timing_stops','timing_recoveries'];$('#engine-live').innerHTML=fields.map(k=>`<div class="keyline"><span>${esc(k.replaceAll('_',' '))}</span><strong>${typeof e[k]==='number'?num(e[k],k==='faults'?0:2):esc(k==='phase_reason'&&e.phase_required===false?'not required for current strategy':e[k]??'--')}</strong></div>`).join('')+'<p class="hint">'+esc(e.binding||e.execution)+'</p>'+(!e.storage_ok?'<p class="warn" role="alert">'+esc(e.error||'Engine tune storage unavailable. Defaults may be active; inspect UART. Saves are blocked.')+'</p>':'')+'<p class="hint">'+esc(e.simulator?(e.last_run?'Completed SIL snapshot, '+Math.floor((e.sample_age_ms||0)/1000)+' seconds since completion.':'No SIL result yet.'):(e.fresh?'Fresh shadow sample.':'Shadow sample is stale.'))+'</p>';const timing=e.timing;const pane=$('#engine-timing');if(pane){if(!timing)pane.innerHTML='<p class="hint">Timing diagnostics are not available in this firmware.</p>';else{const rows=[['Mode',timing.mode],['Fault',timing.fault],['Last fault',timing.last_fault],['Angle plan reason',timing.angle_stop_reason],['Dispatched edges',timing.dispatched],['Virtual high mask',timing.virtual_high_mask],['Physical high mask',timing.physical_high_mask],['Capture clock uncertainty (µs)',timing.clock_uncertainty_us],['Maximum dispatch lateness (µs)',timing.max_lateness_us],['Maximum capture age (µs)',timing.max_capture_age_us],['Producer age (µs)',timing.producer_age_us],['Maximum coil dispatch high (µs)',timing.max_coil_high_us],['Trace records overwritten',timing.trace_overwritten]];pane.innerHTML=rows.map(([label,value])=>'<div class="keyline"><span>'+esc(label)+'</span><strong>'+esc(value??'--')+'</strong></div>').join('')+'<p class="hint">'+esc(timing.qualification||'')+'</p>';if(timing.fault&&timing.fault!=='none')pane.innerHTML+='<p class="warn" role="alert">Timing execution is inhibited: '+esc(timing.fault)+'</p>';}}if(e.last_run&&!engineRun)set('engine-run-result',JSON.stringify(e.last_run,null,2));}catch(e){if(current==='engine')set('engine-live','Engine diagnostics offline: '+e.message);}finally{if(current==='engine')engineStatusTimer=setTimeout(pollEngine,500);}}
+function drawEngineMap(){const kind=$('#engine-map-kind').value,secondary=kind.startsWith('secondary_')?kind.slice(10):null,rule=secondary?engineTune.secondary_tables[secondary]:null,m=rule?rule.map:engineTune.maps[kind],basis=rule?window.EcuSecondaryTables.basis(engineTune,secondary):window.EcuLoadModel.basis(engineTune,kind),unit=esc(basis.unit),limits=rule?window.EcuSecondaryTables.cellLimits(secondary,rule.cells):kind==='ve'?[0,255]:kind==='spark'?[-5,40]:[.75,1.2];$('#engine-map').innerHTML=`<p class="hint ${basis.matched?'':'warn'}">Stored rows: ${unit}. ${rule?'Stored cells: '+esc(rule.cells)+' ('+esc(window.EcuSecondaryTables.cellUnit(secondary,rule.cells))+'). ':''}${basis.matched?'Basis matches selected source.':'Source differs; review and acknowledge in Load sources & fuel model.'}</p><div class="tablewrap"><table><thead><tr><th>${unit} / RPM</th>${m.rpm.map((x,i)=>`<th><input aria-label="RPM axis ${i+1}" data-axis="rpm" data-idx="${i}" type="number" style="width:64px" value="${x}"></th>`).join('')}</tr></thead><tbody>${m.load.map((load,y)=>`<tr><th><input aria-label="Load axis ${y+1} ${unit}" data-axis="load" data-idx="${y}" type="number" step="any" min="${basis.min}" max="${basis.max}" style="width:64px" value="${load}"></th>${m.rpm.map((rpm,x)=>`<td><input aria-label="${kind} at ${load} ${unit} ${rpm} RPM" data-cell="${y*16+x}" type="number" step="any" min="${limits[0]}" max="${limits[1]}" style="width:64px" value="${m.cells[y*16+x]}"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;document.querySelectorAll('[data-cell],[data-axis]').forEach(i=>i.onchange=()=>{const v=i.value.trim()?Number(i.value):NaN;if(i.dataset.axis)m[i.dataset.axis][Number(i.dataset.idx)]=v;else m.cells[Number(i.dataset.cell)]=v;engineDirty=true;set('engine-save-state','Unsaved engine tune');});}
+async function pollEngine(){clearTimeout(engineStatusTimer);if(current!=='engine')return;try{const e=await api('/api/engine/status');if(current!=='engine')return;window.EcuCylinderTuning?.status(document.querySelector('#page'),e.cylinders);window.EcuIdleControl?.status(document.querySelector('#page'),e);window.EcuTransientEnrichment?.status(document.querySelector('#page'),e);window.EcuLoadModel?.status(document.querySelector('#page'),e);window.EcuSecondaryTables?.status(document.querySelector('#page'),e);const fields=['active_strategy','state','faults','crank_synced','phase_synced','phase_required','phase_reason','phase_losses','cam_rejected','cam_error_deg','rpm','ve_pct','target_lambda','pulse_ms','advance_deg','dwell_ms','deadtime_ms','warmup','afterstart','accel','ego','duty_pct','idle_pct','timing_stop_reason','timing_stops','timing_recoveries'];$('#engine-live').innerHTML=fields.map(k=>`<div class="keyline"><span>${esc(k.replaceAll('_',' '))}</span><strong>${typeof e[k]==='number'?num(e[k],k==='faults'?0:2):esc(k==='phase_reason'&&e.phase_required===false?'not required for current strategy':e[k]??'--')}</strong></div>`).join('')+'<p class="hint">'+esc(e.binding||e.execution)+'</p>'+(!e.storage_ok?'<p class="warn" role="alert">'+esc(e.error||'Engine tune storage unavailable. Defaults may be active; inspect UART. Saves are blocked.')+'</p>':'')+'<p class="hint">'+esc(e.simulator?(e.last_run?'Completed SIL snapshot, '+Math.floor((e.sample_age_ms||0)/1000)+' seconds since completion.':'No SIL result yet.'):(e.fresh?'Fresh shadow sample.':'Shadow sample is stale.'))+'</p>';const timing=e.timing;const pane=$('#engine-timing');if(pane){if(!timing)pane.innerHTML='<p class="hint">Timing diagnostics are not available in this firmware.</p>';else{const rows=[['Mode',timing.mode],['Fault',timing.fault],['Last fault',timing.last_fault],['Angle plan reason',timing.angle_stop_reason],['Dispatched edges',timing.dispatched],['Virtual high mask',timing.virtual_high_mask],['Physical high mask',timing.physical_high_mask],['Capture clock uncertainty (µs)',timing.clock_uncertainty_us],['Maximum dispatch lateness (µs)',timing.max_lateness_us],['Maximum capture age (µs)',timing.max_capture_age_us],['Producer age (µs)',timing.producer_age_us],['Maximum coil dispatch high (µs)',timing.max_coil_high_us],['Trace records overwritten',timing.trace_overwritten]];pane.innerHTML=rows.map(([label,value])=>'<div class="keyline"><span>'+esc(label)+'</span><strong>'+esc(value??'--')+'</strong></div>').join('')+'<p class="hint">'+esc(timing.qualification||'')+'</p>';if(timing.fault&&timing.fault!=='none')pane.innerHTML+='<p class="warn" role="alert">Timing execution is inhibited: '+esc(timing.fault)+'</p>';}}if(e.last_run&&!engineRun)set('engine-run-result',JSON.stringify(e.last_run,null,2));}catch(e){if(current==='engine')set('engine-live','Engine diagnostics offline: '+e.message);}finally{if(current==='engine')engineStatusTimer=setTimeout(pollEngine,500);}}
 
 function renderScreens(p){
  p.innerHTML=`<section class="panel"><div class="panelhead"><h2>ESP-NOW screens</h2><span class="tag" id="radio-environment">LOADING</span></div><div class="panelbody"><p class="fine">Hold PAIR / BOOT for 3 seconds, or start pairing below. Enter the setup key on the future screen, then approve its name and MAC here or with a short PAIR press. Keep the key private. Pairing lasts 30 seconds.</p><div class="actions"><button class="primary" id="pair-open">Start pairing</button><button id="pair-cancel" disabled>Cancel pairing</button></div><p id="radio-status" role="status" aria-live="polite" class="fine">Loading radio status...</p><div id="pair-details" class="hidden"><div class="keyline"><span>Setup key</span><strong id="pair-key" style="overflow-wrap:anywhere;min-width:0"></strong></div><p class="hint">Enter this 32-character key on the screen or its setup tool. It is never broadcast over the radio.</p></div><div id="pair-candidate"></div><div class="divider"></div><h3>Saved screens</h3><div id="radio-peers"></div><p class="hint">A saved screen is connected only after authenticated acknowledgements. Unpair removes its saved key and stops future telemetry sends. Screens cannot control engine outputs. New screens can request authenticated engine telemetry with inputs, proposed fuel/spark, phase diagnostics and sample ages. Existing screens keep their sensor stream.</p><p class="fine" id="radio-engine-status"></p><p class="fine">LED: steady green when healthy, blinking blue during pairing, blinking red for a detected fault. Faults take priority. With no screens saved, an idle radio is healthy.</p><div id="radio-simulator" class="hidden"><div class="divider"></div><button id="sim-screen">Simulate a screen requesting pairing</button><p class="hint">Synthetic screen only. This simulator does not send ESP-NOW packets or prove radio range.</p></div></div></section>`;
@@ -2216,7 +2839,7 @@ async function refreshRadio(){
  $('#pair-details').classList.toggle('hidden',!r.pairing);set('pair-key',r.setup_key||'');
  $('#pair-candidate').innerHTML=r.candidate?`<div class="notice" style="margin-top:16px"><p>Screen: <b>${esc(r.candidate.name)}</b> / <span class="mono">${esc(r.candidate.mac)}</span></p><button id="pair-confirm" ${r.candidate.approved?'disabled':''}>${r.candidate.approved?'Waiting for screen key confirmation':'Approve screen'}</button></div>`:'';
  if(r.candidate&&!r.candidate.approved)$('#pair-confirm').onclick=()=>radioAction({action:'confirm',mac:r.candidate.mac,window:r.window});
- $('#radio-peers').innerHTML=(r.peers||[]).map(p=>`<div class="keyline" style="gap:12px;flex-wrap:wrap"><div><b>${esc(p.name)}</b><p class="fine mono">${esc(p.mac)} / ${p.connected?'Connected':'Offline'}${p.last_ack_ms>=0?' / last reply '+num(p.last_ack_ms/1000,1)+' s ago':''} / ${p.engine_telemetry?'engine telemetry v'+p.engine_schema:'legacy sensor stream'}${p.engine_upgrade_needed?' / update screen firmware for current engine data':p.engine_telemetry_blocked?' / current engine data unavailable':''}</p></div><button class="small" data-unpair="${esc(p.mac)}" aria-label="Unpair ${esc(p.name)}">Unpair</button></div>`).join('')||'<p class="fine">No screens paired.</p>';
+ $('#radio-peers').innerHTML=(r.peers||[]).map(p=>`<div class="keyline" style="gap:12px;flex-wrap:wrap"><div><b>${esc(p.name)}</b><p class="fine mono">${esc(p.mac)} / ${p.connected?'Connected':'Offline'}${p.last_ack_ms>=0?' / last reply '+num(p.last_ack_ms/1000,1)+' s ago':''} / ${p.engine_telemetry?'engine telemetry v'+p.engine_schema:'legacy sensor stream'}${p.engine_telemetry_blocked?' / sensor stream fallback':''}${p.engine_upgrade_needed?' / update screen firmware for current engine data':p.engine_telemetry_blocked?' / current engine data unavailable':''}</p></div><button class="small" data-unpair="${esc(p.mac)}" aria-label="Unpair ${esc(p.name)}">Unpair</button></div>`).join('')||'<p class="fine">No screens paired.</p>';
  document.querySelectorAll('[data-unpair]').forEach(b=>b.onclick=()=>radioAction({action:'unpair',mac:b.dataset.unpair}));
  $('#radio-simulator').classList.toggle('hidden',!r.simulator);$('#sim-screen').disabled=!r.pairing||!!r.candidate;
  }catch(e){if(current==='screens'){set('radio-status',e.message+' Pairing controls unavailable.');$('#pair-open').disabled=true;$('#pair-cancel').disabled=true;$('#pair-candidate').innerHTML='';$('#radio-peers').innerHTML='<p class="bad">Connection lost. Saved-screen state is unknown.</p>';$('#pair-details').classList.add('hidden');set('pair-key','');}}
@@ -2380,6 +3003,11 @@ window.EcuEngineLogger=(()=>{
  const LOAD_CODES=['flags','fuel_source_code','spark_source_code','lambda_source_code','trim_source_code','pressure_code','aux_role_code','baro_source_code','afr_code','reason_code','afr_state_code'];
  const LOAD_LABELS=['LoadFuel','LoadSpark','LoadLambda','LoadTrim','LoadPressureFactor','LoadBaro','LoadEmap','LoadAux','LoadAfrFactor','LoadFlags','LoadFuelSource','LoadSparkSource','LoadLambdaSource','LoadTrimSource','LoadPressure','LoadAuxRole','LoadBaroSource','LoadAfr','LoadReason','LoadAfrState','LoadAvailable'];
  const LOAD_UNITS=['source_units','source_units','source_units','source_units','ratio','kPa','kPa','kPa','ratio','bitfield',...Array(10).fill('code'),'bool'];
+ const SEC_VALUES=window.EcuSecondaryTables.values,SEC_LABELS=window.EcuSecondaryTables.valueLabels,SEC_BOOLS=window.EcuSecondaryTables.boolFields;
+ const SEC_CODES=['mode_code','cells_code','source_code','reason_code','input_source_code','condition_code','axis_code','input_channel'],SEC_CODE_LABELS=['Mode','Cells','Source','Reason','InputSource','Condition','Axis','InputChannel'];
+ const SEC_HEADERS=['fuel','spark'].flatMap(kind=>{const prefix='Sec'+kind[0].toUpperCase()+kind.slice(1);return [...SEC_LABELS.map(k=>prefix+k),prefix+'Flags',...SEC_CODE_LABELS.map(k=>prefix+k),prefix+'ObservedUs',...SEC_BOOLS.map(k=>prefix+k.split('_').map(x=>x[0].toUpperCase()+x.slice(1)).join(''))];});
+ const SEC_UNITS=['fuel','spark'].flatMap(kind=>{const unit=kind==='fuel'?'%':'deg';return [unit,unit,'cell_units',unit,'source_units','condition_units','ms','condition_units','ms','bitfield',...Array(8).fill('code'),'us',...Array(12).fill('bool')];});
+ function secondaryValues(s){return ['fuel','spark'].flatMap(kind=>{let d=s.secondary_tables?.[kind];if(!d?.available)d={flags:1024,active_high:true};return [...SEC_VALUES.map(k=>number(d.available&&Number.isFinite(d[k])?Math.fround(d[k]):null)),d.flags??1024,...SEC_CODES.map(k=>d[k]??0),d.mode_code===4&&d.input_source_code?d.input_observed_us??'NaN':'NaN',...SEC_BOOLS.map(k=>d[k]?1:0)];});}
  const PREFIX=['Time','RowSequence','SnapshotSequence','ControlAge','SensorAge','Source','TuneRevision','SensorRevision','PhaseEpoch','Flags','Faults','State','Strategy','PhaseReason','PhaseLosses','CamRejected','CamError','WorkerCommand','WorkerAge','WorkerEpoch','WorkerTuneRevision','WorkerSensorRevision','TimingFault','LastTimingFault','VirtualMask','PhysicalCommandMask','BoardFlags','InputValidMask'];
  const UNITS=['s','count','count','ms','ms','code','count','count','count','bitfield','bitfield','code','code','code','count','count','deg','count','ms','count','count','count','code','code','bitfield','bitfield','bitfield','bitfield',
   'RPM','kPa','%','C','C','lambda','V','V','RPM','%','lambda','deg','ms','ms','ms','mg','ratio','ratio','ratio','ratio','%','%',...Array(8).fill('count')];
@@ -2407,6 +3035,7 @@ window.EcuEngineLogger=(()=>{
    const previous=staged.at(-1)||rows.at(-1);
    if(s.cylinders&&(!uint(s.cylinders.valid_mask)||s.cylinders.valid_mask>15||!Array.isArray(s.cylinders.proposals)||s.cylinders.proposals.length!==4))throw Error('Invalid cylinder observation.');
    if(s.idle&&(typeof s.idle.available!=='boolean'||!u64(s.idle.pid_updates)||!uint(s.idle.flags)||!uint(s.idle.state_code)||s.idle.state_code>10||!uint(s.idle.reason_code)||s.idle.reason_code>12||!uint(s.idle.algorithm_code)||s.idle.algorithm_code>2||IDLE_VALUES.some(k=>s.idle.available?!Number.isFinite(s.idle[k]):s.idle[k]!==null)))throw Error('Invalid idle observation.');
+   if(s.secondary_tables!==undefined){if(!s.secondary_tables||Object.keys(s.secondary_tables).sort().join('|')!=='fuel|spark')throw Error('Invalid secondary observations.');for(const kind of ['fuel','spark'])window.EcuSecondaryTables.checkObservation(s.secondary_tables[kind],kind,s.available);}
    if(s.load_model!==undefined)window.EcuLoadModel.checkObservation(s.load_model,s.available);
    const ae=s.transient_enrichment;
    if(ae!==undefined){
@@ -2460,12 +3089,12 @@ window.EcuEngineLogger=(()=>{
  const number=value=>typeof value==='number'&&Number.isFinite(value)?String(Number(value.toPrecision(9))):'NaN';
  function exportMsl(){
   if(!meta||!rows.length)throw Error('No collected engine rows.');
-  const lines=['"ESP32ECU ENGINE LOG 005"',`"BROWSER COLLECTED ${meta.source_code===1?'TARGET OBSERVATIONS':'SYNTHETIC REPLAY'} / boot ${identity.boot_id} / log ${identity.log_id} / period_ms=${meta.period_ms} duration_s=${meta.duration_s} / overwritten=${meta.overwritten} missed_periods=${meta.missed_periods} repeated=${meta.repeated_skipped} invalid=${meta.invalid_skipped} / missing row ranges ${gaps.map(x=>x.join('..')).join(',')||'none'} / PhaseEpoch=configuration context; WorkerEpoch=executor generation / proposals and software command masks; no electrical execution measurement"`,
-   [...PREFIX,...INPUT_LABELS,...PROPOSAL_LABELS,...Array.from({length:8},(_,i)=>'ADC'+i),'CylinderValidMask','CylinderTrimsEnabled','CylinderCapacityMask','CylinderSparkClampMask','CylinderRetardFloorMask',...Array.from({length:4},(_,i)=>['PW','Advance','FuelTrim','Duty'].map(k=>'C'+(i+1)+k)).flat(),...IDLE_LABELS,...AE_LABELS,...LOAD_LABELS].join('\t'),[...UNITS,'bitfield','bool','bitfield','bitfield','bitfield',...Array(4).fill(['ms','deg','%','%']).flat(),'RPM','%','%','%','%','%','bitfield','code','code','code','count','bool',...AE_UNITS,...LOAD_UNITS].join('\t')];
+  const lines=['"ESP32ECU ENGINE LOG 006"',`"BROWSER COLLECTED ${meta.source_code===1?'TARGET OBSERVATIONS':'SYNTHETIC REPLAY'} / boot ${identity.boot_id} / log ${identity.log_id} / period_ms=${meta.period_ms} duration_s=${meta.duration_s} / overwritten=${meta.overwritten} missed_periods=${meta.missed_periods} repeated=${meta.repeated_skipped} invalid=${meta.invalid_skipped} / missing row ranges ${gaps.map(x=>x.join('..')).join(',')||'none'} / PhaseEpoch=configuration context; WorkerEpoch=executor generation / proposals and software command masks; no electrical execution measurement"`,
+   [...PREFIX,...INPUT_LABELS,...PROPOSAL_LABELS,...Array.from({length:8},(_,i)=>'ADC'+i),'CylinderValidMask','CylinderTrimsEnabled','CylinderCapacityMask','CylinderSparkClampMask','CylinderRetardFloorMask',...Array.from({length:4},(_,i)=>['PW','Advance','FuelTrim','Duty'].map(k=>'C'+(i+1)+k)).flat(),...IDLE_LABELS,...AE_LABELS,...LOAD_LABELS,...SEC_HEADERS].join('\t'),[...UNITS,'bitfield','bool','bitfield','bitfield','bitfield',...Array(4).fill(['ms','deg','%','%']).flat(),'RPM','%','%','%','%','%','bitfield','code','code','code','count','bool',...AE_UNITS,...LOAD_UNITS,...SEC_UNITS].join('\t')];
   for(const r of rows){
    const s=r.sample,w=s.worker_observation,c=s.cylinders,ae=s.transient_enrichment,model=s.load_model;const extra=[c?.valid_mask||0,c?.enabled?1:0,c?.capacity_mask||0,c?.spark_clamp_mask||0,c?.retard_floor_mask||0,...Array.from({length:4},(_,i)=>['pulse_ms','advance_deg','fuel_pct','duty_pct'].map(k=>number(c?.valid_mask&(1<<i)?c.proposals[i][k]:null))).flat()];const elapsed=Number(BigInt(r.recorded_us)-BigInt(meta.started_us))/1e6;
    lines.push([elapsed.toFixed(6),r.row_sequence,s.sequence,number(s.control_age_ms),number(s.sample_age_ms),s.source_code,s.tune_revision,s.sensor_revision,s.phase_epoch,s.flags,s.controller_faults,s.state_code,s.strategy_code,s.phase_reason_code,s.phase_losses,s.cam_rejected,number(s.cam_error_deg),w.command_sequence,number(w.age_ms),w.epoch,w.tune_revision,w.sensor_revision,w.timing_fault_code,w.last_timing_fault_code,w.virtual_high_mask,w.physical_command_mask,s.board_flags,s.input_valid_mask,
-    ...INPUTS.map(k=>number(s.inputs[k])),...PROPOSALS.map(k=>number(s.proposals[k])),...s.raw_adc.map(number),...extra,...IDLE_VALUES.map(k=>number(s.idle?.available?s.idle[k]:null)),s.idle?.flags??0,s.idle?.state_code??0,s.idle?.reason_code??0,s.idle?.algorithm_code??0,s.idle?.pid_updates??'0',s.idle?.available?1:0,...AE_VALUES.map(k=>number(ae?.available?ae[k]:null)),ae?.flags??0,ae?.mode_code??0,ae?.apply_code??0,ae?.phase_code??0,ae?.reason_code??3,ae?.available?1:0,...LOAD_VALUES.map(k=>number(model?.available&&Number.isFinite(model[k])?Math.fround(model[k]):null)),...LOAD_CODES.map((k,i)=>model?.[k]??([5,8].includes(i)?1:i===10?255:0)),model?.available?1:0].join('\t'));
+    ...INPUTS.map(k=>number(s.inputs[k])),...PROPOSALS.map(k=>number(s.proposals[k])),...s.raw_adc.map(number),...extra,...IDLE_VALUES.map(k=>number(s.idle?.available?s.idle[k]:null)),s.idle?.flags??0,s.idle?.state_code??0,s.idle?.reason_code??0,s.idle?.algorithm_code??0,s.idle?.pid_updates??'0',s.idle?.available?1:0,...AE_VALUES.map(k=>number(ae?.available?ae[k]:null)),ae?.flags??0,ae?.mode_code??0,ae?.apply_code??0,ae?.phase_code??0,ae?.reason_code??3,ae?.available?1:0,...LOAD_VALUES.map(k=>number(model?.available&&Number.isFinite(model[k])?Math.fround(model[k]):null)),...LOAD_CODES.map((k,i)=>model?.[k]??([5,8].includes(i)?1:i===10?255:0)),model?.available?1:0,...secondaryValues(s)].join('\t'));
   }
   return lines.join('\n')+'\n';
  }
@@ -2655,6 +3284,66 @@ window.EcuLoadModel=(()=>{
  }
  function status(root,e){const pane=root.querySelector('#load-observation'),d=e?.load_model;if(!pane)return;if(!d?.available){pane.textContent='No load-model control observation.';return;}const n=v=>Number.isFinite(v)?v.toFixed(4):'unknown';const rows=[['Observed reason',d.reason],...['fuel','spark','lambda','trim'].map(k=>[k+' coordinate ('+(units[d[k+'_source_code']]||'unknown')+')',n(d[k+'_load'])]),['Pressure normalization',d.pressure+' / '+n(d.pressure_factor)],['Barometric pressure (kPa)',n(d.baro_kpa)+(d.flags&128?' / manual':'')],['Exhaust pressure (kPa)',n(d.emap_kpa)],['AFR application',d.afr_state+' / '+n(d.afr_factor)],['MAP overpressure guard',d.flags&256?'available':'unavailable'],['Flags',d.flags]];pane.innerHTML='<p class="hint">Control observation, separate from editor settings. '+esc(e.simulator?'SYNTHETIC / completed run':'Target proposal')+'. Check the sample source and age.</p>'+rows.map(([k,v])=>`<div class="keyline"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join('');}
  return {defaults,constants,enumText,parseEnum,validateTune,validate,attach,basis,status,checkObservation,enums:m.enums};
+})();
+)ECU_ASSET";
+inline constexpr char secondary_js[]=R"ECU_ASSET(// Generated by scripts/generate_secondary_ui.py
+window.EcuSecondaryMetadata={"defaults":{"fuel":{"mode":"off","source":"map","axis":"map_kpa","cells":"absolute","condition":"rpm","threshold":3000,"debounce_ms":20,"input_channel":0,"active_high":true,"map":{"rpm":[80,200,400,600,800,1000,1200,1600,2000,2500,3000,3500,4000,5000,6000,8000],"load":[10,15,20,25,30,35,40,45,50,55,60,70,80,90,100,110],"cells":[85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85]}},"spark":{"mode":"off","source":"map","axis":"map_kpa","cells":"absolute","condition":"rpm","threshold":3000,"debounce_ms":20,"input_channel":1,"active_high":true,"map":{"rpm":[80,200,400,600,800,1000,1200,1600,2000,2500,3000,3500,4000,5000,6000,8000],"load":[10,15,20,25,30,35,40,45,50,55,60,70,80,90,100,110],"cells":[15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15]}}},"enums":{"mode":["off","multiply","add","conditional","input"],"source":["map","tps","imap_emap"],"axis":["map_kpa","tps_pct","imap_emap_pct"],"cells":["absolute","multiplier","adder"],"condition":["rpm","map_kpa","tps_pct","ethanol_pct"]},"labels":{"mode":["Off","Multiply percent","Add","Conditional switch","Qualified input switch"],"source":["MAP kPa","TPS percent","IMAP / EMAP percent"],"axis":["MAP kPa","TPS percent","IMAP / EMAP percent"],"cells":["Absolute table value","Multiplier percent","Additive table value"],"condition":["RPM","MAP kPa","TPS percent","Qualified ethanol percent"]},"enumFields":["mode","source","axis","cells","condition"],"scalars":["threshold","debounce_ms"],"values":["primary","primary_corrected","secondary","combined","coordinate","condition_value","input_age_ms","threshold","debounce_ms"],"valueLabels":["Primary","PrimaryCorrected","Secondary","Combined","Coordinate","ConditionValue","InputAgeMs","Threshold","DebounceMs"],"boolFields":["available","evaluated","active","clamped","pending","input_qualified","input_level","pending_level","input_valid","input_raw","active_high","valid"],"reasons":["disabled","multiply","add","condition_primary","condition_secondary","input_primary","input_secondary","input_initial_qualification","input_unavailable","input_stale","input_time_reversed","required_map_unavailable","required_tps_unavailable","required_emap_unavailable","required_ethanol_unavailable","cranking_spark_bypass","invalid_configuration","invalid_arithmetic"],"inputSources":["unavailable","target_protected_input","synthetic_input"],"axisUnits":{"map_kpa":"kPa","tps_pct":"% TPS","imap_emap_pct":"% IMAP/EMAP"},"conditionUnits":{"rpm":"RPM","map_kpa":"kPa","tps_pct":"% TPS","ethanol_pct":"% ethanol"},"cellUnits":{"fuel":{"absolute":"% coefficient","multiplier":"% multiplier","adder":"percentage_points"},"spark":{"absolute":"deg BTDC","multiplier":"% multiplier","adder":"deg delta"}}};
+/* Shared metadata comes from scripts/generate_secondary_ui.py. */
+window.EcuSecondaryTables=(()=>{
+ const m=window.EcuSecondaryMetadata,kinds=['fuel','spark'],axes=['map_kpa','tps_pct','imap_emap_pct'],units=['kPa','% TPS','% IMAP/EMAP'];
+ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const defaults=()=>structuredClone(m.defaults),expectedCells=mode=>mode==='multiply'?'multiplier':mode==='add'?'adder':'absolute';
+ const range=(n,lo,hi)=>typeof n==='number'&&Number.isFinite(n)&&n>=lo&&n<=hi;
+ function basis(t,kind){const r=t.secondary_tables[kind],i=axes.indexOf(r.axis);return {unit:units[i]||'unknown',axis:r.axis,matched:r.axis===axes[m.enums.source.indexOf(r.source)],min:i===0?5:0,max:i===0?110:i===1?100:600};}
+ function cellUnit(kind,cells){return kind==='spark'&&cells!=='multiplier'?'deg':cells==='adder'?'percentage_points':'%';}
+ function cellLimits(kind,cells){return kind==='fuel'||cells==='multiplier'?[0,255]:cells==='adder'?[-40,70]:[-5,40];}
+ function constants(t){return kinds.flatMap(kind=>{const r=t.secondary_tables[kind];return [...m.enumFields.map(key=>({page:0,name:`secondary_${kind}_${key}`,value:r[key],secKind:kind,secKey:key,secEnum:true})),...m.scalars.map(key=>({page:0,name:`secondary_${kind}_${key}`,value:r[key],secKind:kind,secKey:key,unit:key==='debounce_ms'?'ms':m.conditionUnits[r.condition]})),{page:0,name:`secondary_${kind}_input_channel`,value:r.input_channel,secKind:kind,secKey:'input_channel'},{page:0,name:`secondary_${kind}_active_high`,value:r.active_high,secKind:kind,secKey:'active_high',secPolarity:true},...['rpm','load','cells'].map((field,i)=>({page:0,name:`secondary_${kind}_map${['Rpm','Load','Table'][i]}`,value:r.map[field],secKind:kind,secMap:true,field,unit:field==='rpm'?'RPM':field==='load'?m.axisUnits[r.axis]:m.cellUnits[kind][r.cells]}))];});}
+ function enumText(key,value){return '"'+m.labels[key][m.enums[key].indexOf(value)]+'"';}
+ function parseEnum(key,raw){const labels=m.labels[key].map(v=>'"'+v+'"');let i=labels.indexOf(raw);if(i<0)i=m.enums[key].map((_,n)=>String(n)).indexOf(raw);if(i<0)throw Error('Invalid secondary-table selection.');return m.enums[key][i];}
+ function validateTune(t){
+  if(!t.secondary_tables||Object.keys(t.secondary_tables).sort().join('|')!=='fuel|spark')throw Error('Both secondary tables are required.');
+  for(const kind of kinds){const r=t.secondary_tables[kind];
+   if(!r||Object.keys(r).sort().join('|')!==Object.keys(m.defaults[kind]).sort().join('|'))throw Error('Invalid secondary '+kind+' shape.');
+   for(const key of m.enumFields)if(!m.enums[key].includes(r[key]))throw Error('Unknown secondary '+kind+' selection.');
+   if(!Number.isInteger(r.input_channel)||r.input_channel<0||r.input_channel>1||typeof r.active_high!=='boolean'||!range(r.debounce_ms,0,500)||!range(r.threshold,0,r.condition==='rpm'?10000:r.condition==='map_kpa'?110:100))throw Error('Secondary '+kind+': invalid threshold, debounce or input selection.');
+   if(!basis(t,kind).matched)throw Error('Secondary '+kind+': review the load-axis basis before saving.');
+   if(r.mode!=='off'&&r.cells!==expectedCells(r.mode))throw Error('Secondary '+kind+': review the cell meaning before saving.');
+   if(r.mode!=='off'&&r.source==='imap_emap'&&t.load_model.aux_role!=='emap')throw Error('Secondary pressure ratio requires J16 assigned to calibrated EMAP.');
+   if(!r.map||Object.keys(r.map).sort().join('|')!=='cells|load|rpm'||!Array.isArray(r.map.rpm)||r.map.rpm.length!==16||!Array.isArray(r.map.load)||r.map.load.length!==16||!Array.isArray(r.map.cells)||r.map.cells.length!==256)throw Error('Secondary '+kind+': expected a complete16 x16 map.');
+   const b=basis(t,kind),limits=cellLimits(kind,r.cells);
+   for(const [key,lo,hi]of [['rpm',50,10000],['load',b.min,b.max]])for(let i=0;i<16;i++){const v=Math.fround(r.map[key][i]);if(!range(v,lo,hi)||i&&v<=Math.fround(r.map[key][i-1]))throw Error('Secondary '+kind+': axes must increase strictly in their declared units.');}
+   if(r.map.cells.some(v=>!range(Math.fround(v),Math.fround(limits[0]),Math.fround(limits[1]))))throw Error('Secondary '+kind+': a cell is outside the stored meaning\'s range.');
+  }
+ }
+ function attach(root,t,changed,editMap){
+  function draw(){root.innerHTML=`<section class="panel" style="margin-top:20px"><div class="panelhead"><h2>Secondary fuel & spark tables</h2><span class="tag">OUTPUTS INHIBITED</span></div><div class="panelbody"><p class="hint">Each table has its own load source. Multiply/add combines tables; conditional and input modes replace the primary table. Lambda and cylinder-trim coordinates continue to follow their configured primary source. No continuous blend is implemented.</p>${kinds.map(kind=>{const r=t.secondary_tables[kind],b=basis(t,kind),want=expectedCells(r.mode),cellsOkay=r.mode==='off'||r.cells===want;return `<details open><summary>Secondary ${kind}: ${esc(r.mode)} / stored ${esc(cellUnit(kind,r.cells))}</summary><div class="formgrid secondary-fields" style="margin-top:12px">${['mode','source','condition'].map(key=>`<div class="field"><label for="sec-${kind}-${key}">${key==='mode'?'Table mode':key==='source'?'Secondary load source':'Switch condition'}</label><select id="sec-${kind}-${key}">${m.enums[key].map((value,n)=>`<option value="${value}" ${r[key]===value?'selected':''}>${esc(m.labels[key][n])}</option>`).join('')}</select></div>`).join('')}<div class="field"><label for="sec-${kind}-threshold">Strictly greater than (${esc(r.condition)})</label><input id="sec-${kind}-threshold" type="number" step="any" value="${r.threshold}"></div><div class="field"><label for="sec-${kind}-input_channel">Protected input channel</label><select id="sec-${kind}-input_channel"><option value="0" ${r.input_channel===0?'selected':''}>Input 0</option><option value="1" ${r.input_channel===1?'selected':''}>Input 1</option></select></div><div class="field"><label for="sec-${kind}-active_high">Input selection polarity</label><select id="sec-${kind}-active_high"><option value="true" ${r.active_high?'selected':''}>High selects secondary</option><option value="false" ${!r.active_high?'selected':''}>Low selects secondary</option></select></div><div class="field"><label for="sec-${kind}-debounce_ms">Stable observation period (ms)</label><input id="sec-${kind}-debounce_ms" type="number" min="0" max="500" step="any" value="${r.debounce_ms}"></div></div><p class="hint ${b.matched&&cellsOkay?'':'warn'}">Stored rows: ${esc(b.unit)}. Stored cell meaning: ${esc(r.cells)} (${esc(cellUnit(kind,r.cells))}). ${b.matched?'Source basis matches.':'Source basis review required.'} ${cellsOkay?'Cell meaning matches or mode is Off.':'Cell meaning review required.'}</p><label class="check"><input id="sec-${kind}-ack" type="checkbox"><span>I reviewed this secondary map for the selected load source and mode.</span></label><div class="actions" style="margin-top:10px"><button class="small" data-sec-review="${kind}" data-action="axes">Use edited load axes in selected units</button><button class="small ghost" data-sec-review="${kind}" data-action="initialize">Replace load axes with illustrative defaults</button><button class="small" data-sec-review="${kind}" data-action="cells">Use reviewed cells for selected mode</button><button class="small ghost" data-sec-review="${kind}" data-action="neutral">Fill neutral multiplier/additive cells</button><button class="small" data-sec-map="${kind}">Edit secondary ${kind} map</button></div><p class="hint" id="sec-${kind}-error" role="status"></p></details>`;}).join('')}<p class="hint">Multiply/add operates after the primary soft spark retard. Switched spark applies retard to the selected secondary base. Cranking bypasses secondary spark. Final angle and injector-capacity guards still apply. Enabled secondary tables require their selected sensors even while the primary table remains selected.</p><p class="hint warn">Protected switch acquisition and the J4 accessory are not installed in current target firmware. Input mode therefore reports unavailable and inhibits control on the target. Ethanol likewise has no target producer. Host test stimuli are synthetic. PAIR and RESET remain service buttons; cam and pressure inputs retain their roles.</p><div id="secondary-observation" class="fine">No secondary-table control observation.</div></div></section>`;
+   for(const kind of kinds){const r=t.secondary_tables[kind];for(const key of ['mode','source','condition','input_channel','active_high'])root.querySelector(`#sec-${kind}-${key}`).onchange=e=>{r[key]=key==='input_channel'?Number(e.target.value):key==='active_high'?e.target.value==='true':e.target.value;changed();draw();};for(const key of ['threshold','debounce_ms'])root.querySelector(`#sec-${kind}-${key}`).onchange=e=>{r[key]=e.target.value.trim()?Number(e.target.value):NaN;changed();};}
+   root.querySelectorAll('[data-sec-map]').forEach(button=>button.onclick=()=>editMap(button.dataset.secMap));
+   root.querySelectorAll('[data-sec-review]').forEach(button=>button.onclick=()=>{const kind=button.dataset.secReview,r=t.secondary_tables[kind],error=root.querySelector(`#sec-${kind}-error`);if(!root.querySelector(`#sec-${kind}-ack`).checked){error.textContent='Acknowledge the calibration review first.';return;}
+    const action=button.dataset.action;if(action==='axes'||action==='initialize'){const axis=axes[m.enums.source.indexOf(r.source)];if(action==='initialize')r.map.load=Array.from({length:16},(_,i)=>Number(((axis==='map_kpa'?10:0)+i*(axis==='map_kpa'?100:axis==='tps_pct'?100:600)/15).toFixed(6)));r.axis=axis;}
+    else{if(r.mode==='off'){error.textContent='Select a mode before changing the cell meaning.';return;}const cells=expectedCells(r.mode);if(action==='neutral'){if(cells==='absolute'){error.textContent='A switched absolute map needs calibration; there is no general neutral value.';return;}r.map.cells.fill(cells==='multiplier'?100:0);}r.cells=cells;}changed();draw();editMap(kind);
+   });
+  }draw();
+ }
+ function validate(root,t){for(const input of root.querySelectorAll('input[type=number]'))if(!input.value.trim()||!Number.isFinite(Number(input.value)))throw Error('Secondary tables: enter finite values in every numeric field.');validateTune(t);}
+ function checkObservation(d,kind,present=true){
+  const integer=(v,max)=>Number.isSafeInteger(v)&&v>=0&&v<=max;
+  if(!d||typeof d!=='object'||Array.isArray(d))throw Error('Invalid secondary observation.');
+  const codes={mode:m.enums.mode,source:m.enums.source,axis:m.enums.axis,cells:m.enums.cells,condition:m.enums.condition,reason:m.reasons,input_source:m.inputSources};
+  const allowed=[...m.values,...m.boolFields,...Object.keys(codes),...Object.keys(codes).map(k=>k+'_code'),'input_channel','flags','cell_unit','coordinate_unit','input_observed_us'];
+  if(Object.keys(d).sort().join('|')!==allowed.sort().join('|')||m.boolFields.some(k=>typeof d[k]!=='boolean')||d.available&&!present||!integer(d.input_channel,1))throw Error('Invalid secondary observation fields.');
+  for(const [key,values]of Object.entries(codes))if(!integer(d[key+'_code'],values.length-1)||d[key]!==values[d[key+'_code']])throw Error('Invalid secondary code.');
+  let flags=d.input_channel*65536+d.axis_code*1048576;for(let i=0;i<m.boolFields.length;i++)if(d[m.boolFields[i]])flags+=2**i;
+  if(d.flags!==flags||d.cell_unit!==cellUnit(kind,d.cells)||d.coordinate_unit!==units[d.axis_code])throw Error('Invalid secondary flags/units.');
+  for(const key of m.values)if(d.available?d[key]!==null&&(!Number.isFinite(d[key])||Math.abs(d[key])>3.4028234663852886e38):d[key]!==null)throw Error('Invalid secondary numeric value.');
+  const inputTime=d.mode==='input'&&d.input_source_code!==0;
+  if(inputTime?typeof d.input_observed_us!=='string'||!/^(0|[1-9][0-9]{0,19})$/.test(d.input_observed_us)||BigInt(d.input_observed_us)>18446744073709551615n:d.input_observed_us!==null)throw Error('Invalid secondary input time.');
+  if(!d.available&&(m.boolFields.some(k=>d[k]!==Boolean(k==='active_high'))||Object.keys(codes).some(k=>d[k+'_code']!==0)||d.input_channel))throw Error('Unavailable secondary state is not canonical.');
+  if(d.available&&(!Number.isFinite(d.threshold)||!Number.isFinite(d.debounce_ms)||!range(Math.fround(d.threshold),0,d.condition==='rpm'?10000:d.condition==='map_kpa'?110:100)||!range(Math.fround(d.debounce_ms),0,500)))throw Error('Invalid secondary metadata.');
+  if(d.evaluated&&(!d.valid||!['primary','primary_corrected','combined'].every(k=>Number.isFinite(d[k]))||d.active&&!Number.isFinite(d.secondary))||d.valid&&d.axis_code!==d.source_code||d.input_qualified&&(!inputTime||!d.input_valid||!Number.isFinite(d.input_age_ms)||!range(Math.fround(d.input_age_ms),0,20)))throw Error('Invalid secondary evaluation state.');
+ }
+ function status(root,e){const pane=root.querySelector('#secondary-observation');if(!pane)return;const all=e?.secondary_tables;if(!all){pane.textContent='No secondary-table observation.';return;}const number=v=>Number.isFinite(v)?v.toFixed(4):'unknown';pane.innerHTML='<p class="hint">Control observation, separate from editor values. '+(e.simulator?'SYNTHETIC control observation':'Target proposal')+'. Check source and sample age.</p>'+kinds.map(kind=>{const d=all[kind];if(!d?.available)return `<p>${kind}: no observation</p>`;return `<h3>Secondary ${kind}</h3>`+[['Selection',d.reason+(d.pending?' / transition pending':'')],['Source and stored cells',d.source+' / '+d.cells+' ('+d.cell_unit+')'],['Primary / secondary / combined',number(d.primary)+' / '+number(d.secondary)+' / '+number(d.combined)],['Coordinate ('+d.coordinate_unit+')',number(d.coordinate)],['Condition',d.condition+' '+number(d.condition_value)+' > '+number(d.threshold)],['Input source',d.input_source],['Raw / qualified level',(d.input_valid?String(d.input_raw):'unknown')+' / '+(d.input_qualified?String(d.input_level):'unknown')],['Input age / observed time',number(d.input_age_ms)+' ms / '+(d.input_observed_us??'unknown')],['Evaluation',d.evaluated?'computed'+(d.clamped?' / clamped':''):'not computed']].map(([key,value])=>`<div class="keyline"><span>${esc(key)}</span><strong>${esc(value)}</strong></div>`).join('');}).join('');}
+ return {defaults,basis,cellUnit,cellLimits,constants,enumText,parseEnum,validateTune,validate,attach,status,checkObservation,enums:m.enums,values:m.values,valueLabels:m.valueLabels,boolFields:m.boolFields};
 })();
 )ECU_ASSET";
 inline constexpr char tuning_js[]=R"ECU_ASSET(/* Read-only tuning transport observations. USB bus presence is not an app link. */

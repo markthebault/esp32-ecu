@@ -5,25 +5,18 @@
 #include <cstring>
 #include <limits>
 namespace ecu::tuning {
-inline constexpr std::size_t page_bytes=5376,live_bytes=416,chunk_bytes=256;
-inline constexpr const char signature[]="ESP32ECU DEV 008 INHIBITED";
+inline constexpr std::size_t page_bytes=8192,live_bytes=640,chunk_bytes=256;
+inline constexpr const char signature[]="ESP32ECU DEV 009 INHIBITED";
 inline constexpr const char serial_protocol[]="002";
 using Page=std::array<std::uint8_t,page_bytes>;
 inline void put_u32(std::uint8_t*p,std::uint32_t v){for(unsigned i=0;i<4;++i)p[i]=std::uint8_t(v>>(8*i));}
 inline std::uint32_t get_u32(const std::uint8_t*p){std::uint32_t v=0;for(unsigned i=0;i<4;++i)v|=std::uint32_t(p[i])<<(8*i);return v;}
 inline void put_float(std::uint8_t*p,float v){static_assert(sizeof(float)==4&&std::numeric_limits<float>::is_iec559);std::uint32_t u;std::memcpy(&u,&v,4);put_u32(p,u);}
 inline float get_float(const std::uint8_t*p){auto u=get_u32(p);float v;std::memcpy(&v,&u,4);return v;}
-inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||(n>=4756&&n<4768)||(n>=4940&&n<4992)||(n>=5116&&n<5120)||n>=5176;}
+inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||(n>=4756&&n<4768)||(n>=4940&&n<4992)||(n>=5116&&n<5120)||(n>=5176&&n<5376)||(n>=5448&&n<5504)||n>=7808;}
 inline bool revision_offset(std::size_t n){return n>=268&&n<272;}
-// own008 must not export a model/data it cannot preserve on the next burn.
-inline bool representable(const engine::Tune&t){
- const secondary::Config disabled;static constexpr engine::Map axes{};
- if(!secondary::same_rule(t.secondary_tables.fuel,disabled.fuel)||!secondary::same_rule(t.secondary_tables.spark,disabled.spark))return false;
- for(const auto*m:{&t.secondary_ve,&t.secondary_spark})if(m->rpm!=axes.rpm||m->load!=axes.load)return false;
- for(auto v:t.secondary_ve.cells)if(v!=85)return false;
- for(auto v:t.secondary_spark.cells)if(v!=15)return false;
- return true;
-}
+// own009 carries the complete validated model and both secondary maps.
+inline bool representable(const engine::Tune&t){return !engine::validate(t);}
 inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill(0);
  put_u32(p.data(),(std::uint32_t(t.ego_enabled)<<0)|(std::uint32_t(t.dfco_enabled)<<1)|(std::uint32_t(t.idle_enabled)<<2));
  put_float(p.data()+4,t.cylinders);
@@ -136,11 +129,30 @@ inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill
  put_u32(p.data()+5164,std::uint32_t(t.load_model.afr));
  put_float(p.data()+5168,t.load_model.fixed_baro_kpa);
  put_float(p.data()+5172,t.load_model.afr_delay_s);
+ put_u32(p.data()+5376,std::uint32_t(t.secondary_tables.fuel.mode));
+ put_u32(p.data()+5380,std::uint32_t(t.secondary_tables.fuel.source));
+ put_u32(p.data()+5384,std::uint32_t(t.secondary_tables.fuel.axis));
+ put_u32(p.data()+5388,std::uint32_t(t.secondary_tables.fuel.cells));
+ put_u32(p.data()+5392,std::uint32_t(t.secondary_tables.fuel.condition));
+ put_float(p.data()+5396,t.secondary_tables.fuel.threshold);
+ put_float(p.data()+5400,t.secondary_tables.fuel.debounce_ms);
+ put_u32(p.data()+5404,t.secondary_tables.fuel.input_channel);put_u32(p.data()+5408,t.secondary_tables.fuel.active_high);
+ for(unsigned i=0;i<16;++i){put_float(p.data()+5504+i*4,t.secondary_ve.rpm[i]);put_float(p.data()+5568+i*4,t.secondary_ve.load[i]);}
+ for(unsigned i=0;i<256;++i)put_float(p.data()+5632+i*4,t.secondary_ve.cells[i]);
+ put_u32(p.data()+5412,std::uint32_t(t.secondary_tables.spark.mode));
+ put_u32(p.data()+5416,std::uint32_t(t.secondary_tables.spark.source));
+ put_u32(p.data()+5420,std::uint32_t(t.secondary_tables.spark.axis));
+ put_u32(p.data()+5424,std::uint32_t(t.secondary_tables.spark.cells));
+ put_u32(p.data()+5428,std::uint32_t(t.secondary_tables.spark.condition));
+ put_float(p.data()+5432,t.secondary_tables.spark.threshold);
+ put_float(p.data()+5436,t.secondary_tables.spark.debounce_ms);
+ put_u32(p.data()+5440,t.secondary_tables.spark.input_channel);put_u32(p.data()+5444,t.secondary_tables.spark.active_high);
+ for(unsigned i=0;i<16;++i){put_float(p.data()+6656+i*4,t.secondary_spark.rpm[i]);put_float(p.data()+6720+i*4,t.secondary_spark.load[i]);}
+ for(unsigned i=0;i<256;++i)put_float(p.data()+6784+i*4,t.secondary_spark.cells[i]);
 }
 inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  if(!origin||get_u32(p.data()+268)!=origin)return false;
  for(unsigned n=0;n<page_bytes;++n)if(reserved_offset(n)&&p[n])return false;
- engine::reset_secondary_tables(t); // own008 has no secondary-table fields.
  const auto flags=get_u32(p.data());if(flags>>3)return false;
  t.ego_enabled=flags&(1U<<0);
  t.dfco_enabled=flags&(1U<<1);
@@ -254,9 +266,29 @@ inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  const auto load_afr=get_u32(p.data()+5164);if(load_afr>=3)return false;t.load_model.afr=load::Afr(load_afr);
  t.load_model.fixed_baro_kpa=get_float(p.data()+5168);
  t.load_model.afr_delay_s=get_float(p.data()+5172);
+ const auto sec_fuel_mode=get_u32(p.data()+5376);if(sec_fuel_mode>=5)return false;t.secondary_tables.fuel.mode=secondary::Mode(sec_fuel_mode);
+ const auto sec_fuel_source=get_u32(p.data()+5380);if(sec_fuel_source>=3)return false;t.secondary_tables.fuel.source=load::Source(sec_fuel_source);
+ const auto sec_fuel_axis=get_u32(p.data()+5384);if(sec_fuel_axis>=3)return false;t.secondary_tables.fuel.axis=load::Axis(sec_fuel_axis);
+ const auto sec_fuel_cells=get_u32(p.data()+5388);if(sec_fuel_cells>=3)return false;t.secondary_tables.fuel.cells=secondary::Cells(sec_fuel_cells);
+ const auto sec_fuel_condition=get_u32(p.data()+5392);if(sec_fuel_condition>=4)return false;t.secondary_tables.fuel.condition=secondary::Condition(sec_fuel_condition);
+ t.secondary_tables.fuel.threshold=get_float(p.data()+5396);
+ t.secondary_tables.fuel.debounce_ms=get_float(p.data()+5400);
+ const auto sec_fuel_channel=get_u32(p.data()+5404),sec_fuel_polarity=get_u32(p.data()+5408);if(sec_fuel_channel>1||sec_fuel_polarity>1)return false;t.secondary_tables.fuel.input_channel=std::uint8_t(sec_fuel_channel);t.secondary_tables.fuel.active_high=sec_fuel_polarity;
+ for(unsigned i=0;i<16;++i){t.secondary_ve.rpm[i]=get_float(p.data()+5504+i*4);t.secondary_ve.load[i]=get_float(p.data()+5568+i*4);}
+ for(unsigned i=0;i<256;++i)t.secondary_ve.cells[i]=get_float(p.data()+5632+i*4);
+ const auto sec_spark_mode=get_u32(p.data()+5412);if(sec_spark_mode>=5)return false;t.secondary_tables.spark.mode=secondary::Mode(sec_spark_mode);
+ const auto sec_spark_source=get_u32(p.data()+5416);if(sec_spark_source>=3)return false;t.secondary_tables.spark.source=load::Source(sec_spark_source);
+ const auto sec_spark_axis=get_u32(p.data()+5420);if(sec_spark_axis>=3)return false;t.secondary_tables.spark.axis=load::Axis(sec_spark_axis);
+ const auto sec_spark_cells=get_u32(p.data()+5424);if(sec_spark_cells>=3)return false;t.secondary_tables.spark.cells=secondary::Cells(sec_spark_cells);
+ const auto sec_spark_condition=get_u32(p.data()+5428);if(sec_spark_condition>=4)return false;t.secondary_tables.spark.condition=secondary::Condition(sec_spark_condition);
+ t.secondary_tables.spark.threshold=get_float(p.data()+5432);
+ t.secondary_tables.spark.debounce_ms=get_float(p.data()+5436);
+ const auto sec_spark_channel=get_u32(p.data()+5440),sec_spark_polarity=get_u32(p.data()+5444);if(sec_spark_channel>1||sec_spark_polarity>1)return false;t.secondary_tables.spark.input_channel=std::uint8_t(sec_spark_channel);t.secondary_tables.spark.active_high=sec_spark_polarity;
+ for(unsigned i=0;i<16;++i){t.secondary_spark.rpm[i]=get_float(p.data()+6656+i*4);t.secondary_spark.load[i]=get_float(p.data()+6720+i*4);}
+ for(unsigned i=0;i<256;++i)t.secondary_spark.cells[i]=get_float(p.data()+6784+i*4);
  return !engine::validate(t);
 }
-// Update only an owned, already canonical schema7 tree. No global data mutates.
+// Update only an owned, already canonical schema8 tree. No global data mutates.
 template<class Json> bool update_document(Json&j,const engine::Tune&t){
  if(!j.header(t.revision,engine::strategy_name(t.strategy)))return false;
  if(!j.number("engine","cylinders",t.cylinders))return false;
@@ -309,7 +341,7 @@ template<class Json> bool update_document(Json&j,const engine::Tune&t){
  if(!j.number("timing","cam_window_deg",t.cam_window_deg))return false;
  if(!j.array("timing","firing_order",t.firing_order)||!j.boolean("cylinder_trims","enabled",t.cylinder_trims_enabled)||!j.array("cylinder_trims","spark_deg",t.cylinder_spark_deg))return false;
  for(unsigned i=0;i<4;++i)if(!j.trim(i,t.cylinder_fuel[i]))return false;
- if(!j.idle(t.idle_control)||!j.transient_enrichment(t.transient_enrichment)||!j.load_model(t.load_model))return false;
+ if(!j.idle(t.idle_control)||!j.transient_enrichment(t.transient_enrichment)||!j.load_model(t.load_model)||!j.secondary_tables(t.secondary_tables,t.secondary_ve,t.secondary_spark))return false;
  return true;
 }
 } // namespace ecu::tuning

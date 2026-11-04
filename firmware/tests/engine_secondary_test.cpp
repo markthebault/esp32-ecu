@@ -93,11 +93,11 @@ static void input_faults(){
  // Even an input fault during normal operation cannot alter the global gate.
  s.sampled_us=1070000;for(auto&sw:s.table_switches)sw.observed_us=s.sampled_us;s.table_switches[1].valid=false;o=c.step(t,s,s.sampled_us);check(o.faults&BadSensor);check(o.pulse_ms==0&&o.dwell_ms==0&&!o.proposed_enabled());
 }
-static void historical_transport(){
- auto t=tune();ecu::tuning::Page p;ecu::tuning::encode_page(t,9,p);
- auto enabled=tune();configure(enabled.secondary_tables.fuel,sec::Mode::Multiply);enabled.secondary_ve.cells.fill(150);
- check(ecu::tuning::decode_page(p,9,enabled));check(enabled.secondary_tables.fuel.mode==sec::Mode::Off&&enabled.secondary_ve.cells[0]==85);
+static void secondary_transport(){
+ auto t=tune();configure(t.secondary_tables.fuel,sec::Mode::Multiply);t.secondary_ve.cells.fill(150);
+ ecu::tuning::Page p;ecu::tuning::encode_page(t,9,p);auto enabled=tune();
+ check(ecu::tuning::decode_page(p,9,enabled));check(enabled.secondary_tables.fuel.mode==sec::Mode::Multiply&&enabled.secondary_ve.cells[0]==150);
  check(enabled.secondary_tables.spark.mode==sec::Mode::Off&&enabled.secondary_spark.cells[0]==15);
  ecu::tuning::Page roundtrip;ecu::tuning::encode_page(enabled,9,roundtrip);check(p==roundtrip);
 }
-int main(){fuel_and_capacity();spark_order_and_cylinders();dependencies_and_units();input_faults();historical_transport();std::cout<<"{\"passed\":true,\"engine_secondary_checks\":"<<checks<<"}\n";}
+int main(){fuel_and_capacity();spark_order_and_cylinders();dependencies_and_units();input_faults();secondary_transport();std::cout<<"{\"passed\":true,\"engine_secondary_checks\":"<<checks<<"}\n";}

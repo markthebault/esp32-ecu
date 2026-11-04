@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "rows": 7776,
+  "sha256": "8931bc976bb9739f19fa6b093d44fd9ff28a1d979f10a0bf5d64316617b23a8e",
+  "baseline": "reports/engine/secondary-core/after/observations.csv.gz",
+  "argv": [
+    "g++",
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-Wno-misleading-indentation",
+    "-Ifirmware/include",
+    "tools/secondary_legacy_probe.cpp",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-integration/legacy-disabled-probe"
+  ]
+}

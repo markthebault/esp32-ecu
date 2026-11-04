@@ -85,7 +85,7 @@ class EngineStore:
   if path.exists():
    try:
     body=path.read_bytes()
-    if len(body)>24576 or b'\0' in body or not self.bridge.engine_validate(body):raise ValueError('Invalid saved engine tune')
+    if len(body)>49152 or b'\0' in body or not self.bridge.engine_validate(body):raise ValueError('Invalid saved engine tune')
     self.tune=self.canonical(body)
    except (ValueError,OSError):self.storage_ok=False;self.error='Saved engine tune could not be loaded or migrated (invalid, too large, or allocation failure); file preserved, defaults shadow-only'
   self.runtime=EngineRuntime(self.tune,self.bridge);self.latest=None;self.last_run=None
@@ -98,7 +98,7 @@ class EngineStore:
   if not encoded:raise ValueError('Engine tune canonicalization failed')
   value=json.loads(encoded);value['revision']=int(value['revision']);return value
  def save(self,body):
-  if len(body)>24576:return 413,{'error':'Engine tune exceeds 24 KiB'}
+  if len(body)>49152:return 413,{'error':'Engine tune exceeds 48 KiB'}
   if b'\0' in body or not self.bridge.engine_validate(body):return 422,{'error':'Invalid engine tune: schema, axes or pulse limits'}
   try:candidate=self.canonical(body)
   except (ValueError,MemoryError):return 500,{'error':'Engine tune canonicalization failed; previous data retained'}
@@ -106,7 +106,7 @@ class EngineStore:
    if not self.storage_ok:return 503,{'error':self.error}
    if candidate['revision']!=self.tune['revision'] or candidate['revision']==4294967295:return 409,{'error':'Engine tune revision changed; reload'}
    candidate['revision']=int(candidate['revision'])+1;encoded=json.dumps(candidate,separators=(',',':'),allow_nan=False).encode();temp=None
-   if len(encoded)>24576:return 413,{'error':'Encoded engine tune exceeds 24 KiB; previous data retained'}
+   if len(encoded)>49152:return 413,{'error':'Encoded engine tune exceeds 48 KiB; previous data retained'}
    try:prepared=EngineRuntime(candidate,self.bridge)
    except (ValueError,MemoryError):return 500,{'error':'Engine runtime allocation failed; previous data retained'}
    try:

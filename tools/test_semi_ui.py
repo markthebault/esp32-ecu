@@ -21,11 +21,11 @@ async def check(url,device,out):
    await page.locator('#eng-injection_end_deg').fill('');await page.locator('#eng-injection_end_deg').dispatch_event('change');await page.locator('#engine-save').click();await page.locator('#toast').filter(has_text='enter a finite value').wait_for()
    assert device.engine.tune['strategy']=='batch_wasted_4cyl'
    await page.locator('#eng-injection_end_deg').fill('540');await page.locator('#eng-injection_end_deg').dispatch_event('change');await page.locator('#engine-save').click();await page.locator('#engine-save-state').filter(has_text='Revision 2').wait_for()
-   saved=copy.deepcopy(device.engine.tune);assert saved['schema_version']==7 and saved['strategy']=='semi_sequential_4cyl'
+   saved=copy.deepcopy(device.engine.tune);assert saved['schema_version']==8 and saved['strategy']=='semi_sequential_4cyl'
    checks.append('Blank timing rejects without publication; explicit Save validates semi through native schema6')
    async with page.expect_download() as d:await page.locator('#engine-msq').click()
-   msq=out/'semi-browser.msq';await (await d.value).save_as(msq);assert import_msq(msq.read_bytes())==saved and 'DEV 008' in msq.read_text()
-   checks.append('Browser own008 complete-page MSQ retains mode and all settings through native roundtrip')
+   msq=out/'semi-browser.msq';await (await d.value).save_as(msq);assert import_msq(msq.read_bytes())==saved and 'DEV 009' in msq.read_text()
+   checks.append('Browser own009 complete-page MSQ retains mode and all settings through native roundtrip')
    await page.locator('#eng-strategy').select_option('sequential_4cyl');await page.locator('#cylinder-trims-enabled').check()
    await page.locator('#cylinder-spark-2').fill('-3');await page.locator('#cylinder-spark-2').dispatch_event('change')
    await page.locator('#eng-strategy').select_option('semi_sequential_4cyl');assert await page.locator('#cylinder-trims-enabled').is_checked()
@@ -35,7 +35,7 @@ async def check(url,device,out):
    checks.append('Paired mode does not silently disable trims; rejection is atomic and explicit disable preserves stored trim values')
    legacy=(R/'tuning/examples/tunerstudio-idle-roundtrip.msq').read_text()
    candidate=await page.evaluate('text=>engineFromMsq(text,engineTune)',legacy)
-   assert candidate['schema_version']==7 and candidate['idle_control']['frequency_hz']==90
+   assert candidate['schema_version']==8 and candidate['idle_control']['frequency_hz']==90
    old=json.loads((R/'config/engine/defaults-v4.json').read_text());old['revision']=3;old['settings']['idle_enabled']=True;old['idle_control']['frequency_hz']=80
    await page.locator('#engine-import-file').set_input_files(dict(name='legacy4.json',mimeType='application/json',buffer=json.dumps(old).encode()))
    await page.locator('#engine-save-state').filter(has_text='Imported edits').wait_for();assert await page.locator('#idle-idle_enabled').is_checked() and await page.locator('#idle-frequency_hz').input_value()=='80'

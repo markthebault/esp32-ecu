@@ -83,6 +83,7 @@ esp_err_t index_get(httpd_req_t*r){
 }
 esp_err_t trigger_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");httpd_resp_set_hdr(r,"Cache-Control","no-store");return httpd_resp_send(r,assets::trigger_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t tuning_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::tuning_js,HTTPD_RESP_USE_STRLEN);}
+esp_err_t secondary_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::secondary_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t load_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::load_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t transient_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::transient_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t idle_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::idle_js,HTTPD_RESP_USE_STRLEN);}
@@ -276,11 +277,13 @@ esp_err_t engine_trigger_post(httpd_req_t*r){
 }
 esp_err_t engine_config_put(httpd_req_t*r){
  if(!authorized(r))return message(r,"Session token or origin rejected.","403 Forbidden");
- if(r->content_len<=0||r->content_len>engine::tune_maximum)return message(r,"Engine tune must be 1-24576 bytes.","413 Content Too Large");
+ if(r->content_len<=0||r->content_len>engine::tune_maximum)return message(r,"Engine tune must be 1-49152 bytes.","413 Content Too Large");
  char type[80]{};httpd_req_get_hdr_value_str(r,"Content-Type",type,sizeof(type));if(std::strncmp(type,"application/json",16))return message(r,"Use application/json.","415 Unsupported Media Type");
- std::string body(r->content_len,'\0');int n=0;while(n<r->content_len){int got=httpd_req_recv(r,body.data()+n,r->content_len-n);if(got<=0)return ESP_FAIL;n+=got;}
- if(!safe_json(body.data(),body.size(),engine::tune_maximum))return message(r,"Invalid engine JSON envelope.","400 Bad Request");
- std::string reason;const int code=engine_service::save(body.c_str(),reason);if(code==200)return engine_config_get(r);
+ struct EngineBody{std::array<char,engine::tune_maximum+1> bytes{};};auto body=heap_object<EngineBody>();
+ if(!body)return message(r,"Engine request buffer unavailable; previous tune retained.","503 Service Unavailable");
+ int n=0;while(n<r->content_len){int got=httpd_req_recv(r,body->bytes.data()+n,r->content_len-n);if(got<=0)return ESP_FAIL;n+=got;}
+ if(!safe_json(body->bytes.data(),static_cast<std::size_t>(n),engine::tune_maximum))return message(r,"Invalid engine JSON envelope.","400 Bad Request");
+ std::string reason;const int code=engine_service::save(body->bytes.data(),reason);if(code==200)return engine_config_get(r);
  const char*status=code==409?"409 Conflict":code==413?"413 Content Too Large":code==503?"503 Service Unavailable":code==507?"507 Insufficient Storage":code==500?"500 Internal Server Error":"422 Unprocessable Entity";
  return message(r,reason.c_str(),status);
 }
@@ -300,7 +303,7 @@ void service_task(){
   {"/api/engine/defaults",HTTP_GET,engine_defaults_get,nullptr},{"/api/engine/config",HTTP_GET,engine_config_get,nullptr},{"/api/engine/config",HTTP_PUT,engine_config_put,nullptr},{"/api/engine/status",HTTP_GET,engine_status_get,nullptr},
   {"/api/engine/timing",HTTP_GET,engine_timing_get,nullptr},
   {"/api/engine/sample",HTTP_GET,engine_sample_get,nullptr},
-  {"/api/engine/tuning",HTTP_GET,engine_tuning_get,nullptr},{"/tuning_diagnostics.js",HTTP_GET,tuning_script_get,nullptr},{"/idle_control.js",HTTP_GET,idle_script_get,nullptr},{"/transient_enrichment.js",HTTP_GET,transient_script_get,nullptr},{"/load_model.js",HTTP_GET,load_script_get,nullptr},
+  {"/api/engine/tuning",HTTP_GET,engine_tuning_get,nullptr},{"/tuning_diagnostics.js",HTTP_GET,tuning_script_get,nullptr},{"/idle_control.js",HTTP_GET,idle_script_get,nullptr},{"/transient_enrichment.js",HTTP_GET,transient_script_get,nullptr},{"/load_model.js",HTTP_GET,load_script_get,nullptr},{"/secondary_tables.js",HTTP_GET,secondary_script_get,nullptr},
   {"/api/engine/data-log",HTTP_GET,engine_data_log_get,nullptr},{"/api/engine/data-log",HTTP_POST,engine_data_log_post,nullptr},
   {"/api/engine/data-log.msl",HTTP_GET,engine_data_log_msl_get,nullptr},{"/cylinder_tuning.js",HTTP_GET,cylinder_script_get,nullptr},{"/engine_logger.js",HTTP_GET,engine_log_script_get,nullptr},
   {"/api/engine/trigger-log",HTTP_GET,engine_trigger_get,nullptr},{"/api/engine/trigger-log",HTTP_POST,engine_trigger_post,nullptr},

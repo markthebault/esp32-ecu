@@ -1,7 +1,8 @@
-"""The target's own008 task-side tuning codec on native shared-library callbacks."""
+"""The target's own009 task-side tuning codec on native shared-library callbacks."""
 import copy,ctypes,fcntl,json,os,struct,subprocess,threading,time
 from pathlib import Path
 from engine_runtime import R
+from secondary_config import PAGE_BYTES,LIVE_BYTES
 
 _build_lock=threading.Lock()
 LOAD=ctypes.CFUNCTYPE(ctypes.c_int,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_size_t)
@@ -55,7 +56,7 @@ class Session:
   @SAMPLE
   @guarded
   def sample(_,target,size):
-   if size!=416:return 5
+   if size!=LIVE_BYTES:return 5
    with self.store.lock:
     from engine_protocol import live_block
     block=live_block(self.store)
@@ -70,7 +71,7 @@ class Session:
  def buffers(self):
   with self.lock:
    if not self.handle:raise RuntimeError('Tuning session is closed')
-   return {1:bytearray(ctypes.string_at(self.bridge.tuning_page(self.handle),5376))}
+   return {1:bytearray(ctypes.string_at(self.bridge.tuning_page(self.handle),PAGE_BYTES))}
  @property
  def dirty(self):return self.diagnostics()['dirty']
  def command(self,payload):
@@ -124,11 +125,11 @@ def status(store):
  def wire_fields(o):
   return {k:o[v] for k,v in dict(received='received_bytes',transmitted='fully_queued_reply_bytes',frames='frames',crc_errors='crc_errors',timeouts='timeouts',framing_errors='framing_errors',tx_errors='tx_errors').items()}
  current=observations[-1] if len(observations)==1 else None
- return dict(schema_version=1,transport='native_host_development',identity='ESP32ECU DEV 008 INHIBITED',serial_protocol='002',enabled=True,
+ return dict(schema_version=1,transport='native_host_development',identity='ESP32ECU DEV 009 INHIBITED',serial_protocol='002',enabled=True,
   available=bool(observations),boot_allowed=True,host_present=None,reason='Host transport sessions observed' if observations else 'No native tuning session open',
   physical_outputs_inhibited=True,host_presence_meaning='Host TCP/PTY session records; no target USB hardware is connected',
   observed_clock_domain='host_monotonic',observed_us=str(time.monotonic_ns()//1000),active_revision=revision,
-  application_support='Tested TunerStudio 3.3.01 rejects our own controller identity; offline files supported, vendor integration unresolved',
+  application_support='Earlier own identities were rejected online; current identity acceptance unverified; use matching offline definition; vendor integration unresolved',
   commit_behavior='Any successful burn validates, persists and activates the whole tune, resets control and reacquires phase',
   qualification='Native host development only; no target USB enumeration or physical timing measurements',
   driver_rx_drop_count=None,driver_rx_drop_count_meaning='No target USB driver on this host endpoint',

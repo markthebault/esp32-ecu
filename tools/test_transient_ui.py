@@ -26,19 +26,19 @@ async def check(url,device,out):
     for i,value in enumerate((0,2,4,6)):
      field=page.locator(f'[data-ae-array="{prefix}_added_pct"][data-ae-index="{i}"]');await field.fill(str(value));await field.dispatch_event('change')
    await page.locator('#engine-save').click();await page.locator('#engine-save-state').filter(has_text='Revision 2').wait_for()
-   saved=copy.deepcopy(device.engine.tune);assert saved['schema_version']==7 and saved['transient_enrichment']['duration_ms']==120
-   checks.append('Default legacy behavior retained; unsaved new mode differs from active; blank value rejects; explicit Save publishes full schema7 tune')
+   saved=copy.deepcopy(device.engine.tune);assert saved['schema_version']==8 and saved['transient_enrichment']['duration_ms']==120
+   checks.append('Default legacy behavior retained; unsaved new mode differs from active; blank value rejects; explicit Save publishes full schema8 tune')
    async with page.expect_download() as d:await page.locator('#engine-msq').click()
-   path=out/'transient-browser.msq';await (await d.value).save_as(path);assert import_msq(path.read_bytes())==saved and 'DEV 008' in path.read_text()
+   path=out/'transient-browser.msq';await (await d.value).save_as(path);assert import_msq(path.read_bytes())==saved and 'DEV 009' in path.read_text()
    current=await page.evaluate('text=>engineFromMsq(text,engineTune)',path.read_text());assert current==saved
-   checks.append('Browser own008 MSQ and native importer preserve complete transient curves and application settings')
+   checks.append('Browser own009 MSQ and native importer preserve complete transient curves and application settings')
    axis=page.locator('[data-ae-array="tps_rates"][data-ae-index="1"]');await axis.fill('0');await axis.dispatch_event('change');await page.locator('#engine-save').click()
    await page.locator('#toast').filter(has_text='Invalid engine tune').wait_for();assert device.engine.tune==saved
    await page.locator('#engine-reload').click();await page.locator('#engine-save-state').filter(has_text='Revision 2').wait_for()
    for old in sorted((R/'tuning/examples').glob('*.msq')):
-    if 'transient' in old.name or 'load-roundtrip' in old.name:continue
+    if any(identity in old.read_text() for identity in ('ESP32ECU DEV 007 INHIBITED','ESP32ECU DEV 008 INHIBITED','ESP32ECU DEV 009 INHIBITED')):continue
     value=await page.evaluate('text=>engineFromMsq(text,engineTune)',old.read_text())
-    assert value['schema_version']==7 and value['transient_enrichment']['mode']=='legacy_tps',old.name
+    assert value['schema_version']==8 and value['transient_enrichment']['mode']=='legacy_tps',old.name
    old=json.loads((R/'config/engine/defaults-v5.json').read_text());old['revision']=2;old['settings']['accel_gain']=.007
    await page.locator('#engine-import-file').set_input_files(dict(name='legacy5.json',mimeType='application/json',buffer=json.dumps(old).encode()))
    await page.locator('#engine-save-state').filter(has_text='Imported edits').wait_for()
@@ -65,9 +65,9 @@ async def check(url,device,out):
    assert device.engine.latest['transient_enrichment']['available'] and not device.engine.status()['physical_outputs_enabled']
    async with page.expect_download() as d:await page.locator('#engine-log').click()
    log=out/'transient-browser.msl';await (await d.value).save_as(log)
-   rows=list(csv.reader(io.StringIO(log.read_text()),delimiter='\t'));assert 'SIL 005' in rows[0][0] and len(rows[2])==83 and all(len(r)==83 for r in rows[3:])
+   rows=list(csv.reader(io.StringIO(log.read_text()),delimiter='\t'));assert 'SIL 006' in rows[0][0] and len(rows[2])==145 and all(len(r)==145 for r in rows[3:])
    columns=dict(zip(rows[2],rows[-1]));assert columns['AeAvailable']=='1' and columns['AeMode']=='3'
-   checks.append('Reduced host plant exposes synthetic acquisition-window observations and exports83-field MSL005 with available flag')
+   checks.append('Reduced host plant exposes synthetic acquisition-window observations and exports145-field MSL006 with available flag')
    await page.locator('#engine-transient-panel').screenshot(path=out/'transient-desktop.png')
    for width in (320,390,768,1440):
     await page.set_viewport_size({'width':width,'height':1000});await page.evaluate('()=>new Promise(requestAnimationFrame)');assert await page.evaluate('()=>document.documentElement.scrollWidth<=innerWidth')

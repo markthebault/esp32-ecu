@@ -54,3 +54,7 @@ tuning/examples/tunerstudio-load-roundtrip.msq -text -whitespace
 
 # Preserve exact secondary core snapshots, probes and review records.
 reports/engine/secondary-core/** -text -whitespace
+
+# Preserve source-bound secondary integration evidence and vendor export bytes.
+reports/engine/secondary-integration/** -text -whitespace
+tuning/examples/tunerstudio-secondary-roundtrip.msq -text -whitespace

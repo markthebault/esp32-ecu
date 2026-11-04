@@ -1,0 +1,120 @@
+{
+  "review": "Supplemental operator-documentation review",
+  "created_utc": "2026-11-04T11:02:51.004738+00:00",
+  "status": "complete_with_three_documentation_findings_closed",
+  "scope": "Documentation and recorded application receipt consistency only; no production edits, subagents, application restarts or new engineering implementation.",
+  "remaining_medium_high_findings": [],
+  "findings": [
+    {
+      "id": "DOC-1",
+      "severity": "medium",
+      "title": "Load-model guide instructed current operators to use historical own008 INI",
+      "status": "closed",
+      "initial": "initial-sources/docs/engine-load-model.md",
+      "final": "sources/docs/engine-load-model.md",
+      "resolution": "The tuning section now labels the own008 layouts/application checks historical and directs current operators to the own009 INI and secondary guide before the old offsets."
+    },
+    {
+      "id": "DOC-2",
+      "severity": "low",
+      "title": "Current and historical layout/log descriptions conflicted",
+      "status": "closed",
+      "initial": [
+        "initial-sources/docs/engine-observability.md",
+        "initial-sources/docs/engine-development.md",
+        "initial-sources/docs/engine-usb-tuning.md"
+      ],
+      "final": [
+        "sources/docs/engine-observability.md",
+        "sources/docs/engine-development.md",
+        "sources/docs/engine-usb-tuning.md",
+        "sources/docs/engine-feature-coverage.md"
+      ],
+      "resolution": "The main observability section leads with MSL006 188/145, own009 offline acceptance and unresolved online acceptance. Own003/005/006/007 facts are explicitly historical or introduced by their increments. Development now includes the current schema8/own009 summary."
+    },
+    {
+      "id": "DOC-3",
+      "severity": "low",
+      "title": "Ethanol dependency description applied to unused condition metadata",
+      "status": "closed",
+      "initial": "initial-sources/docs/engine-secondary-tables.md",
+      "final": "sources/docs/engine-secondary-tables.md",
+      "resolution": "The guide now requires qualified ethanol for enabled Conditional ethanol rules. Other modes may retain unused condition metadata without adding that dependency, matching the reviewed requirements contract."
+    }
+  ],
+  "checks": [
+    {
+      "name": "Current operator identity/layout/log contract",
+      "result": "pass",
+      "detail": "Current entry points identify schema8/own009, 8192-byte page, 640-byte runtime/647-byte framed response, MSL006 188-field engine and145-field direct SIL, and schema4 compact250-byte screens. Retained prior layouts are explicitly historical."
+    },
+    {
+      "name": "Offline vendor claims and online limitation",
+      "result": "pass",
+      "evidence": "receipt-probe.json",
+      "detail": "Receipt-bound TunerStudio MS Lite3.3.01 has zero recorded definition parser errors/unit warnings. Independent packing of the actual saved MSQ reproduces all8192 bytes/hash with known base revision37 supplied after the application omitted origin. Own009 online acceptance remains unverified. Three MegaLogViewer files match their recorded hashes, field counts188/145/188 and row counts120/120/2. These are synthetic native fixtures, not coupled plant acceptance."
+    },
+    {
+      "name": "Migrations and revision semantics",
+      "result": "pass",
+      "detail": "JSON1..7/own001..008 add default Off secondary data. Schema7/own008 preserve load/AFR and0..255 coefficients; older20..120 F32 bounds remain. Imports do not publish or silently rebase. Browser Save uses its loaded revision and CAS; explicit base revision and read-only origin behavior agree with the software review and actual receipt."
+    },
+    {
+      "name": "48KiB/128KiB capacity and startup guard",
+      "result": "pass",
+      "detail": "The docs describe a48KiB tune document envelope and128KiB engine_nvs at0x210000, with other offsets unchanged and a2MiB factory app. Startup blocks saves on an older layout before opening storage. Flashing, raw flash recovery, fragmentation and power-loss behavior remain unqualified; no automatic erase instruction is introduced."
+    },
+    {
+      "name": "Diagnostics and radio meanings",
+      "result": "pass",
+      "detail": "Unknown numbers remain null/NaN; raw future switch timestamps remain diagnostic strings, not a control clock. Source, validity, selection/evaluation, approximate F32 values and vendor integer/calculated-channel limits remain explicit. Every non-Off mode gates schemas1..3; schema4 carries compact mode/source/status rather than full switch health or per-cylinder execution."
+    },
+    {
+      "name": "Protected input and physical/plant holds",
+      "result": "pass",
+      "detail": "Target protected switch/ethanol producers and the J4 accessory remain missing/proposed. PAIR/RESET/cam/J16/SAFE_N roles remain reserved. The accessory has no current PCB/BOM/Gerber/case/manual implementation. New enabled-table coupled plant/Speeduino comparisons and physical target storage/heap/stack/USB/RF/timing/electrical/environment/fit qualification remain required. Outputs remain inhibited; no full feature-parity or perfectly running engine claim is introduced."
+    },
+    {
+      "name": "Sole post-freeze software-bound file delta",
+      "result": "pass",
+      "evidence": "software-readme-delta.json",
+      "detail": "Exactly tuning/README.md differs from the299 frozen software input paths. Its explicit old/new SHA binding accompanies the current operator-documentation snapshot."
+    },
+    {
+      "name": "Original software evidence immutability",
+      "result": "pass",
+      "evidence": [
+        "software-packet-before.json",
+        "software-packet-after.json"
+      ],
+      "detail": "All503 portable software-review artifacts and their original manifest hash verify unchanged before/after this supplemental review."
+    }
+  ],
+  "source_bindings": "source-bindings.json",
+  "receipt_probe": "receipt-probe.json",
+  "software_readme_delta": {
+    "path": "tuning/README.md",
+    "old_snapshot": ".cache/engine/secondary-software-review/final-sources/tuning/README.md",
+    "old_sha256": "0610fc8c7fdfed946f977a8a5c90b6ce2324d536b1d8b6faf83c03a70af8b6d7",
+    "new_sha256": "d52102276aa8501035205da9021093b7a82396647213d1e7a2c185a017b0d7fc",
+    "new_snapshot": "sources/tuning/README.md",
+    "old_bytes": 3867,
+    "new_bytes": 5206,
+    "reason": "Owner corrected current entry-point documentation after the software source freeze; production implementation unchanged."
+  },
+  "software_packet_unchanged": {
+    "verified": true,
+    "files": 503,
+    "manifest_sha256": "64b4d0237a71943357c1203b3fa02e61c66a7ec4fe99f63ed1c1170f632cd646",
+    "software_bound_paths": 299,
+    "only_live_delta": [
+      "tuning/README.md"
+    ]
+  },
+  "limits": [
+    "The prior software packet is preserved. This supplement does not broaden its software/physical acceptance scope.",
+    "Vendor apps were not driven again by this reviewer; recorded files/receipts were independently checked. The receipt claims are limited to the actual offline files, not online integration.",
+    "Documentation links to the current integration report/verifier are publication entry points; this review does not certify the final evidence publication tree.",
+    "MCP23008 electrical design, target protected input producer, enabled coupled plant acceptance and all physical qualification remain separate work."
+  ]
+}

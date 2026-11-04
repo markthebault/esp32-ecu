@@ -1,0 +1,121 @@
+{
+  "scope": "proposed_schema8_own009_contract_review_against_frozen_f3b049e",
+  "implementation_acceptance": false,
+  "contract_viable_with_required_changes": true,
+  "project_baseline": "f3b049eb695dadbadc7ff382547e572ecf03e695",
+  "speeduino_reference": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+  "framework_package_version": "3.50500.0",
+  "native_json_cases": 3,
+  "native_sanitizers_passed": true,
+  "target_abi_sizing_passed": true,
+  "layout_ranges_consistent": true,
+  "document_limit_recommendation": 49152,
+  "nvs_partition_recommendation": {
+    "offset": "0x210000",
+    "bytes": 131072,
+    "end": "0x230000"
+  },
+  "required_changes": [
+    {
+      "priority": "medium",
+      "issue": "24KiB cannot represent measured legitimate five-map F32 profiles",
+      "required": "Shared48KiB bound and all host/target/storage paths aligned"
+    },
+    {
+      "priority": "medium",
+      "issue": "64KiB engine_nvs cannot retain old+new worst-case48KiB blob versions",
+      "required": "128KiB at same offset, fresh partition image plus production/physical durability gates"
+    },
+    {
+      "priority": "medium",
+      "issue": "Naive current-signature migration would narrow own008 VE bounds and discard load selections",
+      "required": "Distinct has_load capability preserving own0080..255 and full load metadata"
+    },
+    {
+      "priority": "medium",
+      "issue": "Old radio schemas cannot describe non-Off secondary modes",
+      "required": "Explicit legacy-schema gating/fallback or negotiated schema4"
+    }
+  ],
+  "native_sizes": {
+    "baseline": {
+      "tune": 7204,
+      "observation": 44,
+      "sample": 400,
+      "row": 416,
+      "page": 6744,
+      "recorder": 106584,
+      "session": 5456,
+      "reply": 432
+    },
+    "planned": {
+      "observation": 64,
+      "sample": 528,
+      "row": 544,
+      "recorder": 139352,
+      "session": 8272,
+      "reply": 656,
+      "largest_response_frame": 647,
+      "largest_write_frame": 269
+    }
+  },
+  "target_symbol_sizes": {
+    "bytes_cjson": 40,
+    "bytes_planned_observation": 64,
+    "bytes_sample": 400,
+    "bytes_planned_sample": 528,
+    "bytes_planned_row": 544,
+    "bytes_planned_reply": 648,
+    "bytes_session": 5456,
+    "bytes_tune": 7204,
+    "bytes_planned_session": 8272,
+    "bytes_recorder": 106584,
+    "bytes_planned_recorder": 139352
+  },
+  "json_sizes": [
+    {
+      "path": ".cache/engine/secondary-integration-contract-review/defaults.json",
+      "legal_cpp_tune": true,
+      "input_bytes": 8146,
+      "canonical_bytes": 8146,
+      "over_24k": false,
+      "fits_48k": true,
+      "cjson_live_after_parse": 123178,
+      "cjson_peak_parse_print": 139735,
+      "allocations": 3885
+    },
+    {
+      "path": ".cache/engine/secondary-integration-contract-review/dense-f32.json",
+      "legal_cpp_tune": true,
+      "input_bytes": 33160,
+      "canonical_bytes": 33460,
+      "over_24k": true,
+      "fits_48k": true,
+      "cjson_live_after_parse": 123178,
+      "cjson_peak_parse_print": 190465,
+      "allocations": 3887
+    },
+    {
+      "path": ".cache/engine/secondary-integration-contract-review/dense-subnormal-f32.json",
+      "legal_cpp_tune": true,
+      "input_bytes": 37676,
+      "canonical_bytes": 38094,
+      "over_24k": true,
+      "fits_48k": true,
+      "cjson_live_after_parse": 123178,
+      "cjson_peak_parse_print": 229261,
+      "allocations": 3888
+    }
+  ],
+  "qualification": {
+    "root_source_edits": false,
+    "target_execution": false,
+    "firmware_flash": false,
+    "physical_nvs_or_i2c": false,
+    "independent_plant_comparison": false,
+    "online_tunerstudio": false
+  },
+  "execution_receipt": "replays/74d5cc51-5f4a-4f4c-bec7-fba31dc97559/execution.json",
+  "project_source_snapshots": 62,
+  "external_source_snapshots": 7
+}

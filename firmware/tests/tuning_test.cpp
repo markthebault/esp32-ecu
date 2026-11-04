@@ -50,7 +50,7 @@ int main(){
  assert(command(s,write(4752,zero,4)).bytes[0]==0);assert(command(s,{'b',0,1}).bytes[0]==4&&store.tune.strategy==ecu::engine::Strategy::BatchWasted&&!store.tune.cylinder_trims_enabled);
  // One maximum-size M frame is269 bytes; TX for a256-byte read is263.
  Stream stream(s);std::vector<std::vector<std::uint8_t>> replies;auto send=[&](const std::uint8_t*p,std::size_t n){replies.emplace_back(p,p+n);return true;};
- const auto q=frame({'Q'});for(std::size_t i=0;i<q.size();++i)stream.feed(q.data()+i,1,1000+i,send);assert(replies.size()==1&&replies[0]==frame(std::vector<std::uint8_t>({'\0','E','S','P','3','2','E','C','U',' ','D','E','V',' ','0','0','8',' ','I','N','H','I','B','I','T','E','D'})));
+ const auto q=frame({'Q'});for(std::size_t i=0;i<q.size();++i)stream.feed(q.data()+i,1,1000+i,send);assert(replies.size()==1&&replies[0]==frame(std::vector<std::uint8_t>({'\0','E','S','P','3','2','E','C','U',' ','D','E','V',' ','0','0','9',' ','I','N','H','I','B','I','T','E','D'})));
  auto corrupt=q;corrupt.back()^=1;stream.feed(corrupt.data(),corrupt.size(),2000,send);assert(replies.back()==frame({0x82}));
  std::uint8_t chunk[256];std::copy_n(s.staged_page().data()+512,256,chunk);const auto max=frame(write(512,chunk,256));assert(max.size()==269);stream.feed(max.data(),max.size(),3000,send);assert(replies.back()==frame({0}));
  const auto r=frame({'p',0,1,0,2,0,1});stream.feed(r.data(),r.size(),4000,send);assert(replies.back().size()==263);

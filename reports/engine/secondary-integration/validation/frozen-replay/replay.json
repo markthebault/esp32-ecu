@@ -1,0 +1,88 @@
+[
+  {
+    "argv": [
+      "g++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I/home/mark/persospace/esp32-ecu/reports/engine/secondary-integration/sources/firmware/include",
+      "/home/mark/persospace/esp32-ecu/reports/engine/secondary-integration/sources/firmware/tests/secondary_tables_test.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-integration/replays/d8216739-5e08-42fc-bc10-102528b87aa9/secondary_tables"
+    ],
+    "result": {
+      "passed": true,
+      "secondary_checks": 738
+    }
+  },
+  {
+    "argv": [
+      "g++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I/home/mark/persospace/esp32-ecu/reports/engine/secondary-integration/sources/firmware/include",
+      "/home/mark/persospace/esp32-ecu/reports/engine/secondary-integration/sources/firmware/tests/engine_secondary_test.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-integration/replays/d8216739-5e08-42fc-bc10-102528b87aa9/engine_secondary"
+    ],
+    "result": {
+      "passed": true,
+      "engine_secondary_checks": 148
+    }
+  },
+  {
+    "argv": [
+      "g++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I/home/mark/persospace/esp32-ecu/reports/engine/secondary-integration/sources/firmware/include",
+      "/home/mark/persospace/esp32-ecu/reports/engine/secondary-integration/sources/firmware/tests/tuning_allocation_test.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-integration/replays/d8216739-5e08-42fc-bc10-102528b87aa9/tuning_allocation",
+      "-Wl,--wrap=malloc"
+    ],
+    "result": {
+      "passed": true,
+      "allocation_failures": 4,
+      "session_bytes": 8272,
+      "temporary_tune_bytes": 7204
+    }
+  },
+  {
+    "argv": [
+      "g++",
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-misleading-indentation",
+      "-I/home/mark/persospace/esp32-ecu/reports/engine/secondary-integration/sources/firmware/include",
+      "/home/mark/persospace/esp32-ecu/reports/engine/secondary-integration/sources/tools/secondary_legacy_probe.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-integration/replays/d8216739-5e08-42fc-bc10-102528b87aa9/disabled"
+    ],
+    "rows": 7776,
+    "sha256": "8931bc976bb9739f19fa6b093d44fd9ff28a1d979f10a0bf5d64316617b23a8e"
+  }
+]

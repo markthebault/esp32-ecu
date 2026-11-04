@@ -62,6 +62,8 @@ bool sample(const char*text,ecu::engine::RuntimeSample&out){
   r.idle_available=known;
  }
  const auto*inputs=cJSON_GetObjectItemCaseSensitive(j,"inputs");const auto*proposals=cJSON_GetObjectItemCaseSensitive(j,"proposals");
+ const auto*second=cJSON_GetObjectItemCaseSensitive(j,"secondary_tables");
+ if(second)ok=ok&&ecu::secondary::parse_observations(second,r.secondary_fuel,r.secondary_spark,available);
  const auto*model=cJSON_GetObjectItemCaseSensitive(j,"load_model");
  if(model)ok=ok&&ecu::load::parse_observation(model,r.load_model,available);
  const auto*ae=cJSON_GetObjectItemCaseSensitive(j,"transient_enrichment");

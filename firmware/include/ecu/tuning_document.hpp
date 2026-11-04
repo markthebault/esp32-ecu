@@ -1,6 +1,7 @@
 #pragma once
 #include "ecu/tuning_layout.hpp"
 #include "ecu/load_json.hpp"
+#include "ecu/secondary_json.hpp"
 #include "cJSON.h"
 namespace ecu::tuning {
 class Document {
@@ -11,7 +12,7 @@ class Document {
  template<class Map>static bool grid(cJSON*j,const Map&m){return j&&values(item(j,"rpm"),m.rpm)&&values(item(j,"load"),m.load)&&values(item(j,"cells"),m.cells);}
 public:
  explicit Document(cJSON*j):root_(j){}
- bool header(std::uint32_t revision,const char*strategy){return set(item(root_,"schema_version"),7)&&set(item(root_,"revision"),revision)&&cJSON_SetValuestring(item(root_,"strategy"),strategy);}
+ bool header(std::uint32_t revision,const char*strategy){return set(item(root_,"schema_version"),8)&&set(item(root_,"revision"),revision)&&cJSON_SetValuestring(item(root_,"strategy"),strategy);}
  bool number(const char*group,const char*key,double v){return set(item(item(root_,group),key),v);}
  bool boolean(const char*group,const char*key,bool v){auto*j=item(item(root_,group),key);if(!cJSON_IsBool(j))return false;j->type=(j->type&~0xff)|(v?cJSON_True:cJSON_False);return true;}
  template<class Values>bool array(const char*group,const char*key,const Values&v){return values(item(item(root_,group),key),v);}
@@ -56,6 +57,14 @@ public:
   return cJSON_SetValuestring(item(j,"pressure"),load::pressure_name(c.pressure))&&cJSON_SetValuestring(item(j,"aux_role"),load::aux_name(c.aux_role))&&
    cJSON_SetValuestring(item(j,"baro_source"),load::baro_name(c.baro_source))&&cJSON_SetValuestring(item(j,"afr"),load::afr_name(c.afr))&&
    number("load_model","fixed_baro_kpa",c.fixed_baro_kpa)&&number("load_model","afr_delay_s",c.afr_delay_s);
+ }
+ bool secondary_tables(const ecu::secondary::Config&c,const engine::Map&fuel,const engine::Map&spark){
+  auto*group=item(root_,"secondary_tables");if(!group)return false;
+  auto update=[&](const char*name,const secondary::Rule&r,const engine::Map&m){auto*j=item(group,name);if(!j)return false;
+   if(!cJSON_SetValuestring(item(j,"mode"),secondary::mode_name(r.mode))||!cJSON_SetValuestring(item(j,"source"),load::source_name(r.source))||!cJSON_SetValuestring(item(j,"axis"),load::axis_name(r.axis))||
+      !cJSON_SetValuestring(item(j,"cells"),secondary::cells_name(r.cells))||!cJSON_SetValuestring(item(j,"condition"),secondary::condition_name(r.condition))||!set(item(j,"threshold"),r.threshold)||!set(item(j,"debounce_ms"),r.debounce_ms)||!set(item(j,"input_channel"),r.input_channel)||!grid(item(j,"map"),m))return false;
+   auto*flag=item(j,"active_high");if(!cJSON_IsBool(flag))return false;flag->type=(flag->type&~0xff)|(r.active_high?cJSON_True:cJSON_False);return true;};
+  return update("fuel",c.fuel,fuel)&&update("spark",c.spark,spark);
  }
 };
 } // namespace ecu::tuning

@@ -64,7 +64,7 @@ class RadioSimulator:
                     pairing=bool(self.deadline), remaining_s=max(0, int(self.deadline-time.monotonic()+.999)) if self.deadline else 0,
                     error=self.error, window=self.window, setup_key=self.key,
                     candidate=self.candidate, peers=[dict(p, connected=False, last_ack_ms=-1,engine_telemetry=False,engine_schema=0,engine_telemetry_blocked=False,engine_upgrade_needed=False,engine_block_reason='',capability_counter=0) for p in self.peers],
-                    engine_schema=3,engine_packet_bytes=250,engine_packets_submitted=0,sensor_packets_submitted=0,capability_replies_submitted=0,mac_send_failures=0,engine_sample_age_ms=None,engine_data_source='no_radio_observation',
+                    engine_schema=4,engine_packet_bytes=250,engine_packets_submitted=0,sensor_packets_submitted=0,capability_replies_submitted=0,mac_send_failures=0,engine_sample_age_ms=None,engine_data_source='no_radio_observation',
                     led='red_blink' if not self.storage_ok else 'blue_blink' if self.deadline else 'green',
                     channel=6, max_peers=4, mac='02:EC:00:00:00:01')
 

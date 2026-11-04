@@ -1,7 +1,58 @@
 {
-  "signature": "ESP32ECU DEV 008 INHIBITED",
+  "signature": "ESP32ECU DEV 009 INHIBITED",
   "pages": {
-    "1": 5376
+    "1": 8192
+  },
+  "secondary_rule_offsets": {
+    "fuel": 5376,
+    "spark": 5412
+  },
+  "secondary_map_offsets": {
+    "fuel": 5504,
+    "spark": 6656
+  },
+  "secondary_live_offset": 416,
+  "secondary_live_stride": 80,
+  "secondary_values": [
+    "primary",
+    "primary_corrected",
+    "secondary",
+    "combined",
+    "coordinate",
+    "condition_value",
+    "input_age_ms",
+    "threshold",
+    "debounce_ms"
+  ],
+  "secondary_enums": {
+    "mode": [
+      "off",
+      "multiply",
+      "add",
+      "conditional",
+      "input"
+    ],
+    "source": [
+      "map",
+      "tps",
+      "imap_emap"
+    ],
+    "axis": [
+      "map_kpa",
+      "tps_pct",
+      "imap_emap_pct"
+    ],
+    "cells": [
+      "absolute",
+      "multiplier",
+      "adder"
+    ],
+    "condition": [
+      "rpm",
+      "map_kpa",
+      "tps_pct",
+      "ethanol_pct"
+    ]
   },
   "numeric_fields": [
     [
@@ -356,7 +407,7 @@
     "target_lambda",
     "ego"
   ],
-  "live_block_bytes": 416,
+  "live_block_bytes": 640,
   "timing_fields": [
     [
       "injection_end_deg",

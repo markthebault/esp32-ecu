@@ -1,6 +1,6 @@
 # Shared development tuning transport
 
-The selected N16R8 and generic A3 web builds now include a dedicated native USB Serial/JTAG tuning service. The host TCP/PTY tools execute the same portable C++ Session/Stream. Actual TunerStudio 3.3.01 accepts own008 definition/MSQs offline. Earlier online trials rejected our own controller identity; online vendor acceptance remains unresolved. This transport is an implemented development interface; it does not establish online application compatibility or physical USB qualification.
+The selected N16R8 and generic A3 web builds now include a dedicated native USB Serial/JTAG tuning service. The host TCP/PTY tools execute the same portable C++ Session/Stream. Actual TunerStudio 3.3.01 accepts own009 definition/MSQs offline. Earlier online trials rejected our own controller identity; online vendor acceptance remains unresolved. This transport is an implemented development interface; it does not establish online application compatibility or physical USB qualification.
 
 ## Connection and ownership
 
@@ -16,7 +16,7 @@ The project-local pinned ESP-IDF USB component fixes one TX-ring allocation chec
 
 ## Layout and commits
 
-The controller signature is `ESP32ECU DEV 008 INHIBITED`. Raw and framed `F` return serial protocol `002`; `f` advertises protocol 2 with 256-byte data chunks. The MS-envelope uses a big-endian length and CRC32 around command payloads. Calibration and runtime values are little-endian. [Layout manifest](../tuning/protocol-layout.json) and [current INI](../tuning/esp32-ecu-load.ini) match the shared generated codec.
+The controller signature is `ESP32ECU DEV 009 INHIBITED`. Raw and framed `F` return serial protocol `002`; `f` advertises protocol 2 with 256-byte data chunks. The MS-envelope uses a big-endian length and CRC32 around command payloads. Calibration and runtime values are little-endian. [Layout manifest](../tuning/protocol-layout.json) and [current INI](../tuning/esp32-ecu-secondary.ini) match the shared generated codec.
 
 | Page 1 region | Offset | Bytes |
 | --- | ---: | ---: |
@@ -28,9 +28,14 @@ The controller signature is `ESP32ECU DEV 008 INHIBITED`. Raw and framed `F` ret
 | Idle algorithm, scalars, curves and reserved tail | 4768 | 224 |
 | Transient configuration and old reserved tail | 4992 | 128 |
 | Load/axis/pressure/AFR configuration | 5120 | 56 |
-| Reserved zero | 5176 | 200 |
+| Historical reserved zero | 5176 | 200 |
+| Fuel/spark secondary rules | 5376 | 72 |
+| Reserved zero | 5448 | 56 |
+| Secondary fuel axes/map | 5504 | 1152 |
+| Secondary spark axes/map | 6656 | 1152 |
+| Reserved zero | 7808 | 384 |
 
-One complete 5376-byte page avoids TunerStudio's automatic burn between pages splitting a valid strategy/trim transition. `M` modifies staged bytes only. A successful `b` validates the complete native tune, repeats the atomic backend revision check, persists, activates, resets controller state and reacquires phase. It can happen automatically when a dialog closes. It is not a promise of seamless hot tuning or a separate manual-only apply step.
+One complete8192-byte page avoids TunerStudio's automatic burn between pages splitting a valid strategy/trim transition. `M` modifies staged bytes only. A successful `b` validates the complete native tune, repeats the atomic backend revision check, persists, activates, resets controller state and reacquires phase. It can happen automatically when a dialog closes. It is not a promise of seamless hot tuning or a separate manual-only apply step.
 
 The mapped origin revision at offset 268 is read-only and remains byte-for-byte stable until explicit rediscovery. A successful burn advances only the internal expected backend revision and active revision. Thus CRCs do not change behind an application's cache. Repeated clean burns are idempotent only while the backend revision still matches. An HTTP/other-session save causes permanent conflict 84 even for a clean session; it never silently rebases cached values.
 
@@ -42,7 +47,7 @@ An idle raw `F`, optionally prefixed by `F0`, explicitly discards staged edits a
 
 ## Runtime and UI
 
-The runtime block is 416 bytes. The existing 184-byte proposal/phase/cylinder layout is retained, followed by:
+The current runtime block is640 bytes. The existing 184-byte proposal/phase/cylinder layout is retained, followed by:
 
 | Offset | U32 value |
 | ---: | --- |
@@ -57,13 +62,13 @@ The runtime block is 416 bytes. The existing 184-byte proposal/phase/cylinder la
 
 Own005 appends six F32 values at 216..239: target, feedforward, P, I, D and proposed duty. U32 flags/state/reason/algorithm occupy 240..255. Flags bit 8 supplies `iacAvailable`; missing idle data must not appear as a valid zero. Source/age and availability are logged explicitly. The 216-byte prefix and historical own004 definition remain records.
 
-Own007 retains its acquisition-window transient block at256..319. Own008 appends the [load-model diagnostics](engine-load-model.md) at320..391 plus24 reserved zero bytes. A single full `r` response is423 framed bytes, within the existing1024-byte USB rings.
+Own007 retains its acquisition-window transient block at256..319. Own008 appends the [load-model diagnostics](engine-load-model.md) at320..391 plus24 reserved zero bytes. Own009 then appends the two80-byte secondary observations at416/496 and64 reserved zero bytes. A single full `r` response is647 framed bytes, within the existing1024-byte USB rings.
 
 Sample revision at 56 is independent of active/session revisions. A save clears the old completed control observation. An absent sample has `hasResult=0` and unknown age; zeros are not a measurement. This wire's source codes retain the older domain: 0 none, 1 completed synthetic, 2 target. JSON/radio `DataSource` codes use a different domain: 0 none, 1 target, 2 synthetic. Do not interchange them. A target observation is still a software proposal, not proof of a pin transition.
 
 The Engine development page has authenticated read-only tuning diagnostics and JSON export at `/api/engine/tuning`. It shows state, revisions, burn/rejection counters, CRC/timeouts/framing/TX errors, bus-presence meaning and unknown driver drops. Multiple host sessions are exported separately; they are not presented as one connected screen or a real USB device.
 
-Own004..008 MSQ origin is metadata. The browser displays it and retains the editor's already-loaded revision for the normal Save CAS. An intervening writer still causes 409. Saving is explicit after review. TunerStudio omits the read-only origin from its saved MSQ. The browser shows it as unavailable and retains the loaded editor revision. Python import accepts an explicit already-loaded `base_revision`; without one it uses revision 1 as an offline placeholder, never a discovered current revision. Exact historical own001..007 MSQs remain importable, with their existing revision guards and neutral migration of absent features. Other ECU identities are rejected. Engine JSON is schema7. JSON1..6 and own001..007 migrate explicitly to the legacy MAP/target model; older idle migration rules remain. Source selections never convert table units implicitly.
+Own004..009 MSQ origin is metadata. The browser displays it and retains the editor's already-loaded revision for the normal Save CAS. An intervening writer still causes 409. Saving is explicit after review. TunerStudio omits the read-only origin from its saved MSQ. The browser shows it as unavailable and retains the loaded editor revision. Python import accepts an explicit already-loaded `base_revision`; without one it uses revision 1 as an offline placeholder, never a discovered current revision. Exact historical own001..008 MSQs remain importable, with their existing revision guards and neutral migration of absent features. Other ECU identities are rejected. Engine JSON is schema8. JSON1..6 and own001..007 migrate explicitly to the legacy MAP/target model; JSON7/own008 preserve all load settings. Every earlier identity adds default Off secondary tables, and older idle migration rules remain. Source selections never convert table units implicitly.
 
 ## Reproduction and evidence
 
@@ -83,10 +88,15 @@ Use new output paths when preserving a published run. [Evidence](../reports/engi
 
 [Prepared vendor request](../tuning/vendor-integration-request.md) remains unsent. Full Speeduino feature parity, target/HIL measurements and vehicle electrical/environmental qualification remain open in the [coverage ledger](engine-feature-coverage.md).
 
-The [idle increment](engine-idle-control.md) records own005 offline application edits, 91-field bounded engine logging, 48-field direct SIL logging and current validation. Historical USB evidence in the directory above remains unchanged.
+The [idle increment](engine-idle-control.md) records own005 offline application edits, 91-field bounded engine logging, 48-field direct SIL logging and validation for that increment. Historical USB evidence in the directory above remains unchanged.
 
-The [semi-sequential increment](engine-semi-sequential.md) adds the current schema5/own006 strategy and negotiated engine-radio schema2. Earlier identities/evidence described here remain historical records; byte offsets, CAS, bounded logging and selected physical-output inhibition are retained.
+The [semi-sequential increment](engine-semi-sequential.md) introduced the schema5/own006 strategy and negotiated engine-radio schema2. Earlier identities/evidence described here remain historical records; byte offsets, CAS, bounded logging and selected physical-output inhibition are retained.
 
-Current [transient fueling development](engine-transient-enrichment.md) uses schema6/own007, one5120-byte tune page and a320-byte runtime block, with105-field engine MSL004 and62-field direct SIL MSL004. Earlier layout/evidence descriptions in this document are historical. Selected physical-output policy and online vendor limits remain unchanged.
+The earlier [transient fueling development](engine-transient-enrichment.md) uses schema6/own007, one5120-byte tune page and a320-byte runtime block, with105-field engine MSL004 and62-field direct SIL MSL004. Earlier layout/evidence descriptions in this document are historical. Selected physical-output policy and online vendor limits remain unchanged.
 
-Current [load-model evidence](engine-load-model.md) adds own008/schema7, the5376/416-byte layouts, explicit unit metadata, actual offline app edits and126/83-field MSL005. Earlier per-feature application files and reports remain records.
+Earlier [load-model evidence](engine-load-model.md) adds own008/schema7, the5376/416-byte layouts, explicit unit metadata, actual offline app edits and126/83-field MSL005. Earlier per-feature application files and reports remain records.
+
+
+Current [secondary-table software integration](engine-secondary-tables.md) provides the own009/schema8 contract above. The selected engine NVS partition grows to128KiB at0x210000 for atomic replacement of up-to48KiB documents. A read-only startup guard blocks saves on an old partition layout and exposes the error without erasing stored bytes. Actual partition flashing/migration and power-loss tests remain hardware gates.
+
+Both secondary rule panels and maps were edited in TunerStudio MS Lite3.3.01 offline. The resulting application file matches all8192 F32 page bytes, imports through the browser and retains explicit axis/cell/condition units. Initial real-app parser/unit issues were corrected before final acceptance. Own009 has not passed online vendor integration. [Current source-bound checks](../reports/engine/secondary-integration/README.md) retain the actual application file, screenshots, logs, migration/allocation/CAS probes and three target builds; the earlier packets above stay unchanged.

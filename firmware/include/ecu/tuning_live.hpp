@@ -37,5 +37,13 @@ inline void live_block(const engine::RuntimeSample&s,std::uint64_t now,std::arra
  put_u32(b.data()+356,model_flags);put_u32(b.data()+360,static_cast<unsigned>(m.fuel));put_u32(b.data()+364,static_cast<unsigned>(m.spark));
  put_u32(b.data()+368,static_cast<unsigned>(m.lambda));put_u32(b.data()+372,static_cast<unsigned>(m.trim));put_u32(b.data()+376,static_cast<unsigned>(m.pressure));
  put_u32(b.data()+380,static_cast<unsigned>(m.aux_role));put_u32(b.data()+384,static_cast<unsigned>(m.baro_source));put_u32(b.data()+388,static_cast<unsigned>(m.afr));
+ const secondary::Observation*second[]={&s.secondary_fuel,&s.secondary_spark};
+ for(unsigned n=0;n<2;++n){const auto&o=*second[n];const unsigned offset=416+n*80;
+  for(unsigned v=0;v<9;++v){const float number=o.*secondary::value_members[v];if(o.available&&engine::finite(number))put_float(b.data()+offset+v*4,number);else put_u32(b.data()+offset+v*4,0x7fc00000);}
+  put_u32(b.data()+offset+36,secondary::flags(o));
+  const unsigned codes[]={static_cast<unsigned>(o.mode),static_cast<unsigned>(o.cells),static_cast<unsigned>(o.source),static_cast<unsigned>(o.reason),static_cast<unsigned>(o.input_source),static_cast<unsigned>(o.condition)};
+  for(unsigned code=0;code<6;++code)put_u32(b.data()+offset+40+code*4,codes[code]);
+  put_u32(b.data()+offset+64,static_cast<std::uint32_t>(o.input_observed_us));put_u32(b.data()+offset+68,static_cast<std::uint32_t>(o.input_observed_us>>32));
+ }
 }
 } // namespace ecu::tuning

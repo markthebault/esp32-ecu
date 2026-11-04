@@ -46,14 +46,13 @@ int main(){
  assert(command(session,{'b',0,1}).bytes[0]==4&&store.saves==1&&store.tune.ve.cells[0]==90&&store.tune.revision==3);
  const auto after_success=allocations;assert(command(session,{'b',0,1}).bytes[0]==4&&allocations==after_success&&store.saves==1);
  assert(failures==4);
- // A programmatic model newer than own008 is unavailable through that ABI;
- // opening the editor must not silently discard its unrepresented fields.
+ // Own009 represents both enabled and Off-but-edited secondary data.
  store.tune.secondary_tables.fuel.mode=ecu::secondary::Mode::Multiply;
  store.tune.secondary_tables.fuel.cells=ecu::secondary::Cells::Multiplier;
- assert(session.open()==Result::Invalid&&!session.stats().initialized&&session.stats().state==WriteState::Invalid);
+ assert(session.open()==Result::Ok&&session.stats().initialized&&get_u32(session.staged_page().data()+5376)==1);
  assert(store.tune.secondary_tables.fuel.mode==ecu::secondary::Mode::Multiply&&store.saves==1);
  ecu::engine::reset_secondary_tables(store.tune);store.tune.secondary_ve.cells[0]=100;
- assert(session.open()==Result::Invalid&&!session.stats().initialized&&store.tune.secondary_ve.cells[0]==100);
+ assert(session.open()==Result::Ok&&session.stats().initialized&&get_float(session.staged_page().data()+5632)==100&&store.tune.secondary_ve.cells[0]==100);
  ecu::engine::reset_secondary_tables(store.tune);assert(session.open()==Result::Ok);
  std::cout<<"{\"passed\":true,\"allocation_failures\":"<<failures<<",\"session_bytes\":"<<sizeof(Session)<<",\"temporary_tune_bytes\":"<<sizeof(ecu::engine::Tune)<<"}\n";
 }

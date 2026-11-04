@@ -123,7 +123,7 @@ class EngineTests(unittest.TestCase):
  def test_partition_layout_preserves_existing_records_and_app_offsets(self):
   rows=list(csv.reader(line for line in (R/'firmware/partitions.csv').read_text().splitlines() if line and not line.startswith('#')))
   parts={row[0]:(int(row[3],0),int(row[4],0)) for row in rows}
-  self.assertEqual(parts['nvs'],(0x9000,0x6000));self.assertEqual(parts['phy_init'],(0xf000,0x1000));self.assertEqual(parts['factory'],(0x10000,0x200000));self.assertEqual(parts['engine_nvs'],(0x210000,0x10000))
+  self.assertEqual(parts['nvs'],(0x9000,0x6000));self.assertEqual(parts['phy_init'],(0xf000,0x1000));self.assertEqual(parts['factory'],(0x10000,0x200000));self.assertEqual(parts['engine_nvs'],(0x210000,0x20000))
   ranges=sorted((offset,offset+size,name) for name,(offset,size) in parts.items())
   for earlier,later in zip(ranges,ranges[1:]):self.assertLessEqual(earlier[1],later[0])
   self.assertLessEqual(ranges[-1][1],8*1024*1024)

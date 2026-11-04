@@ -172,7 +172,7 @@ class ObservationTests(unittest.TestCase):
   with self.assertRaises(ValueError):self.native.msl(1)
   self.native.command(dict(action='stop',log_id=1),1000)
   text=self.native.msl(1);rows=list(csv.reader(io.StringIO(text),delimiter='\t'))
-  self.assertIn('SYNTHETIC ENGINE REPLAY',text);self.assertEqual([len(r) for r in rows[2:]],[126,126,126])
+  self.assertIn('SYNTHETIC ENGINE REPLAY',text);self.assertEqual([len(r) for r in rows[2:]],[188,188,188])
   record=dict(zip(rows[2],rows[4]));self.assertEqual(record['SnapshotSequence'],str(2**53+1));self.assertEqual(record['Lambda'],'NaN');self.assertEqual(record['ADC0'],'NaN')
  def test_completed_sil_replay_preserves_original_revisions_after_tune_save(self):
   with tempfile.TemporaryDirectory() as directory:

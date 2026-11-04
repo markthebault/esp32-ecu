@@ -5,8 +5,8 @@
 
 namespace ecu::radio::wire {
 constexpr unsigned capability_size=76,capability_reply_size=108,engine_size=250,engine_body_size=218,engine_ack_size=56;
-constexpr std::uint32_t engine_feature=1,engine_schema=3;
-inline bool engine_schema_valid(std::uint32_t schema){return schema>=1&&schema<=3;}
+constexpr std::uint32_t engine_feature=1,engine_schema=4;
+inline bool engine_schema_valid(std::uint32_t schema){return schema>=1&&schema<=4;}
 inline unsigned engine_frame_size(std::uint32_t schema){return engine_schema_valid(schema)?(schema<3?232:250):0;}
 inline unsigned engine_frame_body_size(std::uint32_t schema){return engine_schema_valid(schema)?engine_frame_size(schema)-32:0;}
 inline bool legacy_load_model(const engine::RuntimeSample&r){
@@ -14,7 +14,9 @@ inline bool legacy_load_model(const engine::RuntimeSample&r){
  return !o.available||(o.fuel==load::Source::Map&&o.spark==load::Source::Map&&o.lambda==load::Source::Map&&o.trim==load::Source::Map&&o.pressure==load::Pressure::MapReference&&o.afr==load::Afr::Target&&o.aux_role==load::AuxRole::PostcatMonitor);
 }
 inline bool engine_schema_supports(std::uint32_t schema,const engine::RuntimeSample&r){
- return engine_schema_valid(schema)&&r.strategy<=(schema==1?1:2)&&r.timing_fault<=(schema==1?16:17)&&r.last_timing_fault<=(schema==1?16:17)&&(schema>=3||legacy_load_model(r));
+ const bool secondary_legacy=r.secondary_fuel.mode==secondary::Mode::Off&&r.secondary_spark.mode==secondary::Mode::Off;
+ if(schema>=4)for(const secondary::Observation*o:{&r.secondary_fuel,&r.secondary_spark})if(o->available&&(static_cast<unsigned>(o->mode)>4||static_cast<unsigned>(o->source)>2||(o->evaluated&&!o->available)||(o->active&&o->mode==secondary::Mode::Off)))return false;
+ return engine_schema_valid(schema)&&(schema>=4||secondary_legacy)&&r.strategy<=(schema==1?1:2)&&r.timing_fault<=(schema==1?16:17)&&r.last_timing_fault<=(schema==1?16:17)&&(schema>=3||legacy_load_model(r));
 }
 static_assert(engine_size<=max_packet&&capability_reply_size<=max_packet);
 static_assert(engine::input_count==8&&engine::proposal_count==14,"Schema1 base frame must not grow into its HMAC");
@@ -87,6 +89,11 @@ inline bool engine_body(std::uint8_t*p,const engine::RuntimeSample&r,std::uint32
  u32(p+68,r.phase_losses);u32(p+72,r.cam_rejected);f32(p+76,r.cam_error_deg);
  p[80]=r.state;p[81]=r.strategy;p[82]=static_cast<std::uint8_t>(r.source);p[83]=r.phase_reason;p[84]=r.input_valid;
  p[85]=r.timing_fault;p[86]=r.last_timing_fault;p[87]=r.virtual_high_mask;p[88]=r.physical_command_mask;p[89]=r.board_flags;
+ if(schema>=4){
+  const secondary::Observation empty;const auto&fuel=r.secondary_fuel.available?r.secondary_fuel:empty;const auto&spark=r.secondary_spark.available?r.secondary_spark:empty;
+  p[90]=static_cast<unsigned>(fuel.mode)|(static_cast<unsigned>(spark.mode)<<3)|(unsigned(fuel.active)<<6)|(unsigned(spark.active)<<7);
+  p[91]=static_cast<unsigned>(fuel.source)|(static_cast<unsigned>(spark.source)<<2)|(unsigned(fuel.available)<<4)|(unsigned(spark.available)<<5)|(unsigned(fuel.evaluated)<<6)|(unsigned(spark.evaluated)<<7);
+ }
  u64(p+92,sent_esp_us);u32(p+100,r.worker_tune_revision);u32(p+104,r.worker_sensor_revision);u32(p+108,worker_age_ms);
  for(unsigned i=0;i<engine::input_count;++i)f32(p+112+i*4,(r.input_valid&(1U<<i))?r.inputs[i]:NAN);
  for(unsigned i=0;i<engine::proposal_count;++i)f32(p+144+i*4,r.proposals[i]);

@@ -34,7 +34,7 @@ A fresh stopped/cranking observation resets the measured-AFR running delay, incl
 
 ## Tuning, logs and screens
 
-Use [own008 INI](../tuning/esp32-ecu-load.ini). One5376-byte configuration page retains the first5120 bytes, appends twelve U32 selections at5120..5167 and baro/delay F32 scalars at5168/5172. The remaining200 bytes are reserved zero. Whole-tune staging, stable origin and backend revision checks remain atomic; HTTP or another session causes a stale-editor conflict.
+The following layouts/application checks are historical own008 evidence. Current operators should use [own009 INI](../tuning/esp32-ecu-secondary.ini) and the [secondary integration guide](engine-secondary-tables.md). The historical [own008 INI](../tuning/esp32-ecu-load.ini) remains unchanged. One5376-byte configuration page retains the first5120 bytes, appends twelve U32 selections at5120..5167 and baro/delay F32 scalars at5168/5172. The remaining200 bytes are reserved zero. Whole-tune staging, stable origin and backend revision checks remain atomic; HTTP or another session causes a stale-editor conflict.
 
 One416-byte runtime block retains the first320 bytes. It appends nine F32 values at320..355, a flags/reason U32 at356 and eight source/mode codes at360..391. Bytes392..415 remain zero. A full runtime reply is423 framed bytes. Configuration chunks remain256 bytes; USB rings remain1024 bytes. This is a protocol implementation, not measured USB throughput or online TunerStudio acceptance.
 
@@ -55,3 +55,5 @@ An unchanged flat85% TPS map stalls the project in this plant while the referenc
 The native reference executes unchanged pinned sensor/load/fuel/decoder/scheduler source through a host HAL, with zero CPU/IRQ cost. Its TPS coordinate is physical percent×4; table axes are translated before raw load/2 storage, with actual integer rounding retained. Virtual EMAP calibration has-20..620 kPa headroom so20/100/125/500 kPa do not sit on the production ADC rail. This is not a physical transducer recommendation. Independent review caught and closed a rail/held-value fixture error, a rounding fault, misleading binding text and browser/native diagnostic mismatches.
 
 Secondary fuel/spark tables, a separate baro curve, other cylinder counts/OEM trigger patterns, boost/VVT/flex/staged injection/knock, online application acceptance, physical HIL and vehicle qualification remain open. Source/CAD/simulator checks do not establish EMI/surge, thermal, splash, printed fit or real engine operation.
+
+Current [secondary-table software integration](engine-secondary-tables.md) retains this model under schema8/own009. Current exports use8192-byte pages,640-byte runtime,188/145-field MSL006 and schema4 screens. The own008 application files, layouts and64 coupled runs above remain historical evidence; no new secondary-enabled coupled trajectory is claimed by that evidence.

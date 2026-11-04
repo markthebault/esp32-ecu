@@ -23,7 +23,7 @@ def independent3(sample,seq=1,sent=5030000):
 
 class LoadRadioTests(unittest.TestCase):
  def setUp(self):self.native=EngineRecorder();self.addCleanup(self.native.close);self.key=derive_engine_key(LMK,BOOT,SESSION)
- def frame(self,s,seq=1,sent=5030000,**kw):return self.native.frame(s,LMK,BOOT,SESSION,seq,sample_age=12,control_age=8,sent=sent,**kw)
+ def frame(self,s,seq=1,sent=5030000,**kw):return self.native.frame(s,LMK,BOOT,SESSION,seq,sample_age=12,control_age=8,sent=sent,schema=kw.pop('schema',3),**kw)
  def test_schema3_is250_bytes_and_independent_bytes_match_mixed_sources(self):
   cases=[observation(),observation(alpha(),map_kpa=None,map_qualified=False,tps_pct=12.5)]
   t=tune();t['load_model'].update(fuel_source='imap_emap',ve_axis='imap_emap_pct',lambda_axis='imap_emap_pct',trim_axis='imap_emap_pct',aux_role='emap')
@@ -44,7 +44,7 @@ class LoadRadioTests(unittest.TestCase):
   for schema in (1,2):
    with self.assertRaises(ValueError):self.frame(s,schema=schema)
  def test_each250_tampered_bytes_rejects_before_advancing_negotiated_state(self):
-  r=EngineReceiver(MAC,LMK);q=r.query(100,bytes([1])*16);r.receive_reply(self.native.capability_reply(q,LMK,SESSION,BOOT,0,5000000),MAC,110)
+  r=EngineReceiver(MAC,LMK,schema=3);q=r.query(100,bytes([1])*16);r.receive_reply(self.native.capability_reply(q,LMK,SESSION,BOOT,0,5000000),MAC,110)
   q=r.update(True,120,bytes([2])*16);r.receive_reply(self.native.capability_reply(q,LMK,SESSION,BOOT,0,5010000),MAC,125)
   s=observation(alpha());packet=self.frame(s)
   for i in range(250):

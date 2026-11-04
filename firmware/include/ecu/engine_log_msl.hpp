@@ -4,7 +4,7 @@
 #include <cstdarg>
 
 namespace ecu::engine_log {
-inline constexpr unsigned text_capacity=4096; //126-column header and bounded numeric row.
+inline constexpr unsigned text_capacity=6144; //188-column header and bounded numeric row.
 class Text {
  char* text_;unsigned size_,used_=0;bool ok_=true;
 public:
@@ -19,7 +19,7 @@ public:
 inline constexpr const char* input_msl[]={"RPM","MAP","TPS","CLT","IAT","Lambda","Battery","Sensor5V"};
 inline constexpr const char* proposal_msl[]={"ProposedRPM","VE","LambdaTarget","ProposedAdvance","ProposedPW","ProposedDwell","DeadTime","AirMass","Warmup","Afterstart","Accel","EGO","Duty","IdleProposal"};
 inline bool msl_header(const Header&h,char*buffer,unsigned size,const char*boot="not_recorded"){
- Text t(buffer,size);t.add("\"ESP32ECU ENGINE LOG 005\"\n\"%s / boot %s / log %u / period_ms=%u duration_s=%u / retained rows %u..%u of %u / overwritten=%u missed_periods=%u repeated=%u invalid=%u / PhaseEpoch=configuration context; WorkerEpoch=executor generation / base scalars plus physical-cylinder and transient proposals and software masks; Load*=source-tagged table coordinates and modeled fuel factors; no electrical execution measurement\"\n",
+ Text t(buffer,size);t.add("\"ESP32ECU ENGINE LOG 006\"\n\"%s / boot %s / log %u / period_ms=%u duration_s=%u / retained rows %u..%u of %u / overwritten=%u missed_periods=%u repeated=%u invalid=%u / PhaseEpoch=configuration context; WorkerEpoch=executor generation / proposals and masks; Load*=source-tagged fuel model; Sec*=secondary values/units/selection/raw-input diagnostics; check availability/source/validity; no electrical execution measurement\"\n",
   h.source==engine::DataSource::Target?"TARGET CONTROL/SENSOR OBSERVATIONS":"SYNTHETIC ENGINE REPLAY",boot,h.log_id,h.period_ms,h.duration_s,h.retained?h.first_sequence():0,h.total,h.total,h.overwritten,h.missed_periods,h.repeated,h.invalid);
  t.add("Time\tRowSequence\tSnapshotSequence\tControlAge\tSensorAge\tSource\tTuneRevision\tSensorRevision\tPhaseEpoch\tFlags\tFaults\tState\tStrategy\tPhaseReason\tPhaseLosses\tCamRejected\tCamError\tWorkerCommand\tWorkerAge\tWorkerEpoch\tWorkerTuneRevision\tWorkerSensorRevision\tTimingFault\tLastTimingFault\tVirtualMask\tPhysicalCommandMask\tBoardFlags");
  t.add("\tInputValidMask");for(auto name:input_msl)t.add("\t%s",name);
@@ -30,6 +30,13 @@ inline bool msl_header(const Header&h,char*buffer,unsigned size,const char*boot=
  t.add("\tIdleTarget\tIdleDuty\tIdleFeedforward\tIdleP\tIdleI\tIdleD\tIdleFlags\tIdleState\tIdleReason\tIdleAlgorithm\tIdlePidUpdates\tIdleAvailable");
  t.add("\tAeTpsDot\tAeMapDot\tAeWindowMs\tAeTriggerDot\tAeCorrectionPct\tAeUnclampedPct\tAeRemainingAtSampleMs\tAeAddedFuelMg\tAeFlags\tAeMode\tAeApply\tAePhase\tAeReason\tAeAvailable");
  t.add("\tLoadFuel\tLoadSpark\tLoadLambda\tLoadTrim\tLoadPressureFactor\tLoadBaro\tLoadEmap\tLoadAux\tLoadAfrFactor\tLoadFlags\tLoadFuelSource\tLoadSparkSource\tLoadLambdaSource\tLoadTrimSource\tLoadPressure\tLoadAuxRole\tLoadBaroSource\tLoadAfr\tLoadReason\tLoadAfrState\tLoadAvailable");
+ for(const char*kind:{"Fuel","Spark"}){
+  for(auto name:secondary::value_labels)t.add("\tSec%s%s",kind,name);
+  t.add("\tSec%sFlags",kind);
+  for(auto name:secondary::code_labels)t.add("\tSec%s%s",kind,name);
+  t.add("\tSec%sObservedUs",kind);
+  for(auto name:secondary::boolean_labels)t.add("\tSec%s%s",kind,name);
+ }
  t.add("\ns\tcount\tcount\tms\tms\tcode\tcount\tcount\tcount\tbitfield\tbitfield\tcode\tcode\tcode\tcount\tcount\tdeg\tcount\tms\tcount\tcount\tcount\tcode\tcode\tbitfield\tbitfield\tbitfield");
  t.add("\tbitfield");for(auto unit:engine::input_units)t.add("\t%s",unit);
  for(auto unit:engine::proposal_units)t.add("\t%s",unit);
@@ -39,6 +46,11 @@ inline bool msl_header(const Header&h,char*buffer,unsigned size,const char*boot=
  t.add("\tRPM\t%%\t%%\t%%\t%%\t%%\tbitfield\tcode\tcode\tcode\tcount\tbool");
  t.add("\t%%/s\tkPa/s\tms\tsource_units/s\t%%\t%%\tms\tmg\tbitfield\tcode\tcode\tcode\tcode\tbool");
  t.add("\tsource_units\tsource_units\tsource_units\tsource_units\tratio\tkPa\tkPa\tkPa\tratio\tbitfield\tcode\tcode\tcode\tcode\tcode\tcode\tcode\tcode\tcode\tcode\tbool");
+ for(unsigned kind=0;kind<2;++kind){const char*unit=kind==0?"%":"deg";
+  t.add("\t%s\t%s\tcell_units\t%s\tsource_units\tcondition_units\tms\tcondition_units\tms\tbitfield",unit,unit,unit);
+  for(unsigned n=0;n<8;++n)t.add("\tcode");
+  t.add("\tus");for(unsigned n=0;n<12;++n)t.add("\tbool");
+ }
  t.add("\n");return t.ok();
 }
 inline bool msl_row(const Header&h,const Row&row,char*buffer,unsigned size){
@@ -65,6 +77,13 @@ inline bool msl_row(const Header&h,const Row&row,char*buffer,unsigned size){
  const auto&model=r.load_model;const bool model_known=model.available&&r.has(engine::Present);
  for(auto value:model.values){if(model_known&&engine::finite(value))t.add("\t%.9g",double(value));else t.add("\tNaN");}
  t.add("\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u",model.flags,static_cast<unsigned>(model.fuel),static_cast<unsigned>(model.spark),static_cast<unsigned>(model.lambda),static_cast<unsigned>(model.trim),static_cast<unsigned>(model.pressure),static_cast<unsigned>(model.aux_role),static_cast<unsigned>(model.baro_source),static_cast<unsigned>(model.afr),static_cast<unsigned>(model.reason),model_known&&engine::finite(model.values[load::AfrFactor])?static_cast<unsigned>(model.afr_state()):255,unsigned(model_known));
+ for(const secondary::Observation*raw:{&r.secondary_fuel,&r.secondary_spark}){const secondary::Observation empty;const auto&o=r.has(engine::Present)&&raw->available?*raw:empty;
+  for(auto member:secondary::value_members){const float value=o.*member;if(o.available&&engine::finite(value))t.add("\t%.9g",double(value));else t.add("\tNaN");}
+  t.add("\t%u",secondary::flags(o));
+  for(unsigned code:{static_cast<unsigned>(o.mode),static_cast<unsigned>(o.cells),static_cast<unsigned>(o.source),static_cast<unsigned>(o.reason),static_cast<unsigned>(o.input_source),static_cast<unsigned>(o.condition),static_cast<unsigned>(o.axis),unsigned(o.input_channel)})t.add("\t%u",code);
+  if(o.available&&o.mode==secondary::Mode::Input&&o.input_source!=secondary::InputSource::Unavailable)t.add("\t%llu",static_cast<unsigned long long>(o.input_observed_us));else t.add("\tNaN");
+  for(auto member:secondary::boolean_members)t.add("\t%u",unsigned(o.*member));
+ }
  t.add("\n");return t.ok();
 }
 }

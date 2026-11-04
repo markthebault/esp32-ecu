@@ -1,0 +1,180 @@
+{
+  "review": "Independent secondary-table software integration assessment",
+  "created_utc": "2026-11-04T10:48:17.176684+00:00",
+  "baseline_head": "f3b049eb695dadbadc7ff382547e572ecf03e695",
+  "status": "complete_with_one_medium_finding_and_one_low_recommendation_closed",
+  "remaining_medium_high_findings": [],
+  "findings": [
+    {
+      "id": "SINT-1",
+      "severity": "medium",
+      "title": "Browser accepted null metadata rejected by native recorder",
+      "status": "closed_on_final_source_bytes",
+      "location": "web/secondary_tables_logic.js:checkObservation",
+      "detail": "For an available observation, threshold:null or debounce_ms:null passed Math.fround(null) as zero. Native parse_observation rejected both. This could advance a browser collection cursor for a row rejected by native intake.",
+      "initial_evidence": [
+        "null-metadata-probe.json",
+        "threshold-null.json",
+        "debounce_ms-null.json"
+      ],
+      "fix": "Owner added raw Number.isFinite checks before F32 qualification and regenerated the secondary bundle and embedded assets.",
+      "closure_evidence": [
+        "observation-differential.json",
+        "ui-probe.json",
+        "final-source-bindings.json"
+      ],
+      "closure": "Both malformed metadata fields reject in native/browser and actual Chrome collection retains zero rows/cursor after rejection."
+    },
+    {
+      "id": "SINT-2",
+      "severity": "low",
+      "title": "Negotiated legacy engine peer row did not explicitly name sensor fallback",
+      "status": "closed_on_final_source_bytes",
+      "location": "web/index.html:renderRadio",
+      "detail": "A peer negotiated for an older engine schema can receive the sensor stream while secondary control is enabled. Its row previously showed engine telemetry plus an upgrade prompt, without explicitly naming the active fallback.",
+      "fix": "Owner added sensor stream fallback whenever engine_telemetry_blocked is true.",
+      "closure_evidence": [
+        "final-sources/web/index.html",
+        "radio-probe.json"
+      ],
+      "closure": "Inspected final row discloses sensor stream fallback while preserving the negotiated schema and update guidance."
+    }
+  ],
+  "checks": [
+    {
+      "name": "Native schema/page/Document integration",
+      "result": "pass",
+      "evidence": "integration-probe.json",
+      "detail": "47 valid profiles exercise JSON/native page roundtrips, complete rule+map updates, migration 1..7, current and historical MSQ imports, atomic staged burn, reserved-crossing chunk rejection, CAS conflict and one complete 640-byte framed runtime reply. Each profile runs the independent ASan/UBSan helper, including every reserved byte and bad narrowed enum/channel/polarity word.",
+      "profiles": 47,
+      "checks_per_profile": 1065,
+      "additional_assertions": 399,
+      "native_profile_assertions": 50055
+    },
+    {
+      "name": "Malformed configuration and synthetic-input intake",
+      "result": "pass",
+      "evidence": "rejection-probe.json",
+      "detail": "163 tune rejections retain active/runtime tune, file bytes and file mtime. A49,153-byte body rejects; exactly49,152 bytes accepts. Ten malformed/forged synthetic switch inputs retain the completed observation.",
+      "rejected_tunes": 163,
+      "host_input_rejections": 10
+    },
+    {
+      "name": "Observation validator differential",
+      "result": "pass",
+      "evidence": "observation-differential.json",
+      "detail": "297 fixtures cover actual mode/input fault states, raw/stale/future/reversed times, pending/qualified/invalid observations, unavailable canonical metadata, nulls/types/flags and F32 boundary values. Native and generated-browser acceptance agree. A raw F64 value above a threshold can log F32 equality without invalidating its correct active decision.",
+      "fixtures": 297,
+      "mismatches": 0
+    },
+    {
+      "name": "Runtime extension serialization",
+      "result": "pass",
+      "evidence": "live-comparison.json",
+      "detail": "All193 accepted observation fixtures produce exact native/Python bytes 416..639 of the 640-byte block, including two 80-byte observations and reserved tails. Legacy prefix transport is separately tested, rather than inferred from this extension comparison.",
+      "fixtures": 193,
+      "compared_bytes_per_fixture": 224
+    },
+    {
+      "name": "INI/native page consistency",
+      "result": "pass",
+      "evidence": "ini-probe.json",
+      "detail": "Independent parsing/packing of INI Constants and actual MSQ values reproduces the entire 8192-byte native page for 54 profiles. All 157 constant fields and 166 runtime fields fit the declared page/block; literal secondary offsets, flag bits and timestamp low/high halves are checked.",
+      "profiles": 54,
+      "constant_fields": 157,
+      "runtime_fields": 166
+    },
+    {
+      "name": "Stored-unit metadata in actual Chrome and Python MSQ",
+      "result": "pass",
+      "evidence": "unit-probe.json",
+      "detail": "72 valid Off profiles retain edited source/cell meanings. Independent literal expectations verify all three axes, three meanings per kind and four conditions in Python MSQ and actual Chrome engineToMsq. Four INI unit dictionaries agree, and spark cell range expressions match the non-nested arithmetic form.",
+      "profiles": 72,
+      "unit_assertions": 864
+    },
+    {
+      "name": "Actual Chrome workflows",
+      "result": "pass",
+      "evidence": "ui-probe.json",
+      "detail": "Seven workflows verify explicit cell/source review, cell preservation, signed spark edits, native persistence, own009 browser export/import, actual own008 import migration, stale editor rejection,188-field browser/native log parity with cursor-atomic malformed metadata rejection, and no document overflow at320/390/768/1440px. No page errors occurred.",
+      "workflows": 7,
+      "page_errors": 0
+    },
+    {
+      "name": "Native/direct-SIL log append parity",
+      "result": "pass",
+      "evidence": "log-probe.json",
+      "detail": "For100 actual observations, all 62 appended secondary headers, units and numeric/code/boolean/time fields match between native 188-field MSL006 and direct SIL 145-field SIL006. Raw timestamps 9007199254740993 and 18446744073709551615 remain exact decimal text; absent legacy observations remain explicitly unavailable.",
+      "actual_observation_cases": 100,
+      "matching_secondary_columns": 62
+    },
+    {
+      "name": "Authenticated radio schema4 and legacy gates",
+      "result": "pass",
+      "evidence": "radio-probe.json",
+      "detail": "An independently constructed 250-byte packet/HMAC oracle agrees for 225 mode/source combinations. 1,878 assertions cover all 250 single-byte tamper positions without receiver state advance, authenticated invalid mode/source/availability cases, immutable repeated-source bytes, duplicate packets, correct repeated observations, ACK HMAC, counter/nonce/schema rules and explicit downgrade. Schemas 1..3 retain exact old frames when both modes are Off and reject every non-Off combination, including inactive conditional selection. Schema 4 unavailable metadata is canonical.",
+      "matrix_cases": 225,
+      "assertions": 1878,
+      "tampered_positions": 250
+    },
+    {
+      "name": "Legacy wire prefix",
+      "result": "pass",
+      "evidence": "prefix-probe.json",
+      "detail": "The archived own008 codec is byte-identical to the Git f3b049e baseline. All 5,376 prefix bytes match current encoding across 324 strategy/source/pressure/AFR/transient combinations, including VE endpoints0 and255.",
+      "profiles": 324,
+      "prefix_bytes": 5376
+    },
+    {
+      "name": "Session burn allocation failures",
+      "result": "pass",
+      "evidence": "burn-oom-probe.json",
+      "detail": "Every one of 7,772 cJSON allocation failures during actual native Session/Document burn retains previous active storage, revision, staged page and dirty state. A retry succeeds exactly once. The atomic mock callback exercises the real native code, not physical NVS. ASan/UBSan reports no error or leak.",
+      "allocation_failures": 7772,
+      "tracked_cjson_payload_peak_bytes": 161493
+    },
+    {
+      "name": "Private migration allocation failures",
+      "result": "pass",
+      "evidence": "migration-oom-probe.json",
+      "detail": "All 5,747 allocation failures inside schema 1..7 migration additions release the failed private tree; retry upgrades to schema 8 while preserving the typed tune/page. This does not inject every C++ allocator or physical storage failure.",
+      "allocation_failures": 5747,
+      "legacy_schemas": 7,
+      "tracked_cjson_payload_peak_bytes": 139704
+    },
+    {
+      "name": "Embedded host/target asset parity",
+      "result": "pass",
+      "evidence": "assets-probe.json",
+      "detail": "All 13 embedded UI/default/guide/manual assets exactly match their source bytes. The partition CSV has no overlapping ranges and assigns 128 KiB at 0x210000 to engine_nvs. Source inspection confirms the read-only startup guard runs before storage loading, keeps saves blocked on mismatch and exposes its error. The49,153-byte HTTP buffer uses checked heap allocation before reading or saving.",
+      "matching_assets": 13
+    },
+    {
+      "name": "Retained historical records",
+      "result": "pass",
+      "evidence": "historical-records-probe.json",
+      "detail": "Own008 INI/layout/codec and defaults-v7 are byte-identical to their f3b049e records.",
+      "records": 4
+    }
+  ],
+  "source_bindings": "final-source-bindings.json",
+  "frozen_source_files": 299,
+  "test_only_amendments": "test-only-source-amendments.json",
+  "live_differences_at_finish": [],
+  "external_inputs": "external-sources",
+  "environment": [
+    "environment.json",
+    "browser-environment.json"
+  ],
+  "helper_builds": "helper-builds.json",
+  "limitations": [
+    "Read-only project review with private cache-only probes. The owner made production changes. No subagents were used by this reviewer.",
+    "This is an independent software integration assessment for schema 8/own009 and radio 4, not full ECU feature acceptance or evidence of a running engine. No fresh coupled engine-plant/Speeduino comparison was performed here.",
+    "Actual Chrome was exercised here. TunerStudio/MegaLogViewer application acceptance belongs to the owner's separate evidence; these vendor GUIs were not independently driven by this reviewer.",
+    "Target HTTP/NVS/ESP-NOW service changes were source-inspected and bound; no ESP firmware flashing, target RAM/stack/USB/radio timing measurement or physical storage/RF test was performed here. Tracked cJSON payload peaks and x86_64 structure sizes are not target RAM qualification.",
+    "The target still lacks protected switch and ethanol acquisition producers. Host control inputs are explicitly synthetic. The mode/source radio summary omits full values/reasons/input health; web/log diagnostics remain necessary.",
+    "The two dense, enabled secondary-table fixtures have 30,327/32,450 input bytes and 30,602/32,717 canonical bytes within the 48 KiB limit. The exact 49,152-byte envelope boundary is tested separately using whitespace padding.",
+    "No electrical, engine, vehicle, EMI/surge, thermal, splash or printed-fit qualification is implied. Outputs remain inhibited in this work.",
+    "The initial observation finding is preserved as evidence. Private probe assumptions about a newly added own009 vendor file, MSL boot length and recorder time were corrected before the final successful replay; their failed pre-correction logs are retained."
+  ]
+}

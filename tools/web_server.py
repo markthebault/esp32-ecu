@@ -80,6 +80,7 @@ class Handler(BaseHTTPRequestHandler):
   if self.path in ('/','/index.html'):return self.reply(200,(R/'web/index.html').read_bytes(),'text/html; charset=utf-8')
   if self.path=='/trigger_logger.js':return self.reply(200,(R/'web/trigger_logger.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/cylinder_tuning.js':return self.reply(200,(R/'web/cylinder_tuning.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/secondary_tables.js':return self.reply(200,(R/'web/secondary_tables.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/load_model.js':return self.reply(200,(R/'web/load_model.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/transient_enrichment.js':return self.reply(200,(R/'web/transient_enrichment.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/idle_control.js':return self.reply(200,(R/'web/idle_control.js').read_bytes(),'application/javascript; charset=utf-8')
@@ -136,7 +137,7 @@ class Handler(BaseHTTPRequestHandler):
   if self.headers.get('Content-Type','').split(';')[0]!='application/json':return self.reply(415,{'error':'Use application/json.'})
   try:length=int(self.headers.get('Content-Length','0'))
   except ValueError:return self.reply(400,{'error':'Invalid length'})
-  limit=24576 if self.path=='/api/engine/config' else 16384
+  limit=49152 if self.path=='/api/engine/config' else 16384
   if not 0<length<=limit:return self.reply(413,{'error':f'Body must be 1-{limit} bytes.'})
   body=self.rfile.read(length)
   if self.command=='POST' and self.path=='/api/radio':

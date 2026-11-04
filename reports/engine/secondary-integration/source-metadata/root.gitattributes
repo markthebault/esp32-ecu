@@ -1,0 +1,60 @@
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary
+*.zip binary
+*.FCStd binary
+*.blend binary
+*.stl binary
+# Preserve exporter formatting in generated CAD and validation artifacts.
+*.step -whitespace
+reports/**/*.svg -whitespace
+reports/**/*.txt -whitespace
+reports/*.svg -whitespace
+reports/*.txt -whitespace
+# MSL unit rows retain empty trailing fields in their tab-separated layout.
+*.msl whitespace=-blank-at-eol
+
+# Preserve application-authored tuning files and raw sequential build logs.
+tuning/examples/tunerstudio-sequential-roundtrip.msq -whitespace
+reports/engine/sequential/*.log -whitespace
+# Keep raw tool output in the reviewed engine observability evidence.
+reports/engine/observability/*.log -whitespace
+# Preserve raw validation and application-export formatting for cylinder trims.
+reports/engine/cylinder-trims/*.log -whitespace
+tuning/examples/tunerstudio-cylinder-roundtrip.msq -whitespace
+# Retain raw USB/application evidence and the own004 application export.
+reports/engine/tuning-usb/*.log -whitespace
+tuning/examples/tunerstudio-development-roundtrip.msq -whitespace
+# Keep exact idle evidence bytes and application/tool exporter formatting.
+hardware/idle-accessory/bom.csv -text -whitespace
+reports/engine/idle-control/metrics.csv -text -whitespace
+reports/engine/idle-control/applications/*.msq -whitespace
+reports/engine/idle-control/**/*.log -whitespace
+tuning/examples/tunerstudio-idle-roundtrip.msq -whitespace
+
+# Preserve reviewed native/source snapshots and raw circuit/tool evidence bytes.
+hardware/a5-idle-interface/** -text
+hardware/idle-isolated/** -text
+reports/engine/idle-isolation/** -text -whitespace
+hardware/a5-idle-interface/lib/ecu.pretty/*.kicad_mod -whitespace
+hardware/idle-isolated/lib/ecu.pretty/*.kicad_mod -whitespace
+
+# Preserve exact semi-sequential evidence and application export bytes.
+reports/engine/semi-sequential/** -text -whitespace
+tuning/examples/tunerstudio-semi-roundtrip.msq -text -whitespace
+
+# Preserve source-bound transient traces, reviewer archives and vendor output.
+reports/engine/transient-enrichment/** -text -whitespace
+tuning/examples/tunerstudio-transient-roundtrip.msq -text -whitespace
+
+# Preserve exact load-model evidence, reviewed snapshots and vendor export.
+reports/engine/load-model/** -text -whitespace
+tuning/examples/tunerstudio-load-roundtrip.msq -text -whitespace
+
+# Preserve exact secondary core snapshots, probes and review records.
+reports/engine/secondary-core/** -text -whitespace
+
+# Preserve source-bound secondary integration evidence and vendor export bytes.
+reports/engine/secondary-integration/** -text -whitespace
+tuning/examples/tunerstudio-secondary-roundtrip.msq -text -whitespace
