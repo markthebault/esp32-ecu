@@ -36,9 +36,10 @@ class OurController:
     def __init__(self,tune=None,target_dispatcher=False):
         tune=tune or benchmark_tune()
         from target_runtime import TargetRuntime
-        self.target_dispatcher=target_dispatcher or tune['settings']['idle_enabled']
+        boost=tune.get('boost_control',{}).get('pressure_enabled',False)
+        self.target_dispatcher=target_dispatcher or tune['settings']['idle_enabled'] or boost
         self.runtime=(TargetRuntime if self.target_dispatcher else EngineRuntime)(tune);self.runtime.wheel()
-        self.channels=9 if tune['settings']['idle_enabled'] else 8
+        self.channels=10 if boost else 9 if tune['settings']['idle_enabled'] else 8
         self.worker_us=1000 if self.target_dispatcher else None
         self.status={};self.high=[False]*self.channels;self.stops=[]
 

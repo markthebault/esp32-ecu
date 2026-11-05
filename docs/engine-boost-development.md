@@ -1,6 +1,6 @@
 # Boost control development
 
-Boost pressure protection is now connected to the main engine, schema10 tune, browser controls, own011 binary/MSQ exchange, coherent diagnostics and a separate virtual target PWM channel. The default retains the110kPa NA guard. All physical engine outputs remain inhibited and no boost GPIO is allocated. A coupled turbo/wastegate comparison and the protected physical driver remain unfinished, so this is partial development integration, not a completed boost feature.
+Boost pressure protection is now connected to the main engine, schema10 tune, browser controls, own011 binary/MSQ exchange, coherent diagnostics and a separate virtual target PWM channel. The default retains the110kPa NA guard. A [coupled turbo/wastegate benchmark](engine-turbo-benchmark.md) adds28 independently reviewed native research runs against production Speeduino. All physical engine outputs remain inhibited and no boost GPIO is allocated. The protected physical driver and hardware qualification remain unfinished.
 
 ## Control contract
 
@@ -72,7 +72,7 @@ The reference builder requires the existing attested pinned numerical reference 
 
 [Screen schema6](espnow-engine.md#boost-pressure-and-valve-proposal-schema6) carries the original boost decision alongside engine and flex data in three authenticated datagrams. Both extensions bind the full BASE MAC; only the complete set can publish or ACK. Bounded reassembly, original ages, repeated-source immutability and explicit stale/source decision statuses are included. Schemas1..5 withhold new boost pressure profiles with an upgrade reason; fresh sensor fallback remains separate. Previously prepared observations retain their original context and expiry. This supplies the ECU sender/reference receiver contract, with no actual screen application or RF qualification.
 
-A pulse-driven turbo/wastegate plant must consume actual main-controller PWM edges and engine outputs, then be compared with unchanged production Speeduino under pressure faults, actuator failures and time-step refinement. The current host regression plant has no turbo/wastegate model. A passing NA scenario is not boost validation. The older14 probes above remain isolated-kernel groundwork.
+The separate [pulse-driven turbo/wastegate plant](engine-turbo-benchmark.md) now consumes actual main-controller PWM, injector and ignition transitions. Its28 paired native experiments cover pressure faults, reachable charged-coil cuts, actuator failures and time-step refinement. The review accepts the declared numerical/adapter scope; engine/actuator calibration and target/HIL execution remain open. The web simulator retains its separate synthetic plant, and the older14 probes above remain isolated-kernel groundwork.
 
 The guarded GPIO45/J24 interface is still only an unrouted candidate. Protected driver design, carrier/enclosure integration and physical qualification remain open. Own011 live TunerStudio acceptance and the new MSL008 application workflow also need actual application checks.
 
