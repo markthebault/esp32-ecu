@@ -25,13 +25,13 @@ async def check(url,device,out):
    msl=await save('#engine-data-msl','browser-collected.msl');data_path=await save('#engine-data-json','browser-collected.json');retained=await save('#engine-data-retained','device-retained.msl')
    collected=json.loads(data_path.read_text());assert not collected['gaps'];assert len(collected['records'])==count
    a=list(csv.reader(io.StringIO(msl.read_text()),delimiter='\t'));b=list(csv.reader(io.StringIO(retained.read_text()),delimiter='\t'))
-   assert a[2]==b[2] and a[3]==b[3] and len(a[2])==229 and len(a)==len(b)==count+4
+   assert a[2]==b[2] and a[3]==b[3] and len(a[2])==245 and len(a)==len(b)==count+4
    for x,y in zip(a[4:],b[4:]):
-    assert len(x)==len(y)==229
+    assert len(x)==len(y)==245
     for left,right in zip(x,y):
      if left=='NaN' or right=='NaN':assert left==right
      else:assert abs(float(left)-float(right))<max(1e-6,abs(float(right))*2e-8),(left,right)
-   assert all(row['sample']['source_code']==2 for row in collected['records']);checks.append('Actual browser and native MSL exports agree across229 fields; unknown values stay NaN')
+   assert all(row['sample']['source_code']==2 for row in collected['records']);checks.append('Actual browser and native MSL exports agree across245 fields; unknown values stay NaN')
    await page.locator('#engine-data-period').select_option('20');await page.locator('#engine-data-start').click()
    await page.wait_for_function('()=>window.EcuEngineLogger.inspect().identity.log_id===2&&window.EcuEngineLogger.inspect().rows===128&&!window.EcuEngineLogger.inspect().collecting')
    state=await page.evaluate('()=>window.EcuEngineLogger.inspect()');assert state['gaps'][0][0]==1 and state['gaps'][0][1]>=340

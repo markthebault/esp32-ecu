@@ -6,7 +6,7 @@ R=Path(__file__).resolve().parents[1]
 _lock=threading.Lock()
 def load_bridge():
  with _lock:
-  out=R/'.cache/engine';out.mkdir(parents=True,exist_ok=True)
+  out=R/'.cache/engine/observability-v2';out.mkdir(parents=True,exist_ok=True)
   cjson=Path.home()/'.platformio/packages/framework-espidf/components/json/cJSON'
   source=R/'tools/engine_observability_bridge.cpp';lib=out/'libobservability.so'
   deps=[Path(__file__),source,R/'firmware/main/config_json.hpp',cjson/'cJSON.c',*sorted((R/'firmware/include/ecu').glob('*.hpp'))]

@@ -3,6 +3,7 @@
 #include "ecu/load_json.hpp"
 #include "ecu/secondary_json.hpp"
 #include "ecu/flex_json.hpp"
+#include "ecu/boost_runtime_json.hpp"
 #include "ecu/engine_data.hpp"
 #include "ecu/engine_phase.hpp"
 #include "ecu/timing_executor.hpp"
@@ -24,7 +25,7 @@ inline cJSON* data_json(const RuntimeSample&r,std::uint64_t observed_us){
  const bool present=r.has(Present)&&r.sequence;
  const auto sample_age=data_age_us(r,r.sampled_us,observed_us),control_age=data_age_us(r,r.control_us,observed_us);
  const auto worker_age=(r.worker_sequence||r.worker_observed_us)&&observed_us>=r.worker_observed_us?observed_us-r.worker_observed_us:UINT64_MAX;
- bool ok=cJSON_AddNumberToObject(j,"schema_version",1)&&cJSON_AddBoolToObject(j,"available",present)&&
+ bool ok=cJSON_AddNumberToObject(j,"schema_version",2)&&cJSON_AddBoolToObject(j,"available",present)&&
   cJSON_AddStringToObject(j,"data_source",source_name(r.source))&&cJSON_AddNumberToObject(j,"source_code",static_cast<unsigned>(r.source))&&
   json_u64(j,"sequence",r.sequence)&&json_u64(j,"control_us",r.control_us)&&json_u64(j,"sampled_us",r.sampled_us)&&
   json_age(j,"sample_age_ms",sample_age)&&json_age(j,"control_age_ms",control_age)&&
@@ -62,6 +63,7 @@ inline cJSON* data_json(const RuntimeSample&r,std::uint64_t observed_us){
  if(ok){auto*model=load::observation_json(r.load_model,present);if(!model||!cJSON_AddItemToObject(j,"load_model",model)){cJSON_Delete(model);ok=false;}}
  if(ok){auto*second=secondary::observations_json(r.secondary_fuel,r.secondary_spark,present);if(!second||!cJSON_AddItemToObject(j,"secondary_tables",second)){cJSON_Delete(second);ok=false;}}
  if(ok){auto*flex=flex::evaluation_json(flex::expand(r.flex_fuel));if(!flex||!cJSON_AddItemToObject(j,"flex_fuel",flex)){cJSON_Delete(flex);ok=false;}else ok=json_age(flex,"read_age_ms",present&&flex::sample_timestamp_known(r.flex_fuel)&&observed_us>=r.flex_fuel.times[0]?observed_us-r.flex_fuel.times[0]:UINT64_MAX);}
+ if(ok){auto*boost=boost::record_json(r.boost_control,present);if(!boost||!cJSON_AddItemToObject(j,"boost_control",boost)){cJSON_Delete(boost);ok=false;}}
  for(unsigned i=0;ok&&i<8;++i){auto*value=present&&(r.board_flags&1)?cJSON_CreateNumber(r.raw_adc[i]):cJSON_CreateNull();if(!value||!cJSON_AddItemToArray(raw,value)){cJSON_Delete(value);ok=false;}}
  auto*worker=ok?cJSON_AddObjectToObject(j,"worker_observation"):nullptr;if(!worker)ok=false;
  if(ok)ok=json_u64(worker,"command_sequence",r.worker_sequence)&&json_u64(worker,"observed_us",r.worker_observed_us)&&json_age(worker,"age_ms",worker_age)&&

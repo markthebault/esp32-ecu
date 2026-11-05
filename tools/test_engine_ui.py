@@ -32,7 +32,7 @@ async def check(url,device,report_dir):
    await page.locator('#engine-save-state').filter(has_text='Revision 2').wait_for()
    async with page.expect_download() as download:
     await page.locator('#engine-msq').click()
-   exported=R/'.cache/engine/ui-export.msq';await (await download.value).save_as(exported)
+   exported=report_dir/'ui-export.msq';await (await download.value).save_as(exported)
    decoded=import_msq(exported.read_bytes());assert decoded['revision']==2 and decoded['maps']['ve']['cells'][53]==92.5
    checks.append('Saved browser-exported MSQ passes native validator and lossless revision check')
    await page.locator('#engine-import-file').set_input_files(R/'tuning/examples/tunerstudio-roundtrip.msq')

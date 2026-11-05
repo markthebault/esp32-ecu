@@ -12,7 +12,7 @@ _build_lock=threading.Lock()
 
 def load_target_bridge():
     with _build_lock:
-        cache=R/'.cache/engine/target-native';cache.mkdir(parents=True,exist_ok=True)
+        cache=R/'.cache/engine/target-native-v11';cache.mkdir(parents=True,exist_ok=True)
         cjson=Path.home()/'.platformio/packages/framework-espidf/components/json/cJSON'
         source=R/'tools/target_timing_bridge.cpp'
         dependencies=[Path(__file__),source,R/'firmware/main/config_json.hpp',cjson/'cJSON.c',cjson/'cJSON.h',
@@ -35,7 +35,7 @@ def load_target_bridge():
                     'engine_progress':([P,U],None),
                     'engine_crank_timeout':([P],U),
                     'engine_pop':([P],I),'engine_event_dwell':([P],U),'engine_event_advance':([P],ctypes.c_double),
-                    'engine_data_json':([P],S),'engine_idle_json':([P],S),'engine_plan':([P],S)}
+                    'engine_data_json':([P],S),'engine_idle_json':([P],S),'engine_boost_json':([P],S),'engine_plan':([P],S)}
         for name,(args,result) in signatures.items():
             fn=getattr(bridge,name);fn.argtypes=args;fn.restype=result
         return bridge
@@ -47,3 +47,7 @@ class TargetRuntime(EngineRuntime):
     def idle_status(self):
         import json
         return json.loads(self.bridge.engine_idle_json(self.handle))
+
+    def boost_status(self):
+        import json
+        return json.loads(self.bridge.engine_boost_json(self.handle))

@@ -13,12 +13,12 @@ class SequentialTests(unittest.TestCase):
   self.tune=json.loads((R/'config/engine/defaults.json').read_text())
   self.seq=copy.deepcopy(self.tune);self.seq['strategy']='sequential_4cyl'
  def legacy(self):
-  old=copy.deepcopy(self.tune);old['schema_version']=1;del old['timing'];del old['cylinder_trims'];del old['idle_control'];del old['transient_enrichment'];del old['load_model'];del old['secondary_tables'];del old['flex_fuel'];return old
+  old=copy.deepcopy(self.tune);old['schema_version']=1;del old['timing'];del old['cylinder_trims'];del old['idle_control'];del old['transient_enrichment'];del old['load_model'];del old['secondary_tables'];del old['flex_fuel'];del old['boost_control'];return old
  def test_exact_legacy_migration_preserves_file_and_revision(self):
   with tempfile.TemporaryDirectory() as d:
    path=Path(d)/'old.json';old=self.legacy();old['revision']=1000000001;body=json.dumps(old,indent=1).encode();path.write_bytes(body)
-   store=EngineStore(path);self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['schema_version'],9);self.assertEqual(store.tune['revision'],old['revision']);self.assertEqual(store.tune['timing'],self.tune['timing'])
-   code,saved=store.save(body);self.assertEqual(code,200);self.assertEqual(saved['revision'],1000000002);self.assertEqual(json.loads(path.read_bytes())['schema_version'],9)
+   store=EngineStore(path);self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['schema_version'],10);self.assertEqual(store.tune['revision'],old['revision']);self.assertEqual(store.tune['timing'],self.tune['timing'])
+   code,saved=store.save(body);self.assertEqual(code,200);self.assertEqual(saved['revision'],1000000002);self.assertEqual(json.loads(path.read_bytes())['schema_version'],10)
  def test_schema_aliases_unknown_modes_and_invalid_orders_rejected(self):
   r=EngineRuntime()
   for old in (False,True):
@@ -30,7 +30,7 @@ class SequentialTests(unittest.TestCase):
   for order in ([1,3,3,2],[2,1,3,4],[1,2,3],[1,2,3,5],[1,2,3,True],[1,2,3,3.5]):
    bad=copy.deepcopy(self.seq);bad['timing']['firing_order']=order
    with self.assertRaises(ValueError):r.configure(bad)
-  for version in (0,1,3,10):
+  for version in (0,1,3,11):
    bad=copy.deepcopy(self.seq);bad['schema_version']=version
    with self.assertRaises(ValueError):r.configure(bad)
   r.close()
@@ -41,7 +41,7 @@ class SequentialTests(unittest.TestCase):
  def test_msq002_roundtrip_and001_explicit_batch_migration(self):
   self.seq['timing']['firing_order']=[1,2,4,3];self.seq['timing']['cam_sync_deg']=123.5
   decoded=import_msq(export_msq(self.seq));self.assertEqual(decoded,self.seq);pages(decoded)
-  old=import_msq((R/'tuning/examples/tunerstudio-roundtrip.msq').read_bytes());self.assertEqual(old['strategy'],'batch_wasted_4cyl');self.assertEqual(old['schema_version'],9);self.assertEqual(old['timing'],self.tune['timing']);self.assertEqual(old['maps']['ve']['cells'][53],92.5)
+  old=import_msq((R/'tuning/examples/tunerstudio-roundtrip.msq').read_bytes());self.assertEqual(old['strategy'],'batch_wasted_4cyl');self.assertEqual(old['schema_version'],10);self.assertEqual(old['timing'],self.tune['timing']);self.assertEqual(old['maps']['ve']['cells'][53],92.5)
   body=export_msq(self.seq)
   with self.assertRaises(ValueError):import_msq(body.replace(SIGNATURE.decode(),LEGACY_SIGNATURE.decode()))
  def test_protocol_appended_fields_commit_and_legacy_prefix(self):
@@ -50,7 +50,7 @@ class SequentialTests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as d:
    store=EngineStore(Path(d)/'tune.json');session=Session(store)
    data=p[1][272:292];self.assertEqual(session.command(b'M'+struct.pack('<BBHH',0,1,272,20)+data),b'\0');self.assertEqual(session.command(b'b\0\1'),b'\4');self.assertEqual(store.tune['strategy'],'sequential_4cyl')
-   block=live_block(store);self.assertEqual(len(block),832);self.assertEqual(struct.unpack_from('<I',block,92)[0],1);self.assertEqual(struct.unpack_from('<I',block,52)[0],1)
+   block=live_block(store);self.assertEqual(len(block),1152);self.assertEqual(struct.unpack_from('<I',block,92)[0],1);self.assertEqual(struct.unpack_from('<I',block,52)[0],1)
  def test_prepare_failure_cannot_change_persistent_or_runtime_tune(self):
   with tempfile.TemporaryDirectory() as d:
    path=Path(d)/'tune.json';store=EngineStore(path);self.assertEqual(store.save(json.dumps(self.tune).encode())[0],200);before=path.read_bytes();runtime=store.runtime;self.seq['revision']=2

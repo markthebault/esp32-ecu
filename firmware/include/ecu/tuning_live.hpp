@@ -52,5 +52,10 @@ inline void live_block(const engine::RuntimeSample&s,std::uint64_t now,std::arra
  for(unsigned n=0;n<7;++n){put_u32(b.data()+base+72+n*8,static_cast<std::uint32_t>(f.times[n]));put_u32(b.data()+base+76+n*8,static_cast<std::uint32_t>(f.times[n]>>32));}
  for(unsigned n=0;n<6;++n)put_float(b.data()+base+128+n*4,f.calibration[n]);
  put_u32(b.data()+base+152,f.calibration_cycles);
+ const auto&boost=s.boost_control;
+ for(unsigned n=0;n<8;++n)put_float(b.data()+832+n*4,boost.values[n]);
+ put_u32(b.data()+864,boost.flags|(boost.available?65536U:0U)|(boost.pressure_enabled?131072U:0U)|(boost.inhibit_engine?262144U:0U));
+ put_u32(b.data()+868,boost.reason);put_u32(b.data()+872,boost.mode);
+ for(unsigned n=0;n<2;++n){put_u32(b.data()+880+n*8,static_cast<std::uint32_t>(boost.counters[n]));put_u32(b.data()+884+n*8,static_cast<std::uint32_t>(boost.counters[n]>>32));}
 }
 } // namespace ecu::tuning

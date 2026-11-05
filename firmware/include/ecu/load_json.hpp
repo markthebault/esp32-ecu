@@ -57,7 +57,7 @@ inline cJSON* observation_json(const Observation&o,bool present=true){
 inline bool parse_observation(const cJSON*j,Observation&o,bool present){
  if(!web::keys(j,"|available||flags||reason||reason_code||afr_state||afr_state_code||fuel_source||fuel_source_code||spark_source||spark_source_code||lambda_source||lambda_source_code||trim_source||trim_source_code||pressure||pressure_code||aux_role||aux_role_code||baro_source||baro_source_code||afr||afr_code||meaning||fuel_load||spark_load||lambda_load||trim_load||pressure_factor||baro_kpa||emap_kpa||aux_kpa||afr_factor|"))return false;
  Observation r;unsigned flags=0,reason=0,state=0;
- if(!web::boolean(j,"available",r.available)||(r.available&&!present)||!web::integer(j,"flags",flags)||flags>UINT16_MAX||!web::integer(j,"reason_code",reason)||reason>7||!web::integer(j,"afr_state_code",state))return false;
+ if(!web::boolean(j,"available",r.available)||(r.available&&!present)||!web::integer(j,"flags",flags)||flags>UINT16_MAX||!web::integer(j,"reason_code",reason)||reason>8||!web::integer(j,"afr_state_code",state))return false;
  r.flags=static_cast<std::uint16_t>(flags);r.reason=static_cast<Reason>(reason);
  auto code=[&](const char*key,const char*name,unsigned max,auto&field,auto label){
   unsigned n=0;char text[48]{};if(!web::integer(j,key,n)||n>max||!web::string(j,name,text))return false;

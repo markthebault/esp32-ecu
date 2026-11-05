@@ -1,6 +1,7 @@
 """Text MSL export for recorded SIL traces; no invented physical measurements."""
 import math
 from flex_config import log_fields as flex_log_fields,VALUES as FLEX_VALUES,FLAGS as FLEX_FLAGS,TIMES as FLEX_TIMES
+from boost_config import log_fields as boost_log_fields,VALUES as BOOST_VALUES
 from secondary_config import KINDS,VALUE_NAMES as SEC_VALUES,log_fields
 FIELDS=[('Time','s','time'),('RPM','RPM','plant_rpm'),('MAP','kPa','map_kpa'),('TPS','%','tps'),('Lambda','','lambda_measured'),('PulseWidth','ms','pulse_ms'),('Advance','deg','advance_deg'),('Dwell','ms','dwell_ms'),('VE','%','ve_pct'),('LambdaTarget','','target_lambda'),('EGO','','ego'),('Faults','bitfield','faults'),('Sync','','synced'),('CrankSync','','crank_synced'),('PhaseSync','','phase_synced'),('PhaseRequired','','phase_required'),('PhaseLosses','count','phase_losses'),('CamRejected','count','cam_rejected'),('CamError','deg','cam_error_deg')]
 IDLE_FIELDS=[('IdleTarget','RPM','target_rpm'),('IdleDuty','%','duty_pct'),('IdleFeedforward','%','feedforward_pct'),('IdleP','%','p_term'),('IdleI','%','i_term'),('IdleD','%','d_term'),('IdleFlags','bitfield','flags'),('IdleState','code','state_code'),('IdleReason','code','reason_code'),('IdleAlgorithm','code','algorithm_code'),('IdlePidUpdates','count','pid_updates')]
@@ -20,7 +21,8 @@ def export_msl(rows,scenario,strategy=None):
  labels=[(name,unit) for name,unit,_ in FIELDS+IDLE_FIELDS]+[('IdleAvailable','bool')]+[(name,unit) for name,unit,_ in PWM_FIELDS]+[('IdlePwmAvailable','bool'),('IdlePwmFault','code')]+[(name,unit) for name,unit,_ in VALVE_FIELDS]+[('ValveModelAvailable','bool')]+[(name,unit) for name,unit,_ in AE_FIELDS]+[('AeAvailable','bool')]
  labels += [(name,unit) for name,unit,_ in LOAD_FIELDS]+[('LoadAvailable','bool')]
  labels += [(name,unit) for kind in KINDS for name,unit,_ in log_fields(kind)]+[(name,unit) for name,unit,_ in flex_log_fields()]
- out=['"ESP32ECU SIL 007"','"UNVALIDATED REDUCED-ORDER SIMULATION / '+scenario+(' / '+strategy if strategy else '')+' / physical outputs inhibited; proposals/virtual state/synthetic estimates are separate; Load*=fuel model; Sec*=source-tagged secondary values/selection/input diagnostics; check availability/validity; electrical ledger only"','\t'.join(x[0] for x in labels),'\t'.join(x[1] for x in labels)]
+ labels += [(name,unit) for name,unit,_ in boost_log_fields()]
+ out=['"ESP32ECU SIL 008"','"UNVALIDATED REDUCED-ORDER SIMULATION / '+scenario+(' / '+strategy if strategy else '')+' / physical outputs inhibited; proposals/virtual state/synthetic estimates are separate; Load*=fuel model; Sec*=source-tagged secondary values/selection/input diagnostics; check availability/validity; electrical ledger only"','\t'.join(x[0] for x in labels),'\t'.join(x[1] for x in labels)]
  for row in rows:
   values=[row.get(key,0) for _,_,key in FIELDS]
   idle=row.get('engine_sample',{}).get('idle',{});known=idle.get('available') is True
@@ -42,5 +44,7 @@ def export_msl(rows,scenario,strategy=None):
     values.append(value)
   flex=row.get('flex_fuel',row.get('engine_sample',{}).get('flex_fuel',{}));known=flex.get('available') is True
   values += [flex.get(key) if known else False if key in FLEX_FLAGS else None if key in FLEX_VALUES+FLEX_TIMES else 0 for _,_,key in flex_log_fields()]
+  boost=row.get('engine_sample',{}).get('boost_control',{});known=boost.get('available') is True
+  values += [boost.get(key) if known or key in ('mode_code','pressure_enabled') else None if key in BOOST_VALUES else 0 for _,_,key in boost_log_fields()]
   out.append('\t'.join(value_text(value) for value in values))
  return '\n'.join(out)+'\n'

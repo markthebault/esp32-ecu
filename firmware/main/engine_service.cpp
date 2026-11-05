@@ -6,6 +6,7 @@
 #include "ecu/flex_hardware.hpp"
 #include "ecu/switch_service.hpp"
 #include "ecu/idle_command.hpp"
+#include "ecu/boost_command.hpp"
 #include "ecu/engine_data_json.hpp"
 #include "ecu/heap_object.hpp"
 #include "ecu/tuning_document.hpp"
@@ -85,16 +86,16 @@ bool observe(const web::Sample&s,const config::Config&c,std::uint64_t now,std::u
  command.phase_epoch=s.phase_epoch;
  command.max_injector_high_us=std::llround(active.max_injection_ms*1000);command.max_coil_high_us=std::llround(active.max_dwell_ms*1000);
  command.slots=c.slots;command.missing=c.missing;command.max_rpm=c.max_rpm;
- idle::prepare_pwm(command,active);
+ idle::prepare_pwm(command,active);boost::prepare_pwm(command,active);
 #if ECU_FLEX_G38_DRAFT
  const bool submitted=engine_target::submit_capture(command,flex_view.ticket);
 #else
  const bool submitted=engine_target::submit(command);
 #endif
- engine::RuntimeSample data;engine::data_values(data,in,latest);
+ engine::RuntimeSample data;engine::data_values(data,in,latest,active);
  data.sequence=command.sequence;data.control_us=now;data.sampled_us=sampled;data.tune_revision=active.revision;data.sensor_revision=c.revision;
  data.idle_algorithm=static_cast<std::uint8_t>(active.idle_control.algorithm);data.source=engine::DataSource::Target;data.strategy=static_cast<std::uint8_t>(active.strategy);data.phase_epoch=s.phase_epoch;
- data.input_valid=engine::data_input_mask(in,bound.qualified);if(s.overflow)data.input_valid&=~(1U<<engine::DecodedRpm);
+ data.input_valid=engine::data_input_mask(in,bound.qualified,engine::maximum_map_kpa(active));if(s.overflow)data.input_valid&=~(1U<<engine::DecodedRpm);
  data.flags|=(storage_ok?engine::StorageOk:0)|(in.synced?engine::CrankSynced:0)|(in.phase_synced?engine::PhaseSynced:0)|
   (active.strategy==engine::Strategy::Sequential?engine::PhaseRequired:0)|(submitted?engine::Submitted:0)|
   (now>=sampled&&now-sampled<=20000?engine::InputsFresh:0)|(in.sensors_valid&&latest.secondary_fuel.valid&&latest.secondary_spark.valid&&latest.flex_fuel.control_ok?engine::InputsQualified:0)|

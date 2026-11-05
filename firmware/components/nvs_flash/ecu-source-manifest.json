@@ -1,0 +1,256 @@
+{
+  "schema_version": 1,
+  "origin": "Installed PlatformIO framework-espidf package",
+  "package": "3.50500.0",
+  "upstream_reference": "https://github.com/espressif/esp-idf/tree/v5.5/components/nvs_flash",
+  "qualification": "Exact installed runtime file hashes are authoritative; reference URL identifies the upstream family, not a claim every packaged byte matches the tag.",
+  "change": "Pass item.chunkIndex in the final active-page duplicate lookup; distinguish blob versions on restart. The modified line carries an explicit local-modification notice.",
+  "files": {
+    ".build-test-rules.yml": {
+      "upstream_sha256": "6adac5c72c7b4157d7546eb657c091e029e61f92f920b05eb3d09ff6d938d6b5",
+      "project_sha256": "6adac5c72c7b4157d7546eb657c091e029e61f92f920b05eb3d09ff6d938d6b5",
+      "bytes": 997
+    },
+    ".gitignore": {
+      "upstream_sha256": "3a4dff6136f4a4e8d1cc4c7b4b68a477ad5adacfb07488dd09f7ec28254985ee",
+      "project_sha256": "3a4dff6136f4a4e8d1cc4c7b4b68a477ad5adacfb07488dd09f7ec28254985ee",
+      "bytes": 118
+    },
+    "CMakeLists.txt": {
+      "upstream_sha256": "5c9c64cdec8d94313a95fa186ba9d689e930b6d8c71e1935e17115aec2fab320",
+      "project_sha256": "5c9c64cdec8d94313a95fa186ba9d689e930b6d8c71e1935e17115aec2fab320",
+      "bytes": 3577
+    },
+    "Kconfig": {
+      "upstream_sha256": "d9bcf22c47c6837abd4059c717513f01e6de6f78519caef10853610276cfa531",
+      "project_sha256": "d9bcf22c47c6837abd4059c717513f01e6de6f78519caef10853610276cfa531",
+      "bytes": 2713
+    },
+    "include/nvs.h": {
+      "upstream_sha256": "d961b401c3fa771c8cabdcf1ed19008b8044281b964990648d012c2ac81e0883",
+      "project_sha256": "d961b401c3fa771c8cabdcf1ed19008b8044281b964990648d012c2ac81e0883",
+      "bytes": 39728
+    },
+    "include/nvs_bootloader.h": {
+      "upstream_sha256": "01a7ecc50c11957c99f68e2b7153c3caa9c07eed4748896d301f79c6fc5f026b",
+      "project_sha256": "01a7ecc50c11957c99f68e2b7153c3caa9c07eed4748896d301f79c6fc5f026b",
+      "bytes": 7469
+    },
+    "include/nvs_flash.h": {
+      "upstream_sha256": "5a88848045df9a98ab8aaa21cfb7fac20e2501bb72f638a079cdbba505426235",
+      "project_sha256": "5a88848045df9a98ab8aaa21cfb7fac20e2501bb72f638a079cdbba505426235",
+      "bytes": 12805
+    },
+    "include/nvs_handle.hpp": {
+      "upstream_sha256": "e57cd9e1d142f58ab54f63490eec3471374d7c987440be5b69ef8107625d9299",
+      "project_sha256": "e57cd9e1d142f58ab54f63490eec3471374d7c987440be5b69ef8107625d9299",
+      "bytes": 13532
+    },
+    "private_include/nvs_bootloader_aes.h": {
+      "upstream_sha256": "3118d5ba074773f90e920c0dd8a5abf2ffd355c1ac3d55d8dcf08c9822a4abb9",
+      "project_sha256": "3118d5ba074773f90e920c0dd8a5abf2ffd355c1ac3d55d8dcf08c9822a4abb9",
+      "bytes": 849
+    },
+    "private_include/nvs_bootloader_private.h": {
+      "upstream_sha256": "50ab38e47dcf917d014eda1951bd1495edf630fa84d681a7ed088a7f9a5d880a",
+      "project_sha256": "50ab38e47dcf917d014eda1951bd1495edf630fa84d681a7ed088a7f9a5d880a",
+      "bytes": 8777
+    },
+    "private_include/nvs_bootloader_xts_aes.h": {
+      "upstream_sha256": "727f887c972354bc264970ea98887412b16f2f7e5f734f3109c282a707866d3d",
+      "project_sha256": "727f887c972354bc264970ea98887412b16f2f7e5f734f3109c282a707866d3d",
+      "bytes": 3416
+    },
+    "private_include/nvs_constants.h": {
+      "upstream_sha256": "e025890b9206bd02177b8dc5a0a3983935fae53981a865cb51ff0f12de8e1491",
+      "project_sha256": "e025890b9206bd02177b8dc5a0a3983935fae53981a865cb51ff0f12de8e1491",
+      "bytes": 2725
+    },
+    "private_include/nvs_internal.h": {
+      "upstream_sha256": "35bb059de16051719264201ada61359298b8ad65b9a7a2312963786e35ea0e4f",
+      "project_sha256": "35bb059de16051719264201ada61359298b8ad65b9a7a2312963786e35ea0e4f",
+      "bytes": 497
+    },
+    "project_include.cmake": {
+      "upstream_sha256": "30f6e6f8a565be2655c7be9e0a48ff543738486773c04cd7964d30a2175434e9",
+      "project_sha256": "30f6e6f8a565be2655c7be9e0a48ff543738486773c04cd7964d30a2175434e9",
+      "bytes": 2517
+    },
+    "src/compressed_enum_table.hpp": {
+      "upstream_sha256": "d58581136460d226d339a52d1370eaf0094ca03d4beb758fed6c4e19cf155119",
+      "project_sha256": "d58581136460d226d339a52d1370eaf0094ca03d4beb758fed6c4e19cf155119",
+      "bytes": 1812
+    },
+    "src/intrusive_list.h": {
+      "upstream_sha256": "8160b3e8f398779b0d96e06f17a86bc84e75dbd12ec680b33dc4a091aa83679a",
+      "project_sha256": "8160b3e8f398779b0d96e06f17a86bc84e75dbd12ec680b33dc4a091aa83679a",
+      "bytes": 4434
+    },
+    "src/nvs.hpp": {
+      "upstream_sha256": "7ed78d8cc4fd33b9f58a61333bfae14f1b7bcc0e04e86a5dc231f6002c2b719b",
+      "project_sha256": "7ed78d8cc4fd33b9f58a61333bfae14f1b7bcc0e04e86a5dc231f6002c2b719b",
+      "bytes": 345
+    },
+    "src/nvs_api.cpp": {
+      "upstream_sha256": "9e2c748145c2a1d9a0798062316382ee24c2eeb18e17c9c43676a3c8bc323e4f",
+      "project_sha256": "9e2c748145c2a1d9a0798062316382ee24c2eeb18e17c9c43676a3c8bc323e4f",
+      "bytes": 24616
+    },
+    "src/nvs_bootloader.c": {
+      "upstream_sha256": "4ac4be068f3be71e6f2a67e8a656cff807cd7cc2a006a494719b40bcc3f0f2a4",
+      "project_sha256": "4ac4be068f3be71e6f2a67e8a656cff807cd7cc2a006a494719b40bcc3f0f2a4",
+      "bytes": 34537
+    },
+    "src/nvs_bootloader_aes.c": {
+      "upstream_sha256": "2b3e8474662d47222e7bff4e31e06cbf844e1041b343d2f1b6c98590e28aaacc",
+      "project_sha256": "2b3e8474662d47222e7bff4e31e06cbf844e1041b343d2f1b6c98590e28aaacc",
+      "bytes": 3586
+    },
+    "src/nvs_bootloader_xts_aes.c": {
+      "upstream_sha256": "da31eb4ac95c8ee4f57d7008c964b15c49c3a16018da1a32dacd51b5a216822b",
+      "project_sha256": "da31eb4ac95c8ee4f57d7008c964b15c49c3a16018da1a32dacd51b5a216822b",
+      "bytes": 10031
+    },
+    "src/nvs_cxx_api.cpp": {
+      "upstream_sha256": "d87690718a1da92d24caf6a79991e3504cc6a63fb35b4f461993321959bbdfdc",
+      "project_sha256": "d87690718a1da92d24caf6a79991e3504cc6a63fb35b4f461993321959bbdfdc",
+      "bytes": 1668
+    },
+    "src/nvs_encrypted_partition.cpp": {
+      "upstream_sha256": "b72ba854b4be61e057634472a819b681417b6b4a6924e7dbc52d591fe506116a",
+      "project_sha256": "b72ba854b4be61e057634472a819b681417b6b4a6924e7dbc52d591fe506116a",
+      "bytes": 3236
+    },
+    "src/nvs_encrypted_partition.hpp": {
+      "upstream_sha256": "89fd7219664b374c0c59d1eeee2486b3007a5e2768cb0241a7bc59eed79b14af",
+      "project_sha256": "89fd7219664b374c0c59d1eeee2486b3007a5e2768cb0241a7bc59eed79b14af",
+      "bytes": 1282
+    },
+    "src/nvs_handle_locked.cpp": {
+      "upstream_sha256": "981e68df64c75096a618c8094f0e70ed9154d532accb91eba1629a98e96b8cfc",
+      "project_sha256": "981e68df64c75096a618c8094f0e70ed9154d532accb91eba1629a98e96b8cfc",
+      "bytes": 2055
+    },
+    "src/nvs_handle_locked.hpp": {
+      "upstream_sha256": "597e0ad62da4edd2c04f0ac663c5a7298b51bae4a52577b155d0c071fa30580c",
+      "project_sha256": "597e0ad62da4edd2c04f0ac663c5a7298b51bae4a52577b155d0c071fa30580c",
+      "bytes": 2067
+    },
+    "src/nvs_handle_simple.cpp": {
+      "upstream_sha256": "ff65228c44ee4945f54bdb073251ff2e0e39b3b9de7db4caa1e576606e172b91",
+      "project_sha256": "ff65228c44ee4945f54bdb073251ff2e0e39b3b9de7db4caa1e576606e172b91",
+      "bytes": 4221
+    },
+    "src/nvs_handle_simple.hpp": {
+      "upstream_sha256": "2b3de0241aaf18eb2546c43c05c7f1395156982ef6650b60867f6cb38c719c11",
+      "project_sha256": "2b3de0241aaf18eb2546c43c05c7f1395156982ef6650b60867f6cb38c719c11",
+      "bytes": 3110
+    },
+    "src/nvs_item_hash_list.cpp": {
+      "upstream_sha256": "12e56f57671fb1b205cb27f07bf8b4c3cb4609c387c1bc7b60894925084d3d54",
+      "project_sha256": "12e56f57671fb1b205cb27f07bf8b4c3cb4609c387c1bc7b60894925084d3d54",
+      "bytes": 3567
+    },
+    "src/nvs_item_hash_list.hpp": {
+      "upstream_sha256": "cf0cee7c9cbbf1c3a9663586e57d48bf3621bd365c2c0027ba764f2c660538f0",
+      "project_sha256": "cf0cee7c9cbbf1c3a9663586e57d48bf3621bd365c2c0027ba764f2c660538f0",
+      "bytes": 1475
+    },
+    "src/nvs_memory_management.hpp": {
+      "upstream_sha256": "287b3ab799a2fc376e5a33356b57167a363278785c6a8eb2c04b664792b879aa",
+      "project_sha256": "287b3ab799a2fc376e5a33356b57167a363278785c6a8eb2c04b664792b879aa",
+      "bytes": 3275
+    },
+    "src/nvs_page.cpp": {
+      "upstream_sha256": "81d9ba04f081acd8b3fa05879c9a5e80953ab4ca7947ef9a3a26b0187f1ed32c",
+      "project_sha256": "027dd96a2f0152e1651df0bc522ab7311e075353a2dd29bff90b8b7f5b1b4a38",
+      "bytes": 34679
+    },
+    "src/nvs_page.hpp": {
+      "upstream_sha256": "4b4843f8f489b05a75372d9a0848e07273262d4fe97f17eef0b7f38d95020b2c",
+      "project_sha256": "4b4843f8f489b05a75372d9a0848e07273262d4fe97f17eef0b7f38d95020b2c",
+      "bytes": 7970
+    },
+    "src/nvs_pagemanager.cpp": {
+      "upstream_sha256": "8a9e43a3cce72809d11d53fdff5c5ae8fc2ccbd4e567a95afccfc1361737f50f",
+      "project_sha256": "8a9e43a3cce72809d11d53fdff5c5ae8fc2ccbd4e567a95afccfc1361737f50f",
+      "bytes": 7485
+    },
+    "src/nvs_pagemanager.hpp": {
+      "upstream_sha256": "a3a7084b3b93937832df7d5acca4858ab47150beaf40fcafe8bd9ddfbd91da1e",
+      "project_sha256": "a3a7084b3b93937832df7d5acca4858ab47150beaf40fcafe8bd9ddfbd91da1e",
+      "bytes": 1803
+    },
+    "src/nvs_partition.cpp": {
+      "upstream_sha256": "84ebf8ce5f76de96e839f3d43b1b5a75704617c9050598ee1c10f19ed45a42f3",
+      "project_sha256": "84ebf8ce5f76de96e839f3d43b1b5a75704617c9050598ee1c10f19ed45a42f3",
+      "bytes": 1645
+    },
+    "src/nvs_partition.hpp": {
+      "upstream_sha256": "4cb6ee7d507828aea3c42c2e943e43c35aa342637bba79fda067f2efda6bcc15",
+      "project_sha256": "4cb6ee7d507828aea3c42c2e943e43c35aa342637bba79fda067f2efda6bcc15",
+      "bytes": 3284
+    },
+    "src/nvs_partition_lookup.cpp": {
+      "upstream_sha256": "53ec037cc100c6d316b2444fcc1316bfe5252a95cecebf282732defd61347057",
+      "project_sha256": "53ec037cc100c6d316b2444fcc1316bfe5252a95cecebf282732defd61347057",
+      "bytes": 1578
+    },
+    "src/nvs_partition_lookup.hpp": {
+      "upstream_sha256": "0518236f459daca6c1501e66cb06772f4d842eacd6c45dca1c96ee12a43d08ad",
+      "project_sha256": "0518236f459daca6c1501e66cb06772f4d842eacd6c45dca1c96ee12a43d08ad",
+      "bytes": 429
+    },
+    "src/nvs_partition_manager.cpp": {
+      "upstream_sha256": "7f5d5f90b89b9a633e0c3a872b0bd9252e604e057ede8d2d5dccf0983757de1a",
+      "project_sha256": "7f5d5f90b89b9a633e0c3a872b0bd9252e604e057ede8d2d5dccf0983757de1a",
+      "bytes": 6272
+    },
+    "src/nvs_partition_manager.hpp": {
+      "upstream_sha256": "ace92968090c98bda373c70349db38cbdb2104edddb820fa8e6467d911ba2881",
+      "project_sha256": "ace92968090c98bda373c70349db38cbdb2104edddb820fa8e6467d911ba2881",
+      "bytes": 1381
+    },
+    "src/nvs_platform.cpp": {
+      "upstream_sha256": "34867e196e9e96ab2b740f37adc995d734918d185c921968786135fee54396ed",
+      "project_sha256": "34867e196e9e96ab2b740f37adc995d734918d185c921968786135fee54396ed",
+      "bytes": 1047
+    },
+    "src/nvs_platform.hpp": {
+      "upstream_sha256": "62c7d950c157bbc06bf8dac809203b254763413f17815492c07f888f9c2f653a",
+      "project_sha256": "62c7d950c157bbc06bf8dac809203b254763413f17815492c07f888f9c2f653a",
+      "bytes": 455
+    },
+    "src/nvs_storage.cpp": {
+      "upstream_sha256": "dca1f03cc99e25b31b7b425c1fbc2fd27711b1d500b613a1a8c87fdd10162242",
+      "project_sha256": "dca1f03cc99e25b31b7b425c1fbc2fd27711b1d500b613a1a8c87fdd10162242",
+      "bytes": 36427
+    },
+    "src/nvs_storage.hpp": {
+      "upstream_sha256": "904df2f442969d354cf432490e44154c68e654714d75efdc506eba205ca7a991",
+      "project_sha256": "904df2f442969d354cf432490e44154c68e654714d75efdc506eba205ca7a991",
+      "bytes": 4961
+    },
+    "src/nvs_test_api.h": {
+      "upstream_sha256": "e156a18fbdd0620ce3eaf7b816792d011089bbe7b067ed78b4c9e2ab89edcf7d",
+      "project_sha256": "e156a18fbdd0620ce3eaf7b816792d011089bbe7b067ed78b4c9e2ab89edcf7d",
+      "bytes": 2409
+    },
+    "src/nvs_types.cpp": {
+      "upstream_sha256": "517a18b2799c8bee8f33be5207097c43679025d78de31623f2ab4129f5734b43",
+      "project_sha256": "517a18b2799c8bee8f33be5207097c43679025d78de31623f2ab4129f5734b43",
+      "bytes": 6183
+    },
+    "src/nvs_types.hpp": {
+      "upstream_sha256": "3f6b4407aba55ccffb343d9c1b62177c774e1dd85119cc8d797dc3714286c489",
+      "project_sha256": "3f6b4407aba55ccffb343d9c1b62177c774e1dd85119cc8d797dc3714286c489",
+      "bytes": 3516
+    },
+    "src/partition.hpp": {
+      "upstream_sha256": "eef9a93d22d4ba486301b45128124a320e6b2562d74d2f64d85f7d4b61f91fe9",
+      "project_sha256": "eef9a93d22d4ba486301b45128124a320e6b2562d74d2f64d85f7d4b61f91fe9",
+      "bytes": 1305
+    }
+  },
+  "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+}

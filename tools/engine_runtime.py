@@ -5,7 +5,7 @@ R=Path(__file__).resolve().parents[1]
 _build_lock=threading.Lock()
 def load_engine_bridge():
  with _build_lock:
-  out=Path(os.environ.get('ECU_NATIVE_CACHE_ROOT',str(R/'.cache/native-v2')))/'engine';out.mkdir(parents=True,exist_ok=True)
+  out=Path(os.environ.get('ECU_NATIVE_CACHE_ROOT',str(R/'.cache/native-v3')))/'engine';out.mkdir(parents=True,exist_ok=True)
   cjson=Path.home()/'.platformio/packages/framework-espidf/components/json/cJSON'
   if not (cjson/'cJSON.c').exists():raise RuntimeError('Build firmware with pinned PlatformIO framework first')
   # Include transitive headers: a scheduler-only fix must rebuild the SIL binary.
@@ -64,7 +64,7 @@ class EngineRuntime:
   body=self.bridge.engine_data_json(self.handle)
   if not body:raise MemoryError('Engine observation allocation failed')
   data=json.loads(body)
-  if data.get('schema_version')!=1:raise MemoryError('Engine observation serialization failed')
+  if data.get('schema_version') not in (1,2):raise MemoryError('Engine observation serialization failed')
   return data
  def cut(self):self.bridge.engine_cut(self.handle)
  def timing_reason(self):return self.bridge.engine_timing_reason(self.handle).decode()

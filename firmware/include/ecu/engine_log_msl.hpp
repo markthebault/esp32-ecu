@@ -4,7 +4,7 @@
 #include <cstdarg>
 
 namespace ecu::engine_log {
-inline constexpr unsigned text_capacity=6144; //229-column header and bounded numeric row.
+inline constexpr unsigned text_capacity=6144; //245-column header and bounded numeric row.
 class Text {
  char* text_;unsigned size_,used_=0;bool ok_=true;
 public:
@@ -19,7 +19,7 @@ public:
 inline constexpr const char* input_msl[]={"RPM","MAP","TPS","CLT","IAT","Lambda","Battery","Sensor5V"};
 inline constexpr const char* proposal_msl[]={"ProposedRPM","VE","LambdaTarget","ProposedAdvance","ProposedPW","ProposedDwell","DeadTime","AirMass","Warmup","Afterstart","Accel","EGO","Duty","IdleProposal"};
 inline bool msl_header(const Header&h,char*buffer,unsigned size,const char*boot="not_recorded"){
- Text t(buffer,size);t.add("\"ESP32ECU ENGINE LOG 007\"\n\"%s / boot %s / log %u / period_ms=%u duration_s=%u / retained rows %u..%u of %u / overwritten=%u missed_periods=%u repeated=%u invalid=%u / PhaseEpoch=configuration context; WorkerEpoch=executor generation / proposals and masks; Load*=source-tagged fuel model; Sec*=secondary values/units/selection/raw-input diagnostics; check availability/source/validity; Flex*=captured flex evaluation, source/value/raw qualification; no electrical execution measurement\"\n",
+ Text t(buffer,size);t.add("\"ESP32ECU ENGINE LOG 008\"\n\"%s / boot %s / log %u / period_ms=%u duration_s=%u / retained rows %u..%u of %u / overwritten=%u missed_periods=%u repeated=%u invalid=%u / PhaseEpoch=configuration context; WorkerEpoch=executor generation / proposals and masks; Load*=source-tagged fuel model; Sec*=secondary values/units/selection/raw-input diagnostics; check availability/source/validity; Flex*=captured flex evaluation, source/value/raw qualification; Boost*=pressure protection and valve proposal; no electrical execution measurement\"\n",
   h.source==engine::DataSource::Target?"TARGET CONTROL/SENSOR OBSERVATIONS":"SYNTHETIC ENGINE REPLAY",boot,h.log_id,h.period_ms,h.duration_s,h.retained?h.first_sequence():0,h.total,h.total,h.overwritten,h.missed_periods,h.repeated,h.invalid);
  t.add("Time\tRowSequence\tSnapshotSequence\tControlAge\tSensorAge\tSource\tTuneRevision\tSensorRevision\tPhaseEpoch\tFlags\tFaults\tState\tStrategy\tPhaseReason\tPhaseLosses\tCamRejected\tCamError\tWorkerCommand\tWorkerAge\tWorkerEpoch\tWorkerTuneRevision\tWorkerSensorRevision\tTimingFault\tLastTimingFault\tVirtualMask\tPhysicalCommandMask\tBoardFlags");
  t.add("\tInputValidMask");for(auto name:input_msl)t.add("\t%s",name);
@@ -41,6 +41,8 @@ inline bool msl_header(const Header&h,char*buffer,unsigned size,const char*boot=
  for(auto name:flex::code_labels)t.add("\tFlex%s",name);
  for(auto name:flex::time_labels)t.add("\tFlex%s",name);
  for(auto name:flex::flag_labels)t.add("\tFlex%s",name);
+ for(auto name:boost::value_labels)t.add("\tBoost%s",name);
+ t.add("\tBoostFlags\tBoostReason\tBoostMode\tBoostAvailable\tBoostPressureEnabled\tBoostInhibitEngine\tBoostPidUpdates\tBoostOverboostEvents");
  t.add("\ns\tcount\tcount\tms\tms\tcode\tcount\tcount\tcount\tbitfield\tbitfield\tcode\tcode\tcode\tcount\tcount\tdeg\tcount\tms\tcount\tcount\tcount\tcode\tcode\tbitfield\tbitfield\tbitfield");
  t.add("\tbitfield");for(auto unit:engine::input_units)t.add("\t%s",unit);
  for(auto unit:engine::proposal_units)t.add("\t%s",unit);
@@ -59,6 +61,8 @@ inline bool msl_header(const Header&h,char*buffer,unsigned size,const char*boot=
  for(unsigned n=0;n<7;++n)t.add("\tcode");
  for(unsigned n=0;n<7;++n)t.add(n<3?"\tus":"\tcount");
  for(unsigned n=0;n<17;++n)t.add("\tbool");
+ for(auto unit:boost::value_units)t.add("\t%s",unit);
+ t.add("\tbitfield\tcode\tcode\tbool\tbool\tbool\tcount\tcount");
  t.add("\n");return t.ok();
 }
 inline bool msl_row(const Header&h,const Row&row,char*buffer,unsigned size){
@@ -97,6 +101,9 @@ inline bool msl_row(const Header&h,const Row&row,char*buffer,unsigned size){
  for(auto code:f.codes())t.add("\t%u",available?code:0);
  for(auto time:f.times){if(available)t.add("\t%llu",static_cast<unsigned long long>(time));else t.add("\tNaN");}
  for(unsigned n=0;n<17;++n)t.add("\t%u",unsigned(available&&(f.flags&(1U<<n))));
+ const auto&boost=r.boost_control;const bool boost_known=r.has(engine::Present)&&boost.available;
+ for(auto value:boost.values){if(boost_known&&std::isfinite(value))t.add("\t%.9g",double(value));else t.add("\tNaN");}
+ t.add("\t%u\t%u\t%u\t%u\t%u\t%u\t%llu\t%llu",boost.flags,boost.reason,boost.mode,unsigned(boost_known),unsigned(boost.pressure_enabled),unsigned(boost.inhibit_engine),static_cast<unsigned long long>(boost.counters[0]),static_cast<unsigned long long>(boost.counters[1]));
  t.add("\n");return t.ok();
 }
 }

@@ -229,7 +229,7 @@ void update_view(bool fault){
   const bool blocked=cap.engine()&&live.engine.has(engine::Present)&&!engine_schema_supports(cap.schema(),live.engine);
   cJSON_AddBoolToObject(p,"connected",connected);cJSON_AddBoolToObject(p,"engine_telemetry",cap.engine());cJSON_AddNumberToObject(p,"engine_schema",cap.schema());
   cJSON_AddBoolToObject(p,"engine_telemetry_blocked",blocked);cJSON_AddBoolToObject(p,"engine_upgrade_needed",blocked&&cap.schema()<engine_schema);
-  cJSON_AddStringToObject(p,"engine_block_reason",blocked?(cap.schema()<5&&(live.engine.flex_fuel.has(flex::Required)||live.engine.flex_fuel.has(flex::CorrectionsEnabled))?"Required flex diagnostics need screen schema5":cap.schema()<5?"Current model, strategy or fault needs a newer screen schema":"Current observation is invalid for the negotiated schema"):"");
+  cJSON_AddStringToObject(p,"engine_block_reason",blocked?(live.engine.boost_control.pressure_enabled?"This boost pressure profile has no supported screen engine format yet":cap.schema()<5&&(live.engine.flex_fuel.has(flex::Required)||live.engine.flex_fuel.has(flex::CorrectionsEnabled))?"Required flex diagnostics need screen schema5":cap.schema()<5?"Current model, strategy or fault needs a newer screen schema":"Current observation is invalid for the negotiated schema"):"");
   cJSON_AddNumberToObject(p,"engine_parts_per_observation",cap.engine()?(cap.schema()==5?2:1):0);
   cJSON_AddBoolToObject(p,"engine_pair_pending",streams[i].pair.pending());cJSON_AddBoolToObject(p,"engine_base_submitted",streams[i].pair.pending()&&streams[i].pair.base_submitted());
   cJSON_AddBoolToObject(p,"engine_connected",streams[i].engine_ack_seen&&now()-streams[i].last_engine_ack<3000000);
@@ -351,6 +351,7 @@ void publish(const web::Sample&s,const config::Config&c,const std::array<double,
  l.flex_sample_age=wire::flex_sample_age(s.engine,gp_now);
  if(s.engine.worker_sequence||s.engine.worker_observed_us)l.worker_age=engine::data_age_us(s.engine,s.engine.worker_observed_us,gp_now);
  l.fault=!s.adc_ok||s.overflow||s.timing_fault;
+ if(s.engine.boost_control.available&&s.engine.boost_control.pressure_enabled&&s.engine.boost_control.inhibit_engine)l.fault=true;
  if(required_flex_problem(s.engine,l.flex_sample_age,l.engine_control_age))l.fault=true;
  if(s.engine.idle_available&&(s.engine.idle_flags&idle::Enabled)&&s.engine.idle_state==static_cast<unsigned>(idle::State::Fault))l.fault=true;
  header(l.data,Telemetry,88);u32(l.data+20,c.revision);

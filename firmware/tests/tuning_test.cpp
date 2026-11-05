@@ -31,7 +31,7 @@ int main(){
  assert(get_float(live.data()+100)==3&&get_float(live.data()+116)==0&&get_u32(live.data()+212)&ecu::engine::DisplayFresh);
  sample.input_valid=1U<<ecu::engine::MapKpa;sample.flags|=ecu::engine::PhaseSynced;live_block(sample,1001001,live);
  assert(get_float(live.data()+8)==80&&get_u32(live.data()+48)==1&&get_u32(live.data()+208)==sample.input_valid&&!(get_u32(live.data()+212)&ecu::engine::DisplayFresh));
- Store store;Session s(store);assert(s.open()==Result::Ok);assert(sizeof(Session)<11*1024);
+ Store store;Session s(store);assert(s.open()==Result::Ok);assert(sizeof(Session)<13*1024);
  const auto original=s.staged_page();ecu::engine::Tune decoded;assert(decode_page(original,1,decoded));Page again;encode_page(decoded,1,again);assert(again==original);
  floating(s,512+128,86);assert(store.tune.ve.cells[0]==85);const auto pending=s.staged_page();const auto crc=Session::crc32(pending.data(),pending.size());
  assert(command(s,{'b',0,1}).bytes[0]==4);assert(store.tune.ve.cells[0]==86&&store.tune.revision==2&&s.stats().base_revision==2&&s.stats().origin_revision==1);
@@ -50,7 +50,7 @@ int main(){
  assert(command(s,write(4752,zero,4)).bytes[0]==0);assert(command(s,{'b',0,1}).bytes[0]==4&&store.tune.strategy==ecu::engine::Strategy::BatchWasted&&!store.tune.cylinder_trims_enabled);
  // One maximum-size M frame is269 bytes; TX for a256-byte read is263.
  Stream stream(s);std::vector<std::vector<std::uint8_t>> replies;auto send=[&](const std::uint8_t*p,std::size_t n){replies.emplace_back(p,p+n);return true;};
- const auto q=frame({'Q'});for(std::size_t i=0;i<q.size();++i)stream.feed(q.data()+i,1,1000+i,send);assert(replies.size()==1&&replies[0]==frame(std::vector<std::uint8_t>({'\0','E','S','P','3','2','E','C','U',' ','D','E','V',' ','0','1','0',' ','I','N','H','I','B','I','T','E','D'})));
+ const auto q=frame({'Q'});for(std::size_t i=0;i<q.size();++i)stream.feed(q.data()+i,1,1000+i,send);assert(replies.size()==1&&replies[0]==frame(std::vector<std::uint8_t>({'\0','E','S','P','3','2','E','C','U',' ','D','E','V',' ','0','1','1',' ','I','N','H','I','B','I','T','E','D'})));
  auto corrupt=q;corrupt.back()^=1;stream.feed(corrupt.data(),corrupt.size(),2000,send);assert(replies.back()==frame({0x82}));
  std::uint8_t chunk[256];std::copy_n(s.staged_page().data()+512,256,chunk);const auto max=frame(write(512,chunk,256));assert(max.size()==269);stream.feed(max.data(),max.size(),3000,send);assert(replies.back()==frame({0}));
  const auto r=frame({'p',0,1,0,2,0,1});stream.feed(r.data(),r.size(),4000,send);assert(replies.back().size()==263);

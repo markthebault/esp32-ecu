@@ -66,15 +66,16 @@ inline const char* reason_name(Reason r){switch(r){
  case Reason::Arithmetic:return "invalid_arithmetic";default:return "unknown";
 }}
 inline bool range(double v,double lo,double hi){return std::isfinite(v)&&v>=lo&&v<=hi;}
-inline double threshold_max(Condition c){return c==Condition::Rpm?10000:c==Condition::Map?110:100;}
+inline double threshold_max(Condition c,double maximum_map_kpa=110){return c==Condition::Rpm?10000:c==Condition::Map?maximum_map_kpa:100;}
 inline Cells expected_cells(Mode m){return m==Mode::Multiply?Cells::Multiplier:m==Mode::Add?Cells::Adder:Cells::Absolute;}
 inline double cell_min(Kind k,Cells c){return k==Kind::Fuel||c==Cells::Multiplier?0:c==Cells::Adder?-40:-5;}
 inline double cell_max(Kind k,Cells c){return k==Kind::Fuel||c==Cells::Multiplier?255:c==Cells::Adder?70:40;}
-inline bool valid(const Rule&r){
+inline bool valid(const Rule&r,double maximum_map_kpa=110){
+ if(!range(maximum_map_kpa,110,400))return false;
  return static_cast<unsigned>(r.mode)<=4&&static_cast<unsigned>(r.source)<=2&&
   static_cast<unsigned>(r.axis)<=2&&r.axis==static_cast<load::Axis>(r.source)&&
   static_cast<unsigned>(r.cells)<=2&&static_cast<unsigned>(r.condition)<=3&&
-  range(r.threshold,0,threshold_max(r.condition))&&range(r.debounce_ms,0,500)&&
+  range(r.threshold,0,threshold_max(r.condition,maximum_map_kpa))&&range(r.debounce_ms,0,500)&&
   r.input_channel<2&&(r.mode==Mode::Off||r.cells==expected_cells(r.mode));
 }
 inline bool same_rule(const Rule&a,const Rule&b){
@@ -101,8 +102,8 @@ inline Requirements requirements(const Config&c){
  }
  return r;
 }
-inline bool valid(const Config&c,const load::Config&primary){
- if(!valid(c.fuel)||!valid(c.spark))return false;
+inline bool valid(const Config&c,const load::Config&primary,double maximum_map_kpa=110){
+ if(!valid(c.fuel,maximum_map_kpa)||!valid(c.spark,maximum_map_kpa))return false;
  return !requirements(c).emap||primary.aux_role==load::AuxRole::Emap;
 }
 struct SwitchSample {
@@ -114,6 +115,7 @@ struct Input {
  double rpm=0,map_kpa=NAN,tps_pct=NAN,emap_kpa=NAN,ethanol_pct=NAN;
  bool map_qualified=false,emap_qualified=false,ethanol_qualified=false;
  std::array<SwitchSample,2> switches{};
+ double maximum_map_kpa=110;
 };
 struct SwitchState {
  Reason reason=Reason::InputUnavailable;
@@ -129,9 +131,9 @@ class SwitchFilter {
  InputSource source_=InputSource::Unavailable;
 public:
  void reset(){*this=SwitchFilter{};}
- SwitchState step(const SwitchSample&s,const Rule&r,std::uint64_t now){
+ SwitchState step(const SwitchSample&s,const Rule&r,std::uint64_t now,double maximum_map_kpa=110){
   SwitchState out;out.source=s.source;
-  if(!valid(r)||r.mode!=Mode::Input){reset();out.reason=Reason::InvalidConfig;return out;}
+  if(!valid(r,maximum_map_kpa)||r.mode!=Mode::Input){reset();out.reason=Reason::InvalidConfig;return out;}
   const auto debounce=std::uint64_t(std::llround(double(r.debounce_ms)*1000));
   if(!s.valid||s.source==InputSource::Unavailable||static_cast<unsigned>(s.source)>2){reset();return out;}
   if(now<s.observed_us||(observed_&&now<last_now_)){
@@ -194,10 +196,10 @@ public:
   if(!rule_seen_[slot]||!same_rule(rules_[slot],r))filter.reset();
   rules_[slot]=r;rule_seen_[slot]=true;
   auto fail=[&](Reason reason){o.reason=reason;return result;};
-  if(!valid(r)){filter.reset();return fail(Reason::InvalidConfig);}
+  if(!valid(r,i.maximum_map_kpa)){filter.reset();return fail(Reason::InvalidConfig);}
   auto observe_input=[&](){
    const auto&sample=i.switches[r.input_channel];o.input_observed_us=sample.observed_us;o.input_raw=sample.level;o.input_valid=sample.valid;
-   const auto state=filter.step(sample,r,now);
+   const auto state=filter.step(sample,r,now,i.maximum_map_kpa);
    o.input_source=state.source;o.input_age_ms=static_cast<float>(state.age_ms);o.input_qualified=state.valid;
    o.input_level=state.level;o.pending=state.pending;o.pending_level=state.pending_level;
    return state;
@@ -214,7 +216,7 @@ public:
    result.ok=o.valid=true;o.reason=Reason::CrankingBypass;return result;
   }
   if(r.source==load::Source::Map||r.source==load::Source::PressureRatio){
-   if(!i.map_qualified||!range(i.map_kpa,10,110))return fail(Reason::RequiredMap);
+   if(!i.map_qualified||!range(i.map_kpa,10,i.maximum_map_kpa))return fail(Reason::RequiredMap);
    result.coordinate=i.map_kpa;
   }else{
    if(!range(i.tps_pct,0,100))return fail(Reason::RequiredTps);
@@ -229,7 +231,7 @@ public:
    double value=NAN;
    switch(r.condition){
     case Condition::Rpm:if(range(i.rpm,0,12000))value=i.rpm;break;
-    case Condition::Map:if(!i.map_qualified||!range(i.map_kpa,10,110))return fail(Reason::RequiredMap);value=i.map_kpa;break;
+    case Condition::Map:if(!i.map_qualified||!range(i.map_kpa,10,i.maximum_map_kpa))return fail(Reason::RequiredMap);value=i.map_kpa;break;
     case Condition::Tps:if(!range(i.tps_pct,0,100))return fail(Reason::RequiredTps);value=i.tps_pct;break;
     case Condition::Ethanol:if(!i.ethanol_qualified||!range(i.ethanol_pct,0,100))return fail(Reason::RequiredEthanol);value=i.ethanol_pct;break;
    }

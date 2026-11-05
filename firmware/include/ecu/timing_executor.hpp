@@ -6,7 +6,7 @@
 
 namespace ecu::timing {
 enum class Cause : std::uint8_t {None,Control,Configuration,Clock,Timebase,CaptureAge,CaptureOverflow,
- ProducerTimeout,CommandTimeout,ToothTimeout,LateInterrupt,HighLimit,Plan,Contention,Gate,TraceBudget,CamPhase,IdlePwm};
+ ProducerTimeout,CommandTimeout,ToothTimeout,LateInterrupt,HighLimit,Plan,Contention,Gate,TraceBudget,CamPhase,IdlePwm,BoostPwm};
 inline const char* cause_name(Cause c){switch(c){
  case Cause::Control:return "control_inhibit";case Cause::Configuration:return "configuration_change";
  case Cause::Clock:return "clock_reversed";case Cause::Timebase:return "capture_timebase";
@@ -15,7 +15,7 @@ inline const char* cause_name(Cause c){switch(c){
  case Cause::ToothTimeout:return "tooth_timeout";case Cause::LateInterrupt:return "late_interrupt";
  case Cause::HighLimit:return "maximum_high_time";case Cause::Plan:return "invalid_angle_plan";
  case Cause::Contention:return "commit_contention";case Cause::Gate:return "hardware_gate";
- case Cause::TraceBudget:return "interrupt_budget";case Cause::CamPhase:return "cam_phase_lost";case Cause::IdlePwm:return "idle_pwm_fault";default:return "none";}}
+ case Cause::TraceBudget:return "interrupt_budget";case Cause::CamPhase:return "cam_phase_lost";case Cause::IdlePwm:return "idle_pwm_fault";case Cause::BoostPwm:return "boost_pwm_fault";default:return "none";}}
 
 struct Command {
  engine::AngleConfig angle;
@@ -26,6 +26,7 @@ struct Command {
  unsigned max_injector_high_us=15000,max_coil_high_us=3500;
  unsigned slots=60,missing=2,max_rpm=8000;
  unsigned idle_period_us=10000,idle_high_us=0;
+ unsigned boost_period_us=40000,boost_high_us=0;
 };
 struct TimingStats {
  std::uint64_t dispatched=0,cuts=0,faults=0,recoveries=0,retries=0,

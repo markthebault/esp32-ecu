@@ -5,6 +5,8 @@
 #include "ecu/engine_phase.hpp"
 #include "ecu/timing_executor.hpp"
 #include "ecu/idle_command.hpp"
+#include "ecu/boost_command.hpp"
+#include "ecu/boost_pwm_json.hpp"
 #include "ecu/idle_pwm_json.hpp"
 #include <string>
 
@@ -16,19 +18,22 @@ struct IO {
  void all_low();bool write(unsigned ch,bool high);
 };
 struct IdleIO {Context*owner=nullptr;bool high=false;void all_low();bool write(bool value);};
+struct BoostIO {Context*owner=nullptr;bool high=false;void all_low();bool write(bool value);};
 struct Context {
  ecu::engine::RuntimeSample data;std::uint64_t data_sequence=0;
  ecu::engine::Tune tune;ecu::flex::Capture flex_capture;std::uint32_t flex_revision=0;ecu::engine::Controller controller;ecu::engine::PhaseDecoder decoder{{60,2,8000}};
- ecu::timing::Executor core;ecu::idle::PwmExecutor pwm;ecu::engine::Output last;IO io;IdleIO idle_io;
+ ecu::timing::Executor core;ecu::idle::PwmExecutor pwm;ecu::boost::PwmExecutor boost_pwm;BoostIO boost_io;ecu::engine::Output last;IO io;IdleIO idle_io;
  std::array<Event,32> events{};unsigned event_begin=0,event_count=0;
  Event popped;std::uint64_t now=0,command_us=0,sampled_us=0,gap=0,sequence=0;
  unsigned slots=60,missing=2,max_rpm=8000;bool have_control=false;
- Context(){io.owner=this;idle_io.owner=this;}
+ Context(){io.owner=this;idle_io.owner=this;boost_io.owner=this;}
  void enqueue(Event e){if(event_count<events.size()){events[(event_begin+event_count)%events.size()]=e;++event_count;}}
 };
+void BoostIO::all_low(){if(high)write(false);}
+bool BoostIO::write(bool value){if(high==value)return true;high=value;owner->enqueue({owner->now,0,9,value,false,0});return true;}
 void IdleIO::all_low(){if(high)write(false);}
 bool IdleIO::write(bool value){if(high==value)return true;high=value;owner->enqueue({owner->now,0,8,value,false,0});return true;}
-void IO::all_low(){mask=0;if(owner->pwm.stats().active||owner->pwm.stats().high)owner->pwm.stop(owner->now,ecu::idle::PwmCause::EngineFault,owner->idle_io);else owner->idle_io.all_low();if(dispatching)owner->enqueue({owner->now,0,0,false,true,0});}
+void IO::all_low(){mask=0;if(owner->pwm.stats().active||owner->pwm.stats().high)owner->pwm.stop(owner->now,ecu::idle::PwmCause::EngineFault,owner->idle_io);else owner->idle_io.all_low();if(owner->boost_pwm.stats().active||owner->boost_pwm.stats().high)owner->boost_pwm.stop(owner->now,ecu::boost::PwmCause::EngineFault,owner->boost_io);else owner->boost_io.all_low();if(dispatching)owner->enqueue({owner->now,0,0,false,true,0});}
 bool IO::write(unsigned ch,bool high){
  if(high)mask|=1U<<ch;else mask&=~(1U<<ch);
  owner->enqueue({owner->now,owner->core.event_requested_dwell_us(),ch,high,false,owner->core.event_advance()});return true;
@@ -39,10 +44,11 @@ ecu::timing::Command command(Context& c){
  ecu::timing::Command cmd;cmd.angle=ecu::engine::angle_config(c.tune);cmd.output=c.last;
  cmd.command_us=c.command_us;cmd.sampled_us=c.sampled_us;cmd.sequence=++c.sequence;
  cmd.tune_revision=c.tune.revision;cmd.sensor_revision=1;cmd.slots=c.slots;cmd.missing=c.missing;cmd.max_rpm=c.max_rpm;
- cmd.max_injector_high_us=std::llround(c.tune.max_injection_ms*1000);cmd.max_coil_high_us=std::llround(c.tune.max_dwell_ms*1000);ecu::idle::prepare_pwm(cmd,c.tune);return cmd;
+ cmd.max_injector_high_us=std::llround(c.tune.max_injection_ms*1000);cmd.max_coil_high_us=std::llround(c.tune.max_dwell_ms*1000);ecu::idle::prepare_pwm(cmd,c.tune);ecu::boost::prepare_pwm(cmd,c.tune);return cmd;
 }
 void idle_fault(Context&c){if(c.pwm.stats().fault!=ecu::idle::PwmCause::None&&c.core.stats().fault==ecu::timing::Cause::None)c.core.trip(c.now,ecu::timing::Cause::IdlePwm,c.io);}
-void dispatch(Context&c){c.core.dispatch(c.now,c.io);c.pwm.dispatch(c.now,c.idle_io);idle_fault(c);}
+void boost_fault(Context&c){if(c.boost_pwm.stats().fault!=ecu::boost::PwmCause::None&&c.core.stats().fault==ecu::timing::Cause::None)c.core.trip(c.now,ecu::timing::Cause::BoostPwm,c.io);}
+void dispatch(Context&c){c.core.dispatch(c.now,c.io);c.pwm.dispatch(c.now,c.idle_io);c.boost_pwm.dispatch(c.now,c.boost_io);idle_fault(c);boost_fault(c);}
 }
 extern "C" const char* engine_canonicalize(const char*text){ecu::engine::Tune tune;static thread_local std::string canonical;if(!ecu::engine::canonical_tune(text,tune,canonical))return nullptr;return canonical.c_str();}
 extern "C" int engine_validate(const char* text){
@@ -56,7 +62,7 @@ extern "C" int engine_configure(void*p,const char* text){
  if(!text||!ecu::web::safe_json(text,std::strlen(text),ecu::engine::tune_maximum))return 0;
  auto*j=cJSON_ParseWithOpts(text,nullptr,true);ecu::engine::Tune candidate;
  const bool ok=j&&ecu::engine::parse_tune(j,candidate);cJSON_Delete(j);if(!ok)return 0;
- auto&c=*static_cast<Context*>(p);c.tune=candidate;if(!c.flex_revision)c.flex_capture=ecu::flex::Capture(candidate.flex_fuel.capture);else if(!c.flex_capture.configure(candidate.flex_fuel.capture))c.flex_capture.context_changed();c.flex_revision=candidate.revision;c.controller.reset();c.core=ecu::timing::Executor{};c.pwm=ecu::idle::PwmExecutor{};c.idle_io.high=false;
+ auto&c=*static_cast<Context*>(p);c.tune=candidate;if(!c.flex_revision)c.flex_capture=ecu::flex::Capture(candidate.flex_fuel.capture);else if(!c.flex_capture.configure(candidate.flex_fuel.capture))c.flex_capture.context_changed();c.flex_revision=candidate.revision;c.controller.reset();c.core=ecu::timing::Executor{};c.pwm=ecu::idle::PwmExecutor{};c.idle_io.high=false;c.boost_pwm=ecu::boost::PwmExecutor{};c.boost_io.high=false;
  c.decoder=ecu::engine::PhaseDecoder({c.slots,c.missing,c.max_rpm},ecu::engine::angle_config(c.tune));c.last={};c.data={};c.data_sequence=0;c.io.mask=0;c.event_count=0;c.event_begin=0;c.now=c.command_us=c.sampled_us=c.sequence=0;c.have_control=false;return 1;
 }
 extern "C" int engine_wheel(void*p,unsigned slots,unsigned missing,unsigned max_rpm){
@@ -83,13 +89,13 @@ extern "C" int engine_trigger(void*p,std::uint64_t time){
  if(c.decoder.tooth()==0){c.gap=time;return 1;}return 0;
 }
 extern "C" void engine_cut(void*p){auto&c=*static_cast<Context*>(p);c.core.stop(c.now,ecu::timing::Cause::Control,c.io);c.event_count=0;}
-extern "C" void engine_progress(void*p,std::uint64_t now){auto&c=*static_cast<Context*>(p);c.now=now;c.io.dispatching=true;c.core.progress(now,c.io);c.pwm.dispatch(now,c.idle_io);idle_fault(c);c.io.dispatching=false;}
+extern "C" void engine_progress(void*p,std::uint64_t now){auto&c=*static_cast<Context*>(p);c.now=now;c.io.dispatching=true;c.core.progress(now,c.io);c.pwm.dispatch(now,c.idle_io);c.boost_pwm.dispatch(now,c.boost_io);idle_fault(c);boost_fault(c);c.io.dispatching=false;}
 extern "C" const char* engine_timing_reason(void*p){return ecu::timing::cause_name(static_cast<Context*>(p)->core.stats().last_fault);}
 extern "C" std::uint64_t engine_crank_timeout(void*p){auto&d=static_cast<Context*>(p)->decoder;return d.crank_synced()?d.stall_timeout():0;}
-extern "C" std::uint64_t engine_next_time(void*p){auto&c=*static_cast<Context*>(p);return c.event_count?c.events[c.event_begin].time:std::min(c.core.next_alarm(),c.pwm.next_alarm());}
+extern "C" std::uint64_t engine_next_time(void*p){auto&c=*static_cast<Context*>(p);return c.event_count?c.events[c.event_begin].time:std::min(std::min(c.core.next_alarm(),c.pwm.next_alarm()),c.boost_pwm.next_alarm());}
 extern "C" unsigned engine_pop(void*p){
  auto&c=*static_cast<Context*>(p);
- if(!c.event_count){const auto due=std::min(c.core.next_alarm(),c.pwm.next_alarm());if(due==UINT64_MAX)return 0;c.now=due;c.io.dispatching=true;dispatch(c);c.io.dispatching=false;}
+ if(!c.event_count){const auto due=std::min(std::min(c.core.next_alarm(),c.pwm.next_alarm()),c.boost_pwm.next_alarm());if(due==UINT64_MAX)return 0;c.now=due;c.io.dispatching=true;dispatch(c);c.io.dispatching=false;}
  if(!c.event_count)return 0x40000; // Timer advanced with a constant GPIO level; no fabricated edge.
  c.popped=c.events[c.event_begin];c.event_begin=(c.event_begin+1)%c.events.size();--c.event_count;
  return c.popped.cut?0x30000:0x10000|c.popped.ch|(c.popped.high?0x100:0);
@@ -121,7 +127,7 @@ extern "C" const char* engine_step(void*p,const char*text,std::uint64_t now,std:
  in.flex_sample=raw_flex?ecu::flex::Sample{c.flex_capture.observe(now),c.flex_capture.config(),c.flex_revision}:ecu::flex::synthetic_value(in.ethanol_pct,in.ethanol_qualified,sampled,c.tune.flex_fuel.capture,c.tune.revision);
  c.last=c.controller.step(c.tune,in,now);c.command_us=now;c.sampled_us=sampled;c.have_control=true;
  c.core.progress(now,c.io);const auto cmd=command(c);c.core.command(cmd,now,c.io);
- c.pwm.submit(ecu::idle::pwm_command(cmd,c.core.current_command(),now,c.core.stats()),now,c.idle_io);idle_fault(c);
+ c.pwm.submit(ecu::idle::pwm_command(cmd,c.core.current_command(),now,c.core.stats()),now,c.idle_io);c.boost_pwm.submit(ecu::boost::pwm_command(cmd,c.core.current_command(),now,c.core.stats(),false,!wheel||c.decoder.synced()),now,c.boost_io);idle_fault(c);boost_fault(c);
  if(c.core.recover(now,wheel&&!in.synced&&c.last.state==ecu::engine::State::Stopped&&!c.last.faults))c.decoder.reset();
  const auto& stats=c.core.stats();
  if(stats.fault!=ecu::timing::Cause::None){c.last.faults|=ecu::engine::Timing;c.last.state=ecu::engine::State::Faulted;c.last.fuel_cut=c.last.spark_cut=true;}
@@ -136,3 +142,5 @@ extern "C" const char* engine_plan(void*){return "{\"valid\":false,\"edges\":[]}
 
 extern "C" const char* engine_data_json(void*p){auto&c=*static_cast<Context*>(p);return encode(ecu::engine::data_json(c.data,c.now));}
 extern "C" const char* engine_idle_json(void*p){return encode(ecu::idle::pwm_json(static_cast<Context*>(p)->pwm.stats(),false,false));}
+
+extern "C" const char* engine_boost_json(void*p){return encode(ecu::boost::pwm_json(static_cast<Context*>(p)->boost_pwm.stats()));}

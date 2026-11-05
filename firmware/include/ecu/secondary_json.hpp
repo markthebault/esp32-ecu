@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <type_traits>
 namespace ecu::secondary {
-inline bool parse_rule(const cJSON*j,Rule&r,engine::Map&m){
+inline bool parse_rule(const cJSON*j,Rule&r,engine::Map&m,double maximum_map_kpa=110){
  if(!web::keys(j,"|mode||source||axis||cells||condition||threshold||debounce_ms||input_channel||active_high||map|"))return false;
  if(!load::parse_enum(j,"mode",r.mode,{{"off",Mode::Off},{"multiply",Mode::Multiply},{"add",Mode::Add},{"conditional",Mode::Conditional},{"input",Mode::Input}})||
     !load::parse_enum(j,"source",r.source,{{"map",load::Source::Map},{"tps",load::Source::Tps},{"imap_emap",load::Source::PressureRatio}})||
@@ -13,15 +13,15 @@ inline bool parse_rule(const cJSON*j,Rule&r,engine::Map&m){
     !load::parse_enum(j,"cells",r.cells,{{"absolute",Cells::Absolute},{"multiplier",Cells::Multiplier},{"adder",Cells::Adder}})||
     !load::parse_enum(j,"condition",r.condition,{{"rpm",Condition::Rpm},{"map_kpa",Condition::Map},{"tps_pct",Condition::Tps},{"ethanol_pct",Condition::Ethanol}}))return false;
  double threshold,debounce;unsigned channel;
- if(!web::number(j,"threshold",threshold)||!range(threshold,0,threshold_max(r.condition))||!web::number(j,"debounce_ms",debounce)||!range(debounce,0,500)||
+ if(!web::number(j,"threshold",threshold)||!range(threshold,0,threshold_max(r.condition,maximum_map_kpa))||!web::number(j,"debounce_ms",debounce)||!range(debounce,0,500)||
     !web::integer(j,"input_channel",channel)||channel>1||!web::boolean(j,"active_high",r.active_high))return false;
  r.threshold=static_cast<float>(threshold);r.debounce_ms=static_cast<float>(debounce);r.input_channel=static_cast<std::uint8_t>(channel);
  auto*map=cJSON_GetObjectItemCaseSensitive(j,"map");if(!web::keys(map,"|rpm||load||cells|"))return false;
  auto array=[](const cJSON*a,auto&out){if(!cJSON_IsArray(a)||cJSON_GetArraySize(a)!=int(out.size()))return false;for(unsigned n=0;n<out.size();++n){auto*v=cJSON_GetArrayItem(a,n);if(!cJSON_IsNumber(v)||!range(v->valuedouble,-1e6,1e6))return false;out[n]=static_cast<float>(v->valuedouble);}return true;};
- return array(cJSON_GetObjectItemCaseSensitive(map,"rpm"),m.rpm)&&array(cJSON_GetObjectItemCaseSensitive(map,"load"),m.load)&&array(cJSON_GetObjectItemCaseSensitive(map,"cells"),m.cells)&&valid(r);
+ return array(cJSON_GetObjectItemCaseSensitive(map,"rpm"),m.rpm)&&array(cJSON_GetObjectItemCaseSensitive(map,"load"),m.load)&&array(cJSON_GetObjectItemCaseSensitive(map,"cells"),m.cells)&&valid(r,maximum_map_kpa);
 }
-inline bool parse_config(const cJSON*j,Config&c,engine::Map&fuel_map,engine::Map&spark_map){
- return web::keys(j,"|fuel||spark|")&&parse_rule(cJSON_GetObjectItemCaseSensitive(j,"fuel"),c.fuel,fuel_map)&&parse_rule(cJSON_GetObjectItemCaseSensitive(j,"spark"),c.spark,spark_map);
+inline bool parse_config(const cJSON*j,Config&c,engine::Map&fuel_map,engine::Map&spark_map,double maximum_map_kpa=110){
+ return web::keys(j,"|fuel||spark|")&&parse_rule(cJSON_GetObjectItemCaseSensitive(j,"fuel"),c.fuel,fuel_map,maximum_map_kpa)&&parse_rule(cJSON_GetObjectItemCaseSensitive(j,"spark"),c.spark,spark_map,maximum_map_kpa);
 }
 inline cJSON* rule_document(const Rule&r,const engine::Map&m,float constant=NAN){
  auto*j=cJSON_CreateObject();if(!j)return nullptr;
@@ -91,7 +91,7 @@ inline bool parse_observation(const cJSON*j,Observation&result,Kind kind,bool pr
   for(unsigned n=0;n<12;++n)if(o.*boolean_members[n]!=empty.*boolean_members[n])return false;
   if(o.mode!=empty.mode||o.cells!=empty.cells||o.source!=empty.source||o.axis!=empty.axis||o.condition!=empty.condition||o.reason!=empty.reason||o.input_source!=empty.input_source||o.input_channel)return false;
  }
- if(o.available&&(!range(o.threshold,0,threshold_max(o.condition))||!range(o.debounce_ms,0,500)))return false;
+ if(o.available&&(!range(o.threshold,0,threshold_max(o.condition,400))||!range(o.debounce_ms,0,500)))return false;
  if(o.evaluated&&(!o.valid||!std::isfinite(o.primary)||!std::isfinite(o.primary_corrected)||!std::isfinite(o.combined)||(o.active&&!std::isfinite(o.secondary))))return false;
  if(o.valid&&o.axis!=static_cast<load::Axis>(o.source))return false;
  if(o.input_qualified&&(!input_time||!o.input_valid||!range(o.input_age_ms,0,20)))return false;

@@ -3,6 +3,7 @@
 #include "ecu/load_json.hpp"
 #include "ecu/secondary_json.hpp"
 #include "ecu/flex_json.hpp"
+#include "ecu/boost_json.hpp"
 #include "cJSON.h"
 namespace ecu::tuning {
 class Document {
@@ -13,7 +14,7 @@ class Document {
  template<class Map>static bool grid(cJSON*j,const Map&m){return j&&values(item(j,"rpm"),m.rpm)&&values(item(j,"load"),m.load)&&values(item(j,"cells"),m.cells);}
 public:
  explicit Document(cJSON*j):root_(j){}
- bool header(std::uint32_t revision,const char*strategy){return set(item(root_,"schema_version"),9)&&set(item(root_,"revision"),revision)&&cJSON_SetValuestring(item(root_,"strategy"),strategy);}
+ bool header(std::uint32_t revision,const char*strategy){return set(item(root_,"schema_version"),10)&&set(item(root_,"revision"),revision)&&cJSON_SetValuestring(item(root_,"strategy"),strategy);}
  bool number(const char*group,const char*key,double v){return set(item(item(root_,group),key),v);}
  bool boolean(const char*group,const char*key,bool v){auto*j=item(item(root_,group),key);if(!cJSON_IsBool(j))return false;j->type=(j->type&~0xff)|(v?cJSON_True:cJSON_False);return true;}
  template<class Values>bool array(const char*group,const char*key,const Values&v){return values(item(item(root_,group),key),v);}
@@ -73,6 +74,13 @@ public:
   if(!flag(item(j,"input_confirmed"),c.input_confirmed)||!flag(item(correction,"enabled"),c.correction.enabled)||!flag(item(correction,"temperature_enabled"),c.correction.temperature_enabled)||!set(item(cap,"cycles"),c.capture.cycles))return false;
   for(auto field:ecu::flex::capture_fields)if(!set(item(cap,field.name),c.capture.*field.member))return false;
   for(auto field:ecu::flex::correction_arrays)if(!values(item(correction,field.name),c.correction.*field.member))return false;
+  return true;
+ }
+ bool boost_control(const ecu::boost::Config&c){
+  auto*j=item(root_,"boost_control");
+  if(!j||!boolean("boost_control","pressure_enabled",c.pressure_enabled)||!cJSON_SetValuestring(item(j,"mode"),boost::mode_name(c.mode))||!cJSON_SetValuestring(item(j,"activation"),c.activation==boost::Activation::Barometric?"barometric":"fixed"))return false;
+  for(auto f:boost::scalars)if(!number("boost_control",f.name,c.*(f.member)))return false;
+  for(auto f:boost::grids){auto*table=item(j,f.name);const auto&t=c.*(f.member);if(!table||!values(item(table,"rpm"),t.rpm)||!values(item(table,"axis"),t.axis)||!values(item(table,"cells"),t.cells))return false;}
   return true;
  }
 };

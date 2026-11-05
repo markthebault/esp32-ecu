@@ -5,17 +5,17 @@
 #include <cstring>
 #include <limits>
 namespace ecu::tuning {
-inline constexpr std::size_t page_bytes=8192,live_bytes=832,chunk_bytes=256;
-inline constexpr const char signature[]="ESP32ECU DEV 010 INHIBITED";
+inline constexpr std::size_t page_bytes=12288,live_bytes=1152,chunk_bytes=256;
+inline constexpr const char signature[]="ESP32ECU DEV 011 INHIBITED";
 inline constexpr const char serial_protocol[]="002";
 using Page=std::array<std::uint8_t,page_bytes>;
 inline void put_u32(std::uint8_t*p,std::uint32_t v){for(unsigned i=0;i<4;++i)p[i]=std::uint8_t(v>>(8*i));}
 inline std::uint32_t get_u32(const std::uint8_t*p){std::uint32_t v=0;for(unsigned i=0;i<4;++i)v|=std::uint32_t(p[i])<<(8*i);return v;}
 inline void put_float(std::uint8_t*p,float v){static_assert(sizeof(float)==4&&std::numeric_limits<float>::is_iec559);std::uint32_t u;std::memcpy(&u,&v,4);put_u32(p,u);}
 inline float get_float(const std::uint8_t*p){auto u=get_u32(p);float v;std::memcpy(&v,&u,4);return v;}
-inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||(n>=4756&&n<4768)||(n>=4940&&n<4992)||(n>=5116&&n<5120)||(n>=5176&&n<5376)||(n>=5448&&n<5504)||n>=7968;}
+inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||(n>=4756&&n<4768)||(n>=4940&&n<4992)||(n>=5116&&n<5120)||(n>=5176&&n<5376)||(n>=5448&&n<5504)||(n>=7968&&n<8192)||(n>=8280&&n<8320)||n>=9280;}
 inline bool revision_offset(std::size_t n){return n>=268&&n<272;}
-// own010 appends flex capture/correction settings without moving old fields.
+// own011 appends boost calibration without moving any own010 field.
 inline bool representable(const engine::Tune&t){return !engine::validate(t);}
 inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill(0);
  put_u32(p.data(),(std::uint32_t(t.ego_enabled)<<0)|(std::uint32_t(t.dfco_enabled)<<1)|(std::uint32_t(t.idle_enabled)<<2));
@@ -164,6 +164,34 @@ inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill
  for(unsigned i=0;i<6;++i)put_float(p.data()+7896+i*4,t.flex_fuel.correction.spark_deg[i]);
  for(unsigned i=0;i<6;++i)put_float(p.data()+7920+i*4,t.flex_fuel.correction.temperature_c[i]);
  for(unsigned i=0;i<6;++i)put_float(p.data()+7944+i*4,t.flex_fuel.correction.temperature_pct[i]);
+ put_u32(p.data()+8192,t.boost_control.pressure_enabled);
+ put_u32(p.data()+8196,std::uint32_t(t.boost_control.mode));
+ put_u32(p.data()+8200,std::uint32_t(t.boost_control.activation));
+ put_float(p.data()+8204,t.boost_control.maximum_map_kpa);
+ put_float(p.data()+8208,t.boost_control.cut_kpa);
+ put_float(p.data()+8212,t.boost_control.cut_hysteresis_kpa);
+ put_float(p.data()+8216,t.boost_control.recovery_ms);
+ put_float(p.data()+8220,t.boost_control.frequency_hz);
+ put_float(p.data()+8224,t.boost_control.control_period_ms);
+ put_float(p.data()+8228,t.boost_control.min_pct);
+ put_float(p.data()+8232,t.boost_control.max_pct);
+ put_float(p.data()+8236,t.boost_control.minimum_rpm);
+ put_float(p.data()+8240,t.boost_control.minimum_tps_pct);
+ put_float(p.data()+8244,t.boost_control.activation_kpa);
+ put_float(p.data()+8248,t.boost_control.activation_hysteresis_kpa);
+ put_float(p.data()+8252,t.boost_control.inactive_pct);
+ put_float(p.data()+8256,t.boost_control.kp);
+ put_float(p.data()+8260,t.boost_control.ki);
+ put_float(p.data()+8264,t.boost_control.kd);
+ put_float(p.data()+8268,t.boost_control.integral_limit_pct);
+ put_float(p.data()+8272,t.boost_control.derivative_filter_s);
+ put_float(p.data()+8276,t.boost_control.slew_pct_s);
+ for(unsigned i=0;i<8;++i){put_float(p.data()+8320+i*4,t.boost_control.open_duty.rpm[i]);put_float(p.data()+8352+i*4,t.boost_control.open_duty.axis[i]);}
+ for(unsigned i=0;i<64;++i)put_float(p.data()+8384+i*4,t.boost_control.open_duty.cells[i]);
+ for(unsigned i=0;i<8;++i){put_float(p.data()+8640+i*4,t.boost_control.target.rpm[i]);put_float(p.data()+8672+i*4,t.boost_control.target.axis[i]);}
+ for(unsigned i=0;i<64;++i)put_float(p.data()+8704+i*4,t.boost_control.target.cells[i]);
+ for(unsigned i=0;i<8;++i){put_float(p.data()+8960+i*4,t.boost_control.feedforward.rpm[i]);put_float(p.data()+8992+i*4,t.boost_control.feedforward.axis[i]);}
+ for(unsigned i=0;i<64;++i)put_float(p.data()+9024+i*4,t.boost_control.feedforward.cells[i]);
 }
 inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  if(!origin||get_u32(p.data()+268)!=origin)return false;
@@ -316,9 +344,37 @@ inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  for(unsigned i=0;i<6;++i)t.flex_fuel.correction.spark_deg[i]=get_float(p.data()+7896+i*4);
  for(unsigned i=0;i<6;++i)t.flex_fuel.correction.temperature_c[i]=get_float(p.data()+7920+i*4);
  for(unsigned i=0;i<6;++i)t.flex_fuel.correction.temperature_pct[i]=get_float(p.data()+7944+i*4);
+ const auto pressure_enabled=get_u32(p.data()+8192),boost_mode=get_u32(p.data()+8196),boost_activation=get_u32(p.data()+8200);
+ if(pressure_enabled>1||boost_mode>2||boost_activation>1)return false;
+ t.boost_control.pressure_enabled=pressure_enabled;t.boost_control.mode=boost::Mode(boost_mode);t.boost_control.activation=boost::Activation(boost_activation);
+ t.boost_control.maximum_map_kpa=get_float(p.data()+8204);
+ t.boost_control.cut_kpa=get_float(p.data()+8208);
+ t.boost_control.cut_hysteresis_kpa=get_float(p.data()+8212);
+ t.boost_control.recovery_ms=get_float(p.data()+8216);
+ t.boost_control.frequency_hz=get_float(p.data()+8220);
+ t.boost_control.control_period_ms=get_float(p.data()+8224);
+ t.boost_control.min_pct=get_float(p.data()+8228);
+ t.boost_control.max_pct=get_float(p.data()+8232);
+ t.boost_control.minimum_rpm=get_float(p.data()+8236);
+ t.boost_control.minimum_tps_pct=get_float(p.data()+8240);
+ t.boost_control.activation_kpa=get_float(p.data()+8244);
+ t.boost_control.activation_hysteresis_kpa=get_float(p.data()+8248);
+ t.boost_control.inactive_pct=get_float(p.data()+8252);
+ t.boost_control.kp=get_float(p.data()+8256);
+ t.boost_control.ki=get_float(p.data()+8260);
+ t.boost_control.kd=get_float(p.data()+8264);
+ t.boost_control.integral_limit_pct=get_float(p.data()+8268);
+ t.boost_control.derivative_filter_s=get_float(p.data()+8272);
+ t.boost_control.slew_pct_s=get_float(p.data()+8276);
+ for(unsigned i=0;i<8;++i){t.boost_control.open_duty.rpm[i]=get_float(p.data()+8320+i*4);t.boost_control.open_duty.axis[i]=get_float(p.data()+8352+i*4);}
+ for(unsigned i=0;i<64;++i)t.boost_control.open_duty.cells[i]=get_float(p.data()+8384+i*4);
+ for(unsigned i=0;i<8;++i){t.boost_control.target.rpm[i]=get_float(p.data()+8640+i*4);t.boost_control.target.axis[i]=get_float(p.data()+8672+i*4);}
+ for(unsigned i=0;i<64;++i)t.boost_control.target.cells[i]=get_float(p.data()+8704+i*4);
+ for(unsigned i=0;i<8;++i){t.boost_control.feedforward.rpm[i]=get_float(p.data()+8960+i*4);t.boost_control.feedforward.axis[i]=get_float(p.data()+8992+i*4);}
+ for(unsigned i=0;i<64;++i)t.boost_control.feedforward.cells[i]=get_float(p.data()+9024+i*4);
  return !engine::validate(t);
 }
-// Update only an owned, already canonical schema9 tree. No global data mutates.
+// Update only an owned, already canonical schema10 tree. No global data mutates.
 template<class Json> bool update_document(Json&j,const engine::Tune&t){
  if(!j.header(t.revision,engine::strategy_name(t.strategy)))return false;
  if(!j.number("engine","cylinders",t.cylinders))return false;
@@ -371,7 +427,7 @@ template<class Json> bool update_document(Json&j,const engine::Tune&t){
  if(!j.number("timing","cam_window_deg",t.cam_window_deg))return false;
  if(!j.array("timing","firing_order",t.firing_order)||!j.boolean("cylinder_trims","enabled",t.cylinder_trims_enabled)||!j.array("cylinder_trims","spark_deg",t.cylinder_spark_deg))return false;
  for(unsigned i=0;i<4;++i)if(!j.trim(i,t.cylinder_fuel[i]))return false;
- if(!j.idle(t.idle_control)||!j.transient_enrichment(t.transient_enrichment)||!j.load_model(t.load_model)||!j.secondary_tables(t.secondary_tables,t.secondary_ve,t.secondary_spark)||!j.flex_fuel(t.flex_fuel))return false;
+ if(!j.idle(t.idle_control)||!j.transient_enrichment(t.transient_enrichment)||!j.load_model(t.load_model)||!j.secondary_tables(t.secondary_tables,t.secondary_ve,t.secondary_spark)||!j.flex_fuel(t.flex_fuel)||!j.boost_control(t.boost_control))return false;
  return true;
 }
 } // namespace ecu::tuning

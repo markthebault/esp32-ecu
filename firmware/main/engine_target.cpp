@@ -4,6 +4,8 @@
 #include "ecu/engine_phase.hpp"
 #include "ecu/pins.hpp"
 #include "ecu/idle_command.hpp"
+#include "ecu/boost_command.hpp"
+#include "ecu/boost_pwm_json.hpp"
 #include "ecu/idle_pwm_json.hpp"
 #include "ecu/idle_hardware.hpp"
 #include "ecu/flex_hardware.hpp"
@@ -33,7 +35,12 @@ namespace ecu::engine_target {
 namespace {
 DRAM_ATTR timing::Executor executor;
 DRAM_ATTR idle::PwmExecutor idle_executor;
+DRAM_ATTR boost::PwmExecutor boost_executor;
+// Virtual execution only. The unrouted GPIO45 driver candidate is not allocated.
+struct BoostIO {ECU_ISR_CODE void all_low(){} ECU_ISR_CODE bool write(bool){return true;}};
+DRAM_ATTR BoostIO boost_output;
 ECU_ISR_CODE void idle_engine_stop();
+ECU_ISR_CODE void boost_engine_stop();
 struct IdleIO {bool physical_high=false;ECU_ISR_CODE void all_low();ECU_ISR_CODE bool write(bool high);};
 DRAM_ATTR IdleIO idle_output;
 DRAM_ATTR timing::CaptureClock capture_clock;
@@ -63,6 +70,7 @@ struct OutputIO {
 #endif
   physical_mask=0;
   idle_engine_stop();
+  boost_engine_stop();
  }
  ECU_ISR_CODE bool write(unsigned ch,bool high){
 #if ECU_ENGINE_DUMMY_LOADS
@@ -133,6 +141,14 @@ ECU_ISR_CODE void idle_engine_stop(){
  if(idle_executor.stats().active||idle_executor.stats().high)idle_executor.stop(now_locked(),idle::PwmCause::EngineFault,idle_output);
  else idle_output.all_low(); // Repeated already-low Stopped commands preserve supervised-zero continuity.
 }
+ECU_ISR_CODE void boost_engine_stop(){
+ if(boost_executor.stats().active||boost_executor.stats().high)boost_executor.stop(now_locked(),boost::PwmCause::EngineFault,boost_output);
+ else boost_output.all_low();
+}
+ECU_ISR_CODE void boost_fault(){
+ if(boost_executor.stats().fault!=boost::PwmCause::None&&executor.stats().fault==timing::Cause::None)
+  executor.trip(now_locked(),timing::Cause::BoostPwm,output);
+}
 ECU_ISR_CODE void idle_fault(){
  if(idle_executor.stats().fault!=idle::PwmCause::None&&executor.stats().fault==timing::Cause::None)
   executor.trip(now_locked(),timing::Cause::IdlePwm,output);
@@ -156,7 +172,7 @@ ECU_ISR_CODE void flex_progress(std::uint64_t now){
 void flex_fence(std::uint64_t now){flex_irq_off();flex_port.fence(now);flex_command_live=false;}
 #endif
 ECU_ISR_CODE void alarm_locked(){
- auto deadline=std::min(executor.next_alarm(),idle_executor.next_alarm());
+ auto deadline=std::min(std::min(executor.next_alarm(),idle_executor.next_alarm()),boost_executor.next_alarm());
 #if ECU_FLEX_G38_DRAFT
  if(flex_command_live)deadline=std::min(deadline,flex_command_ticket.valid_until_us+1);
 #endif
@@ -185,7 +201,7 @@ bool IRAM_ATTR on_alarm(gptimer_handle_t,const gptimer_alarm_event_data_t*,void*
 #if ECU_FLEX_G38_DRAFT
  flex_progress(now);
 #endif
- executor.dispatch(now,output);idle_executor.dispatch(now,idle_output);idle_fault();alarm_locked();
+ executor.dispatch(now,output);idle_executor.dispatch(now,idle_output);boost_executor.dispatch(now,boost_output);idle_fault();boost_fault();alarm_locked();
  portEXIT_CRITICAL_ISR(&lock);return false;
 }
 bool IRAM_ATTR on_capture(mcpwm_cap_channel_handle_t,const mcpwm_capture_event_data_t* event,void* context){
@@ -392,7 +408,8 @@ void run(void*){
   const bool healthy=decoder.synced()&&now>=latest.sampled_us&&now-latest.sampled_us<20000&&
    !(latest.output.faults&~std::uint32_t(engine::OverRev))&&executor.stats().fault==timing::Cause::None;
   output.supervise(healthy);
-  idle_executor.submit(idle::pwm_command(latest,executor.current_command(),now,executor.stats(),configuration_hold),now,idle_output);idle_fault();
+  idle_executor.submit(idle::pwm_command(latest,executor.current_command(),now,executor.stats(),configuration_hold),now,idle_output);
+  boost_executor.submit(boost::pwm_command(latest,executor.current_command(),now,executor.stats(),configuration_hold,decoder.synced()),now,boost_output);idle_fault();boost_fault();
   alarm_locked();portEXIT_CRITICAL(&lock);
  };
  for(;;){
@@ -466,7 +483,7 @@ void run(void*){
 #if ECU_FLEX_G38_DRAFT
   flex_progress(checked_now);
 #endif
-  executor.progress(checked_now,output);idle_executor.dispatch(checked_now,idle_output);idle_fault();trigger_capture.expire(checked_now);
+  executor.progress(checked_now,output);idle_executor.dispatch(checked_now,idle_output);boost_executor.dispatch(checked_now,boost_output);idle_fault();boost_fault();trigger_capture.expire(checked_now);
   measured.rpm=accepted_epoch==external_epoch&&!configuration_hold?rpm:0;
   measured.synced=accepted_epoch==external_epoch&&!configuration_hold&&decoder.crank_synced();
   measured.phase_synced=accepted_epoch==external_epoch&&!configuration_hold&&decoder.phase_synced();
@@ -534,7 +551,7 @@ void begin_configuration(){
 #if ECU_FLEX_G38_DRAFT
  flex_fence(now_locked());
 #endif
- executor.stop(now_locked(),timing::Cause::Configuration,output);idle_executor.configuration(now_locked(),idle_output);alarm_locked();portEXIT_CRITICAL(&lock);
+ executor.stop(now_locked(),timing::Cause::Configuration,output);idle_executor.configuration(now_locked(),idle_output);boost_executor.configuration(now_locked(),boost_output);alarm_locked();portEXIT_CRITICAL(&lock);
 }
 void finish_configuration(std::uint32_t tune_revision,std::uint32_t sensor_revision){
  portENTER_CRITICAL(&lock);
@@ -544,7 +561,7 @@ void finish_configuration(std::uint32_t tune_revision,std::uint32_t sensor_revis
 #if ECU_FLEX_G38_DRAFT
  flex_fence(now_locked());
 #endif
- executor.stop(now_locked(),timing::Cause::Configuration,output);idle_executor.configuration(now_locked(),idle_output);alarm_locked();portEXIT_CRITICAL(&lock);
+ executor.stop(now_locked(),timing::Cause::Configuration,output);idle_executor.configuration(now_locked(),idle_output);boost_executor.configuration(now_locked(),boost_output);alarm_locked();portEXIT_CRITICAL(&lock);
  xSemaphoreGive(configuration_mutex);
 }
 flex::CaptureWork flex_configure(const flex::CaptureRequest&r,bool valid,std::uint64_t stale_us){
@@ -651,6 +668,9 @@ cJSON* snapshot(){
  idle::PwmStats idle_stats;bool idle_high;portENTER_CRITICAL(&lock);idle_stats=idle_executor.stats();idle_high=idle_output.physical_high;portEXIT_CRITICAL(&lock);
  auto*idle_json=idle::pwm_json(idle_stats,ECU_IDLE_DUMMY_LOADS,idle_high);
  if(!idle_json||!cJSON_AddItemToObject(j,"idle_pwm",idle_json)){cJSON_Delete(idle_json);cJSON_Delete(j);return nullptr;}
+ boost::PwmStats boost_stats;portENTER_CRITICAL(&lock);boost_stats=boost_executor.stats();portEXIT_CRITICAL(&lock);
+ auto*boost_json=boost::pwm_json(boost_stats);
+ if(!boost_json||!cJSON_AddItemToObject(j,"boost_pwm",boost_json)){cJSON_Delete(boost_json);cJSON_Delete(j);return nullptr;}
  cJSON_AddStringToObject(j,"qualification","Source/native tests only; actual_us is dispatcher observation time. Per-pin edges, target jitter and electrical behavior are unmeasured");return j;
 }
 cJSON* trace_json(){

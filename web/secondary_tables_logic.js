@@ -4,7 +4,7 @@ window.EcuSecondaryTables=(()=>{
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const defaults=()=>structuredClone(m.defaults),expectedCells=mode=>mode==='multiply'?'multiplier':mode==='add'?'adder':'absolute';
  const range=(n,lo,hi)=>typeof n==='number'&&Number.isFinite(n)&&n>=lo&&n<=hi;
- function basis(t,kind){const r=t.secondary_tables[kind],i=axes.indexOf(r.axis);return {unit:units[i]||'unknown',axis:r.axis,matched:r.axis===axes[m.enums.source.indexOf(r.source)],min:i===0?5:0,max:i===0?110:i===1?100:600};}
+ function basis(t,kind){const r=t.secondary_tables[kind],i=axes.indexOf(r.axis);return {unit:units[i]||'unknown',axis:r.axis,matched:r.axis===axes[m.enums.source.indexOf(r.source)],min:i===0?5:0,max:i===0?(t.boost_control?.pressure_enabled?t.boost_control.maximum_map_kpa:110):i===1?100:600};}
  function cellUnit(kind,cells){return kind==='spark'&&cells!=='multiplier'?'deg':cells==='adder'?'percentage_points':'%';}
  function cellLimits(kind,cells){return kind==='fuel'||cells==='multiplier'?[0,255]:cells==='adder'?[-40,70]:[-5,40];}
  function constants(t){return kinds.flatMap(kind=>{const r=t.secondary_tables[kind];return [...m.enumFields.map(key=>({page:0,name:`secondary_${kind}_${key}`,value:r[key],secKind:kind,secKey:key,secEnum:true})),...m.scalars.map(key=>({page:0,name:`secondary_${kind}_${key}`,value:r[key],secKind:kind,secKey:key,unit:key==='debounce_ms'?'ms':m.conditionUnits[r.condition]})),{page:0,name:`secondary_${kind}_input_channel`,value:r.input_channel,secKind:kind,secKey:'input_channel'},{page:0,name:`secondary_${kind}_active_high`,value:r.active_high,secKind:kind,secKey:'active_high',secPolarity:true},...['rpm','load','cells'].map((field,i)=>({page:0,name:`secondary_${kind}_map${['Rpm','Load','Table'][i]}`,value:r.map[field],secKind:kind,secMap:true,field,unit:field==='rpm'?'RPM':field==='load'?m.axisUnits[r.axis]:m.cellUnits[kind][r.cells]}))];});}
@@ -15,7 +15,7 @@ window.EcuSecondaryTables=(()=>{
   for(const kind of kinds){const r=t.secondary_tables[kind];
    if(!r||Object.keys(r).sort().join('|')!==Object.keys(m.defaults[kind]).sort().join('|'))throw Error('Invalid secondary '+kind+' shape.');
    for(const key of m.enumFields)if(!m.enums[key].includes(r[key]))throw Error('Unknown secondary '+kind+' selection.');
-   if(!Number.isInteger(r.input_channel)||r.input_channel<0||r.input_channel>1||typeof r.active_high!=='boolean'||!range(r.debounce_ms,0,500)||!range(r.threshold,0,r.condition==='rpm'?10000:r.condition==='map_kpa'?110:100))throw Error('Secondary '+kind+': invalid threshold, debounce or input selection.');
+   if(!Number.isInteger(r.input_channel)||r.input_channel<0||r.input_channel>1||typeof r.active_high!=='boolean'||!range(r.debounce_ms,0,500)||!range(r.threshold,0,r.condition==='rpm'?10000:r.condition==='map_kpa'?(t.boost_control?.pressure_enabled?t.boost_control.maximum_map_kpa:110):100))throw Error('Secondary '+kind+': invalid threshold, debounce or input selection.');
    if(!basis(t,kind).matched)throw Error('Secondary '+kind+': review the load-axis basis before saving.');
    if(r.mode!=='off'&&r.cells!==expectedCells(r.mode))throw Error('Secondary '+kind+': review the cell meaning before saving.');
    if(r.mode!=='off'&&r.source==='imap_emap'&&t.load_model.aux_role!=='emap')throw Error('Secondary pressure ratio requires J16 assigned to calibrated EMAP.');
@@ -49,7 +49,7 @@ window.EcuSecondaryTables=(()=>{
   const inputTime=d.mode==='input'&&d.input_source_code!==0;
   if(inputTime?typeof d.input_observed_us!=='string'||!/^(0|[1-9][0-9]{0,19})$/.test(d.input_observed_us)||BigInt(d.input_observed_us)>18446744073709551615n:d.input_observed_us!==null)throw Error('Invalid secondary input time.');
   if(!d.available&&(m.boolFields.some(k=>d[k]!==Boolean(k==='active_high'))||Object.keys(codes).some(k=>d[k+'_code']!==0)||d.input_channel))throw Error('Unavailable secondary state is not canonical.');
-  if(d.available&&(!Number.isFinite(d.threshold)||!Number.isFinite(d.debounce_ms)||!range(Math.fround(d.threshold),0,d.condition==='rpm'?10000:d.condition==='map_kpa'?110:100)||!range(Math.fround(d.debounce_ms),0,500)))throw Error('Invalid secondary metadata.');
+  if(d.available&&(!Number.isFinite(d.threshold)||!Number.isFinite(d.debounce_ms)||!range(Math.fround(d.threshold),0,d.condition==='rpm'?10000:d.condition==='map_kpa'?400:100)||!range(Math.fround(d.debounce_ms),0,500)))throw Error('Invalid secondary metadata.');
   if(d.evaluated&&(!d.valid||!['primary','primary_corrected','combined'].every(k=>Number.isFinite(d[k]))||d.active&&!Number.isFinite(d.secondary))||d.valid&&d.axis_code!==d.source_code||d.input_qualified&&(!inputTime||!d.input_valid||!Number.isFinite(d.input_age_ms)||!range(Math.fround(d.input_age_ms),0,20)))throw Error('Invalid secondary evaluation state.');
  }
  function status(root,e){

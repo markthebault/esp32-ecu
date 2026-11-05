@@ -14,8 +14,8 @@ def sections(blob):
  e=struct.unpack_from('<16sHHIIIIIHHHHHH',blob);assert e[0][:5]==b'\x7fELF\x01'
  rows=[struct.unpack_from('<IIIIIIIIII',blob,e[6]+i*e[11]) for i in range(e[12])];s=rows[e[13]];names=blob[s[4]:s[4]+s[5]]
  return [(names[s[0]:].split(b'\0',1)[0].decode(),s) for s in rows]
-def audit(environment,output):
- output.mkdir(parents=True,exist_ok=True);build=ROOT/'firmware/.pio/build'/environment;elf=build/'firmware.elf';image=build/'firmware.bin';blob=elf.read_bytes();mapped=sections(blob)
+def audit(environment,output,build_root=None):
+ output.mkdir(parents=True,exist_ok=True);build=(build_root or ROOT/'firmware/.pio/build')/environment;elf=build/'firmware.elf';image=build/'firmware.bin';blob=elf.read_bytes();mapped=sections(blob)
  nm=subprocess.check_output([PREFIX+'nm','-n','-S','-C',str(elf)],text=True);relevant=[l for l in nm.splitlines() if 'engine_target' in l and any(k in l for k in ('::on_alarm(','::output_pins','engine_target::snapshot()'))]
  alarm=next(l for l in relevant if '::on_alarm(' in l);address,size,*_=alarm.split(maxsplit=3);start=int(address,16);end=start+int(size,16)
  dis=subprocess.check_output([PREFIX+'objdump','-d','-C','--start-address='+hex(start),'--stop-address='+hex(end),str(elf)],text=True)
@@ -40,4 +40,4 @@ def audit(environment,output):
  (output/'audit.json').write_text(json.dumps(report,indent=2)+'\n');return report
 
 if __name__=='__main__':
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('environment',choices=('compact_n16r8_web','compact_a3_web','compact_a3_timing_bench'));p.add_argument('output',type=Path);a=p.parse_args();print(json.dumps(audit(a.environment,a.output),indent=2))
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('environment',choices=('compact_n16r8_web','compact_n16r8_flex_dev','compact_a3_web','compact_a3_timing_bench'));p.add_argument('output',type=Path);p.add_argument('--build-root',type=Path);a=p.parse_args();print(json.dumps(audit(a.environment,a.output,a.build_root),indent=2))

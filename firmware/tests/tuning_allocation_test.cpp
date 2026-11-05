@@ -24,7 +24,7 @@ struct Store:Backend {
 static Reply command(Session&s,std::initializer_list<std::uint8_t>v){return s.command(v.begin(),v.size());}
 int main(){
  Store store;Session session(store);
- static_assert(sizeof(Session)<11*1024,"Resident tuning session exceeded its pre-secondary budget");
+ static_assert(sizeof(Session)<13*1024,"Resident tuning session exceeded its own011 page budget");
  fail_tune=true;assert(session.open()==Result::NoMemory);
  assert(!session.stats().initialized&&!session.stats().dirty&&session.stats().state==WriteState::Busy&&session.stats().last_code==0x85);
  assert(store.loads==0&&store.saves==0&&store.tune.revision==1);

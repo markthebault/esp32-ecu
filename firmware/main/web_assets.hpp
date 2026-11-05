@@ -2,7 +2,7 @@
 #pragma once
 namespace ecu::web::assets {
 inline constexpr char engine_defaults[]=R"ECU_ASSET({
-  "schema_version": 9,
+  "schema_version": 10,
   "revision": 1,
   "strategy": "batch_wasted_4cyl",
   "physical_outputs": "inhibited",
@@ -2010,6 +2010,294 @@ inline constexpr char engine_defaults[]=R"ECU_ASSET({
         100
       ]
     }
+  },
+  "boost_control": {
+    "pressure_enabled": false,
+    "mode": "off",
+    "activation": "barometric",
+    "maximum_map_kpa": 300,
+    "cut_kpa": 220,
+    "cut_hysteresis_kpa": 10,
+    "recovery_ms": 250,
+    "frequency_hz": 25,
+    "control_period_ms": 100,
+    "min_pct": 0,
+    "max_pct": 90,
+    "minimum_rpm": 800,
+    "minimum_tps_pct": 5,
+    "activation_kpa": 120,
+    "activation_hysteresis_kpa": 2,
+    "inactive_pct": 0,
+    "kp": 0.5,
+    "ki": 0.1,
+    "kd": 0,
+    "integral_limit_pct": 40,
+    "derivative_filter_s": 0.1,
+    "slew_pct_s": 100,
+    "open_duty": {
+      "rpm": [
+        500,
+        1000,
+        1500,
+        2000,
+        3000,
+        4000,
+        6000,
+        8000
+      ],
+      "axis": [
+        0,
+        5,
+        10,
+        20,
+        40,
+        60,
+        80,
+        100
+      ],
+      "cells": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "target": {
+      "rpm": [
+        500,
+        1000,
+        1500,
+        2000,
+        3000,
+        4000,
+        6000,
+        8000
+      ],
+      "axis": [
+        0,
+        5,
+        10,
+        20,
+        40,
+        60,
+        80,
+        100
+      ],
+      "cells": [
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150
+      ]
+    },
+    "feedforward": {
+      "rpm": [
+        500,
+        1000,
+        1500,
+        2000,
+        3000,
+        4000,
+        6000,
+        8000
+      ],
+      "axis": [
+        50,
+        75,
+        100,
+        125,
+        150,
+        200,
+        250,
+        300
+      ],
+      "cells": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
   }
 }
 )ECU_ASSET";
@@ -2759,6 +3047,7 @@ inline constexpr char index[]=R"ECU_ASSET(<!doctype html>
 <script src="/load_model.js"></script>
 <script src="/secondary_tables.js"></script>
 <script src="/flex_fuel.js"></script>
+<script src="/boost_control.js"></script>
 <script src="/engine_logger.js"></script>
 <script src="/cylinder_tuning.js"></script>
 <script src="/tuning_diagnostics.js"></script>
@@ -2820,12 +3109,12 @@ function renderDiagnostics(p){p.innerHTML=`<div class="metrics">${metric('ADC in
 
 
 
-const LEGACY_ENGINE_SIGNATURE='ESP32ECU SIL 001 INHIBITED',SEQUENTIAL_ENGINE_SIGNATURE='ESP32ECU SIL 002 INHIBITED',CYLINDER_ENGINE_SIGNATURE='ESP32ECU SIL 003 INHIBITED',WHOLE_ENGINE_SIGNATURE='ESP32ECU DEV 004 INHIBITED',IDLE_ENGINE_SIGNATURE='ESP32ECU DEV 005 INHIBITED',SEMI_ENGINE_SIGNATURE='ESP32ECU DEV 006 INHIBITED',TRANSIENT_ENGINE_SIGNATURE='ESP32ECU DEV 007 INHIBITED',LOAD_ENGINE_SIGNATURE='ESP32ECU DEV 008 INHIBITED',SECONDARY_ENGINE_SIGNATURE='ESP32ECU DEV 009 INHIBITED',ENGINE_SIGNATURE='ESP32ECU DEV 010 INHIBITED',MSQ_NS='http://www.msefi.com/:msq';
-function engineCapabilities(signature){const index=[LEGACY_ENGINE_SIGNATURE,SEQUENTIAL_ENGINE_SIGNATURE,CYLINDER_ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE,IDLE_ENGINE_SIGNATURE,SEMI_ENGINE_SIGNATURE,TRANSIENT_ENGINE_SIGNATURE,LOAD_ENGINE_SIGNATURE,SECONDARY_ENGINE_SIGNATURE,ENGINE_SIGNATURE].indexOf(signature);return {known:index>=0,legacy:index===0,sequential:index===1,whole:index>=3,idle:index>=4,semi:index>=5,transient:index>=6,model:index>=7,secondary:index>=8,flex:index>=9,pages:index<2?'4':index===2?'5':'1'};}
+const LEGACY_ENGINE_SIGNATURE='ESP32ECU SIL 001 INHIBITED',SEQUENTIAL_ENGINE_SIGNATURE='ESP32ECU SIL 002 INHIBITED',CYLINDER_ENGINE_SIGNATURE='ESP32ECU SIL 003 INHIBITED',WHOLE_ENGINE_SIGNATURE='ESP32ECU DEV 004 INHIBITED',IDLE_ENGINE_SIGNATURE='ESP32ECU DEV 005 INHIBITED',SEMI_ENGINE_SIGNATURE='ESP32ECU DEV 006 INHIBITED',TRANSIENT_ENGINE_SIGNATURE='ESP32ECU DEV 007 INHIBITED',LOAD_ENGINE_SIGNATURE='ESP32ECU DEV 008 INHIBITED',SECONDARY_ENGINE_SIGNATURE='ESP32ECU DEV 009 INHIBITED',FLEX_ENGINE_SIGNATURE='ESP32ECU DEV 010 INHIBITED',ENGINE_SIGNATURE='ESP32ECU DEV 011 INHIBITED',MSQ_NS='http://www.msefi.com/:msq';
+function engineCapabilities(signature){const index=[LEGACY_ENGINE_SIGNATURE,SEQUENTIAL_ENGINE_SIGNATURE,CYLINDER_ENGINE_SIGNATURE,WHOLE_ENGINE_SIGNATURE,IDLE_ENGINE_SIGNATURE,SEMI_ENGINE_SIGNATURE,TRANSIENT_ENGINE_SIGNATURE,LOAD_ENGINE_SIGNATURE,SECONDARY_ENGINE_SIGNATURE,FLEX_ENGINE_SIGNATURE,ENGINE_SIGNATURE].indexOf(signature);return {known:index>=0,legacy:index===0,sequential:index===1,whole:index>=3,idle:index>=4,semi:index>=5,transient:index>=6,model:index>=7,secondary:index>=8,flex:index>=9,boost:index>=10,pages:index<2?'4':index===2?'5':'1'};}
 const ENGINE_STRATEGIES=['batch_wasted_4cyl','sequential_4cyl','semi_sequential_4cyl'],ENGINE_STRATEGY_LABELS=['Batch / wasted','Sequential','Semi-sequential'];
 function engineStrategyCode(strategy){const n=ENGINE_STRATEGIES.indexOf(strategy);if(n<0)throw Error('Unknown engine strategy.');return n;}
 function engineTimingDefaults(){return {firing_order:[1,3,4,2],injection_end_deg:540,cam_sync_deg:450,cam_window_deg:20};}
-function engineConstants(t,legacy=false,sequential=false,whole=true,idle=true,transient=true,model=true,secondary=true,flex=true){
+function engineConstants(t,legacy=false,sequential=false,whole=true,idle=true,transient=true,model=true,secondary=true,flex=true,boost=true){
  const values=[{page:0,name:'baseRevision',value:t.revision}];
  for(const group of ['engine','settings'])for(const [name,value] of Object.entries(t[group]))values.push({page:0,name,value,flag:typeof value==='boolean',group});
  if(!legacy){values.push({page:0,name:'engineStrategy',value:engineStrategyCode(t.strategy),strategy:true});for(const key of ['injection_end_deg','cam_sync_deg','cam_window_deg'])values.push({page:0,name:key,value:t.timing[key],group:'timing'});t.timing.firing_order.forEach((value,i)=>values.push({page:0,name:'fireOrder'+(i+1),value,order:i}));}
@@ -2837,6 +3126,7 @@ function engineConstants(t,legacy=false,sequential=false,whole=true,idle=true,tr
  if(model&&whole&&!legacy&&!sequential)values.push(...window.EcuLoadModel.constants(t));
  if(secondary&&whole&&!legacy&&!sequential)values.push(...window.EcuSecondaryTables.constants(t));
  if(flex&&whole&&!legacy&&!sequential)values.push(...window.EcuFlexFuel.constants(t));
+ if(boost&&whole&&!legacy&&!sequential)values.push(...window.EcuBoostControl.constants(t));
  return whole&&!legacy&&!sequential?values.map(x=>({...x,page:0})):values;
 }
 function engineFieldUnits(name){
@@ -2844,17 +3134,17 @@ function engineFieldUnits(name){
  return special[name]??(name.includes('rpm')?'RPM':name.endsWith('_ms')?'ms':name.includes('deg')?'deg':name.endsWith('_s')?'s':name.endsWith('_c')?'C':'');
 }
 function engineToMsq(t){
- window.EcuLoadModel.validateTune(t);window.EcuSecondaryTables.validateTune(t);window.EcuFlexFuel.validateTune(t);
+ window.EcuLoadModel.validateTune(t);window.EcuSecondaryTables.validateTune(t);window.EcuFlexFuel.validateTune(t);window.EcuBoostControl.validateTune(t);
  const doc=document.implementation.createDocument(MSQ_NS,'msq'),root=doc.documentElement;
  function add(parent,name,attrs){const e=doc.createElementNS(MSQ_NS,name);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);parent.appendChild(e);return e;}
  add(root,'bibliography',{author:'ESP32ECU',tuneComment:'SHADOW ONLY; physical outputs inhibited; illustrative development tune'});
  add(root,'versionInfo',{fileFormat:'5.0',nPages:'1',signature:ENGINE_SIGNATURE});
- const ps=[8192].map((size,i)=>add(root,'page',{number:i,size}));
+ const ps=[12288].map((size,i)=>add(root,'page',{number:i,size}));
  for(const item of engineConstants(t)){
   const units=item.unit??(item.group?engineFieldUnits(item.name):item.field==='rpm'?'RPM':item.field==='load'?'source_units':item.field==='cells'?{ve:'%',spark:'deg',lambda:'lambda'}[item.map]:'');
   const attrs={name:item.name,units};if(Array.isArray(item.value)){attrs.rows=item.field==='cells'?(item.bins||16):item.value.length;attrs.cols=item.field==='cells'?(item.bins||16):1;}
   const e=add(ps[item.page],'constant',attrs);
-  e.textContent=item.secEnum?window.EcuSecondaryTables.enumText(item.secKey,item.value):item.secPolarity?(item.value?'"Active high"':'"Active low"'):item.loadEnum?window.EcuLoadModel.enumText(item.loadKey,item.value):item.aeMode?'"'+window.EcuTransientEnrichment.modeLabels[item.value]+'"':item.aeApply?'"'+window.EcuTransientEnrichment.applyLabels[item.value]+'"':item.idleAlgorithm?'"'+item.value+'"':item.strategy?'"'+ENGINE_STRATEGY_LABELS[item.value]+'"':item.flag?(item.value?'"On"':'"Off"'):Array.isArray(item.value)?'\n'+Array.from({length:attrs.rows},(_,i)=>item.value.slice(i*attrs.cols,(i+1)*attrs.cols).join(' ')).join('\n')+'\n':String(item.value);
+  e.textContent=item.boostEnum?'"'+item.value+'"':item.secEnum?window.EcuSecondaryTables.enumText(item.secKey,item.value):item.secPolarity?(item.value?'"Active high"':'"Active low"'):item.loadEnum?window.EcuLoadModel.enumText(item.loadKey,item.value):item.aeMode?'"'+window.EcuTransientEnrichment.modeLabels[item.value]+'"':item.aeApply?'"'+window.EcuTransientEnrichment.applyLabels[item.value]+'"':item.idleAlgorithm?'"'+item.value+'"':item.strategy?'"'+ENGINE_STRATEGY_LABELS[item.value]+'"':item.flag?(item.value?'"On"':'"Off"'):Array.isArray(item.value)?'\n'+Array.from({length:attrs.rows},(_,i)=>item.value.slice(i*attrs.cols,(i+1)*attrs.cols).join(' ')).join('\n')+'\n':String(item.value);
  }
  return '<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(doc)+'\n';
 }
@@ -2863,12 +3153,13 @@ function engineFromMsq(text,template){
  const doc=new DOMParser().parseFromString(text,'application/xml'),root=doc.documentElement,info=doc.getElementsByTagNameNS(MSQ_NS,'versionInfo')[0];
  const caps=engineCapabilities(info?.getAttribute('signature'));
  if(doc.getElementsByTagName('parsererror').length||root.localName!=='msq'||root.namespaceURI!==MSQ_NS||!info||!caps.known||info.getAttribute('nPages')!==caps.pages)throw Error('Use an MSQ for this ESP32ECU definition. Other ECU tunes are incompatible.');
- const legacy=caps.legacy,sequential=caps.sequential,ownCurrent=caps.secondary,hasFlex=caps.flex,hasLoad=caps.model,hasTransient=caps.transient,hasSemi=caps.semi,hasIdle=caps.idle,ownWhole=caps.whole,result=structuredClone(template);result.schema_version=9;result.flex_fuel=window.EcuFlexFuel.defaults();result.secondary_tables=window.EcuSecondaryTables.defaults();result.load_model=window.EcuLoadModel.defaults();result.transient_enrichment=window.EcuTransientEnrichment.defaults();result.idle_control=window.EcuIdleControl.defaults();if(legacy||sequential)result.cylinder_trims=window.EcuCylinderTuning.defaults();if(legacy){result.strategy='batch_wasted_4cyl';result.timing=engineTimingDefaults();}
- const expected=new Map(engineConstants(result,legacy,sequential,ownWhole,hasIdle,hasTransient,hasLoad,ownCurrent,hasFlex).map(x=>[x.name,x])),seen=new Set();
+ const legacy=caps.legacy,sequential=caps.sequential,ownCurrent=caps.secondary,hasFlex=caps.flex,hasBoost=caps.boost,hasLoad=caps.model,hasTransient=caps.transient,hasSemi=caps.semi,hasIdle=caps.idle,ownWhole=caps.whole,result=structuredClone(template);result.schema_version=10;result.boost_control=window.EcuBoostControl.defaults();result.flex_fuel=window.EcuFlexFuel.defaults();result.secondary_tables=window.EcuSecondaryTables.defaults();result.load_model=window.EcuLoadModel.defaults();result.transient_enrichment=window.EcuTransientEnrichment.defaults();result.idle_control=window.EcuIdleControl.defaults();if(legacy||sequential)result.cylinder_trims=window.EcuCylinderTuning.defaults();if(legacy){result.strategy='batch_wasted_4cyl';result.timing=engineTimingDefaults();}
+ const expected=new Map(engineConstants(result,legacy,sequential,ownWhole,hasIdle,hasTransient,hasLoad,ownCurrent,hasFlex,hasBoost).map(x=>[x.name,x])),seen=new Set();
  for(const e of doc.getElementsByTagNameNS(MSQ_NS,'constant')){
   const item=expected.get(e.getAttribute('name'));if(!item||seen.has(item.name)||e.parentNode.localName!=='page'||e.parentNode.getAttribute('number')!==String(item.page))throw Error('Unknown, duplicate or misplaced MSQ constant.');
   seen.add(item.name);const raw=e.textContent.trim();let value;
-  if(item.secEnum)value=window.EcuSecondaryTables.parseEnum(item.secKey,raw);
+  if(item.boostEnum){const list=window.EcuBoostMetadata[item.boostEnum];value=list.find(v=>'"'+v+'"'===raw)??list[Number(raw)];if(!list.includes(value)||!list.map((_,i)=>String(i)).includes(raw)&&!list.some(v=>'"'+v+'"'===raw))throw Error('Invalid boost selection.');}
+  else if(item.secEnum)value=window.EcuSecondaryTables.parseEnum(item.secKey,raw);
   else if(item.secPolarity){if(!['"Active high"','"Active low"','0','1'].includes(raw))throw Error('Invalid secondary polarity.');value=['"Active high"','1'].includes(raw);}
   else if(item.loadEnum)value=window.EcuLoadModel.parseEnum(item.loadKey,raw);
   else if(item.aeMode||item.aeApply){const labels=item.aeMode?window.EcuTransientEnrichment.modeLabels:window.EcuTransientEnrichment.applyLabels;const quoted=labels.map(x=>'"'+x+'"');value=quoted.includes(raw)?quoted.indexOf(raw):labels.map((_,i)=>String(i)).includes(raw)?Number(raw):-1;if(value<0)throw Error('Invalid transient selection.');}
@@ -2876,7 +3167,7 @@ function engineFromMsq(text,template){
   else if(item.strategy){const labels=hasSemi?ENGINE_STRATEGY_LABELS:ENGINE_STRATEGY_LABELS.slice(0,2),quoted=labels.map(x=>'"'+x+'"');value=quoted.includes(raw)?quoted.indexOf(raw):labels.map((_,i)=>String(i)).includes(raw)?Number(raw):-1;if(value<0)throw Error('Invalid MSQ strategy for its identity.');}
   else if(item.flag){if(!['"On"','"Off"','0','1'].includes(raw))throw Error('Invalid MSQ flag.');value=['"On"','1'].includes(raw);}
   else{const list=raw?raw.split(/\s+/).map(Number):[];if(list.some(x=>!Number.isFinite(x))||list.length!==(Array.isArray(item.value)?item.value.length:1))throw Error('MSQ value count or number invalid.');value=Array.isArray(item.value)?list:list[0];}
-  if(item.flexKey)window.EcuFlexFuel.apply(result,item,value);else if(item.secKind){if(item.secMap)result.secondary_tables[item.secKind].map[item.field]=value;else result.secondary_tables[item.secKind][item.secKey]=value;}else if(item.loadKey)result.load_model[item.loadKey]=value;else if(item.aeMode)result.transient_enrichment.mode=window.EcuTransientEnrichment.modes[value];else if(item.aeApply)result.transient_enrichment.apply=window.EcuTransientEnrichment.applies[value];else if(item.aeKey)result.transient_enrichment[item.aeKey]=value;else if(item.idleKey)result.idle_control[item.idleKey]=value;else if(item.trimFlag||item.trimSpark!==undefined||item.trimCylinder!==undefined)window.EcuCylinderTuning.apply(result,item,value);else if(item.name==='baseRevision')result.revision=value;else if(item.strategy)result.strategy=ENGINE_STRATEGIES[value];else if(item.order!==undefined)result.timing.firing_order[item.order]=value;else if(item.group)result[item.group][item.name]=value;else if(item.curve)result.curves[item.name]=value;else result.maps[item.map][item.field]=value;
+  if(item.boostKey)window.EcuBoostControl.apply(result,item,value);else if(item.flexKey)window.EcuFlexFuel.apply(result,item,value);else if(item.secKind){if(item.secMap)result.secondary_tables[item.secKind].map[item.field]=value;else result.secondary_tables[item.secKind][item.secKey]=value;}else if(item.loadKey)result.load_model[item.loadKey]=value;else if(item.aeMode)result.transient_enrichment.mode=window.EcuTransientEnrichment.modes[value];else if(item.aeApply)result.transient_enrichment.apply=window.EcuTransientEnrichment.applies[value];else if(item.aeKey)result.transient_enrichment[item.aeKey]=value;else if(item.idleKey)result.idle_control[item.idleKey]=value;else if(item.trimFlag||item.trimSpark!==undefined||item.trimCylinder!==undefined)window.EcuCylinderTuning.apply(result,item,value);else if(item.name==='baseRevision')result.revision=value;else if(item.strategy)result.strategy=ENGINE_STRATEGIES[value];else if(item.order!==undefined)result.timing.firing_order[item.order]=value;else if(item.group)result[item.group][item.name]=value;else if(item.curve)result.curves[item.name]=value;else result.maps[item.map][item.field]=value;
  }
  if(ownWhole&&!seen.has('baseRevision'))seen.add('baseRevision');
  if(seen.size!==expected.size)throw Error('Incomplete MSQ tune.');
@@ -2888,20 +3179,20 @@ function engineImportShape(value,template,path=""){
  if(path==='schema_version'&&value!==template)throw Error('Unsupported engine schema version.');
  if(typeof template==='number'){if(typeof value!=='number'||!Number.isFinite(value))throw Error('Engine import contains an invalid number.');return;}
  if(typeof template==='boolean'){if(typeof value!=='boolean')throw Error('Engine import contains an invalid flag.');return;}
- if(typeof template==='string'){if(path.startsWith('secondary_tables.')){const choices=window.EcuSecondaryTables.enums[path.split('.')[2]];if(!choices?.includes(value))throw Error('Unknown secondary selection.');return;}if(path.startsWith('load_model.')){const choices=window.EcuLoadModel.enums[path.slice(11)];if(!choices?.includes(value))throw Error('Unknown load-model selection.');return;}if(path==='idle_control.algorithm'){if(!window.EcuIdleControl.algorithms.includes(value))throw Error('Unknown idle algorithm.');return;}if(path==='transient_enrichment.mode'){if(!window.EcuTransientEnrichment.modes.includes(value))throw Error('Unknown transient mode.');return;}if(path==='transient_enrichment.apply'){if(!window.EcuTransientEnrichment.applies.includes(value))throw Error('Unknown transient application.');return;}if(path==='strategy'){if(!ENGINE_STRATEGIES.includes(value))throw Error('Unknown engine strategy.');return;}if(value!==template)throw Error('Engine tune identity or output inhibition changed.');return;}
+ if(typeof template==='string'){if(path==='boost_control.mode'||path==='boost_control.activation'){const list=path.endsWith('.mode')?window.EcuBoostMetadata.modes:window.EcuBoostMetadata.activations;if(!list.includes(value))throw Error('Unknown boost selection.');return;}if(path.startsWith('secondary_tables.')){const choices=window.EcuSecondaryTables.enums[path.split('.')[2]];if(!choices?.includes(value))throw Error('Unknown secondary selection.');return;}if(path.startsWith('load_model.')){const choices=window.EcuLoadModel.enums[path.slice(11)];if(!choices?.includes(value))throw Error('Unknown load-model selection.');return;}if(path==='idle_control.algorithm'){if(!window.EcuIdleControl.algorithms.includes(value))throw Error('Unknown idle algorithm.');return;}if(path==='transient_enrichment.mode'){if(!window.EcuTransientEnrichment.modes.includes(value))throw Error('Unknown transient mode.');return;}if(path==='transient_enrichment.apply'){if(!window.EcuTransientEnrichment.applies.includes(value))throw Error('Unknown transient application.');return;}if(path==='strategy'){if(!ENGINE_STRATEGIES.includes(value))throw Error('Unknown engine strategy.');return;}if(value!==template)throw Error('Engine tune identity or output inhibition changed.');return;}
  if(!value||typeof value!=='object'||Array.isArray(value)!==Array.isArray(template)||Object.keys(value).sort().join('|')!==Object.keys(template).sort().join('|'))throw Error('Engine tune schema or array size does not match.');
  for(const k of Object.keys(template))engineImportShape(value[k],template[k],path?path+'.'+k:k);
 }
 function legacyEngineFuelBounds(value){if(value.maps.ve.cells.some(v=>!Number.isFinite(v)||Math.fround(v)<20||Math.fround(v)>120))throw Error('Historical tune retains20..120 F32 fuel-coefficient bounds.');}
 function upgradeLegacyEngine(value,template){
- if(![1,2,3,4,5,6,7,8].includes(value?.schema_version))return value;
+ if(![1,2,3,4,5,6,7,8,9].includes(value?.schema_version))return value;
  if(!(value.schema_version>=5?ENGINE_STRATEGIES:['batch_wasted_4cyl','sequential_4cyl']).includes(value.strategy))throw Error('Legacy schema cannot represent semi-sequential mode.');
- const old=structuredClone(template);delete old.flex_fuel;if(value.schema_version<8)delete old.secondary_tables;if(value.schema_version<7)delete old.load_model;if(value.schema_version<6)delete old.transient_enrichment;if(value.schema_version<4)delete old.idle_control;old.schema_version=value.schema_version;
+ const old=structuredClone(template);delete old.boost_control;if(value.schema_version<9)delete old.flex_fuel;if(value.schema_version<8)delete old.secondary_tables;if(value.schema_version<7)delete old.load_model;if(value.schema_version<6)delete old.transient_enrichment;if(value.schema_version<4)delete old.idle_control;old.schema_version=value.schema_version;
  if(value.schema_version<3)delete old.cylinder_trims;
  if(value.schema_version===1){delete old.timing;old.strategy='batch_wasted_4cyl';}
  engineImportShape(value,old);if(value.schema_version===1&&value.strategy!=='batch_wasted_4cyl')throw Error('Legacy tune must use batch / wasted.');
  if(value.schema_version<7)legacyEngineFuelBounds(value);
- return {...value,schema_version:9,flex_fuel:window.EcuFlexFuel.defaults(),secondary_tables:value.schema_version<8?window.EcuSecondaryTables.defaults():value.secondary_tables,load_model:value.schema_version<7?window.EcuLoadModel.defaults():value.load_model,transient_enrichment:value.schema_version<6?window.EcuTransientEnrichment.defaults():value.transient_enrichment,settings:value.schema_version<4?{...value.settings,idle_enabled:false}:value.settings,timing:value.schema_version===1?engineTimingDefaults():value.timing,cylinder_trims:value.schema_version<3?window.EcuCylinderTuning.defaults():value.cylinder_trims,idle_control:value.schema_version<4?window.EcuIdleControl.defaults():value.idle_control};
+ return {...value,schema_version:10,boost_control:window.EcuBoostControl.defaults(),flex_fuel:value.schema_version<9?window.EcuFlexFuel.defaults():value.flex_fuel,secondary_tables:value.schema_version<8?window.EcuSecondaryTables.defaults():value.secondary_tables,load_model:value.schema_version<7?window.EcuLoadModel.defaults():value.load_model,transient_enrichment:value.schema_version<6?window.EcuTransientEnrichment.defaults():value.transient_enrichment,settings:value.schema_version<4?{...value.settings,idle_enabled:false}:value.settings,timing:value.schema_version===1?engineTimingDefaults():value.timing,cylinder_trims:value.schema_version<3?window.EcuCylinderTuning.defaults():value.cylinder_trims,idle_control:value.schema_version<4?window.EcuIdleControl.defaults():value.idle_control};
 }
 function engineCycleSummary(t){
  const node=$('#engine-cycle-summary');if(!node)return;
@@ -2927,7 +3218,7 @@ async function renderEngine(p){
  document.querySelectorAll('[data-eng-key]').forEach(i=>i.onchange=()=>{t[i.dataset.engGroup][i.dataset.engKey]=i.type==='checkbox'?i.checked:Number(i.value);engineDirty=true;set('engine-save-state','Unsaved engine tune');engineCycleSummary(t);});
  $('#engine-curves').onchange=e=>{try{t.curves=JSON.parse(e.target.value);engineDirty=true;set('engine-save-state','Unsaved engine tune')}catch(err){toast('Invalid curve JSON: '+err.message,true)}};
  $('#engine-map-kind').onchange=()=>drawEngineMap();
- $('#engine-save').onclick=async()=>{try{for(const i of p.querySelectorAll('[data-eng-key][type=number]'))if(!i.value.trim()||!Number.isFinite(Number(i.value)))throw Error('Engine settings: enter a finite value in every numeric field.');window.EcuIdleControl.validate($('#engine-idle-panel'));window.EcuTransientEnrichment.validate($('#engine-transient-panel'));window.EcuLoadModel.validate($('#engine-load-panel'),t);window.EcuSecondaryTables.validate($('#engine-secondary-panel'),t);window.EcuFlexFuel.validate($('#engine-flex-panel'),t);const curves=JSON.parse($('#engine-curves').value);t.curves=curves;engineTune=await api('/api/engine/config',{method:'PUT',body:JSON.stringify(t)});engineDirty=false;engineImportOrigin=undefined;toast('Engine tune validated and saved. Physical outputs remain inhibited.');renderEngine(p)}catch(e){toast(e.message,true)}};
+ $('#engine-save').onclick=async()=>{try{for(const i of p.querySelectorAll('[data-eng-key][type=number]'))if(!i.value.trim()||!Number.isFinite(Number(i.value)))throw Error('Engine settings: enter a finite value in every numeric field.');window.EcuIdleControl.validate($('#engine-idle-panel'));window.EcuTransientEnrichment.validate($('#engine-transient-panel'));window.EcuLoadModel.validate($('#engine-load-panel'),t);window.EcuSecondaryTables.validate($('#engine-secondary-panel'),t);window.EcuFlexFuel.validate($('#engine-flex-panel'),t);window.EcuBoostControl.validate($('#engine-boost-panel'),t);const curves=JSON.parse($('#engine-curves').value);t.curves=curves;engineTune=await api('/api/engine/config',{method:'PUT',body:JSON.stringify(t)});engineDirty=false;engineImportOrigin=undefined;toast('Engine tune validated and saved. Physical outputs remain inhibited.');renderEngine(p)}catch(e){toast(e.message,true)}};
  $('#engine-reload').onclick=async()=>{try{engineTune=await api('/api/engine/config');engineDirty=false;engineImportOrigin=undefined;renderEngine(p)}catch(e){toast(e.message,true)}};
  $('#engine-export').onclick=()=>download('ecu-shadow-engine-tune.json',t);
 
@@ -2954,6 +3245,7 @@ async function renderEngine(p){
  const loadPane=document.createElement('div');loadPane.id='engine-load-panel';p.append(loadPane);window.EcuLoadModel.attach(loadPane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune')},()=>{drawEngineMap();const c=$('#engine-cylinder-panel');if(c)window.EcuCylinderTuning.attach(c,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune');engineCycleSummary(t)},toast);});
  const flexPane=document.createElement('div');flexPane.id='engine-flex-panel';p.append(flexPane);window.EcuFlexFuel.attach(flexPane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune')});
  const secondaryPane=document.createElement('div');secondaryPane.id='engine-secondary-panel';p.append(secondaryPane);window.EcuSecondaryTables.attach(secondaryPane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune');drawEngineMap();},kind=>{$('#engine-map-kind').value='secondary_'+kind;drawEngineMap();});
+ const boostPane=document.createElement('div');boostPane.id='engine-boost-panel';p.append(boostPane);window.EcuBoostControl.attach(boostPane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune')},()=>{drawEngineMap();const c=$('#engine-cylinder-panel');if(c)window.EcuCylinderTuning.attach(c,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune');engineCycleSummary(t)},toast);});
  const aePane=document.createElement('div');aePane.id='engine-transient-panel';p.append(aePane);window.EcuTransientEnrichment.attach(aePane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune')});
  const cylinderPane=document.createElement('div');cylinderPane.id='engine-cylinder-panel';p.append(cylinderPane);window.EcuCylinderTuning.attach(cylinderPane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune');engineCycleSummary(t)},toast);
  const idlePane=document.createElement('div');idlePane.id='engine-idle-panel';p.append(idlePane);window.EcuIdleControl.attach(idlePane,t,()=>{engineDirty=true;set('engine-save-state','Unsaved engine tune')});
@@ -2963,7 +3255,7 @@ async function renderEngine(p){
  }catch(e){if(current==='engine')p.innerHTML='<section class="panel panelbody"><p>'+esc(e.message)+'</p></section>';}
 }
 function drawEngineMap(){const kind=$('#engine-map-kind').value,secondary=kind.startsWith('secondary_')?kind.slice(10):null,rule=secondary?engineTune.secondary_tables[secondary]:null,m=rule?rule.map:engineTune.maps[kind],basis=rule?window.EcuSecondaryTables.basis(engineTune,secondary):window.EcuLoadModel.basis(engineTune,kind),unit=esc(basis.unit),limits=rule?window.EcuSecondaryTables.cellLimits(secondary,rule.cells):kind==='ve'?[0,255]:kind==='spark'?[-5,40]:[.75,1.2];$('#engine-map').innerHTML=`<p class="hint ${basis.matched?'':'warn'}">Stored rows: ${unit}. ${rule?'Stored cells: '+esc(rule.cells)+' ('+esc(window.EcuSecondaryTables.cellUnit(secondary,rule.cells))+'). ':''}${basis.matched?'Basis matches selected source.':'Source differs; review and acknowledge in Load sources & fuel model.'}</p><div class="tablewrap"><table><thead><tr><th>${unit} / RPM</th>${m.rpm.map((x,i)=>`<th><input aria-label="RPM axis ${i+1}" data-axis="rpm" data-idx="${i}" type="number" style="width:64px" value="${x}"></th>`).join('')}</tr></thead><tbody>${m.load.map((load,y)=>`<tr><th><input aria-label="Load axis ${y+1} ${unit}" data-axis="load" data-idx="${y}" type="number" step="any" min="${basis.min}" max="${basis.max}" style="width:64px" value="${load}"></th>${m.rpm.map((rpm,x)=>`<td><input aria-label="${kind} at ${load} ${unit} ${rpm} RPM" data-cell="${y*16+x}" type="number" step="any" min="${limits[0]}" max="${limits[1]}" style="width:64px" value="${m.cells[y*16+x]}"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;document.querySelectorAll('[data-cell],[data-axis]').forEach(i=>i.onchange=()=>{const v=i.value.trim()?Number(i.value):NaN;if(i.dataset.axis)m[i.dataset.axis][Number(i.dataset.idx)]=v;else m.cells[Number(i.dataset.cell)]=v;engineDirty=true;set('engine-save-state','Unsaved engine tune');});}
-async function pollEngine(){clearTimeout(engineStatusTimer);if(current!=='engine')return;try{const e=await api('/api/engine/status');if(current!=='engine')return;window.EcuCylinderTuning?.status(document.querySelector('#page'),e.cylinders);window.EcuIdleControl?.status(document.querySelector('#page'),e);window.EcuTransientEnrichment?.status(document.querySelector('#page'),e);window.EcuLoadModel?.status(document.querySelector('#page'),e);window.EcuSecondaryTables?.status(document.querySelector('#page'),e);window.EcuFlexFuel?.status(document.querySelector('#page'),e);const fields=['active_strategy','state','faults','crank_synced','phase_synced','phase_required','phase_reason','phase_losses','cam_rejected','cam_error_deg','rpm','ve_pct','target_lambda','pulse_ms','advance_deg','dwell_ms','deadtime_ms','warmup','afterstart','accel','ego','duty_pct','idle_pct','timing_stop_reason','timing_stops','timing_recoveries'];$('#engine-live').innerHTML=fields.map(k=>`<div class="keyline"><span>${esc(k.replaceAll('_',' '))}</span><strong>${typeof e[k]==='number'?num(e[k],k==='faults'?0:2):esc(k==='phase_reason'&&e.phase_required===false?'not required for current strategy':e[k]??'--')}</strong></div>`).join('')+'<p class="hint">'+esc(e.binding||e.execution)+'</p>'+(!e.storage_ok?'<p class="warn" role="alert">'+esc(e.error||'Engine tune storage unavailable. Defaults may be active; inspect UART. Saves are blocked.')+'</p>':'')+'<p class="hint">'+esc(e.simulator?(e.last_run?'Completed SIL snapshot, '+Math.floor((e.sample_age_ms||0)/1000)+' seconds since completion.':'No SIL result yet.'):(e.fresh?'Fresh shadow sample.':'Shadow sample is stale.'))+'</p>';const timing=e.timing;const pane=$('#engine-timing');if(pane){if(!timing)pane.innerHTML='<p class="hint">Timing diagnostics are not available in this firmware.</p>';else{const rows=[['Mode',timing.mode],['Fault',timing.fault],['Last fault',timing.last_fault],['Angle plan reason',timing.angle_stop_reason],['Dispatched edges',timing.dispatched],['Virtual high mask',timing.virtual_high_mask],['Physical high mask',timing.physical_high_mask],['Capture clock uncertainty (µs)',timing.clock_uncertainty_us],['Maximum dispatch lateness (µs)',timing.max_lateness_us],['Maximum capture age (µs)',timing.max_capture_age_us],['Producer age (µs)',timing.producer_age_us],['Maximum coil dispatch high (µs)',timing.max_coil_high_us],['Trace records overwritten',timing.trace_overwritten]];pane.innerHTML=rows.map(([label,value])=>'<div class="keyline"><span>'+esc(label)+'</span><strong>'+esc(value??'--')+'</strong></div>').join('')+'<p class="hint">'+esc(timing.qualification||'')+'</p>';if(timing.fault&&timing.fault!=='none')pane.innerHTML+='<p class="warn" role="alert">Timing execution is inhibited: '+esc(timing.fault)+'</p>';}}if(e.last_run&&!engineRun)set('engine-run-result',JSON.stringify(e.last_run,null,2));}catch(e){if(current==='engine'){set('engine-live','Engine diagnostics offline: '+e.message);window.EcuFlexFuel?.offline(document.querySelector('#page'));}}finally{if(current==='engine')engineStatusTimer=setTimeout(pollEngine,500);}}
+async function pollEngine(){clearTimeout(engineStatusTimer);if(current!=='engine')return;try{const e=await api('/api/engine/status');if(current!=='engine')return;window.EcuCylinderTuning?.status(document.querySelector('#page'),e.cylinders);window.EcuIdleControl?.status(document.querySelector('#page'),e);window.EcuTransientEnrichment?.status(document.querySelector('#page'),e);window.EcuLoadModel?.status(document.querySelector('#page'),e);window.EcuSecondaryTables?.status(document.querySelector('#page'),e);window.EcuFlexFuel?.status(document.querySelector('#page'),e);window.EcuBoostControl?.status(document.querySelector('#page'),e);const fields=['active_strategy','state','faults','crank_synced','phase_synced','phase_required','phase_reason','phase_losses','cam_rejected','cam_error_deg','rpm','ve_pct','target_lambda','pulse_ms','advance_deg','dwell_ms','deadtime_ms','warmup','afterstart','accel','ego','duty_pct','idle_pct','timing_stop_reason','timing_stops','timing_recoveries'];$('#engine-live').innerHTML=fields.map(k=>`<div class="keyline"><span>${esc(k.replaceAll('_',' '))}</span><strong>${typeof e[k]==='number'?num(e[k],k==='faults'?0:2):esc(k==='phase_reason'&&e.phase_required===false?'not required for current strategy':e[k]??'--')}</strong></div>`).join('')+'<p class="hint">'+esc(e.binding||e.execution)+'</p>'+(!e.storage_ok?'<p class="warn" role="alert">'+esc(e.error||'Engine tune storage unavailable. Defaults may be active; inspect UART. Saves are blocked.')+'</p>':'')+'<p class="hint">'+esc(e.simulator?(e.last_run?'Completed SIL snapshot, '+Math.floor((e.sample_age_ms||0)/1000)+' seconds since completion.':'No SIL result yet.'):(e.fresh?'Fresh shadow sample.':'Shadow sample is stale.'))+'</p>';const timing=e.timing;const pane=$('#engine-timing');if(pane){if(!timing)pane.innerHTML='<p class="hint">Timing diagnostics are not available in this firmware.</p>';else{const rows=[['Mode',timing.mode],['Fault',timing.fault],['Last fault',timing.last_fault],['Angle plan reason',timing.angle_stop_reason],['Dispatched edges',timing.dispatched],['Virtual high mask',timing.virtual_high_mask],['Physical high mask',timing.physical_high_mask],['Capture clock uncertainty (µs)',timing.clock_uncertainty_us],['Maximum dispatch lateness (µs)',timing.max_lateness_us],['Maximum capture age (µs)',timing.max_capture_age_us],['Producer age (µs)',timing.producer_age_us],['Maximum coil dispatch high (µs)',timing.max_coil_high_us],['Trace records overwritten',timing.trace_overwritten]];pane.innerHTML=rows.map(([label,value])=>'<div class="keyline"><span>'+esc(label)+'</span><strong>'+esc(value??'--')+'</strong></div>').join('')+'<p class="hint">'+esc(timing.qualification||'')+'</p>';if(timing.fault&&timing.fault!=='none')pane.innerHTML+='<p class="warn" role="alert">Timing execution is inhibited: '+esc(timing.fault)+'</p>';}}if(e.last_run&&!engineRun)set('engine-run-result',JSON.stringify(e.last_run,null,2));}catch(e){if(current==='engine'){set('engine-live','Engine diagnostics offline: '+e.message);window.EcuFlexFuel?.offline(document.querySelector('#page'));window.EcuBoostControl?.offline(document.querySelector('#page'));}}finally{if(current==='engine')engineStatusTimer=setTimeout(pollEngine,500);}}
 
 function radioIndicatorText(r){
  const names={off:'off',green:'steady green',blue_blink:'blinking blue',red_blink:'blinking red'},colors={0:'off',1:'red',2:'green',4:'blue'};
@@ -3217,11 +3509,12 @@ window.EcuEngineLogger=(()=>{
   }
   for(const r of p.records){
    const s=r?.sample;
-   if(r.log_id!==identity.log_id||!uint(r.row_sequence)||r.row_sequence!==expected++||!u64(r.recorded_us)||!s||s.schema_version!==1||!s.available||!u64(s.sequence)||!u64(s.control_us)||!u64(s.sampled_us)||s.source_code!==p.source_code||!s.inputs||!s.proposals||!Array.isArray(s.raw_adc)||s.raw_adc.length!==8||!s.worker_observation||!u64(s.worker_observation.command_sequence))throw Error('Invalid or mixed engine row. Cursor unchanged.');
+   if(r.log_id!==identity.log_id||!uint(r.row_sequence)||r.row_sequence!==expected++||!u64(r.recorded_us)||!s||![1,2].includes(s.schema_version)||!s.available||!u64(s.sequence)||!u64(s.control_us)||!u64(s.sampled_us)||s.source_code!==p.source_code||!s.inputs||!s.proposals||!Array.isArray(s.raw_adc)||s.raw_adc.length!==8||!s.worker_observation||!u64(s.worker_observation.command_sequence))throw Error('Invalid or mixed engine row. Cursor unchanged.');
    const previous=staged.at(-1)||rows.at(-1);
    if(s.cylinders&&(!uint(s.cylinders.valid_mask)||s.cylinders.valid_mask>15||!Array.isArray(s.cylinders.proposals)||s.cylinders.proposals.length!==4))throw Error('Invalid cylinder observation.');
    if(s.idle&&(typeof s.idle.available!=='boolean'||!u64(s.idle.pid_updates)||!uint(s.idle.flags)||!uint(s.idle.state_code)||s.idle.state_code>10||!uint(s.idle.reason_code)||s.idle.reason_code>12||!uint(s.idle.algorithm_code)||s.idle.algorithm_code>2||IDLE_VALUES.some(k=>s.idle.available?!Number.isFinite(s.idle[k]):s.idle[k]!==null)))throw Error('Invalid idle observation.');
    if(s.secondary_tables!==undefined){if(!s.secondary_tables||Object.keys(s.secondary_tables).sort().join('|')!=='fuel|spark')throw Error('Invalid secondary observations.');for(const kind of ['fuel','spark'])window.EcuSecondaryTables.checkObservation(s.secondary_tables[kind],kind,s.available);}
+   if(s.boost_control!==undefined)window.EcuBoostControl.checkObservation(s.boost_control,s.available);else if(s.schema_version===2)throw Error('Missing boost observation.');
    if(s.flex_fuel!==undefined)window.EcuFlexFuel.checkObservation(s.flex_fuel,s.available);
    if(s.load_model!==undefined)window.EcuLoadModel.checkObservation(s.load_model,s.available);
    const ae=s.transient_enrichment;
@@ -3276,12 +3569,12 @@ window.EcuEngineLogger=(()=>{
  const number=value=>typeof value==='number'&&Number.isFinite(value)?String(Number(value.toPrecision(9))):'NaN';
  function exportMsl(){
   if(!meta||!rows.length)throw Error('No collected engine rows.');
-  const lines=['"ESP32ECU ENGINE LOG 007"',`"BROWSER COLLECTED ${meta.source_code===1?'TARGET OBSERVATIONS':'SYNTHETIC REPLAY'} / boot ${identity.boot_id} / log ${identity.log_id} / period_ms=${meta.period_ms} duration_s=${meta.duration_s} / overwritten=${meta.overwritten} missed_periods=${meta.missed_periods} repeated=${meta.repeated_skipped} invalid=${meta.invalid_skipped} / missing row ranges ${gaps.map(x=>x.join('..')).join(',')||'none'} / PhaseEpoch=configuration context; WorkerEpoch=executor generation / proposals and software command masks; no electrical execution measurement"`,
-   [...PREFIX,...INPUT_LABELS,...PROPOSAL_LABELS,...Array.from({length:8},(_,i)=>'ADC'+i),'CylinderValidMask','CylinderTrimsEnabled','CylinderCapacityMask','CylinderSparkClampMask','CylinderRetardFloorMask',...Array.from({length:4},(_,i)=>['PW','Advance','FuelTrim','Duty'].map(k=>'C'+(i+1)+k)).flat(),...IDLE_LABELS,...AE_LABELS,...LOAD_LABELS,...SEC_HEADERS,...window.EcuFlexFuel.logFields.map(x=>x[0])].join('\t'),[...UNITS,'bitfield','bool','bitfield','bitfield','bitfield',...Array(4).fill(['ms','deg','%','%']).flat(),'RPM','%','%','%','%','%','bitfield','code','code','code','count','bool',...AE_UNITS,...LOAD_UNITS,...SEC_UNITS,...window.EcuFlexFuel.logFields.map(x=>x[1])].join('\t')];
+  const lines=['"ESP32ECU ENGINE LOG 008"',`"BROWSER COLLECTED ${meta.source_code===1?'TARGET OBSERVATIONS':'SYNTHETIC REPLAY'} / boot ${identity.boot_id} / log ${identity.log_id} / period_ms=${meta.period_ms} duration_s=${meta.duration_s} / overwritten=${meta.overwritten} missed_periods=${meta.missed_periods} repeated=${meta.repeated_skipped} invalid=${meta.invalid_skipped} / missing row ranges ${gaps.map(x=>x.join('..')).join(',')||'none'} / PhaseEpoch=configuration context; WorkerEpoch=executor generation / proposals and software command masks; no electrical execution measurement"`,
+   [...PREFIX,...INPUT_LABELS,...PROPOSAL_LABELS,...Array.from({length:8},(_,i)=>'ADC'+i),'CylinderValidMask','CylinderTrimsEnabled','CylinderCapacityMask','CylinderSparkClampMask','CylinderRetardFloorMask',...Array.from({length:4},(_,i)=>['PW','Advance','FuelTrim','Duty'].map(k=>'C'+(i+1)+k)).flat(),...IDLE_LABELS,...AE_LABELS,...LOAD_LABELS,...SEC_HEADERS,...window.EcuFlexFuel.logFields.map(x=>x[0]),...window.EcuBoostControl.logFields.map(x=>x[0])].join('\t'),[...UNITS,'bitfield','bool','bitfield','bitfield','bitfield',...Array(4).fill(['ms','deg','%','%']).flat(),'RPM','%','%','%','%','%','bitfield','code','code','code','count','bool',...AE_UNITS,...LOAD_UNITS,...SEC_UNITS,...window.EcuFlexFuel.logFields.map(x=>x[1]),...window.EcuBoostControl.logFields.map(x=>x[1])].join('\t')];
   for(const r of rows){
    const s=r.sample,w=s.worker_observation,c=s.cylinders,ae=s.transient_enrichment,model=s.load_model;const extra=[c?.valid_mask||0,c?.enabled?1:0,c?.capacity_mask||0,c?.spark_clamp_mask||0,c?.retard_floor_mask||0,...Array.from({length:4},(_,i)=>['pulse_ms','advance_deg','fuel_pct','duty_pct'].map(k=>number(c?.valid_mask&(1<<i)?c.proposals[i][k]:null))).flat()];const elapsed=Number(BigInt(r.recorded_us)-BigInt(meta.started_us))/1e6;
    lines.push([elapsed.toFixed(6),r.row_sequence,s.sequence,number(s.control_age_ms),number(s.sample_age_ms),s.source_code,s.tune_revision,s.sensor_revision,s.phase_epoch,s.flags,s.controller_faults,s.state_code,s.strategy_code,s.phase_reason_code,s.phase_losses,s.cam_rejected,number(s.cam_error_deg),w.command_sequence,number(w.age_ms),w.epoch,w.tune_revision,w.sensor_revision,w.timing_fault_code,w.last_timing_fault_code,w.virtual_high_mask,w.physical_command_mask,s.board_flags,s.input_valid_mask,
-    ...INPUTS.map(k=>number(s.inputs[k])),...PROPOSALS.map(k=>number(s.proposals[k])),...s.raw_adc.map(number),...extra,...IDLE_VALUES.map(k=>number(s.idle?.available?s.idle[k]:null)),s.idle?.flags??0,s.idle?.state_code??0,s.idle?.reason_code??0,s.idle?.algorithm_code??0,s.idle?.pid_updates??'0',s.idle?.available?1:0,...AE_VALUES.map(k=>number(ae?.available?ae[k]:null)),ae?.flags??0,ae?.mode_code??0,ae?.apply_code??0,ae?.phase_code??0,ae?.reason_code??3,ae?.available?1:0,...LOAD_VALUES.map(k=>number(model?.available&&Number.isFinite(model[k])?Math.fround(model[k]):null)),...LOAD_CODES.map((k,i)=>model?.[k]??([5,8].includes(i)?1:i===10?255:0)),model?.available?1:0,...secondaryValues(s),...window.EcuFlexFuel.logValues(s)].join('\t'));
+    ...INPUTS.map(k=>number(s.inputs[k])),...PROPOSALS.map(k=>number(s.proposals[k])),...s.raw_adc.map(number),...extra,...IDLE_VALUES.map(k=>number(s.idle?.available?s.idle[k]:null)),s.idle?.flags??0,s.idle?.state_code??0,s.idle?.reason_code??0,s.idle?.algorithm_code??0,s.idle?.pid_updates??'0',s.idle?.available?1:0,...AE_VALUES.map(k=>number(ae?.available?ae[k]:null)),ae?.flags??0,ae?.mode_code??0,ae?.apply_code??0,ae?.phase_code??0,ae?.reason_code??3,ae?.available?1:0,...LOAD_VALUES.map(k=>number(model?.available&&Number.isFinite(model[k])?Math.fround(model[k]):null)),...LOAD_CODES.map((k,i)=>model?.[k]??([5,8].includes(i)?1:i===10?255:0)),model?.available?1:0,...secondaryValues(s),...window.EcuFlexFuel.logValues(s),...window.EcuBoostControl.logValues(s)].join('\t'));
   }
   return lines.join('\n')+'\n';
  }
@@ -3427,11 +3720,11 @@ window.EcuLoadModel=(()=>{
  const sourceNames=['map','tps','imap_emap'],axisNames=['map_kpa','tps_pct','imap_emap_pct'],units=['kPa','% TPS','% IMAP/EMAP'];
  const labels={fuel_source:'Primary fuel table input',spark_source:'Spark table input',lambda_source:'Lambda target table input',trim_source:'Cylinder trim table input',pressure:'Fuel pressure normalization',aux_role:'J16 input role',baro_source:'Barometric pressure source',afr:'AFR incorporation',fixed_baro_kpa:'Fixed absolute barometric pressure',afr_delay_s:'Measured-AFR running delay'};
  const groups={ve:['Fuel coefficient','fuel_source','ve_axis'],spark:['Spark','spark_source','spark_axis'],lambda:['Lambda target','lambda_source','lambda_axis'],trim:['All four cylinder trims','trim_source','trim_axis']};
- const reasons=['unavailable','ready','invalid_configuration','required_map_unavailable','required_tps_unavailable','required_emap_unavailable','required_baro_unavailable','known_map_above_na_limit'];
+ const reasons=['unavailable','ready','invalid_configuration','required_map_unavailable','required_tps_unavailable','required_emap_unavailable','required_baro_unavailable','known_map_above_na_limit','known_map_above_configured_pressure_limit'];
  const defaults=()=>structuredClone(m.defaults);
  const resolve=(c,key)=>c[key]==='follow_fuel'?c.fuel_source:c[key];
  const expectedAxis=(c,key)=>axisNames[sourceNames.indexOf(resolve(c,key))];
- function basis(t,kind){const g=groups[kind],i=axisNames.indexOf(t.load_model[g[2]]);return {unit:units[i]||'unknown',axis:axisNames[i],source:resolve(t.load_model,g[1]),matched:t.load_model[g[2]]===expectedAxis(t.load_model,g[1]),min:i===0?5:0,max:i===0?110:i===1?100:600};}
+ function basis(t,kind){const g=groups[kind],i=axisNames.indexOf(t.load_model[g[2]]);return {unit:units[i]||'unknown',axis:axisNames[i],source:resolve(t.load_model,g[1]),matched:t.load_model[g[2]]===expectedAxis(t.load_model,g[1]),min:i===0?5:0,max:i===0?(t.boost_control?.pressure_enabled?t.boost_control.maximum_map_kpa:110):i===1?100:600};}
  function constants(t){const c=t.load_model;return [...m.enumFields,...m.scalars].map(k=>({page:0,name:'load_'+k,value:c[k],loadKey:k,loadEnum:!!m.enums[k],unit:m.units[k]||''}));}
  function enumText(k,value){return '"'+m.labels[k][m.enums[k].indexOf(value)]+'"';}
  function parseEnum(k,raw){const list=m.enums[k],quoted=m.labels[k].map(v=>'"'+v+'"');let i=quoted.indexOf(raw);if(i<0)i=list.map((_,n)=>String(n)).indexOf(raw);if(i<0)throw Error('Invalid load-model selection.');return list[i];}
@@ -3447,7 +3740,7 @@ window.EcuLoadModel=(()=>{
  function attach(root,t,changed,redraw){
   const c=t.load_model;
   function select(k){return `<div class="field"><label for="load-${k}">${labels[k]}</label><select id="load-${k}">${m.enums[k].map((v,i)=>`<option value="${v}" ${c[k]===v?'selected':''}>${esc(m.labels[k][i])}</option>`).join('')}</select></div>`;}
-  root.innerHTML=`<section class="panel" style="margin-top:20px"><div class="panelhead"><h2>Load sources & fuel model</h2><span class="tag">DEVELOPMENT / OUTPUTS INHIBITED</span></div><div class="panelbody"><div class="formgrid">${['fuel_source','spark_source','lambda_source','trim_source','pressure','aux_role','baro_source','afr'].map(select).join('')}${m.scalars.map(k=>`<div class="field"><label for="load-${k}">${labels[k]} (${m.units[k]})</label><input id="load-${k}" type="number" step="any" required min="${m.limits[k][0]}" max="${m.limits[k][1]}" value="${c[k]}"></div>`).join('')}</div><p class="hint">Table coordinates and pressure multiplication are independent. TPS with normalization Off uses a fixed100 kPa modeled reference; it needs a TPS-based fuel calibration. MAP / baro changes that reference with altitude. IMAP / EMAP means100 × manifold absolute pressure / exhaust absolute pressure. Default MAP tables are illustrative and do not become a TPS tune by changing the selector.</p><div id="load-bases"></div><details><summary>J16 pressure wiring and debugging</summary><p class="hint">J16 is the existing POSTCAT input on ADC channel5, with connector pin 1 ground, pin 2 protected 5 V and pin 3 signal. It is not an unused input. Disconnect the postcat signal before assigning an absolute-pressure sensor. Do not parallel sensors. In Sensor calibration, set the postcat channel to a measured linear/table conversion in kPa and confirm it. The protected input loads the sensor by about55 kΩ; verify calibration against a pressure reference. EMAP accepts20..500 kPa absolute and live baro50..110 kPa. Keep an exhaust-pressure transducer within its temperature rating using suitable remote tubing; no exhaust/thermal qualification has been performed.</p><p class="hint">J16 can supply one pressure signal. EMAP plus live baro requires another input path, which is not implemented. Fixed baro is a manual value. No pre-crank MAP baro capture is inferred from zero RPM. Known calibrated MAP above 110 kPa still faults every mode. If a pure TPS configuration does not require MAP, an unavailable MAP stays unknown and its pressure guard is unavailable.</p></details><details><summary>AFR, zero fuel and test interpretation</summary><p class="hint">Off uses a stoichiometric fuel basis. Target divides the base fuel by target lambda, preserving the previous behavior. Measured applies measured lambda / target only after the running delay, with a ready wideband and outside cranking; otherwise its factor is neutral1. A fresh stopped/cranking observation restarts that delay. EGO remains a separate bounded correction. Zero ordinary fuel suppresses deadtime-only openings. An added reference dose can still supply fuel; its effective dose ratio is unknown when the base is zero. These are modeled proposals, not measured air or injector delivery. Secondary fuel/spark tables, boost control and a separate baro correction curve remain open.</p></details><div id="load-observation" class="fine" style="margin-top:16px">No load-model control observation.</div></div></section>`;
+  root.innerHTML=`<section class="panel" style="margin-top:20px"><div class="panelhead"><h2>Load sources & fuel model</h2><span class="tag">DEVELOPMENT / OUTPUTS INHIBITED</span></div><div class="panelbody"><div class="formgrid">${['fuel_source','spark_source','lambda_source','trim_source','pressure','aux_role','baro_source','afr'].map(select).join('')}${m.scalars.map(k=>`<div class="field"><label for="load-${k}">${labels[k]} (${m.units[k]})</label><input id="load-${k}" type="number" step="any" required min="${m.limits[k][0]}" max="${m.limits[k][1]}" value="${c[k]}"></div>`).join('')}</div><p class="hint">Table coordinates and pressure multiplication are independent. TPS with normalization Off uses a fixed100 kPa modeled reference; it needs a TPS-based fuel calibration. MAP / baro changes that reference with altitude. IMAP / EMAP means100 × manifold absolute pressure / exhaust absolute pressure. Default MAP tables are illustrative and do not become a TPS tune by changing the selector.</p><div id="load-bases"></div><details><summary>J16 pressure wiring and debugging</summary><p class="hint">J16 is the existing POSTCAT input on ADC channel5, with connector pin 1 ground, pin 2 protected 5 V and pin 3 signal. It is not an unused input. Disconnect the postcat signal before assigning an absolute-pressure sensor. Do not parallel sensors. In Sensor calibration, set the postcat channel to a measured linear/table conversion in kPa and confirm it. The protected input loads the sensor by about55 kΩ; verify calibration against a pressure reference. EMAP accepts20..500 kPa absolute and live baro50..110 kPa. Keep an exhaust-pressure transducer within its temperature rating using suitable remote tubing; no exhaust/thermal qualification has been performed.</p><p class="hint">J16 can supply one pressure signal. EMAP plus live baro requires another input path, which is not implemented. Fixed baro is a manual value. No pre-crank MAP baro capture is inferred from zero RPM. Known calibrated MAP above the active pressure ceiling faults every mode. The Boost & pressure protection section explicitly selects a boosted ceiling; its default keeps the 110 kPa guard. If a pure TPS configuration does not require MAP, an unavailable MAP stays unknown and its pressure guard is unavailable.</p></details><details><summary>AFR, zero fuel and test interpretation</summary><p class="hint">Off uses a stoichiometric fuel basis. Target divides the base fuel by target lambda, preserving the previous behavior. Measured applies measured lambda / target only after the running delay, with a ready wideband and outside cranking; otherwise its factor is neutral1. A fresh stopped/cranking observation restarts that delay. EGO remains a separate bounded correction. Zero ordinary fuel suppresses deadtime-only openings. An added reference dose can still supply fuel; its effective dose ratio is unknown when the base is zero. These are modeled proposals, not measured air or injector delivery. Secondary fuel/spark selection and boost pressure protection have separate development settings. A separate baro correction curve remains open.</p></details><div id="load-observation" class="fine" style="margin-top:16px">No load-model control observation.</div></div></section>`;
   function drawBases(){root.querySelector('#load-bases').innerHTML=Object.entries(groups).map(([k,[label,source,axis]])=>`<details ${basis(t,k).matched?'':'open'}><summary>${label}: stored ${esc(units[axisNames.indexOf(c[axis])])}; selected ${esc(units[axisNames.indexOf(expectedAxis(c,source))])}${basis(t,k).matched?'':' / basis acknowledgement required'}</summary><p class="hint">Changing the source keeps all existing table values. There is no general MAP-to-TPS conversion. Review the complete calibration. Replacing an axis keeps its cell values and requires retuning.</p><label class="check"><input id="load-ack-${k}" type="checkbox"><span>I reviewed the ${label.toLowerCase()} values for the selected units.</span></label><div class="actions" style="margin-top:10px"><button class="small" data-load-basis="${k}" data-load-action="use">Use edited axes in selected units</button><button class="small ghost" data-load-basis="${k}" data-load-action="initialize">Replace load axes with illustrative defaults</button></div><p class="hint" id="load-error-${k}" role="status"></p></details>`).join('');
    root.querySelectorAll('[data-load-basis]').forEach(b=>b.onclick=()=>{const k=b.dataset.loadBasis;if(!root.querySelector('#load-ack-'+k).checked){root.querySelector('#load-error-'+k).textContent='Acknowledge the calibration review first.';return;}
     const axis=expectedAxis(c,groups[k][1]),maps=k==='trim'?t.cylinder_trims.fuel_maps:[t.maps[k]];
@@ -3461,7 +3754,7 @@ window.EcuLoadModel=(()=>{
  function validate(root,t){for(const i of root.querySelectorAll('input[type=number]'))if(!i.value.trim()||!Number.isFinite(Number(i.value)))throw Error('Load model: enter a finite value in every numeric field.');validateTune(t);}
  function checkObservation(d,present=true){
   const u=(n,max)=>Number.isSafeInteger(n)&&n>=0&&n<=max,codeNames=['fuel_source','spark_source','lambda_source','trim_source','pressure','aux_role','baro_source','afr'];
-  if(!d||typeof d!=='object'||Array.isArray(d)||typeof d.available!=='boolean'||d.available&&!present||!u(d.flags,65535)||!u(d.reason_code,7)||d.reason!==reasons[d.reason_code])throw Error('Invalid load-model observation.');
+  if(!d||typeof d!=='object'||Array.isArray(d)||typeof d.available!=='boolean'||d.available&&!present||!u(d.flags,65535)||!u(d.reason_code,8)||d.reason!==reasons[d.reason_code])throw Error('Invalid load-model observation.');
   const allowed=[...m.values,'available','flags','reason','reason_code','afr_state','afr_state_code','meaning',...codeNames,...codeNames.map(k=>k+'_code')];
   if(Object.keys(d).some(k=>!allowed.includes(k)))throw Error('Unknown load-model observation field.');
   for(const k of codeNames){const list=k.endsWith('_source')&&k!=='baro_source'?sourceNames:m.enums[k];if(!u(d[k+'_code'],list.length-1)||d[k]!==list[d[k+'_code']])throw Error('Invalid load-model source.');}
@@ -3481,7 +3774,7 @@ window.EcuSecondaryTables=(()=>{
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const defaults=()=>structuredClone(m.defaults),expectedCells=mode=>mode==='multiply'?'multiplier':mode==='add'?'adder':'absolute';
  const range=(n,lo,hi)=>typeof n==='number'&&Number.isFinite(n)&&n>=lo&&n<=hi;
- function basis(t,kind){const r=t.secondary_tables[kind],i=axes.indexOf(r.axis);return {unit:units[i]||'unknown',axis:r.axis,matched:r.axis===axes[m.enums.source.indexOf(r.source)],min:i===0?5:0,max:i===0?110:i===1?100:600};}
+ function basis(t,kind){const r=t.secondary_tables[kind],i=axes.indexOf(r.axis);return {unit:units[i]||'unknown',axis:r.axis,matched:r.axis===axes[m.enums.source.indexOf(r.source)],min:i===0?5:0,max:i===0?(t.boost_control?.pressure_enabled?t.boost_control.maximum_map_kpa:110):i===1?100:600};}
  function cellUnit(kind,cells){return kind==='spark'&&cells!=='multiplier'?'deg':cells==='adder'?'percentage_points':'%';}
  function cellLimits(kind,cells){return kind==='fuel'||cells==='multiplier'?[0,255]:cells==='adder'?[-40,70]:[-5,40];}
  function constants(t){return kinds.flatMap(kind=>{const r=t.secondary_tables[kind];return [...m.enumFields.map(key=>({page:0,name:`secondary_${kind}_${key}`,value:r[key],secKind:kind,secKey:key,secEnum:true})),...m.scalars.map(key=>({page:0,name:`secondary_${kind}_${key}`,value:r[key],secKind:kind,secKey:key,unit:key==='debounce_ms'?'ms':m.conditionUnits[r.condition]})),{page:0,name:`secondary_${kind}_input_channel`,value:r.input_channel,secKind:kind,secKey:'input_channel'},{page:0,name:`secondary_${kind}_active_high`,value:r.active_high,secKind:kind,secKey:'active_high',secPolarity:true},...['rpm','load','cells'].map((field,i)=>({page:0,name:`secondary_${kind}_map${['Rpm','Load','Table'][i]}`,value:r.map[field],secKind:kind,secMap:true,field,unit:field==='rpm'?'RPM':field==='load'?m.axisUnits[r.axis]:m.cellUnits[kind][r.cells]}))];});}
@@ -3492,7 +3785,7 @@ window.EcuSecondaryTables=(()=>{
   for(const kind of kinds){const r=t.secondary_tables[kind];
    if(!r||Object.keys(r).sort().join('|')!==Object.keys(m.defaults[kind]).sort().join('|'))throw Error('Invalid secondary '+kind+' shape.');
    for(const key of m.enumFields)if(!m.enums[key].includes(r[key]))throw Error('Unknown secondary '+kind+' selection.');
-   if(!Number.isInteger(r.input_channel)||r.input_channel<0||r.input_channel>1||typeof r.active_high!=='boolean'||!range(r.debounce_ms,0,500)||!range(r.threshold,0,r.condition==='rpm'?10000:r.condition==='map_kpa'?110:100))throw Error('Secondary '+kind+': invalid threshold, debounce or input selection.');
+   if(!Number.isInteger(r.input_channel)||r.input_channel<0||r.input_channel>1||typeof r.active_high!=='boolean'||!range(r.debounce_ms,0,500)||!range(r.threshold,0,r.condition==='rpm'?10000:r.condition==='map_kpa'?(t.boost_control?.pressure_enabled?t.boost_control.maximum_map_kpa:110):100))throw Error('Secondary '+kind+': invalid threshold, debounce or input selection.');
    if(!basis(t,kind).matched)throw Error('Secondary '+kind+': review the load-axis basis before saving.');
    if(r.mode!=='off'&&r.cells!==expectedCells(r.mode))throw Error('Secondary '+kind+': review the cell meaning before saving.');
    if(r.mode!=='off'&&r.source==='imap_emap'&&t.load_model.aux_role!=='emap')throw Error('Secondary pressure ratio requires J16 assigned to calibrated EMAP.');
@@ -3526,7 +3819,7 @@ window.EcuSecondaryTables=(()=>{
   const inputTime=d.mode==='input'&&d.input_source_code!==0;
   if(inputTime?typeof d.input_observed_us!=='string'||!/^(0|[1-9][0-9]{0,19})$/.test(d.input_observed_us)||BigInt(d.input_observed_us)>18446744073709551615n:d.input_observed_us!==null)throw Error('Invalid secondary input time.');
   if(!d.available&&(m.boolFields.some(k=>d[k]!==Boolean(k==='active_high'))||Object.keys(codes).some(k=>d[k+'_code']!==0)||d.input_channel))throw Error('Unavailable secondary state is not canonical.');
-  if(d.available&&(!Number.isFinite(d.threshold)||!Number.isFinite(d.debounce_ms)||!range(Math.fround(d.threshold),0,d.condition==='rpm'?10000:d.condition==='map_kpa'?110:100)||!range(Math.fround(d.debounce_ms),0,500)))throw Error('Invalid secondary metadata.');
+  if(d.available&&(!Number.isFinite(d.threshold)||!Number.isFinite(d.debounce_ms)||!range(Math.fround(d.threshold),0,d.condition==='rpm'?10000:d.condition==='map_kpa'?400:100)||!range(Math.fround(d.debounce_ms),0,500)))throw Error('Invalid secondary metadata.');
   if(d.evaluated&&(!d.valid||!['primary','primary_corrected','combined'].every(k=>Number.isFinite(d[k]))||d.active&&!Number.isFinite(d.secondary))||d.valid&&d.axis_code!==d.source_code||d.input_qualified&&(!inputTime||!d.input_valid||!Number.isFinite(d.input_age_ms)||!range(Math.fround(d.input_age_ms),0,20)))throw Error('Invalid secondary evaluation state.');
  }
  function status(root,e){
@@ -3627,6 +3920,68 @@ window.EcuFlexFuel=(()=>{
   ].map(([k,v])=>`<div class="keyline"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join('');
  }
  return {defaults,constants,apply,attach,validate,validateTune,checkObservation,captureText,offline,status,logValues,logFields:m.logFields};
+})();
+)ECU_ASSET";
+inline constexpr char boost_js[]=R"ECU_ASSET(// Generated by scripts/generate_boost_ui.py
+window.EcuBoostMetadata={"defaults":{"pressure_enabled":false,"mode":"off","activation":"barometric","maximum_map_kpa":300,"cut_kpa":220,"cut_hysteresis_kpa":10,"recovery_ms":250,"frequency_hz":25,"control_period_ms":100,"min_pct":0,"max_pct":90,"minimum_rpm":800,"minimum_tps_pct":5,"activation_kpa":120,"activation_hysteresis_kpa":2,"inactive_pct":0,"kp":0.5,"ki":0.1,"kd":0,"integral_limit_pct":40,"derivative_filter_s":0.1,"slew_pct_s":100,"open_duty":{"rpm":[500,1000,1500,2000,3000,4000,6000,8000],"axis":[0,5,10,20,40,60,80,100],"cells":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"target":{"rpm":[500,1000,1500,2000,3000,4000,6000,8000],"axis":[0,5,10,20,40,60,80,100],"cells":[150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150]},"feedforward":{"rpm":[500,1000,1500,2000,3000,4000,6000,8000],"axis":[50,75,100,125,150,200,250,300],"cells":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}},"scalars":["maximum_map_kpa","cut_kpa","cut_hysteresis_kpa","recovery_ms","frequency_hz","control_period_ms","min_pct","max_pct","minimum_rpm","minimum_tps_pct","activation_kpa","activation_hysteresis_kpa","inactive_pct","kp","ki","kd","integral_limit_pct","derivative_filter_s","slew_pct_s"],"tables":["open_duty","target","feedforward"],"modes":["off","open_loop","closed_loop"],"activations":["barometric","fixed"],"limits":{"maximum_map_kpa":[110,400],"cut_kpa":[100,400],"cut_hysteresis_kpa":[1,50],"recovery_ms":[0,5000],"frequency_hz":[10,50],"control_period_ms":[20,250],"min_pct":[0,99],"max_pct":[1,100],"minimum_rpm":[500,4000],"minimum_tps_pct":[0,100],"activation_kpa":[50,400],"activation_hysteresis_kpa":[1,20],"inactive_pct":[0,100],"kp":[0,10],"ki":[0,10],"kd":[0,10],"integral_limit_pct":[0,100],"derivative_filter_s":[0,2],"slew_pct_s":[1,2000]},"units":{"maximum_map_kpa":"kPa absolute","cut_kpa":"kPa absolute","cut_hysteresis_kpa":"kPa","recovery_ms":"ms","frequency_hz":"Hz","control_period_ms":"ms","min_pct":"%","max_pct":"%","minimum_rpm":"RPM","minimum_tps_pct":"%","activation_kpa":"kPa absolute","activation_hysteresis_kpa":"kPa","inactive_pct":"%","kp":"%/kPa","ki":"%/(kPa*s)","kd":"%*s/kPa","integral_limit_pct":"%","derivative_filter_s":"s","slew_pct_s":"%/s"},"labels":{"maximum_map_kpa":"Confirmed MAP range ceiling","cut_kpa":"Overboost cut","cut_hysteresis_kpa":"Pressure recovery hysteresis","recovery_ms":"Pressure recovery observation time","frequency_hz":"Valve PWM frequency","control_period_ms":"PID update interval","min_pct":"Active minimum duty","max_pct":"Maximum duty","minimum_rpm":"Minimum running speed","minimum_tps_pct":"Minimum throttle","activation_kpa":"Fixed activation pressure","activation_hysteresis_kpa":"Activation hysteresis","inactive_pct":"Direct duty below activation","kp":"Proportional gain","ki":"Integral gain","kd":"Derivative gain","integral_limit_pct":"Integral limit","derivative_filter_s":"Derivative filter time","slew_pct_s":"Active duty slew limit"},"values":["duty_pct","demand_pct","target_kpa","feedforward_pct","error_kpa","p_term","i_term","d_term"],"reasons":["disabled","ready","invalid_configuration","control_clock","stale_input","map_unavailable","throttle_gate","baro_unavailable","stopped_or_below_rpm","cranking","engine_fault","overrun","below_activation","target_not_above_ambient","overboost","overboost_recovery","pressure_protection_only"]};
+/* Metadata is generated by scripts/generate_boost_ui.py. */
+window.EcuBoostControl=(()=>{
+ const m=window.EcuBoostMetadata,esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const defaults=()=>structuredClone(m.defaults),range=(v,a,b)=>typeof v==='number'&&Number.isFinite(v)&&Math.fround(v)>=a&&Math.fround(v)<=b;
+ const maxMap=t=>t.boost_control?.pressure_enabled?t.boost_control.maximum_map_kpa:110;
+ function shape(value,template){
+  if(typeof template==='number')return typeof value==='number'&&Number.isFinite(value);
+  if(template===null||typeof template!=='object')return typeof value===typeof template;
+  return value&&typeof value==='object'&&Array.isArray(value)===Array.isArray(template)&&Object.keys(value).sort().join('|')===Object.keys(template).sort().join('|')&&Object.keys(template).every(k=>shape(value[k],template[k]));
+ }
+ function validateTune(t){
+  const c=t.boost_control;if(!shape(c,m.defaults)||!m.modes.includes(c.mode)||!m.activations.includes(c.activation))throw Error('Invalid boost configuration shape or selection.');
+  for(const k of m.scalars)if(!range(c[k],...m.limits[k]))throw Error('Boost: '+m.labels[k]+' is outside its range.');
+  if(c.mode!=='off'&&!c.pressure_enabled)throw Error('Enable pressure protection before selecting a boost valve mode.');
+  if(c.cut_kpa>c.maximum_map_kpa||c.cut_kpa-c.cut_hysteresis_kpa<50||c.activation_kpa>c.cut_kpa||c.min_pct>=c.max_pct)throw Error('Boost pressure, activation, hysteresis or duty limits disagree.');
+  if(c.mode==='closed_loop'&&t.load_model.baro_source==='aux'&&t.load_model.aux_role!=='baro')throw Error('Closed-loop boost needs J16 assigned to the selected live barometric input.');
+  for(const name of m.tables){const grid=c[name],axisLo=name==='feedforward'?50:0,axisHi=name==='feedforward'?400:100;
+   if(grid.rpm.some((v,i)=>!range(v,100,10000)||i&&Math.fround(v)<=Math.fround(grid.rpm[i-1]))||grid.axis.some((v,i)=>!range(v,axisLo,axisHi)||i&&Math.fround(v)<=Math.fround(grid.axis[i-1]))||grid.cells.some(v=>!range(v,name==='target'?50:0,name==='target'?Math.fround(c.cut_kpa)-Math.fround(c.cut_hysteresis_kpa):100)))throw Error('Boost '+name+': axes must ascend and cells must respect pressure/duty limits.');
+  }
+ }
+ function constants(t){const c=t.boost_control,result=[{page:0,name:'boost_pressure_enabled',value:c.pressure_enabled,boostKey:'pressure_enabled',flag:true},{page:0,name:'boost_mode',value:c.mode,boostKey:'mode',boostEnum:'modes'},{page:0,name:'boost_activation',value:c.activation,boostKey:'activation',boostEnum:'activations'}];
+  for(const k of m.scalars)result.push({page:0,name:'boost_'+k,value:c[k],boostKey:k,unit:m.units[k]});
+  for(const name of m.tables)for(const key of ['rpm','axis','cells'])result.push({page:0,name:'boost_'+name+'_'+key,value:c[name][key],boostKey:key,boostTable:name,field:key,bins:8,unit:key==='rpm'?'RPM':key==='axis'?(name==='feedforward'?'kPa absolute':'% TPS'):name==='target'?'kPa absolute':'%'});
+  return result;
+ }
+ function apply(t,item,value){if(item.boostTable)t.boost_control[item.boostTable][item.boostKey]=value;else t.boost_control[item.boostKey]=value;}
+ function attach(root,t,changed,redraw){
+  const c=t.boost_control;
+  const select=(key,values)=>`<div class="field"><label for="boost-${key}">${key==='mode'?'Valve controller':'Closed-loop activation reference'}</label><select id="boost-${key}">${values.map(v=>`<option value="${v}" ${c[key]===v?'selected':''}>${esc(v.replaceAll('_',' '))}</option>`).join('')}</select></div>`;
+  root.innerHTML=`<section class="panel" style="margin-top:20px"><div class="panelhead"><h2>Boost & pressure protection</h2><span class="tag">DEVELOPMENT / OUTPUTS INHIBITED</span></div><div class="panelbody"><label class="check"><input id="boost-pressure_enabled" type="checkbox" ${c.pressure_enabled?'checked':''}><span>Use a confirmed boosted MAP calibration and enable pressure protection</span></label><p class="hint">Off retains the 110 kPa naturally aspirated pressure guard. Enabling protection makes MAP required and uses the configured MAP ceiling. Confirm the pressure sensor conversion and range in Sensor calibration, then review all fuel, spark, lambda and cylinder-trim axes. Existing cells and axes remain as entered. Pressure protection also works with valve mode Off.</p><p class="hint">Paired screens currently receive no engine stream from a boost-enabled pressure profile. The screen format needs an extension. Pairing and legacy sensor telemetry remain separate; no RF hardware qualification has been performed.</p><div class="formgrid">${select('mode',m.modes)}${select('activation',m.activations)}${m.scalars.map(k=>`<div class="field"><label for="boost-${k}">${esc(m.labels[k])} (${esc(m.units[k])})</label><input id="boost-${k}" type="number" step="any" required min="${m.limits[k][0]}" max="${m.limits[k][1]}" value="${c[k]}"></div>`).join('')}</div><details><summary>Valve wiring, pressure recovery and debugging</summary><p class="hint">The proposed driver is a separately powered protected low-side stage for a de-energized wastegate valve. Never connect a solenoid directly to an ESP32 GPIO. The J24/GPIO45 carrier extension is an unrouted hardware candidate and is not allocated by current firmware. Current PCB and enclosure releases do not provide this valve connection.</p><p class="hint">Duty is a proposal. A pressure above the cut latches fuel/spark inhibition and zero valve duty. Recovery needs continuous fresh MAP observations below cut minus hysteresis for the configured time. Stale/missing inputs or clock discontinuities reset that recovery interval. Closed loop uses the existing fixed baro or the selected confirmed J16 baro input. The direct duty below activation is explicit and defaults to zero. Greater duty must be verified to mean more boost with the intended valve plumbing.</p></details><div class="field"><label for="boost-table-kind">Boost table</label><select id="boost-table-kind"><option value="open_duty">Open-loop duty / throttle × RPM</option><option value="target">Closed-loop absolute target / throttle × RPM</option><option value="feedforward">Closed-loop feedforward duty / target pressure × RPM</option></select></div><div id="boost-table"></div><div id="boost-observation" class="fine" style="margin-top:16px">No boost control observation.</div></div></section>`;
+  function drawTable(){const name=root.querySelector('#boost-table-kind').value,grid=c[name],axisUnit=name==='feedforward'?'kPa absolute':'% TPS',cellUnit=name==='target'?'kPa absolute':'% duty';
+   root.querySelector('#boost-table').innerHTML=`<p class="hint">Rows: ${axisUnit}. Cells: ${cellUnit}. Target cells must stay at or below cut minus hysteresis. Table edges clamp; extending the MAP ceiling does not retune fuel or spark.</p><div class="tablewrap"><table><thead><tr><th>${axisUnit} / RPM</th>${grid.rpm.map((v,i)=>`<th><input aria-label="Boost ${name} RPM ${i+1}" data-boost-axis="rpm" data-index="${i}" type="number" min="100" max="10000" value="${v}" style="width:72px"></th>`).join('')}</tr></thead><tbody>${grid.axis.map((v,y)=>`<tr><th><input aria-label="Boost ${name} row ${y+1} ${axisUnit}" data-boost-axis="axis" data-index="${y}" type="number" step="any" min="${name==='feedforward'?50:0}" max="${name==='feedforward'?400:100}" value="${v}" style="width:72px"></th>${grid.rpm.map((_,x)=>`<td><input aria-label="Boost ${name} row ${y+1} column ${x+1} ${cellUnit}" data-boost-cell="${y*8+x}" type="number" step="any" min="${name==='target'?50:0}" max="${name==='target'?c.cut_kpa-c.cut_hysteresis_kpa:100}" value="${grid.cells[y*8+x]}" style="width:72px"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+   root.querySelectorAll('[data-boost-axis],[data-boost-cell]').forEach(i=>i.onchange=()=>{const v=i.value.trim()?Number(i.value):NaN;if(i.dataset.boostAxis)grid[i.dataset.boostAxis][Number(i.dataset.index)]=v;else grid.cells[Number(i.dataset.boostCell)]=v;changed();});
+  }
+  root.querySelector('#boost-table-kind').onchange=drawTable;
+  for(const k of ['pressure_enabled','mode','activation',...m.scalars])root.querySelector('#boost-'+k).onchange=e=>{c[k]=e.target.type==='checkbox'?e.target.checked:e.target.tagName==='SELECT'?e.target.value:e.target.value.trim()?Number(e.target.value):NaN;changed();if(['cut_kpa','cut_hysteresis_kpa'].includes(k))drawTable();if(['pressure_enabled','maximum_map_kpa'].includes(k))redraw?.();};
+  drawTable();
+ }
+ function validate(root,t){for(const i of root.querySelectorAll('input[type=number]'))if(!i.value.trim()||!Number.isFinite(Number(i.value)))throw Error('Boost: enter a finite value in every numeric field.');validateTune(t);}
+ const u64=v=>typeof v==='string'&&/^[0-9]{1,20}$/.test(v)&&BigInt(v)<=18446744073709551615n;
+ function checkObservation(d,present=true){
+  const uint=(v,max)=>Number.isSafeInteger(v)&&v>=0&&v<=max;
+  const allowed=[...m.values,'available','pressure_enabled','inhibit_engine','flags','reason_code','reason','mode_code','mode','meaning','pid_updates','overboost_events'];if(!d||Object.keys(d).some(k=>!allowed.includes(k)))throw Error('Unknown boost observation field.');
+  if(!d||typeof d.available!=='boolean'||typeof d.pressure_enabled!=='boolean'||typeof d.inhibit_engine!=='boolean'||d.available&&!present||!uint(d.flags,2047)||!uint(d.reason_code,16)||d.reason!==m.reasons[d.reason_code]||!uint(d.mode_code,2)||d.mode!==m.modes[d.mode_code]||d.mode_code&&!d.pressure_enabled||!u64(d.pid_updates)||!u64(d.overboost_events))throw Error('Invalid boost observation.');
+  if(m.values.some(k=>d.available?d[k]!==null&&(!Number.isFinite(d[k])||Math.abs(d[k])>3.4028234663852886e38):d[k]!==null))throw Error('Invalid boost observation value.');
+  if(!present&&(d.available||d.pressure_enabled||d.mode_code)||!d.available&&(d.flags||d.reason_code||d.inhibit_engine||BigInt(d.pid_updates)||BigInt(d.overboost_events)))throw Error('Unavailable boost observation carries a decision.');
+  if(d.available&&(!range(d.duty_pct,0,100)||!['demand_pct','p_term','i_term','d_term'].every(k=>Number.isFinite(d[k]))||Boolean(d.flags&1)!==d.pressure_enabled||d.inhibit_engine&&(d.duty_pct!==0||d.flags&4)))throw Error('Invalid boost decision.');
+ }
+ const logFields=[...m.values.map((k,i)=>['Boost'+['Duty','Demand','Target','Feedforward','Error','P','I','D'][i],['%','%','kPa','%','kPa','%','%','%'][i]]),['BoostFlags','bitfield'],['BoostReason','code'],['BoostMode','code'],['BoostAvailable','bool'],['BoostPressureEnabled','bool'],['BoostInhibitEngine','bool'],['BoostPidUpdates','count'],['BoostOverboostEvents','count']];
+ function logValues(sample){const d=sample.boost_control,known=Boolean(sample.available&&d?.available),number=v=>Number.isFinite(v)?String(Number(Math.fround(v).toPrecision(9))):'NaN';return [...m.values.map(k=>number(known?d[k]:NaN)),d?.flags??0,d?.reason_code??0,d?.mode_code??0,known?1:0,d?.pressure_enabled?1:0,d?.inhibit_engine?1:0,d?.pid_updates??'0',d?.overboost_events??'0'];}
+ function offline(root){const p=root.querySelector('#boost-observation');if(p)p.textContent='Boost diagnostics offline. The editor does not show a current control decision.';}
+ function status(root,e){const p=root.querySelector('#boost-observation');if(!p)return;const d=e?.data?.boost_control||e?.boost_control;if(!d){p.textContent='No boost observation in this firmware/sample.';return;}
+  // Compact proposals and dispatcher observations are separate clocked facts.
+  const known=d.available!==false,n=v=>Number.isFinite(v)?v.toFixed(3):'unknown';
+  p.innerHTML=`<p class="hint">${e.simulator?'SYNTHETIC control observation':'Target control observation'} / ${known?esc(d.reason):'unavailable'}. Proposal values do not certify valve execution.</p>`+[['Mode',d.mode??'see coherent sample'],['Pressure inhibition',d.inhibit_engine?'active':'inactive'],...m.values.map(k=>[k.replaceAll('_',' '),n(d[k])]),['PID updates',d.pid_updates],['Overboost events',d.overboost_events]].map(([k,v])=>`<div class="keyline"><span>${esc(k)}</span><strong>${esc(v??'unknown')}</strong></div>`).join('');
+  const worker=e?.timing?.boost_pwm||e?.boost_pwm;if(worker){p.innerHTML+='<p class="hint">Earlier dispatcher observation. '+esc(worker.qualification||'')+'</p>'+[['Active',worker.active],['Fault',worker.fault],['Last cause',worker.last_cause],['Latched period (µs)',worker.period_us],['Latched high time (µs)',worker.high_us],['Latched command sequence',worker.sequence],['Pending command sequence',worker.pending_sequence],['Observed time (µs)',worker.observed_us]].map(([k,v])=>`<div class="keyline"><span>${esc(k)}</span><strong>${esc(v??'unknown')}</strong></div>`).join('');}
+ }
+ return {defaults,maxMap,validateTune,constants,apply,attach,validate,checkObservation,logFields,logValues,status,offline};
 })();
 )ECU_ASSET";
 inline constexpr char tuning_js[]=R"ECU_ASSET(/* Read-only tuning transport observations. USB bus presence is not an app link. */

@@ -1,8 +1,45 @@
 {
-  "signature": "ESP32ECU DEV 010 INHIBITED",
+  "signature": "ESP32ECU DEV 011 INHIBITED",
   "pages": {
-    "1": 8192
+    "1": 12288
   },
+  "boost_scalar_offsets": {
+    "maximum_map_kpa": 8204,
+    "cut_kpa": 8208,
+    "cut_hysteresis_kpa": 8212,
+    "recovery_ms": 8216,
+    "frequency_hz": 8220,
+    "control_period_ms": 8224,
+    "min_pct": 8228,
+    "max_pct": 8232,
+    "minimum_rpm": 8236,
+    "minimum_tps_pct": 8240,
+    "activation_kpa": 8244,
+    "activation_hysteresis_kpa": 8248,
+    "inactive_pct": 8252,
+    "kp": 8256,
+    "ki": 8260,
+    "kd": 8264,
+    "integral_limit_pct": 8268,
+    "derivative_filter_s": 8272,
+    "slew_pct_s": 8276
+  },
+  "boost_table_offsets": {
+    "open_duty": 8320,
+    "target": 8640,
+    "feedforward": 8960
+  },
+  "boost_live_offset": 832,
+  "boost_values": [
+    "duty_pct",
+    "demand_pct",
+    "target_kpa",
+    "feedforward_pct",
+    "error_kpa",
+    "p_term",
+    "i_term",
+    "d_term"
+  ],
   "flex_config_offsets": {
     "enabled": 7808,
     "temperature_enabled": 7812,
@@ -474,7 +511,7 @@
     "target_lambda",
     "ego"
   ],
-  "live_block_bytes": 832,
+  "live_block_bytes": 1152,
   "timing_fields": [
     [
       "injection_end_deg",

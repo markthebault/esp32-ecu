@@ -14,7 +14,7 @@ enum class AuxRole:std::uint8_t {PostcatMonitor,Emap,Baro};
 enum class BaroSource:std::uint8_t {Fixed,Aux};
 enum class Afr:std::uint8_t {Off,Target,Measured};
 enum class AfrState:std::uint8_t {Off,Target,StartDelay,Cranking,WidebandUnavailable,Measured,InvalidTarget,ClockUnavailable};
-enum class Reason:std::uint8_t {Unavailable,Ready,InvalidConfig,RequiredMap,RequiredTps,RequiredEmap,RequiredBaro,KnownOverpressure};
+enum class Reason:std::uint8_t {Unavailable,Ready,InvalidConfig,RequiredMap,RequiredTps,RequiredEmap,RequiredBaro,KnownOverpressure,KnownBoostOverpressure};
 struct Config {
  Source fuel_source=Source::Map,spark_source=Source::Map,lambda_source=Source::FollowFuel,trim_source=Source::FollowFuel;
  Pressure pressure=Pressure::MapReference;AuxRole aux_role=AuxRole::PostcatMonitor;BaroSource baro_source=BaroSource::Fixed;
@@ -31,7 +31,7 @@ inline const char* aux_name(AuxRole r){switch(r){case AuxRole::PostcatMonitor:re
 inline const char* baro_name(BaroSource s){return s==BaroSource::Fixed?"fixed":s==BaroSource::Aux?"aux":"unknown";}
 inline const char* afr_name(Afr a){return a==Afr::Off?"off":a==Afr::Target?"target":a==Afr::Measured?"measured":"unknown";}
 inline const char* afr_state_name(AfrState s){switch(s){case AfrState::Off:return "off";case AfrState::Target:return "target_incorporation";case AfrState::StartDelay:return "running_delay";case AfrState::Cranking:return "cranking_neutral";case AfrState::WidebandUnavailable:return "wideband_unavailable";case AfrState::Measured:return "measured_ratio";case AfrState::InvalidTarget:return "invalid_target";case AfrState::ClockUnavailable:return "running_clock_unavailable";default:return "unknown";}}
-inline const char* reason_name(Reason r){switch(r){case Reason::Unavailable:return "unavailable";case Reason::Ready:return "ready";case Reason::InvalidConfig:return "invalid_configuration";case Reason::RequiredMap:return "required_map_unavailable";case Reason::RequiredTps:return "required_tps_unavailable";case Reason::RequiredEmap:return "required_emap_unavailable";case Reason::RequiredBaro:return "required_baro_unavailable";case Reason::KnownOverpressure:return "known_map_above_na_limit";default:return "unknown";}}
+inline const char* reason_name(Reason r){switch(r){case Reason::Unavailable:return "unavailable";case Reason::Ready:return "ready";case Reason::InvalidConfig:return "invalid_configuration";case Reason::RequiredMap:return "required_map_unavailable";case Reason::RequiredTps:return "required_tps_unavailable";case Reason::RequiredEmap:return "required_emap_unavailable";case Reason::RequiredBaro:return "required_baro_unavailable";case Reason::KnownOverpressure:return "known_map_above_na_limit";case Reason::KnownBoostOverpressure:return "known_map_above_configured_pressure_limit";default:return "unknown";}}
 struct Requirements {bool map=false,emap=false,baro=false;bool aux()const{return emap||baro;}};
 inline Requirements requirements(const Config&c,bool trims_enabled,bool map_transient=false,bool ego_enabled=false){
  Requirements r;r.map=c.pressure!=Pressure::None||map_transient;
@@ -47,7 +47,7 @@ inline bool valid(const Config&c,bool trims_enabled=false,bool ego_enabled=false
  return !(r.emap&&c.aux_role!=AuxRole::Emap)&&!(r.baro&&c.aux_role!=AuxRole::Baro);
 }
 inline double axis_min(Axis a){return a==Axis::MapKpa?5:0;}
-inline double axis_max(Axis a){return a==Axis::MapKpa?110:a==Axis::TpsPercent?100:600;}
+inline double axis_max(Axis a,double maximum_map_kpa=110){return a==Axis::MapKpa?maximum_map_kpa:a==Axis::TpsPercent?100:600;}
 enum Value:unsigned {FuelLoad,SparkLoad,LambdaLoad,TrimLoad,PressureFactor,BaroKpa,EmapKpa,AuxKpa,AfrFactor,value_count};
 inline constexpr const char*value_names[]={"fuel_load","spark_load","lambda_load","trim_load","pressure_factor","baro_kpa","emap_kpa","aux_kpa","afr_factor"};
 enum Flag:std::uint16_t {ArithmeticValid=1,MapRequired=2,AuxRequired=4,MapCalibrated=8,MapInRange=16,AuxCalibrated=32,AuxInRange=64,ManualBaro=128,PressureGuardAvailable=256,ZeroBaseFuel=512,AccelRatioUnavailable=1024,AfrWaiting=2048,MeasuredAfrActive=4096};
@@ -60,7 +60,7 @@ struct Observation {
  AfrState afr_state()const{return static_cast<AfrState>((flags>>afr_state_shift)&7);}
 };
 static_assert(sizeof(Observation)<=48,"Load observation exceeds its explicit RAM budget");
-struct Input {double map_kpa=NAN,tps_pct=NAN,aux_kpa=NAN;bool map_qualified=false,aux_qualified=false,trims_enabled=false,map_transient=false,ego_enabled=false,extra_map=false,extra_emap=false;};
+struct Input {double map_kpa=NAN,tps_pct=NAN,aux_kpa=NAN;bool map_qualified=false,aux_qualified=false,trims_enabled=false,map_transient=false,ego_enabled=false,extra_map=false,extra_emap=false;double maximum_map_kpa=110;};
 struct Evaluation {
  Observation observation;
  // Calculations retain double input precision; F32 diagnostics are not used
@@ -71,17 +71,17 @@ struct Evaluation {
 inline bool in_range(double v,double lo,double hi){return std::isfinite(v)&&v>=lo&&v<=hi;}
 inline Evaluation evaluate(const Config&c,const Input&i){
  Evaluation e;auto&o=e.observation;o.available=true;o.fuel=c.fuel_source;o.spark=c.spark_source;o.lambda=resolve(c.lambda_source,c);o.trim=resolve(c.trim_source,c);o.pressure=c.pressure;o.aux_role=c.aux_role;o.baro_source=c.baro_source;o.afr=c.afr;
- if(!valid(c,i.trims_enabled,i.ego_enabled)){o.reason=Reason::InvalidConfig;return e;}
+ if(!valid(c,i.trims_enabled,i.ego_enabled)||!in_range(i.maximum_map_kpa,110,400)){o.reason=Reason::InvalidConfig;return e;}
  auto needs=requirements(c,i.trims_enabled,i.map_transient,i.ego_enabled);
  needs.map|=i.extra_map||i.extra_emap;needs.emap|=i.extra_emap;
  if(needs.map)o.flags|=MapRequired;
  if(needs.aux())o.flags|=AuxRequired;
- const bool map_known=i.map_qualified&&std::isfinite(i.map_kpa),map_valid=map_known&&in_range(i.map_kpa,10,110),tps_valid=in_range(i.tps_pct,0,100);
+ const bool map_known=i.map_qualified&&std::isfinite(i.map_kpa),map_valid=map_known&&in_range(i.map_kpa,10,i.maximum_map_kpa),tps_valid=in_range(i.tps_pct,0,100);
  const bool aux_known=i.aux_qualified&&std::isfinite(i.aux_kpa)&&c.aux_role!=AuxRole::PostcatMonitor;
  const bool aux_valid=aux_known&&in_range(i.aux_kpa,c.aux_role==AuxRole::Emap?20:50,c.aux_role==AuxRole::Emap?500:110);
  if(map_known)o.flags|=MapCalibrated;
  if(map_valid)o.flags|=MapInRange;
- if(map_valid||(map_known&&i.map_kpa>110))o.flags|=PressureGuardAvailable;
+ if(map_valid||(map_known&&i.map_kpa>i.maximum_map_kpa))o.flags|=PressureGuardAvailable;
  if(aux_known){o.flags|=AuxCalibrated;o.values[AuxKpa]=static_cast<float>(i.aux_kpa);}if(aux_valid)o.flags|=AuxInRange;
  if(aux_valid&&c.aux_role==AuxRole::Emap)o.values[EmapKpa]=static_cast<float>(i.aux_kpa);
  double baro=NAN;
@@ -91,7 +91,7 @@ inline Evaluation evaluate(const Config&c,const Input&i){
   o.values[BaroKpa]=static_cast<float>(baro);
  }
  // Even optional MAP cannot hide a confirmed pressure above the NA limit.
- if(map_known&&i.map_kpa>110){o.reason=Reason::KnownOverpressure;return e;}
+ if(map_known&&i.map_kpa>i.maximum_map_kpa){o.reason=i.maximum_map_kpa==110?Reason::KnownOverpressure:Reason::KnownBoostOverpressure;return e;}
  if(needs.map&&!map_valid){o.reason=Reason::RequiredMap;return e;}
  if(needs.emap&&!(aux_valid&&c.aux_role==AuxRole::Emap)){o.reason=Reason::RequiredEmap;return e;}
  if(needs.baro&&!std::isfinite(baro)){o.reason=Reason::RequiredBaro;return e;}

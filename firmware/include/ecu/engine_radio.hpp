@@ -14,6 +14,8 @@ inline bool legacy_load_model(const engine::RuntimeSample&r){
  return !o.available||(o.fuel==load::Source::Map&&o.spark==load::Source::Map&&o.lambda==load::Source::Map&&o.trim==load::Source::Map&&o.pressure==load::Pressure::MapReference&&o.afr==load::Afr::Target&&o.aux_role==load::AuxRole::PostcatMonitor);
 }
 inline bool engine_schema_supports(std::uint32_t schema,const engine::RuntimeSample&r){
+ // Historical schemas have no boost pressure/valve decision block.
+ if(r.boost_control.pressure_enabled)return false;
  // Schemas1..4 have no flex quality/factor block. Suppress engine telemetry
  // when it affects control rather than publish an incomplete legacy frame.
  if(schema<5&&(r.flex_fuel.has(flex::Required)||r.flex_fuel.has(flex::CorrectionsEnabled)))return false;

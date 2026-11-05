@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Audit pinned ESP32-S3 ISR code/literal placement, including reachable helpers.
 
-Usage: python scripts/audit_target_isr.py firmware.elf output-directory
+Usage: python scripts/audit_target_isr.py firmware.elf output-directory [--require-boost]
 This does not measure latency or prove physical safety. Driver callback
 registration and runtime internal-heap allocation also require source review.
 """
@@ -49,7 +49,8 @@ def self_test():
  print('Assertion metadata classifier: 1 positive and 5 adversarial fixtures passed')
 
 if sys.argv[1:]==['--self-test']:self_test();raise SystemExit(0)
-if len(sys.argv)!=3:raise SystemExit(__doc__)
+if len(sys.argv) not in (3,4) or len(sys.argv)==4 and sys.argv[3]!='--require-boost':raise SystemExit(__doc__)
+require_boost=len(sys.argv)==4
 elf=Path(sys.argv[1]);out=Path(sys.argv[2]);out.mkdir(parents=True,exist_ok=True)
 objdump=str(Path.home()/'.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-objdump')
 nm=str(Path.home()/'.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-nm')
@@ -184,6 +185,8 @@ for line in syms.splitlines():
                     'ecu::engine_target::(anonymous namespace)::flex_command_live',
                     'ecu::engine_target::(anonymous namespace)::flex_channel_owned',
                     'ecu::engine_target::(anonymous namespace)::idle_executor',
+                    'ecu::engine_target::(anonymous namespace)::boost_executor',
+                    'ecu::engine_target::(anonymous namespace)::boost_output',
                     'ecu::engine_target::(anonymous namespace)::idle_output',
                     'ecu::engine_target::(anonymous namespace)::trigger_capture',
                     'ecu::engine_target::(anonymous namespace)::trigger_clock',
@@ -202,12 +205,13 @@ for line in syms.splitlines():
   data.append(dict(name=m[4],address=hex(address),section=section))
   if not section.startswith('.dram'):failures.append('ISR state outside internal DRAM: '+m[4])
 required_state={'executor','capture_clock','output','lock','external_epoch','installed_alarm','measured','configuration_hold','commands','captures','timer','cam_context','idle_executor','idle_output'}
+if require_boost:required_state|={'boost_executor'}
 if any('::on_trigger_capture(' in functions[a]['name'] for a in roots):required_state|={'trigger_capture','trigger_clock'}
 if any('::on_flex_capture(' in functions[a]['name'] for a in roots):required_state|={'flex_port','flex_command_ticket','flex_command_live','flex_channel_owned'}
 present={row['name'].split('::')[-1] for row in data}
 for missing in sorted(required_state-present):failures.append('Required ISR state symbol not found: '+missing)
 if 'flex_port' in present and not any('::on_flex_capture(' in functions[a]['name'] for a in roots):failures.append('Flex state present without registered callback root')
-report.update(passed_static_placement=not failures,failures=failures,data_symbols=data,floating_point_instructions=floating,
+report.update(boost_state_required=require_boost,passed_static_placement=not failures,failures=failures,data_symbols=data,floating_point_instructions=floating,
  qualification='Static placement assistance only; assertion-only metadata is separately classified, not hidden. Driver callback targets matched to source registration. Heap allocation, indirect data accesses and physical timing require separate review/evidence.')
 (out/'closure.json').write_text(json.dumps(report,indent=2)+'\n')
 print('Static placement checks:', 'PASS' if not failures else 'FAIL',failures)

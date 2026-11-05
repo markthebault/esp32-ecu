@@ -91,6 +91,7 @@ class Handler(BaseHTTPRequestHandler):
   if self.path in ('/','/index.html'):return self.reply(200,(R/'web/index.html').read_bytes(),'text/html; charset=utf-8')
   if self.path=='/trigger_logger.js':return self.reply(200,(R/'web/trigger_logger.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/cylinder_tuning.js':return self.reply(200,(R/'web/cylinder_tuning.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/boost_control.js':return self.reply(200,(R/'web/boost_control.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/flex_fuel.js':return self.reply(200,(R/'web/flex_fuel.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/secondary_tables.js':return self.reply(200,(R/'web/secondary_tables.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/load_model.js':return self.reply(200,(R/'web/load_model.js').read_bytes(),'application/javascript; charset=utf-8')

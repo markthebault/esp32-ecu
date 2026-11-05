@@ -9,8 +9,8 @@ from pathlib import Path
 R=Path(__file__).resolve().parents[1]
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 
-def audit(environment):
- root=R/'firmware';build=root/'.pio/build'/environment
+def audit(environment,build_root=None):
+ root=R/'firmware';build=(build_root or root/'.pio/build')/environment
  config=(root/('sdkconfig.'+environment)).read_text()
  commands=json.loads((build/'compile_commands.json').read_text())
  component=root/'components/esp_driver_usb_serial_jtag';metadata=json.loads((component/'upstream.json').read_text())
@@ -35,4 +35,4 @@ def audit(environment):
   qualification='Static ELF/config/source checks only. USB ISR can pause during flash work. Runtime stack/heap, boot/panic traffic, enumeration, driver RX drops, sustained load and physical timing remain unmeasured.')
 
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('environment');p.add_argument('output',type=Path);a=p.parse_args();r=audit(a.environment);a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(r,indent=2))
+ p=argparse.ArgumentParser();p.add_argument('environment');p.add_argument('output',type=Path);p.add_argument('--build-root',type=Path);a=p.parse_args();r=audit(a.environment,a.build_root);a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(r,indent=2))

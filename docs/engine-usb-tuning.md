@@ -18,7 +18,7 @@ The project-local pinned ESP-IDF USB component fixes one TX-ring allocation chec
 
 ## Layout and commits
 
-The controller signature is `ESP32ECU DEV 010 INHIBITED`. Raw and framed `F` return serial protocol `002`; `f` advertises protocol 2 with 256-byte data chunks. The MS-envelope uses a big-endian length and CRC32 around command payloads. Calibration and runtime values are little-endian. [Layout manifest](../tuning/protocol-layout.json) and [current INI](../tuning/esp32-ecu-flex.ini) match the shared generated codec.
+The current controller signature is `ESP32ECU DEV 011 INHIBITED`. The earlier own010 application results below remain historical; own011 application acceptance is unverified. Raw and framed `F` return serial protocol `002`; `f` advertises protocol 2 with 256-byte data chunks. The MS-envelope uses a big-endian length and CRC32 around command payloads. Calibration and runtime values are little-endian. [Layout manifest](../tuning/protocol-layout.json) and [current INI](../tuning/esp32-ecu-boost.ini) match the shared generated codec.
 
 | Page 1 region | Offset | Bytes |
 | --- | ---: | ---: |
@@ -105,3 +105,5 @@ Current [flex development integration](engine-flex-fuel.md) provides the own010/
 Both secondary rule panels and maps were edited in TunerStudio MS Lite3.3.01 offline. The resulting application file matches all8192 F32 page bytes, imports through the browser and retains explicit axis/cell/condition units. Initial real-app parser/unit issues were corrected before final acceptance. Own009 has not passed online vendor integration; [fresh application captures](engine-tuning-application.md) now verify the rejection directly. [Software integration checks](../reports/engine/secondary-integration/README.md) retain the actual offline application file, screenshots, logs, migration/allocation/CAS probes and three target builds; earlier packets stay unchanged.
 
 Flex correction or an ETH-dependent secondary rule currently inhibits target control because a protected target capture producer and matching input are not implemented. The confirmation flag cannot supply a missing observation. Current engine screen schemas1..4 suppress the engine frame when flex is required. See the [flex guide](engine-flex-fuel.md).
+
+Own011 appends boost controls and three8×8 tables after the retained8192-byte prefix. Its page is12288bytes, with1152-byte live observations and bounded256-byte incoming chunks. See [the boost integration contract](engine-boost-development.md); old INIs/layouts remain separate import records.

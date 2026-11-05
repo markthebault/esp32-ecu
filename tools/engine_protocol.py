@@ -1,4 +1,4 @@
-"""Own010 development protocol, shared with the inhibited target USB service.
+"""Own011 development protocol, shared with the inhibited target USB service.
 
 One complete calibration page avoids automatic cross-page burn transitions.
 Historical own001/002/003 INIs and own003 codec remain separate records.
@@ -10,7 +10,8 @@ from idle_config import ALGORITHMS,SCALARS,ARRAYS,SCALAR_OFFSETS,ARRAY_OFFSETS,U
 from transient_config import OFFSET as AE_OFFSET,USED_END as AE_USED_END,SCALARS as AE_SCALARS,ARRAYS as AE_ARRAYS,SCALAR_OFFSETS as AE_SCALAR_OFFSETS,ARRAY_OFFSETS as AE_ARRAY_OFFSETS,MODES,APPLIES,VALUE_NAMES
 from load_config import OFFSET as LOAD_OFFSET,USED_END as LOAD_USED_END,ENUM_FIELDS as LOAD_ENUM_FIELDS,SCALARS as LOAD_SCALARS,ENUM_OFFSETS as LOAD_ENUM_OFFSETS,SCALAR_OFFSETS as LOAD_SCALAR_OFFSETS,ENUMS as LOAD_ENUMS,VALUE_NAMES as LOAD_VALUE_NAMES
 from secondary_config import KINDS,ENUM_FIELDS as SEC_ENUM_FIELDS,SCALARS as SEC_SCALARS,ENUMS as SEC_ENUMS,OFFSET as SEC_OFFSET,CONTROL_END as SEC_CONTROL_END,MAP_OFFSETS as SEC_MAP_OFFSETS,USED_END as SEC_USED_END,VALUE_NAMES as SEC_VALUE_NAMES,CODE_FIELDS as SEC_CODE_FIELDS,enum_offset,scalar_offset,rule_offset
-from flex_config import PAGE_BYTES,LIVE_BYTES,OFFSET as FLEX_OFFSET,USED_END as FLEX_END,BOOLEANS as FLEX_BOOLS,CAPTURE_FLOATS as FLEX_FLOATS,ARRAYS as FLEX_ARRAYS,OFFSETS as FLEX_OFFSETS,get as flex_get,set_value as flex_set,DEFAULT as FLEX_DEFAULT,VALUES as FLEX_VALUES,FLAGS as FLEX_FLAGS,CODES as FLEX_CODES,TIMES as FLEX_TIMES
+from flex_config import OFFSET as FLEX_OFFSET,USED_END as FLEX_END,BOOLEANS as FLEX_BOOLS,CAPTURE_FLOATS as FLEX_FLOATS,ARRAYS as FLEX_ARRAYS,OFFSETS as FLEX_OFFSETS,get as flex_get,set_value as flex_set,DEFAULT as FLEX_DEFAULT,VALUES as FLEX_VALUES,FLAGS as FLEX_FLAGS,CODES as FLEX_CODES,TIMES as FLEX_TIMES
+from boost_config import PAGE_BYTES,LIVE_BYTES,OFFSET as BOOST_OFFSET,SCALARS as BOOST_SCALARS,SCALAR_OFFSETS as BOOST_SCALAR_OFFSETS,TABLES as BOOST_TABLES,TABLE_OFFSETS as BOOST_TABLE_OFFSETS,USED_END as BOOST_END,DEFAULT as BOOST_DEFAULT,MODES as BOOST_MODES,ACTIVATIONS as BOOST_ACTIVATIONS,VALUES as BOOST_VALUES
 import engine_protocol_legacy as legacy
 from engine_protocol_legacy import (NUMBERS,FLAGS,CURVES,REVISION_OFFSET,
  TIMING_FIELDS,LIVE_FIELDS,field_units as legacy_field_units,envelope,LEGACY_SIGNATURE,
@@ -25,7 +26,8 @@ SEMI_SIGNATURE=b'ESP32ECU DEV 006 INHIBITED'
 TRANSIENT_SIGNATURE=b'ESP32ECU DEV 007 INHIBITED'
 LOAD_SIGNATURE=b'ESP32ECU DEV 008 INHIBITED'
 SECONDARY_SIGNATURE=b'ESP32ECU DEV 009 INHIBITED'
-SIGNATURE=b'ESP32ECU DEV 010 INHIBITED'
+FLEX_SIGNATURE=b'ESP32ECU DEV 010 INHIBITED'
+SIGNATURE=b'ESP32ECU DEV 011 INHIBITED'
 STRATEGIES=legacy.STRATEGIES+('semi_sequential_4cyl',)
 STRATEGY_LABELS=('Batch / wasted','Sequential','Semi-sequential')
 VERSION=b'ESP32ECU development; staged whole-tune burn; outputs inhibited'
@@ -61,17 +63,22 @@ def pages(tune):
  struct.pack_into('<I',page,FLEX_OFFSETS['cycles'],flex['capture']['cycles'])
  for name in FLEX_FLOATS:struct.pack_into('<f',page,FLEX_OFFSETS[name],flex_get(flex,name))
  for name in FLEX_ARRAYS:struct.pack_into('<6f',page,FLEX_OFFSETS[name],*flex_get(flex,name))
+ boost=tune['boost_control']
+ struct.pack_into('<3I',page,BOOST_OFFSET,int(boost['pressure_enabled']),BOOST_MODES.index(boost['mode']),BOOST_ACTIVATIONS.index(boost['activation']))
+ for name in BOOST_SCALARS:struct.pack_into('<f',page,BOOST_SCALAR_OFFSETS[name],boost[name])
+ for name in BOOST_TABLES:
+  table=boost[name];struct.pack_into('<80f',page,BOOST_TABLE_OFFSETS[name],*table['rpm'],*table['axis'],*table['cells'])
  return {1:page}
 
 def decode_pages(buffers,base):
- if set(buffers)!={1} or len(buffers[1])!=PAGE_BYTES:raise ValueError('Own010 requires one complete 8192-byte page')
+ if set(buffers)!={1} or len(buffers[1])!=PAGE_BYTES:raise ValueError('Own011 requires one complete 12288-byte page')
  p=buffers[1]
- if any(p[292:512]) or any(p[4756:4768]) or any(p[IDLE_USED_END:AE_OFFSET]) or any(p[AE_USED_END:LOAD_OFFSET]) or any(p[LOAD_USED_END:SEC_OFFSET]) or any(p[SEC_CONTROL_END:SEC_MAP_OFFSETS['fuel']]) or any(p[SEC_USED_END:FLEX_OFFSET]) or any(p[FLEX_END:]):raise ValueError('Reserved tune bytes must be zero')
+ if any(p[292:512]) or any(p[4756:4768]) or any(p[IDLE_USED_END:AE_OFFSET]) or any(p[AE_USED_END:LOAD_OFFSET]) or any(p[LOAD_USED_END:SEC_OFFSET]) or any(p[SEC_CONTROL_END:SEC_MAP_OFFSETS['fuel']]) or any(p[SEC_USED_END:FLEX_OFFSET]) or any(p[FLEX_END:BOOST_OFFSET]) or any(p[BOOST_SCALAR_OFFSETS[BOOST_SCALARS[-1]]+4:BOOST_TABLE_OFFSETS['open_duty']]) or any(p[BOOST_END:]):raise ValueError('Reserved tune bytes must be zero')
  strategy=struct.unpack_from('<I',p,272)[0]
  if strategy>=len(STRATEGIES):raise ValueError('Unknown engine strategy')
  old={i:bytearray(p[offset:offset+legacy.PAGE_SIZES[i]]) for i,offset in PAGE_OFFSETS.items()}
  struct.pack_into('<I',old[1],272,strategy if strategy<len(legacy.STRATEGIES) else 0)
- candidate=legacy.decode_pages(old,base);candidate['schema_version']=9;candidate['strategy']=STRATEGIES[strategy];candidate['idle_control']=copy.deepcopy(DEFAULT['idle_control'])
+ candidate=legacy.decode_pages(old,base);candidate['schema_version']=10;candidate['strategy']=STRATEGIES[strategy];candidate['idle_control']=copy.deepcopy(DEFAULT['idle_control'])
  algorithm=struct.unpack_from('<I',p,4768)[0]
  if algorithm>=len(ALGORITHMS):raise ValueError('Unknown idle algorithm')
  candidate['idle_control']['algorithm']=ALGORITHMS[algorithm]
@@ -109,6 +116,13 @@ def decode_pages(buffers,base):
  flex['capture']['cycles']=struct.unpack_from('<I',p,FLEX_OFFSETS['cycles'])[0]
  for name in FLEX_FLOATS:flex_set(flex,name,struct.unpack_from('<f',p,FLEX_OFFSETS[name])[0])
  for name in FLEX_ARRAYS:flex_set(flex,name,list(struct.unpack_from('<6f',p,FLEX_OFFSETS[name])))
+ boost=candidate['boost_control']=copy.deepcopy(BOOST_DEFAULT)
+ enabled,mode,activation=struct.unpack_from('<3I',p,BOOST_OFFSET)
+ if enabled>1 or mode>=len(BOOST_MODES) or activation>=len(BOOST_ACTIVATIONS):raise ValueError('Invalid boost selection')
+ boost.update(pressure_enabled=bool(enabled),mode=BOOST_MODES[mode],activation=BOOST_ACTIVATIONS[activation])
+ for name in BOOST_SCALARS:boost[name]=struct.unpack_from('<f',p,BOOST_SCALAR_OFFSETS[name])[0]
+ for name in BOOST_TABLES:
+  values=struct.unpack_from('<80f',p,BOOST_TABLE_OFFSETS[name]);boost[name]=dict(rpm=list(values[:8]),axis=list(values[8:16]),cells=list(values[16:]))
  # Keep offline binary helpers under the same native whole-tune validator.
  from engine_runtime import EngineRuntime
  runtime=EngineRuntime(candidate);candidate=runtime.tune;runtime.close()
@@ -147,4 +161,9 @@ def live_block(store):
   times=[int(f.get(key,0)) for key in FLEX_TIMES] if known else [0]*7
   cal=f.get('capture_calibration',{}) if known else {}
   prefix+=struct.pack('<10f8I7Q6fI',*values,flags,*codes,*times,*[float(cal.get(key,0)) for key in FLEX_FLOATS],int(cal.get('cycles',0)))
+  prefix+=bytes(832-len(prefix))
+  boost=sample.get('boost_control',{}) if present else {};known=bool(boost.get('available'))
+  values=[float(boost[k]) if boost.get(k) is not None else float('nan') for k in BOOST_VALUES] if known else [float('nan')]*8
+  flags=int(boost.get('flags',0))|(65536 if known else 0)|(131072 if boost.get('pressure_enabled',False) else 0)|(262144 if boost.get('inhibit_engine',False) else 0)
+  prefix+=struct.pack('<8f4I2Q',*values,flags,int(boost.get('reason_code',0)),int(boost.get('mode_code',0)),0,int(boost.get('pid_updates',0)),int(boost.get('overboost_events',0)))
   return prefix+bytes(LIVE_BYTES-len(prefix))

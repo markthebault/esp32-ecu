@@ -20,7 +20,7 @@ class CylinderTests(unittest.TestCase):
    snapshot=with_runtime.data();self.assertEqual(snapshot['cylinders']['valid_mask'],15);self.assertTrue(snapshot['cylinders']['enabled'])
    recorder=EngineRecorder();self.assertEqual(recorder.command(dict(action='start',period_ms=20,duration_s=1),1000),200);self.assertTrue(recorder.append(snapshot,1000));recorder.command(dict(action='stop',log_id=1),2000)
    replay=recorder.page(1,0)['records'][0]['sample']['cylinders'];self.assertEqual(replay,snapshot['cylinders'])
-   rows=list(csv.reader(io.StringIO(recorder.msl(1)),delimiter='\t'));self.assertEqual(len(rows[2]),229);row=dict(zip(rows[2],rows[4]));self.assertEqual(float(row['C2FuelTrim']),120);self.assertAlmostEqual(float(row['C2PW']),c[1]['pulse_ms'],places=5);recorder.close()
+   rows=list(csv.reader(io.StringIO(recorder.msl(1)),delimiter='\t'));self.assertEqual(len(rows[2]),245);row=dict(zip(rows[2],rows[4]));self.assertEqual(float(row['C2FuelTrim']),120);self.assertAlmostEqual(float(row['C2PW']),c[1]['pulse_ms'],places=5);recorder.close()
   finally:with_runtime.close()
  def test_v1_and_v2_imports_reset_every_trim_without_rewriting_file(self):
   for schema in (1,2):
@@ -28,7 +28,7 @@ class CylinderTests(unittest.TestCase):
    if schema==1:old['schema_version']=1;del old['timing']
    with tempfile.TemporaryDirectory() as directory:
     path=Path(directory)/'tune.json';body=json.dumps(old).encode();path.write_bytes(body);store=EngineStore(path)
-    self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['revision'],31);self.assertEqual(store.tune['schema_version'],9)
+    self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['revision'],31);self.assertEqual(store.tune['schema_version'],10)
     self.assertFalse(store.tune['cylinder_trims']['enabled']);self.assertEqual(store.tune['cylinder_trims']['spark_deg'],[0]*4)
     self.assertTrue(all(m['cells']==[100]*36 for m in store.tune['cylinder_trims']['fuel_maps']))
  def test_legacy_near_limit_migrates_above16k_and_keeps_source(self):
@@ -44,7 +44,7 @@ class CylinderTests(unittest.TestCase):
  def test_004_msq_and_single_page_preserve_distinct_corners_and_cylinder_ids(self):
   self.tune['cylinder_trims']['fuel_maps'][1]['cells'][17]=113.25;self.tune['cylinder_trims']['spark_deg']=[1,-3,4,0]
   text=export_msq(self.tune);self.assertIn(SIGNATURE.decode(),text);decoded=import_msq(text);self.assertEqual(decoded,self.tune)
-  blocks=pages(decoded);self.assertEqual(len(blocks),1);self.assertEqual(len(blocks[1]),8192)
+  blocks=pages(decoded);self.assertEqual(len(blocks),1);self.assertEqual(len(blocks[1]),12288)
   self.assertEqual(struct.unpack_from('<f',blocks[1],3968+192+48+17*4)[0],113.25)
   self.assertEqual(struct.unpack_from('<4fI',blocks[1],4736),(1,-3,4,0,1))
   self.assertEqual(pages(decode_pages(blocks,decoded)),blocks)
@@ -52,7 +52,7 @@ class CylinderTests(unittest.TestCase):
   with self.assertRaises(ValueError):decode_pages(broken,decoded)
  def test_old_application_msqs_migrate_to_disabled_neutral(self):
   for filename in ('tunerstudio-roundtrip.msq','tunerstudio-sequential-roundtrip.msq'):
-   tune=import_msq((R/'tuning/examples'/filename).read_bytes());self.assertEqual(tune['schema_version'],9);self.assertFalse(tune['cylinder_trims']['enabled']);self.assertTrue(all(m['cells']==[100]*36 for m in tune['cylinder_trims']['fuel_maps']))
+   tune=import_msq((R/'tuning/examples'/filename).read_bytes());self.assertEqual(tune['schema_version'],10);self.assertFalse(tune['cylinder_trims']['enabled']);self.assertTrue(all(m['cells']==[100]*36 for m in tune['cylinder_trims']['fuel_maps']))
  def test_actual_tunerstudio003_saved_cylinder_cell_and_spark(self):
   tune=import_msq((R/'tuning/examples/tunerstudio-cylinder-roundtrip.msq').read_bytes())
   self.assertTrue(tune['cylinder_trims']['enabled']);self.assertEqual(tune['cylinder_trims']['spark_deg'],[0,-2.5,0,0])
@@ -64,7 +64,7 @@ class CylinderTests(unittest.TestCase):
    store=EngineStore(Path(directory)/'tune.json');session=Session(store);blocks=pages(self.tune)
    for offset in range(0,5120,256):
     body=bytes(blocks[1][offset:offset+256]);self.assertEqual(session.command(b'M'+struct.pack('<BBHH',0,1,offset,len(body))+body),b'\0')
-   self.assertEqual(session.command(b'b\0\1'),b'\4');self.assertTrue(store.tune['cylinder_trims']['enabled']);self.assertEqual(len(live_block(store)),832);self.assertEqual(struct.unpack_from('<I',live_block(store),52)[0],1)
+   self.assertEqual(session.command(b'b\0\1'),b'\4');self.assertTrue(store.tune['cylinder_trims']['enabled']);self.assertEqual(len(live_block(store)),1152);self.assertEqual(struct.unpack_from('<I',live_block(store),52)[0],1)
    revision=store.tune['revision'];self.assertEqual(session.command(b'b\0\1'),b'\4');self.assertEqual(store.tune['revision'],revision)
 
 if __name__=='__main__':unittest.main(verbosity=2)

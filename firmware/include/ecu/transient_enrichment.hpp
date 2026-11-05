@@ -68,7 +68,7 @@ struct Output {
  double correction()const{return values[CorrectionPct]/100.0;}
 };
 static_assert(sizeof(Output)<=40,"Transient diagnostic exceeds its explicit memory budget");
-struct Input {double tps_pct=0,map_kpa=0,rpm=0,clt_c=0;std::uint64_t sampled_us=0;bool eligible=false,allow_unknown_map=false;};
+struct Input {double tps_pct=0,map_kpa=0,rpm=0,clt_c=0;std::uint64_t sampled_us=0;bool eligible=false,allow_unknown_map=false;double maximum_map_kpa=110;};
 class Controller {
  Config config_;bool configured_=false,control_seen_=false,history_=false;
  std::uint64_t last_control_=0,last_sample_=0,anchor_sample_=0,expires_=0;
@@ -92,9 +92,9 @@ public:
  Output inhibit(const Config&c,Reason reason=Reason::Inhibited){clear(reason);control_seen_=false;return result(c,0);}
  Output step(const Config&c,const Input&i,std::uint64_t now){
   if(!configured_||!equal(c,config_)){clear(Reason::Priming);control_seen_=false;config_=c;configured_=true;}
-  const bool map_valid=std::isfinite(i.map_kpa)&&i.map_kpa>=10&&i.map_kpa<=110;
+  const bool map_valid=std::isfinite(i.map_kpa)&&i.map_kpa>=10&&i.map_kpa<=i.maximum_map_kpa;
   const bool map_optional=i.allow_unknown_map&&c.mode==Mode::TpsRate&&std::isnan(i.map_kpa);
-  if(!valid(c)||!i.eligible||!std::isfinite(i.tps_pct)||(!map_valid&&!map_optional)||!std::isfinite(i.rpm)||!std::isfinite(i.clt_c)||
+  if(!std::isfinite(i.maximum_map_kpa)||i.maximum_map_kpa<110||i.maximum_map_kpa>400||!valid(c)||!i.eligible||!std::isfinite(i.tps_pct)||(!map_valid&&!map_optional)||!std::isfinite(i.rpm)||!std::isfinite(i.clt_c)||
      i.tps_pct<0||i.tps_pct>100||i.rpm<0||i.rpm>12000||i.clt_c< -40||i.clt_c>140||now<i.sampled_us||now-i.sampled_us>20000)return inhibit(c);
   if(c.mode==Mode::Off||c.mode==Mode::LegacyTps)return inhibit(c,c.mode==Mode::Off?Reason::Disabled:Reason::Legacy);
   if(control_seen_&&now<=last_control_){clear(Reason::ControlClock);control_seen_=false;return result(c,now);}

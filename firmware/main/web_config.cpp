@@ -89,6 +89,7 @@ esp_err_t index_get(httpd_req_t*r){
 }
 esp_err_t trigger_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");httpd_resp_set_hdr(r,"Cache-Control","no-store");return httpd_resp_send(r,assets::trigger_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t tuning_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::tuning_js,HTTPD_RESP_USE_STRLEN);}
+esp_err_t boost_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::boost_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t flex_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::flex_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t secondary_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::secondary_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t load_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::load_js,HTTPD_RESP_USE_STRLEN);}
@@ -311,13 +312,13 @@ void service_task(){
  wifi.ap.ssid_len=std::strlen(reinterpret_cast<char*>(wifi.ap.ssid));wifi.ap.channel=6;wifi.ap.authmode=WIFI_AUTH_WPA2_PSK;wifi.ap.max_connection=2;wifi.ap.pmf_cfg.required=true;
  ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP,&wifi));ESP_ERROR_CHECK(esp_wifi_start());
  for(unsigned i=0;i<4;++i)std::snprintf(token+i*8,9,"%08lX",static_cast<unsigned long>(esp_random()));
- constexpr unsigned uri_capacity=41;httpd_config_t http=HTTPD_DEFAULT_CONFIG();http.stack_size=16384;http.max_uri_handlers=uri_capacity;http.lru_purge_enable=true;http.recv_wait_timeout=5;http.send_wait_timeout=5;
+ constexpr unsigned uri_capacity=42;httpd_config_t http=HTTPD_DEFAULT_CONFIG();http.stack_size=16384;http.max_uri_handlers=uri_capacity;http.lru_purge_enable=true;http.recv_wait_timeout=5;http.send_wait_timeout=5;
  httpd_handle_t server{};ESP_ERROR_CHECK(httpd_start(&server,&http));
  const httpd_uri_t routes[]={
   {"/api/engine/defaults",HTTP_GET,engine_defaults_get,nullptr},{"/api/engine/config",HTTP_GET,engine_config_get,nullptr},{"/api/engine/config",HTTP_PUT,engine_config_put,nullptr},{"/api/engine/status",HTTP_GET,engine_status_get,nullptr},
   {"/api/engine/timing",HTTP_GET,engine_timing_get,nullptr},
   {"/api/engine/sample",HTTP_GET,engine_sample_get,nullptr},
-  {"/api/engine/tuning",HTTP_GET,engine_tuning_get,nullptr},{"/tuning_diagnostics.js",HTTP_GET,tuning_script_get,nullptr},{"/idle_control.js",HTTP_GET,idle_script_get,nullptr},{"/transient_enrichment.js",HTTP_GET,transient_script_get,nullptr},{"/load_model.js",HTTP_GET,load_script_get,nullptr},{"/secondary_tables.js",HTTP_GET,secondary_script_get,nullptr},{"/flex_fuel.js",HTTP_GET,flex_script_get,nullptr},
+  {"/api/engine/tuning",HTTP_GET,engine_tuning_get,nullptr},{"/tuning_diagnostics.js",HTTP_GET,tuning_script_get,nullptr},{"/idle_control.js",HTTP_GET,idle_script_get,nullptr},{"/transient_enrichment.js",HTTP_GET,transient_script_get,nullptr},{"/load_model.js",HTTP_GET,load_script_get,nullptr},{"/secondary_tables.js",HTTP_GET,secondary_script_get,nullptr},{"/flex_fuel.js",HTTP_GET,flex_script_get,nullptr},{"/boost_control.js",HTTP_GET,boost_script_get,nullptr},
   {"/api/engine/data-log",HTTP_GET,engine_data_log_get,nullptr},{"/api/engine/data-log",HTTP_POST,engine_data_log_post,nullptr},
   {"/api/engine/data-log.msl",HTTP_GET,engine_data_log_msl_get,nullptr},{"/cylinder_tuning.js",HTTP_GET,cylinder_script_get,nullptr},{"/engine_logger.js",HTTP_GET,engine_log_script_get,nullptr},
   {"/api/engine/trigger-log",HTTP_GET,engine_trigger_get,nullptr},{"/api/engine/trigger-log",HTTP_POST,engine_trigger_post,nullptr},

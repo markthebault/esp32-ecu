@@ -117,7 +117,7 @@ def expected_stimulus(edges, queries):
 
 
 def msl_expected(frame, started_us):
-    """Explicit JSON/MSL007 contract, including unknown values and all229 fields."""
+    """Explicit version7/8 JSON/MSL contracts, including unknown values."""
     cols={}
     def put(label,value,unit):cols[label]=(value,unit)
     def group(obj,spec):
@@ -150,20 +150,26 @@ def msl_expected(frame, started_us):
     spec.extend((label,key,'us' if n<3 else 'count') for n,(label,key) in enumerate([('SampleUs','sample_us'),('WindowStartUs','window_start_us'),('LastEdgeUs','last_edge_us'),('RawEdges','raw_edges'),('FaultGeneration','fault_generation'),('AcknowledgedGeneration','acknowledged_generation'),('ConfigEpoch','config_epoch')]))
     spec.extend((label,key,'bool') for label,key in [('Required','required'),('ConfigurationMatch','configuration_match'),('ValueQualified','value_qualified'),('RawCaptureQualified','raw_capture_qualified'),('ControlOk','control_ok'),('CaptureValid','capture_valid'),('SampleValueValid','sample_value_valid'),('PendingFault','pending_fault'),('FrequencyClamped','frequency_clamped'),('TemperatureClamped','temperature_clamped'),('InputConfirmed','input_confirmed'),('CorrectionsEnabled','corrections_enabled'),('CorrectionsValid','corrections_valid'),('SparkBypassed','spark_bypassed'),('SparkClamped','spark_clamped'),('ZeroFactor','zero_factor'),('Available','available')])
     for label,key,u in spec:put('Flex'+label,flex[key],u)
-    if len(cols)!=229:raise ValueError('Incomplete MSL007 audit contract')
+    schema=frame.get('schema_version',1)
+    if schema not in (1,2):raise ValueError('Unsupported native MSL observation schema')
+    if schema==2:
+        b=frame['boost_control']
+        for label,key,unit in [('Duty','duty_pct','%'),('Demand','demand_pct','%'),('Target','target_kpa','kPa'),('Feedforward','feedforward_pct','%'),('Error','error_kpa','kPa'),('P','p_term','%'),('I','i_term','%'),('D','d_term','%'),('Flags','flags','bitfield'),('Reason','reason_code','code'),('Mode','mode_code','code'),('Available','available','bool'),('PressureEnabled','pressure_enabled','bool'),('InhibitEngine','inhibit_engine','bool'),('PidUpdates','pid_updates','count'),('OverboostEvents','overboost_events','count')]:put('Boost'+label,b[key],unit)
+    if len(cols)!=(245 if schema==2 else 229):raise ValueError('Incomplete native MSL audit contract')
     return cols
 
 
 def verify_msl(path, frames):
     with path.open() as f:rows=list(csv.reader(f,delimiter='\t'))
-    if not frames or len(rows)!=len(frames)+4 or rows[0]!=['ESP32ECU ENGINE LOG 007'] or len(rows[1])!=1:
-        raise ValueError('Native MSL007 provenance/retention differs')
+    schema=frames[0].get('schema_version',1) if frames else 0;version=7 if schema==1 else 8;contract=f'MSL{version:03d}'
+    if not frames or schema not in (1,2) or any(f.get('schema_version',1)!=schema for f in frames) or len(rows)!=len(frames)+4 or rows[0]!=[f'ESP32ECU ENGINE LOG {version:03d}'] or len(rows[1])!=1:
+        raise ValueError(f'Native {contract} provenance/retention differs')
     duration=int(frames[-1]['control_us'])//1000000+1
     prefix=f'SYNTHETIC ENGINE REPLAY / boot synthetic-circuit-no-target / log 1 / period_ms=5 duration_s={duration} / retained rows 1..{len(frames)} of {len(frames)} / overwritten=0 missed_periods=0 repeated=0 invalid=0 / '
-    if not rows[1][0].startswith(prefix):raise ValueError('Native MSL007 provenance/retention differs')
+    if not rows[1][0].startswith(prefix):raise ValueError(f'Native {contract} provenance/retention differs')
     for n,(frame,row) in enumerate(zip(frames,rows[4:])):
         expected=msl_expected(frame,int(frames[0]['control_us']))
-        if rows[2]!=list(expected) or rows[3]!=[u for _,u in expected.values()] or len(row)!=len(expected):raise ValueError('Native MSL007 columns/units differ')
+        if rows[2]!=list(expected) or rows[3]!=[u for _,u in expected.values()] or len(row)!=len(expected):raise ValueError(f'Native {contract} columns/units differ')
         for (name,(value,unit)),text in zip(expected.items(),row):
             if value is None:ok=text=='NaN'
             elif name=='Time':ok=text==f'{value:.6f}'
@@ -174,7 +180,7 @@ def verify_msl(path, frames):
                 # Native %.9g fields: at most half a unit in the ninth
                 # significant digit; JSON carries the unformatted value.
                 ok=math.isfinite(number) and math.isclose(number,float(value),rel_tol=5.1e-9,abs_tol=5e-12)
-            if not ok:raise ValueError(f'Native MSL007 value differs at row{n+1}/{name}')
+            if not ok:raise ValueError(f'Native {contract} value differs at row{n+1}/{name}')
 
 
 def digest(path):
@@ -323,7 +329,7 @@ def audit(root,allow_partial=False,binding_source=None):
                     frame=json.loads(text);seq=int(frame['sequence']);phase=frame['circuit_clock_phase_us'];key=(seq,phase)
                     if key in seen or not 1<=seq<=len(queries):raise ValueError('Controller sequence duplicate/out of range')
                     seen.add(key);query=queries[seq-1]
-                    if frame['schema_version']!=1 or frame['data_source']!='synthetic_control_observation' or frame['physical_execution'] is not False:
+                    if frame['schema_version'] not in (1,2) or frame['data_source']!='synthetic_control_observation' or frame['physical_execution'] is not False:
                         raise ValueError('Controller provenance differs')
                     if frame['raw_adc']!=query['raw'] or int(frame['control_us'])!=math.floor(query['control_us']+phase) or int(frame['sampled_us'])!=math.floor(query['sampled_us']+phase):raise ValueError('Binding inputs differ from scan')
                     if frame['board_flags']!=query['adc_ok'] or frame['circuit_adc7_code']!=query['raw'][7]:raise ValueError('ADC transport debug differs')
@@ -361,7 +367,7 @@ def audit(root,allow_partial=False,binding_source=None):
                 retain(member(root,f'{name}/gpio-{threshold}.stimulus.txt'))
                 row['edge_inputs'][threshold]={str(p):[(math.floor(t+p/10),level) for t,level in edges] for p in range(10)}
         row['full_replay_matrix']=True
-        row['sampling_derived_from_raw']=True;row['msl_columns_checked']=229
+        row['sampling_derived_from_raw']=True;row['msl_columns_checked']=len(msl_expected(phase0[0],int(phase0[0]['control_us'])))
         if name=='baseline':baseline=queries
         cases[name]=row
         print(json.dumps(dict(matrix=root.name,case=name,raw_rows=row['raw_rows'],replays=len(row['replays']),ripple_acquisition_samples=row['ripple_acquisition_samples'])),flush=True)

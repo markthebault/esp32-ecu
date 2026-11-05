@@ -41,11 +41,23 @@ int main(int argc,char**argv){
  auto&peer=r::saved.peers[0];const std::uint8_t screen[]={2,170,187,204,221,238};std::memcpy(peer.mac,screen,6);std::strcpy(peer.name,"Native screen fixture");for(unsigned n=0;n<16;++n)peer.key[n]=n;
  r::session_id=0x12345678;esp_fill_random(r::engine_nonce,16);esp_wifi_get_mac(0,r::own);r::engine_sequence=(UINT64_C(1)<<53)+91;check(r::prepare_stream(0));auto good=captured();publish(good);
  check(!r::live.fault&&!r::radio_fault(5000000));r::led(false,false);check(requested_pattern==ecu::status_led::Pattern::Normal);
+ // Pressure protection is a problem even without a rotating engine. A
+ // stopped monitor must not suppress the red policy for this new fault.
+ auto pressure=good;pressure.controller_faults=ecu::engine::Overboost;
+ pressure.boost_control.available=pressure.boost_control.pressure_enabled=pressure.boost_control.inhibit_engine=true;
+ pressure.boost_control.flags=ecu::boost::Enabled|ecu::boost::PressureValid|ecu::boost::OverboostLatched;
+ pressure.boost_control.reason=static_cast<unsigned>(ecu::boost::Reason::Overboost);
+ check(pressure.inputs[ecu::engine::DecodedRpm]==0);publish(pressure);check(r::live.fault&&r::radio_fault(5000000));
+ r::led(r::radio_fault(5000000),true);check(requested_pattern==ecu::status_led::Pattern::Problem);
+ publish(good);check(!r::live.fault);r::led(false,true);check(requested_pattern==ecu::status_led::Pattern::Pairing);r::led(false,false);
  auto query=capability(0,0,1);binary("query-request.bin",query);input(query);slot(2);check(fake_datagrams.back().bytes[5]==8);binary("query-reply.bin",fake_datagrams.back().bytes);finish();
  at(5010000);auto update=capability(1,5,2);binary("update-request.bin",update);input(update);
  // First reply is rate limited until250ms after the previous reply. Set its
  // previous stamp to0 in this fixture so the timed Python query can complete.
  r::streams[0].last_reply=0;slot(2);check(fake_datagrams.back().bytes[5]==8);binary("update-reply.bin",fake_datagrams.back().bytes);finish();r::maintain_streams(r::now());
+ publish(pressure);fixture("boost-profile-blocked");auto*peers=cJSON_GetObjectItemCaseSensitive(r::view,"peers");auto*screen_status=cJSON_GetArrayItem(peers,0);
+ check(cJSON_IsTrue(cJSON_GetObjectItemCaseSensitive(screen_status,"engine_telemetry_blocked")));
+ check(std::strstr(cJSON_GetObjectItemCaseSensitive(screen_status,"engine_block_reason")->valuestring,"boost pressure profile"));publish(good);
  at(5020000);slot(1);check(fake_datagrams.back().bytes[5]==4);sensor_acknowledgement(w::read32(fake_datagrams.back().bytes.data()+12));check(r::ack_seen[0]&&!r::streams[0].engine_ack_seen);finish();
  at(5030000);slot(2);check(fake_datagrams.back().bytes[5]==9&&r::streams[0].pair.pending()&&r::streams[0].pair.base_submitted());auto base=fake_datagrams.back().bytes;binary("base.bin",base);const auto seq=r::streams[0].pair.sequence();finish();
  acknowledgement(seq);check(!r::streams[0].engine_ack_seen);fixture("partial");

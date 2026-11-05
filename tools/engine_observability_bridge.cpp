@@ -39,7 +39,7 @@ bool sample(const char*text,ecu::engine::RuntimeSample&out){
  if(!text||!ecu::web::safe_json(text,std::strlen(text)))return false;
  auto*j=cJSON_ParseWithOpts(text,nullptr,true);if(!j)return false;
  ecu::engine::RuntimeSample r;std::uint32_t source=0,schema=0;bool available=false;
- bool ok=integer(j,"schema_version",schema)&&schema==1&&ecu::web::boolean(j,"available",available)&&
+ bool ok=integer(j,"schema_version",schema)&&(schema==1||schema==2)&&ecu::web::boolean(j,"available",available)&&
   integer(j,"source_code",source,2)&&u64(j,"sequence",r.sequence)&&u64(j,"control_us",r.control_us)&&u64(j,"sampled_us",r.sampled_us)&&
   integer(j,"tune_revision",r.tune_revision)&&integer(j,"sensor_revision",r.sensor_revision)&&integer(j,"phase_epoch",r.phase_epoch)&&
   integer(j,"flags",r.flags,UINT16_MAX)&&integer(j,"input_valid_mask",r.input_valid,255)&&integer(j,"board_flags",r.board_flags,15)&&
@@ -67,6 +67,8 @@ bool sample(const char*text,ecu::engine::RuntimeSample&out){
  const auto*second=cJSON_GetObjectItemCaseSensitive(j,"secondary_tables");
  if(second)ok=ok&&ecu::secondary::parse_observations(second,r.secondary_fuel,r.secondary_spark,available);
  const auto*flex=cJSON_GetObjectItemCaseSensitive(j,"flex_fuel");if(flex)ok=ok&&ecu::flex::parse_record(flex,r.flex_fuel,available);
+ const auto*boost=cJSON_GetObjectItemCaseSensitive(j,"boost_control");
+ if(boost)ok=ok&&ecu::boost::parse_record(boost,r.boost_control,available);else if(schema==2)ok=false;
  const auto*model=cJSON_GetObjectItemCaseSensitive(j,"load_model");
  if(model)ok=ok&&ecu::load::parse_observation(model,r.load_model,available);
  const auto*ae=cJSON_GetObjectItemCaseSensitive(j,"transient_enrichment");
@@ -89,7 +91,7 @@ bool sample(const char*text,ecu::engine::RuntimeSample&out){
  const auto*worker=cJSON_GetObjectItemCaseSensitive(j,"worker_observation");
  ok=ok&&cJSON_IsObject(worker)&&u64(worker,"command_sequence",r.worker_sequence)&&u64(worker,"observed_us",r.worker_observed_us)&&
   integer(worker,"epoch",r.worker_epoch)&&integer(worker,"tune_revision",r.worker_tune_revision)&&integer(worker,"sensor_revision",r.worker_sensor_revision)&&
-  integer(worker,"timing_fault_code",r.timing_fault,17)&&integer(worker,"last_timing_fault_code",r.last_timing_fault,17)&&
+  integer(worker,"timing_fault_code",r.timing_fault,18)&&integer(worker,"last_timing_fault_code",r.last_timing_fault,18)&&
   integer(worker,"virtual_high_mask",r.virtual_high_mask,255)&&integer(worker,"physical_command_mask",r.physical_command_mask,255);
  const auto*raw=cJSON_GetObjectItemCaseSensitive(j,"raw_adc");ok=ok&&cJSON_IsArray(raw)&&cJSON_GetArraySize(raw)==8;
  for(unsigned i=0;ok&&i<8;++i){
