@@ -1,0 +1,445 @@
+{
+  "schema": 1,
+  "review": "A6 compact frontend / native routing / model increment",
+  "reviewed_at_utc": "2026-11-05T08:10:33.242131+00:00",
+  "reviewer": "Independent delegated reviewer; no subagents; no source edits, services, flashing, external messages or physical output actions",
+  "accepted": true,
+  "decision": "ACCEPT_DEVELOPMENT_DRAFT_WITH_EXPLICIT_HOLDS",
+  "publication_may_proceed": true,
+  "development_publication_blockers": [],
+  "scope": "Frozen compact candidate and exact native publication copy only. Logical/profile/native/BOM consistency, circuit reproducibility, width enforcement, locality, nearby copper and RF geometry were checked. This is no fabrication, sensor hookup, engine-operation or physical qualification approval.",
+  "candidate": {
+    "path": ".cache/engine/flex-circuit/a6-compact-width-001-native",
+    "pcb_sha256": "2cfc0d9328337cccce873d8882cc32c2a305b6afd9e53c2393769a298af8b4b2",
+    "contract_sha256": "284c34e4583ef584a705d03eb4251ed3d08ca9ff9565327b195d2ba46be82acd"
+  },
+  "publication": {
+    "path": "hardware/a6-flex-rgb",
+    "pcb_sha256": "2cfc0d9328337cccce873d8882cc32c2a305b6afd9e53c2393769a298af8b4b2",
+    "contract_sha256": "2d2d8883d8035c43bde5d7781e491ee5b8cb470fb0c87e3c80975175e99b80e2",
+    "all_78_delivered_noncontract_files_identical": true,
+    "only_changed_contract_fields": [
+      "native_checks_required",
+      "native_validation",
+      "status"
+    ],
+    "metadata_state_correction_accepted": true,
+    "validation_report_was_review_pending_at_freeze": true,
+    "review_result_may_be_added_to_report": true
+  },
+  "source_freeze": {
+    "directory": "freeze",
+    "manifest": "freeze-manifest.json",
+    "manifest_sha256": "a4845fc4bd8699f22643fe6822a44c63ed17774509be13c56216f7752e754129",
+    "source_files": 1486,
+    "original_and_frozen_files_unchanged_at_check": true,
+    "stability_report": "source-stability.json",
+    "key_sha256": {
+      "hardware/flex-input/frontend.json": "7c30d047e69cdfa31af53ce0c11f5cd78856098ffbe6fd698246b01f48b553b6",
+      "hardware/flex-input/frontend-compact.json": "91f862a55b23bd8a09814847fce5b960ad2afdc3736199f4c6f76671bf52d059",
+      "hardware/a6-flex-rgb/net_contract.json": "2d2d8883d8035c43bde5d7781e491ee5b8cb470fb0c87e3c80975175e99b80e2",
+      "hardware/a6-flex-rgb/esp32-ecu.kicad_pcb": "2cfc0d9328337cccce873d8882cc32c2a305b6afd9e53c2393769a298af8b4b2",
+      "hardware/a6-flex-rgb/esp32-ecu.kicad_pro": "c5b772c96fed6378b94d4c0719c9e00fe953cce0cea7b69735e07c4c009a2f85",
+      "hardware/a6-flex-rgb/esp32-ecu.kicad_dru": "860a6a7703d33ae3f62b53cdfd16c17ff3aa1ea0e1c90b38cd0b50309af7955e",
+      "scripts/apply_a6_analog_solution.py": "cd0c8b9dd90f1e6280d7b8c3b36f2a71ce5f355be1514d1d3d6bff3c1fb19f67",
+      "scripts/route_a6_local_analog.py": "775bec20c2cdced6a3843bd3a1c28aa6ac377a2c0358a8c0c8995b816ff877df",
+      "scripts/restore_a6_copper.py": "aed022b2daab7e90913899df7eb01914197b6f48be6d04fbbf6caa316e1efe98",
+      "scripts/finish_a6_routes.py": "560d25c3866f657a7d15607ff934d3546e12bbf4aa35a791f7cd8dddf96468cf",
+      "scripts/prune_a6_stubs.py": "9a5601de047571dc6cc47706756ba820ce4e214e6e2ce097cf6a0339fa693294",
+      "scripts/update_a6_contracts.py": "c15c02a2b613bf54a3333a5fce2b708cab40bf76df16392b396eb9affdfff935",
+      "scripts/add_a6_width_rules.py": "7d53ab4aca50c4539cecdcf254639e4177e3ba1f93f0867ea9f1245852ead5c8",
+      "scripts/audit_a6_copper.py": "3c57a939fefd4357dc086dac6c1e8a0bd90ab5168005c07b9e5f004f0e4116db",
+      "tools/run_flex_circuit.py": "ef3513a4875a3dc668fc5166f514d8a046f7dff731aca88de30567b9506e39db",
+      "tools/test_flex_frontend.py": "d9ecbe14adec9dc5345ce21bc7a5c30bf94212a3f1229231f3b4e61695d01d87",
+      "tools/flex_circuit_capture.cpp": "80a57b49c7e097eea32ee88be6d34e93e61ef1a371736f7e829a83930ab410b8",
+      "firmware/include/ecu/flex_fuel.hpp": "ce233744b7f8b938f2d2a4a491138b2ba115a62ec0a5270612a89261e1729c22",
+      ".cache/engine/flex-circuit/a6-compact-width-001-native/net_contract.json": "284c34e4583ef584a705d03eb4251ed3d08ca9ff9565327b195d2ba46be82acd",
+      ".cache/engine/flex-circuit/a6-compact-width-001-native/esp32-ecu.kicad_pcb": "2cfc0d9328337cccce873d8882cc32c2a305b6afd9e53c2393769a298af8b4b2",
+      ".cache/engine/flex-circuit/a6-width-003-native/esp32-ecu.kicad_pcb": "97fcc87031779ccd8793876ab18e8be4b8fd524c026f8c406b12f6e8eaf1129c",
+      ".cache/engine/flex-circuit/compact-matrix-001/index.json": "1e0fb466b6267d5f6adce75cef02d1f996f4bae24b4b77898b7618eaa82f464a",
+      ".cache/engine/a6-copper-review/preliminary-001/review.json": "f01af904d7b918abce7b3c9f595a926abcbf6b6b5f2b6a4fe1f70265e4996ba8"
+    }
+  },
+  "accepted_scope": [
+    "All 264 native footprint identities/values/MPNs/pin nets/DNP/placements agree with the contract; all 260 electrical schematic components and all 779 numbered pads agree with fresh KiCad XML. The four unnumbered mechanical holes are H1..H4.",
+    "BOM/pinout recomputation agrees: 99 electronic purchase groups, 249 fitted electronic references, R32/R33/R41/R43 DNP, and 24 VH / 28 XH / 10 PH connected contacts. J20 uses one PHR-2 and the PH contact group uses SPH-002T-P0.5S.",
+    "Existing topology is preserved; C164 is the only added footprint. All fixed packages/pads retain exact geometry. U18 body translation is +0.1/+0.05mm with +90deg rotation. New J20 courtyard [107.51,106.8,114.41,112.3]mm lies entirely within old [105.55,102.8,114.41,112.3]mm.",
+    "C315 and PH2 retained provenance/asset hashes match the actual project library. This verifies provenance binding, not manufacturer dimensional/assembly qualification.",
+    "All 87 priority copper objects exactly match the frozen local-routing stage after the completed restoration/routing/pruning/metadata steps. That local stage added exactly the 87 receipted tracks and no vias.",
+    "The previous comparator bypass, remote pullup bypass, immediate feedback/summing detours and same-layer IN/CMP parallel witness have been addressed geometrically. Physical circuit/parasitic qualification stays open.",
+    "Both RF rectangles apply to all six copper layers, deny tracks/vias/pads/pours, and have zero expanded trace/via-body, pad-box and actual filled-polygon area intrusions.",
+    "The current compact profile has the same numeric circuit as the retained matrix profile; exactly nine nominal_body_mm->maximum_body_mm metadata key renames are the only differences. All 62 current compact decks match retained inputs, all 62 legacy decks match actual matrix-007 decks, and C164 is explicitly present once in every compact deck."
+  ],
+  "independent_native_checks": {
+    "DRC_violations": 0,
+    "unconnected_items": 0,
+    "schematic_parity": 0,
+    "ERC_violations": 0,
+    "severities": [
+      "error",
+      "warning",
+      "exclusion"
+    ],
+    "counts": {
+      "footprints": 264,
+      "schematic_components": 260,
+      "numbered_pads": 779,
+      "tracks": 3588,
+      "vias": 151
+    },
+    "native_width_controls": [
+      {
+        "name": "supply",
+        "net": "+5V",
+        "target_uuid": "0600dfd3-b48a-4bb5-a38e-39c0bd0118b4",
+        "native_target_width_rejected": true,
+        "expected_native_width_rejection": true,
+        "independent_exact_policy_rejected": true,
+        "explicit_rejection_uuids": [
+          "0600dfd3-b48a-4bb5-a38e-39c0bd0118b4"
+        ],
+        "native_types": [
+          "track_width"
+        ],
+        "unconnected": 0,
+        "parity": 0,
+        "command": [
+          "kicad-cli",
+          "pcb",
+          "drc",
+          "--format",
+          "json",
+          "--all-track-errors",
+          "--schematic-parity",
+          "--severity-all",
+          "--exit-code-violations",
+          "-o",
+          "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/supply/drc.json",
+          "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/supply/esp32-ecu.kicad_pcb"
+        ],
+        "exit_code": 5,
+        "seconds": 1.984994888305664,
+        "pcb_sha256": "5ee0c1b61a16f442850ca6db540b67483bd08b573176836bff9e55e868487f87",
+        "passed": true
+      },
+      {
+        "name": "power",
+        "net": "VIN_PROT",
+        "target_uuid": "0dd72c77-067b-411c-817c-3da8544f0f12",
+        "native_target_width_rejected": true,
+        "expected_native_width_rejection": true,
+        "independent_exact_policy_rejected": true,
+        "explicit_rejection_uuids": [
+          "0dd72c77-067b-411c-817c-3da8544f0f12"
+        ],
+        "native_types": [
+          "track_width"
+        ],
+        "unconnected": 0,
+        "parity": 0,
+        "command": [
+          "kicad-cli",
+          "pcb",
+          "drc",
+          "--format",
+          "json",
+          "--all-track-errors",
+          "--schematic-parity",
+          "--severity-all",
+          "--exit-code-violations",
+          "-o",
+          "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/power/drc.json",
+          "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/power/esp32-ecu.kicad_pcb"
+        ],
+        "exit_code": 5,
+        "seconds": 2.053746223449707,
+        "pcb_sha256": "22b6fbca1735f71452d2c7343b5bd663ee58c84077daa5bc60f24113dd737743",
+        "passed": true
+      },
+      {
+        "name": "extra-INJ1-neck",
+        "net": "INJ1_LS",
+        "target_uuid": "014c1510-e03d-4d0b-8822-cb035b5a2bcb",
+        "native_target_width_rejected": false,
+        "expected_native_width_rejection": false,
+        "independent_exact_policy_rejected": true,
+        "explicit_rejection_uuids": [
+          "014c1510-e03d-4d0b-8822-cb035b5a2bcb"
+        ],
+        "native_types": [],
+        "unconnected": 0,
+        "parity": 0,
+        "command": [
+          "kicad-cli",
+          "pcb",
+          "drc",
+          "--format",
+          "json",
+          "--all-track-errors",
+          "--schematic-parity",
+          "--severity-all",
+          "--exit-code-violations",
+          "-o",
+          "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/extra-INJ1-neck/drc.json",
+          "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/extra-INJ1-neck/esp32-ecu.kicad_pcb"
+        ],
+        "exit_code": 0,
+        "seconds": 1.962174415588379,
+        "pcb_sha256": "1f1cfe32c5f7e5b3b7219a1d3a9823e810b32b16487ec88cb662bed09c98b516",
+        "passed": true
+      },
+      {
+        "name": "alter-literal-neck",
+        "net": "INJ1_LS",
+        "target_uuid": "0b7ea104-b013-488f-93e3-d6a76c61494c",
+        "native_target_width_rejected": false,
+        "expected_native_width_rejection": false,
+        "independent_exact_policy_rejected": true,
+        "explicit_rejection_uuids": [
+          "0b7ea104-b013-488f-93e3-d6a76c61494c"
+        ],
+        "native_types": [],
+        "unconnected": 0,
+        "parity": 0,
+        "command": [
+          "kicad-cli",
+          "pcb",
+          "drc",
+          "--format",
+          "json",
+          "--all-track-errors",
+          "--schematic-parity",
+          "--severity-all",
+          "--exit-code-violations",
+          "-o",
+          "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/alter-literal-neck/drc.json",
+          "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/alter-literal-neck/esp32-ecu.kicad_pcb"
+        ],
+        "exit_code": 0,
+        "seconds": 1.9839446544647217,
+        "pcb_sha256": "fac580ca68d23be736ddfd107a90904f8a8c27e0dabfd74e7b271901b86e40d5",
+        "passed": true
+      }
+    ],
+    "global_copper_policy_passed": true,
+    "repository_audit_controls_passed": true,
+    "prior_severities_unchanged": true,
+    "native_exclusions": [],
+    "ignored_categories": {
+      "footprint_filters_mismatch": "ignore",
+      "footprint_type_mismatch": "ignore",
+      "missing_courtyard": "ignore",
+      "track_not_centered_on_via": "ignore",
+      "tuning_profile_track_geometries": "ignore"
+    },
+    "note": "All enabled severities were requested. The five inherited ignored categories are explicitly listed, and none was newly disabled. Independent package/net/BOM checks and actual width mutations complement native DRC."
+  },
+  "independent_numerical_checks": {
+    "binding_tests": 6,
+    "full_fresh_ngspice_capture_rerun": true,
+    "ngspice_elf_sha256": "25b6a73fafd9b489b92347a6c55fe307db502c1638f53d7d0bf439b5f7c65e38",
+    "case_count": 62,
+    "retained_raw_rows": 3978182,
+    "capture_observations": 4300,
+    "raw_gzip_bytes_and_case_replay_payloads_identical": true,
+    "negative_capture_controls": {
+      "skew-reject-long": {
+        "observations": 90,
+        "invalid": 90
+      },
+      "skew-reject-short": {
+        "observations": 90,
+        "invalid": 90
+      },
+      "capacitance-overrun-rejected": {
+        "observations": 90,
+        "invalid": 90
+      }
+    },
+    "resistor_peak_w": {
+      "R155": {
+        "peak_w": 0.42250368003929256,
+        "case": "cold-clamp-bound-1",
+        "time_s": null,
+        "raw_scale_value": 5.0,
+        "simulated_ohm": 740.8125,
+        "nominal_P70_w": 0.6
+      },
+      "R156": {
+        "peak_w": 0.4225036774600935,
+        "case": "cold-clamp-bound-1",
+        "time_s": null,
+        "raw_scale_value": 5.0,
+        "simulated_ohm": 740.8125,
+        "nominal_P70_w": 0.6
+      },
+      "R157": {
+        "peak_w": 0.04553643995964562,
+        "case": "fault--36-0",
+        "time_s": 5e-08,
+        "raw_scale_value": 5e-08,
+        "simulated_ohm": 27400.0,
+        "nominal_P70_w": 0.4
+      },
+      "R158": {
+        "peak_w": 0.009857142293366832,
+        "case": "fault-36-0",
+        "time_s": 0.0,
+        "raw_scale_value": 0.0,
+        "simulated_ohm": 24900.0,
+        "nominal_P70_w": 0.4
+      },
+      "R159": {
+        "peak_w": 0.0019708911083600807,
+        "case": "fault-36-1",
+        "time_s": 0.0,
+        "raw_scale_value": 0.0,
+        "simulated_ohm": 4990.0,
+        "nominal_P70_w": 0.4
+      },
+      "R160": {
+        "peak_w": 3.435936960639072e-05,
+        "case": "opposed-corner-1",
+        "time_s": 0.0220017737,
+        "raw_scale_value": 0.0220017737,
+        "simulated_ohm": 333300.0,
+        "nominal_P70_w": 0.4
+      },
+      "R161": {
+        "peak_w": 0.00024779980438746754,
+        "case": "opposed-corner-1",
+        "time_s": 0.0,
+        "raw_scale_value": 0.0,
+        "simulated_ohm": 101000.0,
+        "nominal_P70_w": 0.4
+      },
+      "R162": {
+        "peak_w": 1.2366284901337668e-05,
+        "case": "opposed-corner-1",
+        "time_s": 0.0,
+        "raw_scale_value": 0.0,
+        "simulated_ohm": 4940.1,
+        "nominal_P70_w": 0.4
+      },
+      "R163": {
+        "peak_w": 0.004433382397142146,
+        "case": "cold-clamp-bound-1",
+        "time_s": null,
+        "raw_scale_value": 5.0,
+        "simulated_ohm": 2173.05,
+        "nominal_P70_w": 0.4
+      },
+      "R164": {
+        "peak_w": 0.0013994311676742963,
+        "case": "slow-noisy-drive",
+        "time_s": 0.00217643724,
+        "raw_scale_value": 0.00217643724,
+        "simulated_ohm": 4700.0,
+        "nominal_P70_w": 0.4
+      },
+      "R165": {
+        "peak_w": 0.00020985062031378597,
+        "case": "joined-corner-85-1000",
+        "time_s": 0.0,
+        "raw_scale_value": 0.0,
+        "simulated_ohm": 46389.0,
+        "nominal_P70_w": 0.4
+      },
+      "R166": {
+        "peak_w": 0.42250368113784015,
+        "case": "cold-clamp-bound-1",
+        "time_s": null,
+        "raw_scale_value": 5.0,
+        "simulated_ohm": 740.8125,
+        "nominal_P70_w": 0.6
+      }
+    },
+    "max_compact_resistor_peak_w": 0.04553643995964562,
+    "max_750R_pullup_peak_w": 0.42250368113784015,
+    "power_scope": "All retained rows independently parsed; actual executed resistor values used for V^2/R. Peaks are below nominal P70 references only; no assembled derating, thermal, pulse or physical protection rating."
+  },
+  "local_priority_centerline_lengths_mm": {
+    "U18.1->R160.1": 3.7977733597439967,
+    "R160.2->U18.3": 6.1654672844138245,
+    "C160.1->U18.8": 3.3334881107285628,
+    "C164.1->R163.1": 2.256568542494924,
+    "R158.2->U18.3": 6.536242752033815,
+    "R159.1->U18.3": 6.346293258372648,
+    "C159.1->U18.2": 6.611915682674932
+  },
+  "measurement_note": "Priority-object centerline sums and independent shortest track/land paths are both retained. The latter can be slightly shorter through shared pad lands; no zone shortcuts or physical barrel-length model are invented.",
+  "closed_layout_actions": [
+    "CU-DECOUPLE-01: short C160/U18 supply branch",
+    "CU-PULLUP-01: added C164 and short R163 local supply branch",
+    "CU-FEEDBACK-01: immediate summing/feedback shortening and IN/CMP layer separation",
+    "CU-RULES-01: active native width rules plus exact INJ1 exception audit",
+    "CU-RF-01: prior six-layer geometric RF closure preserved",
+    "Publication state: stale native_checks_required corrected on an exact native copy"
+  ],
+  "open_findings": [
+    {
+      "id": "INC-PARASITICS-01",
+      "priority": "physical_qualification_hold",
+      "finding": "No physical 5pF/15pF/10pF comparator-input/output/GPIO bound has been established. The previous same-layer IN/CMP parallel witness is absent. Actual current FLEX_IN on In2 and ADC7 on adjacent In3 have 2.25mm parallel overlap with 0.025mm projected center spacing; no ground layer lies between these two signal layers. This is a geometric coupling witness, not a demonstrated excess capacitance or functional defect.",
+      "action": "Keep the capacitance assumptions conditional. Use a specified dielectric/copper stack and extraction or physical measurements, including ADC activity, before claiming a post-layout parasitic bound. No mandatory routing change follows from this review alone.",
+      "evidence": [
+        "independent-native-inspection.json:nearby_parallel_pairs",
+        "native-locality-six-layers.png"
+      ]
+    },
+    {
+      "id": "INC-SUPPLY-01",
+      "priority": "physical_qualification_hold",
+      "finding": "C160 and C164 improve native locality, but every executed deck models nominal ideal 100nF capacitors on assumed sources. X7R effective capacitance, DC bias, ESR/ESL and actual rail impedance/transients are outside these results. Ground sampling shows connected, broadly continuous In1/In4 pours and normal PTH clearances; it does not prove a continuous screen under every segment or a return-impedance bound.",
+      "action": "Retain the supply-stability hold and validate the selected assembled capacitors and rails physically or with justified nonideal supply models. Do not describe the ideal-cap matrix as a supply-transient or full-temperature stability guarantee.",
+      "evidence": [
+        "independent-model-inspection.json",
+        "independent-native-inspection.json:GND_return_samples",
+        "independent-native-inspection.json:plane_under_route_samples",
+        "native-locality-six-layers.png"
+      ]
+    },
+    {
+      "id": "INC-CURRENT-01",
+      "priority": "current_thermal_qualification_hold",
+      "finding": "The three literal prior INJ1 0.8mm objects remain the sole audited power-width exceptions. The native floor deliberately permits 0.8mm on INJ1 generally; native zero-DRC alone would also accept an extra 0.8mm segment or a 10um change to an authorized neck. Both the independent exact policy and the actual frozen audit reject those mutations. Width and nominal P70 arithmetic are not current, derating, pulse, I2t or assembled-temperature ratings.",
+      "action": "Retain the exact UUID/net/layer/endpoints audit as a required companion to native DRC. Close the current/thermal/fuse hold with load-specific evidence before fabrication or operation.",
+      "evidence": [
+        "independent-native-negative-controls.json",
+        "declared-audit-controls.json",
+        "independent-native-inspection.json",
+        "independent-model-inspection.json:resistor_peak_w"
+      ]
+    },
+    {
+      "id": "INC-ASSEMBLY-01",
+      "priority": "physical_fit_qualification_hold",
+      "finding": "Native compact package identities, holes/pitches, fixed-part preservation and J20 courtyard containment are coherent. They do not qualify formed MRS16 leads, C315 pitch tolerance and finished 0.8mm holes, hand-solder thermal behavior, PH crimp/strap performance, N16R8 stack/antenna, printed parts or case fit. J20 remains an internal two-pin CHASSIS bond with no normal load return; H5 remains CHASSIS.",
+      "action": "Retain actual-part lead-form/finished-hole/thermal and assembled module/case/RF checks. Preserve the separate unresolved external J22 sensor pin mapping and unqualified FLEX_12V behavior.",
+      "evidence": [
+        "independent-native-inspection.json",
+        "footprint-provenance-checks.json",
+        "publication-comparison.json"
+      ]
+    }
+  ],
+  "remaining_context": "Physical engine outputs remain inhibited by the existing development policy; this review authorizes no output enablement. Full Speeduino feature parity and TunerStudio online are unfinished and outside this increment. No physical RF, timing, sensor, vehicle, thermal, splash or enclosure qualification follows.",
+  "manufacturing_release": false,
+  "physical_qualification": false,
+  "engine_operation_release": false,
+  "sensor_connection_release": false,
+  "evidence": {
+    "commands": "commands.json",
+    "native": "independent-native-inspection.json",
+    "models": "independent-model-inspection.json",
+    "negative_controls": "independent-native-negative-controls.json",
+    "declared_audit": "declared-audit-controls.json",
+    "publication": "publication-comparison.json",
+    "assets": "footprint-provenance-checks.json",
+    "native_DRC": "native-drc.json",
+    "native_ERC": "native-erc.json",
+    "fresh_netlist": "native-netlist.xml",
+    "full_matrix": "matrix-rerun/index.json",
+    "plot": "native-locality-six-layers.png"
+  }
+}

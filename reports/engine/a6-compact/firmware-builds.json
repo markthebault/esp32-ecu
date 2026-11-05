@@ -1,0 +1,132 @@
+{
+  "created_utc": "2026-11-05T07:54:04.076682+00:00",
+  "command": [
+    "pio",
+    "run",
+    "-d",
+    "/home/mark/persospace/esp32-ecu/firmware",
+    "-e",
+    "compact_n16r8_flex_dev",
+    "-e",
+    "compact_n16r8_web",
+    "-e",
+    "compact_a3_web"
+  ],
+  "exit_code": 0,
+  "build_dir_override": "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-guide-build-001/build",
+  "environments": [
+    "compact_n16r8_flex_dev",
+    "compact_n16r8_web",
+    "compact_a3_web"
+  ],
+  "default_cache_retained": true,
+  "default_cache_unchanged": true,
+  "source_inputs_unchanged": true,
+  "generated_sdkconfigs": [
+    {
+      "environment": "compact_n16r8_flex_dev",
+      "original_present": true,
+      "original_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_n16r8_flex_dev",
+      "after_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_n16r8_flex_dev"
+    },
+    {
+      "environment": "compact_n16r8_web",
+      "original_present": true,
+      "original_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_n16r8_web",
+      "after_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_n16r8_web"
+    },
+    {
+      "environment": "compact_a3_web",
+      "original_present": true,
+      "original_sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_a3_web",
+      "after_sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_a3_web"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "build/compact_a3_web/firmware.bin",
+      "bytes": 1672416,
+      "sha256": "5f80ba50cf25aaf8353cdaf2e9fc25b790b36b97a560fe18b43592d256adaf23"
+    },
+    {
+      "path": "build/compact_a3_web/firmware.elf",
+      "bytes": 14018164,
+      "sha256": "ce0f09aa2bb2c184d4201b4ace38a74c44010a585943c89c03f84d4c7d2e38a4"
+    },
+    {
+      "path": "build/compact_n16r8_flex_dev/firmware.bin",
+      "bytes": 1711568,
+      "sha256": "27123d2ad0c98697d60f351101436198dd256ecd8858ab1364355b934510cd66"
+    },
+    {
+      "path": "build/compact_n16r8_flex_dev/firmware.elf",
+      "bytes": 14401280,
+      "sha256": "7c4740e5ff6e27f255f8617f2f98cb1f8eb4311265d83c8d55fa853102b77362"
+    },
+    {
+      "path": "build/compact_n16r8_web/firmware.bin",
+      "bytes": 1683296,
+      "sha256": "3fc8c80cb624e35e415f86031ae1990436c3026896ab191fe2712f93e6ca0e4f"
+    },
+    {
+      "path": "build/compact_n16r8_web/firmware.elf",
+      "bytes": 14318084,
+      "sha256": "8e1f20d6be897a4dea0ff65a51f6829f5973aada92f0faefaebad9bd3a02889a"
+    }
+  ],
+  "elf_archives": [
+    {
+      "environment": "compact_a3_web",
+      "path": "elf-archives/compact_a3_web.elf.gz",
+      "bytes": 4905153,
+      "sha256": "b6f24b75ffa4b238d3ae8612870908b3ab7b9e04acd28fc9a25332401743c814",
+      "elf_bytes": 14018164,
+      "elf_sha256": "ce0f09aa2bb2c184d4201b4ace38a74c44010a585943c89c03f84d4c7d2e38a4"
+    },
+    {
+      "environment": "compact_n16r8_flex_dev",
+      "path": "elf-archives/compact_n16r8_flex_dev.elf.gz",
+      "bytes": 4958643,
+      "sha256": "48fb737ae49d95ef278c3c6cc3d19455517890048784d64c7c064dd9ecaa0390",
+      "elf_bytes": 14401280,
+      "elf_sha256": "7c4740e5ff6e27f255f8617f2f98cb1f8eb4311265d83c8d55fa853102b77362"
+    },
+    {
+      "environment": "compact_n16r8_web",
+      "path": "elf-archives/compact_n16r8_web.elf.gz",
+      "bytes": 4949774,
+      "sha256": "2900715690e65fee5c4ce537360b52f74a6d7206c1da1c50265c3e8f0851a636",
+      "elf_bytes": 14318084,
+      "elf_sha256": "8e1f20d6be897a4dea0ff65a51f6829f5973aada92f0faefaebad9bd3a02889a"
+    }
+  ],
+  "generated_assets_sha256": "8a6812fb1137a2860716a674c65d2cb5e847079c217f7a673abf4eee484a9a46",
+  "web_index_sha256": "ec70e73bd125c28754a5854314e254f163dbca099a26326a8357bc4c48d707b9",
+  "embedded_UI": [
+    {
+      "environment": "compact_n16r8_flex_dev",
+      "web_expected": true,
+      "current_index_in_flash_rodata": true
+    },
+    {
+      "environment": "compact_n16r8_web",
+      "web_expected": true,
+      "current_index_in_flash_rodata": true
+    },
+    {
+      "environment": "compact_a3_web",
+      "web_expected": true,
+      "current_index_in_flash_rodata": true
+    }
+  ],
+  "declared_generation_changes": [],
+  "generation_only_declared_output": true,
+  "flashed": false,
+  "physical_qualification": false
+}

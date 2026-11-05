@@ -1,6 +1,6 @@
 {
   "contract": "FLEX-G38-DRAFT1",
-  "status": "software_integration_draft_not_for_fabrication_or_sensor_connection",
+  "status": "routed_compact_A6_development_draft_reviewed_with_holds_not_for_fabrication",
   "software_build": "compact_n16r8_flex_dev",
   "parent_carrier": "a5-idle-interface",
   "board_limit_mm": [
@@ -13,10 +13,15 @@
     "portable_integer_ingress": true,
     "target_producer": true,
     "shared_bus_led_driver": true,
-    "protected_input_circuit": false,
-    "native_cad": false,
+    "protected_input_circuit": true,
+    "native_cad": true,
     "physical_qualification": false,
-    "engine_outputs_enabled": false
+    "engine_outputs_enabled": false,
+    "conditional_frontend_model": true,
+    "circuit_concepts": true,
+    "protected_input_circuit_qualified": false,
+    "sensor_connection_released": false,
+    "fabrication_release": false
   },
   "allocation": {
     "flex_signal": {
@@ -55,7 +60,7 @@
       "IODIR_expected": 0,
       "IOCON_expected": 4,
       "gp7": "NC_but_IODIR_bit7_must_be_zero",
-      "ordinary_rgb_led_driver_and_resistors": "not_selected",
+      "ordinary_rgb_led_driver_and_resistors": "RGB-MCP21-DRAFT1_common_anode_5V_with_three_NPN_candidates_unqualified",
       "old_GPIO38_WS2812_wiring_compatible": false,
       "old_GPIO38_RMT_initialization_and_writes_allowed": false,
       "noncompact_GPIO38_ARM_build_allowed": false,
@@ -125,7 +130,7 @@
     "input_voltage_current_clamps_and_fault_energy",
     "sensor_power_present_with_carrier_off_back_power",
     "conditioner_polarity_bias_and_worst_case_pulse_skew",
-    "possible_reuse_of_two_spare_3V3_SN74HC14N_gates_is_not_a_qualified_frontend",
+    "classic_comparator_direct_GPIO_divider_selected_in_concept_steady_low_margin_and_asymmetric_delay_unqualified",
     "LED_driver_headroom_current_reset_default_and_sealed_window",
     "boot_reset_partial_power_BootPair_download_and_input_noise_tests",
     "all_target_timing_interference_heap_stack_and_HIL_measurements",
@@ -152,5 +157,20 @@
       "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/MCP23008-and-MCP23008-Data-Sheet-DS20001919.pdf",
       "locators": "GP7 output only, Register1-1 IO7=0, full-byte register semantics"
     }
-  ]
+  ],
+  "circuit_concepts": {
+    "frontend": "frontend.json",
+    "advisory_rgb": "status-led.json",
+    "native_carrier": "../a6-flex-rgb",
+    "released_sensor_connection": false,
+    "supply_or_timing_rating": false,
+    "selected_frontend": "frontend-compact.json"
+  },
+  "native_development_checkpoint": {
+    "revision": "A6-FLEX-RGB-HOLD",
+    "directory": "hardware/a6-flex-rgb",
+    "selected_frontend": "hardware/flex-input/frontend-compact.json",
+    "evidence": "reports/engine/a6-compact/README.md",
+    "scope": "Conditional designed circuit and routed native draft only; no physical protection, sensor-connection, fabrication or engine-operation release"
+  }
 }

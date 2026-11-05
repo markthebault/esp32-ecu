@@ -1,0 +1,45 @@
+ACCEPT: coherent development draft may be published with explicit holds.
+
+PCB SHA256: 2cfc0d9328337cccce873d8882cc32c2a305b6afd9e53c2393769a298af8b4b2.
+Candidate: .cache/engine/flex-circuit/a6-compact-width-001-native.
+Publication: hardware/a6-flex-rgb. All 78 delivered non-contract files are identical;
+only status/native_checks_required/native_validation change in its contract.
+The HOLD status and false fabrication/physical release fields remain intact.
+
+Fresh KiCad 9.0.8 DRC/ERC: zero findings, opens or schematic parity issues,
+with error/warning/exclusion severities requested. Independent native/contract/
+fresh XML/BOM checks agree on 264 footprints, 260 schematic components, 779 pins,
+3588 tracks, 151 vias; 99 BOM groups, 249 fitted electronic refs, 4 DNP,
+24 VH / 28 XH / 10 PH connected contacts. H1..H4 explain the four-component gap.
+Existing topology/fixed package geometry is preserved; C164 is the only addition.
+J20 PH2 is fully contained in its old courtyard, both pins CHASSIS; H5 is preserved.
+
+All 87 local copper objects retain exact geometry; no local vias were added.
+Priority branch lengths: output-feedback 3.798mm, feedback-input 6.165mm,
+C160 supply 3.333mm, C164 pullup 2.257mm. Immediate IN/CMP use separate layers.
+In1/In4 ground pours are broadly continuous, with PTH clearances. Both RF areas
+enforce all six copper layers and have zero actual body/pad/pour intrusions.
+Four fresh actual-board negative controls pass: native width rules reject the
+supply/power changes; the actual exact audit also rejects extra or altered INJ1
+necks that the native 0.8mm floor intentionally permits. No exclusions were added.
+
+Six binding tests pass. A full fresh 62-case ngspice/capture run reproduces all
+3,978,182 raw rows and 4,300 capture observations byte-for-byte in raw gzip and
+case payloads. All 62 current compact decks match retained inputs, all legacy
+decks match actual matrix-007, and all compact decks contain C164. The only profile
+delta after the retained run is nine nominal-to-maximum dimension-field renames.
+Independent all-row power peaks: compact R157 45.536mW; three 750R pullups
+422.504mW each, below nominal P70 references only.
+
+Open holds: effective X7R/ESR/ESL and real supply transients; physical 5/15/10pF
+parasitic bounds and timing; current/thermal/I2t including the three literal INJ1
+necks; actual formed leads, finished holes, crimp/strap, module/antenna and case
+fit. A 2.25mm FLEX_IN/ADC7 overlap on adjacent In2/In3 remains a geometric coupling
+witness, not a demonstrated defect or extracted capacitance. Keep qualification
+pending; do not convert this review into fabrication, sensor hookup or engine
+operation approval. Full Speeduino parity and TunerStudio online remain unfinished.
+
+No concrete reviewed-source/native/model/BOM mismatch blocks draft publication.
+Exact freezes/hashes: freeze-manifest.json; all 1486 original and frozen files
+were unchanged at final check. Commands: commands.json. Detailed evidence and
+actionable qualification holds: review.json and the referenced inspection files.

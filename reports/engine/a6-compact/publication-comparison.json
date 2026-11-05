@@ -1,0 +1,469 @@
+{
+  "passed": true,
+  "before_contract_sha256": "284c34e4583ef584a705d03eb4251ed3d08ca9ff9565327b195d2ba46be82acd",
+  "published_contract_sha256": "2d2d8883d8035c43bde5d7781e491ee5b8cb470fb0c87e3c80975175e99b80e2",
+  "pcb_sha256": "2cfc0d9328337cccce873d8882cc32c2a305b6afd9e53c2393769a298af8b4b2",
+  "contract_changed_fields": [
+    "native_checks_required",
+    "native_validation",
+    "status"
+  ],
+  "changes": {
+    "native_checks_required": {
+      "before": true,
+      "after": false
+    },
+    "native_validation": {
+      "before": null,
+      "after": {
+        "report": "../../reports/engine/a6-compact/validation.json",
+        "pcb_sha256": "2cfc0d9328337cccce873d8882cc32c2a305b6afd9e53c2393769a298af8b4b2",
+        "erc_violations": 0,
+        "drc_violations": 0,
+        "unconnected_items": 0,
+        "schematic_parity_issues": 0,
+        "manufacturing_release": false,
+        "physical_qualification": false
+      }
+    },
+    "status": {
+      "before": "NATIVE_DRAFT_METADATA_RECONCILED_HOLD",
+      "after": "NATIVE_ROUTED_COMPACT_DEVELOPMENT_HOLD"
+    }
+  },
+  "published_files_checked": [
+    {
+      "path": "BOM.md",
+      "sha256": "9b877b7714ae72c8ad5a9c21645cfd4cd0f800f4db507b335767e4d116463584",
+      "identical": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "0536ea37551bf77aa7852b73a6d6045ce565d5a3e61ea3a0e40a3219c486a3b8",
+      "identical": true
+    },
+    {
+      "path": "analog.kicad_sch",
+      "sha256": "f34a5c3153a8240b523896686eeaff0cffce381b67763fb92882630c284eef26",
+      "identical": true
+    },
+    {
+      "path": "bom-shopping.csv",
+      "sha256": "6e6ae85b589d00ea94f84e6692a265dd1e7ab784df503f594a1686590e6417d1",
+      "identical": true
+    },
+    {
+      "path": "bom-summary.json",
+      "sha256": "62b8e3ab220c020ceb4195b74f95cbb2da2e68749c4ca179f48d2c2d2a86976d",
+      "identical": true
+    },
+    {
+      "path": "bom.csv",
+      "sha256": "24fded3e28e0801f14200824d332ab08e8b55ef15435bbb071e2ed9580c3ad49",
+      "identical": true
+    },
+    {
+      "path": "connector-pinout.csv",
+      "sha256": "b166b61566c991ea59627eac544274a537e1c28997bf02b0a997dde7d27df176",
+      "identical": true
+    },
+    {
+      "path": "core.kicad_sch",
+      "sha256": "081c808499bfda4bdfac7bb45c25aa2f4b079175b1e098594451fd8cae3fdf8a",
+      "identical": true
+    },
+    {
+      "path": "esp32-ecu.kicad_dru",
+      "sha256": "860a6a7703d33ae3f62b53cdfd16c17ff3aa1ea0e1c90b38cd0b50309af7955e",
+      "identical": true
+    },
+    {
+      "path": "esp32-ecu.kicad_pcb",
+      "sha256": "2cfc0d9328337cccce873d8882cc32c2a305b6afd9e53c2393769a298af8b4b2",
+      "identical": true
+    },
+    {
+      "path": "esp32-ecu.kicad_pro",
+      "sha256": "c5b772c96fed6378b94d4c0719c9e00fe953cce0cea7b69735e07c4c009a2f85",
+      "identical": true
+    },
+    {
+      "path": "esp32-ecu.kicad_sch",
+      "sha256": "5f4fa47df88cdd9a1f0d3125b686319832c421140214a711982da9ba0c48c19e",
+      "identical": true
+    },
+    {
+      "path": "flex.kicad_sch",
+      "sha256": "281357eb8764a0efb790639ee476c30c774bc1fbc20769a39c439ea7f56f6855",
+      "identical": true
+    },
+    {
+      "path": "fp-lib-table",
+      "sha256": "e553be5b0578848cbea0ca71eacb959e3ce44391547e492acaa2f6b0f13e63ab",
+      "identical": true
+    },
+    {
+      "path": "ignition.kicad_sch",
+      "sha256": "701b0d17a5ed295842025e4c7174fc0177c48e04ef8391efcd8f75743be54d82",
+      "identical": true
+    },
+    {
+      "path": "injectors.kicad_sch",
+      "sha256": "2430fe4fdf5a87d1ca8b441b752f61f557ae258a5d36d235d74de607d5bb6ac8",
+      "identical": true
+    },
+    {
+      "path": "lib/LICENSE-KiCad.md",
+      "sha256": "285b027a721577d0bc0198f36e948c6c282ddaa4b58fef8ed826749576eb0aef",
+      "identical": true
+    },
+    {
+      "path": "lib/NOTICE.md",
+      "sha256": "03efa002864a5b272eb2b187cf8dd04447c680d1c5a3788e9197152c1deb4bcb",
+      "identical": true
+    },
+    {
+      "path": "lib/R179-footprint-NOTICE.md",
+      "sha256": "a7225b64783142fd85f3bc96c83c0a997d49c20c5fc4889cbac982bec5a93f5d",
+      "identical": true
+    },
+    {
+      "path": "lib/R179-footprint-provenance.json",
+      "sha256": "79c6c76ff01692bef4fde1a79f42e32989cc642629d1e64488062a404aebbf1c",
+      "identical": true
+    },
+    {
+      "path": "lib/compact-capacitor-provenance.json",
+      "sha256": "01a1e927b17e860be83bc9ba693626e18ed4e9fa46ba158f75bbb45ebe13a9ce",
+      "identical": true
+    },
+    {
+      "path": "lib/compact-shield-connector-provenance.json",
+      "sha256": "73ea1358d44c5fe7810b52787449999cb06aa25bc97b249c027cdcb37dc900bd",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.kicad_sym",
+      "sha256": "15c277df776be7572c70b3233fa434f05640b51db2b3690364916d2c1c997c68",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/CP_Radial_D8.0mm_P3.50mm.kicad_mod",
+      "sha256": "653c8574ab8c35ac9ab86aedd95e8dcf6a3be0156891ca0818f90ea8dfa1d216",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/CP_Radial_D8.0mm_P3.50mm_A6_C9.kicad_mod",
+      "sha256": "dab6acb3c3845ce3de59da55be0eb881b2bf6c7cf6479597932afe4f007b733c",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/C_Disc_D5.0mm_W2.5mm_P5.00mm.kicad_mod",
+      "sha256": "951765c5e3866f11266d7d8f61ddc97a43ed3188cd9729f97eafc48b7b1878a3",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/C_Radial_KEMET_C315_L3.81mm_W2.54mm_P2.54mm.kicad_mod",
+      "sha256": "2b81977f312f5f8ff6f1f5edaa14a4be9453bbcf763b0894e148809bc648da7e",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/C_Rect_L7.2mm_W5.0mm_P5.00mm.kicad_mod",
+      "sha256": "d4204703cc22287afb2f65ae2e787085645b6da59a85ba970d0992577127cfc0",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/DIP-14_W7.62mm_LongPads.kicad_mod",
+      "sha256": "8129bb34e9b9775987e0611ae309a81c4e389d15ada344ac81c17923d723f70b",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/DIP-16_W7.62mm_LongPads.kicad_mod",
+      "sha256": "c0b8499f0bb5972d50e7e8d55390d2f3d6bfc6b5b090d0b6a43dd4b890506131",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/DIP-18_W7.62mm_LongPads.kicad_mod",
+      "sha256": "d3761e80267f6e91f496319b69aeb81c84fae51117014c1e6eef6db803874a6e",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/DIP-8_W7.62mm_LongPads.kicad_mod",
+      "sha256": "856a8b0b362480709646e1514ee9a700af954a14205f2d9b58dd32dc2c6761ac",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/D_DO-15_P12.70mm_Horizontal.kicad_mod",
+      "sha256": "1cfd047599ee734ac8ae94b963080f714468246b36a9958cbbac50ba44b291d6",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/D_DO-201AD_P15.24mm_Horizontal.kicad_mod",
+      "sha256": "a8019a2b94624e05b8185e681328b68ad5c1994a16277ee000ccdb6e83ce6c3e",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/D_DO-201AD_P5.08mm_Vertical_AnodeUp.kicad_mod",
+      "sha256": "030e4203fc77bf846c006c1c1bd2286eb937161c1107406822bfae61146d75d4",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp.kicad_mod",
+      "sha256": "110604720a16583167c7f2a5b11e72e138e158d6a838225d647744137c5b325d",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp_A6_D121.kicad_mod",
+      "sha256": "3f33a048bd22d7f977d0eb81004e31e8941599e9c04196679299a0ca39460975",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/D_DO-35_SOD27_P7.62mm_Horizontal.kicad_mod",
+      "sha256": "b25eac2468a502e0d01f4d97689005bfb2c3563512d645a7fd49f0647ee3a035",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/ESP32_S3_DevKitC_1_socket.kicad_mod",
+      "sha256": "fa81ae3adbdf99aa384717ac6071a018372393a10fec8a67ba6518ba823c7eb7",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical.kicad_mod",
+      "sha256": "1af3334885ac84d2bc4af629b29fc3dddc25ee1453bb67e20fb8dfdaee358a64",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical.kicad_mod",
+      "sha256": "149a484d86b4c190df4b961d6c6edac68b655349b248c0ca03135294c291e8f1",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/JST_PH_B5B-PH-K_1x05_P2.00mm_Vertical.kicad_mod",
+      "sha256": "615bc16a5cc6b419b743f65b706282f39852b9c8c3a48fec675df4cdb6704b4e",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/JST_VH_B2P-VH_1x02_P3.96mm_Vertical.kicad_mod",
+      "sha256": "039c57806cf885f28c874e4d2042ceec86fa8238cef6ea1aa5db09ad2069fb7a",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/JST_VH_B2P_SHIELD_Compact.kicad_mod",
+      "sha256": "2d6cf97bd1cdfb3832fd99a6424df203ff888ee025a69a92ed18f59d780ca2d7",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/JST_VH_B3P-VH_1x03_P3.96mm_Vertical.kicad_mod",
+      "sha256": "c65825ef6a20c7301f4ab035fcac44d082272262ecde9c4158ec34a10ad56312",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/JST_VH_B4P-VH_1x04_P3.96mm_Vertical.kicad_mod",
+      "sha256": "822a40678c4f0ee8d15e6e04c7e37618174cfd1af3df20f627578128ae326639",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/JST_VH_B5P-VH_1x05_P3.96mm_Vertical.kicad_mod",
+      "sha256": "896e3bdf3534a671f395661ce93a91de20cc89ac0af6f4c2c9faba7eb6110291",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/JST_VH_B8P-VH_1x08_P3.96mm_Vertical.kicad_mod",
+      "sha256": "3cd51b8aa2c1b0d4e5f864d4d3d8cf2e77c50930c80465162a6ea3c57846e4de",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical.kicad_mod",
+      "sha256": "41b46afdc52098e2f78ccfeaee1cf1c79b9da80fed13aacc7f5771990614dd38",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical.kicad_mod",
+      "sha256": "16d013aba8d9744f370b0ee861e3956eb2b237017d2ecef8fb6959a6b9bdbd91",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/L_Radial_D10.0mm_P5.00mm_Fastron_07P.kicad_mod",
+      "sha256": "414318fa336498beb005fb2bc97406db91acb05602d6bb8fa7fcb53290a1ff23",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/MountingHole_3.2mm_M3.kicad_mod",
+      "sha256": "ad3ae9361d31f7f65b71a9b8c7d0159fc6278a7baba0a48c886e40b430d989dd",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/MountingHole_3.2mm_M3_Pad.kicad_mod",
+      "sha256": "416c333cb9239ebf3970c411efb891816cd016f64b62f736b74fec957e5d1533",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/PTC_MF_R010.kicad_mod",
+      "sha256": "251ffbc70601048a0e757fe6d54cab61f6745d55ace8bbacb633f18871d86246",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/PinHeader_1x02_P2.54mm_Vertical.kicad_mod",
+      "sha256": "7de5032e02a5567990a3f6a8294956fcdba209c15e80a4ed1936b517ae465974",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/PinHeader_1x05_P2.54mm_Vertical.kicad_mod",
+      "sha256": "b812ad7d1bc8452f8c83e1c4b28b90806b40c52c105838850e3b8309bb57ca82",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/Pololu_D36V6F5_vertical.kicad_mod",
+      "sha256": "a4ae737f7fbf706f3ef9fdafda0a55f69be41d471a9103d0601f5e4fe1fe8614",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical.kicad_mod",
+      "sha256": "302a6e4543594145875a524945a36182c9ad9d7d4dba6437cca32ddd96d7ab30",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal.kicad_mod",
+      "sha256": "a9dcc8f2086449c256b52cf3cef6a8cbcde23b6dadb55b67a25a4c5fa9b30bb4",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical.kicad_mod",
+      "sha256": "3a34f732213b656c61226bc7ab649655e54299d56516f8c2f35d44c15f6b24d3",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/TO-220-3_Vertical.kicad_mod",
+      "sha256": "88a13e76d4ba9b70d45330b9f9bac6b017dc31661f51bc6aecd59ea3afb40b38",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/TO-92_Inline_Wide.kicad_mod",
+      "sha256": "b67daafbfbad5a0c4270731cb4e2012145988792639ec3cd3630c25569313f51",
+      "identical": true
+    },
+    {
+      "path": "lib/ecu.pretty/TestPoint_THTPad_D2.5mm_Drill1.2mm.kicad_mod",
+      "sha256": "0672bbc3707a4caa2d655ae32e59e6c08f71561e7baaeee4ec337e470012a970",
+      "identical": true
+    },
+    {
+      "path": "lib/models/esp32-s3-devkitc-envelope.step",
+      "sha256": "af25b8994abe6e29a163e756c2883398dc0da956f4ca74a630c3fdee94e01605",
+      "identical": true
+    },
+    {
+      "path": "lib/models/esp32-s3-n16r8-provisional.stl",
+      "sha256": "714e9d9b9e787ee29c684c770262756e2c1a1bd452dcb569ed6f227a518e867c",
+      "identical": true
+    },
+    {
+      "path": "lib/models/jst-vh-2-envelope.step",
+      "sha256": "15755a7fd78904e5e6f5d3ff3498e3ee6d6d1edb683e7a99efd5967bef743eb3",
+      "identical": true
+    },
+    {
+      "path": "lib/models/jst-vh-4-envelope.step",
+      "sha256": "0242e2f570cfb975baa4e030f8712d967dc15cc4b961927316961f4277e205ad",
+      "identical": true
+    },
+    {
+      "path": "lib/models/jst-vh-5-envelope.step",
+      "sha256": "04b17d04fa693eeefe7f88b8b964b5af129d18aa182b3a8727a69e2f9476dc48",
+      "identical": true
+    },
+    {
+      "path": "lib/models/jst-vh-8-envelope.step",
+      "sha256": "7ac6e3e9c8f94d30b6fe48887c125b89087cb79d782af1a8d615862a06787c5b",
+      "identical": true
+    },
+    {
+      "path": "lib/models/pololu-d36v6-envelope.step",
+      "sha256": "5db7245ada309211613cde76215c2753f62737e8de251a224750483d04d9957d",
+      "identical": true
+    },
+    {
+      "path": "lib/models/ptc-envelope.step",
+      "sha256": "94ad41893f80840f7d4e984ac84a2d1d20fa13f260a67d2e937ac48ee03a9b6c",
+      "identical": true
+    },
+    {
+      "path": "module-fit.json",
+      "sha256": "60d5f2803f4211d5339a1871f5435875e99823fe2a90828542f271582b02c98a",
+      "identical": true
+    },
+    {
+      "path": "new-footprints.json",
+      "sha256": "b316be9dee94f73d0a9247f810ec487c1e57e43eea5474173237b8d0104acaec",
+      "identical": true
+    },
+    {
+      "path": "outputs.kicad_sch",
+      "sha256": "4daed8fd35d83d45984b79df73c4e5f2ceabf147b697d3bc842d6193cb856c2f",
+      "identical": true
+    },
+    {
+      "path": "power.kicad_sch",
+      "sha256": "c4ba286f4ecfbaaca3ea76db89498652e639b9d536bb1b1d3300bfc02d91af50",
+      "identical": true
+    },
+    {
+      "path": "status_led.kicad_sch",
+      "sha256": "76824770772423e17f79f0196c7823bd7c2f42f04eedd0ecdaa9d28e280de209",
+      "identical": true
+    },
+    {
+      "path": "sym-lib-table",
+      "sha256": "b5ad9a7e704ebbaed688bb5178371a1e0fd090422d20e316302ca9f690da1248",
+      "identical": true
+    },
+    {
+      "path": "trigger_can.kicad_sch",
+      "sha256": "1cbaab6a6f98d7179415e43bee77153dea551e5ca2f9d29ffa162f7c0d737763",
+      "identical": true
+    }
+  ],
+  "failures": [],
+  "missing_required_native_files": [],
+  "validation_at_freeze": {
+    "candidate": "hardware/a6-flex-rgb",
+    "footprints": 264,
+    "schematic_components": 260,
+    "exact_schematic_board_pin_bindings": 779,
+    "component_values_mpn_and_footprint_ids_match": true,
+    "erc_violations": 0,
+    "drc_violations": 0,
+    "unconnected_items": 0,
+    "schematic_parity_issues": 0,
+    "width_audit_and_controls_passed": true,
+    "compact_nominal_cases": 62,
+    "retained_raw_rows": 3978182,
+    "capture_observations": 4300,
+    "independent_review_pending": true,
+    "manufacturing_release": false,
+    "physical_engine_outputs_enabled": false,
+    "physical_fit_qualified": false,
+    "source_sha256": {
+      ".cache/engine/flex-circuit/a6-compact-width-001-native/esp32-ecu.kicad_pcb": "2cfc0d9328337cccce873d8882cc32c2a305b6afd9e53c2393769a298af8b4b2",
+      ".cache/engine/flex-circuit/a6-compact-width-001-native/net_contract.json": "284c34e4583ef584a705d03eb4251ed3d08ca9ff9565327b195d2ba46be82acd",
+      ".cache/engine/flex-circuit/a6-compact-width-001-native/esp32-ecu.kicad_pro": "c5b772c96fed6378b94d4c0719c9e00fe953cce0cea7b69735e07c4c009a2f85",
+      ".cache/engine/flex-circuit/a6-compact-width-001-native/esp32-ecu.kicad_dru": "860a6a7703d33ae3f62b53cdfd16c17ff3aa1ea0e1c90b38cd0b50309af7955e",
+      ".cache/engine/flex-circuit/a6-compact-width-001-native/bom.csv": "24fded3e28e0801f14200824d332ab08e8b55ef15435bbb071e2ed9580c3ad49",
+      ".cache/engine/flex-circuit/a6-compact-width-001-native/bom-shopping.csv": "6e6ae85b589d00ea94f84e6692a265dd1e7ab784df503f594a1686590e6417d1",
+      ".cache/engine/flex-circuit/a6-compact-width-001-native/connector-pinout.csv": "b166b61566c991ea59627eac544274a537e1c28997bf02b0a997dde7d27df176",
+      ".cache/engine/flex-circuit/a6-compact-width-001-native/bom-summary.json": "62b8e3ab220c020ceb4195b74f95cbb2da2e68749c4ca179f48d2c2d2a86976d",
+      ".cache/engine/flex-circuit/a6-compact-width-001-native/width-rule-update.json": "6c653a3a37d34c18c7b6a73d26664514f9ba84a1b349935c38a52aec5b28d1a9",
+      ".cache/engine/flex-circuit/a6-compact-width-001-native/copper-width-audit.json": "435c2b523fe19fe1356b5bf22a77ee2c7ab54873209d2f2e54d34e3b1292bf93",
+      ".cache/engine/flex-circuit/a6-compact-width-001-native/finish-drc.json": "faefc4bed542614e4795c9c52ef413a614929be0600b038494fb8cefebb0d167",
+      ".cache/engine/flex-circuit/a6-compact-final-netlist-001.xml": "a1e3b334a69c9b0da351e2e2893167751dbead489e81ce9f0671598237f273f8",
+      ".cache/engine/flex-circuit/a6-compact-final-erc-001.json": "28843b649ce733fecfb0f26afb37aca91cdd1b68b5e17bfc15e5ff290ba6d80e",
+      ".cache/engine/flex-circuit/compact-matrix-001/index.json": "1e0fb466b6267d5f6adce75cef02d1f996f4bae24b4b77898b7618eaa82f464a",
+      ".cache/engine/flex-circuit/compact-metadata-model-equivalence-001.json": "617ff72127c83b460c9296b01e919ce63297092832cf279d599cb28360b56810",
+      ".cache/engine/flex-circuit/compact-resistor-power-new-matrix-001.json": "fa68d01b51c2a2acfef4df6f10f50e03bebe9359fb81da83a8979fba445eac42",
+      "hardware/flex-input/frontend-compact.json": "91f862a55b23bd8a09814847fce5b960ad2afdc3736199f4c6f76671bf52d059"
+    },
+    "published_contract_sha256": "2d2d8883d8035c43bde5d7781e491ee5b8cb470fb0c87e3c80975175e99b80e2",
+    "publication_delta": "publication-delta.json"
+  },
+  "review_note": "The native_validation reference correctly records completed native checks. Publication report was frozen while independent review was still pending. This review result may be linked into it without changing the accepted native bytes."
+}

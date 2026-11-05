@@ -1,5 +1,5 @@
 {
-  "guide_version": "1.7",
+  "guide_version": "1.9",
   "sources_append": [
     {
       "title": "Vishay 6N137 optical input/detector data",
@@ -12,6 +12,26 @@
     {
       "title": "Microchip MCP100 supply supervisor",
       "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/11187f.pdf"
+    },
+    {
+      "title": "Microchip MCP23008 expander, low-voltage table and register behavior",
+      "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/MCP23008-and-MCP23008-Data-Sheet-DS20001919.pdf"
+    },
+    {
+      "title": "Microchip MCP121 reset supervisor, threshold and hysteresis conditions",
+      "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/MCP102-Data-Sheet-DS20001906.pdf"
+    },
+    {
+      "title": "Kingbright named common-anode RGB LED",
+      "url": "https://www.kingbrightusa.com/images/catalog/SPEC/WP154A4SEJ3VBDZGW-CA.pdf"
+    },
+    {
+      "title": "Vishay MRS16/MRS25 candidate dimensions and conditional ratings",
+      "url": "https://www.vishay.com/docs/28724/mrs16m25.pdf"
+    },
+    {
+      "title": "AEM flex sensor manual, pinout contradiction remains unresolved",
+      "url": "https://documents.aemelectronics.com/4d1c5cae401b6fdb894a16fe7fc697444fb51f37.pdf"
     }
   ],
   "services_append": [
@@ -57,15 +77,37 @@
       ]
     },
     {
-      "connector": "FLEX-G38-DRAFT1 / no released connector",
+      "connector": "A6 / J22 VH3 candidate, unreleased",
       "title": "Flex capture development and diagnostics",
       "checks": [
-        "The current manufactured carriers have no released protected flex connection. Do not connect a sensor to GPIO38 using this software draft. The sensor supply, connector, conditioner, polarity, off-state back-power and pulse skew remain unqualified.",
+        "A3/A4/A5 designs have no released protected flex connection. A6 circuit and layout drafts are under review. Do not connect a sensor directly to GPIO38. J22 candidate pins are1 ground,2 FLEX_12V,3 FLEX_RAW; FLEX_12V is not an18V regulator and the external AEM sensor plug mapping is unresolved.",
         "Only compact_n16r8_flex_dev assigns GPIO38 to both-edge MCPWM capture. It requires the new0x21 MCP23008 RGB architecture. Historical/default builds retain GPIO38 WS2812 wiring and have no target flex producer. BOOT/PAIR stays on GPIO0; RESET and the sealed buttons remain required.",
         "Engine development has capture calibration, correction curves and an input confirmation. Confirmation records an assertion, not physical qualification. Corrections or an ethanol secondary-table condition require fresh genuine target capture. Missing, unconfirmed, stale or faulty data inhibits fuel and spark proposals; physical engine outputs remain OFF.",
         "Inspect the flex capture panel and its counters: requested versus actual producer calibration/revision, context, arm boundary, original sample expiry, ingress queue, fault generations, discarded edges and rejected publications. The host simulator explicitly has no target capture. Its synthetic waveforms cannot qualify the target input.",
         "Fault notifications clear only after the serialized controller consumes the matching invalid sample. A busy controller or a diagnostic read cannot clear them. Ingress suppression masks only channel2 and waits for completed-control ACK plus50ms before reacquisition of a complete new window. Quiet during masking does not prove the electrical input is quiet.",
-        "One hardware latch per channel has no FIFO. Native tests and compiled ISR placement do not measure target loss, latency, queue pressure, noise or interaction with Wi-Fi, I2C and USB. Record those HIL checks before any hardware qualification."
+        "One hardware latch per channel has no FIFO. Native tests and compiled ISR placement do not measure target loss, latency, queue pressure, noise or interaction with Wi-Fi, I2C and USB. Record those HIL checks before any hardware qualification.",
+        "The classic comparator circuit has conditional model/capture checks, with assumed sensor/cable/PCB loads and delay. These do not establish physical timing, noise, protection, temperature or target capture integrity. Use the matching circuit and native draft, not old carrier assembly coordinates.",
+        "The compact A6 candidate uses smaller leaded passives and adds local supply bypassing. Use its matching BOM and assembly coordinates; earlier A6 trial placements also differ. Nominal circuit simulations do not qualify the real capacitors, supply transients or assembled board."
+      ]
+    },
+    {
+      "connector": "A6 / J23 PH5 candidate, unreleased",
+      "title": "RGB status circuit draft",
+      "checks": [
+        "Only the GPIO38 flex development profile uses the shared-bus MCP23008 at0x21. GP0/1/2 select red/green/blue through three NPN sinks. The previous GPIO38 WS2812 wiring is incompatible with this profile.",
+        "Candidate J23 pins:1 common-anode supply through R179330R,2 red cathode,3 green cathode,4 blue cathode,5 NC with no contact or wire. For the named Kingbright common-anode LED, these four populated positions map to LED pins2,1,4,3. The three cathode resistors remain required.",
+        "R179 uses the named330R1%0.4W MRS16 candidate upright on its DIN0204 footprint. Match the3.6mm by1.6mm maximum body, lead forming and actual ratings. Solder access, assembled temperature and enclosure fit remain unqualified.",
+        "Normal requests steady green; pairing requests blue blink; a detected problem takes priority and requests red blink. Use the pairing button or Paired screens UI. Requested color and verified expander latch are separate diagnostics. Retained green after CPU/bus failure and an open LED path can still have a valid latch; readback does not prove visible light or a live CPU.",
+        "The reset-supervisor candidate is MCP121-270E/TO. Loaded reset release, loaded GPIO readback, shared-bus timing, partial rails, source/thermal headroom and actual brightness remain unqualified. The lower reset threshold is not a3V brownout monitor. No sensor or powered-harness release is supplied."
+      ]
+    },
+    {
+      "connector": "A6 / J20 PH2 candidate, unreleased",
+      "title": "Compact A6 shield and enclosure bond",
+      "checks": [
+        "The compact A6 draft uses J20 B2B-PH-K-S(LF)(SN), a PHR-2 housing and two SPH-002T-P0.5S contacts selected for the actual wire. Earlier carriers use a different housing. Match the board revision and its BOM before assembling the harness.",
+        "Both J20 pins are CHASSIS. Use this internal connector only for the shield or enclosure lining bond. H5 remains the designated chassis lug; J20 is not a normal sensor or actuator current return.",
+        "With power removed, verify the keyed mating view and continuity to the lining. Keep the bond inside the water seal. Native PCB checks do not establish crimp quality, electrical rating, enclosure fit or splash resistance."
       ]
     }
   ],

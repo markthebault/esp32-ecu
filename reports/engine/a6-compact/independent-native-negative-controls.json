@@ -1,0 +1,139 @@
+{
+  "passed": true,
+  "controls": [
+    {
+      "name": "supply",
+      "net": "+5V",
+      "target_uuid": "0600dfd3-b48a-4bb5-a38e-39c0bd0118b4",
+      "native_target_width_rejected": true,
+      "expected_native_width_rejection": true,
+      "independent_exact_policy_rejected": true,
+      "explicit_rejection_uuids": [
+        "0600dfd3-b48a-4bb5-a38e-39c0bd0118b4"
+      ],
+      "native_types": [
+        "track_width"
+      ],
+      "unconnected": 0,
+      "parity": 0,
+      "command": [
+        "kicad-cli",
+        "pcb",
+        "drc",
+        "--format",
+        "json",
+        "--all-track-errors",
+        "--schematic-parity",
+        "--severity-all",
+        "--exit-code-violations",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/supply/drc.json",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/supply/esp32-ecu.kicad_pcb"
+      ],
+      "exit_code": 5,
+      "seconds": 1.984994888305664,
+      "pcb_sha256": "5ee0c1b61a16f442850ca6db540b67483bd08b573176836bff9e55e868487f87",
+      "passed": true
+    },
+    {
+      "name": "power",
+      "net": "VIN_PROT",
+      "target_uuid": "0dd72c77-067b-411c-817c-3da8544f0f12",
+      "native_target_width_rejected": true,
+      "expected_native_width_rejection": true,
+      "independent_exact_policy_rejected": true,
+      "explicit_rejection_uuids": [
+        "0dd72c77-067b-411c-817c-3da8544f0f12"
+      ],
+      "native_types": [
+        "track_width"
+      ],
+      "unconnected": 0,
+      "parity": 0,
+      "command": [
+        "kicad-cli",
+        "pcb",
+        "drc",
+        "--format",
+        "json",
+        "--all-track-errors",
+        "--schematic-parity",
+        "--severity-all",
+        "--exit-code-violations",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/power/drc.json",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/power/esp32-ecu.kicad_pcb"
+      ],
+      "exit_code": 5,
+      "seconds": 2.053746223449707,
+      "pcb_sha256": "22b6fbca1735f71452d2c7343b5bd663ee58c84077daa5bc60f24113dd737743",
+      "passed": true
+    },
+    {
+      "name": "extra-INJ1-neck",
+      "net": "INJ1_LS",
+      "target_uuid": "014c1510-e03d-4d0b-8822-cb035b5a2bcb",
+      "native_target_width_rejected": false,
+      "expected_native_width_rejection": false,
+      "independent_exact_policy_rejected": true,
+      "explicit_rejection_uuids": [
+        "014c1510-e03d-4d0b-8822-cb035b5a2bcb"
+      ],
+      "native_types": [],
+      "unconnected": 0,
+      "parity": 0,
+      "command": [
+        "kicad-cli",
+        "pcb",
+        "drc",
+        "--format",
+        "json",
+        "--all-track-errors",
+        "--schematic-parity",
+        "--severity-all",
+        "--exit-code-violations",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/extra-INJ1-neck/drc.json",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/extra-INJ1-neck/esp32-ecu.kicad_pcb"
+      ],
+      "exit_code": 0,
+      "seconds": 1.962174415588379,
+      "pcb_sha256": "1f1cfe32c5f7e5b3b7219a1d3a9823e810b32b16487ec88cb662bed09c98b516",
+      "passed": true
+    },
+    {
+      "name": "alter-literal-neck",
+      "net": "INJ1_LS",
+      "target_uuid": "0b7ea104-b013-488f-93e3-d6a76c61494c",
+      "native_target_width_rejected": false,
+      "expected_native_width_rejection": false,
+      "independent_exact_policy_rejected": true,
+      "explicit_rejection_uuids": [
+        "0b7ea104-b013-488f-93e3-d6a76c61494c"
+      ],
+      "native_types": [],
+      "unconnected": 0,
+      "parity": 0,
+      "command": [
+        "kicad-cli",
+        "pcb",
+        "drc",
+        "--format",
+        "json",
+        "--all-track-errors",
+        "--schematic-parity",
+        "--severity-all",
+        "--exit-code-violations",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/alter-literal-neck/drc.json",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/alter-literal-neck/esp32-ecu.kicad_pcb"
+      ],
+      "exit_code": 0,
+      "seconds": 1.9839446544647217,
+      "pcb_sha256": "fac580ca68d23be736ddfd107a90904f8a8c27e0dabfd74e7b271901b86e40d5",
+      "passed": true
+    }
+  ],
+  "native_caveat": "Native INJ1 floor intentionally allows 0.8mm everywhere on INJ1; separate exact UUID/geometry audit must remain mandatory.",
+  "qualification": false
+}

@@ -1,0 +1,286 @@
+{
+  "contract": "FLEX-G38-FRONTEND-DRAFT1",
+  "status": "circuit_concept_under_review_no_fabrication_or_sensor_connection",
+  "intended_carrier": "A6_FLEX_RGB_HOLD_copy_of_A5",
+  "board_limit_mm": [
+    120,
+    120
+  ],
+  "profile": {
+    "candidate_sensor": "AEM_35-2200_in_30-2200_or_30-2201_kit",
+    "sensor_supply_at_connector_v": [
+      9,
+      18
+    ],
+    "output": "open_collector_active_low_frequency_and_low_pulse_width",
+    "frequency_hz": [
+      50,
+      150
+    ],
+    "temperature_low_pulse_us": [
+      1000,
+      5000
+    ],
+    "pullup_ohm": 2250,
+    "sensor_connector_pinout_qualified": false,
+    "supply_transients_and_current_qualified": false,
+    "source_warning": "AEM10-220X page3 pullup prose swaps pins1/3 relative to page4 table. Use physical markings and exact sensor drawing before wiring; do not infer a universal GM harness pinout."
+  },
+  "parts": [
+    {
+      "ref": "F3",
+      "value": "PTC 100mA radial candidate",
+      "mpn": "MF-R010",
+      "pins": {
+        "1": "VIN_PROT",
+        "2": "FLEX_12V"
+      },
+      "note": "Sensor current, derating, hold/trip and supply9..18V at sensor remain acceptance holds; existing VIN_PROT is not an18V regulator."
+    },
+    {
+      "ref": "J22",
+      "value": "FLEX 12V SENSOR",
+      "mpn": "B3P-VH(LF)(SN)",
+      "pins": {
+        "1": "GND",
+        "2": "FLEX_12V",
+        "3": "FLEX_RAW"
+      },
+      "note": "VH3 keyed internal connector. Deliberately not XH3 sensor5V. Housing/crimp/gland and sensor-side mapping unqualified."
+    },
+    {
+      "ref": "D212",
+      "value": "1N4148-TAP",
+      "mpn": "1N4148-TAP",
+      "pins": {
+        "1": "FLEX_BIAS",
+        "2": "FLEX_12V"
+      },
+      "note": "Anode supply, cathode bias. Blocks positive signal fault from directly feeding sensor rail; not a general power-sequence guarantee."
+    },
+    {
+      "ref": "R155",
+      "value": "750R 1% 0.6W",
+      "ohm": 750,
+      "pins": {
+        "1": "FLEX_BIAS",
+        "2": "FLEX_PULL_MID"
+      }
+    },
+    {
+      "ref": "R156",
+      "value": "750R 1% 0.6W",
+      "ohm": 750,
+      "pins": {
+        "1": "FLEX_PULL_MID",
+        "2": "FLEX_PULL_MID2"
+      }
+    },
+    {
+      "ref": "R157",
+      "value": "27400R 1% 0.6W",
+      "ohm": 27400,
+      "pins": {
+        "1": "FLEX_RAW",
+        "2": "FLEX_INPUT_MID"
+      }
+    },
+    {
+      "ref": "R158",
+      "value": "24900R 1% 0.6W",
+      "ohm": 24900,
+      "pins": {
+        "1": "FLEX_INPUT_MID",
+        "2": "FLEX_IN"
+      }
+    },
+    {
+      "ref": "R159",
+      "value": "4990R 1% 0.6W",
+      "ohm": 4990,
+      "pins": {
+        "1": "FLEX_IN",
+        "2": "GND"
+      }
+    },
+    {
+      "ref": "R160",
+      "value": "330000R 1% 0.6W",
+      "ohm": 330000,
+      "pins": {
+        "1": "FLEX_CMP",
+        "2": "FLEX_IN"
+      }
+    },
+    {
+      "ref": "R161",
+      "value": "100000R 1% 0.6W",
+      "ohm": 100000,
+      "pins": {
+        "1": "+5V",
+        "2": "FLEX_REF"
+      }
+    },
+    {
+      "ref": "R162",
+      "value": "4990R 1% 0.6W",
+      "ohm": 4990,
+      "pins": {
+        "1": "FLEX_REF",
+        "2": "GND"
+      }
+    },
+    {
+      "ref": "R163",
+      "value": "2200R 1% 0.6W",
+      "ohm": 2200,
+      "pins": {
+        "1": "+3V3",
+        "2": "FLEX_CMP"
+      }
+    },
+    {
+      "ref": "R164",
+      "value": "4700R 1% 0.6W",
+      "ohm": 4700,
+      "pins": {
+        "1": "FLEX_CMP",
+        "2": "FLEX"
+      }
+    },
+    {
+      "ref": "R165",
+      "value": "47000R 1% 0.6W",
+      "ohm": 47000,
+      "pins": {
+        "1": "FLEX",
+        "2": "GND"
+      }
+    },
+    {
+      "ref": "C158",
+      "value": "47pF C0G 5% 50V candidate",
+      "farad": 4.7e-11,
+      "pins": {
+        "1": "FLEX_INPUT_MID",
+        "2": "GND"
+      },
+      "note": "Filter is upstream of hysteresis summing node. Comparator input parasitic capacitance still requires stability review."
+    },
+    {
+      "ref": "C159",
+      "value": "10nF 50V candidate",
+      "farad": 1e-08,
+      "pins": {
+        "1": "FLEX_REF",
+        "2": "GND"
+      }
+    },
+    {
+      "ref": "C160",
+      "value": "100nF 50V candidate",
+      "farad": 1e-07,
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      }
+    },
+    {
+      "ref": "D213",
+      "value": "1N4148-TAP",
+      "mpn": "1N4148-TAP",
+      "pins": {
+        "1": "FLEX_INPUT_MID",
+        "2": "GND"
+      },
+      "note": "Low-leakage clamp upstream of final divider resistor. Conditional cold Vf and hot leakage bounds must be checked; no full-temperature physical rating inferred."
+    },
+    {
+      "ref": "U18",
+      "value": "LM2903P",
+      "mpn": "LM2903P",
+      "pins": {
+        "1": "FLEX_CMP",
+        "2": "FLEX_REF",
+        "3": "FLEX_IN",
+        "4": "GND",
+        "5": "GND",
+        "6": "FLEX_REF",
+        "7": null,
+        "8": "+5V"
+      },
+      "note": "TI classic non-B PDIP8 direct solder, no socket. Common-mode and timing must use classic limits. Unused half has IN+ GND, IN- reference and OUT NC. B-version model cannot qualify this device."
+    },
+    {
+      "ref": "R166",
+      "value": "750R 1% 0.6W",
+      "ohm": 750,
+      "pins": {
+        "1": "FLEX_PULL_MID2",
+        "2": "FLEX_RAW"
+      },
+      "note": "Third series pullup resistor shares conditional sustained negative-fault dissipation; total2250R. Actual temperature/rating/assembly remains unqualified."
+    }
+  ],
+  "existing_part_changes": {
+    "U3": {
+      "32": "FLEX"
+    }
+  },
+  "polarity": "noninverting_comparator_preserves_physical_sensor_LOW_direct_to_GPIO38",
+  "model_scope": "Conditional ngspice circuit experiments, tolerance arithmetic and actual portable Capture replay; no target, RF, hardware rating or physical qualification",
+  "unresolved": [
+    "Exact sensor output current/leakage/VOL, physical connector pinout and full supply behavior",
+    "Protection currents/energy and comparator negative-pin limits over temperature",
+    "Classic comparator delay has typical-only data; no worst-case pulse-skew guarantee",
+    "Actual cable/filter/GPIO input/output delays and raw pulse endpoint behavior",
+    "Power-off, reset, brownout, BOOT/PAIR, back-power, USB restrictions and GPIO ownership",
+    "Candidate capacitor, fuse, diode/resistor order codes, packages and assembly tolerances",
+    "Native CAD/routing, complete PCB power budgets, RGB driver circuit and physical fit",
+    "Target/HIL, EMI/surge, thermal, splash and vehicle qualification"
+  ],
+  "references": [
+    {
+      "url": "https://documents.aemelectronics.com/4d1c5cae401b6fdb894a16fe7fc697444fb51f37.pdf",
+      "title": "AEM10-220X build2016-04-20",
+      "pages": "3-4; contradictory pullup prose noted"
+    },
+    {
+      "url": "https://www.ti.com/lit/gpn/lm2903",
+      "title": "SLCS005AH April2025",
+      "pages": "3-4,10-11; classic LM2903 and PDIP order codes"
+    },
+    {
+      "url": "https://www.ti.com/lit/an/snoaa35/snoaa35.pdf",
+      "title": "SNOAA35F December2024",
+      "sections": "6.8-6.9,8; no positive input clamp toVCC, negative injection and bypass considerations"
+    }
+  ],
+  "conditional_model_bounds": {
+    "clamp_forward_v_assumed_max": 1.5,
+    "clamp_reverse_leak_ua_assumed_max": 50,
+    "classic_comparator_bias_na": 500,
+    "classic_offset_mv": 15,
+    "comparator_low_v_at_4ma_max": 0.7,
+    "normal_3v3_rail_v": [
+      3.0,
+      3.6
+    ],
+    "gpio_switching_thresholds_3v3_25c_only": true,
+    "normal_total_raw_shunt_pf_assumed_max": 500,
+    "raw_capacitance_scope": "Lumped sensor output, cable, connector and PCB shunt capacitance at RAW; conditioning/diode equivalents are additionally explicit. No AEM capacitance guarantee exists.",
+    "sensor_on_resistance_ohm_assumed_max": 50,
+    "sensor_off_leak_ua_assumed_max": 10,
+    "resistor_tcr_ppm_per_k_assumed_max": 50,
+    "filter_capacitor_tolerance_pct": 5,
+    "gpio_leak_ua_assumed_bound": 1
+  },
+  "implementation": {
+    "circuit_concept": true,
+    "native_cad": false,
+    "protection_rating": false,
+    "sensor_supply_qualified": false,
+    "physical_qualification": false,
+    "engine_outputs_enabled": false
+  }
+}
