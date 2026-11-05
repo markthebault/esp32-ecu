@@ -5,7 +5,7 @@ R=Path(__file__).resolve().parents[1]
 _build_lock=threading.Lock()
 def load_engine_bridge():
  with _build_lock:
-  out=R/'.cache/engine';out.mkdir(parents=True,exist_ok=True)
+  out=Path(os.environ.get('ECU_NATIVE_CACHE_ROOT',str(R/'.cache/native-v2')))/'engine';out.mkdir(parents=True,exist_ok=True)
   cjson=Path.home()/'.platformio/packages/framework-espidf/components/json/cJSON'
   if not (cjson/'cJSON.c').exists():raise RuntimeError('Build firmware with pinned PlatformIO framework first')
   # Include transitive headers: a scheduler-only fix must rebuild the SIL binary.

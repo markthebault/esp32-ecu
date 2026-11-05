@@ -1,5 +1,5 @@
 {
-  "guide_version": "1.9",
+  "guide_version": "1.10",
   "sources_append": [
     {
       "title": "Vishay 6N137 optical input/detector data",
@@ -113,10 +113,14 @@
   ],
   "config_help": [
     "Voltage mode shows the reconstructed connector voltage; it does not require a sensor transfer curve.",
-    "Linear mode uses two measured input voltages and two physical values. Set the actual units and validate a third reference point.",
+    "Linear mode uses two measured input voltages and two physical values. Set the actual units and validate a third reference point. Voltage coordinates are absolute unless ratiometric conversion is explicitly enabled.",
     "Table mode interpolates between 2-16 ascending voltage/value pairs. Values outside the table range are faults, not extrapolated measurements.",
+    "For a sensor documented as ratiometric to this board's measured SENSOR_5V rail, linear/table mode can normalize its signal to the curve reference supply: conversion voltage = connector voltage x curve reference supply / measured SENSOR_5V. Enter the supply used for the calibration curve, normally5 V. Do not enable this for an independently regulated sensor or controller output. Raw connector voltages and fault limits remain absolute; NTC mode already uses the supply ratio.",
+    "Sensor profile schema2 stores ratiometric and reference_supply_v for every sensor. Schema1 imports explicitly disable this option and use5 V as an inactive reference; loading an old saved profile only normalizes it in RAM until the next successful save. This profile version is separate from engine tune schema9 and own010 MSQ files. Changing conversion basis clears the editor's calibration confirmation; recheck the whole curve.",
+    "Current sensor profiles use bounded blob storage and retain the old saved string separately. Export the current profile before changing firmware: old firmware reads only its older record. Read or commit failures block further device saves until restart/inspection. The firmware never requests an automatic partition erase; available flash space and physical power-loss recovery still need testing.",
+    "Ratiometric normalization does not correct ground offsets, divider mismatch, sample timing, input loading or sensor nonlinearity. The shared5 V fuse, wiring and sensor current budget still apply. Engine rail limits remain4.75..5.25 V and physical outputs remain inhibited. A normalized reading outside these engine limits does not authorize operation.",
     "NTC beta mode is for CLT/IAT only and requires the physical pull-up. It uses the measured sensor supply and compensates the 55 kohm divider load. A voltage table is preferable when the real curve is available.",
-    "Filtering is for readout smoothing, not a substitute for fixing wiring/noise. Electrical fault checks use the instantaneous input.",
+    "Filtering is for readout smoothing, not a substitute for fixing wiring/noise. Ratiometric samples are normalized before readout filtering; engine calculations and electrical fault checks use instantaneous inputs.",
     "Saved calibration feeds readouts and shadow engine calculations. Physical engine outputs remain inhibited. DBW, catalyst diagnostics and OEM protocols are not implemented.",
     "Saving trigger geometry or engine timing fences virtual output plans and requires fresh synchronization. Batch and semi-sequential use crank-only360-degree synchronization; full sequential uses two repeatable cam observations for720-degree phase. Capture age, overflow and stopped/quiet recovery still apply."
   ],

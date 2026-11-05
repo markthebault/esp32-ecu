@@ -10,6 +10,7 @@
 #include "ecu/heap_object.hpp"
 #include "ecu/trigger_log_json.hpp"
 #include "config_json.hpp"
+#include "ecu/config_storage.hpp"
 #include "web_assets.hpp"
 #include "driver/gpio.h"
 #include "esp_log.h"
@@ -53,10 +54,15 @@ const char* storage_message="not initialized";
 char token[33]{};
 std::int64_t started{};
 #endif
-bool parse_text(const char* text,config::Config& out){
+bool parse_text(const char* text,config::Config& out,std::string*canonical=nullptr){
  if(!safe_json(text,std::strlen(text)))return false;
  const char* end=nullptr;auto*j=cJSON_ParseWithOpts(text,&end,true);
- const bool ok=j&&parse(j,out);cJSON_Delete(j);return ok;
+ bool ok=j&&parse(j,out);
+ if(ok&&canonical){
+  ok=upgrade_profile_document(j);char*encoded=ok?cJSON_PrintUnformatted(j):nullptr;
+  ok=encoded&&std::strlen(encoded)<=16384;if(ok)*canonical=encoded;cJSON_free(encoded);
+ }
+ cJSON_Delete(j);return ok;
 }
 #if ECU_CONFIG_WEB
 void numeric(cJSON*j,const char*k,double v){if(std::isfinite(v))cJSON_AddNumberToObject(j,k,v);else cJSON_AddNullToObject(j,k);}
@@ -109,14 +115,20 @@ esp_err_t config_put(httpd_req_t*r){
  if(!safe_json(body.c_str(),body.size()))return message(r,"Invalid profile envelope or excessive JSON nesting.","400 Bad Request");
  config::Config candidate;const char*end=nullptr;auto*j=cJSON_ParseWithOpts(body.c_str(),&end,true);
  if(!j||!parse(j,candidate)){cJSON_Delete(j);return message(r,"Profile violates schema or calibration limits. Check every field.","422 Unprocessable Entity");}
+ if(!upgrade_profile_document(j)){cJSON_Delete(j);return message(r,"Profile migration allocation failed.","500 Internal Server Error");}
  xSemaphoreTake(mutex,portMAX_DELAY);const auto revision=active.revision;xSemaphoreGive(mutex);
  if(candidate.revision!=revision||revision==UINT32_MAX){cJSON_Delete(j);return message(r,"Profile revision changed. Export edits, reload, then reapply them.","409 Conflict");}
  candidate.revision++;cJSON_SetNumberValue(cJSON_GetObjectItemCaseSensitive(j,"revision"),candidate.revision);
  char*encoded=cJSON_PrintUnformatted(j);cJSON_Delete(j);if(!encoded)return message(r,"Allocation failed.","500 Internal Server Error");
+ if(std::strlen(encoded)>16384){cJSON_free(encoded);return message(r,"Migrated profile exceeds 16 KiB.","413 Content Too Large");}
  engine_target::begin_configuration();
- nvs_handle_t store{};auto err=nvs_open("ecu_config",NVS_READWRITE,&store);
- if(err==ESP_OK){err=nvs_set_str(store,"profile",encoded);if(err==ESP_OK)err=nvs_commit(store);nvs_close(store);}
- if(err!=ESP_OK){cJSON_free(encoded);engine_target::finish_configuration(0,revision);ESP_LOGE(tag,"Profile commit failed: %s",esp_err_to_name(err));return message(r,"Flash commit failed. Previous runtime profile remains active.","507 Insufficient Storage");}
+ const auto err=config_storage::save(encoded,std::strlen(encoded));
+ if(err!=ESP_OK){
+  cJSON_free(encoded);engine_target::finish_configuration(0,revision);
+  storage_ok=false;storage_message="profile commit failed; writes blocked until restart/inspection";
+  ESP_LOGE(tag,"Profile commit failed: %s",esp_err_to_name(err));
+  return message(r,"Flash commit failed. Previous runtime profile remains active; further saves are blocked until restart/inspection.","507 Insufficient Storage");
+ }
  xSemaphoreTake(mutex,portMAX_DELAY);active=candidate;document=encoded;storage_message="saved";xSemaphoreGive(mutex);cJSON_free(encoded);
  engine_target::finish_configuration(0,candidate.revision);
  return config_get(r);
@@ -134,7 +146,8 @@ esp_err_t status_get(httpd_req_t*r){
  numeric(j,"sensor_5v",supply);numeric(j,"battery_v",s.raw[6]*c.adc_reference_v/4095.0*13);
  auto*a=cJSON_AddArrayToObject(j,"raw_adc");for(auto n:s.raw)cJSON_AddItemToArray(a,cJSON_CreateNumber(n));
  a=cJSON_AddArrayToObject(j,"sensors");for(unsigned i=0;i<6;++i){const auto&sc=c.sensors[i];const double av=s.raw[i]*c.adc_reference_v/4095.0,sv=av/.6;
-  auto reading=config::convert(sc,sv,av,supply);auto smooth=config::convert(sc,f[i],f[i]*.6,supply);auto*o=cJSON_CreateObject();cJSON_AddStringToObject(o,"id",sc.id);numeric(o,"raw",s.raw[i]);numeric(o,"adc_v",av);numeric(o,"sensor_v",sv);
+  auto reading=config::convert(sc,sv,av,supply);auto smooth=sc.ratiometric?config::convert(sc,sv,av,supply,&f[i]):config::convert(sc,f[i],f[i]*.6,supply);auto*o=cJSON_CreateObject();cJSON_AddStringToObject(o,"id",sc.id);numeric(o,"raw",s.raw[i]);numeric(o,"adc_v",av);numeric(o,"sensor_v",sv);
+  cJSON_AddBoolToObject(o,"ratiometric",sc.ratiometric);numeric(o,"transfer_voltage_v",reading.transfer_v);numeric(o,"display_transfer_voltage_v",smooth.transfer_v);
   const bool good=fresh&&s.adc_ok&&reading.valid&&smooth.valid;numeric(o,"value",good?smooth.value:NAN);cJSON_AddBoolToObject(o,"valid",good);cJSON_AddBoolToObject(o,"confirmed",sc.confirmed);
   cJSON_AddStringToObject(o,"fault",!fresh?"stale sample":!s.adc_ok?"ADC transfer failed":!reading.valid?reading.fault:!smooth.valid?smooth.fault:"ok");cJSON_AddItemToArray(a,o);
  }
@@ -319,18 +332,18 @@ void service_task(){
 }
 void init(){
  mutex=xSemaphoreCreateMutex();configASSERT(mutex);
- configASSERT(parse_text(assets::defaults,active));document=assets::defaults;
+ configASSERT(parse_text(assets::defaults,active,&document));
  const auto err=nvs_flash_init();storage_ok=err==ESP_OK;storage_message=storage_ok?"defaults; no saved profile":"NVS init failed; inspect UART";
  if(!storage_ok){ESP_LOGE(tag,"NVS init failed: %s. Partition NOT erased.",esp_err_to_name(err));return;}
- nvs_handle_t store{};auto opened=nvs_open("ecu_config",NVS_READONLY,&store);
- if(opened==ESP_ERR_NVS_NOT_FOUND)return;
- if(opened!=ESP_OK){storage_ok=false;storage_message="NVS namespace read failed";return;}
- std::size_t size=0;auto result=nvs_get_str(store,"profile",nullptr,&size);
- if(result==ESP_OK&&size>0&&size<=16385){std::string saved(size,'\0');result=nvs_get_str(store,"profile",saved.data(),&size);config::Config c;
-  if(result==ESP_OK&&parse_text(saved.c_str(),c)){active=c;document=saved.c_str();storage_message="loaded from NVS";}
-  else{storage_ok=false;storage_message="saved profile invalid; defaults active; inspect UART";}
- }else if(result!=ESP_ERR_NVS_NOT_FOUND){storage_ok=false;storage_message="profile read failed or too large";}
- nvs_close(store);
+ config::Config candidate;std::string saved,prepared;esp_err_t read_error=ESP_OK;
+ const auto loaded=config_storage::load(saved,[&](const std::string&text){return parse_text(text.c_str(),candidate,&prepared);},read_error);
+ if(loaded==config_storage::Load::Blob||loaded==config_storage::Load::Legacy){
+  active=candidate;document.swap(prepared);
+  storage_message=loaded==config_storage::Load::Blob?"loaded profile blob":"legacy profile loaded; normalized in RAM, old NVS string retained";
+ }else if(loaded==config_storage::Load::Error){
+  storage_ok=false;storage_message="profile read/validation failed; defaults active; saving blocked";
+  ESP_LOGE(tag,"Profile read failed: %s. Stored records NOT erased.",esp_err_to_name(read_error));
+ }
 }
 void start_service(){
 #if ECU_CONFIG_WEB
@@ -342,9 +355,10 @@ void publish(const Sample&s){
  if(xSemaphoreTake(mutex,0)!=pdTRUE)return;
  const auto now=esp_timer_get_time();
  const double dt=last_sample?std::max(0.0,(now-last_sample)/1000.0):0;
- for(unsigned i=0;i<6;++i){const double v=s.raw[i]*active.adc_reference_v/4095.0/.6;
-  if(!last_sample||filtered_revision!=active.revision||active.sensors[i].filter_ms<=0)filtered[i]=v;
-  else filtered[i]+=dt/(active.sensors[i].filter_ms+dt)*(v-filtered[i]);
+ const double supply=s.raw[7]*active.adc_reference_v/4095.0/.6;
+ for(unsigned i=0;i<6;++i){const double raw=s.raw[i]*active.adc_reference_v/4095.0/.6;
+  filtered[i]=config::readout_filter(active.sensors[i],raw,supply,filtered[i],dt,
+                                    !last_sample||filtered_revision!=active.revision,s.adc_ok);
  }
  filtered_revision=active.revision;latest=s;last_sample=now;radio::publish(s,active,filtered);xSemaphoreGive(mutex);
 }

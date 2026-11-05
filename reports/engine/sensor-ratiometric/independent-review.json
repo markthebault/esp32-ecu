@@ -1,0 +1,297 @@
+{
+  "reviewer": "independent ECU reviewer; no subagents",
+  "review_started_on_head": "1050d9276e89f4289cfe4ad1e275d604485c6243",
+  "completed_utc": "2026-11-05T10:46:50.228672+00:00",
+  "decision": {
+    "software_publication": "pass for frozen reviewed ratiometric calibration increment after resolved P2; final preserved target builds verified",
+    "open_publication_blockers": [],
+    "physical_operation_qualified": false,
+    "full_nonideal_sweep_accepted": false
+  },
+  "ownership": {
+    "evidence_directory": ".cache/engine/ratiometric-002/independent-review-001",
+    "created_new_fail_if_present": true,
+    "writes": "Only this owned directory; native cache and temporary/browser files stay within it",
+    "source_edits_by_reviewer": false,
+    "applicable_instructions_read": [
+      "/home/mark/AGENTS.md"
+    ],
+    "instruction_contents_copied_into_evidence": false
+  },
+  "scope": [
+    "Actual config.hpp linear/table ratio math, raw electrical-fault order, normalized readout filtering, invalid-supply/ADC behavior and recovery",
+    "Actual schema1/schema2 parser, explicit legacy Off/5V reset, duplicate/unknown/missing fields and migration allocation failures",
+    "Actual firmware web_config.cpp boot/load/publish and full config_put handler against independently authored SDK/HTTP/NVS/timer/mutex/fence API models",
+    "Actual espnow.cpp sensor publication via native fake SDK queue/time, including raw counts, normalized filtered values and invalidity bits",
+    "Host ctypes layout, cache separation, actual C++ bridge, file persistence and migration; actual local HTTP-backed Chrome calibration editor",
+    "Generated defaults/guides/assets, current documentation, legacy regression and final preserved target-build artifact/source/ELF checks",
+    "8-case actual production Speeduino raw-ADC MAP acquisition/conversion fixture; entry/build attestation source reviewed, unchanged binary/input hashes verified and all cases independently rerun"
+  ],
+  "findings": [
+    {
+      "id": "RATIO-REVIEW-001",
+      "severity": "P2",
+      "category": "publication blocker before fix; resolved",
+      "title": "Schema migration crossed the NVS string ceiling for a previously persistable profile",
+      "pre_fix_location": {
+        "file": "firmware/main/web_config.cpp",
+        "line": 125,
+        "source_sha256": "6bf00ee6412b5e21b52b00f3347ff21eb10bad51c36c9441e35d034fd371fe3e"
+      },
+      "reproduction": "nvs-limit-profile1.json is parser-valid schema1 and 3775 bytes. Actual cJSON normalization yields parser-valid schema2 of4033 bytes. Pinned SDK nvs.h:295 limits NVS strings to4000 bytes including NUL, while the old target save route accepted up to16384 before nvs_set_str. The legacy profile could load but could no longer be explicitly saved after migration; the host would save it.",
+      "reproduction_script": "nvs_reproduce.py",
+      "evidence": [
+        "nvs-limit.json",
+        "nvs-limit-profile1.json",
+        "nvs-limit-profile2.json"
+      ],
+      "resolution": {
+        "files": [
+          "firmware/include/ecu/config_storage.hpp:16",
+          "firmware/include/ecu/config_storage.hpp:48",
+          "firmware/main/web_config.cpp:125",
+          "firmware/main/web_config.cpp:339"
+        ],
+        "behavior": "Bounded <=16384-byte blob in existing ecu_config/profile_blob. Boot reads only, prefers a valid blob, uses the retained legacy string only when blob is absent, rejects present invalid blob. Successful save commits blob before publishing runtime. Commit errors retain runtime, finish the configuration fence using the previous revision, and block further saves."
+      },
+      "resolution_verified": true,
+      "resolution_probes": [
+        "web-firmware-002-1.log",
+        "web-http-002-1.log",
+        "storage-rerun/result.json",
+        "final-firmware-verification.json"
+      ],
+      "objection_limit": "The error path already failed safely before the fix. This was a functional persistence/migration regression, not evidence of a physical output hazard. Native API models do not establish real flash recovery/atomicity/capacity."
+    }
+  ],
+  "independent_probes": [
+    {
+      "name": "random ratio/parser/allocation probe",
+      "source": "review_probe.cpp",
+      "command_record": "commands.json",
+      "result": "40049 assertions pass with ASan/UBSan;10000 seeded ratio/reference cases;24 injected migration allocation failures and16 successes",
+      "log": "probe-02.log"
+    },
+    {
+      "name": "actual ESP-NOW sensor publisher",
+      "source": "radio_probe.cpp",
+      "command_record": "radio-commands-003.json",
+      "result": "33 assertions pass with ASan/UBSan; fake SDK queue/time only",
+      "log": "radio-probe-003-1.log"
+    },
+    {
+      "name": "actual firmware boot/load/publish",
+      "source": "web_firmware_probe.cpp",
+      "command_record": "web-firmware-commands-002.json",
+      "result": "16 assertions pass with ASan/UBSan; independently authored NVS/timer/mutex API model",
+      "log": "web-firmware-002-1.log"
+    },
+    {
+      "name": "actual complete config_put handler",
+      "source": "web_http_probe.cpp",
+      "command_record": "web-http-commands-002.json",
+      "result": "14 assertions pass with ASan/UBSan; long migrated PUT success, stale CAS, commit failure, blocked retries and corrupt-blob boot. Fake HTTP/NVS/fences; unused unrelated handlers are link-garbage-collected. Sign-compare warnings suppressed for the SDK size_t content_len versus existing integer counters.",
+      "log": "web-http-002-1.log"
+    },
+    {
+      "name": "actual Chrome and host HTTP/C++ acquisition path",
+      "source": "ui_probe.py",
+      "result": "7 checks pass; no injected JavaScript sensor measurement values; uses actual Device synthetic sampling/C++ conversion and authored supply controls",
+      "log": "ui-probe-002.log",
+      "result_file": "ui-probe.json"
+    },
+    {
+      "name": "generated-source reconstruction without writes to source",
+      "result": "build_shared_guides.py outputs match current defaults and guide; embed_web.py output matches current web_assets.hpp",
+      "evidence": [
+        "generated-check.json",
+        "generated-assets-check.json"
+      ]
+    },
+    {
+      "name": "final preserved PlatformIO build validation",
+      "result": "All3 environments passed. Independently verified6 BIN/ELF hashes,3 compressed ELF payload hashes, matching final production source hashes, and exact current index bytes in each ELF .flash.rodata. Reviewer did not rerun compiler.",
+      "evidence": "final-firmware-verification.json",
+      "parent_build": ".cache/engine/ratiometric-002/firmware-002/summary.json"
+    }
+  ],
+  "authored_suite_reruns": [
+    {
+      "name": "host web config",
+      "checks": 20,
+      "log": "probe-03.log",
+      "result": "pass"
+    },
+    {
+      "name": "sensor ratiometric Python",
+      "checks": 10,
+      "log": "probe-04.log",
+      "result": "pass"
+    },
+    {
+      "name": "native ratiometric binding/controller",
+      "checks": 93,
+      "log": "existing-probe-1.log",
+      "result": "pass; includes unchanged4.75..5.25 engine cuts and freshness"
+    },
+    {
+      "name": "frozen1050d92 Off differential replay",
+      "compared_readings": 12288,
+      "raw_vectors": 2048,
+      "log": "existing-probe-2.log",
+      "result_file": "legacy-replay/result.json",
+      "result": "bit-identical values/voltages/validity/fault strings"
+    },
+    {
+      "name": "sensor NVS API model",
+      "checks": 60,
+      "log": "storage-rerun.log",
+      "result_file": "storage-rerun/result.json",
+      "result": "pass"
+    },
+    {
+      "name": "production Speeduino raw-ADC conversion comparison",
+      "cases": 8,
+      "command_record": "reference-command.json",
+      "log": "reference-rerun.log",
+      "result_file": "reference-rerun/result.json",
+      "result": "pass; parent-built production-loop binary copied unchanged into owned reference-runtime to isolate GCOV writes. Common-reference case outputs51kPa for declared52kPa integer-conversion fixture; sensor-only drop is not cancelled.",
+      "scope_limit": "MAP acquisition/conversion only; authored10-bit/12-bit ADC/reference relationships; no ADC hardware, power distribution, timing, full-engine equivalence or physical qualification."
+    }
+  ],
+  "review_observations": {
+    "core": "Normalization uses instantaneous connector voltage times calibration reference over measured rail. Raw input fault thresholds precede ratio conversion faults; display samples normalize before smoothing. Engine binding remains instantaneous.",
+    "schema": "Schema1 success explicitly clears both new settings on every sensor, including reused Config objects. Schema2 requires fields. Mixed schema1/new fields reject. In-place document upgrade is used only after validation and caller-owned allocation failures are discarded.",
+    "ui": "Ratio/reference/mode changes clear confirmation; capture uses edited settings and rejects stale/failed/invalid-supply observations. Saved conversions remain separate. Legacy-backend capability logic was source-reviewed and the existing authored8-check browser result was inspected; independent7-check UI run did not emulate an old backend.",
+    "docs": "Final docs/guides state Off defaults, sensor-documentation prerequisite, absolute raw faults, normalization limits, unchanged engine rail guard/output inhibit, blob capacity/recovery limits, downgrade behavior and conditional simulation scope. No unsupported physical qualification claim found in reviewed final docs.",
+    "source_transition": "Parent fixed the discovered persistence regression during this review. sources-start.json and sources-final.json distinguish original and final hashes; final tested production files match firmware-002 manifest.",
+    "speeduino": "The entry writes authored raw ADC counts, executes run_loop(), and reads production currentStatus.MAP; no MAP/RPM/sync status injection was found in the entry. The production objects/inputs are attested and an unchanged binary was independently rerun. Source selects AVCC on AVR, while the native test models that relationship outside the binary; a separate sensor-only supply drop is explicitly exercised and not cancelled. Only8 declared acquisition/conversion cases are supported.",
+    "late_test_only_updates": "After production-source freeze and completed independent probes, the parent added the same93-check native reproduction wrapper, its docs command, and2 screenshot-only UI test lines (kPa label and waiting for toast disappearance). These were source-reviewed and copied into the final source map; the new wrapper and modified authored UI script were not additionally rerun by this reviewer. Production code, web/index.html and firmware-002 artifact hashes remain unchanged."
+  },
+  "physical_holds": [
+    "Physical engine outputs remain inhibited; this review grants no permission to operate an engine.",
+    "Actual sensor wiring/pinout/supply relationship, ground offsets, divider tolerances, ADC channel switching/sample skew/loading, reference error, current/fuse/wiring drop and thermal behavior require measured testing.",
+    "Actual ESP32 timing/RTOS/supervisor/watchdog/output-scheduler behavior, NVS capacity/fragmentation/wear/recovery/power-loss behavior and RF/EMI/surge/enclosure/environment remain unqualified.",
+    "Conversion acceptance at4..5.3V is distinct from the unchanged engine rail guard4.75..5.25V.",
+    "No full nonideal circuit sweep is accepted here. The authored idealized CPU/GPIO/regulator/sensor/ADC0..6 and sample-time assumptions cannot establish board limits. Parent-reported fixture nonconvergence is not classified as a product failure."
+  ],
+  "excluded_evidence": [
+    "Final physical hardware/HIL tests",
+    "Unfinished/revised full nonideal runs005/006/007 or subsequent sweeps"
+  ],
+  "harness_corrections": [
+    "First independent Chrome launch failed because the owned TMPDIR absolute socket path exceeded the UNIX socket path limit. Re-run changed CWD to owned tmp and set TMPDIR=. so all files remain owned; current UI run passed.",
+    "Initial radio harness used an unavailable read16 helper; replaced it with local byte decoding. First runtime attempted an exact4V synthetic rail that quantizes below4V; corrected valid-rail probes to4.01/5.29 while retaining strict invalidity tests. These were harness assumptions, not feature defects.",
+    "Initial full-HTTP compile exposed the harness content_len signedness choice; matched the pinned SDK size_t declaration and suppressed existing sign-compare warnings. ASan/UBSan execution then passed."
+  ],
+  "source_sha256_final": {
+    "firmware/include/ecu/config.hpp": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739",
+    "firmware/main/config_json.hpp": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6",
+    "firmware/main/web_config.cpp": "482ae6da5c108491a57df4c688e95652a1f9ddd8029ceee8a0d0e7a0a23cd846",
+    "firmware/main/espnow.cpp": "fe1d07279fda987162e191812cd8b92eb5d9cc5374b246bdd5ed971decdb39c0",
+    "firmware/include/ecu/json.hpp": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+    "firmware/include/ecu/engine_binding.hpp": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9",
+    "firmware/include/ecu/engine.hpp": "18ceb68768c435139fa3917da435de6b8164bdeb28c46173dfead5a8c64cb4a9",
+    "tools/config_bridge.cpp": "63abc51efe6d5331bfd528fa07fa5bae02cfea2e2bce9a20fcc9bc8394ba439e",
+    "tools/web_server.py": "bb02471c0cc7f887d2624f1c7c564c9a1f7cc391e9a469c8d8bab1e525fb31a3",
+    "tools/engine_runtime.py": "3b8ca5e27dce38337271a27eaa658d1341dc2535ee6fdfede5e369c1bd792505",
+    "web/index.html": "344b915e0823b6f961350500e637355ee3e125e6bfc0dbecbe6676c9e3b92a3f",
+    "scripts/build_shared_guides.py": "bd0cdc53811202145b62b42d33040b87401df69877cbdab8b79ae29645a4d554",
+    "config/defaults.json": "e61fb310f60ddc801bbc2dec0dca288314ed124761b7fc35087aee10687ba617",
+    "config/interface-guide.json": "5cd231774c77bdc9c6751686979a0e28efa5ca5e1c45413eec94caa2bcda25de",
+    "config/interface-guide-development.json": "303df4820d7dd10aa0691e9ae701ed8ea67aa780a96c177966d60c5f21172549",
+    "docs/sensor-ratiometric.md": "1b56e9d475aceb0f29d7326b1e1bf45f11422544b53159c063aac7b83855ef29",
+    "docs/engine-feature-coverage.md": "5bfbcae846230db0569db3b3a9a9be9932447dcc58263951ce06b4fe49222d3f",
+    "firmware/tests/ratiometric_test.cpp": "14ec489f02b6e86762789a54d43a544bfdbe003051724c0196227d35ca0f7b79",
+    "tools/test_sensor_ratiometric.py": "9f9ba882a833ed1654ad6d97392a8d3331813955eb57c0cebaf2ca961c17bcc4",
+    "tools/test_sensor_ratiometric_ui.py": "7d006cb115dd5000bf15d778f085786a42a25a84952acaaeb21181941d5a0be9",
+    "firmware/include/ecu/config_storage.hpp": "b7ec2f7029e00abb6440b3a9b1e1210d76ddf1f2309d19f7c52d81bc59990c45",
+    "firmware/main/web_assets.hpp": "042267504d326092156270d6d418f1123bfaa14f6f43733873f2d727373f1910",
+    "tools/sensor_storage_test.cpp": "2dec7f1a51e451cd304c7b12c0e027f2b3b340e02c7a43c0ed63b904ab4be6b8",
+    "tools/test_sensor_storage.py": "8aa758b0e76e4fb8730555abcb1c90951ea0e78408555da05e2517745225d05e",
+    "tools/fixtures/sensor-profile1-nvs-boundary.json": "c8bcf8d42674f56301bdba8632fde480fb234af3e56d12cc2a07ffc111582a39",
+    "firmware/tests/fakes/nvs.h": "8ae4111796b3175b79d5c4ae9537bd75c49cd4351269706d3ad705bb1c81611c",
+    "scripts/embed_web.py": "2893e1b9423d066538b8dd9cbcbf4d7bdeccb249751e3da9296073a682b210dc",
+    "firmware/platformio.ini": "1cd5facedd3e9fc9e3c7a7b0d6741b24b4a3871d2a6897ac36c740e09a8d8497",
+    "tools/compare_sensor_reference.py": "143425ffa16ae3e441b3c7d9c100c8ef255f74ee9b191ed19345414d35f65360",
+    "tools/speeduino_sensor_sim.cpp": "2a4ebd47c9563057ac0d6b2b804ec67807aa074f9ae3b4d171597040134c6e2e",
+    "scripts/build_speeduino_sensor.py": "b90150da6d7a9343f2532f2230572a3e6bc54aa7b0d665ca2b7164c50f93f4f5",
+    "tools/speeduino_sim.cpp": "dc5ef41e64539e18c21be2aa9cf748820969271117923569b592fc6ae3b42f50",
+    "tools/speeduino_sim_native.hpp": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9",
+    "scripts/build_speeduino_flex.py": "6c4fa2b9a47d1f5d0b1efc0bd50cf9fd45fc3fc61380e318733aa64effe11dd7",
+    "tools/test_sensor_native.py": "d4b9728ee1d09f0eafabd9464514ac6868b550ea4cadcf9f2dbb35096464ed44"
+  },
+  "source_changes_during_review": {
+    "firmware/main/web_config.cpp": {
+      "initial": "6bf00ee6412b5e21b52b00f3347ff21eb10bad51c36c9441e35d034fd371fe3e",
+      "final": "482ae6da5c108491a57df4c688e95652a1f9ddd8029ceee8a0d0e7a0a23cd846"
+    },
+    "config/interface-guide.json": {
+      "initial": "077f845b89d1949f5857b9eb1cfebd22ff6e821c063257d1e9fe7cbed84a2633",
+      "final": "5cd231774c77bdc9c6751686979a0e28efa5ca5e1c45413eec94caa2bcda25de"
+    },
+    "config/interface-guide-development.json": {
+      "initial": "a56792d6bd7f9e1c5796f04ee2faf35d78e3f50cea109ab5f4a9ab248ad00eaf",
+      "final": "303df4820d7dd10aa0691e9ae701ed8ea67aa780a96c177966d60c5f21172549"
+    },
+    "docs/sensor-ratiometric.md": {
+      "initial": "cdacce3e4a8d17adffddbf128310adafb02378743fd2428adc208825d6919572",
+      "final": "1b56e9d475aceb0f29d7326b1e1bf45f11422544b53159c063aac7b83855ef29"
+    },
+    "tools/test_sensor_ratiometric_ui.py": {
+      "initial": "fec8e6ee6b32ad52b43eaaa3c1d4c6693f2c691a72fdb252ac3f681dffa29ef4",
+      "final": "7d006cb115dd5000bf15d778f085786a42a25a84952acaaeb21181941d5a0be9"
+    }
+  },
+  "sdk_root": "/home/mark/.platformio/packages/framework-espidf",
+  "sdk_sha256": {
+    "components/json/cJSON/cJSON.c": "f892717f26cf3d21b7108de50cea95b6e48092950427615fe1d8d9c46ea09cca",
+    "components/json/cJSON/cJSON.h": "fda63720ffad1d007802f62204831018d167084c26e2ce08ad36f11529a90682",
+    "components/nvs_flash/include/nvs.h": "d961b401c3fa771c8cabdcf1ed19008b8044281b964990648d012c2ac81e0883",
+    "components/nvs_flash/src/nvs_page.cpp": "81d9ba04f081acd8b3fa05879c9a5e80953ab4ca7947ef9a3a26b0187f1ed32c",
+    "components/esp_http_server/include/esp_http_server.h": "b83467efddfced61ee5183816fcc3f103d2b4bcf9164dc5de83a40ca667f4fbd"
+  },
+  "compilers": {
+    "cc": "cc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "c++": "c++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "g++": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0"
+  },
+  "reproducibility_whitelist": {
+    "required_owned_sources": [
+      "review_probe.cpp",
+      "radio_probe.cpp",
+      "web_firmware_probe.cpp",
+      "web_http_probe.cpp",
+      "ui_probe.py",
+      "nvs_reproduce.py",
+      "web_fakes/",
+      "sources-final/"
+    ],
+    "required_records": [
+      "review.json",
+      "sources-start.json",
+      "sources-final.json",
+      "artifact-sha256.json",
+      "commands.json",
+      "existing-commands.json",
+      "radio-commands-003.json",
+      "web-firmware-commands-002.json",
+      "web-http-commands-002.json",
+      "reference-command.json",
+      "final-firmware-verification.json",
+      "generated-check.json",
+      "generated-assets-check.json",
+      "nvs-limit.json",
+      "nvs-limit-profile1.json",
+      "nvs-limit-profile2.json",
+      "ui-probe.json"
+    ],
+    "result_dirs": [
+      "legacy-replay/",
+      "storage-rerun/",
+      "reference-rerun/"
+    ],
+    "binary_if_needed": "reference-runtime/speeduino-sensor-sim plus reference-runtime/build-manifest.json (or use the identical separately retained production reference binary/manifest)",
+    "logs": "Retain the logs referenced by review.json; initial failed-harness logs are optional diagnostic history. No AGENTS instructions are included."
+  }
+}

@@ -36,7 +36,7 @@ Reference: [published features](https://speeduino.com/home/about/features), [tun
 | Staged injection | Missing | No staging controls | Extra drivers and duty/flow qualification |
 | Launch / flat shift / nitrous | Missing | No enable options | Protected switch/speed/pressure inputs and output allocations |
 | Knock | Missing | No misleading protection indicator | Analog front end and processing required |
-| Sensor calibration | Persistent linear/table/NTC with loading compensation | Guides, units, confirmation and raw diagnostics | Six analog inputs plus battery/5V; physical verification pending |
+| Sensor calibration | Persistent linear/table/NTC with loading compensation and optional ratiometric linear/table conversion | [Sensor profile2](sensor-ratiometric.md), explicit legacy migration, curve-supply settings, raw/normalized diagnostics and confirmation | Six analog inputs plus battery/5V; actual sensor/supply/ADC timing and physical verification pending |
 | Engine sensor binding | Confirmed physical units; raw-voltage relabelling rejected | Binding/fault status | Fast raw samples, display filter cannot hide faults |
 | Supervision/recovery | Target independent command/producer/tooth/cam/high-time deadlines, transactional scheduling and configuration holds | Reasons/counters/bounded traces/revisions/storage | Target timing/watchdog/restart policy needs physical HIL |
 | TunerStudio offline | Own definition/MSQ exchange | Own0108192-byte complete-page settings/curve/map editing, origin metadata and stale-editor CAS | Actual offline application roundtrip; target USB hardware unmeasured |

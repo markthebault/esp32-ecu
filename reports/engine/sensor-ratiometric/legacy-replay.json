@@ -1,0 +1,58 @@
+{
+  "passed": true,
+  "baseline_commit": "1050d9276e89f4289cfe4ad1e275d604485c6243",
+  "baseline_sources": {
+    "firmware/include/ecu/config.hpp": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39",
+    "firmware/include/ecu/json.hpp": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+    "firmware/main/config_json.hpp": "1b8469d3ff7f750db50f731e209a184479fa4191ed6200a0a555aa0065e3c1ae",
+    "tools/config_bridge.cpp": "d692084a8714de7ce9cf10474ce52d714b405de71702d784a4b3c5afafe58ff4"
+  },
+  "current_sources": {
+    "firmware/include/ecu/config.hpp": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739",
+    "firmware/include/ecu/json.hpp": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+    "firmware/main/config_json.hpp": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6",
+    "tools/config_bridge.cpp": "63abc51efe6d5331bfd528fa07fa5bae02cfea2e2bce9a20fcc9bc8394ba439e",
+    "config/defaults.json": "e61fb310f60ddc801bbc2dec0dca288314ed124761b7fc35087aee10687ba617",
+    "tools/compare_sensor_calibration.py": "96ca3860ba9cc7b364e4abcb217297b37626d6bad271474cc9b4dabbd62aad9b",
+    "tools/web_server.py": "bb02471c0cc7f887d2624f1c7c564c9a1f7cc391e9a469c8d8bab1e525fb31a3",
+    "tools/test_sensor_ratiometric.py": "9f9ba882a833ed1654ad6d97392a8d3331813955eb57c0cebaf2ca961c17bcc4"
+  },
+  "commands": [
+    [
+      "cc",
+      "-O2",
+      "-fPIC",
+      "-c",
+      "/home/mark/.platformio/packages/framework-espidf/components/json/cJSON/cJSON.c",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/ratiometric-002/legacy-001/cJSON.o"
+    ],
+    [
+      "c++",
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-shared",
+      "-fPIC",
+      "-I/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/ratiometric-002/legacy-001/baseline/firmware/main",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/ratiometric-002/legacy-001/baseline/firmware/include",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/ratiometric-002/legacy-001/baseline/tools/config_bridge.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/ratiometric-002/legacy-001/cJSON.o",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/ratiometric-002/legacy-001/baseline.so"
+    ]
+  ],
+  "seed": "0xA6505",
+  "profiles": 2,
+  "raw_vectors": 2048,
+  "compared_readings": 12288,
+  "comparison": "bit-identical value/sensor_v/adc_v doubles, validity and fault strings with ratio Off",
+  "transcript_sha256": "d2c7111f3dfde324966204d9238d542ce628f15a919425e90032796e28640304",
+  "baseline_binary_sha256": "20ed4c66974c59708900e5a529677ad12df44a03f6af644ea397206a5f48ee1b",
+  "current_binary_sha256": "aad51c6c3ef0296ce0a06cd0faaf4789b765749876bb3436052fa6d7fc60ac2e",
+  "cjson_sha256": "f892717f26cf3d21b7108de50cea95b6e48092950427615fe1d8d9c46ea09cca",
+  "physical_qualification": false
+}

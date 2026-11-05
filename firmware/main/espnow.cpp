@@ -360,7 +360,7 @@ void publish(const web::Sample&s,const config::Config&c,const std::array<double,
  for(unsigned i=0;i<8;++i)u16(l.data+28+2*i,s.raw[i]);
  f32(l.data+44,s.rpm);f32(l.data+48,s.raw[6]*c.adc_reference_v/4095*13);f32(l.data+52,rail);
  u32(l.data+80,std::uint32_t(s.can_frames));
- for(unsigned i=0;i<6;++i){auto instant=config::convert(c.sensors[i],s.raw[i]*c.adc_reference_v/4095/.6,s.raw[i]*c.adc_reference_v/4095,rail);auto r=config::convert(c.sensors[i],filtered[i],filtered[i]*.6,rail);
+ for(unsigned i=0;i<6;++i){const double av=s.raw[i]*c.adc_reference_v/4095,sv=av/.6;auto instant=config::convert(c.sensors[i],sv,av,rail);auto r=c.sensors[i].ratiometric?config::convert(c.sensors[i],sv,av,rail,&filtered[i]):config::convert(c.sensors[i],filtered[i],filtered[i]*.6,rail);
   const bool valid=s.adc_ok&&instant.valid&&r.valid;if(c.sensors[i].confirmed&&!valid)l.fault=true;if(valid)l.data[26]|=1<<i;if(c.sensors[i].confirmed)l.data[27]|=1<<i;f32(l.data+56+4*i,valid?r.value:NAN);
   auto*m=l.meta[i];header(m,Metadata,98);u32(m+8,c.revision);m[12]=i;m[13]=std::uint8_t(c.sensors[i].mode);std::memcpy(m+14,c.sensors[i].unit,16);std::memcpy(m+30,c.sensors[i].label,64);u32(m+94,session_id);
  }

@@ -2,6 +2,8 @@
 
 The offline interface in `web/index.html` is served directly by the ESP32-S3. It needs no CDN, internet, cloud account or external JavaScript packages. `tools/web_server.py` runs the same page as a clearly labelled desktop simulator. Its readings are synthetic. It uses the firmware's C++ parser and conversion functions through a small host library.
 
+[Optional sensor-supply compensation](sensor-ratiometric.md) explains ratiometric linear/table calibration, profile migration, raw diagnostics and storage behavior.
+
 ## Device setup
 
 1. Build the `compact_a3_web` PlatformIO environment. The `compact_a3` environment keeps the radio off. Both keep every actuator command and ARM off. A compile-time check rejects combining the service with dummy-load pulse firmware.
