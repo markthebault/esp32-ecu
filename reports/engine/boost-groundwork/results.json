@@ -1,0 +1,1197 @@
+{
+  "status": "complete",
+  "complete": true,
+  "scope": "Execute the real production boost fixture and portable kernel/PWM probes.\n\nThis is isolated groundwork, not the full ECU/turbo-plant comparison. Own RPM\nis authored; reference RPM comes only from real missing-tooth callbacks.\n",
+  "planned_cases": [
+    "disabled",
+    "open-zero",
+    "open20",
+    "open60",
+    "open100",
+    "closed-feedforward",
+    "closed-below-activation",
+    "trigger-stall",
+    "overboost",
+    "unarmed-native-timer",
+    "tps-ramp-20",
+    "tps-ramp-40",
+    "tps-ramp-60",
+    "tps-ramp-80"
+  ],
+  "completed_cases": [
+    "disabled",
+    "open-zero",
+    "open20",
+    "open60",
+    "open100",
+    "closed-feedforward",
+    "closed-below-activation",
+    "trigger-stall",
+    "overboost",
+    "unarmed-native-timer",
+    "tps-ramp-20",
+    "tps-ramp-40",
+    "tps-ramp-60",
+    "tps-ramp-80"
+  ],
+  "active_case": null,
+  "failure": null,
+  "cases": [
+    {
+      "case": {
+        "name": "disabled",
+        "mode": "off",
+        "duty": 60,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 1200000,
+        "stop_trigger_us": 1200000,
+        "high_pressure_at_us": 0,
+        "default_compare": false,
+        "tps_ramp": false
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 129,
+        "raw_map_adc": 332,
+        "tps_raw_half_pct": 99,
+        "tps_pct": 49.5,
+        "boost_lookup_tps_coordinate": 198,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 99,
+        "rpm": 2000,
+        "rotation_code": 2,
+        "boost_duty_pct": 0,
+        "boost_target_kpa": 0,
+        "boost_pin_high": false,
+        "timer_counter": 300250,
+        "timer_compare": 0,
+        "boost_cut": false,
+        "fuel_channels": 3,
+        "spark_channels": 3,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "rpm": 2000,
+        "boost_duty_pct": 0,
+        "boost_target_kpa": null,
+        "reason": "pressure_protection_only",
+        "inhibit_engine": false,
+        "flags": 3,
+        "pid_updates": 0,
+        "p_term": 0,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": false,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 0,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 0,
+        "cycles": 0,
+        "period_range_us": null,
+        "duty_range_pct": null
+      },
+      "own_pwm": {
+        "edge_count": 0,
+        "cycles": 0,
+        "period_range_us": null,
+        "duty_range_pct": null
+      }
+    },
+    {
+      "case": {
+        "name": "open-zero",
+        "mode": "open",
+        "duty": 0,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 1200000,
+        "stop_trigger_us": 1200000,
+        "high_pressure_at_us": 0,
+        "default_compare": false,
+        "tps_ramp": false
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 129,
+        "raw_map_adc": 332,
+        "tps_raw_half_pct": 99,
+        "tps_pct": 49.5,
+        "boost_lookup_tps_coordinate": 198,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 99,
+        "rpm": 2000,
+        "rotation_code": 2,
+        "boost_duty_pct": 0,
+        "boost_target_kpa": 0,
+        "boost_pin_high": false,
+        "timer_counter": 300250,
+        "timer_compare": 0,
+        "boost_cut": false,
+        "fuel_channels": 3,
+        "spark_channels": 3,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "rpm": 2000,
+        "boost_duty_pct": 0,
+        "boost_target_kpa": null,
+        "reason": "ready",
+        "inhibit_engine": false,
+        "flags": 7,
+        "pid_updates": 0,
+        "p_term": 0,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": false,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 0,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 0,
+        "cycles": 0,
+        "period_range_us": null,
+        "duty_range_pct": null
+      },
+      "own_pwm": {
+        "edge_count": 0,
+        "cycles": 0,
+        "period_range_us": null,
+        "duty_range_pct": null
+      }
+    },
+    {
+      "case": {
+        "name": "open20",
+        "mode": "open",
+        "duty": 20,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 1200000,
+        "stop_trigger_us": 1200000,
+        "high_pressure_at_us": 0,
+        "default_compare": false,
+        "tps_ramp": false
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 129,
+        "raw_map_adc": 332,
+        "tps_raw_half_pct": 99,
+        "tps_pct": 49.5,
+        "boost_lookup_tps_coordinate": 198,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 99,
+        "rpm": 2000,
+        "rotation_code": 2,
+        "boost_duty_pct": 20,
+        "boost_target_kpa": 0,
+        "boost_pin_high": true,
+        "timer_counter": 300250,
+        "timer_compare": 301982,
+        "boost_cut": false,
+        "fuel_channels": 3,
+        "spark_channels": 3,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "rpm": 2000,
+        "boost_duty_pct": 20,
+        "boost_target_kpa": null,
+        "reason": "ready",
+        "inhibit_engine": false,
+        "flags": 7,
+        "pid_updates": 0,
+        "p_term": 0,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": false,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 8333,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 39,
+        "cycles": 19,
+        "period_range_us": [
+          41664,
+          41664
+        ],
+        "duty_range_pct": [
+          19.998079877112136,
+          19.998079877112136
+        ]
+      },
+      "own_pwm": {
+        "edge_count": 38,
+        "cycles": 18,
+        "period_range_us": [
+          41667,
+          41667
+        ],
+        "duty_range_pct": [
+          19.999040007679938,
+          19.999040007679938
+        ]
+      }
+    },
+    {
+      "case": {
+        "name": "open60",
+        "mode": "open",
+        "duty": 60,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 1200000,
+        "stop_trigger_us": 1200000,
+        "high_pressure_at_us": 0,
+        "default_compare": false,
+        "tps_ramp": false
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 129,
+        "raw_map_adc": 332,
+        "tps_raw_half_pct": 99,
+        "tps_pct": 49.5,
+        "boost_lookup_tps_coordinate": 198,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 99,
+        "rpm": 2000,
+        "rotation_code": 2,
+        "boost_duty_pct": 60,
+        "boost_target_kpa": 0,
+        "boost_pin_high": true,
+        "timer_counter": 300250,
+        "timer_compare": 306149,
+        "boost_cut": false,
+        "fuel_channels": 3,
+        "spark_channels": 3,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "rpm": 2000,
+        "boost_duty_pct": 60,
+        "boost_target_kpa": null,
+        "reason": "ready",
+        "inhibit_engine": false,
+        "flags": 7,
+        "pid_updates": 0,
+        "p_term": 0,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": false,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 25000,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 39,
+        "cycles": 19,
+        "period_range_us": [
+          41664,
+          41664
+        ],
+        "duty_range_pct": [
+          60.00384024577573,
+          60.00384024577573
+        ]
+      },
+      "own_pwm": {
+        "edge_count": 39,
+        "cycles": 18,
+        "period_range_us": [
+          41667,
+          41667
+        ],
+        "duty_range_pct": [
+          59.99952000383997,
+          59.99952000383997
+        ]
+      }
+    },
+    {
+      "case": {
+        "name": "open100",
+        "mode": "open",
+        "duty": 100,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 1200000,
+        "stop_trigger_us": 1200000,
+        "high_pressure_at_us": 0,
+        "default_compare": false,
+        "tps_ramp": false
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 129,
+        "raw_map_adc": 332,
+        "tps_raw_half_pct": 99,
+        "tps_pct": 49.5,
+        "boost_lookup_tps_coordinate": 198,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 99,
+        "rpm": 2000,
+        "rotation_code": 2,
+        "boost_duty_pct": 100,
+        "boost_target_kpa": 0,
+        "boost_pin_high": true,
+        "timer_counter": 300250,
+        "timer_compare": 0,
+        "boost_cut": false,
+        "fuel_channels": 3,
+        "spark_channels": 3,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "rpm": 2000,
+        "boost_duty_pct": 100,
+        "boost_target_kpa": null,
+        "reason": "ready",
+        "inhibit_engine": false,
+        "flags": 7,
+        "pid_updates": 0,
+        "p_term": 0,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": true,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 41667,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 0,
+        "cycles": 0,
+        "period_range_us": null,
+        "duty_range_pct": null
+      },
+      "own_pwm": {
+        "edge_count": 0,
+        "cycles": 0,
+        "period_range_us": null,
+        "duty_range_pct": null
+      }
+    },
+    {
+      "case": {
+        "name": "closed-feedforward",
+        "mode": "closed",
+        "duty": 30,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 4500000,
+        "stop_trigger_us": 4500000,
+        "high_pressure_at_us": 0,
+        "default_compare": false,
+        "tps_ramp": false
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 4501000,
+        "map_kpa": 129,
+        "raw_map_adc": 332,
+        "tps_raw_half_pct": 99,
+        "tps_pct": 49.5,
+        "boost_lookup_tps_coordinate": 198,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 99,
+        "rpm": 2000,
+        "rotation_code": 2,
+        "boost_duty_pct": 30.26,
+        "boost_target_kpa": 150,
+        "boost_pin_high": false,
+        "timer_counter": 1125250,
+        "timer_compare": 1127065,
+        "boost_cut": false,
+        "fuel_channels": 3,
+        "spark_channels": 3,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 4501000,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "rpm": 2000,
+        "boost_duty_pct": 30.19999999552965,
+        "boost_target_kpa": 150,
+        "reason": "ready",
+        "inhibit_engine": false,
+        "flags": 15,
+        "pid_updates": 46,
+        "p_term": 0.19999999552965164,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": false,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 12583,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 43,
+        "cycles": 20,
+        "period_range_us": [
+          41664,
+          41664
+        ],
+        "duty_range_pct": [
+          30.50115207373272,
+          30.50115207373272
+        ]
+      },
+      "own_pwm": {
+        "edge_count": 43,
+        "cycles": 20,
+        "period_range_us": [
+          41667,
+          41667
+        ],
+        "duty_range_pct": [
+          30.198958408332732,
+          30.198958408332732
+        ]
+      },
+      "reference_first_nonzero_target_query_us": 3301000,
+      "timing_difference": "Under the declared fast native loop, nested33ms/100ms gates first coincide at3300ms; own PID uses an explicit period."
+    },
+    {
+      "case": {
+        "name": "closed-below-activation",
+        "mode": "closed",
+        "duty": 30,
+        "map_kpa": 100,
+        "tps_pct": 50,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 4500000,
+        "stop_trigger_us": 4500000,
+        "high_pressure_at_us": 0,
+        "default_compare": false,
+        "tps_ramp": false
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 4501000,
+        "map_kpa": 100,
+        "raw_map_adc": 256,
+        "tps_raw_half_pct": 99,
+        "tps_pct": 49.5,
+        "boost_lookup_tps_coordinate": 198,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 99,
+        "rpm": 2000,
+        "rotation_code": 2,
+        "boost_duty_pct": 0,
+        "boost_target_kpa": 150,
+        "boost_pin_high": false,
+        "timer_counter": 1125250,
+        "timer_compare": 0,
+        "boost_cut": false,
+        "fuel_channels": 3,
+        "spark_channels": 3,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 4501000,
+        "map_kpa": 100,
+        "tps_pct": 50,
+        "rpm": 2000,
+        "boost_duty_pct": 0,
+        "boost_target_kpa": 150,
+        "reason": "below_activation",
+        "inhibit_engine": false,
+        "flags": 7,
+        "pid_updates": 0,
+        "p_term": 0,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": false,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 0,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 0,
+        "cycles": 0,
+        "period_range_us": null,
+        "duty_range_pct": null
+      },
+      "own_pwm": {
+        "edge_count": 0,
+        "cycles": 0,
+        "period_range_us": null,
+        "duty_range_pct": null
+      },
+      "reference_first_nonzero_target_query_us": 3301000,
+      "timing_difference": "Under the declared fast native loop, nested33ms/100ms gates first coincide at3300ms; own PID uses an explicit period."
+    },
+    {
+      "case": {
+        "name": "trigger-stall",
+        "mode": "open",
+        "duty": 60,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 1800000,
+        "stop_trigger_us": 600000,
+        "high_pressure_at_us": 0,
+        "default_compare": false,
+        "tps_ramp": false
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 1801000,
+        "map_kpa": 129,
+        "raw_map_adc": 332,
+        "tps_raw_half_pct": 99,
+        "tps_pct": 49.5,
+        "boost_lookup_tps_coordinate": 198,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 99,
+        "rpm": 0,
+        "rotation_code": 0,
+        "boost_duty_pct": 0,
+        "boost_target_kpa": 0,
+        "boost_pin_high": false,
+        "timer_counter": 450250,
+        "timer_compare": 170741,
+        "boost_cut": false,
+        "fuel_channels": 3,
+        "spark_channels": 3,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 1801000,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "rpm": 0,
+        "boost_duty_pct": 0,
+        "boost_target_kpa": null,
+        "reason": "stopped_or_below_rpm",
+        "inhibit_engine": false,
+        "flags": 3,
+        "pid_updates": 0,
+        "p_term": 0,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": false,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 0,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 14,
+        "cycles": 6,
+        "period_range_us": [
+          41664,
+          41664
+        ],
+        "duty_range_pct": [
+          60.00384024577573,
+          60.00384024577573
+        ]
+      },
+      "own_pwm": {
+        "edge_count": 11,
+        "cycles": 4,
+        "period_range_us": [
+          41667,
+          41667
+        ],
+        "duty_range_pct": [
+          59.99952000383997,
+          59.99952000383997
+        ]
+      }
+    },
+    {
+      "case": {
+        "name": "overboost",
+        "mode": "open",
+        "duty": 60,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 1200000,
+        "stop_trigger_us": 1200000,
+        "high_pressure_at_us": 600000,
+        "default_compare": false,
+        "tps_ramp": false
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 229,
+        "raw_map_adc": 588,
+        "tps_raw_half_pct": 99,
+        "tps_pct": 49.5,
+        "boost_lookup_tps_coordinate": 198,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 99,
+        "rpm": 2000,
+        "rotation_code": 2,
+        "boost_duty_pct": 60,
+        "boost_target_kpa": 0,
+        "boost_pin_high": true,
+        "timer_counter": 300250,
+        "timer_compare": 306149,
+        "boost_cut": true,
+        "fuel_channels": 0,
+        "spark_channels": 0,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 230,
+        "tps_pct": 50,
+        "rpm": 2000,
+        "boost_duty_pct": 0,
+        "boost_target_kpa": null,
+        "reason": "overboost",
+        "inhibit_engine": true,
+        "flags": 259,
+        "pid_updates": 0,
+        "p_term": 0,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": false,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 0,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 39,
+        "cycles": 19,
+        "period_range_us": [
+          41664,
+          41664
+        ],
+        "duty_range_pct": [
+          60.00384024577573,
+          60.00384024577573
+        ]
+      },
+      "own_pwm": {
+        "edge_count": 11,
+        "cycles": 4,
+        "period_range_us": [
+          41667,
+          41667
+        ],
+        "duty_range_pct": [
+          59.99952000383997,
+          59.99952000383997
+        ]
+      },
+      "policy_difference": "Reference boost duty may persist while engine protection cuts scheduling masks; own kernel deenergizes."
+    },
+    {
+      "case": {
+        "name": "unarmed-native-timer",
+        "mode": "open",
+        "duty": 60,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 1200000,
+        "stop_trigger_us": 1200000,
+        "high_pressure_at_us": 0,
+        "default_compare": true,
+        "tps_ramp": false
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 129,
+        "raw_map_adc": 332,
+        "tps_raw_half_pct": 99,
+        "tps_pct": 49.5,
+        "boost_lookup_tps_coordinate": 198,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 99,
+        "rpm": 2000,
+        "rotation_code": 2,
+        "boost_duty_pct": 60,
+        "boost_target_kpa": 0,
+        "boost_pin_high": false,
+        "timer_counter": 300250,
+        "timer_compare": 4294967295,
+        "boost_cut": false,
+        "fuel_channels": 3,
+        "spark_channels": 3,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 130,
+        "tps_pct": 50,
+        "rpm": 2000,
+        "boost_duty_pct": 60,
+        "boost_target_kpa": null,
+        "reason": "ready",
+        "inhibit_engine": false,
+        "flags": 7,
+        "pid_updates": 0,
+        "p_term": 0,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": false,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 25000,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 0,
+        "cycles": 0,
+        "period_range_us": null,
+        "duty_range_pct": null
+      },
+      "own_pwm": {
+        "edge_count": 39,
+        "cycles": 18,
+        "period_range_us": [
+          41667,
+          41667
+        ],
+        "duty_range_pct": [
+          59.99952000383997,
+          59.99952000383997
+        ]
+      }
+    },
+    {
+      "case": {
+        "name": "tps-ramp-20",
+        "mode": "open",
+        "duty": 20,
+        "map_kpa": 130,
+        "tps_pct": 20,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 1200000,
+        "stop_trigger_us": 1200000,
+        "high_pressure_at_us": 0,
+        "default_compare": false,
+        "tps_ramp": true
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 129,
+        "raw_map_adc": 332,
+        "tps_raw_half_pct": 40,
+        "tps_pct": 20,
+        "boost_lookup_tps_coordinate": 80,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 40,
+        "rpm": 2000,
+        "rotation_code": 2,
+        "boost_duty_pct": 20,
+        "boost_target_kpa": 0,
+        "boost_pin_high": true,
+        "timer_counter": 300250,
+        "timer_compare": 301982,
+        "boost_cut": false,
+        "fuel_channels": 3,
+        "spark_channels": 3,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 130,
+        "tps_pct": 20,
+        "rpm": 2000,
+        "boost_duty_pct": 20,
+        "boost_target_kpa": null,
+        "reason": "ready",
+        "inhibit_engine": false,
+        "flags": 7,
+        "pid_updates": 0,
+        "p_term": 0,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": false,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 8333,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 39,
+        "cycles": 19,
+        "period_range_us": [
+          41664,
+          41664
+        ],
+        "duty_range_pct": [
+          19.998079877112136,
+          19.998079877112136
+        ]
+      },
+      "own_pwm": {
+        "edge_count": 38,
+        "cycles": 18,
+        "period_range_us": [
+          41667,
+          41667
+        ],
+        "duty_range_pct": [
+          19.999040007679938,
+          19.999040007679938
+        ]
+      },
+      "unit_observation": "Production raw half-percent TPS, table yFactor2 and physical-percent duty agree within integer table/ADC quantization."
+    },
+    {
+      "case": {
+        "name": "tps-ramp-40",
+        "mode": "open",
+        "duty": 40,
+        "map_kpa": 130,
+        "tps_pct": 40,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 1200000,
+        "stop_trigger_us": 1200000,
+        "high_pressure_at_us": 0,
+        "default_compare": false,
+        "tps_ramp": true
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 129,
+        "raw_map_adc": 332,
+        "tps_raw_half_pct": 79,
+        "tps_pct": 39.5,
+        "boost_lookup_tps_coordinate": 158,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 79,
+        "rpm": 2000,
+        "rotation_code": 2,
+        "boost_duty_pct": 38,
+        "boost_target_kpa": 0,
+        "boost_pin_high": true,
+        "timer_counter": 300250,
+        "timer_compare": 303857,
+        "boost_cut": false,
+        "fuel_channels": 3,
+        "spark_channels": 3,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 130,
+        "tps_pct": 40,
+        "rpm": 2000,
+        "boost_duty_pct": 40,
+        "boost_target_kpa": null,
+        "reason": "ready",
+        "inhibit_engine": false,
+        "flags": 7,
+        "pid_updates": 0,
+        "p_term": 0,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": false,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 16667,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 39,
+        "cycles": 19,
+        "period_range_us": [
+          41664,
+          41664
+        ],
+        "duty_range_pct": [
+          37.99923195084485,
+          37.99923195084485
+        ]
+      },
+      "own_pwm": {
+        "edge_count": 38,
+        "cycles": 18,
+        "period_range_us": [
+          41667,
+          41667
+        ],
+        "duty_range_pct": [
+          40.00047999616003,
+          40.00047999616003
+        ]
+      },
+      "unit_observation": "Production raw half-percent TPS, table yFactor2 and physical-percent duty agree within integer table/ADC quantization."
+    },
+    {
+      "case": {
+        "name": "tps-ramp-60",
+        "mode": "open",
+        "duty": 60,
+        "map_kpa": 130,
+        "tps_pct": 60,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 1200000,
+        "stop_trigger_us": 1200000,
+        "high_pressure_at_us": 0,
+        "default_compare": false,
+        "tps_ramp": true
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 129,
+        "raw_map_adc": 332,
+        "tps_raw_half_pct": 119,
+        "tps_pct": 59.5,
+        "boost_lookup_tps_coordinate": 238,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 119,
+        "rpm": 2000,
+        "rotation_code": 2,
+        "boost_duty_pct": 58,
+        "boost_target_kpa": 0,
+        "boost_pin_high": true,
+        "timer_counter": 300250,
+        "timer_compare": 305940,
+        "boost_cut": false,
+        "fuel_channels": 3,
+        "spark_channels": 3,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 130,
+        "tps_pct": 60,
+        "rpm": 2000,
+        "boost_duty_pct": 60,
+        "boost_target_kpa": null,
+        "reason": "ready",
+        "inhibit_engine": false,
+        "flags": 7,
+        "pid_updates": 0,
+        "p_term": 0,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": false,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 25000,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 39,
+        "cycles": 19,
+        "period_range_us": [
+          41664,
+          41664
+        ],
+        "duty_range_pct": [
+          57.99731182795699,
+          57.99731182795699
+        ]
+      },
+      "own_pwm": {
+        "edge_count": 39,
+        "cycles": 18,
+        "period_range_us": [
+          41667,
+          41667
+        ],
+        "duty_range_pct": [
+          59.99952000383997,
+          59.99952000383997
+        ]
+      },
+      "unit_observation": "Production raw half-percent TPS, table yFactor2 and physical-percent duty agree within integer table/ADC quantization."
+    },
+    {
+      "case": {
+        "name": "tps-ramp-80",
+        "mode": "open",
+        "duty": 80,
+        "map_kpa": 130,
+        "tps_pct": 80,
+        "target": 150,
+        "frequency": 24,
+        "cut": 220,
+        "duration_us": 1200000,
+        "stop_trigger_us": 1200000,
+        "high_pressure_at_us": 0,
+        "default_compare": false,
+        "tps_ramp": true
+      },
+      "reference_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 129,
+        "raw_map_adc": 332,
+        "tps_raw_half_pct": 159,
+        "tps_pct": 79.5,
+        "boost_lookup_tps_coordinate": 318,
+        "boost_lookup_y_factor": 2,
+        "boost_stored_tps_coordinate": 159,
+        "rpm": 2000,
+        "rotation_code": 2,
+        "boost_duty_pct": 80,
+        "boost_target_kpa": 0,
+        "boost_pin_high": true,
+        "timer_counter": 300250,
+        "timer_compare": 308232,
+        "boost_cut": false,
+        "fuel_channels": 3,
+        "spark_channels": 3,
+        "physical_execution": false
+      },
+      "own_last": {
+        "kind": "sample",
+        "time_us": 1201000,
+        "map_kpa": 130,
+        "tps_pct": 80,
+        "rpm": 2000,
+        "boost_duty_pct": 80,
+        "boost_target_kpa": null,
+        "reason": "ready",
+        "inhibit_engine": false,
+        "flags": 7,
+        "pid_updates": 0,
+        "p_term": 0,
+        "i_term": 0,
+        "d_term": 0,
+        "boost_pin_high": true,
+        "pwm_accepted": true,
+        "pwm_fault": 0,
+        "applied_period_us": 41667,
+        "applied_high_us": 33334,
+        "physical_execution": false
+      },
+      "reference_pwm": {
+        "edge_count": 39,
+        "cycles": 19,
+        "period_range_us": [
+          41664,
+          41664
+        ],
+        "duty_range_pct": [
+          80.00192012288787,
+          80.00192012288787
+        ]
+      },
+      "own_pwm": {
+        "edge_count": 38,
+        "cycles": 18,
+        "period_range_us": [
+          41667,
+          41667
+        ],
+        "duty_range_pct": [
+          80.00095999232006,
+          80.00095999232006
+        ]
+      },
+      "unit_observation": "Production raw half-percent TPS, table yFactor2 and physical-percent duty agree within integer table/ADC quantization."
+    }
+  ],
+  "source_sha256": {
+    "tools/run_boost_groundwork.py": "ae7bf978104c6de6da92e51dae824b1f5b8f5bdf110fe732739c56432c4b0ffc",
+    "tools/boost_core_sim.cpp": "2bbe1e2fa8a4f70ae1ae17b7ea83f132d99d69c8641c015dd3378594b5372248",
+    "firmware/include/ecu/boost_control.hpp": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b",
+    "firmware/include/ecu/boost_pwm.hpp": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255",
+    "firmware/include/ecu/idle_pwm.hpp": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+  },
+  "reference_manifest_sha256": "e87bb4e2cb00270d7f4d5c7e9872e38c304f82d312bea81ebf80cac0cfc2708c",
+  "own_binary_sha256": "97dd29d7e8e846573bebed93134ca375ff1564ea9e7ae09ff021ca316aceaf20",
+  "physical_qualification": false
+}

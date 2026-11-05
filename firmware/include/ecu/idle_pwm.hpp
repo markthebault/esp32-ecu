@@ -21,7 +21,9 @@ struct PwmStats {
 // Fixed storage and integer-only dispatch, usable inside the common GPTimer
 // owner. A separate applied-idle observation avoids truncating the eight-bit
 // injector/coil masks. IO is a dedicated one-pin sink; no GPIO call lives here.
-class PwmExecutor {
+template<std::uint32_t MinimumPeriodUs,std::uint32_t MaximumPeriodUs>
+class PwmExecutorBase {
+ static_assert(MinimumPeriodUs>=1000&&MinimumPeriodUs<=MaximumPeriodUs&&MaximumPeriodUs<=1000000,"Invalid auxiliary PWM period envelope");
  static constexpr std::uint64_t never=UINT64_MAX,maximum_age_us=20000,maximum_lateness_us=25;
  PwmCommand pending_{};PwmStats stats_;
  std::uint64_t deadline_=never,fall_=never,cycle_=never,last_=0,quiet_since_=0,last_zero_=0,sequence_floor_=0;
@@ -67,7 +69,7 @@ public:
   // Expiry is evaluated before a new heartbeat can rescue an old command.
   dispatch(now,io);
   const bool valid=c.sequence&&c.sequence>sequence_floor_&&c.tune_revision&&c.sensor_revision&&c.command_us<=now&&c.sampled_us<=now&&
-   now-c.command_us<maximum_age_us&&now-c.sampled_us<maximum_age_us&&c.period_us>=2500&&c.period_us<=50000&&c.high_us<=c.period_us&&(!c.enabled?c.high_us==0:true)&&(!c.supervised_stop||(!c.enabled&&!c.high_us))&&now<=UINT64_MAX-50000;
+   now-c.command_us<maximum_age_us&&now-c.sampled_us<maximum_age_us&&c.period_us>=MinimumPeriodUs&&c.period_us<=MaximumPeriodUs&&c.high_us<=c.period_us&&(!c.enabled?c.high_us==0:true)&&(!c.supervised_stop||(!c.enabled&&!c.high_us))&&now<=UINT64_MAX-MaximumPeriodUs;
   if(!valid){++stats_.rejected;trip(now,PwmCause::InvalidCommand,io);return false;}
   pending_=c;sequence_floor_=c.sequence;stats_.pending_sequence=c.sequence;stats_.pending_tune_revision=c.tune_revision;stats_.pending_sensor_revision=c.sensor_revision;
   if(!c.enabled||!c.high_us){
@@ -89,4 +91,7 @@ public:
  }
  template<class IO>void configuration(std::uint64_t now,IO&io){stop(now,PwmCause::Configuration,io);stats_.fault=PwmCause::None;pending_={};stats_.pending_sequence=0;stats_.pending_tune_revision=stats_.pending_sensor_revision=0;}
 };
+// Preserve the idle command envelope exactly. Other auxiliary channels get
+// their own compile-time envelope and their own state/immutable deadlines.
+using PwmExecutor=PwmExecutorBase<2500,50000>;
 } // namespace ecu::idle
