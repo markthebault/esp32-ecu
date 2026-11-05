@@ -56,5 +56,5 @@ static void immutable_pair(){
  const std::uint32_t nan_bits=0xffc01234;std::memcpy(&unknown.flex_fuel.values[0],&nan_bits,4);
  check(pair.prepare(unknown,7,14,0,0,0,0,0,mac));pair.submitted();check(read32(pair.data()+112)==0x7fc00000);pair.cancel();
 }
-static_assert(sizeof(radio::wire::EnginePair)<=512,"Bounded per-peer pair storage");
+static_assert(sizeof(radio::wire::EnginePair)<=672,"Bounded per-peer observation storage");
 int main(){age_and_indicator();immutable_pair();std::cout<<"engine_radio_flex_checks "<<checks<<'\n';}

@@ -44,13 +44,13 @@ def decode_record(packet):
   if math.isnan(f[key]):f[key]=None
  return f
 
-def engine_flex_fragment(packet,key):
+def engine_flex_fragment(packet,key,expected_schema=5):
  if len(key)!=32:raise ValueError('Engine key must be32 bytes')
  check(packet,11,FLEX_SIZE)
  if not hmac.compare_digest(packet[FLEX_BODY:],hmac.digest(key,packet[:FLEX_BODY],'sha256')):raise ValueError('Flex authentication failed')
  session,sequence,schema,reserved=struct.unpack_from('<IQHH',packet,8)
- if not session or not sequence or schema!=5 or reserved or packet[191]:raise ValueError('Invalid flex fragment header')
+ if expected_schema not in (5,6) or not session or not sequence or schema!=expected_schema or reserved or packet[191]:raise ValueError('Invalid flex fragment header')
  f=decode_record(packet);age,stale=struct.unpack_from('<II',packet,192)
  if stale!=(stale_limit(f['capture_calibration']) if f['available'] else 0):raise ValueError('Flex stale limit changed')
  if age!=UINT32_MAX and (not f['available'] or not timestamp_known(f)):raise ValueError('Unknown flex timestamp cannot have an age')
- return dict(complete=False,session=session,packet_sequence=sequence,schema_version=5,base_mac=packet[24:56],flex_fuel=f,raw_age_ms=None if age==UINT32_MAX else age,stale_limit_us=stale,immutable=packet[56:192]+packet[196:200])
+ return dict(complete=False,session=session,packet_sequence=sequence,schema_version=schema,base_mac=packet[24:56],flex_fuel=f,raw_age_ms=None if age==UINT32_MAX else age,stale_limit_us=stale,immutable=packet[56:192]+packet[196:200])

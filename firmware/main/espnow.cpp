@@ -54,7 +54,7 @@ Store saved;Live live;std::uint8_t own[6]{},secret[16]{},window[16]{},candidate_
 std::uint64_t acks[max_peers]{};bool ack_seen[max_peers]{};StreamPeer streams[max_peers];std::uint8_t engine_nonce[16]{};std::uint64_t engine_sequence=0;
 std::int64_t deadline=0,last_beacon=0,candidate_started=0;bool waiting=false,approved=false,storage_ok=false,radio_ok=false;
 std::int64_t fault_until=0;
-std::atomic<std::uint32_t> session_id{0};std::uint32_t sequence=0;std::atomic<bool> sending{false};std::atomic<bool> rx_overflow{false};std::atomic<std::uint32_t> mac_failures{0};std::uint32_t mac_failure_count=0;std::uint64_t engine_packets=0,sensor_packets=0,capability_replies=0,engine_datagrams=0,flex_datagrams=0,pair_timeouts=0,pair_cancellations=0;
+std::atomic<std::uint32_t> session_id{0};std::uint32_t sequence=0;std::atomic<bool> sending{false};std::atomic<bool> rx_overflow{false};std::atomic<std::uint32_t> mac_failures{0};std::uint32_t mac_failure_count=0;std::uint64_t engine_packets=0,sensor_packets=0,capability_replies=0,engine_datagrams=0,flex_datagrams=0,boost_datagrams=0,pair_timeouts=0,pair_cancellations=0;
 cJSON* view=nullptr;const char* last_error="initializing";
 #if !ECU_FLEX_G38_DRAFT
 rmt_channel_handle_t led_channel{};rmt_encoder_handle_t led_encoder{};
@@ -92,9 +92,9 @@ bool submit_pair(unsigned i){
  // Command/RX/HMAC processing can outlive the loop's earlier time sample.
  // Recheck immediately before EVERY SDK submission, including retries.
  if(s.pair.expired(now())){s.pair.cancel();++pair_timeouts;return false;}
- const bool extension=s.pair.base_submitted();
+ const auto type=s.pair.data()[5];
  if(!send(saved.peers[i].mac,s.pair.data(),s.pair.size()))return false;
- ++engine_datagrams;if(extension)++flex_datagrams;
+ ++engine_datagrams;if(type==EngineFlex)++flex_datagrams;else if(type==EngineBoost)++boost_datagrams;
  if(s.pair.submitted()){s.engine_sent.submitted(s.pair.sequence(),s.pair.prepared_us());++engine_packets;}
  return true;
 }
@@ -216,8 +216,9 @@ void update_view(bool fault){
  cJSON_AddNumberToObject(j,"engine_schema",engine_schema);cJSON_AddNumberToObject(j,"engine_packet_bytes",engine_size);cJSON_AddNumberToObject(j,"engine_packets_submitted",engine_packets);cJSON_AddNumberToObject(j,"sensor_packets_submitted",sensor_packets);cJSON_AddNumberToObject(j,"capability_replies_submitted",capability_replies);cJSON_AddNumberToObject(j,"mac_send_failures",mac_failure_count);
  auto count=[&](const char*name,std::uint64_t value){char text[24];std::snprintf(text,sizeof(text),"%llu",static_cast<unsigned long long>(value));cJSON_AddStringToObject(j,name,text);};
  cJSON_AddNumberToObject(j,"engine_flex_packet_bytes",engine_flex_size);cJSON_AddNumberToObject(j,"engine_schema5_parts",2);
- count("engine_observations_submitted",engine_packets);count("engine_datagrams_submitted",engine_datagrams);count("flex_datagrams_submitted",flex_datagrams);count("engine_pair_timeouts",pair_timeouts);count("engine_pair_cancellations",pair_cancellations);
- cJSON_AddStringToObject(j,"engine_observation_scope","Schema5 requires both authenticated datagrams; submission is not screen receipt. Legacy engine schemas remain single datagrams.");
+ cJSON_AddNumberToObject(j,"engine_boost_packet_bytes",engine_boost_size);cJSON_AddNumberToObject(j,"engine_schema6_parts",3);
+ count("engine_observations_submitted",engine_packets);count("engine_datagrams_submitted",engine_datagrams);count("flex_datagrams_submitted",flex_datagrams);count("boost_datagrams_submitted",boost_datagrams);count("engine_pair_timeouts",pair_timeouts);count("engine_pair_cancellations",pair_cancellations);
+ cJSON_AddStringToObject(j,"engine_observation_scope","Schema6 requires BASE, FLEX and BOOST; schema5 requires BASE and FLEX. Submission is not screen receipt. Schemas1..4 use one datagram.");
  const auto age=transmitted_age(live.engine_sample_age,live.stamp,now());if(age==UINT32_MAX)cJSON_AddNullToObject(j,"engine_sample_age_ms");else cJSON_AddNumberToObject(j,"engine_sample_age_ms",age);
  cJSON_AddStringToObject(j,"engine_data_source",live.engine.source==engine::DataSource::Target?"target_control_observation":"no_observation");
  char mac[18]{};mac_text(own,mac);cJSON_AddStringToObject(j,"mac",mac);
@@ -225,16 +226,22 @@ void update_view(bool fault){
  if(waiting){auto*c=cJSON_AddObjectToObject(j,"candidate");mac_text(candidate.mac,mac);cJSON_AddStringToObject(c,"mac",mac);cJSON_AddStringToObject(c,"name",candidate.name);cJSON_AddBoolToObject(c,"approved",approved);}
  auto*a=cJSON_AddArrayToObject(j,"peers");for(unsigned i=0;i<max_peers;++i)if(occupied(saved.peers[i])){
   auto*p=cJSON_CreateObject();mac_text(saved.peers[i].mac,mac);cJSON_AddStringToObject(p,"mac",mac);cJSON_AddStringToObject(p,"name",saved.peers[i].name);
-  const auto&cap=streams[i].capabilities;const bool connected=ack_seen[i]&&now()-acks[i]<3000000;
+  const auto&cap=streams[i].capabilities;const auto stamp=now();
+  const bool link_known=ack_seen[i]&&stamp>=0&&std::uint64_t(stamp)>=acks[i];
+  const double link_age=link_known?double((std::uint64_t(stamp)-acks[i])/1000):-1.;
+  const bool engine_known=streams[i].engine_ack_seen&&stamp>=streams[i].last_engine_ack;
+  const double engine_age=engine_known?double((stamp-streams[i].last_engine_ack)/1000):-1.;
+  const bool connected=link_known&&link_age<3000;
   const bool blocked=cap.engine()&&live.engine.has(engine::Present)&&!engine_schema_supports(cap.schema(),live.engine);
   cJSON_AddBoolToObject(p,"connected",connected);cJSON_AddBoolToObject(p,"engine_telemetry",cap.engine());cJSON_AddNumberToObject(p,"engine_schema",cap.schema());
   cJSON_AddBoolToObject(p,"engine_telemetry_blocked",blocked);cJSON_AddBoolToObject(p,"engine_upgrade_needed",blocked&&cap.schema()<engine_schema);
-  cJSON_AddStringToObject(p,"engine_block_reason",blocked?(live.engine.boost_control.pressure_enabled?"This boost pressure profile has no supported screen engine format yet":cap.schema()<5&&(live.engine.flex_fuel.has(flex::Required)||live.engine.flex_fuel.has(flex::CorrectionsEnabled))?"Required flex diagnostics need screen schema5":cap.schema()<5?"Current model, strategy or fault needs a newer screen schema":"Current observation is invalid for the negotiated schema"):"");
-  cJSON_AddNumberToObject(p,"engine_parts_per_observation",cap.engine()?(cap.schema()==5?2:1):0);
+  cJSON_AddStringToObject(p,"engine_block_reason",blocked?(live.engine.boost_control.pressure_enabled&&cap.schema()<6?"This boost pressure profile needs screen schema6":cap.schema()<5&&(live.engine.flex_fuel.has(flex::Required)||live.engine.flex_fuel.has(flex::CorrectionsEnabled))?"Required flex diagnostics need screen schema5":cap.schema()<engine_schema?"Current model, strategy or fault needs a newer screen schema":"Current observation is invalid for the negotiated schema"):"");
+  cJSON_AddNumberToObject(p,"engine_parts_per_observation",cap.engine()?(cap.schema()==6?3:cap.schema()==5?2:1):0);
   cJSON_AddBoolToObject(p,"engine_pair_pending",streams[i].pair.pending());cJSON_AddBoolToObject(p,"engine_base_submitted",streams[i].pair.pending()&&streams[i].pair.base_submitted());
-  cJSON_AddBoolToObject(p,"engine_connected",streams[i].engine_ack_seen&&now()-streams[i].last_engine_ack<3000000);
-  cJSON_AddNumberToObject(p,"last_engine_ack_ms",streams[i].engine_ack_seen?(now()-streams[i].last_engine_ack)/1000:-1);
-  cJSON_AddNumberToObject(p,"capability_counter",cap.counter());cJSON_AddNumberToObject(p,"last_ack_ms",acks[i]?(now()-acks[i])/1000:-1);cJSON_AddItemToArray(a,p);
+  cJSON_AddStringToObject(p,"engine_next_part",!streams[i].pair.pending()?"none":streams[i].pair.part_index()==0?"base":streams[i].pair.part_index()==1?"flex":"boost");
+  cJSON_AddBoolToObject(p,"engine_connected",engine_known&&engine_age<3000);
+  cJSON_AddNumberToObject(p,"last_engine_ack_ms",engine_age);
+  cJSON_AddNumberToObject(p,"capability_counter",cap.counter());cJSON_AddNumberToObject(p,"last_ack_ms",link_age);cJSON_AddItemToArray(a,p);
  }
  xSemaphoreTake(view_mutex,portMAX_DELAY);cJSON_Delete(view);view=j;xSemaphoreGive(view_mutex);
 }
@@ -247,6 +254,10 @@ bool init_wifi(){
  }
  return esp_wifi_set_channel(channel,WIFI_SECOND_CHAN_NONE)==ESP_OK&&esp_wifi_set_ps(WIFI_PS_NONE)==ESP_OK;
 }
+void send_sensor(unsigned i,std::int64_t tx_now){
+ std::uint8_t packet[88];std::memcpy(packet,live.data,sizeof(packet));u32(packet+8,session_id);u32(packet+12,++sequence);u32(packet+16,std::uint32_t(live.stamp/1000));u32(packet+84,std::uint32_t((tx_now-live.stamp)/1000));
+ if(send(saved.peers[i].mac,packet,sizeof(packet))){streams[i].sensor_sent.submitted(sequence,tx_now);++sensor_packets;}
+}
 void service_peer(unsigned i,unsigned round,std::int64_t stamp){
  if(!radio_ok||sending||!occupied(saved.peers[i]))return;
      auto& stream=streams[i];const auto tx_now=now();
@@ -256,22 +267,25 @@ void service_peer(unsigned i,unsigned round,std::int64_t stamp){
       if(stream.pair.pending()){stream.pair.cancel();++pair_cancellations;}
       std::uint8_t packet[capability_reply_size];stream.capabilities.reply(packet,session_id,engine_nonce,engine_sequence,tx_now);
       if(hmac(saved.peers[i].key,packet,76,packet+76)&&send(saved.peers[i].mac,packet,sizeof(packet))){stream.capabilities.sent();stream.last_reply=tx_now;++capability_replies;}
+     }else if(live.stamp&&tx_now>=live.stamp&&tx_now-live.stamp<1000000&&round%10<2){
+      // Reserve BOTH legacy metadata and sensor slots. Multipart priority
+      // would otherwise permanently consume one of them in schema6.
+      if(round%10==0){const unsigned sensor=(round/10)%6;std::uint8_t packet[98];std::memcpy(packet,live.meta[sensor],98);u32(packet+94,session_id);send(saved.peers[i].mac,packet,sizeof(packet));}
+      else send_sensor(i,tx_now);
      }else if(stream.pair.pending()){
       // Finish an immutable pair even if a newer live snapshot is queued.
       // The extension retains the BASE send time and raw sample age.
       submit_pair(i);
      }else if(!live.stamp||tx_now<live.stamp){
       // Negotiation remains available before the first sensor observation.
-     }else if(round%10==0&&tx_now-live.stamp<1000000){
-      const unsigned sensor=(round/10)%6;std::uint8_t packet[98];std::memcpy(packet,live.meta[sensor],98);u32(packet+94,session_id);send(saved.peers[i].mac,packet,sizeof(packet));
      }else if(stream.capabilities.engine()&&round%10!=1&&live.engine.has(engine::Present)&&engine_schema_supports(stream.capabilities.schema(),live.engine)){
       if(engine_sequence==UINT64_MAX){last_error="Engine telemetry sequence exhausted; restart required";fault_until=stamp+3000000;}
-      else if(stream.capabilities.schema()==5){
+      else if(stream.capabilities.schema()>=5){
        const auto sequence=++engine_sequence;
        if(stream.pair.prepare(live.engine,session_id,sequence,transmitted_age(live.engine_sample_age,live.stamp,tx_now),
           transmitted_age(live.engine_control_age,live.stamp,tx_now),transmitted_age(live.worker_age,live.stamp,tx_now),
           transmitted_age(live.flex_sample_age,live.stamp,tx_now),tx_now,
-          [&](const std::uint8_t*p,unsigned n,std::uint8_t*out){return hmac_key(stream.key.data(),32,p,n,out);}))submit_pair(i);
+          [&](const std::uint8_t*p,unsigned n,std::uint8_t*out){return hmac_key(stream.key.data(),32,p,n,out);},stream.capabilities.schema()))submit_pair(i);
       }
       else{
        std::uint8_t packet[engine_size];const auto sequence=++engine_sequence;
@@ -280,8 +294,7 @@ void service_peer(unsigned i,unsigned round,std::int64_t stamp){
           hmac_key(stream.key.data(),32,packet,body_size,packet+body_size)&&send(saved.peers[i].mac,packet,packet_size)){stream.engine_sent.submitted(sequence,tx_now);++engine_packets;++engine_datagrams;}
       }
      }else if(tx_now-live.stamp<1000000){
-      std::uint8_t packet[88];std::memcpy(packet,live.data,sizeof(packet));u32(packet+8,session_id);u32(packet+12,++sequence);u32(packet+16,std::uint32_t(live.stamp/1000));u32(packet+84,std::uint32_t((tx_now-live.stamp)/1000));
-      if(send(saved.peers[i].mac,packet,sizeof(packet))){stream.sensor_sent.submitted(sequence,tx_now);++sensor_packets;}
+      send_sensor(i,tx_now);
      }
 
 }

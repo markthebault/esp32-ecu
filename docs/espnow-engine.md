@@ -2,13 +2,13 @@
 
 This extends the [existing pairing and sensor protocol](espnow.md). It implements the ECU sender plus a [reference receiver](../tools/engine_receiver.py); it does not build a screen. The channel remains 6, encrypted unicast uses the saved 16-byte LMK, and peers remain limited to 4. Peer Storev1 and types 1–6 keep their existing byte layouts. Capabilities are volatile, reset at reboot/unpair/slot reuse and do not change the saved peer blob.
 
-Types 7–11 use the existing 8-byte `ECN1`, version 1, type, little-endian uint16 length header. No native structure is transmitted. Integers are unsigned little endian; floats are IEEE-754 float32. The largest datagram is250 bytes in schemas3..5; schemas1/2 retain232 bytes, within the250-byte v1 ESP-NOW payload limit. Schema5 uses two authenticated datagrams for one complete observation. Send/receive callbacks only signal or queue bounded work; authentication, JSON and framing run in the task, consistent with [Espressif's API guidance](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-reference/network/esp_now.html).
+Types7..12 use the existing8-byte `ECN1`, version1, type, little-endian uint16 length header. No native structure is transmitted. Integers are unsigned little endian; floats are IEEE-754 float32. The largest datagram is250bytes; schemas1/2 retain232bytes. Schema5 uses two authenticated datagrams per observation; schema6 uses three and carries boost diagnostics. Send/receive callbacks only signal or queue bounded work; authentication, JSON and framing run in the task, consistent with [Espressif's API guidance](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-reference/network/esp_now.html).
 
 ## Negotiate and recover
 
 1. Load the saved ECU STA MAC and LMK. Send a type 7 read-only query with session/counter/features/schema all 0 and a fresh cryptographic 16-byte client nonce. Start a local monotonic timer for this request. A query does not enable engine telemetry.
 2. Within 1 second, verify type 8's full HMAC with the LMK, echoed nonce, enums, lengths and reserved/status fields. Reject responses from any other MAC. Record the current capability counter/mode, nonzero boot session, boot nonce, sequence floor and ECU reply-send time.
-3. To enable, send type 7 with that boot session, counter+1, feature bit 0 set, schema5 (or explicit legacy schema1..4) and a new nonce. Accept the matching authenticated reply before using data. To disable, increment the counter with features/schema 0. Counter 0 is reserved for queries. Updates must be strictly newer; retry the exact same request bytes if a reply is lost. A same-counter request with changed bytes is rejected. At UINT32_MAX, re-pair/reboot is required before another update; never wrap the counter.
+3. To enable, send type7 with that boot session, counter+1, feature bit0 set, schema6 (or an explicit legacy schema1..5) and a new nonce. Accept the matching authenticated reply before using data. To disable, increment the counter with features/schema0. Counter0 is reserved for queries. Updates must be strictly newer; retry the exact same request bytes if a reply is lost. A same-counter request with changed bytes is rejected. At UINT32_MAX, re-pair/reboot is required before another update; never wrap the counter.
 4. A rebooted screen queries the ECU's accepted counter instead of assuming 0. Queries report the current mode without modifying it. An ECU reboot starts disabled again. A query with session 0 discovers the current boot. Query/reply state is not persisted to NVS.
 5. Refresh the timed nonce query at most 5 seconds later and after a 1 second gap in authenticated engine frames, including no first data within 1 second of a reply. The reference receiver invalidates its cached display while querying. Use a fresh random nonce every time. Never accept an unsolicited, expired or nonce-mismatched reply.
 
@@ -25,7 +25,7 @@ The ASCII domain is 17 bytes. Use all 32 derived bytes for engine data/ACK HMACs
 | 12 counter u32, 0 for query | 12 accepted update counter u32 |
 | 16..31 fresh client nonce | 16..31 echoed client nonce |
 | 32 feature mask u32 (only bit 0) | 32 current feature mask u32 |
-| 36 schema u32 (1..5 enabled,0 disabled/query) | 36 current schema u32 |
+| 36 schema u32 (1..6 enabled,0 disabled/query) | 36 current schema u32 |
 | 40 reserved u32=0 | 40 status u32=0 |
 | 44..75 HMAC-SHA256(LMK16, bytes 0..43) | 44..59 per-boot random nonce |
 | | 60 engine packet sequence floor u64 |
@@ -34,14 +34,14 @@ The ASCII domain is 17 bytes. Use all 32 derived bytes for engine data/ACK HMACs
 
 ## Engine packet, type 9
 
-Total232 bytes for schemas1/2 or250 for schemas3..5. Schema5's base uses the schema4 layout with schema=5; it becomes an observation only after its matching type11 extension is verified. HMAC verification with the derived key precedes any sequence/freshness update. Reject incorrect lengths, nonzero reserved bytes, unsupported schema/enums, wrong boot/source, duplicate/out-of-order packet IDs and reversed sender time. Packet IDs are global u64 and can have gaps. The source proposal sequence is independently u64. Preserve these as integers, not JavaScript Number values; the web API uses decimal strings.
+Total232bytes for schemas1/2 or250 for schemas3..6. Multipart BASE retains the schema4 layout with its negotiated schema field. Schema5 needs matching type11; schema6 also needs type12. HMAC verification with the derived key precedes any sequence/freshness update. Reject incorrect lengths, nonzero reserved bytes, unsupported schema/enums, wrong boot/source, duplicate/out-of-order packet IDs and reversed sender time. Packet IDs are global u64 and can have gaps. The source proposal sequence is independently u64. Preserve these as integers, not JavaScript Number values; the web API uses decimal strings.
 
 | Offset | Field |
 | --- | --- |
 | 0..7 | Common header |
 | 8 | Boot session u32 |
 | 12 | Engine packet sequence u64 |
-| 20, 22 | Negotiated schema u16 (1..5), flags u16 |
+| 20, 22 | Negotiated schema u16 (1..6), flags u16 |
 | 24, 28 | Sensor-sample and control-evaluation ages at send, u32 ms |
 | 32, 36 | Tune and sensor-profile revisions, u32 |
 | 40, 48 | Source proposal sequence and earlier worker-current command sequence, u64 |
@@ -70,11 +70,11 @@ The receiver must add network/receiver age. The reference implementation uses th
 
 ## Acknowledge and rate
 
-Type 10 is 56 bytes: common header 0..7, session u32@8, received engine packet sequence u64@12, reserved u32=0@20, HMAC-SHA256(engine_key32, bytes 0..23)@24..55. ACK the newest authenticated, processed complete observation promptly. Schema5 requires both parts before an ACK. The ECU requires a sequence it actually submitted within the last 1 second and within its last 8 complete submissions for that peer and packet family (engine or legacy sensor, independently). Eight engine observations span about0.5 seconds at16 Hz or1 second at8 Hz; promptly acknowledge the newest. It rejects duplicates, old ACKs and reversed time before advancing ACK state. The same recent-send/serial rule applies to legacy type6, including legitimate uint32 rollover through0. A MAC-layer send success is not a screen ACK.
+Type 10 is 56 bytes: common header 0..7, session u32@8, received engine packet sequence u64@12, reserved u32=0@20, HMAC-SHA256(engine_key32, bytes 0..23)@24..55. ACK the newest authenticated, processed complete observation promptly. Schema5 requires both parts before an ACK; schema6 requires all three. The ECU requires a sequence it actually submitted within the last 1 second and within its last 8 complete submissions for that peer and packet family (engine or legacy sensor, independently). Promptly acknowledge the newest. The1s age limit still applies when eight observations span more than1s. It rejects duplicates, old ACKs and reversed time before advancing ACK state. The same recent-send/serial rule applies to legacy type6, including legitimate uint32 rollover through0. A MAC-layer send success is not a screen ACK.
 
-Normal per-peer budget remains up to20 datagrams/s. Legacy peers retain their sensor cadence. Schemas1..4 normally receive16 engine observations,2 legacy sensor packets and2 metadata packets/s. Schema5 uses those same16 engine datagram slots for8 complete two-part observations. Capability replies borrow slots and are rate limited; radio congestion/pairing/CPU delays can reduce rates. Busy periods do not create an unbounded backlog. Metadata keeps its session/revision contract, and its session is stamped at transmission. No rate/delivery guarantee is implied.
+Normal per-peer budget remains up to20 datagrams/s. Legacy peers retain their sensor cadence. Schemas1..4 normally receive16 engine observations,2 legacy sensor packets and2 metadata packets/s. Schema5 uses those same16 engine datagram slots for8 complete two-part observations. Schema6 reserves both metadata and sensor slots ahead of pending parts, leaving16 engine datagrams/s for about5.33 complete observations/s over longer windows. A four-peer native15s schedule produces80 complete observations per peer, all six metadata channels,500ms sensor/metadata intervals and at most200ms from BASE to BOOST. Those are deterministic software-model results. Capability replies borrow slots and are rate limited; radio congestion/pairing/CPU delays can reduce rates. Busy periods do not create an unbounded backlog. Metadata keeps its session/revision contract, and its session is stamped at transmission. No rate/delivery guarantee is implied.
 
-The UI distinguishes recent link ACKs from complete-engine ACKs, including a pending flex submission. Sensor ACKs cannot hide a missing complete-engine ACK for3 seconds. Complete fault observations can be acknowledged while their flex value remains unusable. Neither an ACK nor a worker command observation proves an output executed or a screen displayed it. HTTP failure clears both ACK readbacks to unknown. Unpair stops subsequent sends and resets stream keys/capabilities/ACK history for that slot.
+The UI distinguishes recent link ACKs from complete-engine ACKs, including separate pending BASE/FLEX/BOOST submissions. Sensor ACKs cannot hide a missing complete-engine ACK for3 seconds. Complete fault observations can be acknowledged while their flex value remains unusable. Neither an ACK nor a worker command observation proves an output executed or a screen displayed it. HTTP failure clears both ACK readbacks to unknown. Unpair stops subsequent sends and resets stream keys/capabilities/ACK history for that slot.
 
 ## Reproduce
 
@@ -149,3 +149,41 @@ uv run --offline --with playwright==1.64.0 python -B tools/test_flex_radio_ui.py
 ```
 
 The actual sender/handler code executes against native SDK API models. These checks do not execute the RTOS task, ESP-IDF transport, radio, physical LED or a screen. The [frozen evidence](../reports/engine/flex-radio/README.md) binds source, native frames, browser checks, final linked builds and independent review. Earlier evidence packets remain historical and unchanged.
+
+
+## Boost pressure and valve proposal, schema6
+
+The [schema6 machine contract](../config/engine-radio-v6.json) preserves the BASE layout and FLEX record, changing their schema fields to6. It adds a144-byte type12 BOOST datagram. All three have one session and packet sequence, and both extensions bind the full BASE MAC. Each part has its own full HMAC. No extension introduces a new timestamp or refreshes the original observation.
+
+| Offset | Type12 field |
+| --- | --- |
+|0..7|Common header|
+|8,12|Session u32, packet sequence u64|
+|20,22|Schema u16=6, reserved u16=0|
+|24..55|Full BASE HMAC-SHA256|
+|56..87|Eight F32: bounded duty %, raw demand %, target absolute kPa, feedforward %, error kPa, P %, I %, D %|
+|88,96|PID updates and overboost events, u64|
+|104|Boost flags u32, bits0..10 from `boost_control.hpp`|
+|108,109|Reason u8=0..16, mode u8=0..2 (Off/open/closed loop)|
+|110|Available bit0, pressure enabled bit1, engine inhibit bit2; other bits0|
+|111|Reserved0|
+|112..143|HMAC-SHA256(engine_key32, bytes0..111)|
+
+Unknown F32 values are canonical NaN. Applied proposal duty is0..100%, but finite raw demand and PID terms can exceed that range. Unavailable records have no values, counters, flags, reason or inhibit decision; configured pressure/mode can remain known. Counters retain all64bits. A pressure inhibit must agree with the parent faulted state, nonzero faults, fuel/spark cuts, no pump or active engine proposal, and zero scalar pulse/dwell/duty. Worker timing cause18 is supported in schema6. Worker faults describe an earlier command and do not rewrite the current controller proposal.
+
+A valid MAP may reach400kPa only with pressure enabled. The source input-valid mask still applies the exact configured/calibrated ceiling. A schema6 BASE with MAP above110kPa stays private until BOOST confirms the pressure context. The receiver does not reconstruct sensor calibration or controller qualification from rounded wire values.
+
+The sender holds at most one immutable three-part observation per peer within the original250ms deadline, rechecked immediately before each SDK submission. It enters the ACK window only after all three submissions succeed and retains the original preparation time. Pending observations can finish in their original context after the live profile changes. Query, mode/schema update, key change and unpair cancel them. Legacy schemas1..5 still withhold new boost pressure profiles; their sensor fallback also requires a fresh sensor publication.
+
+The receiver holds at most two observations, supports all six arrival orders and uses the same absolute250ms assembly deadline, retirement, duplicate, clock-query and repeated-source rules as schema5. Neither one nor two parts can publish data, advance a completed sequence, ACK or renew the1s engine gap. Both full BASE bindings must match. Every boost byte joins repeated-proposal immutability, including counters and unknown values. Source/control ages include assembly wait, conservative clock/transit bounds and local elapsed; an unknown repeated age cannot become fresh after a query.
+
+`boost_observation_fresh` means an available diagnostic record with bounded source/control ages at most1s. It is not a20ms actuation authorization. Pressure-valid, valve-allowed and engine-inhibit statuses are explicitly named `at_source`; their original values remain identifiable when the display becomes stale. The receiver never drives an engine or valve. Flex freshness retains its own producer deadline and can expire before the boost diagnostic display.
+
+The paired-screen page distinguishes BASE pending, FLEX pending, BOOST pending, complete-observation ACK and old-screen upgrade/fallback. Counters distinguish submitted datagrams from complete observations and reception. The actual sender service is exercised in a native SDK API model, including all four peer slots; RF, RTOS scheduling, actual screen application, physical valve and engine operation remain unmeasured.
+
+```sh
+PYTHONPATH=tools python3 -B -m unittest test_boost_radio test_flex_radio test_engine_observability test_load_radio test_secondary_radio
+python3 -B scripts/test_radio_service.py --output .cache/engine/NEW_SCHEMA6_RADIO
+python3 -B tools/check_radio_service_fixtures.py .cache/engine/NEW_SCHEMA6_RADIO .cache/engine/NEW_SCHEMA6_INTEROP.json
+uv run --offline --with playwright==1.64.0 python -B tools/test_flex_radio_ui.py --fixtures .cache/engine/NEW_SCHEMA6_RADIO --output .cache/engine/NEW_SCHEMA6_BROWSER
+```

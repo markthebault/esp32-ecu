@@ -6,7 +6,7 @@
 namespace ecu::radio::wire {
 constexpr unsigned max_peers=4, channel=6, header_size=8, max_packet=250;
 enum Type : std::uint8_t { Beacon=1, Request=2, Accepted=3, Telemetry=4, Metadata=5, Ack=6,
- Capabilities=7,CapabilitiesReply=8,EngineTelemetry=9,EngineAck=10,EngineFlex=11 };
+ Capabilities=7,CapabilitiesReply=8,EngineTelemetry=9,EngineAck=10,EngineFlex=11,EngineBoost=12 };
 inline void u16(std::uint8_t*p,std::uint16_t v){p[0]=v;p[1]=v>>8;}
 inline void u32(std::uint8_t*p,std::uint32_t v){for(unsigned i=0;i<4;++i)p[i]=v>>(i*8);}
 inline std::uint32_t read32(const std::uint8_t*p){return p[0]|(std::uint32_t(p[1])<<8)|(std::uint32_t(p[2])<<16)|(std::uint32_t(p[3])<<24);}

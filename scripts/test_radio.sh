@@ -9,4 +9,5 @@ mkdir -p build
 build/espnow-test
 python3 tools/test_radio.py
 python3 -B tools/test_flex_radio.py
+python3 -B tools/test_boost_radio.py
 python3 tools/test_web_config.py

@@ -157,3 +157,14 @@ extern "C" int data_radio_pair(const char*text,const std::uint8_t*lmk,const std:
     [&](const std::uint8_t*p,unsigned n,std::uint8_t*proof){return mac(key,32,p,n,proof);}))return 0;
  std::memcpy(out,pair.data(),pair.size());pair.submitted();std::memcpy(out+250,pair.data(),pair.size());return 1;
 }
+extern "C" int data_radio_triple(const char*text,const std::uint8_t*lmk,const std::uint8_t*nonce,std::uint32_t session,std::uint64_t seq,std::uint32_t sample_age,std::uint32_t control_age,std::uint32_t worker_age,std::uint32_t raw_age,std::uint64_t sent,std::uint8_t*out){
+ ecu::engine::RuntimeSample r;if(!sample(text,r))return 0;
+ const auto transcript=ecu::radio::wire::engine_key_transcript(nonce,session);std::uint8_t key[32];
+ if(!mac(lmk,16,transcript.data(),transcript.size(),key))return 0;
+ ecu::radio::wire::EnginePair observation;
+ if(!observation.prepare(r,session,seq,sample_age,control_age,worker_age,raw_age,sent,
+    [&](const std::uint8_t*p,unsigned n,std::uint8_t*proof){return mac(key,32,p,n,proof);},6))return 0;
+ unsigned offset=0;
+ while(observation.pending()){std::memcpy(out+offset,observation.data(),observation.size());offset+=observation.size();observation.submitted();}
+ return offset==626;
+}

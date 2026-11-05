@@ -27,6 +27,18 @@ async def run(url,fixtures,out):
     if name=='partial':assert 'base submitted, flex submission pending' in text
     if name in ('held-expired','engine-ack-missing'):assert current['led']=='red_blink'
     results.append(name+': link ACK, complete-engine ACK and partial submission are distinct')
+   for name in ('schema6-partial-base','schema6-partial-flex','schema6-complete','schema6-downgraded'):
+    current=json.loads((fixtures/(name+'.json')).read_text());await page.evaluate('refreshRadio()');text=await page.locator('#radio-peers').inner_text()
+    if name=='schema6-downgraded':
+     assert 'needs screen schema6' in text and 'sensor stream fallback' in text and 'no complete engine observation acknowledged' in text
+    else:
+     assert 'engine schema6 / 3 datagrams per observation' in text
+     if name=='schema6-complete':assert 'complete engine observation ACK ' in text
+     else:
+      assert 'no complete engine observation acknowledged' in text
+      assert 'last reply' not in text
+      assert ('base submitted, flex and boost submission pending' if name.endswith('base') else 'base and flex submitted, boost submission pending') in text
+    results.append(name+': complete three-part receipt and legacy upgrade state remain distinct')
    negative=await page.evaluate('''p=>{
     const cases=[];
     for(const [key,value] of [['engine_connected','true'],['last_engine_ack_ms',-1],['last_engine_ack_ms',3000],['last_engine_ack_ms',0.5],['engine_parts_per_observation',1],['engine_pair_pending','false'],['engine_base_submitted',true],['engine_schema',6],['engine_telemetry','true']]){
@@ -35,11 +47,19 @@ async def run(url,fixtures,out):
     const x=structuredClone(p);x.engine_connected=false;cases.push(radioEnginePeerText(x).includes('unknown'));
     cases.push(radioLinkText({...p,connected:'true'}).includes('unknown'));
     cases.push(radioLinkText({...p,connected:true,last_ack_ms:-1}).includes('unknown'));
+    cases.push(radioLinkText({...p,connected:false,last_ack_ms:0}).includes('unknown'));
+    cases.push(radioLinkText({...p,connected:false,last_ack_ms:18446744073709552000}).includes('unknown'));
     return {count:cases.length,passed:cases.every(Boolean)};
    }''',json.loads((fixtures/'complete.json').read_text())['peers'][0]);assert negative['passed'],negative
    results.append(str(negative['count'])+' malformed ACK/schema/part states stay unknown')
+   negative=await page.evaluate('''p=>{
+    const cases=[];
+    for(const patch of [{engine_next_part:'boost'},{engine_next_part:null},{engine_parts_per_observation:2},{engine_schema:7},{engine_pair_pending:true},{engine_pair_pending:true,engine_base_submitted:true,engine_next_part:'base'},{engine_pair_pending:true,engine_base_submitted:false,engine_next_part:'flex'}])cases.push(radioEnginePeerText({...p,...patch}).includes('unknown'));
+    return {count:cases.length,passed:cases.every(Boolean)};
+   }''',json.loads((fixtures/'schema6-complete.json').read_text())['peers'][0]);assert negative['passed'],negative
+   results.append(str(negative['count'])+' malformed schema6 next-part states stay unknown')
    current=json.loads((fixtures/'complete.json').read_text());current['peers'][0]['name']='<img src=x onerror="window.radioMarkup=true">';await page.evaluate('refreshRadio()');assert not await page.locator('#radio-peers img').count();assert not await page.evaluate('window.radioMarkup||false');results.append('Peer text remains escaped')
-   current=json.loads((fixtures/'partial.json').read_text());await page.evaluate('refreshRadio()');await page.locator('#page').screenshot(path=out/'radio-desktop.png')
+   current=json.loads((fixtures/'schema6-partial-flex.json').read_text());await page.evaluate('refreshRadio()');await page.locator('#page').screenshot(path=out/'radio-desktop.png')
    for width in (320,390,768,1440):
     await page.set_viewport_size({'width':width,'height':1000});assert await page.evaluate('document.documentElement.scrollWidth<=innerWidth'),width
    await page.set_viewport_size({'width':390,'height':1000});await page.locator('#page').screenshot(path=out/'radio-mobile.png')

@@ -1,6 +1,6 @@
 # Boost control development
 
-Boost pressure protection is now connected to the main engine, schema10 tune, browser controls, own011 binary/MSQ exchange, coherent diagnostics and a separate virtual target PWM channel. The default retains the110kPa NA guard. All physical engine outputs remain inhibited and no boost GPIO is allocated. Screen-format support, a coupled turbo/wastegate comparison and the protected physical driver remain unfinished, so this is partial development integration, not a completed boost feature.
+Boost pressure protection is now connected to the main engine, schema10 tune, browser controls, own011 binary/MSQ exchange, coherent diagnostics and a separate virtual target PWM channel. The default retains the110kPa NA guard. All physical engine outputs remain inhibited and no boost GPIO is allocated. A coupled turbo/wastegate comparison and the protected physical driver remain unfinished, so this is partial development integration, not a completed boost feature.
 
 ## Control contract
 
@@ -70,7 +70,7 @@ The reference builder requires the existing attested pinned numerical reference 
 
 ## Remaining boost work
 
-Existing screen engine schemas1..5 cannot represent this pressure profile. New boost observations are withheld, with an explicit block reason; pairing and legacy sensor telemetry remain separate. A negotiated boost extension with authenticated bounded reassembly, original timestamps and complete-observation ACKs is still required. Previously prepared NA observations retain their own original context and expiry.
+[Screen schema6](espnow-engine.md#boost-pressure-and-valve-proposal-schema6) carries the original boost decision alongside engine and flex data in three authenticated datagrams. Both extensions bind the full BASE MAC; only the complete set can publish or ACK. Bounded reassembly, original ages, repeated-source immutability and explicit stale/source decision statuses are included. Schemas1..5 withhold new boost pressure profiles with an upgrade reason; fresh sensor fallback remains separate. Previously prepared observations retain their original context and expiry. This supplies the ECU sender/reference receiver contract, with no actual screen application or RF qualification.
 
 A pulse-driven turbo/wastegate plant must consume actual main-controller PWM edges and engine outputs, then be compared with unchanged production Speeduino under pressure faults, actuator failures and time-step refinement. The current host regression plant has no turbo/wastegate model. A passing NA scenario is not boost validation. The older14 probes above remain isolated-kernel groundwork.
 

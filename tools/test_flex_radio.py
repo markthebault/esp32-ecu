@@ -33,7 +33,7 @@ class FlexRadioTests(unittest.TestCase):
  def pair(self,s=None,sequence=FLOOR+1,sent=5030000,raw_age=8,control_age=8,sample_age=12):
   return self.native.frame_pair(s or self.sample,LMK,BOOT,SESSION,sequence,sent=sent,raw_age=raw_age,control_age=control_age,sample_age=sample_age)
  def receiver(self):
-  self.native.reset_capabilities();r=EngineReceiver(MAC,LMK);q=r.query(100,bytes([1])*16);r.receive_reply(self.native.capability_reply(q,LMK,SESSION,BOOT,FLOOR,5000000),MAC,110)
+  self.native.reset_capabilities();r=EngineReceiver(MAC,LMK,schema=5);q=r.query(100,bytes([1])*16);r.receive_reply(self.native.capability_reply(q,LMK,SESSION,BOOT,FLOOR,5000000),MAC,110)
   q=r.update(True,120,bytes([2])*16);r.receive_reply(self.native.capability_reply(q,LMK,SESSION,BOOT,FLOOR,5010000),MAC,125);return r
  def complete(self,r,pair=None,times=(140,150),reverse=False):
   p=pair or self.pair();order=(1,0) if reverse else (0,1);self.assertIsNone(r.receive(p[order[0]],MAC,times[0]));return r.receive(p[order[1]],MAC,times[1])

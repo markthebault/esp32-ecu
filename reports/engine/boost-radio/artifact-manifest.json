@@ -1,0 +1,2912 @@
+{
+  "scope": "coherent_boost_radio_software",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2527,
+      "sha256": "689ad7b971872fab668017838d76dcd20352dcb4bcd5a627d3bdcc9ff761e5a9"
+    },
+    {
+      "path": "independent-review.tar.gz",
+      "bytes": 1049148,
+      "sha256": "e8cd3f92125cc013afcd039120817a1984475b0a1a26a90e0040ea57866a8398"
+    },
+    {
+      "path": "inhibited-firmware.tar.gz",
+      "bytes": 17576972,
+      "sha256": "dca3941a389c36877a40f9bdb9789a8ec055d98411dd47c6917bec9aa87ea15f"
+    },
+    {
+      "path": "sources.tar.gz",
+      "bytes": 551697,
+      "sha256": "0040c291fdfcab67d9cdbae6a8d44b32f9423598e2f1ca2ed196905f6738bc73"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 24002,
+      "sha256": "54e641fe6fe8b1000c1c8f34f10c41272880802e222eea888adc0e26a0f4da13"
+    },
+    {
+      "path": "validation.tar.gz",
+      "bytes": 282315,
+      "sha256": "318b5ae00f70e89f60dbfcb9689b5a41161a0b79fab5fd384a12afd1f362733d"
+    },
+    {
+      "path": "verify.py",
+      "bytes": 1879,
+      "sha256": "ceed56be9e875ca981c9674b966e69ed8d07d379e49ef09aa28f3cba408dfcba"
+    }
+  ],
+  "archives": [
+    {
+      "path": "sources.tar.gz",
+      "payloads": [
+        {
+          "path": "base-commit.txt",
+          "bytes": 41,
+          "sha256": "2238dbeb456ab2055f50129039b523fc25f82b3e48e3e86fd51e482b50fb0b04"
+        },
+        {
+          "path": "project/config/defaults.json",
+          "bytes": 4006,
+          "sha256": "e61fb310f60ddc801bbc2dec0dca288314ed124761b7fc35087aee10687ba617"
+        },
+        {
+          "path": "project/config/engine-radio-v5.json",
+          "bytes": 2252,
+          "sha256": "c23e5de6cee6d5dd88ceb44993e3fe3676fed9730ee8621704c501c6dba62c27"
+        },
+        {
+          "path": "project/config/engine-radio-v6.json",
+          "bytes": 3931,
+          "sha256": "9356e292ac103667768a80842253cedff19e44823d63dea58ea5a653f8c622d1"
+        },
+        {
+          "path": "project/config/engine/defaults.json",
+          "bytes": 31060,
+          "sha256": "f43aff000bf2c398c5bea7a2a3873b32d6997b217496a0bc3182625b7aaf356d"
+        },
+        {
+          "path": "project/config/interface-guide.json",
+          "bytes": 42300,
+          "sha256": "5cd231774c77bdc9c6751686979a0e28efa5ca5e1c45413eec94caa2bcda25de"
+        },
+        {
+          "path": "project/config/manual.json",
+          "bytes": 45021,
+          "sha256": "24d9eb07660ecb40e9ab0ab5ea76ec2aeb8ea7fe704d0abe90d00f6efc10f142"
+        },
+        {
+          "path": "project/docs/engine-boost-development.md",
+          "bytes": 14449,
+          "sha256": "77dc3467dcca1d3d12e65e5f39fe4c73771edef9ed847d7101849a3cd8efa4c6"
+        },
+        {
+          "path": "project/docs/engine-feature-coverage.md",
+          "bytes": 17916,
+          "sha256": "8d6b35280b0ae9a004a2f568ae7dcb1e7003a8e28dc96ea12757b92de572d685"
+        },
+        {
+          "path": "project/docs/espnow-engine.md",
+          "bytes": 27102,
+          "sha256": "4d3a20d2c93848910ac1cf3d265bae0ccb373203d08554844fce51cba6f20191"
+        },
+        {
+          "path": "project/firmware/include/ecu/board_status.hpp",
+          "bytes": 305,
+          "sha256": "4ad055e17cdfc081db4cb6f17763bcd2ce299fecd8786a7b1220ff8e350d53d7"
+        },
+        {
+          "path": "project/firmware/include/ecu/boost_command.hpp",
+          "bytes": 1615,
+          "sha256": "34c9871c2addc9054b95688dca63c0270dc84da422ae50c4361da658631a870d"
+        },
+        {
+          "path": "project/firmware/include/ecu/boost_control.hpp",
+          "bytes": 11161,
+          "sha256": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b"
+        },
+        {
+          "path": "project/firmware/include/ecu/boost_json.hpp",
+          "bytes": 4920,
+          "sha256": "93db1549ffb1491af8eee73e02e4044ab7d1151f9f510844f1f243e1c9f9d0e9"
+        },
+        {
+          "path": "project/firmware/include/ecu/boost_pwm.hpp",
+          "bytes": 375,
+          "sha256": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255"
+        },
+        {
+          "path": "project/firmware/include/ecu/boost_pwm_json.hpp",
+          "bytes": 549,
+          "sha256": "6891cdb627ae14043717fcf644bba2a2a76f931ec30e76c2b5a5de240f7053c6"
+        },
+        {
+          "path": "project/firmware/include/ecu/boost_runtime.hpp",
+          "bytes": 2310,
+          "sha256": "2bd7df42100f065228a34023c85421b5f62bd09b610892eb5404faea21793102"
+        },
+        {
+          "path": "project/firmware/include/ecu/boost_runtime_json.hpp",
+          "bytes": 3203,
+          "sha256": "732d52aa667e42c4c9d93f8ab84dd96565ea91f600251eeda1e3721f2b2e0f1d"
+        },
+        {
+          "path": "project/firmware/include/ecu/capture_clock.hpp",
+          "bytes": 3448,
+          "sha256": "5c0f88793019c236b3dc6eea7a39e9a9b1a080bf5adc3159b6651ba45bdc8511"
+        },
+        {
+          "path": "project/firmware/include/ecu/config.hpp",
+          "bytes": 5442,
+          "sha256": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739"
+        },
+        {
+          "path": "project/firmware/include/ecu/config_storage.hpp",
+          "bytes": 2363,
+          "sha256": "b7ec2f7029e00abb6440b3a9b1e1210d76ddf1f2309d19f7c52d81bc59990c45"
+        },
+        {
+          "path": "project/firmware/include/ecu/control.hpp",
+          "bytes": 10954,
+          "sha256": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine.hpp",
+          "bytes": 31886,
+          "sha256": "e7e306b2a3e4b3a47b687ab6338238ae07591cd29d1eb041fa89f47d4da6dc3d"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_binding.hpp",
+          "bytes": 3197,
+          "sha256": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_data.hpp",
+          "bytes": 6532,
+          "sha256": "238552f1037803ef57776177d480262f3d179bc51fee1d99bc410f68a83e314b"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_data_json.hpp",
+          "bytes": 8677,
+          "sha256": "affc4dbf745b9ecee6d6ac82c9a4e71719eb24cb65130731b2497d6ec7f81ab6"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_json.hpp",
+          "bytes": 20543,
+          "sha256": "70fed3649906051b574d1d79d9f17620ff6634e6df9c4852f46254d175ffecc1"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_limits.hpp",
+          "bytes": 107,
+          "sha256": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_log.hpp",
+          "bytes": 5420,
+          "sha256": "8e603def55b0355b052b32b4123df48e39fa0e7bc736db6ad271b02de08131c2"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_log_json.hpp",
+          "bytes": 3996,
+          "sha256": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_log_msl.hpp",
+          "bytes": 11026,
+          "sha256": "2cae8a43a2bb5953207e5eaddee13ee91df304b65b174b5414ee3c1faa524b26"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_log_service.hpp",
+          "bytes": 754,
+          "sha256": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_phase.hpp",
+          "bytes": 8547,
+          "sha256": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_radio.hpp",
+          "bytes": 10007,
+          "sha256": "a4863c243027bf77ada0580119a3cec4310d535962dbb9c54c83518272867ee5"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_radio_boost.hpp",
+          "bytes": 1178,
+          "sha256": "2804ff8d0e63bd5b07ea6eaeb879a7731814e85109bc054751a6b6b9e1466bb7"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_radio_flex.hpp",
+          "bytes": 4416,
+          "sha256": "0013db12fed38ae4ec3207d52166d8c9d994fcd615d8076e0318bd22394aca75"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_radio_health.hpp",
+          "bytes": 1009,
+          "sha256": "94919a86f184cf7bccdc767c67de753a10b0d1dba40478479ddd9341e311cc75"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_scheduler.hpp",
+          "bytes": 10251,
+          "sha256": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_service.hpp",
+          "bytes": 976,
+          "sha256": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_storage.hpp",
+          "bytes": 3105,
+          "sha256": "0e794be42d9a643e055d6f2e86b497ff6bd21ad2446b2b09b51a297819d02e4c"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_target.hpp",
+          "bytes": 2451,
+          "sha256": "17bc0b1f7f709b8946674cdf956a7914798e741fd51b4c3c90614c14abfe6273"
+        },
+        {
+          "path": "project/firmware/include/ecu/engine_tuning.hpp",
+          "bytes": 120,
+          "sha256": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6"
+        },
+        {
+          "path": "project/firmware/include/ecu/espnow.hpp",
+          "bytes": 336,
+          "sha256": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc"
+        },
+        {
+          "path": "project/firmware/include/ecu/espnow_protocol.hpp",
+          "bytes": 2778,
+          "sha256": "0edb7d95dd390a619503464b36a6930a9845f3019a1a996a47f9a219680231fe"
+        },
+        {
+          "path": "project/firmware/include/ecu/flex_capture_json.hpp",
+          "bytes": 5288,
+          "sha256": "5721d4889b351bb9001a259801cb4ae465ddd8852a9d69553a6564684d0a85fb"
+        },
+        {
+          "path": "project/firmware/include/ecu/flex_capture_owner.hpp",
+          "bytes": 12562,
+          "sha256": "3f4f69618b9e7b376c2ea1a1717ffdd328d782d5e54416da9296a2a95d6efb84"
+        },
+        {
+          "path": "project/firmware/include/ecu/flex_engine.hpp",
+          "bytes": 5999,
+          "sha256": "b24c940bdee8e71e427f552d126efdba7d5ca29110aa70d7d4396fcef6eba468"
+        },
+        {
+          "path": "project/firmware/include/ecu/flex_fuel.hpp",
+          "bytes": 14382,
+          "sha256": "ce233744b7f8b938f2d2a4a491138b2ba115a62ec0a5270612a89261e1729c22"
+        },
+        {
+          "path": "project/firmware/include/ecu/flex_hardware.hpp",
+          "bytes": 493,
+          "sha256": "bd01b82d25c37f25169aead71d7df3fc4992923c52e941df4766943e290a6380"
+        },
+        {
+          "path": "project/firmware/include/ecu/flex_ingress.hpp",
+          "bytes": 9452,
+          "sha256": "29a7ab7040b9918f7dde65356c138b8b619b484588954230bbc8d8d43cff4216"
+        },
+        {
+          "path": "project/firmware/include/ecu/flex_json.hpp",
+          "bytes": 6399,
+          "sha256": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45"
+        },
+        {
+          "path": "project/firmware/include/ecu/flex_runtime.hpp",
+          "bytes": 8991,
+          "sha256": "74bffa63c8930ea35c123250c98e30b5c9f588eb6761a812881d1e1a0b981051"
+        },
+        {
+          "path": "project/firmware/include/ecu/flex_runtime_json.hpp",
+          "bytes": 4014,
+          "sha256": "4b1c0424f5ac2bd50f520d1d04badb4347bbe246cfb02070988175a50a45d6d7"
+        },
+        {
+          "path": "project/firmware/include/ecu/heap_object.hpp",
+          "bytes": 540,
+          "sha256": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51"
+        },
+        {
+          "path": "project/firmware/include/ecu/idle_command.hpp",
+          "bytes": 1489,
+          "sha256": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310"
+        },
+        {
+          "path": "project/firmware/include/ecu/idle_control.hpp",
+          "bytes": 10973,
+          "sha256": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd"
+        },
+        {
+          "path": "project/firmware/include/ecu/idle_hardware.hpp",
+          "bytes": 616,
+          "sha256": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+        },
+        {
+          "path": "project/firmware/include/ecu/idle_pwm.hpp",
+          "bytes": 6903,
+          "sha256": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20"
+        },
+        {
+          "path": "project/firmware/include/ecu/idle_pwm_json.hpp",
+          "bytes": 1434,
+          "sha256": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b"
+        },
+        {
+          "path": "project/firmware/include/ecu/json.hpp",
+          "bytes": 2130,
+          "sha256": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247"
+        },
+        {
+          "path": "project/firmware/include/ecu/load_json.hpp",
+          "bytes": 8013,
+          "sha256": "75a0b2fb5939e671c44c0ae0e49e380db187bcc3c413fc20375f6ede6abfb931"
+        },
+        {
+          "path": "project/firmware/include/ecu/load_model.hpp",
+          "bytes": 11873,
+          "sha256": "5d25340d26a20b58f29501491357e2264e30f91284bc0691bf0f06f34ec26361"
+        },
+        {
+          "path": "project/firmware/include/ecu/pins.hpp",
+          "bytes": 1139,
+          "sha256": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad"
+        },
+        {
+          "path": "project/firmware/include/ecu/realtime.hpp",
+          "bytes": 387,
+          "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+        },
+        {
+          "path": "project/firmware/include/ecu/secondary_json.hpp",
+          "bytes": 11890,
+          "sha256": "25037e11278fac1bb2f4e0a394b9e992e25336f497147f849e6109af9d00eed1"
+        },
+        {
+          "path": "project/firmware/include/ecu/secondary_tables.hpp",
+          "bytes": 16600,
+          "sha256": "4ea26b399ae6cb29bb82823572698a11d65bc51ac570097ab6b22803119d02f2"
+        },
+        {
+          "path": "project/firmware/include/ecu/status_led.hpp",
+          "bytes": 6608,
+          "sha256": "47dc3b311195c72348849e24521b47e743cfec90b751fcd1b9626b39ff034902"
+        },
+        {
+          "path": "project/firmware/include/ecu/switch_acquisition.hpp",
+          "bytes": 9371,
+          "sha256": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb"
+        },
+        {
+          "path": "project/firmware/include/ecu/switch_service.hpp",
+          "bytes": 416,
+          "sha256": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e"
+        },
+        {
+          "path": "project/firmware/include/ecu/switch_transport.hpp",
+          "bytes": 2438,
+          "sha256": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932"
+        },
+        {
+          "path": "project/firmware/include/ecu/timing_executor.hpp",
+          "bytes": 15412,
+          "sha256": "c47ab152d9b4a12b756809871314197126382e3fa0c27a5f858e0048bb5f68c1"
+        },
+        {
+          "path": "project/firmware/include/ecu/transient_enrichment.hpp",
+          "bytes": 12008,
+          "sha256": "cb29b19871a4b900008e46356bd5d43c89313a271dd5b84996f9dbb4a6fb3403"
+        },
+        {
+          "path": "project/firmware/include/ecu/transient_json.hpp",
+          "bytes": 3294,
+          "sha256": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88"
+        },
+        {
+          "path": "project/firmware/include/ecu/trigger_log.hpp",
+          "bytes": 2952,
+          "sha256": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451"
+        },
+        {
+          "path": "project/firmware/include/ecu/trigger_log_json.hpp",
+          "bytes": 4155,
+          "sha256": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58"
+        },
+        {
+          "path": "project/firmware/include/ecu/tuning_document.hpp",
+          "bytes": 7415,
+          "sha256": "0df767a646f051c12f1ba20faa22e65d5587ae61b3be961a5597c492428321a2"
+        },
+        {
+          "path": "project/firmware/include/ecu/tuning_layout.hpp",
+          "bytes": 31412,
+          "sha256": "865e5086081a9ad2c5763d7b21d77153c6e426ca55f6850a93d84703d939a232"
+        },
+        {
+          "path": "project/firmware/include/ecu/tuning_live.hpp",
+          "bytes": 6093,
+          "sha256": "11f966fa06b767134c410ba80f6f09a85fc30931159cce87f540cf1f92c12949"
+        },
+        {
+          "path": "project/firmware/include/ecu/tuning_session.hpp",
+          "bytes": 7958,
+          "sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e"
+        },
+        {
+          "path": "project/firmware/include/ecu/tuning_stream.hpp",
+          "bytes": 3028,
+          "sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042"
+        },
+        {
+          "path": "project/firmware/include/ecu/web_config.hpp",
+          "bytes": 1050,
+          "sha256": "984d5447a6f07e626987819d2338489aa25004a15b529c460c29bde497e7a019"
+        },
+        {
+          "path": "project/firmware/main/CMakeLists.txt",
+          "bytes": 495,
+          "sha256": "2b6bde9fd593ea127fd647020cd70915627d26074634d9e8e581b72ae00c8269"
+        },
+        {
+          "path": "project/firmware/main/Kconfig.projbuild",
+          "bytes": 760,
+          "sha256": "b5ddeaaea5721d444da8d48d92ff2dabf6545a70ab7a4fc353cdc6f8316d3164"
+        },
+        {
+          "path": "project/firmware/main/app.cpp",
+          "bytes": 12967,
+          "sha256": "487d5e03a964f686939dcb46a148a91c02e516678cfd6c7d342ec0ba269ce9e6"
+        },
+        {
+          "path": "project/firmware/main/config_json.hpp",
+          "bytes": 3373,
+          "sha256": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6"
+        },
+        {
+          "path": "project/firmware/main/engine_log_service.cpp",
+          "bytes": 2629,
+          "sha256": "05666d7be694be72719515709a083b0cf65701ebcd410fdb32fc0aa0e9fbbd53"
+        },
+        {
+          "path": "project/firmware/main/engine_service.cpp",
+          "bytes": 14637,
+          "sha256": "44c62a8a90db307dd6fca9616ee59524e71c32e70b69db74efd2ba9b9d0f3fda"
+        },
+        {
+          "path": "project/firmware/main/engine_target.cpp",
+          "bytes": 40234,
+          "sha256": "07f51fdd428cef4e8ddae05148b3b49fc66af4122012584d8ad86d6b73a6d0c6"
+        },
+        {
+          "path": "project/firmware/main/engine_tuning.cpp",
+          "bytes": 7880,
+          "sha256": "24b846ed8cc4a03c7b323afd4b58eea7f411b243e71e569f5b9c08c9343d851a"
+        },
+        {
+          "path": "project/firmware/main/espnow.cpp",
+          "bytes": 30406,
+          "sha256": "749d38933aafa6a16c5fe9fa8d1a326ec87ce64c5a69bcd9d33fb7f39b79068d"
+        },
+        {
+          "path": "project/firmware/main/switch_service.cpp",
+          "bytes": 11355,
+          "sha256": "60bdc96159ced2a79ee24e68e30179d804a6bc95b9173b27ac89a797f43e3826"
+        },
+        {
+          "path": "project/firmware/main/web_assets.hpp",
+          "bytes": 361980,
+          "sha256": "57643587d3323092e21207d8eeae4fd2bb28dd253dba882075cbb2035e1bd584"
+        },
+        {
+          "path": "project/firmware/main/web_config.cpp",
+          "bytes": 29180,
+          "sha256": "d497f6b5e2f2e26a57c0a9f34a9b76c8d6834db9dc19c3ea2ad3238fa3a9c4d2"
+        },
+        {
+          "path": "project/firmware/tests/boost_control_test.cpp",
+          "bytes": 6188,
+          "sha256": "b032e3f6afec416ecf856ac146967097f206169e053aad17b1dddc488a4e897a"
+        },
+        {
+          "path": "project/firmware/tests/control_test.cpp",
+          "bytes": 6497,
+          "sha256": "f70daa1f94eb5caf27a26467e2f93ca84788470c0286e743bdf273c159a3cecf"
+        },
+        {
+          "path": "project/firmware/tests/engine_boost_test.cpp",
+          "bytes": 6962,
+          "sha256": "803fb30a14e2194cf32a78851fddeb03ac3002fde1cd93dc83ac524c7d00fdfb"
+        },
+        {
+          "path": "project/firmware/tests/engine_cylinder_test.cpp",
+          "bytes": 6236,
+          "sha256": "a07acf0093afa510389dfa05b609c7d4c3e0f59814c11349bb51990d95d449d9"
+        },
+        {
+          "path": "project/firmware/tests/engine_flex_test.cpp",
+          "bytes": 9679,
+          "sha256": "b83af90088af9f934d392adcfbabc064aa7789ec8aad33c0b648ff231aebce7a"
+        },
+        {
+          "path": "project/firmware/tests/engine_load_test.cpp",
+          "bytes": 6984,
+          "sha256": "8ef3d6e0382b77c5eb0f81e9009294e6a141ff5f360cc7c89ef9f397bdcff5b6"
+        },
+        {
+          "path": "project/firmware/tests/engine_log_service_test.cpp",
+          "bytes": 2437,
+          "sha256": "adcce12f0b93a315d05894309c1e7df6c2df4592484ff41bee1cbfceb922e7d4"
+        },
+        {
+          "path": "project/firmware/tests/engine_observability_test.cpp",
+          "bytes": 9315,
+          "sha256": "6de3f55de2aacd7a06893a196a8f1604d3fc71dd0b94acf99fcd586d622cd48a"
+        },
+        {
+          "path": "project/firmware/tests/engine_phase_test.cpp",
+          "bytes": 7909,
+          "sha256": "1b9485b170ec1bedd8a73022d294e87bdc83c74be726da78de43ac0dea816d72"
+        },
+        {
+          "path": "project/firmware/tests/engine_radio_boost_test.cpp",
+          "bytes": 4862,
+          "sha256": "e4a52e58f984d1ec511bec21711da78e7529ae3c260a785b5821316d60f76238"
+        },
+        {
+          "path": "project/firmware/tests/engine_radio_flex_test.cpp",
+          "bytes": 5417,
+          "sha256": "92f7da4959e35f5171ed4b5f03a6fe3c73fddacf50bc60ad3fd4ceec85bf034b"
+        },
+        {
+          "path": "project/firmware/tests/engine_secondary_test.cpp",
+          "bytes": 10884,
+          "sha256": "1126af2ecadb7eb7d16f3da2aaf253f6cedb6e4e576943ca971b6636a0cda89c"
+        },
+        {
+          "path": "project/firmware/tests/engine_semi_test.cpp",
+          "bytes": 4502,
+          "sha256": "728a90d92b9ba9320b6adeaf85d6791d960bc55d62ce3663e55594521b134fd4"
+        },
+        {
+          "path": "project/firmware/tests/engine_storage_test.cpp",
+          "bytes": 4783,
+          "sha256": "06e8c1149abd50f8bea41b22521517620345e4a66716b0446af15bc4fc9babe3"
+        },
+        {
+          "path": "project/firmware/tests/engine_test.cpp",
+          "bytes": 8721,
+          "sha256": "55f467d4f6e35ff9b018eabaf4cb938c9a1559ad5574e8e5c40236458120d93e"
+        },
+        {
+          "path": "project/firmware/tests/engine_transient_test.cpp",
+          "bytes": 3781,
+          "sha256": "f6c4e08aafc47ef6ab7c6bad87f21bc381d39255ace08329c87e1e3ac57077e6"
+        },
+        {
+          "path": "project/firmware/tests/espnow_test.cpp",
+          "bytes": 2454,
+          "sha256": "1f1ff8c1fcb50d16416d27e514c1eabf5c3cddb70814d0371089e5cc0d23bc26"
+        },
+        {
+          "path": "project/firmware/tests/fakes/nvs.h",
+          "bytes": 705,
+          "sha256": "8ae4111796b3175b79d5c4ae9537bd75c49cd4351269706d3ad705bb1c81611c"
+        },
+        {
+          "path": "project/firmware/tests/fakes/nvs_flash.h",
+          "bytes": 79,
+          "sha256": "e290e693131eaf64d035dccb6cfb1e0be527233a4ce3b7f2f04d6d54315888ff"
+        },
+        {
+          "path": "project/firmware/tests/flex_capture_owner_test.cpp",
+          "bytes": 13618,
+          "sha256": "618b4a7322b55c54ab314f03632885ce2b0bee06edca1e79ad2a46f8d1c8b4e8"
+        },
+        {
+          "path": "project/firmware/tests/flex_fuel_test.cpp",
+          "bytes": 10539,
+          "sha256": "f14554f6579e0da880243e40bb25ad966e80a30737ff283e27f17f491553661a"
+        },
+        {
+          "path": "project/firmware/tests/flex_ingress_test.cpp",
+          "bytes": 14052,
+          "sha256": "85f1ee955f99b848400f6ef237cf73acee33655c3b45f2a5c90b6da7d7e02a79"
+        },
+        {
+          "path": "project/firmware/tests/flex_ingress_xtensa_probe.cpp",
+          "bytes": 1616,
+          "sha256": "93ead0be76a50d8085458d6f8acdd7ea2299cf5b567efc060604a90dfde1b69f"
+        },
+        {
+          "path": "project/firmware/tests/flex_target_service_test.cpp",
+          "bytes": 12036,
+          "sha256": "728d06468b817c25b4a33f83afa780ed04e1f176df22658ccf36575dd61098f7"
+        },
+        {
+          "path": "project/firmware/tests/idle_control_test.cpp",
+          "bytes": 3473,
+          "sha256": "2a805518e3438cc1d99c20a62e10b63dbdab9073a3c462e004488999683f0fe6"
+        },
+        {
+          "path": "project/firmware/tests/idle_pwm_test.cpp",
+          "bytes": 2845,
+          "sha256": "6a19fbfcbb3d562fefd07941521666fbe16f62cad26da0638c2828941c647f5a"
+        },
+        {
+          "path": "project/firmware/tests/load_model_test.cpp",
+          "bytes": 4019,
+          "sha256": "9b3f549c91a6e1ba6d3af5e31ce3b1f74173f0819aeaaf00ad89e12da01ae295"
+        },
+        {
+          "path": "project/firmware/tests/log_fakes/esp_random.h",
+          "bytes": 194,
+          "sha256": "dcea98138360c20e84dd523c28427c819816263242e4176e38280437877fb91b"
+        },
+        {
+          "path": "project/firmware/tests/log_fakes/freertos/FreeRTOS.h",
+          "bytes": 162,
+          "sha256": "0f7428ac0dfd9288552b66794c75a6ff31c915bfade756962022d2804855eca3"
+        },
+        {
+          "path": "project/firmware/tests/log_fakes/freertos/semphr.h",
+          "bytes": 373,
+          "sha256": "abdd0fb8ea37d1fa8c04ce2ae0cb7ccabb462bd0177aeb24c8301e54f98df31f"
+        },
+        {
+          "path": "project/firmware/tests/radio_fakes/driver/gpio.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "project/firmware/tests/radio_fakes/esp_event.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "project/firmware/tests/radio_fakes/esp_netif.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "project/firmware/tests/radio_fakes/esp_now.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "project/firmware/tests/radio_fakes/esp_random.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "project/firmware/tests/radio_fakes/esp_timer.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "project/firmware/tests/radio_fakes/esp_wifi.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "project/firmware/tests/radio_fakes/fake_radio.hpp",
+          "bytes": 3830,
+          "sha256": "eb93f553f4b59bd69932976ab13cd94b015f7a44a603fada5d5b88c1ed3b6f88"
+        },
+        {
+          "path": "project/firmware/tests/radio_fakes/mbedtls/md.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "project/firmware/tests/radio_fakes/nvs.h",
+          "bytes": 611,
+          "sha256": "b1826fbb473fd55eefe9403218a6fff8fc503e1592436854aa5370f69d89370c"
+        },
+        {
+          "path": "project/firmware/tests/radio_service_test.cpp",
+          "bytes": 20539,
+          "sha256": "e4a95e72c988b4265c94b7cbe9467495be98ae4a3dd3a9fe95e581e89a526468"
+        },
+        {
+          "path": "project/firmware/tests/ratiometric_test.cpp",
+          "bytes": 7590,
+          "sha256": "14ec489f02b6e86762789a54d43a544bfdbe003051724c0196227d35ca0f7b79"
+        },
+        {
+          "path": "project/firmware/tests/secondary_tables_test.cpp",
+          "bytes": 13537,
+          "sha256": "20a724186a917d68c79b4a97f14b7b8ce50b57d9fe64b9c5c85e8c1bb665d7ca"
+        },
+        {
+          "path": "project/firmware/tests/shared_i2c_service_test.cpp",
+          "bytes": 11754,
+          "sha256": "3d3711c9d55b7f75dfffd823cafe43bd0bdd5c1605d60e85b6233d1e9d8f9779"
+        },
+        {
+          "path": "project/firmware/tests/status_led_test.cpp",
+          "bytes": 7786,
+          "sha256": "441e9dca5e3e5897d3d89c1f887c87293ccd3add1909922ff4bf78d79d5db584"
+        },
+        {
+          "path": "project/firmware/tests/switch_acquisition_test.cpp",
+          "bytes": 9770,
+          "sha256": "ec3aeb8ad9fbf673c6a1ce65998db91a8727f745f8cc94a673a1c6f7ae76b569"
+        },
+        {
+          "path": "project/firmware/tests/switch_fakes/driver/i2c_master.h",
+          "bytes": 1366,
+          "sha256": "ece48ba8b9bc71c549be7819020b56622e21ab5da69a04d08ba159d4a20ec113"
+        },
+        {
+          "path": "project/firmware/tests/switch_fakes/freertos/FreeRTOS.h",
+          "bytes": 194,
+          "sha256": "cc12e0510e857a1d3b83546b7edf66afe4a3207b55fbf64edf055aa01587d530"
+        },
+        {
+          "path": "project/firmware/tests/switch_service_test.cpp",
+          "bytes": 9850,
+          "sha256": "822e38bc845d546ca2849705a696c2ed90ff4ec2f724825546a6cd5e92039845"
+        },
+        {
+          "path": "project/firmware/tests/switch_transport_test.cpp",
+          "bytes": 4291,
+          "sha256": "ea7699a7f95193113c007e5f7dbc779d279f9cb70d01150d422a0660416979fa"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/driver/gpio.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/driver/gptimer.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/driver/mcpwm_cap.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/driver/mcpwm_sync.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/esp_attr.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/esp_log.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/esp_partition.h",
+          "bytes": 272,
+          "sha256": "ee4a29beeb359a2919b8893df65bde056019559a9f3d9c7960f526466ea2b995"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/esp_timer.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/fake_target.hpp",
+          "bytes": 9713,
+          "sha256": "3fb1c00e1fd75cea8d082b38d82741105c5e904ee7ef41a6e7cb4130546dd3ee"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/freertos/FreeRTOS.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/freertos/queue.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/freertos/semphr.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/freertos/task.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/hal/gpio_ll.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/hal/mcpwm_ll.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/nvs.h",
+          "bytes": 834,
+          "sha256": "435e7d8735725a73f4ae4e9462ebcac42c042dea02df3d018211deff351d422f"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/nvs_flash.h",
+          "bytes": 101,
+          "sha256": "f00a3d74a36b621cf063e6e2bb6526f0c976519bc2720cb3bce85f24f1639fbb"
+        },
+        {
+          "path": "project/firmware/tests/target_fakes/soc/gpio_struct.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "project/firmware/tests/timing_executor_test.cpp",
+          "bytes": 8121,
+          "sha256": "ff61dabaaeceb99f23b7f16d5238126fafa4dfb849471b15f40fae0e8cf339b8"
+        },
+        {
+          "path": "project/firmware/tests/transient_enrichment_test.cpp",
+          "bytes": 4670,
+          "sha256": "ef1b5ea7453d96cdcc602435470cda057efbd857d30ec721445227091b1c9c18"
+        },
+        {
+          "path": "project/firmware/tests/trigger_log_json_test.cpp",
+          "bytes": 3121,
+          "sha256": "cd6523ac035ad884ef52f7d98281a90fb5a32bf711bea90bcaaabd8f9114590b"
+        },
+        {
+          "path": "project/firmware/tests/trigger_log_test.cpp",
+          "bytes": 2489,
+          "sha256": "76dadab2610ad93b42508eb3019f009f92ebfbb6f8b0e4cebb7273b3d8e9e1db"
+        },
+        {
+          "path": "project/firmware/tests/tuning_allocation_test.cpp",
+          "bytes": 3839,
+          "sha256": "acc8eebe0a02e6cfc9c7c2778c1a61cb9ce7d52c71aa8a05893c9a6968aa8271"
+        },
+        {
+          "path": "project/firmware/tests/tuning_test.cpp",
+          "bytes": 8336,
+          "sha256": "6f6373f6dcf550b711af8639e41c5bdcdfff72c95089922c47b9562c9d881eea"
+        },
+        {
+          "path": "project/scripts/embed_web.py",
+          "bytes": 1116,
+          "sha256": "5382c822a5c28b4c7a83c7522018655c3f60ea1cd907fd4e5bbaaeebf5a2526f"
+        },
+        {
+          "path": "project/scripts/test_firmware.sh",
+          "bytes": 6671,
+          "sha256": "816767edc7fc2894a1fe4f7118cde52dea40735dc0d752e5dca3cdc3b39dc269"
+        },
+        {
+          "path": "project/scripts/test_radio.sh",
+          "bytes": 461,
+          "sha256": "fe5fd37e406dbcb6a4f3e6a20dce90e000c8a824af81795085ec1cabeb20d57c"
+        },
+        {
+          "path": "project/scripts/test_radio_service.py",
+          "bytes": 1941,
+          "sha256": "f75403ef39d0f80843c414f4483ae3aa6e91a5332f1b25042b4832972ed0eedf"
+        },
+        {
+          "path": "project/tools/boost_config.py",
+          "bytes": 3872,
+          "sha256": "e42b7fd846aca7536db7f8333be785a0603304b79e0d97fb786a6d7eb00ff301"
+        },
+        {
+          "path": "project/tools/boost_radio.py",
+          "bytes": 2832,
+          "sha256": "c9ba9e54bc1b1ec43dae87a13706c88279e5a0bb0fe07d18ccb8cb214937b842"
+        },
+        {
+          "path": "project/tools/check_radio_service_fixtures.py",
+          "bytes": 3565,
+          "sha256": "b4c62929d1eddd1edbafcf57377f0ae7edec77670b673a120f7ceccc943b3e65"
+        },
+        {
+          "path": "project/tools/engine_msq.py",
+          "bytes": 17787,
+          "sha256": "7bebc04ee911e604b26ab7ef6e826b792432d94e8ecb6c5d8db6c7711c170606"
+        },
+        {
+          "path": "project/tools/engine_observability.py",
+          "bytes": 5047,
+          "sha256": "828212969b7fd28c415ad9827a879b9a79552eda7ffbcb1cdf629e4037424ed8"
+        },
+        {
+          "path": "project/tools/engine_observability_bridge.cpp",
+          "bytes": 13872,
+          "sha256": "9a15a1edf7608f2a2292036469cf2119f9fea257e786c9e52082ef4159aff14b"
+        },
+        {
+          "path": "project/tools/engine_receiver.py",
+          "bytes": 27944,
+          "sha256": "5ca832521822e09629ac54e053c9a3a0802e04b28261feb0ae97dfb97e4e72f2"
+        },
+        {
+          "path": "project/tools/espnow_protocol.py",
+          "bytes": 2807,
+          "sha256": "90d806e472f54ab5d054629ab92162157064d461f34164f7b73bc5dde43176f9"
+        },
+        {
+          "path": "project/tools/flex_config.py",
+          "bytes": 4367,
+          "sha256": "bb70f8423ef4332919de2fdca97c2461701df531a6fe0d621be93de895c1a5c2"
+        },
+        {
+          "path": "project/tools/flex_radio.py",
+          "bytes": 5950,
+          "sha256": "fe9be5d3ed7aa79dc71974bd72aed308fb9ca0e4bbc4ccd89adf98ccef1fdf36"
+        },
+        {
+          "path": "project/tools/radio_simulator.py",
+          "bytes": 5680,
+          "sha256": "297d548cd799d8b75de56363b5dd5829a8d7fac57df50eb79a85398c9b071e5c"
+        },
+        {
+          "path": "project/tools/test_boost_radio.py",
+          "bytes": 13828,
+          "sha256": "b03952fc07560c2c54478005dee824b1db168e4927cfd87e2289419c4770a3f6"
+        },
+        {
+          "path": "project/tools/test_boost_ui.py",
+          "bytes": 7811,
+          "sha256": "c8d4470b24ee294b574e45141d65c7af2a77db93332ff950956a360b4d416e41"
+        },
+        {
+          "path": "project/tools/test_flex_radio.py",
+          "bytes": 11777,
+          "sha256": "9b48b1fd1f14c765dfa7c1d69d228fd8068139bbd76bfd4a79c82c8ee44a2b76"
+        },
+        {
+          "path": "project/tools/test_flex_radio_ui.py",
+          "bytes": 7201,
+          "sha256": "4833b56d289894c1c3ffb13a0cf07d428e836689e487e1bf5d6b4585f84f33a1"
+        },
+        {
+          "path": "project/web/boost_control.js",
+          "bytes": 16622,
+          "sha256": "35ca0b87b2f3cdb597f5c35e7635bddf0a1b8838ca3a90eaaadce6d8284d70ef"
+        },
+        {
+          "path": "project/web/boost_control_logic.js",
+          "bytes": 12803,
+          "sha256": "53dfa88256e6ea3dd029405c9aa8047e3ba37760d51371d73f5ba83d3446124e"
+        },
+        {
+          "path": "project/web/cylinder_tuning.js",
+          "bytes": 5831,
+          "sha256": "4cdce733ebbe765f691fae50b2653650007a3ee83e0d30eb0d9c7270a4660bd3"
+        },
+        {
+          "path": "project/web/engine_logger.js",
+          "bytes": 21059,
+          "sha256": "4f0dd8de7bbbffa33f9fa8a2f5eb3a303773641ffe54b5f4dad8653e22a81957"
+        },
+        {
+          "path": "project/web/flex_fuel.js",
+          "bytes": 21926,
+          "sha256": "264a9cca85ad712eb0ebad1bdfde8db5269118bc9ebce7ca9986e5ecabcb8801"
+        },
+        {
+          "path": "project/web/idle_control.js",
+          "bytes": 9835,
+          "sha256": "6527c03afb5e4ecd4d8a88907afb39bcee6ccd0a41d7d0c7cfce1d062b606f4b"
+        },
+        {
+          "path": "project/web/index.html",
+          "bytes": 98078,
+          "sha256": "ac069d1b2e91c5bbc95e2bb1498023006537a345e4a3c7a156a47a0d6792a197"
+        },
+        {
+          "path": "project/web/load_model.js",
+          "bytes": 14355,
+          "sha256": "d5ccc9cbf60041eb1900b6f47ae12d0e62bce560c962f3017bd8587c9a64892d"
+        },
+        {
+          "path": "project/web/secondary_tables.js",
+          "bytes": 22203,
+          "sha256": "edcc8a98c5676111399b97b375159f6414fe273c77a87315aec69d695b4927bc"
+        },
+        {
+          "path": "project/web/transient_enrichment.js",
+          "bytes": 10605,
+          "sha256": "42b60c320c0d95a5535a8346e9b1bd7be0faef0d91007bc9468cf4f959566767"
+        },
+        {
+          "path": "project/web/trigger_logger.js",
+          "bytes": 15198,
+          "sha256": "d9997905115af0cbecca5382b04694a4bd71c220e19e84b0b02bd9cd27e85c07"
+        },
+        {
+          "path": "project/web/tuning_diagnostics.js",
+          "bytes": 2883,
+          "sha256": "9c96152e9e9cae4f000fdc268f3512f9d915fe6dcdae4cef2ca37ac87651a1c8"
+        },
+        {
+          "path": "reconstruct.patch",
+          "bytes": 161729,
+          "sha256": "9274255e54d880623cf32fb97a5fe487aab1e859beb618d22c8a3e8d1fadc3c6"
+        }
+      ]
+    },
+    {
+      "path": "independent-review.tar.gz",
+      "payloads": [
+        {
+          "path": "README.md",
+          "bytes": 2091,
+          "sha256": "9e374f1898564ec41a3133c1619cdaebcfe0c8680b2c086bbea1891c6c62ab80"
+        },
+        {
+          "path": "archive-whitelist.json",
+          "bytes": 54015,
+          "sha256": "f9c97bdedbed71bab36f8a6bb649b2f0c9dbb90f70d681386326c8828cc60906"
+        },
+        {
+          "path": "asset-verification.json",
+          "bytes": 2578,
+          "sha256": "bfa198049711ee3665bd24ce477d09586cb67744d0cbdbad697a787cfd9a83e2"
+        },
+        {
+          "path": "boost-test-build.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "boost-test-run.log",
+          "bytes": 29,
+          "sha256": "e3e5c67cf3b163cfd3302b42813a5800f48f84b3073a4f954afa1593ddfdee7f"
+        },
+        {
+          "path": "browser-boost-current.log",
+          "bytes": 1609,
+          "sha256": "20097ece34a486c77c21a9a50f588ec249da14c20634c6b401ed4842472ed98b"
+        },
+        {
+          "path": "browser-boost-current/boost-desktop.png",
+          "bytes": 118544,
+          "sha256": "512ec2ed7fc3a45822b90608e9bb113cb83169de0a3926370ab88eb252afca1c"
+        },
+        {
+          "path": "browser-boost-current/boost-mobile.png",
+          "bytes": 64471,
+          "sha256": "ff1f52bc9468c221b9b17fa65ca5db838dcbc7ea585d479b49000728a5358e70"
+        },
+        {
+          "path": "browser-boost-current/browser-boost.msq",
+          "bytes": 19451,
+          "sha256": "5681229cd24fb264800a0f1d110e6f2e8dc5d7281067a3f53e58025a568002c8"
+        },
+        {
+          "path": "browser-boost-current/legacy-schema9.json",
+          "bytes": 10583,
+          "sha256": "90acb8e0cda7ccb5bb86f242e9dcf1612b2d65a27235be928cbf24a4d943fb1d"
+        },
+        {
+          "path": "browser-boost-current/ui-tests.json",
+          "bytes": 1609,
+          "sha256": "20097ece34a486c77c21a9a50f588ec249da14c20634c6b401ed4842472ed98b"
+        },
+        {
+          "path": "browser-fixture-equivalence.json",
+          "bytes": 522,
+          "sha256": "971f8ca073c51cd1c5ad78784af99f9dcf622958d8a74ce3e025fb3836a1e374"
+        },
+        {
+          "path": "build-review.log",
+          "bytes": 88,
+          "sha256": "dd4806197c1a30ed327d215ebb0d53c4430cc772435612ba6f926e6f0142d8f8"
+        },
+        {
+          "path": "build_review.py",
+          "bytes": 3045,
+          "sha256": "ea8470eb711aa8aea83c8f940965412c13a5006f6e1abe0617412545495bc39f"
+        },
+        {
+          "path": "cjson-build.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "codec-library-build.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "commands.json",
+          "bytes": 7754,
+          "sha256": "8f277bab643615b42d063bc2b315dbb02fdfbe9498365d1e8771366ce9063e9e"
+        },
+        {
+          "path": "core-build.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "core-run.log",
+          "bytes": 35,
+          "sha256": "c39e2c9c95c8d03c101935821c5d99f89d1e8b5ae2cfaab6e1127185547b046e"
+        },
+        {
+          "path": "current/legacy-1.bin",
+          "bytes": 232,
+          "sha256": "5374ca447722d0fa40f33b35dcad463b52d4246bc88f35160bf1d97675b23c05"
+        },
+        {
+          "path": "current/legacy-2.bin",
+          "bytes": 232,
+          "sha256": "80fec397a3f431cfef54cd1000631b3edcadaaa0aef37e5bcbad3c30113a3535"
+        },
+        {
+          "path": "current/legacy-3.bin",
+          "bytes": 250,
+          "sha256": "1bea24695027fda089e2e9089fe7f49fe35523c5d763f2ead8efcd3fa21046a0"
+        },
+        {
+          "path": "current/legacy-4.bin",
+          "bytes": 250,
+          "sha256": "f5bce599a1e9fbbfa6c67fb71c1b7159be3ae8bd8f1260d294e9d9518d23a591"
+        },
+        {
+          "path": "current/legacy-5-0.bin",
+          "bytes": 250,
+          "sha256": "e4d6c21c1534acc34aba107f4f745f362d19a15ba0002c85ddf452f1ad3cc699"
+        },
+        {
+          "path": "current/legacy-5-1.bin",
+          "bytes": 232,
+          "sha256": "ec73df0cbde1cbc4fbc85828d6f3184f68f371813fe74db91046b6a7fda77b5b"
+        },
+        {
+          "path": "current/schema6-0.bin",
+          "bytes": 250,
+          "sha256": "52e821ceaaf886c59853954d4b8584e527ceba24ec64438776d93a114ec3c1ed"
+        },
+        {
+          "path": "current/schema6-1.bin",
+          "bytes": 232,
+          "sha256": "73ea7c25b12acbdb463990787c27f08ed2fa0ff863f9575868e8402f030e51d9"
+        },
+        {
+          "path": "current/schema6-2.bin",
+          "bytes": 144,
+          "sha256": "be87f53d064467659ad7aa5261157aa6941aeaeee4d1822c06882c9fe61a2e28"
+        },
+        {
+          "path": "external-evidence/radio-browser/radio-desktop.png",
+          "bytes": 94368,
+          "sha256": "691bf61c2b4c72a6ec1fcb9b04c9888e841f83b157d16d97ab4ad221556cf6ad"
+        },
+        {
+          "path": "external-evidence/radio-browser/radio-mobile.png",
+          "bytes": 93209,
+          "sha256": "49cd348fdad757daedb77ac62421df5ee07e744dee4c801b0d298b8cd588407c"
+        },
+        {
+          "path": "external-evidence/radio-browser/ui-tests.json",
+          "bytes": 2741,
+          "sha256": "4b8c8041c472fae2f7a83dc09a1f1fb8877e1b3c82fbed3117cc6c4102c641de"
+        },
+        {
+          "path": "external-evidence/radio-fixtures/boost-profile-blocked.json",
+          "bytes": 1637,
+          "sha256": "c689376302047f2d1754700ffa9652dc5e0085bac73e66f78624d1a456cb16c9"
+        },
+        {
+          "path": "external-evidence/radio-fixtures/commands.json",
+          "bytes": 1509,
+          "sha256": "103f0f4703c6886662b718df4b4b65085d075b533b709c7505522b56064c78eb"
+        },
+        {
+          "path": "external-evidence/radio-fixtures/complete.json",
+          "bytes": 1583,
+          "sha256": "d0450ab4756dae0e5a1ad5f4830284ebf684f3300b73eeb09c6ff851297be237"
+        },
+        {
+          "path": "external-evidence/radio-fixtures/engine-ack-missing.json",
+          "bytes": 1589,
+          "sha256": "023f62d80f6a5c65c6dd2eaee4705d6016a0c7f215a2e3eb774ef9ef1020edf5"
+        },
+        {
+          "path": "external-evidence/radio-fixtures/held-expired.json",
+          "bytes": 1592,
+          "sha256": "1be8967758af9e937ceb9f701d3be7657a5c0ce38938c3ab851405875569b589"
+        },
+        {
+          "path": "external-evidence/radio-fixtures/partial.json",
+          "bytes": 1584,
+          "sha256": "03c7d007aeb82698052c45e3ce22e7da2ab1e8afd4c5494b680a9c7c15a898be"
+        },
+        {
+          "path": "external-evidence/radio-fixtures/schema6-complete.json",
+          "bytes": 1578,
+          "sha256": "7e61f22ca9887d913cb5e7be485b8bf6b07c8c59eba12bcaddbd00f7f0286f72"
+        },
+        {
+          "path": "external-evidence/radio-fixtures/schema6-downgraded.json",
+          "bytes": 1650,
+          "sha256": "624b6cb48d73234a4cf51764efe57cafda1d8ac3ed2f20ba0842845c81249a86"
+        },
+        {
+          "path": "external-evidence/radio-fixtures/schema6-fairness.json",
+          "bytes": 255,
+          "sha256": "141edf208bb82c5f25113dd97f57a522e0e3a073ceecc3d0dc8630797f59cfa9"
+        },
+        {
+          "path": "external-evidence/radio-fixtures/schema6-four-peers.json",
+          "bytes": 118,
+          "sha256": "83d7df78e41972fd81afffde7593bbd596e580bbf4aa2e9d67156c6b57ef2ae9"
+        },
+        {
+          "path": "external-evidence/radio-fixtures/schema6-partial-base.json",
+          "bytes": 1575,
+          "sha256": "9b3da08e9a94dcd551e95709f60c5671dea6cb856377b2376dfc431b4eecfad7"
+        },
+        {
+          "path": "external-evidence/radio-fixtures/schema6-partial-flex.json",
+          "bytes": 1580,
+          "sha256": "02a830620ac627f35377f5c0da56b462c655379698eb8ebec06a1d5cd81d1fdc"
+        },
+        {
+          "path": "external-evidence/radio-fixtures/summary.json",
+          "bytes": 1907,
+          "sha256": "1a12f1b4d85672ac0f9a8fe52ebb2d3ef82dc4935a6c7d355ed5723bc30b62e3"
+        },
+        {
+          "path": "failure-reproduction/firmware/main/espnow.cpp",
+          "bytes": 29866,
+          "sha256": "9de38d776a7a790a590753354c5e30e66c1caaa1aae418eaa6502524b056c622"
+        },
+        {
+          "path": "failure-reproduction/firmware/tests/review_radio_liveness.cpp",
+          "bytes": 5537,
+          "sha256": "59bc2ea48522ea75d83b305d1169026b4c10c4c3a0dc9a3c2cda32c574fd51ab"
+        },
+        {
+          "path": "independent-probes.json",
+          "bytes": 807,
+          "sha256": "3a994b9fdffe8dd78eb0fb4e0af0c89d06715f2a049a18087c32c75c5e03dc81"
+        },
+        {
+          "path": "independent-probes.log",
+          "bytes": 807,
+          "sha256": "3a994b9fdffe8dd78eb0fb4e0af0c89d06715f2a049a18087c32c75c5e03dc81"
+        },
+        {
+          "path": "interop.json",
+          "bytes": 14955,
+          "sha256": "9c9938fc86f7ff1012e6f3fe0756040b1fbf6a1dfc8e1a6f847c78d7bad99202"
+        },
+        {
+          "path": "interop.log",
+          "bytes": 64,
+          "sha256": "ecc3802bbf7a5ba43c465670e3b95140c0729958268cf400e4844cfb8b6be62d"
+        },
+        {
+          "path": "legacy-byte-parity.json",
+          "bytes": 317,
+          "sha256": "354aa5aa4a57005dc97d0534beace623b4cc81d2e142277527d971d9d5b706a0"
+        },
+        {
+          "path": "legacy/legacy-1.bin",
+          "bytes": 232,
+          "sha256": "5374ca447722d0fa40f33b35dcad463b52d4246bc88f35160bf1d97675b23c05"
+        },
+        {
+          "path": "legacy/legacy-2.bin",
+          "bytes": 232,
+          "sha256": "80fec397a3f431cfef54cd1000631b3edcadaaa0aef37e5bcbad3c30113a3535"
+        },
+        {
+          "path": "legacy/legacy-3.bin",
+          "bytes": 250,
+          "sha256": "1bea24695027fda089e2e9089fe7f49fe35523c5d763f2ead8efcd3fa21046a0"
+        },
+        {
+          "path": "legacy/legacy-4.bin",
+          "bytes": 250,
+          "sha256": "f5bce599a1e9fbbfa6c67fb71c1b7159be3ae8bd8f1260d294e9d9518d23a591"
+        },
+        {
+          "path": "legacy/legacy-5-0.bin",
+          "bytes": 250,
+          "sha256": "e4d6c21c1534acc34aba107f4f745f362d19a15ba0002c85ddf452f1ad3cc699"
+        },
+        {
+          "path": "legacy/legacy-5-1.bin",
+          "bytes": 232,
+          "sha256": "ec73df0cbde1cbc4fbc85828d6f3184f68f371813fe74db91046b6a7fda77b5b"
+        },
+        {
+          "path": "liveness-build.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "liveness-run.log",
+          "bytes": 137,
+          "sha256": "53ff76322bed5e8ff217d6d388b90ee22f687bd2df1804c474e26ab8925ad456"
+        },
+        {
+          "path": "mutation-build.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "mutation-run.log",
+          "bytes": 401,
+          "sha256": "777a92130e1427d84054552037208d18a506b6796e18f61dd4eaf3486f3eb126"
+        },
+        {
+          "path": "mutation/firmware/main/espnow.cpp",
+          "bytes": 30407,
+          "sha256": "4ed777994d06e05d9cc7e5a0faf834603a21222e56dd5f8415227b716008eeeb"
+        },
+        {
+          "path": "mutation/firmware/tests/review_radio_liveness.cpp",
+          "bytes": 5713,
+          "sha256": "85c9cd70b1640765577d56dd4e176904f8a627a4c80ff7e7573278468919a6d4"
+        },
+        {
+          "path": "previous-review/commands.json",
+          "bytes": 2196,
+          "sha256": "69fcfdc701e002043044ba3c08bc869a57978d76cf8704f72293e23e3712e806"
+        },
+        {
+          "path": "previous-review/existing-tests.log",
+          "bytes": 160,
+          "sha256": "a9fcb59e5106ec54457b030f004e76039fde486a205bd6de716b62464bcac948"
+        },
+        {
+          "path": "previous-review/independent-probes.json",
+          "bytes": 807,
+          "sha256": "3a994b9fdffe8dd78eb0fb4e0af0c89d06715f2a049a18087c32c75c5e03dc81"
+        },
+        {
+          "path": "previous-review/independent-probes.log",
+          "bytes": 807,
+          "sha256": "3a994b9fdffe8dd78eb0fb4e0af0c89d06715f2a049a18087c32c75c5e03dc81"
+        },
+        {
+          "path": "previous-review/legacy-byte-parity.json",
+          "bytes": 162,
+          "sha256": "85a9f035a53e616a8462718e79480bb802227051408b6a8c2dc77112ef162c18"
+        },
+        {
+          "path": "previous-review/liveness/2.log",
+          "bytes": 112,
+          "sha256": "c50ed6b7258d32f3b1129a16e4b82c2a3243c5a0e0ea22d1031655d2c8214c65"
+        },
+        {
+          "path": "previous-review/liveness/commands.json",
+          "bytes": 1712,
+          "sha256": "a00d25763f1dd41576f8f62e544878ab3201eb594dbe7414fb0341b54e3d12d8"
+        },
+        {
+          "path": "previous-review/liveness/reproduction.cpp",
+          "bytes": 5537,
+          "sha256": "59bc2ea48522ea75d83b305d1169026b4c10c4c3a0dc9a3c2cda32c574fd51ab"
+        },
+        {
+          "path": "previous-review/probes.py",
+          "bytes": 7699,
+          "sha256": "11cd83bba775067de8e5bf25cb4ab1b2bfab8d3bc3407864bd662bd786c46d95"
+        },
+        {
+          "path": "previous-review/review-initial.json",
+          "bytes": 4653,
+          "sha256": "d5a06248346397428c533f2b68fe3ddf0790d434b670321c18399ec72a5ce0e2"
+        },
+        {
+          "path": "previous-review/review.cpp",
+          "bytes": 4226,
+          "sha256": "b6969f452a1391cbaa46a50799c78d7621f99fee1226039c57149cc4e6f67b19"
+        },
+        {
+          "path": "previous-review/source-hashes-initial.json",
+          "bytes": 1542,
+          "sha256": "1157327c6dc9b678f7917e6d3c4e7f7cb21e0d1b64ba029685cef8c588135bbf"
+        },
+        {
+          "path": "probes.py",
+          "bytes": 7699,
+          "sha256": "11cd83bba775067de8e5bf25cb4ab1b2bfab8d3bc3407864bd662bd786c46d95"
+        },
+        {
+          "path": "review.cpp",
+          "bytes": 4226,
+          "sha256": "b6969f452a1391cbaa46a50799c78d7621f99fee1226039c57149cc4e6f67b19"
+        },
+        {
+          "path": "review.json",
+          "bytes": 25971,
+          "sha256": "a1085919603736dcc032bb163b6abe25e1a9e0f9bdebeb526fae9eeb9c686396"
+        },
+        {
+          "path": "service-build.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "service-run.log",
+          "bytes": 26,
+          "sha256": "851e8af8ea6cde8384b4d185c6ef36d7a93544c7f67ca9e644baf00da229831e"
+        },
+        {
+          "path": "service/base.bin",
+          "bytes": 250,
+          "sha256": "fb75aed2aa368fa504f0c9d7a44a55bd4b253e0db2557ed5f0128aaddefbaaa7"
+        },
+        {
+          "path": "service/boost-profile-blocked.json",
+          "bytes": 1637,
+          "sha256": "c689376302047f2d1754700ffa9652dc5e0085bac73e66f78624d1a456cb16c9"
+        },
+        {
+          "path": "service/complete.json",
+          "bytes": 1583,
+          "sha256": "d0450ab4756dae0e5a1ad5f4830284ebf684f3300b73eeb09c6ff851297be237"
+        },
+        {
+          "path": "service/engine-ack-missing.json",
+          "bytes": 1589,
+          "sha256": "023f62d80f6a5c65c6dd2eaee4705d6016a0c7f215a2e3eb774ef9ef1020edf5"
+        },
+        {
+          "path": "service/engine-ack.bin",
+          "bytes": 56,
+          "sha256": "4c1a6a6084e812b1fe7692bb9fcffa2970ccd675a04e9112d0cdea432bab2641"
+        },
+        {
+          "path": "service/flex.bin",
+          "bytes": 232,
+          "sha256": "9a2f7122e2727a07c0bb5dc2b8304cda8feece79035d123c1929663c624278bd"
+        },
+        {
+          "path": "service/held-expired.json",
+          "bytes": 1592,
+          "sha256": "1be8967758af9e937ceb9f701d3be7657a5c0ce38938c3ab851405875569b589"
+        },
+        {
+          "path": "service/partial.json",
+          "bytes": 1584,
+          "sha256": "03c7d007aeb82698052c45e3ce22e7da2ab1e8afd4c5494b680a9c7c15a898be"
+        },
+        {
+          "path": "service/query-reply.bin",
+          "bytes": 108,
+          "sha256": "fd8cbb068d283156c964d9fdbd213287ee9358bece2ae2cd5837d96836d0709b"
+        },
+        {
+          "path": "service/query-request.bin",
+          "bytes": 76,
+          "sha256": "b18429d7dd5eb4bec09255773ac353262074e3ab3b1cdc3ecd80b6ab83111729"
+        },
+        {
+          "path": "service/schema6-base.bin",
+          "bytes": 250,
+          "sha256": "219ebdacce025e70bbd8ec51f71fd66040cbca38c9647b7f7674bd070f8c5848"
+        },
+        {
+          "path": "service/schema6-boost.bin",
+          "bytes": 144,
+          "sha256": "790a25addc44890137bc373bc8907ce2ec1d5fa3885892c60fa7c12704148d04"
+        },
+        {
+          "path": "service/schema6-complete.json",
+          "bytes": 1578,
+          "sha256": "7e61f22ca9887d913cb5e7be485b8bf6b07c8c59eba12bcaddbd00f7f0286f72"
+        },
+        {
+          "path": "service/schema6-downgraded.json",
+          "bytes": 1650,
+          "sha256": "624b6cb48d73234a4cf51764efe57cafda1d8ac3ed2f20ba0842845c81249a86"
+        },
+        {
+          "path": "service/schema6-engine-ack.bin",
+          "bytes": 56,
+          "sha256": "4c1a6a6084e812b1fe7692bb9fcffa2970ccd675a04e9112d0cdea432bab2641"
+        },
+        {
+          "path": "service/schema6-fairness.json",
+          "bytes": 255,
+          "sha256": "141edf208bb82c5f25113dd97f57a522e0e3a073ceecc3d0dc8630797f59cfa9"
+        },
+        {
+          "path": "service/schema6-flex.bin",
+          "bytes": 232,
+          "sha256": "380570533b54b09f3059719edb62c165ca906c2b3685433c4fe3771e989d154f"
+        },
+        {
+          "path": "service/schema6-four-peers.json",
+          "bytes": 118,
+          "sha256": "83d7df78e41972fd81afffde7593bbd596e580bbf4aa2e9d67156c6b57ef2ae9"
+        },
+        {
+          "path": "service/schema6-partial-base.json",
+          "bytes": 1575,
+          "sha256": "9b3da08e9a94dcd551e95709f60c5671dea6cb856377b2376dfc431b4eecfad7"
+        },
+        {
+          "path": "service/schema6-partial-flex.json",
+          "bytes": 1580,
+          "sha256": "02a830620ac627f35377f5c0da56b462c655379698eb8ebec06a1d5cd81d1fdc"
+        },
+        {
+          "path": "service/schema6-query-reply.bin",
+          "bytes": 108,
+          "sha256": "fd8cbb068d283156c964d9fdbd213287ee9358bece2ae2cd5837d96836d0709b"
+        },
+        {
+          "path": "service/schema6-query-request.bin",
+          "bytes": 76,
+          "sha256": "b18429d7dd5eb4bec09255773ac353262074e3ab3b1cdc3ecd80b6ab83111729"
+        },
+        {
+          "path": "service/schema6-update-reply.bin",
+          "bytes": 108,
+          "sha256": "97f81b2eea9570be788b7e03e69fe298cc8906a13ab140ebffff6ade742214ea"
+        },
+        {
+          "path": "service/schema6-update-request.bin",
+          "bytes": 76,
+          "sha256": "82c3d8c59e76b33e0f45a2ab76b0d9efffc26850ca696d605f5f6857fd3e4202"
+        },
+        {
+          "path": "service/update-reply.bin",
+          "bytes": 108,
+          "sha256": "5b14d65eb2ffd4faf80aea2955f7023177f168bf37da85ee55b2e5abe4da8f2c"
+        },
+        {
+          "path": "service/update-request.bin",
+          "bytes": 76,
+          "sha256": "7534a6fe5fea45572a5f07fd00bb5d190c2cc3a5610d4ccc626bfd7860fc7d38"
+        },
+        {
+          "path": "source-hashes.json",
+          "bytes": 21134,
+          "sha256": "274c6d2a9c905ff389453bc0a64762ab7109a342ef1b969d20fb85cd56b94f5c"
+        },
+        {
+          "path": "sources/config/defaults.json",
+          "bytes": 4006,
+          "sha256": "e61fb310f60ddc801bbc2dec0dca288314ed124761b7fc35087aee10687ba617"
+        },
+        {
+          "path": "sources/config/engine-radio-v5.json",
+          "bytes": 2252,
+          "sha256": "c23e5de6cee6d5dd88ceb44993e3fe3676fed9730ee8621704c501c6dba62c27"
+        },
+        {
+          "path": "sources/config/engine-radio-v6.json",
+          "bytes": 3931,
+          "sha256": "9356e292ac103667768a80842253cedff19e44823d63dea58ea5a653f8c622d1"
+        },
+        {
+          "path": "sources/config/engine/defaults.json",
+          "bytes": 31060,
+          "sha256": "f43aff000bf2c398c5bea7a2a3873b32d6997b217496a0bc3182625b7aaf356d"
+        },
+        {
+          "path": "sources/config/interface-guide.json",
+          "bytes": 42300,
+          "sha256": "5cd231774c77bdc9c6751686979a0e28efa5ca5e1c45413eec94caa2bcda25de"
+        },
+        {
+          "path": "sources/config/manual.json",
+          "bytes": 45021,
+          "sha256": "24d9eb07660ecb40e9ab0ab5ea76ec2aeb8ea7fe704d0abe90d00f6efc10f142"
+        },
+        {
+          "path": "sources/docs/engine-boost-development.md",
+          "bytes": 14449,
+          "sha256": "77dc3467dcca1d3d12e65e5f39fe4c73771edef9ed847d7101849a3cd8efa4c6"
+        },
+        {
+          "path": "sources/docs/espnow-engine.md",
+          "bytes": 27102,
+          "sha256": "4d3a20d2c93848910ac1cf3d265bae0ccb373203d08554844fce51cba6f20191"
+        },
+        {
+          "path": "sources/firmware/include/ecu/board_status.hpp",
+          "bytes": 305,
+          "sha256": "4ad055e17cdfc081db4cb6f17763bcd2ce299fecd8786a7b1220ff8e350d53d7"
+        },
+        {
+          "path": "sources/firmware/include/ecu/boost_command.hpp",
+          "bytes": 1615,
+          "sha256": "34c9871c2addc9054b95688dca63c0270dc84da422ae50c4361da658631a870d"
+        },
+        {
+          "path": "sources/firmware/include/ecu/boost_control.hpp",
+          "bytes": 11161,
+          "sha256": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b"
+        },
+        {
+          "path": "sources/firmware/include/ecu/boost_json.hpp",
+          "bytes": 4920,
+          "sha256": "93db1549ffb1491af8eee73e02e4044ab7d1151f9f510844f1f243e1c9f9d0e9"
+        },
+        {
+          "path": "sources/firmware/include/ecu/boost_pwm.hpp",
+          "bytes": 375,
+          "sha256": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255"
+        },
+        {
+          "path": "sources/firmware/include/ecu/boost_pwm_json.hpp",
+          "bytes": 549,
+          "sha256": "6891cdb627ae14043717fcf644bba2a2a76f931ec30e76c2b5a5de240f7053c6"
+        },
+        {
+          "path": "sources/firmware/include/ecu/boost_runtime.hpp",
+          "bytes": 2310,
+          "sha256": "2bd7df42100f065228a34023c85421b5f62bd09b610892eb5404faea21793102"
+        },
+        {
+          "path": "sources/firmware/include/ecu/boost_runtime_json.hpp",
+          "bytes": 3203,
+          "sha256": "732d52aa667e42c4c9d93f8ab84dd96565ea91f600251eeda1e3721f2b2e0f1d"
+        },
+        {
+          "path": "sources/firmware/include/ecu/capture_clock.hpp",
+          "bytes": 3448,
+          "sha256": "5c0f88793019c236b3dc6eea7a39e9a9b1a080bf5adc3159b6651ba45bdc8511"
+        },
+        {
+          "path": "sources/firmware/include/ecu/config.hpp",
+          "bytes": 5442,
+          "sha256": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739"
+        },
+        {
+          "path": "sources/firmware/include/ecu/config_storage.hpp",
+          "bytes": 2363,
+          "sha256": "b7ec2f7029e00abb6440b3a9b1e1210d76ddf1f2309d19f7c52d81bc59990c45"
+        },
+        {
+          "path": "sources/firmware/include/ecu/control.hpp",
+          "bytes": 10954,
+          "sha256": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine.hpp",
+          "bytes": 31886,
+          "sha256": "e7e306b2a3e4b3a47b687ab6338238ae07591cd29d1eb041fa89f47d4da6dc3d"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_binding.hpp",
+          "bytes": 3197,
+          "sha256": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_data.hpp",
+          "bytes": 6532,
+          "sha256": "238552f1037803ef57776177d480262f3d179bc51fee1d99bc410f68a83e314b"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_data_json.hpp",
+          "bytes": 8677,
+          "sha256": "affc4dbf745b9ecee6d6ac82c9a4e71719eb24cb65130731b2497d6ec7f81ab6"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_json.hpp",
+          "bytes": 20543,
+          "sha256": "70fed3649906051b574d1d79d9f17620ff6634e6df9c4852f46254d175ffecc1"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_limits.hpp",
+          "bytes": 107,
+          "sha256": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_log.hpp",
+          "bytes": 5420,
+          "sha256": "8e603def55b0355b052b32b4123df48e39fa0e7bc736db6ad271b02de08131c2"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_log_json.hpp",
+          "bytes": 3996,
+          "sha256": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_log_msl.hpp",
+          "bytes": 11026,
+          "sha256": "2cae8a43a2bb5953207e5eaddee13ee91df304b65b174b5414ee3c1faa524b26"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_log_service.hpp",
+          "bytes": 754,
+          "sha256": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_phase.hpp",
+          "bytes": 8547,
+          "sha256": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_radio.hpp",
+          "bytes": 10007,
+          "sha256": "a4863c243027bf77ada0580119a3cec4310d535962dbb9c54c83518272867ee5"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_radio_boost.hpp",
+          "bytes": 1178,
+          "sha256": "2804ff8d0e63bd5b07ea6eaeb879a7731814e85109bc054751a6b6b9e1466bb7"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_radio_flex.hpp",
+          "bytes": 4416,
+          "sha256": "0013db12fed38ae4ec3207d52166d8c9d994fcd615d8076e0318bd22394aca75"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_radio_health.hpp",
+          "bytes": 1009,
+          "sha256": "94919a86f184cf7bccdc767c67de753a10b0d1dba40478479ddd9341e311cc75"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_scheduler.hpp",
+          "bytes": 10251,
+          "sha256": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_service.hpp",
+          "bytes": 976,
+          "sha256": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_storage.hpp",
+          "bytes": 3105,
+          "sha256": "0e794be42d9a643e055d6f2e86b497ff6bd21ad2446b2b09b51a297819d02e4c"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_target.hpp",
+          "bytes": 2451,
+          "sha256": "17bc0b1f7f709b8946674cdf956a7914798e741fd51b4c3c90614c14abfe6273"
+        },
+        {
+          "path": "sources/firmware/include/ecu/engine_tuning.hpp",
+          "bytes": 120,
+          "sha256": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6"
+        },
+        {
+          "path": "sources/firmware/include/ecu/espnow.hpp",
+          "bytes": 336,
+          "sha256": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc"
+        },
+        {
+          "path": "sources/firmware/include/ecu/espnow_protocol.hpp",
+          "bytes": 2778,
+          "sha256": "0edb7d95dd390a619503464b36a6930a9845f3019a1a996a47f9a219680231fe"
+        },
+        {
+          "path": "sources/firmware/include/ecu/flex_capture_json.hpp",
+          "bytes": 5288,
+          "sha256": "5721d4889b351bb9001a259801cb4ae465ddd8852a9d69553a6564684d0a85fb"
+        },
+        {
+          "path": "sources/firmware/include/ecu/flex_capture_owner.hpp",
+          "bytes": 12562,
+          "sha256": "3f4f69618b9e7b376c2ea1a1717ffdd328d782d5e54416da9296a2a95d6efb84"
+        },
+        {
+          "path": "sources/firmware/include/ecu/flex_engine.hpp",
+          "bytes": 5999,
+          "sha256": "b24c940bdee8e71e427f552d126efdba7d5ca29110aa70d7d4396fcef6eba468"
+        },
+        {
+          "path": "sources/firmware/include/ecu/flex_fuel.hpp",
+          "bytes": 14382,
+          "sha256": "ce233744b7f8b938f2d2a4a491138b2ba115a62ec0a5270612a89261e1729c22"
+        },
+        {
+          "path": "sources/firmware/include/ecu/flex_hardware.hpp",
+          "bytes": 493,
+          "sha256": "bd01b82d25c37f25169aead71d7df3fc4992923c52e941df4766943e290a6380"
+        },
+        {
+          "path": "sources/firmware/include/ecu/flex_ingress.hpp",
+          "bytes": 9452,
+          "sha256": "29a7ab7040b9918f7dde65356c138b8b619b484588954230bbc8d8d43cff4216"
+        },
+        {
+          "path": "sources/firmware/include/ecu/flex_json.hpp",
+          "bytes": 6399,
+          "sha256": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45"
+        },
+        {
+          "path": "sources/firmware/include/ecu/flex_runtime.hpp",
+          "bytes": 8991,
+          "sha256": "74bffa63c8930ea35c123250c98e30b5c9f588eb6761a812881d1e1a0b981051"
+        },
+        {
+          "path": "sources/firmware/include/ecu/flex_runtime_json.hpp",
+          "bytes": 4014,
+          "sha256": "4b1c0424f5ac2bd50f520d1d04badb4347bbe246cfb02070988175a50a45d6d7"
+        },
+        {
+          "path": "sources/firmware/include/ecu/heap_object.hpp",
+          "bytes": 540,
+          "sha256": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51"
+        },
+        {
+          "path": "sources/firmware/include/ecu/idle_command.hpp",
+          "bytes": 1489,
+          "sha256": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310"
+        },
+        {
+          "path": "sources/firmware/include/ecu/idle_control.hpp",
+          "bytes": 10973,
+          "sha256": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd"
+        },
+        {
+          "path": "sources/firmware/include/ecu/idle_hardware.hpp",
+          "bytes": 616,
+          "sha256": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+        },
+        {
+          "path": "sources/firmware/include/ecu/idle_pwm.hpp",
+          "bytes": 6903,
+          "sha256": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20"
+        },
+        {
+          "path": "sources/firmware/include/ecu/idle_pwm_json.hpp",
+          "bytes": 1434,
+          "sha256": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b"
+        },
+        {
+          "path": "sources/firmware/include/ecu/json.hpp",
+          "bytes": 2130,
+          "sha256": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247"
+        },
+        {
+          "path": "sources/firmware/include/ecu/load_json.hpp",
+          "bytes": 8013,
+          "sha256": "75a0b2fb5939e671c44c0ae0e49e380db187bcc3c413fc20375f6ede6abfb931"
+        },
+        {
+          "path": "sources/firmware/include/ecu/load_model.hpp",
+          "bytes": 11873,
+          "sha256": "5d25340d26a20b58f29501491357e2264e30f91284bc0691bf0f06f34ec26361"
+        },
+        {
+          "path": "sources/firmware/include/ecu/pins.hpp",
+          "bytes": 1139,
+          "sha256": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad"
+        },
+        {
+          "path": "sources/firmware/include/ecu/realtime.hpp",
+          "bytes": 387,
+          "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+        },
+        {
+          "path": "sources/firmware/include/ecu/secondary_json.hpp",
+          "bytes": 11890,
+          "sha256": "25037e11278fac1bb2f4e0a394b9e992e25336f497147f849e6109af9d00eed1"
+        },
+        {
+          "path": "sources/firmware/include/ecu/secondary_tables.hpp",
+          "bytes": 16600,
+          "sha256": "4ea26b399ae6cb29bb82823572698a11d65bc51ac570097ab6b22803119d02f2"
+        },
+        {
+          "path": "sources/firmware/include/ecu/status_led.hpp",
+          "bytes": 6608,
+          "sha256": "47dc3b311195c72348849e24521b47e743cfec90b751fcd1b9626b39ff034902"
+        },
+        {
+          "path": "sources/firmware/include/ecu/switch_acquisition.hpp",
+          "bytes": 9371,
+          "sha256": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb"
+        },
+        {
+          "path": "sources/firmware/include/ecu/switch_service.hpp",
+          "bytes": 416,
+          "sha256": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e"
+        },
+        {
+          "path": "sources/firmware/include/ecu/switch_transport.hpp",
+          "bytes": 2438,
+          "sha256": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932"
+        },
+        {
+          "path": "sources/firmware/include/ecu/timing_executor.hpp",
+          "bytes": 15412,
+          "sha256": "c47ab152d9b4a12b756809871314197126382e3fa0c27a5f858e0048bb5f68c1"
+        },
+        {
+          "path": "sources/firmware/include/ecu/transient_enrichment.hpp",
+          "bytes": 12008,
+          "sha256": "cb29b19871a4b900008e46356bd5d43c89313a271dd5b84996f9dbb4a6fb3403"
+        },
+        {
+          "path": "sources/firmware/include/ecu/transient_json.hpp",
+          "bytes": 3294,
+          "sha256": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88"
+        },
+        {
+          "path": "sources/firmware/include/ecu/trigger_log.hpp",
+          "bytes": 2952,
+          "sha256": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451"
+        },
+        {
+          "path": "sources/firmware/include/ecu/trigger_log_json.hpp",
+          "bytes": 4155,
+          "sha256": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58"
+        },
+        {
+          "path": "sources/firmware/include/ecu/tuning_document.hpp",
+          "bytes": 7415,
+          "sha256": "0df767a646f051c12f1ba20faa22e65d5587ae61b3be961a5597c492428321a2"
+        },
+        {
+          "path": "sources/firmware/include/ecu/tuning_layout.hpp",
+          "bytes": 31412,
+          "sha256": "865e5086081a9ad2c5763d7b21d77153c6e426ca55f6850a93d84703d939a232"
+        },
+        {
+          "path": "sources/firmware/include/ecu/tuning_live.hpp",
+          "bytes": 6093,
+          "sha256": "11f966fa06b767134c410ba80f6f09a85fc30931159cce87f540cf1f92c12949"
+        },
+        {
+          "path": "sources/firmware/include/ecu/tuning_session.hpp",
+          "bytes": 7958,
+          "sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e"
+        },
+        {
+          "path": "sources/firmware/include/ecu/tuning_stream.hpp",
+          "bytes": 3028,
+          "sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042"
+        },
+        {
+          "path": "sources/firmware/include/ecu/web_config.hpp",
+          "bytes": 1050,
+          "sha256": "984d5447a6f07e626987819d2338489aa25004a15b529c460c29bde497e7a019"
+        },
+        {
+          "path": "sources/firmware/main/CMakeLists.txt",
+          "bytes": 495,
+          "sha256": "2b6bde9fd593ea127fd647020cd70915627d26074634d9e8e581b72ae00c8269"
+        },
+        {
+          "path": "sources/firmware/main/Kconfig.projbuild",
+          "bytes": 760,
+          "sha256": "b5ddeaaea5721d444da8d48d92ff2dabf6545a70ab7a4fc353cdc6f8316d3164"
+        },
+        {
+          "path": "sources/firmware/main/app.cpp",
+          "bytes": 12967,
+          "sha256": "487d5e03a964f686939dcb46a148a91c02e516678cfd6c7d342ec0ba269ce9e6"
+        },
+        {
+          "path": "sources/firmware/main/config_json.hpp",
+          "bytes": 3373,
+          "sha256": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6"
+        },
+        {
+          "path": "sources/firmware/main/engine_log_service.cpp",
+          "bytes": 2629,
+          "sha256": "05666d7be694be72719515709a083b0cf65701ebcd410fdb32fc0aa0e9fbbd53"
+        },
+        {
+          "path": "sources/firmware/main/engine_service.cpp",
+          "bytes": 14637,
+          "sha256": "44c62a8a90db307dd6fca9616ee59524e71c32e70b69db74efd2ba9b9d0f3fda"
+        },
+        {
+          "path": "sources/firmware/main/engine_target.cpp",
+          "bytes": 40234,
+          "sha256": "07f51fdd428cef4e8ddae05148b3b49fc66af4122012584d8ad86d6b73a6d0c6"
+        },
+        {
+          "path": "sources/firmware/main/engine_tuning.cpp",
+          "bytes": 7880,
+          "sha256": "24b846ed8cc4a03c7b323afd4b58eea7f411b243e71e569f5b9c08c9343d851a"
+        },
+        {
+          "path": "sources/firmware/main/espnow.cpp",
+          "bytes": 30406,
+          "sha256": "749d38933aafa6a16c5fe9fa8d1a326ec87ce64c5a69bcd9d33fb7f39b79068d"
+        },
+        {
+          "path": "sources/firmware/main/switch_service.cpp",
+          "bytes": 11355,
+          "sha256": "60bdc96159ced2a79ee24e68e30179d804a6bc95b9173b27ac89a797f43e3826"
+        },
+        {
+          "path": "sources/firmware/main/web_assets.hpp",
+          "bytes": 361980,
+          "sha256": "57643587d3323092e21207d8eeae4fd2bb28dd253dba882075cbb2035e1bd584"
+        },
+        {
+          "path": "sources/firmware/main/web_config.cpp",
+          "bytes": 29180,
+          "sha256": "d497f6b5e2f2e26a57c0a9f34a9b76c8d6834db9dc19c3ea2ad3238fa3a9c4d2"
+        },
+        {
+          "path": "sources/firmware/tests/boost_control_test.cpp",
+          "bytes": 6188,
+          "sha256": "b032e3f6afec416ecf856ac146967097f206169e053aad17b1dddc488a4e897a"
+        },
+        {
+          "path": "sources/firmware/tests/control_test.cpp",
+          "bytes": 6497,
+          "sha256": "f70daa1f94eb5caf27a26467e2f93ca84788470c0286e743bdf273c159a3cecf"
+        },
+        {
+          "path": "sources/firmware/tests/engine_boost_test.cpp",
+          "bytes": 6962,
+          "sha256": "803fb30a14e2194cf32a78851fddeb03ac3002fde1cd93dc83ac524c7d00fdfb"
+        },
+        {
+          "path": "sources/firmware/tests/engine_cylinder_test.cpp",
+          "bytes": 6236,
+          "sha256": "a07acf0093afa510389dfa05b609c7d4c3e0f59814c11349bb51990d95d449d9"
+        },
+        {
+          "path": "sources/firmware/tests/engine_flex_test.cpp",
+          "bytes": 9679,
+          "sha256": "b83af90088af9f934d392adcfbabc064aa7789ec8aad33c0b648ff231aebce7a"
+        },
+        {
+          "path": "sources/firmware/tests/engine_load_test.cpp",
+          "bytes": 6984,
+          "sha256": "8ef3d6e0382b77c5eb0f81e9009294e6a141ff5f360cc7c89ef9f397bdcff5b6"
+        },
+        {
+          "path": "sources/firmware/tests/engine_log_service_test.cpp",
+          "bytes": 2437,
+          "sha256": "adcce12f0b93a315d05894309c1e7df6c2df4592484ff41bee1cbfceb922e7d4"
+        },
+        {
+          "path": "sources/firmware/tests/engine_observability_test.cpp",
+          "bytes": 9315,
+          "sha256": "6de3f55de2aacd7a06893a196a8f1604d3fc71dd0b94acf99fcd586d622cd48a"
+        },
+        {
+          "path": "sources/firmware/tests/engine_phase_test.cpp",
+          "bytes": 7909,
+          "sha256": "1b9485b170ec1bedd8a73022d294e87bdc83c74be726da78de43ac0dea816d72"
+        },
+        {
+          "path": "sources/firmware/tests/engine_radio_boost_test.cpp",
+          "bytes": 4862,
+          "sha256": "e4a52e58f984d1ec511bec21711da78e7529ae3c260a785b5821316d60f76238"
+        },
+        {
+          "path": "sources/firmware/tests/engine_radio_flex_test.cpp",
+          "bytes": 5417,
+          "sha256": "92f7da4959e35f5171ed4b5f03a6fe3c73fddacf50bc60ad3fd4ceec85bf034b"
+        },
+        {
+          "path": "sources/firmware/tests/engine_secondary_test.cpp",
+          "bytes": 10884,
+          "sha256": "1126af2ecadb7eb7d16f3da2aaf253f6cedb6e4e576943ca971b6636a0cda89c"
+        },
+        {
+          "path": "sources/firmware/tests/engine_semi_test.cpp",
+          "bytes": 4502,
+          "sha256": "728a90d92b9ba9320b6adeaf85d6791d960bc55d62ce3663e55594521b134fd4"
+        },
+        {
+          "path": "sources/firmware/tests/engine_storage_test.cpp",
+          "bytes": 4783,
+          "sha256": "06e8c1149abd50f8bea41b22521517620345e4a66716b0446af15bc4fc9babe3"
+        },
+        {
+          "path": "sources/firmware/tests/engine_test.cpp",
+          "bytes": 8721,
+          "sha256": "55f467d4f6e35ff9b018eabaf4cb938c9a1559ad5574e8e5c40236458120d93e"
+        },
+        {
+          "path": "sources/firmware/tests/engine_transient_test.cpp",
+          "bytes": 3781,
+          "sha256": "f6c4e08aafc47ef6ab7c6bad87f21bc381d39255ace08329c87e1e3ac57077e6"
+        },
+        {
+          "path": "sources/firmware/tests/espnow_test.cpp",
+          "bytes": 2454,
+          "sha256": "1f1ff8c1fcb50d16416d27e514c1eabf5c3cddb70814d0371089e5cc0d23bc26"
+        },
+        {
+          "path": "sources/firmware/tests/fakes/nvs.h",
+          "bytes": 705,
+          "sha256": "8ae4111796b3175b79d5c4ae9537bd75c49cd4351269706d3ad705bb1c81611c"
+        },
+        {
+          "path": "sources/firmware/tests/fakes/nvs_flash.h",
+          "bytes": 79,
+          "sha256": "e290e693131eaf64d035dccb6cfb1e0be527233a4ce3b7f2f04d6d54315888ff"
+        },
+        {
+          "path": "sources/firmware/tests/flex_capture_owner_test.cpp",
+          "bytes": 13618,
+          "sha256": "618b4a7322b55c54ab314f03632885ce2b0bee06edca1e79ad2a46f8d1c8b4e8"
+        },
+        {
+          "path": "sources/firmware/tests/flex_fuel_test.cpp",
+          "bytes": 10539,
+          "sha256": "f14554f6579e0da880243e40bb25ad966e80a30737ff283e27f17f491553661a"
+        },
+        {
+          "path": "sources/firmware/tests/flex_ingress_test.cpp",
+          "bytes": 14052,
+          "sha256": "85f1ee955f99b848400f6ef237cf73acee33655c3b45f2a5c90b6da7d7e02a79"
+        },
+        {
+          "path": "sources/firmware/tests/flex_ingress_xtensa_probe.cpp",
+          "bytes": 1616,
+          "sha256": "93ead0be76a50d8085458d6f8acdd7ea2299cf5b567efc060604a90dfde1b69f"
+        },
+        {
+          "path": "sources/firmware/tests/flex_target_service_test.cpp",
+          "bytes": 12036,
+          "sha256": "728d06468b817c25b4a33f83afa780ed04e1f176df22658ccf36575dd61098f7"
+        },
+        {
+          "path": "sources/firmware/tests/idle_control_test.cpp",
+          "bytes": 3473,
+          "sha256": "2a805518e3438cc1d99c20a62e10b63dbdab9073a3c462e004488999683f0fe6"
+        },
+        {
+          "path": "sources/firmware/tests/idle_pwm_test.cpp",
+          "bytes": 2845,
+          "sha256": "6a19fbfcbb3d562fefd07941521666fbe16f62cad26da0638c2828941c647f5a"
+        },
+        {
+          "path": "sources/firmware/tests/load_model_test.cpp",
+          "bytes": 4019,
+          "sha256": "9b3f549c91a6e1ba6d3af5e31ce3b1f74173f0819aeaaf00ad89e12da01ae295"
+        },
+        {
+          "path": "sources/firmware/tests/log_fakes/esp_random.h",
+          "bytes": 194,
+          "sha256": "dcea98138360c20e84dd523c28427c819816263242e4176e38280437877fb91b"
+        },
+        {
+          "path": "sources/firmware/tests/log_fakes/freertos/FreeRTOS.h",
+          "bytes": 162,
+          "sha256": "0f7428ac0dfd9288552b66794c75a6ff31c915bfade756962022d2804855eca3"
+        },
+        {
+          "path": "sources/firmware/tests/log_fakes/freertos/semphr.h",
+          "bytes": 373,
+          "sha256": "abdd0fb8ea37d1fa8c04ce2ae0cb7ccabb462bd0177aeb24c8301e54f98df31f"
+        },
+        {
+          "path": "sources/firmware/tests/radio_fakes/driver/gpio.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "sources/firmware/tests/radio_fakes/esp_event.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "sources/firmware/tests/radio_fakes/esp_netif.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "sources/firmware/tests/radio_fakes/esp_now.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "sources/firmware/tests/radio_fakes/esp_random.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "sources/firmware/tests/radio_fakes/esp_timer.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "sources/firmware/tests/radio_fakes/esp_wifi.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "sources/firmware/tests/radio_fakes/fake_radio.hpp",
+          "bytes": 3830,
+          "sha256": "eb93f553f4b59bd69932976ab13cd94b015f7a44a603fada5d5b88c1ed3b6f88"
+        },
+        {
+          "path": "sources/firmware/tests/radio_fakes/mbedtls/md.h",
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        {
+          "path": "sources/firmware/tests/radio_fakes/nvs.h",
+          "bytes": 611,
+          "sha256": "b1826fbb473fd55eefe9403218a6fff8fc503e1592436854aa5370f69d89370c"
+        },
+        {
+          "path": "sources/firmware/tests/radio_service_test.cpp",
+          "bytes": 20539,
+          "sha256": "e4a95e72c988b4265c94b7cbe9467495be98ae4a3dd3a9fe95e581e89a526468"
+        },
+        {
+          "path": "sources/firmware/tests/ratiometric_test.cpp",
+          "bytes": 7590,
+          "sha256": "14ec489f02b6e86762789a54d43a544bfdbe003051724c0196227d35ca0f7b79"
+        },
+        {
+          "path": "sources/firmware/tests/review_radio_liveness.cpp",
+          "bytes": 5713,
+          "sha256": "85c9cd70b1640765577d56dd4e176904f8a627a4c80ff7e7573278468919a6d4"
+        },
+        {
+          "path": "sources/firmware/tests/secondary_tables_test.cpp",
+          "bytes": 13537,
+          "sha256": "20a724186a917d68c79b4a97f14b7b8ce50b57d9fe64b9c5c85e8c1bb665d7ca"
+        },
+        {
+          "path": "sources/firmware/tests/shared_i2c_service_test.cpp",
+          "bytes": 11754,
+          "sha256": "3d3711c9d55b7f75dfffd823cafe43bd0bdd5c1605d60e85b6233d1e9d8f9779"
+        },
+        {
+          "path": "sources/firmware/tests/status_led_test.cpp",
+          "bytes": 7786,
+          "sha256": "441e9dca5e3e5897d3d89c1f887c87293ccd3add1909922ff4bf78d79d5db584"
+        },
+        {
+          "path": "sources/firmware/tests/switch_acquisition_test.cpp",
+          "bytes": 9770,
+          "sha256": "ec3aeb8ad9fbf673c6a1ce65998db91a8727f745f8cc94a673a1c6f7ae76b569"
+        },
+        {
+          "path": "sources/firmware/tests/switch_fakes/driver/i2c_master.h",
+          "bytes": 1366,
+          "sha256": "ece48ba8b9bc71c549be7819020b56622e21ab5da69a04d08ba159d4a20ec113"
+        },
+        {
+          "path": "sources/firmware/tests/switch_fakes/freertos/FreeRTOS.h",
+          "bytes": 194,
+          "sha256": "cc12e0510e857a1d3b83546b7edf66afe4a3207b55fbf64edf055aa01587d530"
+        },
+        {
+          "path": "sources/firmware/tests/switch_service_test.cpp",
+          "bytes": 9850,
+          "sha256": "822e38bc845d546ca2849705a696c2ed90ff4ec2f724825546a6cd5e92039845"
+        },
+        {
+          "path": "sources/firmware/tests/switch_transport_test.cpp",
+          "bytes": 4291,
+          "sha256": "ea7699a7f95193113c007e5f7dbc779d279f9cb70d01150d422a0660416979fa"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/driver/gpio.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/driver/gptimer.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/driver/mcpwm_cap.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/driver/mcpwm_sync.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/esp_attr.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/esp_log.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/esp_partition.h",
+          "bytes": 272,
+          "sha256": "ee4a29beeb359a2919b8893df65bde056019559a9f3d9c7960f526466ea2b995"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/esp_timer.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/fake_target.hpp",
+          "bytes": 9713,
+          "sha256": "3fb1c00e1fd75cea8d082b38d82741105c5e904ee7ef41a6e7cb4130546dd3ee"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/freertos/FreeRTOS.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/freertos/queue.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/freertos/semphr.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/freertos/task.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/hal/gpio_ll.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/hal/mcpwm_ll.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/nvs.h",
+          "bytes": 834,
+          "sha256": "435e7d8735725a73f4ae4e9462ebcac42c042dea02df3d018211deff351d422f"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/nvs_flash.h",
+          "bytes": 101,
+          "sha256": "f00a3d74a36b621cf063e6e2bb6526f0c976519bc2720cb3bce85f24f1639fbb"
+        },
+        {
+          "path": "sources/firmware/tests/target_fakes/soc/gpio_struct.h",
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        {
+          "path": "sources/firmware/tests/timing_executor_test.cpp",
+          "bytes": 8121,
+          "sha256": "ff61dabaaeceb99f23b7f16d5238126fafa4dfb849471b15f40fae0e8cf339b8"
+        },
+        {
+          "path": "sources/firmware/tests/transient_enrichment_test.cpp",
+          "bytes": 4670,
+          "sha256": "ef1b5ea7453d96cdcc602435470cda057efbd857d30ec721445227091b1c9c18"
+        },
+        {
+          "path": "sources/firmware/tests/trigger_log_json_test.cpp",
+          "bytes": 3121,
+          "sha256": "cd6523ac035ad884ef52f7d98281a90fb5a32bf711bea90bcaaabd8f9114590b"
+        },
+        {
+          "path": "sources/firmware/tests/trigger_log_test.cpp",
+          "bytes": 2489,
+          "sha256": "76dadab2610ad93b42508eb3019f009f92ebfbb6f8b0e4cebb7273b3d8e9e1db"
+        },
+        {
+          "path": "sources/firmware/tests/tuning_allocation_test.cpp",
+          "bytes": 3839,
+          "sha256": "acc8eebe0a02e6cfc9c7c2778c1a61cb9ce7d52c71aa8a05893c9a6968aa8271"
+        },
+        {
+          "path": "sources/firmware/tests/tuning_test.cpp",
+          "bytes": 8336,
+          "sha256": "6f6373f6dcf550b711af8639e41c5bdcdfff72c95089922c47b9562c9d881eea"
+        },
+        {
+          "path": "sources/scripts/embed_web.py",
+          "bytes": 1116,
+          "sha256": "5382c822a5c28b4c7a83c7522018655c3f60ea1cd907fd4e5bbaaeebf5a2526f"
+        },
+        {
+          "path": "sources/scripts/test_radio_service.py",
+          "bytes": 1941,
+          "sha256": "f75403ef39d0f80843c414f4483ae3aa6e91a5332f1b25042b4832972ed0eedf"
+        },
+        {
+          "path": "sources/tools/boost_config.py",
+          "bytes": 3872,
+          "sha256": "e42b7fd846aca7536db7f8333be785a0603304b79e0d97fb786a6d7eb00ff301"
+        },
+        {
+          "path": "sources/tools/boost_radio.py",
+          "bytes": 2832,
+          "sha256": "c9ba9e54bc1b1ec43dae87a13706c88279e5a0bb0fe07d18ccb8cb214937b842"
+        },
+        {
+          "path": "sources/tools/check_radio_service_fixtures.py",
+          "bytes": 3565,
+          "sha256": "b4c62929d1eddd1edbafcf57377f0ae7edec77670b673a120f7ceccc943b3e65"
+        },
+        {
+          "path": "sources/tools/engine_msq.py",
+          "bytes": 17787,
+          "sha256": "7bebc04ee911e604b26ab7ef6e826b792432d94e8ecb6c5d8db6c7711c170606"
+        },
+        {
+          "path": "sources/tools/engine_observability.py",
+          "bytes": 5047,
+          "sha256": "828212969b7fd28c415ad9827a879b9a79552eda7ffbcb1cdf629e4037424ed8"
+        },
+        {
+          "path": "sources/tools/engine_observability_bridge.cpp",
+          "bytes": 13872,
+          "sha256": "9a15a1edf7608f2a2292036469cf2119f9fea257e786c9e52082ef4159aff14b"
+        },
+        {
+          "path": "sources/tools/engine_receiver.py",
+          "bytes": 27944,
+          "sha256": "5ca832521822e09629ac54e053c9a3a0802e04b28261feb0ae97dfb97e4e72f2"
+        },
+        {
+          "path": "sources/tools/espnow_protocol.py",
+          "bytes": 2807,
+          "sha256": "90d806e472f54ab5d054629ab92162157064d461f34164f7b73bc5dde43176f9"
+        },
+        {
+          "path": "sources/tools/flex_config.py",
+          "bytes": 4367,
+          "sha256": "bb70f8423ef4332919de2fdca97c2461701df531a6fe0d621be93de895c1a5c2"
+        },
+        {
+          "path": "sources/tools/flex_radio.py",
+          "bytes": 5950,
+          "sha256": "fe9be5d3ed7aa79dc71974bd72aed308fb9ca0e4bbc4ccd89adf98ccef1fdf36"
+        },
+        {
+          "path": "sources/tools/radio_simulator.py",
+          "bytes": 5680,
+          "sha256": "297d548cd799d8b75de56363b5dd5829a8d7fac57df50eb79a85398c9b071e5c"
+        },
+        {
+          "path": "sources/tools/test_boost_radio.py",
+          "bytes": 13828,
+          "sha256": "b03952fc07560c2c54478005dee824b1db168e4927cfd87e2289419c4770a3f6"
+        },
+        {
+          "path": "sources/tools/test_boost_ui.py",
+          "bytes": 7811,
+          "sha256": "c8d4470b24ee294b574e45141d65c7af2a77db93332ff950956a360b4d416e41"
+        },
+        {
+          "path": "sources/tools/test_flex_radio.py",
+          "bytes": 11777,
+          "sha256": "9b48b1fd1f14c765dfa7c1d69d228fd8068139bbd76bfd4a79c82c8ee44a2b76"
+        },
+        {
+          "path": "sources/tools/test_flex_radio_ui.py",
+          "bytes": 7201,
+          "sha256": "4833b56d289894c1c3ffb13a0cf07d428e836689e487e1bf5d6b4585f84f33a1"
+        },
+        {
+          "path": "sources/web/boost_control.js",
+          "bytes": 16622,
+          "sha256": "35ca0b87b2f3cdb597f5c35e7635bddf0a1b8838ca3a90eaaadce6d8284d70ef"
+        },
+        {
+          "path": "sources/web/boost_control_logic.js",
+          "bytes": 12803,
+          "sha256": "53dfa88256e6ea3dd029405c9aa8047e3ba37760d51371d73f5ba83d3446124e"
+        },
+        {
+          "path": "sources/web/cylinder_tuning.js",
+          "bytes": 5831,
+          "sha256": "4cdce733ebbe765f691fae50b2653650007a3ee83e0d30eb0d9c7270a4660bd3"
+        },
+        {
+          "path": "sources/web/engine_logger.js",
+          "bytes": 21059,
+          "sha256": "4f0dd8de7bbbffa33f9fa8a2f5eb3a303773641ffe54b5f4dad8653e22a81957"
+        },
+        {
+          "path": "sources/web/flex_fuel.js",
+          "bytes": 21926,
+          "sha256": "264a9cca85ad712eb0ebad1bdfde8db5269118bc9ebce7ca9986e5ecabcb8801"
+        },
+        {
+          "path": "sources/web/idle_control.js",
+          "bytes": 9835,
+          "sha256": "6527c03afb5e4ecd4d8a88907afb39bcee6ccd0a41d7d0c7cfce1d062b606f4b"
+        },
+        {
+          "path": "sources/web/index.html",
+          "bytes": 98078,
+          "sha256": "ac069d1b2e91c5bbc95e2bb1498023006537a345e4a3c7a156a47a0d6792a197"
+        },
+        {
+          "path": "sources/web/load_model.js",
+          "bytes": 14355,
+          "sha256": "d5ccc9cbf60041eb1900b6f47ae12d0e62bce560c962f3017bd8587c9a64892d"
+        },
+        {
+          "path": "sources/web/secondary_tables.js",
+          "bytes": 22203,
+          "sha256": "edcc8a98c5676111399b97b375159f6414fe273c77a87315aec69d695b4927bc"
+        },
+        {
+          "path": "sources/web/transient_enrichment.js",
+          "bytes": 10605,
+          "sha256": "42b60c320c0d95a5535a8346e9b1bd7be0faef0d91007bc9468cf4f959566767"
+        },
+        {
+          "path": "sources/web/trigger_logger.js",
+          "bytes": 15198,
+          "sha256": "d9997905115af0cbecca5382b04694a4bd71c220e19e84b0b02bd9cd27e85c07"
+        },
+        {
+          "path": "sources/web/tuning_diagnostics.js",
+          "bytes": 2883,
+          "sha256": "9c96152e9e9cae4f000fdc268f3512f9d915fe6dcdae4cef2ca37ac87651a1c8"
+        },
+        {
+          "path": "supersession/reviews.json",
+          "bytes": 690,
+          "sha256": "936090c7d4cbe44f7230f955f7612e92497964f95ef45248d85a500f4d419d2e"
+        },
+        {
+          "path": "supersession/source-hashes-before-final-assets.json",
+          "bytes": 19891,
+          "sha256": "ff115a3ef789b374ad33fae7285737d0dc8c8828eb433bcc511c8b21153195d9"
+        },
+        {
+          "path": "supersession/web_assets-before-final-generation.hpp",
+          "bytes": 361829,
+          "sha256": "eac7f26556a12edb21c7c5388b74c05122c1b7bdecb4054b77763e3f0b64da92"
+        },
+        {
+          "path": "ui-functions.js",
+          "bytes": 2098,
+          "sha256": "a819c86bb43863083b19ae9878c03909e2acff8695990fda38365d29f8af74aa"
+        },
+        {
+          "path": "ui-state-review.js",
+          "bytes": 2955,
+          "sha256": "a88dad1679f6740326d2acd115e92d807f572970bba4c9b21ccc88f48a88cccd"
+        },
+        {
+          "path": "ui-state-review.json",
+          "bytes": 179,
+          "sha256": "062597fbaa255b4da8a1687c56528973faa29795b9c66110d701a4e84383aa4e"
+        },
+        {
+          "path": "ui-state-review.log",
+          "bytes": 162,
+          "sha256": "c28dbf1790474622bb902ed764e35b531c8e13b4f83a709b53e3dab78d2c010b"
+        },
+        {
+          "path": "unit-tests.log",
+          "bytes": 160,
+          "sha256": "a98aff9721fb7b041f03bffe54397415045a426d4d08ddb57ac014ab8e47ba17"
+        },
+        {
+          "path": "verification-final.json",
+          "bytes": 197,
+          "sha256": "a2320f6d0984299aa173454c2e1f0c19eb987274063ff757bf8cb885861933b8"
+        },
+        {
+          "path": "verify_final.py",
+          "bytes": 3128,
+          "sha256": "02a7d1f61f0ca6b69b2011335b294ce295bde988ddf24d19c41d609af5538fe8"
+        }
+      ]
+    },
+    {
+      "path": "validation.tar.gz",
+      "payloads": [
+        {
+          "path": "actual-radio-service/0.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "actual-radio-service/1.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "actual-radio-service/2.log",
+          "bytes": 26,
+          "sha256": "851e8af8ea6cde8384b4d185c6ef36d7a93544c7f67ca9e644baf00da229831e"
+        },
+        {
+          "path": "actual-radio-service/base.bin",
+          "bytes": 250,
+          "sha256": "fb75aed2aa368fa504f0c9d7a44a55bd4b253e0db2557ed5f0128aaddefbaaa7"
+        },
+        {
+          "path": "actual-radio-service/boost-profile-blocked.json",
+          "bytes": 1637,
+          "sha256": "c689376302047f2d1754700ffa9652dc5e0085bac73e66f78624d1a456cb16c9"
+        },
+        {
+          "path": "actual-radio-service/commands.json",
+          "bytes": 1509,
+          "sha256": "103f0f4703c6886662b718df4b4b65085d075b533b709c7505522b56064c78eb"
+        },
+        {
+          "path": "actual-radio-service/complete.json",
+          "bytes": 1583,
+          "sha256": "d0450ab4756dae0e5a1ad5f4830284ebf684f3300b73eeb09c6ff851297be237"
+        },
+        {
+          "path": "actual-radio-service/engine-ack-missing.json",
+          "bytes": 1589,
+          "sha256": "023f62d80f6a5c65c6dd2eaee4705d6016a0c7f215a2e3eb774ef9ef1020edf5"
+        },
+        {
+          "path": "actual-radio-service/engine-ack.bin",
+          "bytes": 56,
+          "sha256": "4c1a6a6084e812b1fe7692bb9fcffa2970ccd675a04e9112d0cdea432bab2641"
+        },
+        {
+          "path": "actual-radio-service/flex.bin",
+          "bytes": 232,
+          "sha256": "9a2f7122e2727a07c0bb5dc2b8304cda8feece79035d123c1929663c624278bd"
+        },
+        {
+          "path": "actual-radio-service/held-expired.json",
+          "bytes": 1592,
+          "sha256": "1be8967758af9e937ceb9f701d3be7657a5c0ce38938c3ab851405875569b589"
+        },
+        {
+          "path": "actual-radio-service/partial.json",
+          "bytes": 1584,
+          "sha256": "03c7d007aeb82698052c45e3ce22e7da2ab1e8afd4c5494b680a9c7c15a898be"
+        },
+        {
+          "path": "actual-radio-service/query-reply.bin",
+          "bytes": 108,
+          "sha256": "fd8cbb068d283156c964d9fdbd213287ee9358bece2ae2cd5837d96836d0709b"
+        },
+        {
+          "path": "actual-radio-service/query-request.bin",
+          "bytes": 76,
+          "sha256": "b18429d7dd5eb4bec09255773ac353262074e3ab3b1cdc3ecd80b6ab83111729"
+        },
+        {
+          "path": "actual-radio-service/schema6-base.bin",
+          "bytes": 250,
+          "sha256": "219ebdacce025e70bbd8ec51f71fd66040cbca38c9647b7f7674bd070f8c5848"
+        },
+        {
+          "path": "actual-radio-service/schema6-boost.bin",
+          "bytes": 144,
+          "sha256": "790a25addc44890137bc373bc8907ce2ec1d5fa3885892c60fa7c12704148d04"
+        },
+        {
+          "path": "actual-radio-service/schema6-complete.json",
+          "bytes": 1578,
+          "sha256": "7e61f22ca9887d913cb5e7be485b8bf6b07c8c59eba12bcaddbd00f7f0286f72"
+        },
+        {
+          "path": "actual-radio-service/schema6-downgraded.json",
+          "bytes": 1650,
+          "sha256": "624b6cb48d73234a4cf51764efe57cafda1d8ac3ed2f20ba0842845c81249a86"
+        },
+        {
+          "path": "actual-radio-service/schema6-engine-ack.bin",
+          "bytes": 56,
+          "sha256": "4c1a6a6084e812b1fe7692bb9fcffa2970ccd675a04e9112d0cdea432bab2641"
+        },
+        {
+          "path": "actual-radio-service/schema6-fairness.json",
+          "bytes": 255,
+          "sha256": "141edf208bb82c5f25113dd97f57a522e0e3a073ceecc3d0dc8630797f59cfa9"
+        },
+        {
+          "path": "actual-radio-service/schema6-flex.bin",
+          "bytes": 232,
+          "sha256": "380570533b54b09f3059719edb62c165ca906c2b3685433c4fe3771e989d154f"
+        },
+        {
+          "path": "actual-radio-service/schema6-four-peers.json",
+          "bytes": 118,
+          "sha256": "83d7df78e41972fd81afffde7593bbd596e580bbf4aa2e9d67156c6b57ef2ae9"
+        },
+        {
+          "path": "actual-radio-service/schema6-partial-base.json",
+          "bytes": 1575,
+          "sha256": "9b3da08e9a94dcd551e95709f60c5671dea6cb856377b2376dfc431b4eecfad7"
+        },
+        {
+          "path": "actual-radio-service/schema6-partial-flex.json",
+          "bytes": 1580,
+          "sha256": "02a830620ac627f35377f5c0da56b462c655379698eb8ebec06a1d5cd81d1fdc"
+        },
+        {
+          "path": "actual-radio-service/schema6-query-reply.bin",
+          "bytes": 108,
+          "sha256": "fd8cbb068d283156c964d9fdbd213287ee9358bece2ae2cd5837d96836d0709b"
+        },
+        {
+          "path": "actual-radio-service/schema6-query-request.bin",
+          "bytes": 76,
+          "sha256": "b18429d7dd5eb4bec09255773ac353262074e3ab3b1cdc3ecd80b6ab83111729"
+        },
+        {
+          "path": "actual-radio-service/schema6-update-reply.bin",
+          "bytes": 108,
+          "sha256": "97f81b2eea9570be788b7e03e69fe298cc8906a13ab140ebffff6ade742214ea"
+        },
+        {
+          "path": "actual-radio-service/schema6-update-request.bin",
+          "bytes": 76,
+          "sha256": "82c3d8c59e76b33e0f45a2ab76b0d9efffc26850ca696d605f5f6857fd3e4202"
+        },
+        {
+          "path": "actual-radio-service/summary.json",
+          "bytes": 1907,
+          "sha256": "1a12f1b4d85672ac0f9a8fe52ebb2d3ef82dc4935a6c7d355ed5723bc30b62e3"
+        },
+        {
+          "path": "actual-radio-service/update-reply.bin",
+          "bytes": 108,
+          "sha256": "5b14d65eb2ffd4faf80aea2955f7023177f168bf37da85ee55b2e5abe4da8f2c"
+        },
+        {
+          "path": "actual-radio-service/update-request.bin",
+          "bytes": 76,
+          "sha256": "7534a6fe5fea45572a5f07fd00bb5d190c2cc3a5610d4ccc626bfd7860fc7d38"
+        },
+        {
+          "path": "browser-radio/radio-desktop.png",
+          "bytes": 94368,
+          "sha256": "691bf61c2b4c72a6ec1fcb9b04c9888e841f83b157d16d97ab4ad221556cf6ad"
+        },
+        {
+          "path": "browser-radio/radio-mobile.png",
+          "bytes": 93209,
+          "sha256": "49cd348fdad757daedb77ac62421df5ee07e744dee4c801b0d298b8cd588407c"
+        },
+        {
+          "path": "browser-radio/ui-tests.json",
+          "bytes": 2741,
+          "sha256": "4b8c8041c472fae2f7a83dc09a1f1fb8877e1b3c82fbed3117cc6c4102c641de"
+        },
+        {
+          "path": "build/build.log",
+          "bytes": 680894,
+          "sha256": "dac2fca904507e2654f007c27ede7652740b78851e70adc5699650994fbd70f7"
+        },
+        {
+          "path": "build/embed-web.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/sources-after.json",
+          "bytes": 41791,
+          "sha256": "e1c10648a0adf44b46304ce1ed5295604c04f7ddac7fd91f5335a673b91abb73"
+        },
+        {
+          "path": "build/sources-before.json",
+          "bytes": 41791,
+          "sha256": "e1c10648a0adf44b46304ce1ed5295604c04f7ddac7fd91f5335a673b91abb73"
+        },
+        {
+          "path": "build/summary.json",
+          "bytes": 4709,
+          "sha256": "d0cf7366c8c45991c9f3ef35529accd469c96c68e2708eaa6ffca81901d583d2"
+        },
+        {
+          "path": "package-schema6.py",
+          "bytes": 11251,
+          "sha256": "10c0b7005a72a2e6186b0b18e199dc0447cff680cf7baba8360691e489b3107f"
+        },
+        {
+          "path": "regressions/schema6-final-radio-python.log",
+          "bytes": 188,
+          "sha256": "0c10c62285d598f8b6d3d1f434c66ba9148a704f387ebbbc3abc3e16cb53051f"
+        },
+        {
+          "path": "regressions/schema6-interop-003.json",
+          "bytes": 14955,
+          "sha256": "9c9938fc86f7ff1012e6f3fe0756040b1fbf6a1dfc8e1a6f847c78d7bad99202"
+        },
+        {
+          "path": "regressions/schema6-native-suite.log",
+          "bytes": 3267,
+          "sha256": "b184002e9e8919e60d1d36384852edc020f4acada4c04f9863b39af1d9dcfb3c"
+        },
+        {
+          "path": "regressions/schema6-python-regressions-001.log",
+          "bytes": 313,
+          "sha256": "4572f2cdde59264299618615c6dc2230c28ed9bc0e27797387ee0d36e09801e0"
+        },
+        {
+          "path": "static/compact_a3_web/audit.json",
+          "bytes": 2161,
+          "sha256": "51f3dac8da431ef937cb032245057eb6ccb9003ff1b0a1746fba8bd67b1dba7c"
+        },
+        {
+          "path": "static/compact_a3_web/closure.json",
+          "bytes": 71953,
+          "sha256": "5648837804535e3808e9cb8a15d13b64fd122802134de9de92d0dc6fc982a681"
+        },
+        {
+          "path": "static/compact_a3_web/usb.json",
+          "bytes": 1198,
+          "sha256": "845abe3004be0367db202ae07ee3f5f0c270ebdb7846c8c1fb34cc8c745f16cd"
+        },
+        {
+          "path": "static/compact_n16r8_flex_dev/audit.json",
+          "bytes": 2169,
+          "sha256": "4084508fd73a9826972e267783244a46777a4fa239b3fbbf750e50754aa4f1aa"
+        },
+        {
+          "path": "static/compact_n16r8_flex_dev/closure.json",
+          "bytes": 76864,
+          "sha256": "16c5453386b08c8663718b3ad5f099977f944b5de284dca679cbefe48f63fdd0"
+        },
+        {
+          "path": "static/compact_n16r8_flex_dev/usb.json",
+          "bytes": 1206,
+          "sha256": "3fdf4fc0c166bd3af5a03dd7076b64e1a54b9d55e9693f9442f25dbd265ef3cf"
+        },
+        {
+          "path": "static/compact_n16r8_web/audit.json",
+          "bytes": 2164,
+          "sha256": "89a5b9e59cffb90caafe1a55a69a2c250806821f71ac9c016398c628a69a1717"
+        },
+        {
+          "path": "static/compact_n16r8_web/closure.json",
+          "bytes": 71961,
+          "sha256": "dcabcbe40ba2333c144ea70177d013d7e5da6b035c4bb9964cd6faee6549e8fe"
+        },
+        {
+          "path": "static/compact_n16r8_web/usb.json",
+          "bytes": 1201,
+          "sha256": "5fc7c9bd9f3d43afc9e161668eac16036857ae1251a9218409316d0855760004"
+        }
+      ]
+    },
+    {
+      "path": "inhibited-firmware.tar.gz",
+      "payloads": [
+        {
+          "path": "compact_a3_web/firmware.bin",
+          "bytes": 1754336,
+          "sha256": "8435ab2509e7461bafb9374c2c44af9b25eccda8ab550cd02e4f15067ba7c00c"
+        },
+        {
+          "path": "compact_a3_web/firmware.elf.gz",
+          "bytes": 5015369,
+          "sha256": "178197da383107a6a46cfd328c298f343f02b1f40a18ad816604fc001b5d490f"
+        },
+        {
+          "path": "compact_n16r8_flex_dev/firmware.bin",
+          "bytes": 1796688,
+          "sha256": "1b070629d281828f099b6de5ad34b88da84539f0d2b0086341daca4b3cd73f64"
+        },
+        {
+          "path": "compact_n16r8_flex_dev/firmware.elf.gz",
+          "bytes": 5074942,
+          "sha256": "1f2502a3a768a42e3c48425d24edaeb0e819cd51d7944256d0e8c37dc02200d9"
+        },
+        {
+          "path": "compact_n16r8_web/firmware.bin",
+          "bytes": 1765136,
+          "sha256": "03f4bae7a3397e6a4be1c735acb4c4ef4b5ad9040b2418776651600af9639c47"
+        },
+        {
+          "path": "compact_n16r8_web/firmware.elf.gz",
+          "bytes": 5059361,
+          "sha256": "cbbb6341a432f4a3ac06ebeeeddce64246fd362fb421dd3be4e8b1a37a1947bc"
+        }
+      ]
+    }
+  ]
+}
