@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "qualification": "Actual Chrome paired-screen diagnostics from native radio service fixtures.\n\nFixtures execute sender code through SDK API models; no real radio or LED.",
+  "checks": [
+    "Host fixture explicitly discloses no ESP-NOW transmission",
+    "partial: link ACK, complete-engine ACK and partial submission are distinct",
+    "complete: link ACK, complete-engine ACK and partial submission are distinct",
+    "engine-ack-missing: link ACK, complete-engine ACK and partial submission are distinct",
+    "held-expired: link ACK, complete-engine ACK and partial submission are distinct",
+    "12 malformed ACK/schema/part states stay unknown",
+    "Peer text remains escaped",
+    "HTTP failure clears readback and engine status;320/390/768/1440px fit"
+  ],
+  "page_errors": [],
+  "fixture_sha256": {
+    "engine-ack-missing.json": "ee3de4a543bbd8b27c682a9eb7399750392e7324a510cd11bdf0f3d59cd4270e",
+    "complete.json": "bba54ff4c1245a9f2abc54945442c8027e5a3049fa80a990eb9581c7fbf26553",
+    "held-expired.json": "6d8c5466da33feb3ae24de8a9c6fc13467c938a8d03b1b4550a56bd4ee286880",
+    "partial.json": "07acf2c3a68a2ed189233bc6ca19814dc7682d035eaf06713bb4fc4dc9a23a57",
+    "commands.json": "526893395acee7dc67fd634c50f7e24ef34e0cc0535679c70315fa9f10b3ad34",
+    "summary.json": "77fd7f457220ca16652d3dfe2fb4af9de8e85e272375f140902bd1a16c08401c"
+  },
+  "source_sha256": {
+    "web/index.html": "e9b8aafc59beb73362213db3d8c97cf76d614f4d4173d7f40d24dbb1e46c9b51",
+    "tools/test_flex_radio_ui.py": "a839f49920bc48dc456f7602d9b0c499a974249076615b8fd546c0284ba89204"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "parent_execution": true,
+  "independent_packaging_review": false,
+  "source_hash_inventory": "../summary.json",
+  "commands": [
+    {
+      "command": "CXX=g++ sh scripts/test_firmware.sh",
+      "returncode": 0,
+      "log": "parent-logs/native-suite-001.log"
+    },
+    {
+      "command": "CXX=g++ sh scripts/test_radio.sh",
+      "returncode": 0,
+      "log": "parent-logs/radio-suite-001.log"
+    },
+    {
+      "command": "PYTHONPATH=tools PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest test_radio test_web_config test_engine_flex test_engine_observability test_load_radio test_secondary_radio test_engine_semi test_engine_sequential test_engine_cylinder test_tuning test_engine_http test_flex_radio",
+      "returncode": 0,
+      "log": "parent-logs/python-final-002.log"
+    },
+    {
+      "command": "uv run --with playwright python -B tools/test_flex_radio_ui.py --fixtures .cache/engine/flex-radio-parent/service-004 --output .cache/engine/flex-radio-parent/ui-003",
+      "returncode": 0,
+      "log": "parent-logs/ui-003-driver.log"
+    },
+    {
+      "command": "python3 -B tools/run_flex_integration_scenarios.py --output .cache/engine/flex-radio-parent/plant-001",
+      "returncode": 0,
+      "log": "parent-logs/plant-001-driver.log"
+    }
+  ],
+  "qualification": "Actual owned native/browser execution and static target builds. Commands were completed with zero process return codes; no real device, RF or engine."
+}

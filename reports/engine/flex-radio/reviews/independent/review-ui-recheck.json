@@ -1,0 +1,103 @@
+{
+  "accepted": true,
+  "open_findings": [],
+  "scope": "Final UI HTTP-failure handling, matching Chrome-test assertions and standard native-test harness wiring only. Supplements the prior functional acceptance; no broader goal or packaging acceptance.",
+  "source_hashes": {
+    "web/index.html": "e9b8aafc59beb73362213db3d8c97cf76d614f4d4173d7f40d24dbb1e46c9b51",
+    "tools/test_flex_radio_ui.py": "a839f49920bc48dc456f7602d9b0c499a974249076615b8fd546c0284ba89204",
+    "scripts/test_firmware.sh": "154d407bf32099bb48c4e3bea418b4ef6eba87434396001fe4458be39ada158a"
+  },
+  "supersession": {
+    "previous_review": ".cache/engine/flex-radio-review/review.json",
+    "previous_review_sha256": "8181362581b9e500a53d6bb5f707ff0f1ba419e9268f1a378ffad8ca54a3defa",
+    "previous_review_preserved_byte_for_byte": true,
+    "only_paths_updated_or_added": [
+      "web/index.html",
+      "tools/test_flex_radio_ui.py",
+      "scripts/test_firmware.sh"
+    ],
+    "previous_hashes": {
+      "web/index.html": "762c9cd170bfa7b35506506629751fada2a4bf2d066d975a030eb3a24817bbb6",
+      "tools/test_flex_radio_ui.py": null,
+      "scripts/test_firmware.sh": "c0354f4e79e48f10702b11fe27ca4132a77746cccb6deb30b944a3ba7125af0a"
+    },
+    "scope_note": "web/index.html replaces its earlier accepted hash. The shell harness was previously context-only and is now reviewed for these two test additions. The new browser test is reviewed for HTTP-failure coverage; it had no prior reviewed hash.",
+    "other_reviewed_sources_equal": 30,
+    "other_reviewed_source_hashes": {
+      "config/engine-radio-v5.json": "c23e5de6cee6d5dd88ceb44993e3fe3676fed9730ee8621704c501c6dba62c27",
+      "firmware/include/ecu/engine_data_json.hpp": "dee3074bf7a2ee996be6f0f0d55c0934987a692b4cbf2ee5dd35d5c93e78a05a",
+      "firmware/include/ecu/engine_radio.hpp": "7e0b32a27405f2bcf5081864d7b62de9c680c291d06037343ab45d9f75bfbdc5",
+      "firmware/include/ecu/engine_radio_flex.hpp": "24580460d92e27c4223fe272b49ec7f099e54601d6f58fe9d9a27e65209894e5",
+      "firmware/include/ecu/engine_radio_health.hpp": "94919a86f184cf7bccdc767c67de753a10b0d1dba40478479ddd9341e311cc75",
+      "firmware/include/ecu/espnow_protocol.hpp": "02de39839f8367f46d7fb4cdb922a3de47e68c67280309f581a1f7eb05bfbbad",
+      "firmware/include/ecu/flex_engine.hpp": "b24c940bdee8e71e427f552d126efdba7d5ca29110aa70d7d4396fcef6eba468",
+      "firmware/include/ecu/flex_runtime.hpp": "74bffa63c8930ea35c123250c98e30b5c9f588eb6761a812881d1e1a0b981051",
+      "firmware/include/ecu/flex_runtime_json.hpp": "4b1c0424f5ac2bd50f520d1d04badb4347bbe246cfb02070988175a50a45d6d7",
+      "firmware/main/espnow.cpp": "5ec9486159620cf2abbed01fcd0ad2de21bc9528efbb8f6fa9811d1bf45bdbd5",
+      "firmware/tests/engine_radio_flex_test.cpp": "03818eab8561d6bc154c84cf6538933538f594a3c7fbe3d9e4d0d063cddc2305",
+      "firmware/tests/radio_fakes/driver/gpio.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+      "firmware/tests/radio_fakes/esp_event.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+      "firmware/tests/radio_fakes/esp_netif.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+      "firmware/tests/radio_fakes/esp_now.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+      "firmware/tests/radio_fakes/esp_random.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+      "firmware/tests/radio_fakes/esp_timer.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+      "firmware/tests/radio_fakes/esp_wifi.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+      "firmware/tests/radio_fakes/fake_radio.hpp": "eb93f553f4b59bd69932976ab13cd94b015f7a44a603fada5d5b88c1ed3b6f88",
+      "firmware/tests/radio_fakes/mbedtls/md.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+      "firmware/tests/radio_fakes/nvs.h": "b1826fbb473fd55eefe9403218a6fff8fc503e1592436854aa5370f69d89370c",
+      "firmware/tests/radio_service_test.cpp": "398cda60f84ef80702c7b1c4e909fd2e6713a16878887ce8987db4758ae066e0",
+      "firmware/tests/target_fakes/fake_target.hpp": "3fb1c00e1fd75cea8d082b38d82741105c5e904ee7ef41a6e7cb4130546dd3ee",
+      "scripts/test_radio_service.py": "f75403ef39d0f80843c414f4483ae3aa6e91a5332f1b25042b4832972ed0eedf",
+      "tools/engine_observability.py": "43a95da1a3602ccd2f51153ae86705847b7b5856a0232cdaa513d9feb28f9f08",
+      "tools/engine_observability_bridge.cpp": "0aa14ec4560717840b5ccaf6f7ac2302456dccfde14b790c25445833a02b1fa7",
+      "tools/engine_receiver.py": "f7eb1a7b31c6c668e117cdfcf522dc40a915f5f4827f89bd4b9f5252480b5447",
+      "tools/flex_radio.py": "3f930d2a6e84b3bc81f9c7c24f3075dddf6ed3d6b3668f1f7d916b16bfa382b4",
+      "tools/radio_simulator.py": "4736cc873249822f05e5e4feb4862aa9c0f64fd6dac85e57fcdcc7bd06f544bd",
+      "tools/test_flex_radio.py": "6f04a38be6e9780cfebd2d2abf449c368f1fa474492148726a72c14e5ddb266e"
+    }
+  },
+  "findings": [
+    "The HTTP-error catch explicitly overwrites global engine telemetry/acknowledgement text with unknown, and replaces peer entries so previous link/complete-engine ACK claims and ages cannot remain displayed.",
+    "Failure still clears candidate/key/LED readback and disables pairing controls. Its page guard prevents an in-flight failed request from overwriting a different page; the500ms retry remains conditional on the screens page.",
+    "The final Chrome test checks global engine unknown, peer unknown and absence of positive link/complete-engine ACK text after an aborted HTTP request.",
+    "The standard fail-fast shell harness now includes the unchanged engine_radio_flex sanitizer test and native actual radio-service wrapper. Both unchanged components were independently executed in the initial acceptance; no full-suite rerun is needed to assess these wiring-only lines."
+  ],
+  "validation": {
+    "owned_frozen_inputs": 3,
+    "before_after_live_and_snapshot_hashes_match": true,
+    "actual_refreshRadio_in_memory_DOM_API_checks": 24,
+    "replayed_final_helper_checks": 35,
+    "helper_native_fixture_states": 4,
+    "transitions": [
+      "valid_complete_observation_then_HTTP_failure",
+      "page_changed_during_failed_request",
+      "successful_new_observation_after_failure"
+    ],
+    "shell_syntax": "sh -n passed on frozen scripts/test_firmware.sh",
+    "python_test_syntax": "ast.parse passed on frozen tools/test_flex_radio_ui.py",
+    "commands": [
+      "GCOV_PREFIX=$PWD/.cache/engine/flex-radio-review/gcov node .cache/engine/flex-radio-review/probes/ui-recheck-failure.js",
+      "GCOV_PREFIX=$PWD/.cache/engine/flex-radio-review/gcov node .cache/engine/flex-radio-review/probes/ui-recheck-helpers.js",
+      "GCOV_PREFIX=$PWD/.cache/engine/flex-radio-review/gcov sh -n .cache/engine/flex-radio-review/freeze-ui-recheck-001/scripts/test_firmware.sh"
+    ],
+    "actual_Chrome_execution_by_this_reviewer": false,
+    "HTTP_server_or_service_started": false,
+    "firmware_or_upstream_execution": false,
+    "owned_probe_iteration": "Initial extractor used a nonexistent renderTuning sentinel and stopped at its setup assertion before product code execution. Corrected only the owned probe to use renderDevice; first source/log retained. Final24-check execution passes."
+  },
+  "limits": [
+    "No actual browser, ESP32/RTOS, RF, device, GPIO/I2C/LED, electrical, vendor/application, full-goal or packaging qualification is added.",
+    "The initial review and all its evidence remain untouched; prior generated coverage/build-cache side effects remain disclosed there."
+  ],
+  "evidence_hashes": {
+    "freeze-ui-recheck-001/manifest.json": "1210b40f9618af676b6188ddd1c857cd19539cd6a529a7d247001913d0d484cd",
+    "freeze-ui-recheck-001/web_index.html.diff": "f63f505d20ddc6327738a9113327d9ed435213fc59e7d1dac3701bfc0ecd9b20",
+    "freeze-ui-recheck-001/scripts_test_firmware.sh.diff": "6f3540629b36284a00816f19ac83edf0ae555f3c02bec5e15d4f4cbadadac5fd",
+    "probes/ui-recheck-failure.js": "daca6f125ba7f445326a9143d3aa6bb9edbb2b2cb99210ee54ebb57b83a41894",
+    "probes/ui-recheck-helpers.js": "a3edf74d3e70ad30131fb788e59638bfd353609e66981af0856e98a76586ee79",
+    "ui-recheck-failure-001.log": "6d4b58f9fe0eba599b041fc7b7d8007b4a8a45f6337bed10a75cadb0c032c699",
+    "ui-recheck-failure-002.log": "6ced7ce19e5592fedef1c3e383a8fb2eac30db57818285cd68583d7c605ef964",
+    "ui-recheck-helpers-001.log": "1e9c1234f705a8ddfa56d65d4b5b3a3a68d601079b43a427c5f5cb0b7fda8530",
+    "probe-history/ui-recheck-failure-extractor-001.js": "4dee68415398cd34fd973311e03b13ba6fe652c2a8ca4e8e534fb22990b04c6e"
+  }
+}

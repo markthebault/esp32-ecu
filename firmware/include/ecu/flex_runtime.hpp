@@ -25,6 +25,8 @@ struct Record {
  std::array<std::uint32_t,7> codes()const{return {source,reason,capture_reason,last_fault,correction_reason,window_cycles,revision};}
 };
 static_assert(sizeof(Record)<=136,"Flex diagnostic snapshot RAM budget");
+inline bool sample_timestamp_known(const Record&r){return r.has(Available)&&
+ sample_timestamp_known(static_cast<Source>(r.source),r.times[0],r.has(SampleValueValid));}
 inline Record record(const Evaluation&e){
  Record r;if(!e.available)return r;const auto&o=e.sample.observation;
  const double values[]={o.frequency_hz,o.low_pulse_us,o.ethanol_pct,o.fuel_temp_c,o.unfiltered_ethanol_pct,o.unfiltered_fuel_temp_c,o.age_ms,e.corrections.fuel_factor*100,e.corrections.spark_add_deg,e.corrections.temperature_factor*100};
@@ -48,5 +50,29 @@ inline Evaluation expand(const Record&r){
  e.required=r.has(Required);e.configuration_match=r.has(ConfigurationMatch);e.value_qualified=r.has(ValueQualified);e.raw_qualified=r.has(RawQualified);e.control_ok=r.has(ControlOk);
  o.valid=r.has(SampleValueValid);o.pending_fault=r.has(PendingFault);o.frequency_clamped=r.has(FrequencyClamped);o.temperature_clamped=r.has(TemperatureClamped);e.input_confirmed=r.has(InputConfirmed);e.corrections.enabled=r.has(CorrectionsEnabled);e.corrections.valid=r.has(CorrectionsValid);e.spark_bypassed=r.has(SparkBypassed);e.spark_clamped=r.has(SparkClamped);e.zero_factor=r.has(ZeroFactor);
  return e;
+}
+// Shared typed diagnostic validation. This checks the recorded controller
+// decision; rounded F32 values are not reassessed as original F64 acquisition.
+inline bool valid_record(const Record&r,bool present=true){
+ if((r.flags&~131071U)||r.source>3||r.reason>22||r.capture_reason>22||r.last_fault>22||r.correction_reason>22||r.window_cycles>32||r.calibration_cycles>32)return false;
+ if(r.has(Available)&&!present)return false;
+ for(auto n:r.values)if(std::isinf(n))return false;
+ for(auto n:r.calibration)if(!std::isfinite(n))return false;
+ const auto e=expand(r);const auto&o=e.sample.observation;
+ if(e.available&&!valid(e.sample.calibration))return false;
+ if(e.corrections.enabled&&!e.required)return false;
+ if(e.value_qualified&&(o.source==Source::Unavailable||(o.source==Source::TargetCapture&&!e.input_confirmed)))return false;
+ if(e.raw_qualified!=bool(e.value_qualified&&(o.source==Source::TargetCapture||o.source==Source::Synthetic)))return false;
+ if(r.has(CaptureValid)!=(o.valid&&(o.source==Source::TargetCapture||o.source==Source::Synthetic)))return false;
+ if(e.value_qualified&&(!e.configuration_match||!o.valid||o.pending_fault||o.fault_generation!=o.acknowledged_generation||!range(o.ethanol_pct,0,100)||!o.config_epoch||!e.sample.tune_revision))return false;
+ if(e.value_qualified&&!range(o.age_ms,0,std::llround(double(e.sample.calibration.stale_ms)*1000.)/1000.+.001))return false;
+ if(e.raw_qualified&&(!e.value_qualified||!r.has(CaptureValid)||e.reason!=Reason::Ready||o.capture_reason!=Reason::Ready||o.window_cycles!=e.sample.calibration.cycles||o.window_start_us>=o.sample_us||o.sample_us>o.last_edge_us||!range(o.frequency_hz,1,500)||!range(o.low_pulse_us,998,5002)||!range(o.fuel_temp_c,-40,125)))return false;
+ if(o.source==Source::SyntheticValue&&(r.has(CaptureValid)||e.raw_qualified||o.window_cycles||std::isfinite(o.frequency_hz)||std::isfinite(o.low_pulse_us)||std::isfinite(o.fuel_temp_c)||std::isfinite(o.unfiltered_ethanol_pct)||std::isfinite(o.unfiltered_fuel_temp_c)||(e.value_qualified&&(e.reason!=Reason::ValueOnly||o.capture_reason!=Reason::Unavailable))))return false;
+ if(e.corrections.enabled&&e.corrections.valid&&!e.raw_qualified)return false;
+ if(e.required&&e.control_ok&&(!e.value_qualified||(e.corrections.enabled&&!e.corrections.valid)))return false;
+ if(e.corrections.valid&&(!range(r.values[7],0,255)||!range(r.values[8],-40,40)||!range(r.values[9],0,255)))return false;
+ if(e.zero_factor!=bool(e.corrections.enabled&&e.corrections.valid&&(r.values[7]==0||r.values[9]==0)))return false;
+ if(!e.available){if(r.flags||r.revision||r.source||r.reason||r.capture_reason||r.last_fault||r.correction_reason||r.window_cycles||r.calibration_cycles)return false;for(auto n:r.times)if(n)return false;for(auto n:r.calibration)if(n)return false;for(auto n:r.values)if(std::isfinite(n))return false;}
+ return true;
 }
 }} // namespace ecu::flex

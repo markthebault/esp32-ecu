@@ -1,0 +1,11 @@
+--- previous-owned-freeze/web/index.html
++++ ui-recheck-freeze/web/index.html
+@@ -264,7 +264,7 @@
+  $('#radio-peers').innerHTML=(r.peers||[]).map(p=>`<div class="keyline" style="gap:12px;flex-wrap:wrap"><div><b>${esc(p.name)}</b><p class="fine mono">${esc(p.mac)} / ${esc(radioLinkText(p))}${p.last_ack_ms>=0?' / last reply '+num(p.last_ack_ms/1000,1)+' s ago':''} / ${esc(radioEnginePeerText(p))}${p.engine_telemetry_blocked?' / sensor stream fallback':''}${p.engine_upgrade_needed?' / update screen firmware for current engine data':p.engine_telemetry_blocked?' / current engine data unavailable':''}</p></div><button class="small" data-unpair="${esc(p.mac)}" aria-label="Unpair ${esc(p.name)}">Unpair</button></div>`).join('')||'<p class="fine">No screens paired.</p>';
+  document.querySelectorAll('[data-unpair]').forEach(b=>b.onclick=()=>radioAction({action:'unpair',mac:b.dataset.unpair}));
+  $('#radio-simulator').classList.toggle('hidden',!r.simulator);$('#sim-screen').disabled=!r.pairing||!!r.candidate;
+- }catch(e){if(current==='screens'){set('radio-status',e.message+' Pairing controls unavailable.');set('radio-indicator-status','LED hardware readback unavailable. Previous latch status is unverified.');$('#pair-open').disabled=true;$('#pair-cancel').disabled=true;$('#pair-candidate').innerHTML='';$('#radio-peers').innerHTML='<p class="bad">Connection lost. Saved-screen state is unknown.</p>';$('#pair-details').classList.add('hidden');set('pair-key','');}}
++ }catch(e){if(current==='screens'){set('radio-status',e.message+' Pairing controls unavailable.');set('radio-indicator-status','LED hardware readback unavailable. Previous latch status is unverified.');set('radio-engine-status','Engine telemetry and acknowledgement status unknown. Connection lost.');$('#pair-open').disabled=true;$('#pair-cancel').disabled=true;$('#pair-candidate').innerHTML='';$('#radio-peers').innerHTML='<p class="bad">Connection lost. Saved-screen state and previous link or engine acknowledgement ages are unknown.</p>';$('#pair-details').classList.add('hidden');set('pair-key','');}}
+  finally{if(current==='screens')radioTimer=setTimeout(refreshRadio,500);}
+ }
+ 

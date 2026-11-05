@@ -1,0 +1,16 @@
+firmware/tests/engine_radio_flex_test.cpp: In function ‘void age_and_indicator()’:
+firmware/tests/engine_radio_flex_test.cpp:17:80: error: ‘Rpm’ is not a member of ‘ecu::engine’; did you mean ‘ecu::secondary::Condition::Rpm’?
+   17 |  auto r=captured();check(r.flex_fuel.has(flex::RawQualified)&&r.inputs[engine::Rpm]==0);
+      |                                                                                ^~~
+firmware/tests/engine_radio_flex_test.cpp:7:26: note: in definition of macro ‘check’
+    7 | #define check(v) verify((v),#v,__LINE__)
+      |                          ^
+In file included from firmware/include/ecu/engine.hpp:5,
+                 from firmware/include/ecu/engine_data.hpp:2,
+                 from firmware/include/ecu/engine_radio.hpp:3,
+                 from firmware/include/ecu/engine_radio_flex.hpp:2,
+                 from firmware/include/ecu/engine_radio_health.hpp:2,
+                 from firmware/tests/engine_radio_flex_test.cpp:1:
+firmware/include/ecu/secondary_tables.hpp:14:36: note: ‘ecu::secondary::Condition::Rpm’ declared here
+   14 | enum class Condition:std::uint8_t {Rpm,Map,Tps,Ethanol};
+      |                                    ^~~

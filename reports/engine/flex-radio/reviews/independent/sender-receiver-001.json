@@ -1,0 +1,29 @@
+{
+  "accepted": true,
+  "actual_source_native_model_to_frozen_receiver": [
+    {
+      "reversed": false,
+      "packet_sequence": "9007199254741084",
+      "raw_age_ms_at_base": 30,
+      "bounded_flex_age_ms_at_complete": 96,
+      "ack_matches_actual_handler_fixture": true
+    },
+    {
+      "reversed": true,
+      "packet_sequence": "9007199254741084",
+      "raw_age_ms_at_base": 30,
+      "bounded_flex_age_ms_at_complete": 96,
+      "ack_matches_actual_handler_fixture": true
+    }
+  ],
+  "capture_hashes": {
+    "query-reply.bin": "fd8cbb068d283156c964d9fdbd213287ee9358bece2ae2cd5837d96836d0709b",
+    "base.bin": "fb75aed2aa368fa504f0c9d7a44a55bd4b253e0db2557ed5f0128aaddefbaaa7",
+    "engine-ack.bin": "4c1a6a6084e812b1fe7692bb9fcffa2970ccd675a04e9112d0cdea432bab2641",
+    "update-reply.bin": "5b14d65eb2ffd4faf80aea2955f7023177f168bf37da85ee55b2e5abe4da8f2c",
+    "flex.bin": "9a2f7122e2727a07c0bb5dc2b8304cda8feece79035d123c1929663c624278bd",
+    "update-request.bin": "7534a6fe5fea45572a5f07fd00bb5d190c2cc3a5610d4ccc626bfd7860fc7d38",
+    "query-request.bin": "b18429d7dd5eb4bec09255773ac353262074e3ab3b1cdc3ecd80b6ab83111729"
+  },
+  "scope": "Actual sender functions and handler in native API model; no infinite RTOS task, ESP-IDF, RF, physical LED or device"
+}

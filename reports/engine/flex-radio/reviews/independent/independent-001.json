@@ -1,0 +1,65 @@
+{
+  "source_sha256": {
+    "probes/independent_native.cpp": "452c86e720a9f8bf4b4370600fc3a35d1479c4253e6dcc0438d698cc8e81ea73",
+    "probes/independent_receiver.py": "5f4c921dca7fed07112a7b3bee854192d9ea70bf058e901fe4802da9349c3958",
+    "run_independent.py": "6f82f69e6da4d70529aa8feb1db83704010ff42bf3fd1b90d1c80353a167ff35"
+  },
+  "freeze": "freeze-final-001",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "commands": [
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-MMD",
+        "-MF",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/independent-native-001.d",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/probes/independent_native.cpp",
+        "-lcrypto",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/independent-native-001"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "independent-001-compile.log"
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/independent-native-001"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "01671cf5bc708e856a3720b144a736e9dfd5a001be7de0a47e020dc5bf29414a",
+      "stderr_sha256": "d45202c7bc1b1550087680e43787a381bc9ca0e5766d50af70d3af06853bf332",
+      "log": "independent-001-native.log"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/probes/independent_receiver.py",
+        "freeze-final-001",
+        "independent-native-001.ndjson"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "7cd4a4620fe5deb7bbd706bbd8cfe614430b480651fbdd33e46aaeab4472410b",
+      "log": "independent-001-receiver.log"
+    }
+  ]
+}

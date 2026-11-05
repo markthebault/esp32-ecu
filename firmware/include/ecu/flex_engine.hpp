@@ -2,6 +2,12 @@
 #include "ecu/flex_fuel.hpp"
 
 namespace ecu { namespace flex {
+inline bool sample_timestamp_known(Source source,std::uint64_t sample_us,bool value_valid){
+ // Scalar host fixtures may legitimately start at epoch0. Raw acquisition
+ // cannot have a completed positive-length window ending at0.
+ return source==Source::SyntheticValue?(value_valid||sample_us!=0):
+  (source==Source::TargetCapture||source==Source::Synthetic)&&sample_us!=0;
+}
 struct Config {CaptureConfig capture;CorrectionConfig correction;bool input_confirmed=false;};
 inline bool valid(const Config&c){return valid(c.capture)&&valid(c.correction);}
 // Calibration travels with the immutable observation. A local epoch counter
@@ -16,7 +22,8 @@ struct Evaluation {
 };
 inline Evaluation assess(const Config&c,const Sample&s,std::uint64_t now,bool ethanol_required,std::uint32_t tune_revision,bool context_match=true){
  Evaluation e;e.available=true;e.sample=s;e.required=c.correction.enabled||ethanol_required;e.input_confirmed=c.input_confirmed;e.configuration_match=context_match&&tune_revision&&s.tune_revision==tune_revision&&same(c.capture,s.calibration);
- if(s.observation.source!=Source::Unavailable&&now>=s.observation.sample_us)e.sample.observation.age_ms=double(now-s.observation.sample_us)/1000;
+ if(sample_timestamp_known(s.observation.source,s.observation.sample_us,s.observation.valid)&&now>=s.observation.sample_us)e.sample.observation.age_ms=double(now-s.observation.sample_us)/1000;
+ else e.sample.observation.age_ms=NAN;
  e.corrections=evaluate(c.correction,c.capture,s.observation,now);
  auto fail=[&](Reason reason){e.reason=reason;e.control_ok=!e.required;if(c.correction.enabled){e.corrections.valid=false;e.corrections.reason=reason;e.corrections.fuel_factor=e.corrections.spark_add_deg=e.corrections.temperature_factor=NAN;}return e;};
  if(!valid(c)){e.corrections.valid=false;return fail(Reason::InvalidConfig);}

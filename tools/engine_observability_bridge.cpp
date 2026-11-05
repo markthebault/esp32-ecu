@@ -4,6 +4,7 @@
 #include "ecu/flex_runtime_json.hpp"
 #include "ecu/engine_log_msl.hpp"
 #include "ecu/engine_radio.hpp"
+#include "ecu/engine_radio_flex.hpp"
 #include <openssl/hmac.h>
 #include <cctype>
 #include <string>
@@ -144,4 +145,13 @@ extern "C" int data_radio_frame(const char*text,const std::uint8_t*lmk,const std
  const auto transcript=ecu::radio::wire::engine_key_transcript(nonce,session);std::uint8_t key[32];
  const auto body_size=ecu::radio::wire::engine_frame_body_size(schema);
  return mac(lmk,16,transcript.data(),transcript.size(),key)&&ecu::radio::wire::engine_body(out,r,session,seq,sample_age,control_age,worker_age,sent,schema)&&mac(key,32,out,body_size,out+body_size);
+}
+extern "C" int data_radio_pair(const char*text,const std::uint8_t*lmk,const std::uint8_t*nonce,std::uint32_t session,std::uint64_t seq,std::uint32_t sample_age,std::uint32_t control_age,std::uint32_t worker_age,std::uint32_t raw_age,std::uint64_t sent,std::uint8_t*out){
+ ecu::engine::RuntimeSample r;if(!sample(text,r))return 0;
+ const auto transcript=ecu::radio::wire::engine_key_transcript(nonce,session);std::uint8_t key[32];
+ if(!mac(lmk,16,transcript.data(),transcript.size(),key))return 0;
+ ecu::radio::wire::EnginePair pair;
+ if(!pair.prepare(r,session,seq,sample_age,control_age,worker_age,raw_age,sent,
+    [&](const std::uint8_t*p,unsigned n,std::uint8_t*proof){return mac(key,32,p,n,proof);}))return 0;
+ std::memcpy(out,pair.data(),pair.size());pair.submitted();std::memcpy(out+250,pair.data(),pair.size());return 1;
 }

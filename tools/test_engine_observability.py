@@ -85,7 +85,10 @@ class ObservationTests(unittest.TestCase):
   for packet,mac,stamp in [(reply[:-1]+bytes([reply[-1]^1]),MAC,110),(reply,'02:EC:00:00:00:02',110),(reply,MAC,1101)]:
    with self.assertRaises(ValueError):r.receive_reply(packet,mac,stamp)
    self.assertIsNone(r.data_key)
-  r.receive_reply(reply,MAC,110);self.assertFalse(r.status(111)['query_required']);self.assertFalse(r.status(111)['fresh'])
+  with self.assertRaisesRegex(ValueError,'clock reversed'):r.receive_reply(reply,MAC,110)
+  self.assertTrue(r.status(1102)['query_required'])
+  q=r.query(1200,bytes([2])*16);reply=self.native.capability_reply(q,LMK,SESSION,BOOT,FLOOR,5000000)
+  r.receive_reply(reply,MAC,1210);self.assertFalse(r.status(1211)['query_required']);self.assertFalse(r.status(1211)['fresh'])
  def test_receiver_ages_clock_interval_and_stale_gap_require_query(self):
   r=self.negotiate();data=r.receive(self.frame(sample_age=12,control_age=8),MAC,150)
   self.assertEqual(data['transport_age_bound_ms'],13);self.assertEqual(data['bounded_sample_age_ms'],26)

@@ -1,0 +1,30 @@
+{
+  "compile_command": [
+    "c++",
+    "-std=c++17",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-pedantic",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-legacy-001/firmware/include",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/legacy_wire_probe.cpp",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/legacy-wire-001"
+  ],
+  "compile_returncode": 1,
+  "compile_stderr": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/legacy_wire_probe.cpp: In function \u2018int main()\u2019:\n/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/legacy_wire_probe.cpp:7:371: error: enumerated and non-enumerated type in conditional expression [-Werror=extra]\n    7 |    r.flags=ecu::engine::Present|ecu::engine::StorageOk|ecu::engine::InputsFresh|ecu::engine::InputsQualified|ecu::engine::Submitted|(n%2?ecu::engine::FuelCut:ecu::engine::ProposedActive);r.state=n%2?5:2;r.strategy=n%(schema==1?2:3);r.input_valid=static_cast<unsigned char>(n*37);r.phase_reason=n%10;r.board_flags=n%16;r.cam_error_deg=float(n)/100;r.controller_faults=n%2?ecu::engine::BadSensor:0;r.phase_losses=n*3;r.cam_rejected=n*5;r.virtual_high_mask=n%16;r.physical_command_mask=0;\n      |                                                                                                                                                                                                                                                                                                                                                                                ~~~^~~~~~~~~~~~~~~~~~~~~~~~~\n/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/legacy_wire_probe.cpp:13:4: error: this \u2018if\u2019 clause does not guard... [-Werror=misleading-indentation]\n   13 |    if(std::fwrite(prefix,1,sizeof prefix,stdout)!=sizeof prefix)return 1;if(ok&&std::fwrite(packet,1,w::engine_frame_size(schema),stdout)!=w::engine_frame_size(schema))return 2;++vectors;\n      |    ^~\n/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/legacy_wire_probe.cpp:13:74: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the \u2018if\u2019\n   13 |    if(std::fwrite(prefix,1,sizeof prefix,stdout)!=sizeof prefix)return 1;if(ok&&std::fwrite(packet,1,w::engine_frame_size(schema),stdout)!=w::engine_frame_size(schema))return 2;++vectors;\n      |                                                                          ^~\ncc1plus: all warnings being treated as errors\n",
+  "run_returncode": null,
+  "run_stderr": null,
+  "source_sha256": "24d60f88ee7a81db9f2f170442311e36dc8a91b4811cf55b7784ac9300990201",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  }
+}

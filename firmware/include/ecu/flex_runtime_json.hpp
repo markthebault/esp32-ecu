@@ -24,20 +24,7 @@ inline bool parse_record(const cJSON*j,Record&out,bool present){
  const auto*cal=cJSON_GetObjectItemCaseSensitive(j,"capture_calibration");if(!web::keys(cal,"|low_hz||high_hz||fault_hz||tolerance_hz||stale_ms||filter_ms||cycles|")||!web::integer(cal,"cycles",cycles)||cycles>32)return false;r.calibration_cycles=static_cast<std::uint8_t>(cycles);
  for(unsigned n=0;n<6;++n){double v=0;if(!web::number(cal,capture_fields[n].name,v)||!range(v,-FLT_MAX,FLT_MAX))return false;r.calibration[n]=static_cast<float>(v);}
  if(const auto*age=cJSON_GetObjectItemCaseSensitive(j,"read_age_ms")){if(!cJSON_IsNull(age)&&(!cJSON_IsNumber(age)||!range(age->valuedouble,0,UINT32_MAX-1)||std::floor(age->valuedouble)!=age->valuedouble))return false;}
- const auto e=expand(r);const auto&o=e.sample.observation;
- if(e.available&&!valid(e.sample.calibration))return false;
- if(e.corrections.enabled&&!e.required)return false;
- if(e.value_qualified&&(o.source==Source::Unavailable||(o.source==Source::TargetCapture&&!e.input_confirmed)))return false;
- if(e.raw_qualified!=bool(e.value_qualified&&(o.source==Source::TargetCapture||o.source==Source::Synthetic)))return false;
- if(r.has(CaptureValid)!=(o.valid&&(o.source==Source::TargetCapture||o.source==Source::Synthetic)))return false;
- if(e.value_qualified&&(!e.configuration_match||!o.valid||o.pending_fault||o.fault_generation!=o.acknowledged_generation||!range(o.ethanol_pct,0,100)||!o.config_epoch||!e.sample.tune_revision))return false;
- if(e.raw_qualified&&(!e.value_qualified||!r.has(CaptureValid)||e.reason!=Reason::Ready||o.capture_reason!=Reason::Ready||o.window_cycles!=e.sample.calibration.cycles||o.window_start_us>=o.sample_us||o.sample_us>o.last_edge_us||!range(o.frequency_hz,1,500)||!range(o.low_pulse_us,998,5002)||!range(o.fuel_temp_c,-40,125)))return false;
- if(o.source==Source::SyntheticValue&&(r.has(CaptureValid)||e.raw_qualified||o.window_cycles||std::isfinite(o.frequency_hz)||std::isfinite(o.low_pulse_us)||std::isfinite(o.fuel_temp_c)||std::isfinite(o.unfiltered_ethanol_pct)||std::isfinite(o.unfiltered_fuel_temp_c)||(e.value_qualified&&(e.reason!=Reason::ValueOnly||o.capture_reason!=Reason::Unavailable))))return false;
- if(e.corrections.enabled&&e.corrections.valid&&!e.raw_qualified)return false;
- if(e.required&&e.control_ok&&(!e.value_qualified||(e.corrections.enabled&&!e.corrections.valid)))return false;
- if(e.corrections.valid&&(!range(r.values[7],0,255)||!range(r.values[8],-40,40)||!range(r.values[9],0,255)))return false;
- if(e.zero_factor!=bool(e.corrections.enabled&&e.corrections.valid&&(r.values[7]==0||r.values[9]==0)))return false;
- if(!e.available){if(r.flags||r.revision||r.source||r.reason||r.capture_reason||r.last_fault||r.correction_reason||r.window_cycles||r.calibration_cycles)return false;for(auto n:r.times)if(n)return false;for(auto n:r.calibration)if(n)return false;for(auto n:r.values)if(std::isfinite(n))return false;}
+ if(!valid_record(r,present))return false;
  out=r;return true;
 }
 }} // namespace ecu::flex

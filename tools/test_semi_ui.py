@@ -59,10 +59,10 @@ async def check(url,device,out):
    checks.append('Strategy form and hardware/debug guide fit320/390/768/1440px')
    original=device.radio.status
    def old_screen():
-    status=original();status['peers']=[dict(mac='02:EC:00:00:00:02',name='Synthetic old screen',connected=False,last_ack_ms=-1,engine_telemetry=True,engine_schema=1,engine_telemetry_blocked=True,engine_upgrade_needed=True),dict(mac='02:EC:00:00:00:03',name='Synthetic new screen',connected=True,last_ack_ms=0,engine_telemetry=True,engine_schema=2,engine_telemetry_blocked=False,engine_upgrade_needed=False)];return status
+    status=original();status['peers']=[dict(mac='02:EC:00:00:00:02',name='Synthetic old screen',connected=False,last_ack_ms=-1,engine_telemetry=True,engine_schema=1,engine_telemetry_blocked=True,engine_upgrade_needed=True,engine_parts_per_observation=1,engine_pair_pending=False,engine_base_submitted=False,engine_connected=False,last_engine_ack_ms=-1),dict(mac='02:EC:00:00:00:03',name='Synthetic new screen',connected=True,last_ack_ms=0,engine_telemetry=True,engine_schema=2,engine_telemetry_blocked=False,engine_upgrade_needed=False,engine_parts_per_observation=1,engine_pair_pending=False,engine_base_submitted=False,engine_connected=False,last_engine_ack_ms=-1)];return status
    device.radio.status=old_screen
    await page.locator('[data-page="screens"]').click();await page.locator('#radio-peers').filter(has_text='update screen firmware for current engine data').wait_for()
-   assert 'engine telemetry v2' in await page.locator('#radio-peers').inner_text() and (await page.locator('#radio-peers').inner_text()).count('update screen firmware')==1
+   assert 'engine schema2' in await page.locator('#radio-peers').inner_text() and (await page.locator('#radio-peers').inner_text()).count('update screen firmware')==1
    checks.append('Synthetic legacy-screen compatibility warning is visible separately from connection state')
    assert not errors,errors
   finally:await browser.close()

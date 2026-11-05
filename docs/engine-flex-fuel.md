@@ -28,11 +28,11 @@ Schema9 requires the complete `flex_fuel` section. Schema1..8 migration always i
 
 Use [esp32-ecu-flex.ini](../tuning/esp32-ecu-flex.ini), identity `ESP32ECU DEV 010 INHIBITED`. Its8192-byte page preserves all prior offsets and appends160 bytes at7808; its832-byte runtime block preserves the640-byte prefix. MSL007 appends41 flex fields for229 engine /186 direct SIL columns, with U64 counters/timestamps preserved as decimal strings in JSON. The device recorder retains128 rows, with overwrite/gap accounting. Prior256-row retention exceeded linked DRAM after this diagnostic expansion.
 
-Known engine screen schemas1..4 cannot carry flex quality/factors. When flex is required they explicitly suppress the engine frame and retain legacy sensor telemetry; a negotiated flex-capable screen protocol is still needed. No frame is silently extended beyond250 bytes.
+Engine screen schemas1..4 cannot carry flex quality/factors. When flex is required they explicitly suppress the engine frame and retain legacy sensor telemetry. [Schema5](espnow-engine.md#complete-flex-observation-schema5) now sends a250-byte base and a separately authenticated232-byte full flex observation. The bounded receiver assembles both before display/ACK and retains the original raw-sample expiry. No datagram exceeds250 bytes. Actual screen firmware and RF tests remain missing.
 
 The host SIL panel can emit actual synthetic frequency/low-pulse edges. The27-case matrix exercises three strategies, neutral/off controls, endpoint frequencies, enabled fuel/temperature/spark factors, smoothing, zero fuel, missing input and dropout. Its combustion model retains fixed gasoline properties. This tests integration and cut behavior, not ethanol chemistry; the separate pinned production fixture supplies the earlier raw-edge comparisons.
 
-Remaining work includes the protected GPIO38 circuit/reset design, PCB/case integration, negotiated flex radio fields, ethanol-aware plant calibration, online vendor support and HIL. The development target producer acquires when either corrections or a secondary ETH condition requires it. The software cannot turn the confirmation checkbox into missing target data.
+Remaining work includes the protected GPIO38 circuit/reset design, PCB/case integration, actual screen/RF integration, ethanol-aware plant calibration, online vendor support and HIL. The development target producer acquires when either corrections or a secondary ETH condition requires it. Required-flex fault indication now applies at zero RPM and when a held raw sample expires; it is advisory software status. The software cannot turn the confirmation checkbox into missing target data.
 
 ## Source execution and observed differences
 

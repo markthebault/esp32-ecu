@@ -21,7 +21,8 @@ def load_bridge():
    'data_log_command':([P,S,U,T,U],I),'data_log_append':([P,S,T],I),'data_log_expire':([P,T],None),
    'data_log_header':([P],S),'data_log_page':([P,U,U],S),'data_log_msl':([P,U,S],S),
    'data_capability_reset':([P],None),'data_capability_reply':([P,S,U,S,U,S,T,T,P],I),
-   'data_radio_frame':([S,S,S,U,T,U,U,U,T,U,P],I)}
+   'data_radio_frame':([S,S,S,U,T,U,U,U,T,U,P],I),
+   'data_radio_pair':([S,S,S,U,T,U,U,U,U,T,P],I)}
   for name,(args,result) in signatures.items():fn=getattr(b,name);fn.argtypes=args;fn.restype=result
   return b
 
@@ -52,6 +53,10 @@ class EngineRecorder:
   out=ctypes.create_string_buffer(108)
   if not self.bridge.data_capability_reply(self.handle,request,len(request),key,session,nonce,floor,sent,out):raise ValueError('Capability request rejected')
   return out.raw
+ def frame_pair(self,sample,lmk,nonce,session,sequence,sample_age=0,control_age=0,worker_age=4294967295,raw_age=4294967295,sent=0):
+  out=ctypes.create_string_buffer(482)
+  if not self.bridge.data_radio_pair(encoded(sample),lmk,nonce,session,sequence,sample_age,control_age,worker_age,raw_age,sent,out):raise ValueError('Invalid schema5 engine/flex observation')
+  return out.raw[:250],out.raw[250:]
  def reset_capabilities(self):self.bridge.data_capability_reset(self.handle)
  def frame(self,sample,lmk,nonce,session,sequence,sample_age=0,control_age=0,worker_age=4294967295,sent=0,schema=4):
   if type(schema) is not int or schema not in (1,2,3,4):raise ValueError('Unsupported engine schema')

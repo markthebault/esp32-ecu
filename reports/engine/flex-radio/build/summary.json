@@ -1,0 +1,168 @@
+{
+  "created_utc": "2026-11-05T00:21:39.842529+00:00",
+  "command": [
+    "pio",
+    "run",
+    "-d",
+    "/home/mark/persospace/esp32-ecu/firmware",
+    "-e",
+    "compact_n16r8_flex_dev",
+    "-e",
+    "compact_n16r8_web",
+    "-e",
+    "compact_a3_web",
+    "-e",
+    "compact_a3_timing_bench"
+  ],
+  "exit_code": 0,
+  "build_dir_override": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-build-001/build",
+  "environments": [
+    "compact_n16r8_flex_dev",
+    "compact_n16r8_web",
+    "compact_a3_web",
+    "compact_a3_timing_bench"
+  ],
+  "default_cache_retained": true,
+  "default_cache_unchanged": true,
+  "source_inputs_unchanged": true,
+  "generated_sdkconfigs": [
+    {
+      "environment": "compact_n16r8_flex_dev",
+      "original_present": true,
+      "original_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_n16r8_flex_dev",
+      "after_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_n16r8_flex_dev"
+    },
+    {
+      "environment": "compact_n16r8_web",
+      "original_present": true,
+      "original_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_n16r8_web",
+      "after_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_n16r8_web"
+    },
+    {
+      "environment": "compact_a3_web",
+      "original_present": true,
+      "original_sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_a3_web",
+      "after_sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_a3_web"
+    },
+    {
+      "environment": "compact_a3_timing_bench",
+      "original_present": true,
+      "original_sha256": "b5cb80264f595019e6c879a6120e7ee9b8bc002c566d31fb1898bd48439af51d",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_a3_timing_bench",
+      "after_sha256": "b5cb80264f595019e6c879a6120e7ee9b8bc002c566d31fb1898bd48439af51d",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_a3_timing_bench"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "build/compact_a3_timing_bench/firmware.bin",
+      "bytes": 681216,
+      "sha256": "5d4c753a0052ce39dce1d0eb8ab510c696ba625581aae20ca41f6fd31e2229b1"
+    },
+    {
+      "path": "build/compact_a3_timing_bench/firmware.elf",
+      "bytes": 8427832,
+      "sha256": "4e143507a32f569794bb40d0b728a3dd301fe3690c96e3b46bec62d0ca55c4d1"
+    },
+    {
+      "path": "build/compact_a3_web/firmware.bin",
+      "bytes": 1666000,
+      "sha256": "4492703f9444bfff2591361f83addfc97ba4f61892a1137bceadd3e29765b449"
+    },
+    {
+      "path": "build/compact_a3_web/firmware.elf",
+      "bytes": 14007660,
+      "sha256": "413a5184e720c036650d85fa87ce59f08a77604f700bdab02e0b9a29453a2e65"
+    },
+    {
+      "path": "build/compact_n16r8_flex_dev/firmware.bin",
+      "bytes": 1705168,
+      "sha256": "fdbf9e6dd0539ee939be1608d5064da6a1779c34f39c2ad5a9e90c117452c41e"
+    },
+    {
+      "path": "build/compact_n16r8_flex_dev/firmware.elf",
+      "bytes": 14386680,
+      "sha256": "54bfc6538518fe0423e944e66c5238713e4786b0e441cf9c997f9e463d6b3861"
+    },
+    {
+      "path": "build/compact_n16r8_web/firmware.bin",
+      "bytes": 1676880,
+      "sha256": "3cc17f363f9cbdc6157af518de4f924487a51f01ad86abda989c140d57b96531"
+    },
+    {
+      "path": "build/compact_n16r8_web/firmware.elf",
+      "bytes": 14303476,
+      "sha256": "23256698c4d654990a2aa88f07f501a2b2fe1cd4ed1563004316bf91867c89f5"
+    }
+  ],
+  "elf_archives": [
+    {
+      "environment": "compact_a3_timing_bench",
+      "path": "elf-archives/compact_a3_timing_bench.elf.gz",
+      "bytes": 2835783,
+      "sha256": "8176e9032089c31af53104476f6fce45a2f399c074e030b8af0e0ffbc7c1cd14",
+      "elf_bytes": 8427832,
+      "elf_sha256": "4e143507a32f569794bb40d0b728a3dd301fe3690c96e3b46bec62d0ca55c4d1"
+    },
+    {
+      "environment": "compact_a3_web",
+      "path": "elf-archives/compact_a3_web.elf.gz",
+      "bytes": 4901054,
+      "sha256": "d5662d24c961eac6cff59bd6ad1ce15db32d513415c5abe9e27508b7831d8900",
+      "elf_bytes": 14007660,
+      "elf_sha256": "413a5184e720c036650d85fa87ce59f08a77604f700bdab02e0b9a29453a2e65"
+    },
+    {
+      "environment": "compact_n16r8_flex_dev",
+      "path": "elf-archives/compact_n16r8_flex_dev.elf.gz",
+      "bytes": 4953988,
+      "sha256": "37cf59719ebf414a3fa4f2fe1b187192ef8ce68f1ede73d0fd3423fd7151b8e4",
+      "elf_bytes": 14386680,
+      "elf_sha256": "54bfc6538518fe0423e944e66c5238713e4786b0e441cf9c997f9e463d6b3861"
+    },
+    {
+      "environment": "compact_n16r8_web",
+      "path": "elf-archives/compact_n16r8_web.elf.gz",
+      "bytes": 4944515,
+      "sha256": "1c19316756d7d06ffd60dfd3f74bb209198725909da85cdf32318ec0785a496b",
+      "elf_bytes": 14303476,
+      "elf_sha256": "23256698c4d654990a2aa88f07f501a2b2fe1cd4ed1563004316bf91867c89f5"
+    }
+  ],
+  "generated_assets_sha256": "31ad81d24e4933a60f13806102ec69515221e0ee3618d88a0abcc348807bee7a",
+  "web_index_sha256": "e9b8aafc59beb73362213db3d8c97cf76d614f4d4173d7f40d24dbb1e46c9b51",
+  "embedded_UI": [
+    {
+      "environment": "compact_n16r8_flex_dev",
+      "web_expected": true,
+      "current_index_in_flash_rodata": true
+    },
+    {
+      "environment": "compact_n16r8_web",
+      "web_expected": true,
+      "current_index_in_flash_rodata": true
+    },
+    {
+      "environment": "compact_a3_web",
+      "web_expected": true,
+      "current_index_in_flash_rodata": true
+    },
+    {
+      "environment": "compact_a3_timing_bench",
+      "web_expected": false,
+      "current_index_in_flash_rodata": false
+    }
+  ],
+  "declared_generation_changes": [
+    "firmware/main/web_assets.hpp"
+  ],
+  "generation_only_declared_output": true,
+  "flashed": false,
+  "physical_qualification": false
+}

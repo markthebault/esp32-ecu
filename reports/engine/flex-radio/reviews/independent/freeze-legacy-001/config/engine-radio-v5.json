@@ -1,0 +1,43 @@
+{
+  "status": "implementation_in_progress_software_contract_not_RF_qualification",
+  "schema": 5,
+  "max_datagram_bytes": 250,
+  "base": {"type": 9, "bytes": 250, "body_bytes": 218, "layout": "schema4_with_schema_field_5"},
+  "flex": {
+    "type": 11, "bytes": 232, "body_bytes": 200,
+    "fields": [
+      [0, 8, "ECN1_header"], [8, 4, "session_u32"], [12, 8, "packet_sequence_u64"],
+      [20, 2, "schema_u16_5"], [22, 2, "reserved_zero"],
+      [24, 32, "full_base_HMAC_SHA256"],
+      [56, 56, "flex_times_7xu64"], [112, 40, "flex_values_10xf32"],
+      [152, 24, "producer_calibration_6xf32"], [176, 4, "flex_flags_u32"],
+      [180, 4, "producer_tune_revision_u32"],
+      [184, 7, "source_reason_capture_reason_last_fault_correction_reason_window_cycles_calibration_cycles_u8"],
+      [191, 1, "reserved_zero"], [192, 4, "raw_sample_age_ms_at_base_send_u32_unknown_MAX"],
+      [196, 4, "producer_stale_limit_us_u32_zero_when_unavailable"], [200, 32, "full_extension_HMAC_SHA256"]
+    ]
+  },
+  "authentication": "existing_per_boot_per_peer_engine_key_full_SHA256_MAC_on_each_body",
+  "sender": {
+    "pending_pairs_per_peer": 1,
+    "pair_deadline_us": 250000,
+    "datagram_budget_unchanged": true,
+    "typical_complete_observations_hz": 8,
+    "ack_window_submission": "only_after_both_datagrams_accepted_using_original_base_send_time",
+    "capability_request_unpair_or_key_change_cancels_pending": true
+  },
+  "receiver": {
+    "pending_pairs": 2,
+    "assembly_deadline_ms": 250,
+    "partial_data_is_observation": false,
+    "partial_data_refreshes_gap_or_ack": false,
+    "duplicate_part_refreshes_assembly_deadline": false,
+    "authenticated_conflict_quarantines_through_packet_sequence": true,
+    "new_query_update_or_boot_clears_partial_state": true,
+    "repeated_proposal_preserves_full_flex_payload_and_age_lower_bound": true,
+    "flex_freshness": "conservative_age_with_existing_clock_drift_transit_and_local_elapsed_bounds_vs_original_producer_stale_limit",
+    "target_control_cannot_claim_synthetic_flex_origin": true
+  },
+  "legacy_schemas_1_to_4": "unchanged_bytes_and_required_flex_sensor_stream_fallback",
+  "scope": "read_only_telemetry_no_remote_control_no_screen_application_no_actual_RF_or_physical_qualification"
+}

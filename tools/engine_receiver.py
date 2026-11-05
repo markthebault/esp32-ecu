@@ -3,11 +3,12 @@
 Inputs to receive() must be from the saved ECU MAC. Authentication is checked
 before accepting sequence/freshness. Legacy sensor frames retain their own codec.
 """
-import hmac,math,secrets,struct
+import copy,hmac,math,secrets,struct
 from espnow_protocol import header,check,mac_bytes
+from flex_radio import engine_flex_fragment
 
 CAP_SIZE=76;REPLY_SIZE=108;ENGINE_SIZE=250;ENGINE_BODY=218;ACK_SIZE=56
-FEATURE_ENGINE=1;SCHEMA=4;SUPPORTED_SCHEMAS=(1,2,3,4);UINT32_MAX=2**32-1;UINT64_MAX=2**64-1
+FEATURE_ENGINE=1;SCHEMA=5;SUPPORTED_SCHEMAS=(1,2,3,4,5);UINT32_MAX=2**32-1;UINT64_MAX=2**64-1
 INPUT_NAMES=('rpm','map_kpa','tps_pct','clt_c','iat_c','lambda','battery_v','sensor_v')
 PROPOSAL_NAMES=('rpm','ve_pct','target_lambda','advance_deg','pulse_ms','dwell_ms','deadtime_ms','air_mg','warmup','afterstart','accel','ego','duty_pct','idle_pct')
 PRESENT=1;INPUTS_FRESH=2;STORAGE_OK=4;CRANK_SYNC=8;PHASE_SYNC=16;PHASE_REQUIRED=32;SUBMITTED=64;DUMMY_POLICY=128;PHASE_CONTEXT_MATCH=256;PROPOSED_ACTIVE=512;FUEL_CUT=1024;SPARK_CUT=2048;PUMP=4096;FAN=8192;INPUTS_QUALIFIED=16384;DISPLAY_FRESH=32768
@@ -41,7 +42,7 @@ def engine_acknowledgement(session,sequence,data_key):
     body=header(10,ACK_SIZE)+struct.pack('<IQI',uint(session,32),uint(sequence,64),0)
     return body+hmac.digest(key_bytes(data_key,32),body,'sha256')
 
-def engine_telemetry(packet,data_key,expected_schema=None):
+def _engine_base(packet,data_key,expected_schema=None):
     if len(packet) not in (232,250):raise ValueError('Invalid engine packet length')
     check(packet,9,len(packet));body_size=len(packet)-32
     if not hmac.compare_digest(packet[body_size:],hmac.digest(key_bytes(data_key,32),packet[:body_size],'sha256')):raise ValueError('Engine authentication failed')
@@ -102,6 +103,12 @@ def engine_telemetry(packet,data_key,expected_schema=None):
                 sent_esp_us=sent,worker_observation=dict(command_sequence=worker_sequence,epoch=worker_epoch,epoch_domain='executor_generation',tune_revision=worker_tune,sensor_revision=worker_sensors,age_ms=age(worker_age),timing_fault_code=timing,last_timing_fault_code=last_timing,virtual_high_mask=virtual,physical_command_mask=physical),
                 inputs_fresh_at_control=bool(flags&INPUTS_FRESH),proposal_submitted=bool(flags&SUBMITTED),physical_policy='dummy_loads_only' if flags&DUMMY_POLICY else 'inhibited')
 
+def engine_telemetry(packet,data_key,expected_schema=None):
+    """Decode complete legacy observations. Schema5 needs EngineReceiver."""
+    data=_engine_base(packet,data_key,expected_schema)
+    if data['schema_version']==5:raise ValueError('Schema5 base is partial; use EngineReceiver for both datagrams')
+    return data
+
 class EngineReceiver:
     """Saved-peer engine protocol state and conservative display-age bound.
 
@@ -111,6 +118,8 @@ class EngineReceiver:
     """
     query_lifetime_ms=1000
     clock_lifetime_ms=5000
+    assembly_lifetime_ms=250
+    maximum_pending_pairs=2
     def __init__(self,ecu_mac,lmk,schema=SCHEMA):
         if type(schema) is not int or schema not in SUPPORTED_SCHEMAS:raise ValueError('Unsupported engine schema')
         self.desired_schema=schema
@@ -118,68 +127,161 @@ class EngineReceiver:
         self.session=None;self.counter=0;self.features=0;self.data_key=None;self.reply=None
         self.latest=None;self.received_ms=None;self.last_packet=0;self.last_snapshot=0;self.last_sent_esp=0
         self.rejected=0;self.immutable=None
-    def _time(self,ms):return uint(ms,64)
+        self.partials={};self.retired_through=0;self.expired_pairs=0;self.evicted_pairs=0;self.conflicting_pairs=0
+        self.assembly_clock_fault=False;self.last_part_ms=None;self.last_api_ms=None;self.history=None;self.boot_identity=None
+    def _time(self,ms,reset=False):
+        ms=uint(ms,64)
+        if reset:self.last_api_ms=ms;self.assembly_clock_fault=False
+        elif self.last_api_ms is not None and ms<self.last_api_ms:self.assembly_clock_fault=True
+        else:self.last_api_ms=ms
+        return ms
     def _peer(self,mac):
         if mac_bytes(mac)!=self.ecu_mac:raise ValueError('Packet is not from saved ECU')
     def query(self,now_ms,nonce=None):
-        now_ms=self._time(now_ms);packet=capability_request(self.lmk,nonce=nonce)
+        now_ms=uint(now_ms,64)
+        if self.assembly_clock_fault or self.last_api_ms is not None and now_ms<self.last_api_ms:self.history=None
+        now_ms=self._time(now_ms,reset=True);packet=capability_request(self.lmk,nonce=nonce)
+        self.partials.clear();self.assembly_clock_fault=False;self.last_part_ms=None
         self.pending=dict(packet=packet,sent_ms=now_ms,counter=0,features=None)
         self.data_key=None;self.latest=None;self.received_ms=None;return packet
     def update(self,enabled,now_ms,nonce=None):
         if type(enabled) is not bool or self.session is None or self.counter==UINT32_MAX:raise ValueError('Query current capability state first')
         now_ms=self._time(now_ms);packet=capability_request(self.lmk,self.session,self.counter+1,int(enabled),nonce,self.desired_schema)
+        if self.partials:self._retire(max(self.partials))
         self.pending=dict(packet=packet,sent_ms=now_ms,counter=self.counter+1,features=int(enabled),schema=self.desired_schema if enabled else 0);return packet
     def retry(self):
         if self.pending is None:raise ValueError('No pending request')
         return self.pending['packet']
     def receive_reply(self,packet,mac,now_ms):
         self._peer(mac);now_ms=self._time(now_ms)
+        if self.assembly_clock_fault:raise ValueError('Receiver clock reversed; fresh query required')
         if self.pending is None:raise ValueError('Unsolicited capability reply')
         pending=self.pending;reply=capability_reply(packet,self.lmk,pending['packet'][16:32])
         if now_ms<pending['sent_ms'] or now_ms-pending['sent_ms']>self.query_lifetime_ms:raise ValueError('Capability query expired')
         if pending['counter'] and (reply['session']!=self.session or reply['counter']!=pending['counter'] or reply['features']!=pending['features'] or reply['schema']!=pending['schema']):raise ValueError('Capability update changed')
-        self.session=reply['session'];self.counter=reply['counter'];self.features=reply['features']
+        identity=(reply['session'],reply['boot_nonce'])
+        if self.boot_identity!=identity or self.history is not None and reply['features'] and self.history['data']['schema_version']!=reply['schema']:self.history=None
+        self.boot_identity=identity;self.session=reply['session'];self.counter=reply['counter'];self.features=reply['features']
         self.data_key=derive_engine_key(self.lmk,reply['boot_nonce'],reply['session']);self.reply=dict(reply,query_sent_ms=pending['sent_ms'],received_ms=now_ms)
         self.last_packet=reply['sequence_floor'];self.last_snapshot=0;self.last_sent_esp=reply['sent_esp_us'];self.latest=None;self.received_ms=None;self.pending=None;self.immutable=None
+        self.partials.clear();self.retired_through=reply['sequence_floor'];self.assembly_clock_fault=False;self.last_part_ms=now_ms
         return reply
     def receive(self,packet,mac,now_ms):
         try:return self._receive(packet,mac,now_ms)
         except (ValueError,TypeError):
             self.rejected+=1;raise
     def _receive(self,packet,mac,now_ms):
-        self._peer(mac);now_ms=self._time(now_ms)
+        self._peer(mac);now_ms=self._time(now_ms);packet=bytes(packet)
         if self.data_key is None or not self.features&FEATURE_ENGINE or self.reply is None:raise ValueError('Fresh engine negotiation required')
+        if self.assembly_clock_fault:raise ValueError('Receiver clock reversed; fresh query required')
         if now_ms<self.reply['received_ms'] or now_ms-self.reply['received_ms']>self.clock_lifetime_ms:raise ValueError('Refresh engine clock query')
         if (self.received_ms is not None and (now_ms<self.received_ms or now_ms-self.received_ms>1000)) or (self.received_ms is None and now_ms-self.reply['received_ms']>1000):raise ValueError('Stale gap requires a fresh query')
-        data=engine_telemetry(packet,self.data_key,self.reply['schema'])
-        if data['session']!=self.session or data['packet_sequence']<=self.last_packet or data['proposal_sequence']<self.last_snapshot or data['sent_esp_us']<self.last_sent_esp:raise ValueError('Old session, duplicate, clock reversal or out-of-order observation')
+        if self.reply['schema']==5:
+            if self.pending is not None:raise ValueError('Capability exchange pending')
+            return self._receive_pair(packet,now_ms)
+        data=_engine_base(packet,self.data_key,self.reply['schema'])
         immutable=(packet[20:22],data['flags']&~DISPLAY_FRESH,packet[32:92],packet[100:108],packet[112:len(packet)-32])
+        return self._complete(data,immutable,now_ms)
+    def _retire(self,sequence):
+        # This is NOT last_packet. Retiring a partial can never make an ACK.
+        self.retired_through=max(self.retired_through,sequence)
+        for seq in list(self.partials):
+            if seq<=self.retired_through:del self.partials[seq]
+    def _expire_pairs(self,now_ms):
+        if self.last_part_ms is not None and now_ms<self.last_part_ms:
+            self.assembly_clock_fault=True
+            if self.partials:self._retire(max(self.partials))
+        expired=[seq for seq,slot in self.partials.items() if now_ms-slot['started_ms']>self.assembly_lifetime_ms]
+        for seq in sorted(expired):self._retire(seq);self.expired_pairs+=1
+    def _receive_pair(self,packet,now_ms):
+        self._expire_pairs(now_ms)
+        if self.assembly_clock_fault:raise ValueError('Receiver clock reversed; fresh query required')
+        if len(packet)>=6 and packet[5]==9:
+            kind='base';size=250
+        elif len(packet)>=6 and packet[5]==11:
+            kind='flex';size=232
+        else:raise ValueError('Expected schema5 engine or flex datagram')
+        check(packet,9 if kind=='base' else 11,size)
+        if not hmac.compare_digest(packet[-32:],hmac.digest(self.data_key,packet[:-32],'sha256')):raise ValueError('Fragment authentication failed')
+        session,seq=struct.unpack_from('<IQ',packet,8)
+        if session!=self.session or not seq or seq<=max(self.last_packet,self.retired_through):raise ValueError('Retired, duplicate or wrong-session pair')
+        self.last_part_ms=now_ms
+        existing=self.partials.get(seq)
+        if existing is not None and existing[kind] is not None:
+            if existing[kind][0]!=packet:self.conflicting_pairs+=1;self._retire(seq);raise ValueError('Conflicting authenticated fragment')
+            return None
+        try:data=_engine_base(packet,self.data_key,5) if kind=='base' else engine_flex_fragment(packet,self.data_key)
+        except (ValueError,TypeError):self._retire(seq);raise
+        if seq not in self.partials:
+            if len(self.partials)>=self.maximum_pending_pairs:
+                oldest=min(self.partials);self.evicted_pairs+=1
+                if seq<oldest:self._retire(seq);raise ValueError('Older pair exceeds pending capacity')
+                self._retire(oldest)
+            self.partials[seq]=dict(started_ms=now_ms,base=None,flex=None)
+        slot=self.partials[seq]
+        slot[kind]=(packet,data)
+        if slot['base'] is None or slot['flex'] is None:return None
+        base,observation=slot['base'];extension,part=slot['flex']
+        try:
+            if not hmac.compare_digest(base[218:],part['base_mac']):raise ValueError('Flex fragment binds a different base')
+            f=part['flex_fuel']
+            if observation['source_code']==1 and f['source_code']>1:raise ValueError('Target control cannot claim synthetic flex')
+            if f['configuration_match'] and (not observation['tune_revision'] or f['configuration_revision']!=observation['tune_revision']):raise ValueError('Flex producer revision does not match control')
+            a=f['sample_age_ms'];raw=part['raw_age_ms'];control=observation['control_age_ms']
+            if f['value_qualified'] and raw is not None and control is not None and (raw<control or abs(raw-control-a)>1.002):raise ValueError('Inconsistent original flex/control ages')
+            observation['flex_fuel']=f;observation['flex_sample_age_ms']=raw;observation['flex_stale_limit_us']=part['stale_limit_us'];observation['flex_age_floor_ms']=None
+            # A conservative floor covers a first pair too. F32 rounding at
+            # control cannot make the sum understate original raw sample age.
+            if raw is not None and a is not None and a>=0:
+                observation['flex_age_floor_ms']=math.ceil(a+max(.001,abs(a)*2**-23)+(control or 0))
+            observation['complete_observation']=True;observation['datagrams_per_observation']=2
+            immutable=(base[20:22],observation['flags']&~DISPLAY_FRESH,base[32:92],base[100:108],base[112:218],part['immutable'])
+            completed=self._complete(observation,immutable,now_ms)
+        except (ValueError,TypeError):self._retire(seq);raise
+        self._retire(seq);return completed
+    def _complete(self,data,immutable,now_ms):
+        if data['session']!=self.session or data['packet_sequence']<=self.last_packet or data['proposal_sequence']<self.last_snapshot or data['sent_esp_us']<self.last_sent_esp:raise ValueError('Old session, duplicate, clock reversal or out-of-order observation')
         if data['proposal_sequence']==self.last_snapshot and immutable!=self.immutable:raise ValueError('Repeated snapshot payload changed')
+        history=self.history
+        if history is not None and data['schema_version']==history['data']['schema_version']:
+            if data['proposal_sequence']<history['data']['proposal_sequence']:raise ValueError('Old proposal across clock query')
+            if data['proposal_sequence']==history['data']['proposal_sequence'] and immutable!=history['immutable']:raise ValueError('Repeated payload changed across query')
         local_elapsed=now_ms-self.reply['query_sent_ms'];sender_elapsed=(data['sent_esp_us']-self.reply['sent_esp_us'])/1000
         uncertainty=2+math.ceil(local_elapsed*.02)
         if sender_elapsed<0 or sender_elapsed>local_elapsed+uncertainty:raise ValueError('Sender clock outside negotiated interval')
         transit=max(0,local_elapsed-sender_elapsed)+uncertainty
         data['transport_age_bound_ms']=math.ceil(transit)
-        repeated=self.latest is not None and data['proposal_sequence']==self.last_snapshot
-        for key,current in [('sample_age_ms',data['sample_age_ms']),('control_age_ms',data['control_age_ms']),('worker_age_ms',data['worker_observation']['age_ms'])]:
+        repeated=history is not None and data['schema_version']==history['data']['schema_version'] and data['proposal_sequence']==history['data']['proposal_sequence']
+        durations=[('sample_age_ms',data['sample_age_ms']),('control_age_ms',data['control_age_ms']),('worker_age_ms',data['worker_observation']['age_ms'])]
+        if data['schema_version']==5:
+            raw=data['flex_sample_age_ms'];floor=data['flex_age_floor_ms']
+            durations.append(('flex_sample_age_ms',None if raw is None else max(raw,floor or 0)))
+        for key,current in durations:
             # The2% clock assumption also applies to ages accumulated BEFORE
             # the query. A slow source clock must not understate that history.
             bounded=None if current is None else (current*100+97)//98+math.ceil(transit)
             if repeated:
-                previous=self.latest.get('bounded_'+key)
+                previous=history['data'].get('bounded_'+key)
                 # A repeated unknown age cannot become fresh by transport alone.
-                bounded=None if bounded is None or previous is None else max(bounded,previous+now_ms-self.received_ms)
+                bounded=None if bounded is None or previous is None else max(bounded,previous+now_ms-history['received_ms'])
             data['bounded_'+key]=bounded
         data['worker_observation']['bounded_age_ms']=data['bounded_worker_age_ms']
         self.latest=data;self.received_ms=now_ms;self.last_packet=data['packet_sequence'];self.last_snapshot=data['proposal_sequence'];self.last_sent_esp=data['sent_esp_us'];self.immutable=immutable
+        self.history=dict(data=copy.deepcopy(data),received_ms=now_ms,immutable=immutable)
         return data
     def status(self,now_ms):
-        now_ms=self._time(now_ms);elapsed=now_ms-self.received_ms if self.received_ms is not None and now_ms>=self.received_ms else None
+        now_ms=self._time(now_ms);self._expire_pairs(now_ms);elapsed=now_ms-self.received_ms if self.received_ms is not None and now_ms>=self.received_ms else None
         clock_valid=self.data_key is not None and self.reply is not None and self.reply['received_ms']<=now_ms<=self.reply['received_ms']+self.clock_lifetime_ms
         gap_valid=(elapsed is not None and elapsed<=1000) if self.received_ms is not None else bool(self.reply is not None and self.reply['received_ms']<=now_ms<=self.reply['received_ms']+1000)
-        active=self.latest is not None and clock_valid and gap_valid
+        active=self.latest is not None and clock_valid and gap_valid and not self.assembly_clock_fault
         ages={key:None if not active or self.latest.get('bounded_'+key) is None else self.latest['bounded_'+key]+elapsed for key in ('sample_age_ms','control_age_ms','worker_age_ms')}
-        return dict(negotiated=self.data_key is not None,engine_enabled=bool(self.features&1),fresh=active and all(ages[k] is not None and ages[k]<=1000 for k in ('sample_age_ms','control_age_ms')),query_required=not(clock_valid and gap_valid),rejected=self.rejected,source=self.latest['source'] if self.latest else 'no_observation',**ages)
+        fresh=active and all(ages[k] is not None and ages[k]<=1000 for k in ('sample_age_ms','control_age_ms'))
+        result=dict(negotiated=self.data_key is not None,engine_enabled=bool(self.features&1),fresh=fresh,query_required=not(clock_valid and gap_valid) or self.assembly_clock_fault,rejected=self.rejected,source=self.latest['source'] if self.latest else 'no_observation',pending_pairs=len(self.partials),retired_sequence_floor=self.retired_through,expired_pairs=self.expired_pairs,evicted_pairs=self.evicted_pairs,conflicting_pairs=self.conflicting_pairs,**ages)
+        if self.latest is not None and self.latest['schema_version']==5:
+            f=self.latest['flex_fuel'];bound=self.latest['bounded_flex_sample_age_ms'];age=None if not active or bound is None else bound+elapsed
+            sample_fresh=fresh and age is not None and age*1000<=self.latest['flex_stale_limit_us']
+            result.update(flex_sample_age_ms=age,flex_sample_fresh=sample_fresh,flex_value_qualified=sample_fresh and f['value_qualified'],flex_raw_capture_qualified=sample_fresh and f['raw_capture_qualified'],flex_control_ok_at_source=f['control_ok'],flex_control_allowed=None if not f['available'] else fresh and (not f['required'] or sample_fresh and f['control_ok']),flex_current_reason='source_unqualified' if not f['value_qualified'] else 'unknown_sample_age' if age is None else 'current' if sample_fresh else 'receiver_sample_stale')
+        return result
     def acknowledgement(self):
         if self.latest is None or self.data_key is None:raise ValueError('No authenticated engine frame')
         return engine_acknowledgement(self.session,self.last_packet,self.data_key)

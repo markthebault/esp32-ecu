@@ -5,8 +5,8 @@
 
 namespace ecu::radio::wire {
 constexpr unsigned capability_size=76,capability_reply_size=108,engine_size=250,engine_body_size=218,engine_ack_size=56;
-constexpr std::uint32_t engine_feature=1,engine_schema=4;
-inline bool engine_schema_valid(std::uint32_t schema){return schema>=1&&schema<=4;}
+constexpr std::uint32_t engine_feature=1,engine_schema=5;
+inline bool engine_schema_valid(std::uint32_t schema){return schema>=1&&schema<=5;}
 inline unsigned engine_frame_size(std::uint32_t schema){return engine_schema_valid(schema)?(schema<3?232:250):0;}
 inline unsigned engine_frame_body_size(std::uint32_t schema){return engine_schema_valid(schema)?engine_frame_size(schema)-32:0;}
 inline bool legacy_load_model(const engine::RuntimeSample&r){
@@ -16,7 +16,10 @@ inline bool legacy_load_model(const engine::RuntimeSample&r){
 inline bool engine_schema_supports(std::uint32_t schema,const engine::RuntimeSample&r){
  // Schemas1..4 have no flex quality/factor block. Suppress engine telemetry
  // when it affects control rather than publish an incomplete legacy frame.
- if(r.flex_fuel.has(flex::Required)||r.flex_fuel.has(flex::CorrectionsEnabled))return false;
+ if(schema<5&&(r.flex_fuel.has(flex::Required)||r.flex_fuel.has(flex::CorrectionsEnabled)))return false;
+ if(schema>=5&&(!flex::valid_record(r.flex_fuel,r.has(engine::Present))||
+    (r.source==engine::DataSource::Target&&r.flex_fuel.source>1)||
+    (r.flex_fuel.has(flex::ConfigurationMatch)&&r.flex_fuel.revision!=r.tune_revision)))return false;
  const bool secondary_legacy=r.secondary_fuel.mode==secondary::Mode::Off&&r.secondary_spark.mode==secondary::Mode::Off;
  if(schema>=4)for(const secondary::Observation*o:{&r.secondary_fuel,&r.secondary_spark})if(o->available&&(static_cast<unsigned>(o->mode)>4||static_cast<unsigned>(o->source)>2||(o->evaluated&&!o->available)||(o->active&&o->mode==secondary::Mode::Off)))return false;
  return engine_schema_valid(schema)&&(schema>=4||secondary_legacy)&&r.strategy<=(schema==1?1:2)&&r.timing_fault<=(schema==1?16:17)&&r.last_timing_fault<=(schema==1?16:17)&&(schema>=3||legacy_load_model(r));
@@ -77,10 +80,13 @@ public:
 };
 // Different clocks are bridged by durations. Read ESP time BEFORE GP time at
 // publication, then add only subsequent ESP elapsed time at transmission.
+inline std::uint64_t transmitted_age_us(std::uint64_t gp_age_us,std::uint64_t published_esp_us,std::uint64_t now_esp_us){
+ if(gp_age_us==UINT64_MAX||now_esp_us<published_esp_us)return UINT64_MAX;
+ const auto elapsed=now_esp_us-published_esp_us;if(gp_age_us>UINT64_MAX-elapsed)return UINT64_MAX;
+ return gp_age_us+elapsed;
+}
 inline std::uint32_t transmitted_age(std::uint64_t gp_age_us,std::uint64_t published_esp_us,std::uint64_t now_esp_us){
- if(gp_age_us==UINT64_MAX||now_esp_us<published_esp_us)return UINT32_MAX;
- const auto elapsed=now_esp_us-published_esp_us;if(gp_age_us>UINT64_MAX-elapsed)return UINT32_MAX;
- return engine::data_age_ms(gp_age_us+elapsed);
+ return engine::data_age_ms(transmitted_age_us(gp_age_us,published_esp_us,now_esp_us));
 }
 inline bool engine_body(std::uint8_t*p,const engine::RuntimeSample&r,std::uint32_t session,std::uint64_t packet_sequence,std::uint32_t sample_age_ms,std::uint32_t control_age_ms,std::uint32_t worker_age_ms,std::uint64_t sent_esp_us,std::uint32_t schema=engine_schema){
  if(!session||!r.has(engine::Present)||!r.sequence||(r.source!=engine::DataSource::Target&&r.source!=engine::DataSource::Synthetic)||!packet_sequence||r.state>5||!engine_schema_supports(schema,r)||r.phase_reason>9||(r.board_flags&~15))return false;

@@ -1,0 +1,26 @@
+test_complete_source_faults_are_acknowledgeable_not_control_permission (__main__.Age.test_complete_source_faults_are_acknowledgeable_not_control_permission) ... ok
+test_delay_and_drift_floor_include_first_pair_and_wait (__main__.Age.test_delay_and_drift_floor_include_first_pair_and_wait) ... ok
+test_query_preserves_repeated_immutable_and_non_refreshing_age (__main__.Age.test_query_preserves_repeated_immutable_and_non_refreshing_age) ... ok
+test_repeated_payload_ages_cannot_decrease_or_change (__main__.Age.test_repeated_payload_ages_cannot_decrease_or_change) ... ok
+test_unknown_is_never_refreshed_by_transport_or_query (__main__.Age.test_unknown_is_never_refreshed_by_transport_or_query) ... ok
+test_unknown_timestamp_finite_age_cannot_be_fabricated (__main__.Age.test_unknown_timestamp_finite_age_cannot_be_fabricated) ... ok
+test_authenticated_conflicts_including_invalid_semantic_duplicates_quarantine (__main__.Assembly.test_authenticated_conflicts_including_invalid_semantic_duplicates_quarantine) ... ok
+test_capacity_eviction_retires_without_resetting_old_deadline (__main__.Assembly.test_capacity_eviction_retires_without_resetting_old_deadline) ... ok
+test_clock_reversal_after_fragment_and_after_status_requires_query (__main__.Assembly.test_clock_reversal_after_fragment_and_after_status_requires_query) ... ok
+test_exact_first_fragment_deadline_and_duplicate_never_extends_it (__main__.Assembly.test_exact_first_fragment_deadline_and_duplicate_never_extends_it) ... ok
+test_new_older_pair_at_capacity_cannot_evict_newer_slots (__main__.Assembly.test_new_older_pair_at_capacity_cannot_evict_newer_slots) ... ok
+test_partial_expiry_and_conflict_cannot_refresh_completed_ack (__main__.Assembly.test_partial_expiry_and_conflict_cannot_refresh_completed_ack) ... ok
+test_query_update_and_new_boot_drop_all_partials (__main__.Assembly.test_query_update_and_new_boot_drop_all_partials) ... ok
+test_reorder_duplicate_no_partial_display_ack_or_liveness (__main__.Assembly.test_reorder_duplicate_no_partial_display_ack_or_liveness) ... ok
+test_each_byte_tamper_and_every_wrong_peer_rejected_before_liveness (__main__.Codec.test_each_byte_tamper_and_every_wrong_peer_rejected_before_liveness) ... ok
+test_full_base_mac_and_cross_source_revision_reject (__main__.Codec.test_full_base_mac_and_cross_source_revision_reject) ... ok
+test_native_extensions_match_independent_explicit_record_encoding (__main__.Codec.test_native_extensions_match_independent_explicit_record_encoding) ... ok
+test_original_u64_fields_stay_lossless_and_sources_are_explicit (__main__.Codec.test_original_u64_fields_stay_lossless_and_sources_are_explicit) ... ok
+test_reserved_enums_calibration_and_nan_mutations_reject_authenticated (__main__.Codec.test_reserved_enums_calibration_and_nan_mutations_reject_authenticated) ... ok
+test_new_boot_key_rejects_old_pair_even_when_session_collides (__main__.Epoch.test_new_boot_key_rejects_old_pair_even_when_session_collides) ... ok
+test_u64_sequence_exhaustion_preserves_exact_ack_without_wrap (__main__.Epoch.test_u64_sequence_exhaustion_preserves_exact_ack_without_wrap) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.014s
+
+OK
