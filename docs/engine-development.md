@@ -86,6 +86,8 @@ Independent reviews found and drove fixes for synchronization/bench arming, whol
 
 Before engine actuation, required work includes physical target timer/ISR measurements under Wi-Fi/ESP-NOW/flash load, HIL fault/restart validation, calibrated plant and remaining feature comparisons, crank/cam/ADC HIL, electrically measured dummy loads, driver energy/thermal tests, module/carrier fit and physical power/wiring/EMI/surge/environment testing. CAD, SIL and compilation do not qualify a car, printed fit or enclosure splash resistance.
 
+The [conditional supply/acquisition checkpoint](engine-supply-disturbance.md) adds26 authored circuit scenarios at two numerical grids, actual sensor binding/capture/controller replay, independent raw-to-log audit and exact native replay review. It exposes reference/current-budget assumptions while retaining numeric rail cuts. Its ideal point conversion, authored impedances and fixture RPM/synchronization do not establish physical ADC, target, scheduler or engine behavior.
+
 The [semi-sequential increment](engine-semi-sequential.md) introduced the schema5/own006 strategy and negotiated engine-radio schema2. Earlier identities/evidence described here remain historical records; byte offsets, CAS, bounded logging and selected physical-output inhibition are retained.
 
 The earlier [transient fueling development](engine-transient-enrichment.md) uses schema6/own007, one5120-byte tune page and a320-byte runtime block, with105-field engine MSL004 and62-field direct SIL MSL004. Earlier layout/evidence descriptions in this document are historical. Selected physical-output policy and online vendor limits remain unchanged.
