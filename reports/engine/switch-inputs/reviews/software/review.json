@@ -1,0 +1,93 @@
+{
+  "reviewer": "/root/switch_input_implementation_review",
+  "date": "2026-11-04T12:17:28.505680+00:00",
+  "baseline": "b0c39a9daf3334f9ddec0e181ade62aecb10e2f9",
+  "scope": "Protected switch acquisition software and actual production engine/switch service integration; no accessory circuit/CAD/HIL or external-plant acceptance",
+  "decision": "Software implementation accepted within reviewed scope, subject to parent broader regression/publication checks and explicitly open physical gates",
+  "open_medium_high_software_findings": 0,
+  "root_project_files_edited": false,
+  "subagents_spawned": false,
+  "source_bindings": "source-bindings.json",
+  "source_bindings_sha256": "cda8a1713ae517e67c6a6614aae1bff33c0b8f18d0444ddc8a2699fba03ae8af",
+  "source_count": 69,
+  "external_sdk_source_count": 4,
+  "critical_source_sha256": {
+    "firmware/include/ecu/switch_acquisition.hpp": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb",
+    "firmware/include/ecu/switch_transport.hpp": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932",
+    "firmware/main/switch_service.cpp": "813f488d127fb25dd3c2287b7bc53968dc9c5e821050159fbe2978e590aed25a",
+    "firmware/main/engine_service.cpp": "dfc0dce8066385f66da66224c194e2446d121c1f90ea9d83117c6547330083b4",
+    "firmware/main/app.cpp": "487d5e03a964f686939dcb46a148a91c02e516678cfd6c7d342ec0ba269ce9e6",
+    "firmware/include/ecu/engine_binding.hpp": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9",
+    "web/secondary_tables_logic.js": "5f56325d280acb348ef530d48b737bad5518a067573e35c8c48af70cab8bb641"
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "priority": "medium",
+      "topic": "Fatal state erased by Off",
+      "status": "resolved in frozen software",
+      "finding": "Initial Off cleared fatal clock/internal state without MCU boot; parent now preserves fatal phase/fault while dropping availability and releasing ownership",
+      "verification": "Independent actual-service fatal/Off/Input scenario and immutable-copy replay"
+    },
+    {
+      "id": "F2",
+      "priority": "low",
+      "topic": "UI provenance for unsupported acquisition diagnostics",
+      "status": "resolved in frozen software",
+      "finding": "Initial non-target branch labelled all missing/unrecognized responses host synthetic; final UI requires explicit host source+simulator true, explicit target source+simulator false, otherwise unknown",
+      "verification": "Frozen source inspection and21 Node VM/assignment-fixture assertions"
+    },
+    {
+      "id": "F3",
+      "priority": "low publication note",
+      "topic": "Secondary feature guide update",
+      "status": "parent action before publication; contextual old guide is not accepted as new release documentation",
+      "finding": "Contextual docs/engine-secondary-tables.md still says target switch acquisition is unimplemented and no accessory PCB/BOM exists; update for implemented software versus prototype and physical gates"
+    }
+  ],
+  "probes": [
+    {
+      "file": "adversarial_probe.cpp",
+      "result": "passed ASan/UBSan",
+      "assertions": 11890,
+      "reset_cases": 26,
+      "owned_register_mutations": 144,
+      "timing_combinations": 720
+    },
+    {
+      "file": "service_probe.cpp",
+      "result": "passed ASan/UBSan",
+      "assertions": 225,
+      "fresh_process_scenarios": 15,
+      "actual_switch_service": true
+    },
+    {
+      "file": "engine_integration_probe.cpp",
+      "result": "passed ASan/UBSan",
+      "assertions": 142,
+      "actual_engine_service": true,
+      "actual_switch_service": true
+    },
+    {
+      "file": "ui_probe.cjs",
+      "result": "passed Node VM/minimal DOM assignment fixture",
+      "assertions": 21,
+      "browser_acceptance": false
+    }
+  ],
+  "native_assertions": 12257,
+  "total_assertions": 12278,
+  "replay": "python3 run_review.py",
+  "commands": "commands.json",
+  "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+  "open_gates": [
+    "Parent full firmware/target-policy/browser regressions and publication documentation update",
+    "Exact accessory circuit/parts/protection and reset/poweroff/backfeed acceptance",
+    "Native CAD/BOM/parity/ERC/DRC and harness/case physical fit",
+    "Actual scheduler/IRQ/I2C peripheral timing/loading and fault HIL",
+    "Supply current/thermal and dry-contact characterization",
+    "Physical engine/vehicle/EMI/surge/ingress qualification; not claimed",
+    "Secondary-enabled independently coupled external-plant versus production Speeduino comparison; separate pending feature gate"
+  ],
+  "physical_qualification": false
+}

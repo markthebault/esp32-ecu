@@ -1,0 +1,167 @@
+{
+  "guide_version": "1.11",
+  "sources_append": [
+    {
+      "title": "Vishay 6N137 optical input/detector data",
+      "url": "https://www.vishay.com/docs/84732/6n137_vo2601_vo2611.pdf"
+    },
+    {
+      "title": "TI UCC27524 gate-driver data and layout guidance",
+      "url": "https://www.ti.com/lit/ds/symlink/ucc27524.pdf"
+    },
+    {
+      "title": "Microchip MCP100 supply supervisor",
+      "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/11187f.pdf"
+    },
+    {
+      "title": "Microchip MCP23008 expander, low-voltage table and register behavior",
+      "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/MCP23008-and-MCP23008-Data-Sheet-DS20001919.pdf"
+    },
+    {
+      "title": "Microchip MCP121 reset supervisor, threshold and hysteresis conditions",
+      "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/MCP102-Data-Sheet-DS20001906.pdf"
+    },
+    {
+      "title": "Kingbright named common-anode RGB LED",
+      "url": "https://www.kingbrightusa.com/images/catalog/SPEC/WP154A4SEJ3VBDZGW-CA.pdf"
+    },
+    {
+      "title": "Vishay MRS16/MRS25 candidate dimensions and conditional ratings",
+      "url": "https://www.vishay.com/docs/28724/mrs16m25.pdf"
+    },
+    {
+      "title": "AEM flex sensor manual, pinout contradiction remains unresolved",
+      "url": "https://documents.aemelectronics.com/4d1c5cae401b6fdb894a16fe7fc697444fb51f37.pdf"
+    },
+    {
+      "title": "Microchip TN0702 low-threshold MOSFET data",
+      "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/TN0702-N-Channel-Enhancement-Mode-Vertical-DMOS-FET-Data-Sheet-20005941A.pdf"
+    },
+    {
+      "title": "JST ZH keyed low-power connector dimensions and contacts",
+      "url": "https://www.jst-mfg.com/product/pdf/eng/eZH.pdf"
+    }
+  ],
+  "services_append": [
+    {
+      "connector": "A5/A6 J21 PH4 or A7 J21 ZH5 / IAC-DRAFT2",
+      "title": "Isolated idle PWM",
+      "checks": [
+        "Engine development contains idle modes, gains, coolant curves and source/age diagnostics. All shipped builds keep physical idle GPIO writes disabled. A3/A4 and the old manual/ZIP do not contain this new carrier connector.",
+        "A5/A6 J21 PH4 maps pin 1 GPIO3/IDLE_CMD, pin 2 RUN_5V, pin 3 carrier 5V, pin 4 carrier GND to IAC-DRAFT2 J1 XH4 pins1 through 4. R154 is the permanent 2.2 kohm carrier bias and stays present with the harness unplugged. Verify the keyed mating view and continuity with power removed.",
+        "A7 replaces J21 with ZH5 at the old position:1 IDLE_CMD/GPIO3,2 RUN_5V,3 carrier5V,4 GND,5 BOOST_CMD/GPIO45. Its dedicated split harness maps1..4 to IAC-DRAFT2 J1 XH4. It maps5 to BOOST-DRAFT1 J1 ZH4 pin1 and2..4 to boost pins2..4. The original PH4 harness does not mate. R154 remains the idle bias; R180 adds a separate GPIO45 bias. Physical writes stay disabled.",
+        "Use one wire per crimp: one ZHR-5 carrier housing, one ZHR-4 boost housing, one XHP-4 idle housing,9 SZH-002T-P0.5 contacts and4 wire-compatible ordinary XH contacts. Stranded AWG26 with insulation OD0.9..1.1mm fits the stated ZH/XH candidate ranges. RUN,5V and carrier GND each need a defined insulated, strain-relieved fanout joint. Do not stuff two wires into one contact or join actuator returns. Actual crimps, wire length, routing, retention and fit remain unqualified.",
+        "Two input-side transistor buffers and 6N137 optocouplers separate carrier power/return from actuator logic. Do not bridge these domains with wires, case foil, heatsinks or scope ground clips. This is low-voltage return separation, not certified isolation.",
+        "Accessory J2 fixed screw terminal: pin 1 separate externally protected, fused, relay-switched 9-16 V; pin 2 dedicated return. J3 VH2: pin 1 valve positive, pin 2 IAC_LS. Use an actual <=2 A normally closed two-wire continuous-PWM valve; carrier J1 and sensor rails cannot supply it.",
+        "IRLZ44NPBF has no current/thermal shutdown or valve feedback. A drain-source short can energize a normal-current coil without clearing a fuse. Provide an independently operable actuator-branch disconnect. Q1 drain tab and U6 regulator-output tab are live at different voltages.",
+        "C1-C5, C10, R13 and R14 mount on the back. C4/C10 bypass the driver locally; LOGIC_GND joins ACT_GND only at NT1/Q1 source. Do not add a second return strap. Actual passive parts, trimmed leads, finished TO220 holes, underside height and case clearance require assembly acceptance.",
+        "Keep this draft unpowered pending release of the protected branch, exact PDIP driver guarantee, loaded GPIO/RUN/opto timing, minimum 1 us pulse, supervisor brownout, temperature and mounting checks. MCP100 assertion 10 us is typical with no specified maximum. Read actual GPIO3/JTAG eFuses without burns; N16R8 socket/antenna fit remains provisional. The RUN source also feeds carrier R47/R50/R53, Q7 and HCT inputs; measure loaded RUN and MAIN_IN with both boards attached. The Q7 500 uA figure at 10 V/25 C is not a 5 V/full-temperature/fault bound.",
+        "Use a current-limited resistor fixture first with proper isolated/differential probes and an independent cutoff. Observe local rail, supervisor, ENA, gate/source, drain and both return currents during startup, reset, RUN/command loss, disconnected inputs and opened returns. Preserve scope protective earth.",
+        "Compare proposed duty with separate cycle-latched PWM high time and fault. Synthetic current/opening are model estimates; no physical valve feedback exists. Command0% does not prove valve closure."
+      ]
+    },
+    {
+      "connector": "J9 / J10 semi-sequential",
+      "title": "Semi-sequential fuel and wasted COP",
+      "checks": [
+        "This is a software development strategy. Selected web builds keep physical engine outputs OFF. The separate dummy-load bench build has no web service and is not installed here. Keep J3 open and real injector/ignition harnesses disconnected. The unchanged carrier needs four independent injector drivers and four smart-coil logic channels; no extra pair wiring is required.",
+        "J9 pins1-4 remain physical injector cylinders1-4; pins5-8 are return. J19 is the dedicated power return. J10 pins1-4 remain physical smart-coil commands1-4, pin5 ground. Check each harness by continuity with both ends unplugged. Never bridge low-side outputs or move two injectors onto one driver.",
+        "For firing order1-3-4-2 the scheduled fuel pairs are cylinders1+4 and3+2. Other valid four-cylinder orders derive pairs from order slots1+3 and2+4. Each injector opens once per crank revolution, giving two half-effective-fuel openings per720 degrees. Dead time is added to each opening.",
+        "Semi-sequential needs crank synchronization from J17, without compression phase from J18. Its closing reference repeats modulo360 degrees:540 means180 each revolution. The two groups are180 degrees apart. Full sequential alone uses the720-degree cam reference and individual trims; enabled trims must be disabled explicitly before saving a paired mode. Stored trim maps are retained.",
+        "After saving, check active strategy separately from unsaved editor settings. Compare executed rising/falling timestamps for both members of each pair, full electrical width, duty, fault cause, revision and source age. Injector low deadlines stay fixed after opening, so changing RPM can move the actual closing angle. A missing cam is expected in this mode; a missing crank must cut. Old latched faults still require stopped/quiet recovery.",
+        "Pairs can overlap above50 percent duty. Do not assume lower peak supply/return current. Existing1.2A injector and4mA smart-coil targets remain unqualified; saturated high-impedance PFI only. Actual flow/deadtime, current/flyback, loaded supply/gates, timing/jitter, temperature and engine phase need physical dummy-load/HIL acceptance.",
+        "The host reduced and research plants have fixed physical1-3-4-2 geometry. Changing the tune order does not change that engine. Coupled comparison uses a neutral test tune, not a vehicle calibration. Screen engine schema2 is required for this mode; schema1 peers fall back to sensors and show upgrade needed."
+      ]
+    },
+    {
+      "connector": "J11 / J12 transient fueling",
+      "title": "MAP/TPS transient acquisition and dose",
+      "checks": [
+        "Use Engine development > Transient fueling. Older tunes retain Legacy TPS decay; Off, TPS rate table and MAP rate table are explicit choices. Selected web images inhibit physical outputs. No new connector or PCB route is required.",
+        "J11 is protected MAP and J12 is protected TPS. Reference each signal to its connector pin1 ground and verify the actual sensor supply, mating pinout and calibrated kPa or percent. Do not infer wiring from the sensor body color.",
+        "New modes use nominal5ms fast calibrated acquisitions and the scan-start timestamp, independently of display smoothing. Compare raw voltage, calibrated values, window length, source rate, threshold/minimum-change gates and phase/reason. Bad wiring and noise can trigger enrichment.",
+        "Extra curve values are percentages. Multiply scales effective current fuel. Add reference fuel uses per-cylinder720-degree mass at100kPa,25C,100%VE and lambda1, independent of current MAP/VE/warmup. Trims scale the complete dose; opening count and deadtime follow.",
+        "Deceleration is fuel remaining:100% neutral,0% stops new injector starts after scheduler acceptance while spark continues unless another cut applies. Existing active closing edges finish normally. Dose/pulse/duty limits still inhibit the whole command.",
+        "First observation and recovery after stop/crank/fault/DFCO clear history. Rate-valid differs from observation available. Check source age: hold remaining is measured at the observation time. Completed host runs are synthetic and retained logs are historical.",
+        "Use engine MSL004 or JSON for detailed transient rates, phase and dose. Fixed ESP-NOW schema2 retains the existing effective accel ratio only. No physical measurement or vehicle base tune is implied."
+      ]
+    },
+    {
+      "connector": "A6 / J22 VH3 candidate, unreleased",
+      "title": "Flex capture development and diagnostics",
+      "checks": [
+        "A3/A4/A5 designs have no released protected flex connection. A6 circuit and layout drafts are under review. Do not connect a sensor directly to GPIO38. J22 candidate pins are1 ground,2 FLEX_12V,3 FLEX_RAW; FLEX_12V is not an18V regulator and the external AEM sensor plug mapping is unresolved.",
+        "Only compact_n16r8_flex_dev assigns GPIO38 to both-edge MCPWM capture. It requires the new0x21 MCP23008 RGB architecture. Historical/default builds retain GPIO38 WS2812 wiring and have no target flex producer. BOOT/PAIR stays on GPIO0; RESET and the sealed buttons remain required.",
+        "Engine development has capture calibration, correction curves and an input confirmation. Confirmation records an assertion, not physical qualification. Corrections or an ethanol secondary-table condition require fresh genuine target capture. Missing, unconfirmed, stale or faulty data inhibits fuel and spark proposals; physical engine outputs remain OFF.",
+        "Inspect the flex capture panel and its counters: requested versus actual producer calibration/revision, context, arm boundary, original sample expiry, ingress queue, fault generations, discarded edges and rejected publications. The host simulator explicitly has no target capture. Its synthetic waveforms cannot qualify the target input.",
+        "Fault notifications clear only after the serialized controller consumes the matching invalid sample. A busy controller or a diagnostic read cannot clear them. Ingress suppression masks only channel2 and waits for completed-control ACK plus50ms before reacquisition of a complete new window. Quiet during masking does not prove the electrical input is quiet.",
+        "One hardware latch per channel has no FIFO. Native tests and compiled ISR placement do not measure target loss, latency, queue pressure, noise or interaction with Wi-Fi, I2C and USB. Record those HIL checks before any hardware qualification.",
+        "The classic comparator circuit has conditional model/capture checks, with assumed sensor/cable/PCB loads and delay. These do not establish physical timing, noise, protection, temperature or target capture integrity. Use the matching circuit and native draft, not old carrier assembly coordinates.",
+        "The compact A6 candidate uses smaller leaded passives and adds local supply bypassing. Use its matching BOM and assembly coordinates; earlier A6 trial placements also differ. Nominal circuit simulations do not qualify the real capacitors, supply transients or assembled board."
+      ]
+    },
+    {
+      "connector": "A6 / J23 PH5 candidate, unreleased",
+      "title": "RGB status circuit draft",
+      "checks": [
+        "Only the GPIO38 flex development profile uses the shared-bus MCP23008 at0x21. GP0/1/2 select red/green/blue through three NPN sinks. The previous GPIO38 WS2812 wiring is incompatible with this profile.",
+        "Candidate J23 pins:1 common-anode supply through R179330R,2 red cathode,3 green cathode,4 blue cathode,5 NC with no contact or wire. For the named Kingbright common-anode LED, these four populated positions map to LED pins2,1,4,3. The three cathode resistors remain required.",
+        "R179 uses the named330R1%0.4W MRS16 candidate upright on its DIN0204 footprint. Match the3.6mm by1.6mm maximum body, lead forming and actual ratings. Solder access, assembled temperature and enclosure fit remain unqualified.",
+        "Normal requests steady green; pairing requests blue blink; a detected problem takes priority and requests red blink. Use the pairing button or Paired screens UI. Requested color and verified expander latch are separate diagnostics. Retained green after CPU/bus failure and an open LED path can still have a valid latch; readback does not prove visible light or a live CPU.",
+        "The reset-supervisor candidate is MCP121-270E/TO. Loaded reset release, loaded GPIO readback, shared-bus timing, partial rails, source/thermal headroom and actual brightness remain unqualified. The lower reset threshold is not a3V brownout monitor. No sensor or powered-harness release is supplied."
+      ]
+    },
+    {
+      "connector": "A6 / J20 PH2 candidate, unreleased",
+      "title": "Compact A6 shield and enclosure bond",
+      "checks": [
+        "The compact A6 draft uses J20 B2B-PH-K-S(LF)(SN), a PHR-2 housing and two SPH-002T-P0.5S contacts selected for the actual wire. Earlier carriers use a different housing. Match the board revision and its BOM before assembling the harness.",
+        "Both J20 pins are CHASSIS. Use this internal connector only for the shield or enclosure lining bond. H5 remains the designated chassis lug; J20 is not a normal sensor or actuator current return.",
+        "With power removed, verify the keyed mating view and continuity to the lining. Keep the bond inside the water seal. Native PCB checks do not establish crimp quality, electrical rating, enclosure fit or splash resistance."
+      ]
+    },
+    {
+      "connector": "A7 J21 ZH5 / BOOST-DRAFT1",
+      "title": "Boost valve connection and diagnostics",
+      "checks": [
+        "A3/A4/A5/A6 have no released boost connection. A7 and BOOST-DRAFT1 are separate development drafts with physical engine outputs inhibited; no configuration enables GPIO45 writes. Old J24 architecture notes are historical proposals.",
+        "A7 J21 ZH5 carries1 idle GPIO3,2 RUN_5V,3 carrier5V,4 carrier GND,5 boost GPIO45. BOOST-DRAFT1 J1 ZH4 pins1..4 receive J21 pins5,2,3,4. Use the A7 split harness described in the idle guide and verify pin numbers/continuity with all power removed. GPIO45 memory-voltage strapping/eFuses/reset must be checked on the actual module without burns.",
+        "Driver J2 fixed screw terminal:1 separate externally fused, switched, reverse/transient-protected9\u201316V,2 actuator return. J3 VH6:1 valve positive,2 BOOST_LS,3..6 no contacts/wires. Use VHR-6N with exactly two wire-compatible VH contacts. Actual valve coil/current/plumbing and the protected branch are not selected or qualified.",
+        "TN0702 gate buffers, local gate filtering and LED-supply slew limiting address declared hotplug sensitivities. Modeled short-pulse loss and changed electrical width remain visible. Requested or cycle-latched digital duty is not a valve-current/position measurement; no physical minimum pulse or transfer function is established.",
+        "Two optical paths separate carrier inputs from local actuator logic. LOGIC_GND joins ACT_GND only at the source star. Keep case metal, heatsinks and scope grounds from bridging domains. Q1 drain and regulator output tabs are live at different potentials. Back-mounted parts and front lead trimming need assembly/insulation clearance checks.",
+        "With an independent actuator disconnect, eventual bench checks start on a current-limited resistor fixture. Observe loaded carrier RUN and MAIN_IN, optical LED currents, local rail/supervisor/ENA, gate relative to source, drain and return currents through startup/reset, command/RUN loss, boost-stub and shared-trunk opens. Preserve scope protective earth. Do not connect an engine for commissioning.",
+        "Exact UCC27524P/P.B electrical guarantees, MCP100 maximum assertion latency, full-temperature input behavior, real supply transients, actual valve/RL/flyback/thermal behavior, GPIO loading, formed leads, crimp/finished-hole fit, enclosure/sealing and RF remain release holds. Conditional native/circuit checks do not establish these properties.",
+        "Keep de-energized valve plumbing on mechanical spring-pressure control and verify increasing energized duty raises boost. Stored current can persist after a low command. A drain-source short may energize a normal-current coil without blowing a fuse; use the independent branch disconnect. No physical valve feedback exists."
+      ]
+    }
+  ],
+  "config_help": [
+    "Voltage mode shows the reconstructed connector voltage; it does not require a sensor transfer curve.",
+    "Linear mode uses two measured input voltages and two physical values. Set the actual units and validate a third reference point. Voltage coordinates are absolute unless ratiometric conversion is explicitly enabled.",
+    "Table mode interpolates between 2-16 ascending voltage/value pairs. Values outside the table range are faults, not extrapolated measurements.",
+    "For a sensor documented as ratiometric to this board's measured SENSOR_5V rail, linear/table mode can normalize its signal to the curve reference supply: conversion voltage = connector voltage x curve reference supply / measured SENSOR_5V. Enter the supply used for the calibration curve, normally5 V. Do not enable this for an independently regulated sensor or controller output. Raw connector voltages and fault limits remain absolute; NTC mode already uses the supply ratio.",
+    "Sensor profile schema2 stores ratiometric and reference_supply_v for every sensor. Schema1 imports explicitly disable this option and use5 V as an inactive reference; loading an old saved profile only normalizes it in RAM until the next successful save. This profile version is separate from engine tune schema9 and own010 MSQ files. Changing conversion basis clears the editor's calibration confirmation; recheck the whole curve.",
+    "Current sensor profiles use bounded blob storage and retain the old saved string separately. Export the current profile before changing firmware: old firmware reads only its older record. Read or commit failures block further device saves until restart/inspection. The firmware never requests an automatic partition erase; available flash space and physical power-loss recovery still need testing.",
+    "Ratiometric normalization does not correct ground offsets, divider mismatch, sample timing, input loading or sensor nonlinearity. The shared5 V fuse, wiring and sensor current budget still apply. Engine rail limits remain4.75..5.25 V and physical outputs remain inhibited. A normalized reading outside these engine limits does not authorize operation.",
+    "NTC beta mode is for CLT/IAT only and requires the physical pull-up. It uses the measured sensor supply and compensates the 55 kohm divider load. A voltage table is preferable when the real curve is available.",
+    "Filtering is for readout smoothing, not a substitute for fixing wiring/noise. Ratiometric samples are normalized before readout filtering; engine calculations and electrical fault checks use instantaneous inputs.",
+    "Saved calibration feeds readouts and shadow engine calculations. Physical engine outputs remain inhibited. DBW, catalyst diagnostics and OEM protocols are not implemented.",
+    "Saving trigger geometry or engine timing fences virtual output plans and requires fresh synchronization. Batch and semi-sequential use crank-only360-degree synchronization; full sequential uses two repeatable cam observations for720-degree phase. Capture age, overflow and stopped/quiet recovery still apply."
+  ],
+  "trigger_expected": [
+    "The decoder uses rising edges. Trigger logging records both polarities on separate diagnostic capture channels. Both Hall paths use two Schmitt inversions, preserving the input polarity.",
+    "Crank sync requires the selected missing-tooth geometry and repeated valid gaps. Batch/wasted and semi-sequential use crank only. Full sequential requires one rising cam pulse per720 degrees and two repeatable observations; phase loss after acquisition cuts and latches until a supervised stop. Confirm mechanical cylinder1 compression reference independently."
+  ],
+  "sensor_append": {
+    "postcat": {
+      "checks": [
+        "Optional engine EMAP or baro role: disconnect the postcat buffer and assign J16 in Engine development. Connect one suitable absolute-pressure sensor: pin 1 ground, pin 2 protected 5 V only if its supply specification permits, pin 3 conditioned 0-5 V output. Do not parallel two signals.",
+        "Calibrate the postcat channel in exact unit kPa using a measured linear or table conversion, then confirm it. EMAP requires20..500 kPa absolute; baro requires50..110 kPa absolute. The about55 kohm input load and shared supply/current budget still apply. A voltage reading with a kPa label is not a pressure calibration."
+      ],
+      "expected": [
+        "The default engine role is postcat_monitor. An explicit EMAP or live baro assignment reuses this existing protected ADC channel, with no extra simultaneous channel. EMAP plus live baro requires an additional input path that is not implemented. No zero-RPM ambient capture is inferred.",
+        "Keep an exhaust-pressure transducer within its temperature rating with appropriate remote tubing. Pressure/thermal installation remains unqualified. Engine status, recorded logs and own008 tuning diagnostics identify the selected source, pressure normalization and unknown readings. Physical outputs remain inhibited."
+      ]
+    }
+  }
+}

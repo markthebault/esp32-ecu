@@ -1,0 +1,15 @@
+{
+  "application": "Unmodified TunerStudio MS Lite3.3.01",
+  "scope": "Offline003 file exchange on isolated owned Xvfb; no live controller compatibility or physical transport",
+  "final_definition_sha256": "cba711c6a25babf51bb6872385203e6f2322c8f2d4c0361f28e8288b3dc1c6b7",
+  "export_fixture_sha256": "910f765fe1fe9acef520a8c9617fcedfc1b210e6390a1dc21625eac545ce56a4",
+  "actions": [
+    "Loaded own003 project with5pages and184-byte output definition",
+    "Changed physicalC2 spark offset -3 to -2.5deg",
+    "Changed C2 fuel-map1600RPM/50kPa cell120 to117.25percent",
+    "Save Tune As created actual application-authored MSQ",
+    "Native importer verifies spark, physical cylinder, map cell orientation and other cells",
+    "Reloaded final generated INI including per-cylinder Datalog entries; saved values restored"
+  ],
+  "result": "PASS offline; actual live identity limitation remains"
+}

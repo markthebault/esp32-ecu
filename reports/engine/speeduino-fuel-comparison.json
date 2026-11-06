@@ -1,0 +1,613 @@
+{
+  "scope": "Compiled production computePulseWidths steady-state batch-fuel comparison only; not two full ECUs on the same plant",
+  "speeduino_commit": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+  "reqFuel_units_point1ms": 107,
+  "conditions": "2L/4cyl, 300cc/min, 25C IAT, lambda1, 0.9ms deadtime, corrections100%; Speeduino MAP/100 mode; no staging/nitrous",
+  "quantization": "Speeduino required fuel rounded to 0.1 ms; integer percentage approximations differ from float calculation",
+  "cases": 75,
+  "max_absolute_difference_us": 22.689573349797683,
+  "tolerance_us": 75,
+  "passed": true,
+  "rows": [
+    {
+      "ve_pct": 50,
+      "map_kpa": 20,
+      "rpm": 1000,
+      "ours_us": 1433.462663863167,
+      "speeduino_us": 1443,
+      "difference_us": -9.537336136832891
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 20,
+      "rpm": 3000,
+      "ours_us": 1433.462663863167,
+      "speeduino_us": 1443,
+      "difference_us": -9.537336136832891
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 20,
+      "rpm": 6000,
+      "ours_us": 1433.462663863167,
+      "speeduino_us": 1443,
+      "difference_us": -9.537336136832891
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 40,
+      "rpm": 1000,
+      "ours_us": 1966.9253515681921,
+      "speeduino_us": 1965,
+      "difference_us": 1.9253515681921272
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 40,
+      "rpm": 3000,
+      "ours_us": 1966.9253515681921,
+      "speeduino_us": 1965,
+      "difference_us": 1.9253515681921272
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 40,
+      "rpm": 6000,
+      "ours_us": 1966.9253515681921,
+      "speeduino_us": 1965,
+      "difference_us": 1.9253515681921272
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 60,
+      "rpm": 1000,
+      "ours_us": 2500.3880392732176,
+      "speeduino_us": 2509,
+      "difference_us": -8.6119607267824
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 60,
+      "rpm": 3000,
+      "ours_us": 2500.3880392732176,
+      "speeduino_us": 2509,
+      "difference_us": -8.6119607267824
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 60,
+      "rpm": 6000,
+      "ours_us": 2500.3880392732176,
+      "speeduino_us": 2509,
+      "difference_us": -8.6119607267824
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 80,
+      "rpm": 1000,
+      "ours_us": 3033.850726978242,
+      "speeduino_us": 3031,
+      "difference_us": 2.8507269782421645
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 80,
+      "rpm": 3000,
+      "ours_us": 3033.850726978242,
+      "speeduino_us": 3031,
+      "difference_us": 2.8507269782421645
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 80,
+      "rpm": 6000,
+      "ours_us": 3033.850726978242,
+      "speeduino_us": 3031,
+      "difference_us": 2.8507269782421645
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 100,
+      "rpm": 1000,
+      "ours_us": 3567.3134146832676,
+      "speeduino_us": 3575,
+      "difference_us": -7.686585316732362
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 100,
+      "rpm": 3000,
+      "ours_us": 3567.3134146832676,
+      "speeduino_us": 3575,
+      "difference_us": -7.686585316732362
+    },
+    {
+      "ve_pct": 50,
+      "map_kpa": 100,
+      "rpm": 6000,
+      "ours_us": 3567.3134146832676,
+      "speeduino_us": 3575,
+      "difference_us": -7.686585316732362
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 20,
+      "rpm": 1000,
+      "ours_us": 1646.8477389451773,
+      "speeduino_us": 1659,
+      "difference_us": -12.152261054822702
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 20,
+      "rpm": 3000,
+      "ours_us": 1646.8477389451773,
+      "speeduino_us": 1659,
+      "difference_us": -12.152261054822702
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 20,
+      "rpm": 6000,
+      "ours_us": 1646.8477389451773,
+      "speeduino_us": 1659,
+      "difference_us": -12.152261054822702
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 40,
+      "rpm": 1000,
+      "ours_us": 2393.6955017322125,
+      "speeduino_us": 2390,
+      "difference_us": 3.695501732212506
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 40,
+      "rpm": 3000,
+      "ours_us": 2393.6955017322125,
+      "speeduino_us": 2390,
+      "difference_us": 3.695501732212506
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 40,
+      "rpm": 6000,
+      "ours_us": 2393.6955017322125,
+      "speeduino_us": 2390,
+      "difference_us": 3.695501732212506
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 60,
+      "rpm": 1000,
+      "ours_us": 3140.5432645192473,
+      "speeduino_us": 3150,
+      "difference_us": -9.45673548075274
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 60,
+      "rpm": 3000,
+      "ours_us": 3140.5432645192473,
+      "speeduino_us": 3150,
+      "difference_us": -9.45673548075274
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 60,
+      "rpm": 6000,
+      "ours_us": 3140.5432645192473,
+      "speeduino_us": 3150,
+      "difference_us": -9.45673548075274
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 80,
+      "rpm": 1000,
+      "ours_us": 3887.391027306283,
+      "speeduino_us": 3881,
+      "difference_us": 6.391027306282922
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 80,
+      "rpm": 3000,
+      "ours_us": 3887.391027306283,
+      "speeduino_us": 3881,
+      "difference_us": 6.391027306282922
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 80,
+      "rpm": 6000,
+      "ours_us": 3887.391027306283,
+      "speeduino_us": 3881,
+      "difference_us": 6.391027306282922
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 100,
+      "rpm": 1000,
+      "ours_us": 4634.238790093318,
+      "speeduino_us": 4641,
+      "difference_us": -6.76120990668187
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 100,
+      "rpm": 3000,
+      "ours_us": 4634.238790093318,
+      "speeduino_us": 4641,
+      "difference_us": -6.76120990668187
+    },
+    {
+      "ve_pct": 70,
+      "map_kpa": 100,
+      "rpm": 6000,
+      "ours_us": 4634.238790093318,
+      "speeduino_us": 4641,
+      "difference_us": -6.76120990668187
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 20,
+      "rpm": 1000,
+      "ours_us": 1806.8865452566847,
+      "speeduino_us": 1823,
+      "difference_us": -16.113454743315287
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 20,
+      "rpm": 3000,
+      "ours_us": 1806.8865452566847,
+      "speeduino_us": 1823,
+      "difference_us": -16.113454743315287
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 20,
+      "rpm": 6000,
+      "ours_us": 1806.8865452566847,
+      "speeduino_us": 1823,
+      "difference_us": -16.113454743315287
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 40,
+      "rpm": 1000,
+      "ours_us": 2713.7731143552273,
+      "speeduino_us": 2710,
+      "difference_us": 3.773114355227335
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 40,
+      "rpm": 3000,
+      "ours_us": 2713.7731143552273,
+      "speeduino_us": 2710,
+      "difference_us": 3.773114355227335
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 40,
+      "rpm": 6000,
+      "ours_us": 2713.7731143552273,
+      "speeduino_us": 2710,
+      "difference_us": 3.773114355227335
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 60,
+      "rpm": 1000,
+      "ours_us": 3620.65968345377,
+      "speeduino_us": 3634,
+      "difference_us": -13.340316546230042
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 60,
+      "rpm": 3000,
+      "ours_us": 3620.65968345377,
+      "speeduino_us": 3634,
+      "difference_us": -13.340316546230042
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 60,
+      "rpm": 6000,
+      "ours_us": 3620.65968345377,
+      "speeduino_us": 3634,
+      "difference_us": -13.340316546230042
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 80,
+      "rpm": 1000,
+      "ours_us": 4527.546252552313,
+      "speeduino_us": 4521,
+      "difference_us": 6.5462525523125805
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 80,
+      "rpm": 3000,
+      "ours_us": 4527.546252552313,
+      "speeduino_us": 4521,
+      "difference_us": 6.5462525523125805
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 80,
+      "rpm": 6000,
+      "ours_us": 4527.546252552313,
+      "speeduino_us": 4521,
+      "difference_us": 6.5462525523125805
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 100,
+      "rpm": 1000,
+      "ours_us": 5434.432821650856,
+      "speeduino_us": 5445,
+      "difference_us": -10.567178349144342
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 100,
+      "rpm": 3000,
+      "ours_us": 5434.432821650856,
+      "speeduino_us": 5445,
+      "difference_us": -10.567178349144342
+    },
+    {
+      "ve_pct": 85,
+      "map_kpa": 100,
+      "rpm": 6000,
+      "ours_us": 5434.432821650856,
+      "speeduino_us": 5445,
+      "difference_us": -10.567178349144342
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 20,
+      "rpm": 1000,
+      "ours_us": 1966.9253515681921,
+      "speeduino_us": 1986,
+      "difference_us": -19.074648431807873
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 20,
+      "rpm": 3000,
+      "ours_us": 1966.9253515681921,
+      "speeduino_us": 1986,
+      "difference_us": -19.074648431807873
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 20,
+      "rpm": 6000,
+      "ours_us": 1966.9253515681921,
+      "speeduino_us": 1986,
+      "difference_us": -19.074648431807873
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 40,
+      "rpm": 1000,
+      "ours_us": 3033.850726978242,
+      "speeduino_us": 3031,
+      "difference_us": 2.8507269782421645
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 40,
+      "rpm": 3000,
+      "ours_us": 3033.850726978242,
+      "speeduino_us": 3031,
+      "difference_us": 2.8507269782421645
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 40,
+      "rpm": 6000,
+      "ours_us": 3033.850726978242,
+      "speeduino_us": 3031,
+      "difference_us": 2.8507269782421645
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 60,
+      "rpm": 1000,
+      "ours_us": 4100.776102388293,
+      "speeduino_us": 4118,
+      "difference_us": -17.22389761170689
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 60,
+      "rpm": 3000,
+      "ours_us": 4100.776102388293,
+      "speeduino_us": 4118,
+      "difference_us": -17.22389761170689
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 60,
+      "rpm": 6000,
+      "ours_us": 4100.776102388293,
+      "speeduino_us": 4118,
+      "difference_us": -17.22389761170689
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 80,
+      "rpm": 1000,
+      "ours_us": 5167.701477798342,
+      "speeduino_us": 5163,
+      "difference_us": 4.701477798342239
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 80,
+      "rpm": 3000,
+      "ours_us": 5167.701477798342,
+      "speeduino_us": 5163,
+      "difference_us": 4.701477798342239
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 80,
+      "rpm": 6000,
+      "ours_us": 5167.701477798342,
+      "speeduino_us": 5163,
+      "difference_us": 4.701477798342239
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 100,
+      "rpm": 1000,
+      "ours_us": 6234.626853208393,
+      "speeduino_us": 6250,
+      "difference_us": -15.373146791606814
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 100,
+      "rpm": 3000,
+      "ours_us": 6234.626853208393,
+      "speeduino_us": 6250,
+      "difference_us": -15.373146791606814
+    },
+    {
+      "ve_pct": 100,
+      "map_kpa": 100,
+      "rpm": 6000,
+      "ours_us": 6234.626853208393,
+      "speeduino_us": 6250,
+      "difference_us": -15.373146791606814
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 20,
+      "rpm": 1000,
+      "ours_us": 2180.3104266502023,
+      "speeduino_us": 2203,
+      "difference_us": -22.689573349797683
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 20,
+      "rpm": 3000,
+      "ours_us": 2180.3104266502023,
+      "speeduino_us": 2203,
+      "difference_us": -22.689573349797683
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 20,
+      "rpm": 6000,
+      "ours_us": 2180.3104266502023,
+      "speeduino_us": 2203,
+      "difference_us": -22.689573349797683
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 40,
+      "rpm": 1000,
+      "ours_us": 3460.6208771422625,
+      "speeduino_us": 3456,
+      "difference_us": 4.620877142262543
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 40,
+      "rpm": 3000,
+      "ours_us": 3460.6208771422625,
+      "speeduino_us": 3456,
+      "difference_us": 4.620877142262543
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 40,
+      "rpm": 6000,
+      "ours_us": 3460.6208771422625,
+      "speeduino_us": 3456,
+      "difference_us": 4.620877142262543
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 60,
+      "rpm": 1000,
+      "ours_us": 4740.931327634323,
+      "speeduino_us": 4759,
+      "difference_us": -18.06867236567723
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 60,
+      "rpm": 3000,
+      "ours_us": 4740.931327634323,
+      "speeduino_us": 4759,
+      "difference_us": -18.06867236567723
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 60,
+      "rpm": 6000,
+      "ours_us": 4740.931327634323,
+      "speeduino_us": 4759,
+      "difference_us": -18.06867236567723
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 80,
+      "rpm": 1000,
+      "ours_us": 6021.241778126383,
+      "speeduino_us": 6012,
+      "difference_us": 9.241778126382997
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 80,
+      "rpm": 3000,
+      "ours_us": 6021.241778126383,
+      "speeduino_us": 6012,
+      "difference_us": 9.241778126382997
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 80,
+      "rpm": 6000,
+      "ours_us": 6021.241778126383,
+      "speeduino_us": 6012,
+      "difference_us": 9.241778126382997
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 100,
+      "rpm": 1000,
+      "ours_us": 7301.552228618443,
+      "speeduino_us": 7316,
+      "difference_us": -14.447771381556777
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 100,
+      "rpm": 3000,
+      "ours_us": 7301.552228618443,
+      "speeduino_us": 7316,
+      "difference_us": -14.447771381556777
+    },
+    {
+      "ve_pct": 120,
+      "map_kpa": 100,
+      "rpm": 6000,
+      "ours_us": 7301.552228618443,
+      "speeduino_us": 7316,
+      "difference_us": -14.447771381556777
+    }
+  ]
+}

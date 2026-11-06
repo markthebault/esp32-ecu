@@ -1,0 +1,32 @@
+{
+  "reviewed_at_utc": "2026-11-04T00:58:16.300893+00:00",
+  "reviewer": "/root/idle_isolation_review",
+  "base_commit": "497aabb4a0ea686b240182e42b4c64aefa280c32",
+  "verdict": "Initial proposal requires corrections; revised architecture suitable for further disabled development, no physical/fabrication acceptance",
+  "scope": "Read-only architecture/primary-datasheet review and independent static arithmetic/Boolean/DC-connectivity probe. No final new netlist, routing or physical execution reviewed.",
+  "production_files_edited": false,
+  "source_sha256": {
+    "hardware/idle-accessory/net_contract.json": "53d2cecf0e822d6f15f67a409e46043b3cd330c9c28752163518049270e94b03",
+    "hardware/idle-accessory/idle.kicad_sch": "9516317fb6f48020c301e76d88dd8005fe7412d785dd5bb4d3baadae5010e496",
+    "hardware/idle-accessory/idle.kicad_pcb": "d5689e2698fa0511b87caf241a252d6f820b40249d60d2558fc9e880f02d4e45",
+    "hardware/a4-n16r8/net_contract.json": "728f174b3596a631ae598d0786a34182068f7cfa94ae8f75f09cb27e11bd7682",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+    "reports/engine/idle-control/reviews/hardware/pass2/review.md": "70534dd203240d5fb6fb48ff9227fdc6fffaee326ed5b19d430291975b7dc69a"
+  },
+  "artifacts_sha256": {
+    "review.md": "5468cca2d3887c83fdeb78d002d91e18ef310057a6c8e4fbda8ac277e1fbead7",
+    "architecture_probe.py": "a7a6d71afc6240c2452085180b6df1589c389f915f7f04783394af0024f42d49",
+    "architecture-probe.json": "9e9609dc586a38d3f04a6d27b743b1086d351414672da1bd29f88556df37a356",
+    "architecture-probe.log": "1a32653cd3d55f1bb31786f0d83e72bad20bdadbd006a82713c0a3200db61cdf",
+    "sources/manifest.json": "3170ebeadc6edeb7d78742a58d0b8a6496ae7c83655a365a553b284f2003fab5"
+  },
+  "sources_not_for_redistribution": true,
+  "remaining_release_blockers": [
+    "Actual new netlist and routed copper not reviewed in this architecture probe",
+    "Opto/NPN/gate and supervisor transient timing not validated",
+    "Loaded GPIO voltage and actual module eFuse/routing unknown",
+    "Regulator transient overshoot, thermal and startup behavior unmeasured",
+    "Physical barrier, mounting and enclosure conductive bridges unmeasured",
+    "External protected/fused switched actuator branch and actual valve unselected"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "compile_command": [
+    "c++",
+    "-std=c++17",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-pedantic",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-MMD",
+    "-MF",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/clock-interval-003.d",
+    "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-004/firmware/include",
+    "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/clock_interval_probe.cpp",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/clock-interval-003"
+  ],
+  "compile_returncode": 0,
+  "compile_stderr": "",
+  "run_returncode": 0,
+  "stdout": "independent_interval_checks 117937 waves 7128\n",
+  "stderr": "",
+  "probe_source_sha256": "c9e7d7feed656ed332c4244f7d613a3457f685b9cca9e99bccfec8157d2e12d4",
+  "source_freeze_manifest_sha256": "fd24a1695b5f010e98833ffff0c687e1b798b6c559d3db53f8ec7d6b6595a1a4",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  }
+}

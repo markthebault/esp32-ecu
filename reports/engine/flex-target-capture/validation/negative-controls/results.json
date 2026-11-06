@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "case": "overclaim",
+      "rejected": true,
+      "manifest_refreshed": true,
+      "expected": "Overstated qualification",
+      "returncode": 1
+    },
+    {
+      "case": "review-scope",
+      "rejected": true,
+      "manifest_refreshed": true,
+      "expected": "Independent critical source scope",
+      "returncode": 1
+    },
+    {
+      "case": "source-scope",
+      "rejected": true,
+      "manifest_refreshed": true,
+      "expected": "Missing execution source",
+      "returncode": 1
+    },
+    {
+      "case": "ui-fixture-scope",
+      "rejected": true,
+      "manifest_refreshed": true,
+      "expected": "Browser fixture scope",
+      "returncode": 1
+    },
+    {
+      "case": "policy-source-scope",
+      "rejected": true,
+      "manifest_refreshed": true,
+      "expected": "Policy source scope",
+      "returncode": 1
+    },
+    {
+      "case": "usb-config",
+      "rejected": true,
+      "manifest_refreshed": true,
+      "expected": "USB binding",
+      "returncode": 1
+    },
+    {
+      "case": "isr-fpu",
+      "rejected": true,
+      "manifest_refreshed": true,
+      "expected": "ISR placement/FPU",
+      "returncode": 1
+    },
+    {
+      "case": "artifact-content",
+      "rejected": true,
+      "manifest_refreshed": false,
+      "expected": "Changed artifact",
+      "returncode": 1
+    }
+  ]
+}

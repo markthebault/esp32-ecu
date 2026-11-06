@@ -1,0 +1,17 @@
+E
+======================================================================
+ERROR: test_flex_radio (unittest.loader._FailedTest.test_flex_radio)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_flex_radio
+Traceback (most recent call last):
+  File "/usr/lib/python3.14/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+  File "/home/mark/persospace/esp32-ecu/tools/test_flex_radio.py", line 5, in <module>
+    from engine_runtime import EngineRuntime,DEFAULT
+ImportError: cannot import name 'DEFAULT' from 'engine_runtime' (/home/mark/persospace/esp32-ecu/tools/engine_runtime.py)
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

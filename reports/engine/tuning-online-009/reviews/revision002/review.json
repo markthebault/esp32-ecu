@@ -1,0 +1,75 @@
+{
+  "reviewed_at_utc": "2026-11-04T15:10:27.455700+00:00",
+  "root_run_path": "/home/mark/persospace/esp32-ecu/.cache/engine/tuning-online-009/own009",
+  "scope": "Independent replay/CRC/log/screenshot review of root-owned unchanged TunerStudio actual own009 online attempt. Reviewer did not launch, modify or decompile application.",
+  "identity": "ESP32ECU DEV 009 INHIBITED",
+  "application_jar_sha256": "3ebafb867fef3722816e768879501845904f81bc5e13249c77d170e9adf61cf8",
+  "application_jar_matches_previous_unmodified": true,
+  "definition_sha256": "e9e581971c563fd96603327a13ac925ed7ce31b65f454dcc6a2662b6c95f34a0",
+  "project_definition_sha256": "e9e581971c563fd96603327a13ac925ed7ce31b65f454dcc6a2662b6c95f34a0",
+  "initial_project_definition_sha256": "74bece9aedb2e8818960e0d81ccde253096529202a6dd833f04e131c7a59ba6a",
+  "project_definition_equals_current": true,
+  "source_binding": {
+    "firmware/include/ecu/tuning_session.hpp": {
+      "current_sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e",
+      "frozen_sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e",
+      "matches_frozen": true
+    },
+    "firmware/include/ecu/tuning_stream.hpp": {
+      "current_sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042",
+      "frozen_sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042",
+      "matches_frozen": true
+    },
+    "firmware/include/ecu/tuning_layout.hpp": {
+      "current_sha256": "bff9eff532e74de816af855e663991ca460e78807c16581b9821297b252b9e16",
+      "frozen_sha256": "bff9eff532e74de816af855e663991ca460e78807c16581b9821297b252b9e16",
+      "matches_frozen": true
+    },
+    "tools/tuning_runtime.py": {
+      "current_sha256": "bd3863c3e8020d4f00617812929e501df97ea85c2f90b945b571c255e55bb31e",
+      "frozen_sha256": "bd3863c3e8020d4f00617812929e501df97ea85c2f90b945b571c255e55bb31e",
+      "matches_frozen": true
+    },
+    "tools/tuning_bridge.cpp": {
+      "current_sha256": "213107aa881292a48158cacab045b99a07000f8aed5d834dc304dbef0e65eed0",
+      "frozen_sha256": "213107aa881292a48158cacab045b99a07000f8aed5d834dc304dbef0e65eed0",
+      "matches_frozen": true
+    },
+    "tools/engine_protocol.py": {
+      "current_sha256": "eb2a210a97cac08b50a81896e869140f87eb7dd395f28ce1ad61925dc4a45a69",
+      "frozen_sha256": "eb2a210a97cac08b50a81896e869140f87eb7dd395f28ce1ad61925dc4a45a69",
+      "matches_frozen": true
+    },
+    "tools/tuning_server.py": {
+      "current_sha256": "c1bfd2312e3eb64bf4cd33d5642dd3d0674a9fefa0a8266edc22225ef6e5518e",
+      "frozen_sha256": "c1bfd2312e3eb64bf4cd33d5642dd3d0674a9fefa0a8266edc22225ef6e5518e",
+      "matches_frozen": true
+    },
+    "tuning/esp32-ecu-secondary.ini": {
+      "current_sha256": "e9e581971c563fd96603327a13ac925ed7ce31b65f454dcc6a2662b6c95f34a0",
+      "frozen_sha256": "e9e581971c563fd96603327a13ac925ed7ce31b65f454dcc6a2662b6c95f34a0",
+      "matches_frozen": true
+    }
+  },
+  "request_count": 1640,
+  "response_count": 1640,
+  "command_counts": {
+    "F": 328,
+    "I": 328,
+    "f": 656,
+    "Q": 328
+  },
+  "crc_or_length_or_pairing_issues": [],
+  "explicit_unsupported_warnings": 328,
+  "page_runtime_write_or_burn_requests": 0,
+  "q_responses_unique": [
+    "ESP32ECU DEV 009 INHIBITED"
+  ],
+  "screenshot_review": "Observed Not Connected center banner and bottom status. No online page/write/burn behavior established.",
+  "verdict": "Fresh actual own009 is explicitly rejected at controller-identity discovery after valid protocol002/I/f/Q responses. This supports the vendor/application acceptance boundary; no normal calibration or runtime requests occurred. Genuine-Speeduino positive control remains pending.",
+  "limits": [
+    "No proprietary application changes or identity substitution.",
+    "This is host PTY/native shared codec evidence, not target USB or physical output evidence.",
+    "Wire/probe correctness and offline INI support do not establish online app acceptance."
+  ]
+}

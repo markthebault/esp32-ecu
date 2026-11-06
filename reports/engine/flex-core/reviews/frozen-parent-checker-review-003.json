@@ -1,0 +1,223 @@
+{
+  "passed": true,
+  "scope": "saved_raw_edge_flex_audits_and_controls",
+  "cases": 25,
+  "checks": [
+    {
+      "name": "e0-neutral-startup",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "e50-ramp",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "e50-neutral",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "e50-cold-ramp",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "e50-hot-ramp",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "e85-ramp",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "e100-neutral",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "e1-reference-deadband",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "low-frequency48",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "high-frequency160",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "sensor-fault170",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "counter-wrap356",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "short-low-pulse",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "long-low-pulse",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "lower-tolerance49",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "upper-tolerance151",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "custom40-160-span",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "reference-filter75",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "disabled-curves-live-acquisition",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "dropout",
+      "passed": true,
+      "snapshots": 8
+    },
+    {
+      "name": "hidden-width-fault-and-ack",
+      "passed": true,
+      "snapshots": 6
+    },
+    {
+      "name": "flat-high",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "flat-low",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "e50-phase1us",
+      "passed": true,
+      "snapshots": 9
+    },
+    {
+      "name": "e50-loop-refinement",
+      "passed": true,
+      "snapshots": 3202
+    },
+    {
+      "name": "neutral_vs_ramp_causal_control",
+      "passed": true
+    },
+    {
+      "name": "query_refinement_and_phase_control",
+      "passed": true
+    }
+  ],
+  "mutations": [
+    {
+      "name": "wrong_ethanol",
+      "rejected": true,
+      "failures": [
+        "Calibrated physical ethanol conversion",
+        "Independent curve interpolation"
+      ]
+    },
+    {
+      "name": "forged_target_source",
+      "rejected": true,
+      "failures": [
+        "e50-ramp:3200000 source provenance"
+      ]
+    },
+    {
+      "name": "future_sample",
+      "rejected": true,
+      "failures": [
+        "e50-ramp:3200000 qualification",
+        "e50-ramp:3200000 sample freshness"
+      ]
+    },
+    {
+      "name": "wrong_own_edge_count",
+      "rejected": true,
+      "failures": [
+        "e50-ramp:3200000 actual callback/edge count"
+      ]
+    },
+    {
+      "name": "wrong_reference_counter",
+      "rejected": true,
+      "failures": [
+        "e50-ramp:3200000 independent one-second/mod256 counter"
+      ]
+    },
+    {
+      "name": "missing_snapshot",
+      "rejected": true,
+      "failures": [
+        "Snapshot coverage differs"
+      ]
+    },
+    {
+      "name": "wrong_callback",
+      "rejected": true,
+      "failures": [
+        "Genuine setup/callback binding"
+      ]
+    },
+    {
+      "name": "wrong_temperature_factor",
+      "rejected": true,
+      "failures": [
+        "Independent temperature curve interpolation"
+      ]
+    },
+    {
+      "name": "lost_neutrality",
+      "rejected": true,
+      "failures": [
+        "Independent curve interpolation"
+      ]
+    },
+    {
+      "name": "hidden_recovered_fault",
+      "rejected": true,
+      "failures": [
+        "Recovered fault must remain visible before consumer ACK"
+      ]
+    },
+    {
+      "name": "erased_startup_evidence",
+      "rejected": true,
+      "failures": [
+        "Production native startup cache behavior changed"
+      ]
+    }
+  ],
+  "physical_qualification": false,
+  "full_flex_integration": false
+}

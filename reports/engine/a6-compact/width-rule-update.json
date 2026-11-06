@@ -1,0 +1,115 @@
+{
+  "source": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-circuit/a6-compact-metadata-001-native",
+  "source_pcb_sha256": "2cfc0d9328337cccce873d8882cc32c2a305b6afd9e53c2393769a298af8b4b2",
+  "source_project_sha256": "c5b772c96fed6378b94d4c0719c9e00fe953cce0cea7b69735e07c4c009a2f85",
+  "output_pcb_sha256": "2cfc0d9328337cccce873d8882cc32c2a305b6afd9e53c2393769a298af8b4b2",
+  "output_project_sha256": "c5b772c96fed6378b94d4c0719c9e00fe953cce0cea7b69735e07c4c009a2f85",
+  "rules_sha256": "860a6a7703d33ae3f62b53cdfd16c17ff3aa1ea0e1c90b38cd0b50309af7955e",
+  "script_sha256": "7d53ab4aca50c4539cecdcf254639e4177e3ba1f93f0867ea9f1245852ead5c8",
+  "audit_script_sha256": "3c57a939fefd4357dc086dac6c1e8a0bd90ab5168005c07b9e5f004f0e4116db",
+  "PCB_bytes_unchanged": true,
+  "width_audit_passed": true,
+  "native": {
+    "unconnected": 0,
+    "dangling": 0,
+    "physical": [],
+    "parity": 0
+  },
+  "existing_project_and_rules_verified_unchanged": true,
+  "active_native_rule_controls": [
+    {
+      "name": "supply",
+      "target_uuid": "0600dfd3-b48a-4bb5-a38e-39c0bd0118b4",
+      "net": "+5V",
+      "initial_width_nm": 500000,
+      "narrowed_width_nm": 250000,
+      "native_width_rejected": true,
+      "expected_native_width_rejection": true,
+      "explicit_audit_rejected": true,
+      "native": {
+        "unconnected": 0,
+        "dangling": 0,
+        "physical": [
+          {
+            "description": "Track width (board setup constraints min width 0.5000 mm; actual 0.2500 mm)",
+            "items": [
+              {
+                "description": "Track [+5V] on F.Cu, length 2.3000 mm",
+                "pos": {
+                  "x": 52.1,
+                  "y": 38.075
+                },
+                "uuid": "0600dfd3-b48a-4bb5-a38e-39c0bd0118b4"
+              }
+            ],
+            "severity": "error",
+            "type": "track_width"
+          }
+        ],
+        "parity": 0
+      },
+      "board_sha256": "5ee0c1b61a16f442850ca6db540b67483bd08b573176836bff9e55e868487f87",
+      "passed": true
+    },
+    {
+      "name": "power",
+      "target_uuid": "0dd72c77-067b-411c-817c-3da8544f0f12",
+      "net": "VIN_PROT",
+      "initial_width_nm": 1000000,
+      "narrowed_width_nm": 800000,
+      "native_width_rejected": true,
+      "expected_native_width_rejection": true,
+      "explicit_audit_rejected": true,
+      "native": {
+        "unconnected": 0,
+        "dangling": 0,
+        "physical": [
+          {
+            "description": "Track width (board setup constraints min width 1.0000 mm; actual 0.8000 mm)",
+            "items": [
+              {
+                "description": "Track [VIN_PROT] on F.Cu, length 2.5818 mm",
+                "pos": {
+                  "x": 52.1961,
+                  "y": 58.194
+                },
+                "uuid": "0dd72c77-067b-411c-817c-3da8544f0f12"
+              }
+            ],
+            "severity": "error",
+            "type": "track_width"
+          }
+        ],
+        "parity": 0
+      },
+      "board_sha256": "22b6fbca1735f71452d2c7343b5bd663ee58c84077daa5bc60f24113dd737743",
+      "passed": true
+    },
+    {
+      "name": "extra-INJ1-neck",
+      "target_uuid": "014c1510-e03d-4d0b-8822-cb035b5a2bcb",
+      "net": "INJ1_LS",
+      "initial_width_nm": 1000000,
+      "narrowed_width_nm": 800000,
+      "native_width_rejected": false,
+      "expected_native_width_rejection": false,
+      "explicit_audit_rejected": true,
+      "native": {
+        "unconnected": 0,
+        "dangling": 0,
+        "physical": [],
+        "parity": 0
+      },
+      "board_sha256": "1f1cfe32c5f7e5b3b7219a1d3a9823e810b32b16487ec88cb662bed09c98b516",
+      "passed": true
+    }
+  ],
+  "source_snapshots_sha256": {
+    "add_a6_width_rules.py": "7d53ab4aca50c4539cecdcf254639e4177e3ba1f93f0867ea9f1245852ead5c8",
+    "audit_a6_copper.py": "3c57a939fefd4357dc086dac6c1e8a0bd90ab5168005c07b9e5f004f0e4116db",
+    "finish_a6_routes.py": "560d25c3866f657a7d15607ff934d3546e12bbf4aa35a791f7cd8dddf96468cf"
+  },
+  "passed": true,
+  "scope": "Add or verify explicit A6 width rules on a fresh native project copy.\n\nNetclass defaults aid editing; custom rules enforce geometric floors. The\nINJ1 0.8mm exception needs the separate UUID/geometry audit. No current rating.\n",
+  "manufacturing_release": false
+}

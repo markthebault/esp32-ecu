@@ -1,0 +1,26 @@
+{
+  "geometry_basis_pcb_sha256": "8e384058d01955faa4ae7469863d10a1f917bc2d0220583d52f1657a7219d371",
+  "current_pcb_sha256": "65972617df997cbfaa2e0f0d5b58050604a5774fa2a97c795e962bd8c6aa484d",
+  "current_snapshot_bundle_sha256": "48933374b05e90e962b122c1c4975a52d0a9fab63ce2166c51a09b6706b1db1f",
+  "changed_files": [
+    "hardware/idle-isolated/bom.csv",
+    "hardware/idle-isolated/isolated.kicad_pcb",
+    "hardware/idle-isolated/isolated.kicad_sch",
+    "hardware/idle-isolated/lib/ecu.kicad_sym",
+    "hardware/idle-isolated/net_contract.json",
+    "scripts/build_idle_isolated.py"
+  ],
+  "PCB_exactly_one_R2_value_string_replacement": true,
+  "all_footprint_library_files_identical": true,
+  "contract_R2_only_delta": {
+    "value": [
+      "1k8 1%",
+      "2k2 1%"
+    ],
+    "note": [
+      "RUN base load stays within source budget conditionally; exact leaded passive part/temperature rating pending",
+      "RUN buffer; combined R47/R50/R53/Q7/HCT loading is not guaranteed over temperature/faults and needs bench acceptance; exact leaded passive part/temperature rating pending"
+    ]
+  },
+  "all_other_contract_data_identical": true
+}

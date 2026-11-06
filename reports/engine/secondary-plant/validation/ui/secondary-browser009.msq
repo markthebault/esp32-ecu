@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<msq xmlns="http://www.msefi.com/:msq"><bibliography author="ESP32ECU" tuneComment="SHADOW ONLY; physical outputs inhibited; illustrative development tune"/><versionInfo fileFormat="5.0" nPages="1" signature="ESP32ECU DEV 009 INHIBITED"/><page number="0" size="8192"><constant name="baseRevision" units="">3</constant><constant name="cylinders" units="">4</constant><constant name="displacement_cc" units="cc">2000</constant><constant name="injector_cc_min" units="cc/min">300</constant><constant name="fuel_density_g_cc" units="g/cc">0.745</constant><constant name="stoich_afr" units="AFR">14.7</constant><constant name="cranking_rpm" units="RPM">450</constant><constant name="crank_advance_deg" units="deg">5</constant><constant name="rpm_limit" units="RPM">6500</constant><constant name="rpm_hysteresis" units="RPM">200</constant><constant name="soft_limit_band" units="RPM">300</constant><constant name="max_duty" units="ratio">0.8</constant><constant name="max_injection_ms" units="ms">15</constant><constant name="max_dwell_ms" units="ms">3.5</constant><constant name="tooth1_btdc_deg" units="deg">90</constant><constant name="afterstart_pct" units="%">15</constant><constant name="afterstart_s" units="s">20</constant><constant name="accel_threshold_pct_s" units="%/s">40</constant><constant name="accel_gain" units="s/%">0.002</constant><constant name="accel_decay_s" units="s">0.4</constant><constant name="ego_enabled" units="">"Off"</constant><constant name="ego_kp" units="">0.15</constant><constant name="ego_ki" units="">0.08</constant><constant name="ego_limit" units="ratio">0.1</constant><constant name="ego_min_clt" units="C">70</constant><constant name="dfco_enabled" units="">"On"</constant><constant name="dfco_rpm" units="RPM">2000</constant><constant name="dfco_hysteresis" units="RPM">300</constant><constant name="dfco_tps" units="%">1</constant><constant name="dfco_delay_s" units="s">0.5</constant><constant name="idle_enabled" units="">"Off"</constant><constant name="idle_target_rpm" units="RPM">900</constant><constant name="idle_kp" units="%/RPM">0.03</constant><constant name="idle_ki" units="%/(RPM*s)">0.02</constant><constant name="fan_on_c" units="C">95</constant><constant name="fan_off_c" units="C">90</constant><constant name="pump_prime_s" units="s">2</constant><constant name="engineStrategy" units="">"Batch / wasted"</constant><constant name="injection_end_deg" units="deg">540</constant><constant name="cam_sync_deg" units="deg">450</constant><constant name="cam_window_deg" units="deg">20</constant><constant name="fireOrder1" units="">1</constant><constant name="fireOrder2" units="">3</constant><constant name="fireOrder3" units="">4</constant><constant name="fireOrder4" units="">2</constant><constant name="coolant_c" units="" rows="6" cols="1">
+-40
+0
+20
+40
+70
+110
+</constant><constant name="warmup_pct" units="" rows="6" cols="1">
+180
+150
+130
+115
+100
+100
+</constant><constant name="crank_pct" units="" rows="6" cols="1">
+250
+210
+180
+160
+140
+130
+</constant><constant name="battery_v" units="" rows="5" cols="1">
+8
+10
+12
+14
+16
+</constant><constant name="deadtime_ms" units="" rows="5" cols="1">
+2
+1.5
+1.15
+0.9
+0.7
+</constant><constant name="dwell_ms" units="" rows="5" cols="1">
+3.5
+3.3
+3
+2.8
+2.5
+</constant><constant name="veRpm" units="RPM" rows="16" cols="1">
+80
+200
+400
+600
+800
+1000
+1200
+1600
+2000
+2500
+3000
+3500
+4000
+5000
+6000
+8000
+</constant><constant name="veLoad" units="source_units" rows="16" cols="1">
+10
+15
+20
+25
+30
+35
+40
+45
+50
+55
+60
+70
+80
+90
+100
+110
+</constant><constant name="veTable" units="%" rows="16" cols="16">
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85
+</constant><constant name="sparkRpm" units="RPM" rows="16" cols="1">
+80
+200
+400
+600
+800
+1000
+1200
+1600
+2000
+2500
+3000
+3500
+4000
+5000
+6000
+8000
+</constant><constant name="sparkLoad" units="source_units" rows="16" cols="1">
+10
+15
+20
+25
+30
+35
+40
+45
+50
+55
+60
+70
+80
+90
+100
+110
+</constant><constant name="sparkTable" units="deg" rows="16" cols="16">
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+</constant><constant name="lambdaRpm" units="RPM" rows="16" cols="1">
+80
+200
+400
+600
+800
+1000
+1200
+1600
+2000
+2500
+3000
+3500
+4000
+5000
+6000
+8000
+</constant><constant name="lambdaLoad" units="source_units" rows="16" cols="1">
+10
+15
+20
+25
+30
+35
+40
+45
+50
+55
+60
+70
+80
+90
+100
+110
+</constant><constant name="lambdaTable" units="lambda" rows="16" cols="16">
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+</constant><constant name="cylinderTrimsEnabled" units="">"Off"</constant><constant name="c1SparkTrim" units="deg">0</constant><constant name="c1FuelRpm" units="RPM" rows="6" cols="1">
+80
+800
+1600
+3000
+5000
+8000
+</constant><constant name="c1FuelLoad" units="source_units" rows="6" cols="1">
+10
+30
+50
+70
+90
+110
+</constant><constant name="c1FuelTable" units="%" rows="6" cols="6">
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+</constant><constant name="c2SparkTrim" units="deg">0</constant><constant name="c2FuelRpm" units="RPM" rows="6" cols="1">
+80
+800
+1600
+3000
+5000
+8000
+</constant><constant name="c2FuelLoad" units="source_units" rows="6" cols="1">
+10
+30
+50
+70
+90
+110
+</constant><constant name="c2FuelTable" units="%" rows="6" cols="6">
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+</constant><constant name="c3SparkTrim" units="deg">0</constant><constant name="c3FuelRpm" units="RPM" rows="6" cols="1">
+80
+800
+1600
+3000
+5000
+8000
+</constant><constant name="c3FuelLoad" units="source_units" rows="6" cols="1">
+10
+30
+50
+70
+90
+110
+</constant><constant name="c3FuelTable" units="%" rows="6" cols="6">
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+</constant><constant name="c4SparkTrim" units="deg">0</constant><constant name="c4FuelRpm" units="RPM" rows="6" cols="1">
+80
+800
+1600
+3000
+5000
+8000
+</constant><constant name="c4FuelLoad" units="source_units" rows="6" cols="1">
+10
+30
+50
+70
+90
+110
+</constant><constant name="c4FuelTable" units="%" rows="6" cols="6">
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+100 100 100 100 100 100
+</constant><constant name="iac_algorithm" units="">"closed_loop"</constant><constant name="iac_frequency_hz" units="Hz">100</constant><constant name="iac_control_period_ms" units="ms">100</constant><constant name="iac_min_pct" units="%">0</constant><constant name="iac_max_pct" units="%">100</constant><constant name="iac_tps_closed_pct" units="%">2</constant><constant name="iac_tps_hysteresis_pct" units="%">0.5</constant><constant name="iac_entry_rpm_above" units="RPM">300</constant><constant name="iac_exit_rpm_above" units="RPM">500</constant><constant name="iac_entry_delay_s" units="s">0.25</constant><constant name="iac_afterstart_taper_s" units="s">2</constant><constant name="iac_dashpot_pct" units="%">8</constant><constant name="iac_dashpot_decay_pct_s" units="%/s">10</constant><constant name="iac_slew_pct_s" units="%/s">200</constant><constant name="iac_integral_limit_pct" units="%">40</constant><constant name="iac_kd" units="%*s/RPM">0</constant><constant name="iac_derivative_filter_s" units="s">0.1</constant><constant name="iac_fast_idle_temp_c" units="C">50</constant><constant name="iac_fast_idle_hysteresis_c" units="C">5</constant><constant name="iac_coolant_c" units="C" rows="6" cols="1">
+-40
+0
+20
+40
+70
+110
+</constant><constant name="iac_run_pct" units="%" rows="6" cols="1">
+65
+50
+38
+30
+20
+20
+</constant><constant name="iac_crank_pct" units="%" rows="6" cols="1">
+75
+65
+55
+45
+35
+35
+</constant><constant name="iac_target_add_rpm" units="RPM" rows="6" cols="1">
+400
+300
+200
+100
+0
+0
+</constant><constant name="ae_mode" units="">"Legacy TPS decay"</constant><constant name="ae_apply" units="">"Multiply fuel"</constant><constant name="ae_sample_period_ms" units="ms">20</constant><constant name="ae_tps_threshold_pct_s" units="%/s">40</constant><constant name="ae_map_threshold_kpa_s" units="kPa/s">40</constant><constant name="ae_tps_min_change_pct" units="%">0.5</constant><constant name="ae_map_min_change_kpa" units="kPa">0.5</constant><constant name="ae_duration_ms" units="ms">200</constant><constant name="ae_max_enrichment_pct" units="%">100</constant><constant name="ae_decel_fuel_pct" units="%">100</constant><constant name="ae_rpm_taper_start" units="RPM">3000</constant><constant name="ae_rpm_taper_end" units="RPM">6000</constant><constant name="ae_cold_multiplier_pct" units="%">100</constant><constant name="ae_cold_taper_start_c" units="C">0</constant><constant name="ae_cold_taper_end_c" units="C">70</constant><constant name="ae_tps_rates" units="%/s" rows="4" cols="1">
+0
+100
+500
+1500
+</constant><constant name="ae_tps_added_pct" units="%" rows="4" cols="1">
+0
+10
+30
+50
+</constant><constant name="ae_map_rates" units="kPa/s" rows="4" cols="1">
+0
+100
+500
+1500
+</constant><constant name="ae_map_added_pct" units="%" rows="4" cols="1">
+0
+10
+30
+50
+</constant><constant name="load_fuel_source" units="">"MAP kPa"</constant><constant name="load_spark_source" units="">"MAP kPa"</constant><constant name="load_lambda_source" units="">"Follow primary fuel"</constant><constant name="load_trim_source" units="">"Follow primary fuel"</constant><constant name="load_pressure" units="">"MAP / 100 kPa"</constant><constant name="load_aux_role" units="">"J16 postcat monitor"</constant><constant name="load_baro_source" units="">"Fixed manual kPa"</constant><constant name="load_ve_axis" units="">"MAP kPa"</constant><constant name="load_spark_axis" units="">"MAP kPa"</constant><constant name="load_lambda_axis" units="">"MAP kPa"</constant><constant name="load_trim_axis" units="">"MAP kPa"</constant><constant name="load_afr" units="">"Incorporate target lambda"</constant><constant name="load_fixed_baro_kpa" units="kPa">100</constant><constant name="load_afr_delay_s" units="s">10</constant><constant name="secondary_fuel_mode" units="">"Multiply percent"</constant><constant name="secondary_fuel_source" units="">"TPS percent"</constant><constant name="secondary_fuel_axis" units="">"TPS percent"</constant><constant name="secondary_fuel_cells" units="">"Multiplier percent"</constant><constant name="secondary_fuel_condition" units="">"RPM"</constant><constant name="secondary_fuel_threshold" units="RPM">3000</constant><constant name="secondary_fuel_debounce_ms" units="ms">20</constant><constant name="secondary_fuel_input_channel" units="">0</constant><constant name="secondary_fuel_active_high" units="">"Active high"</constant><constant name="secondary_fuel_mapRpm" units="RPM" rows="16" cols="1">
+80
+200
+400
+600
+800
+1000
+1200
+1600
+2000
+2500
+3000
+3500
+4000
+5000
+6000
+8000
+</constant><constant name="secondary_fuel_mapLoad" units="% TPS" rows="16" cols="1">
+0
+6.666667
+13.333333
+20
+26.666667
+33.333333
+40
+46.666667
+53.333333
+60
+66.666667
+73.333333
+80
+86.666667
+93.333333
+100
+</constant><constant name="secondary_fuel_mapTable" units="% multiplier" rows="16" cols="16">
+150 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
+</constant><constant name="secondary_spark_mode" units="">"Add"</constant><constant name="secondary_spark_source" units="">"MAP kPa"</constant><constant name="secondary_spark_axis" units="">"MAP kPa"</constant><constant name="secondary_spark_cells" units="">"Additive table value"</constant><constant name="secondary_spark_condition" units="">"RPM"</constant><constant name="secondary_spark_threshold" units="RPM">3000</constant><constant name="secondary_spark_debounce_ms" units="ms">20</constant><constant name="secondary_spark_input_channel" units="">1</constant><constant name="secondary_spark_active_high" units="">"Active high"</constant><constant name="secondary_spark_mapRpm" units="RPM" rows="16" cols="1">
+80
+200
+400
+600
+800
+1000
+1200
+1600
+2000
+2500
+3000
+3500
+4000
+5000
+6000
+8000
+</constant><constant name="secondary_spark_mapLoad" units="kPa" rows="16" cols="1">
+10
+15
+20
+25
+30
+35
+40
+45
+50
+55
+60
+70
+80
+90
+100
+110
+</constant><constant name="secondary_spark_mapTable" units="deg delta" rows="16" cols="16">
+-2.5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+</constant></page></msq>

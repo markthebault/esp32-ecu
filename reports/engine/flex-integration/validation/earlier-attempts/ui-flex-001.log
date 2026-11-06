@@ -1,0 +1,54 @@
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_flex_ui.py", line 63, in <module>
+    try:asyncio.run(check(f'http://127.0.0.1:{server.server_address[1]}',server.device,a.report_dir))
+        ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/mark/persospace/esp32-ecu/tools/test_flex_ui.py", line 23, in check
+    await page.locator('#flex-low_hz').fill('');await page.locator('#flex-low_hz').dispatch_event('change');await page.locator('#engine-save').click();await page.locator('#toast').filter(has_text='finite value').wait_for();assert device.engine.tune['revision']==1
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mark/.cache/uv/archive-v0/qPmj90TXE8GwewCz/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 11621, in fill
+    await self._impl_obj.fill(
+    ...<4 lines>...
+    )
+  File "/home/mark/.cache/uv/archive-v0/qPmj90TXE8GwewCz/lib/python3.13/site-packages/playwright/_impl/_locator.py", line 228, in fill
+    return await self._frame.fill(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mark/.cache/uv/archive-v0/qPmj90TXE8GwewCz/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 641, in fill
+    await self._fill(**locals_to_params(locals()))
+  File "/home/mark/.cache/uv/archive-v0/qPmj90TXE8GwewCz/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 653, in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+  File "/home/mark/.cache/uv/archive-v0/qPmj90TXE8GwewCz/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 78, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/mark/.cache/uv/archive-v0/qPmj90TXE8GwewCz/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 636, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Locator.fill: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("#flex-low_hz")
+    - locator resolved to <input min="10" max="180" step="any" value="50" type="number" id="flex-low_hz" data-flex="low_hz"/>
+    - fill("")
+  - attempting fill action
+    2 × waiting for element to be visible, enabled and editable
+      - element is not visible
+    - retrying fill action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and editable
+      - element is not visible
+    - retrying fill action
+      - waiting 100ms
+    60 × waiting for element to be visible, enabled and editable
+       - element is not visible
+     - retrying fill action
+       - waiting 500ms
+

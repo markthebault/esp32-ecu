@@ -1,0 +1,164 @@
+{
+  "scope": "Final independent read-only review of the finite raw trigger recorder, shared JSON parser/serializer, ESP32-S3 diagnostic integration, HTTP request path, and auditor root coverage. No production source edits, child agents, connected hardware or flashing.",
+  "reviewed_at": "2026-11-03T15:59:31.763109+00:00",
+  "baseline_commit": "0a9a08cab8ae7336a5273c45193436116c4379ce",
+  "result": "No remaining concrete blocker found in the reviewed recorder/JSON/target integration and exact audited ELF hashes. Initial architecture findings AR1-AR7 are resolved. This is source/native/static-build review, not physical timing or engine qualification. UI browser execution and the parent's in-progress HTTP/UI checks are outside this final approval scope.",
+  "source_sha256": {
+    "firmware/include/ecu/trigger_log.hpp": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451",
+    "firmware/include/ecu/trigger_log_json.hpp": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58",
+    "firmware/include/ecu/json.hpp": "ca420bf9c98e41d07241f50daa8deba2955a2d9bfad8862978d1b019b4bd1c52",
+    "firmware/include/ecu/engine_target.hpp": "bd2144c3ec5a897241bc4a7f6e8f3eec6035a73a0ed9659ce4e713cffdbdb2a7",
+    "firmware/include/ecu/engine_json.hpp": "14cdf1b28e90f83cfc59233c63e56c48859c160360d9e2f4294a4f4617b41078",
+    "firmware/include/ecu/capture_clock.hpp": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/main/engine_target.cpp": "3467c3d8846e2ca9d084059c004600200a2274a8afc0f165bebd6a16fd3f7966",
+    "firmware/main/web_config.cpp": "58353ab3296bcfd2b51842b6f1a5ccf7f07e0d3d80576806ae37853a9b991e17",
+    "firmware/main/config_json.hpp": "1b8469d3ff7f750db50f731e209a184479fa4191ed6200a0a555aa0065e3c1ae",
+    "firmware/main/CMakeLists.txt": "727fc7e89d4506975ff1d13929c64667e4c9eacf55a7b9106c169ad6f41ee918",
+    "firmware/main/app.cpp": "302759188e88b433dbf8913ec7cf31e25b091e43a7b7cc6211f437266b7f31f9",
+    "firmware/tests/trigger_log_test.cpp": "2f19a48b35c9c1a18efda5f81c7d14c3266c27bd633610cde338e4f80cdfb81c",
+    "firmware/tests/trigger_log_json_test.cpp": "cd6523ac035ad884ef52f7d98281a90fb5a32bf711bea90bcaaabd8f9114590b",
+    "scripts/audit_target_isr.py": "82ba7ac2244dcf79fe52ac8a8cd4f088e9d45cdc9b7c1b8d4c847d6f22d4253a",
+    "scripts/test_firmware.sh": "0ff6203ca790697e288cf02d32f6acf4a444b09734772290abeddafa88aa89ec",
+    "tools/trigger_capture.py": "11765a063924b1ef7eac9a71c3cefa7c53af0cb93854336aa1984cf48f10447c",
+    "tools/trigger_capture_bridge.hpp": "15c809a38a2832da57ddaa8319dc0b10c9b623b6e8ad02beac472145641a957f",
+    "web/trigger_logger.js": "b8e0457ede91233767a63060b9d403dbc37b3a588639735c2adfeba68ebef863"
+  },
+  "sdk_version": "5.5.0",
+  "sdk_source_sha256": {
+    "components/esp_driver_mcpwm/src/mcpwm_cap.c": "d02bbe2251fdba5d4c14c79bf852101cb45b636e0c5cd286fba07a1f3af8cbd2",
+    "components/esp_driver_mcpwm/src/mcpwm_sync.c": "4b8a41d4ece64ddd97583c17e45fe32dd2be2d271267e2f3451b5e3ce175b078",
+    "components/esp_driver_mcpwm/include/driver/mcpwm_sync.h": "2a6852f08332640884b69e355251169e87f55b5f8db7a64a806d1724124d0eda",
+    "components/hal/esp32s3/include/hal/mcpwm_ll.h": "28f77239ff7fbf5786d7dcc79e75d0880664ec79a5cab5dfca035defbc65a7a1",
+    "components/soc/esp32s3/register/soc/mcpwm_struct.h": "70d9a09b98106376e4ebff17509ca220e0a6611e8da199d86a5a0c50cca0aef4",
+    "components/esp_hw_support/intr_alloc.c": "9159d5c5588552596d4c1c420fba670af4673144e99454df119e39f43ceab704",
+    "components/newlib/src/assert.c": "42d25f58eae3d2b315d6e3badc291cd1423a08fcf97e16fe2eee944ad8a2397d"
+  },
+  "elfs": {
+    "selected": {
+      "environment": "compact_n16r8_web",
+      "path": "firmware/.pio/build/compact_n16r8_web/firmware.elf",
+      "sha256": "6a08a479c5e43fb549e1b476b7159f81ea867ec7048845a451c75b1d0ac8e913",
+      "mtime_ns": 1793720999905834460
+    },
+    "dummy": {
+      "environment": "compact_a3_timing_bench",
+      "path": "firmware/.pio/build/compact_a3_timing_bench/firmware.elf",
+      "sha256": "fe8697fe40b18237961e3231287a5b98edaede914f24633d60b1eea702cfe455",
+      "mtime_ns": 1793721003043714961
+    }
+  },
+  "resolved_findings": [
+    {
+      "id": "AR1",
+      "status": "resolved",
+      "finding": "Both-edge diagnostic capture originally shared and could overwrite decoder latches.",
+      "final_review": "Group0 capture channel configuration, on_capture and on_alarm are exact baseline source. A dedicated group1 capture timer/clock and separate two-edge channels isolate decoder latches. Diagnostic callback only maps/appends under the shared lock; it never queues decoder edges or changes executor state. Group1 channels are disabled outside finite recording windows. Physical dummy/legacy modes skip diagnostic allocation."
+    },
+    {
+      "id": "AR2",
+      "status": "resolved",
+      "finding": "Rearm after final record read escaped stale-frame detection.",
+      "final_review": "frame_json now invokes a final current-frame predicate after copying/serializing rows, discards rows on mismatch and reports snapshot_superseded. Target also validates requested frame ID, returning HTTP409. Native regression explicitly rearms after final row read and passes."
+    },
+    {
+      "id": "AR3",
+      "status": "resolved",
+      "finding": "Full512-row JSON could consume substantial heap and allocation failure could return partial unmarked data.",
+      "final_review": "GET defaults to metadata. Records are fixed64-row pages, query parser exposes no count override, and frame_json checks every creation/attachment. Target extra metadata is checked too. Failures delete partial trees and return null; send_json converts encode/null failure to HTTP500. Independent ASan/UBSan execution passed2000 allocation-budget positions through full page construction and encoding with zero live allocations afterward."
+    },
+    {
+      "id": "AR4",
+      "status": "resolved subject to hardware qualification",
+      "finding": "Pending old latches survived disable and invalid-time rows bypassed prearm filtering.",
+      "final_review": "Invalid/future mappings are dropped and counted; valid captured timestamps before frame start are dropped and counted. Before a new frame, task mutex serializes successful disable of both channels, a group1-only LL clear of capture0/1/2 status bits, frame start and enable. Worker acquires the same mutex nonblocking then re-reads state before disabling, preventing cleanup from stopping a newer frame. Existing in-flight callbacks are covered by timestamp validation; no target lock spans driver controls."
+    },
+    {
+      "id": "AR5",
+      "status": "resolved",
+      "finding": "Public trigger JSON header included private firmware/main/config_json.hpp.",
+      "final_review": "Shared helpers moved to public ecu/json.hpp. Trigger and engine JSON now include it; main/config_json.hpp retains only profile parsing. Supplied selected and dummy builds link successfully without a broad main include path."
+    },
+    {
+      "id": "AR6",
+      "status": "resolved",
+      "finding": "Nonexistent group_id field used on empty mcpwm_soft_sync_config_t.",
+      "final_review": "Removed field assignment; phase-on-sync binds source to group1 capture timer. Pinned IDF API source matches this use."
+    },
+    {
+      "id": "AR7",
+      "status": "resolved for exact reviewed images",
+      "finding": "ISR audit omitted new diagnostic callback root.",
+      "final_review": "Root discovery includes on_trigger_capture. Independently rerun audits found5 roots/30 functions for selected image and4 roots/29 functions for dummy, with the diagnostic callback absent from dummy. All audited code/literal fetches stay in IRAM/ROM, checked dispatcher data in DRAM,63 SDK assertion argument-only pointers reviewed and0 unclassified flash pointers."
+    }
+  ],
+  "remaining_code_findings": [],
+  "baseline_contract_checks": {
+    "group0_channel_configuration_exact_baseline": true,
+    "on_capture_exact_baseline": true,
+    "on_alarm_exact_baseline": true,
+    "selected_output_policy": "ECU_ENGINE_DUMMY_LOADS remains disabled in selected environment; OutputIO high writes are compiled out and app retains all_off. Diagnostic operations cannot enable physical outputs.",
+    "dummy_diagnostic_exclusion": "Actual dummy ELF has no on_trigger_capture, trigger_clock or init_trigger_logger symbols; reviewed source compile guard also skips legacy pulse mode.",
+    "isr_cam_context": "Independently inspected symbol table: selected cam_context at0x3fca5318,dummy at0x3fc9acbc, both internal initialized data.",
+    "driver_callback_mapping": "GPTimer callback registration maps to on_alarm; group0 MCPWM maps to on_capture; selected group1 maps to on_trigger_capture. Remaining driver callback indirections are these explicitly reviewed registrations."
+  },
+  "validation": {
+    "independent_native": "Fresh reviewer builds in .cache/engine/trigger-review with -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined. Both trigger_log_test and trigger_log_json_test pass. cJSON C source is also sanitizer-built. Log: final-recorder-native.log.",
+    "audits": {
+      "selected": {
+        "reviewer_reran": true,
+        "passed_static_placement": true,
+        "functions": 30,
+        "root_count": 5,
+        "roots": [
+          "0x40375810",
+          "0x40375a3c",
+          "0x40376138",
+          "0x4037e828",
+          "0x4037ebd0"
+        ],
+        "diagnostic_callback_present": true,
+        "literals_outside_iram": [],
+        "unclassified_flash_pointers": [],
+        "reviewed_assertion_argument_only": 63,
+        "failures": [],
+        "artifact": "final-selected-closure/closure.json"
+      },
+      "dummy": {
+        "reviewer_reran": true,
+        "passed_static_placement": true,
+        "functions": 29,
+        "root_count": 4,
+        "roots": [
+          "0x4037546c",
+          "0x40375c10",
+          "0x4037cbf8",
+          "0x4037cfa0"
+        ],
+        "diagnostic_callback_present": false,
+        "literals_outside_iram": [],
+        "unclassified_flash_pointers": [],
+        "reviewed_assertion_argument_only": 63,
+        "failures": [],
+        "artifact": "final-dummy-closure/closure.json"
+      }
+    },
+    "builds": "Reviewed parent trigger-build-current.log: selected and dummy builds successful. Independently hashed actual ELF files and reran static auditor on each exact image.",
+    "broader_regressions": "Reviewed parent trigger-native-final.log and trigger-existing-python.log; native controller/storage/timing tests pass and existing54 Python tests pass. These broad tests were not unnecessarily rerun by this reviewer.",
+    "ui_scope": "Read static page-assembly behavior: UI gathers a frozen same-ID frame, validates each64-row page and checks final metadata. Browser rendering/asynchronous UI tests remain owned by parent and are not claimed as independently executed here."
+  },
+  "remaining_hardware_limits": [
+    "No physical ESP32 execution. ISR duration, lock hold time, cross-core latency, capture age and timer jitter remain unmeasured.",
+    "Group1 isolates decoder capture registers but still has one last-capture latch per channel. SDK reads timestamp and polarity separately. Lost/coalesced captures, overwrite and mixed timestamp/polarity pairs remain possible and unmeasured.",
+    "Finite storage bounds memory, not diagnostic interrupt rate or worker time-to-disable under arbitrary electrical noise. Diagnostic allocation is excluded from physical modes.",
+    "Sync bracket uncertainty and32-bit counter wrap behavior need independent hardware stimulus/timestamp validation. Logical invalid/prearm handling is source/native verified only.",
+    "SDK assertion paths are reviewed for cache-safe metadata handling; this review does not establish physical fail-low behavior during an SDK panic/assertion.",
+    "Recorded edges describe conditioned digital inputs, not analog sensor waveform voltage, per-pin actuator measurements or720-degree cam phase. No complete Speeduino/TunerStudio high-speed-logger interoperability claim follows."
+  ],
+  "artifacts": {
+    "initial_review": "architecture.json",
+    "native_log": "final-recorder-native.log",
+    "selected_audit_log": "final-selected-audit.log",
+    "dummy_audit_log": "final-dummy-audit.log"
+  }
+}

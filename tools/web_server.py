@@ -2,39 +2,50 @@
 """Offline ECU UI simulator. Never connects to, or drives, vehicle hardware.
 Requires a C++ compiler and ESP-IDF's cJSON source installed by PlatformIO.
 """
-import argparse,ctypes,json,math,os,secrets,subprocess,sys,tempfile,threading,time
+import argparse,ctypes,json,math,os,secrets,signal,subprocess,sys,tempfile,threading,time
+import re
+from contextlib import ExitStack
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
 from radio_simulator import RadioSimulator
+from engine_runtime import EngineStore
 R=Path(__file__).resolve().parents[1]
 class Reading(ctypes.Structure):
- _fields_=[('value',ctypes.c_double),('sensor_v',ctypes.c_double),('adc_v',ctypes.c_double),('valid',ctypes.c_int),('fault',ctypes.c_char*64)]
+ _fields_=[('value',ctypes.c_double),('sensor_v',ctypes.c_double),('adc_v',ctypes.c_double),('valid',ctypes.c_int),('fault',ctypes.c_char*64),('transfer_v',ctypes.c_double),('display_transfer_v',ctypes.c_double)]
 def load_bridge():
- target=R/'.cache/web';target.mkdir(parents=True,exist_ok=True)
+ target=Path(os.environ.get('ECU_NATIVE_CACHE_ROOT',str(R/'.cache/native-v2')))/'web';target.mkdir(parents=True,exist_ok=True)
  source=Path.home()/'.platformio/packages/framework-espidf/components/json/cJSON'
  if not (source/'cJSON.c').exists():raise RuntimeError('Install the pinned PlatformIO ESP-IDF framework first; see docs/web-configuration.md.')
  lib=target/('config_bridge.dylib' if sys.platform=='darwin' else 'config_bridge.so')
- deps=[R/'tools/config_bridge.cpp',R/'firmware/main/config_json.hpp',R/'firmware/include/ecu/config.hpp',source/'cJSON.c']
+ deps=[Path(__file__),R/'tools/config_bridge.cpp',R/'firmware/main/config_json.hpp',R/'firmware/include/ecu/config.hpp',source/'cJSON.c']
  if not lib.exists() or max(p.stat().st_mtime for p in deps)>lib.stat().st_mtime:
   subprocess.run(['cc','-O2','-fPIC','-c',str(source/'cJSON.c'),'-o',str(target/'cJSON.o')],check=True)
   subprocess.run(['c++','-std=c++17','-O2','-Wall','-Wextra','-Werror','-shared','-fPIC','-I'+str(source),'-I'+str(R/'firmware/main'),'-I'+str(R/'firmware/include'),str(R/'tools/config_bridge.cpp'),str(target/'cJSON.o'),'-o',str(lib)],check=True)
  bridge=ctypes.CDLL(str(lib));bridge.validate_profile.argtypes=[ctypes.c_char_p];bridge.validate_profile.restype=ctypes.c_int
  bridge.evaluate_profile.argtypes=[ctypes.c_char_p,ctypes.POINTER(ctypes.c_uint),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(Reading)];bridge.evaluate_profile.restype=ctypes.c_int
+ bridge.normalize_profile.argtypes=[ctypes.c_char_p,ctypes.c_void_p,ctypes.c_uint];bridge.normalize_profile.restype=ctypes.c_int
+ bridge.profile_transfer_voltage.argtypes=[ctypes.c_char_p,ctypes.POINTER(ctypes.c_uint),ctypes.POINTER(ctypes.c_double)];bridge.profile_transfer_voltage.restype=ctypes.c_int
+ bridge.filter_profile.argtypes=[ctypes.c_char_p,ctypes.POINTER(ctypes.c_uint),ctypes.POINTER(ctypes.c_double),ctypes.c_double,ctypes.c_int,ctypes.c_int,ctypes.POINTER(ctypes.c_double)];bridge.filter_profile.restype=ctypes.c_int
  return bridge
+def canonical_profile(bridge,body):
+ if len(body)>16384 or b'\x00'in body:raise ValueError('invalid profile envelope')
+ buffer=ctypes.create_string_buffer(16385)
+ if not bridge.normalize_profile(body,buffer,len(buffer)):raise ValueError('invalid profile')
+ return json.loads(buffer.value)
 class Device:
  def __init__(self,path,bridge):
-  self.radio=RadioSimulator(path.with_name(path.name+'.peers'));self.path=path;self.bridge=bridge;self.lock=threading.Lock();self.started=time.monotonic();self.token=secrets.token_hex(16);self.faults={};self.filtered=None;self.last=0;self.storage_ok=True;self.storage='defaults; no saved profile'
-  self.defaults=json.loads((R/'config/defaults.json').read_text());self.profile=self.defaults
+  self.engine=EngineStore(path.with_name(path.name+'.engine'));self.radio=RadioSimulator(path.with_name(path.name+'.peers'));self.path=path;self.bridge=bridge;self.lock=threading.Lock();self.started=time.monotonic();self.token=secrets.token_hex(16);self.faults={};self.filtered=None;self.last=0;self.storage_ok=True;self.storage='defaults; no saved profile'
+  self.defaults=canonical_profile(bridge,(R/'config/defaults.json').read_bytes());self.profile=self.defaults
   if path.exists():
    try:
     text=path.read_bytes()
-    if len(text)>16384 or not bridge.validate_profile(text):raise ValueError('invalid saved profile')
-    self.profile=json.loads(text);self.storage='loaded from disk (simulated NVS)'
+    self.profile=canonical_profile(bridge,text);self.storage='loaded from disk; schema normalized in RAM (simulated NVS)'
    except (ValueError,OSError):self.storage_ok=False;self.storage='saved profile invalid; defaults active; saving blocked'
  def save(self,body):
   if len(body)>16384:return 413,{'error':'Profile exceeds 16 KiB.'}
   if b'\x00' in body or not self.bridge.validate_profile(body):return 422,{'error':'Profile violates schema or calibration limits.'}
-  p=json.loads(body)
+  try:p=canonical_profile(self.bridge,body)
+  except ValueError:return 422,{'error':'Profile migration failed.'}
   with self.lock:
    if not self.storage_ok:return 503,{'error':'Storage fault. Inspect saved profile file.'}
    if p['revision']!=self.profile['revision'] or p['revision']==4294967295:return 409,{'error':'Profile revision changed. Export edits, reload, then reapply them.'}
@@ -51,7 +62,9 @@ class Device:
   with self.lock:
    p=self.profile;now=time.monotonic();t=now-self.started;rail=5.;values=[2.24+.015*math.sin(t*.7),.72+.008*math.sin(t*.5),2.12+.003*math.sin(t),2.82+.006*math.sin(t*.6),2.45+.018*math.sin(t),.56+.008*math.sin(t*.4)]
    ids=['map','tps','clt','iat','wideband','postcat']
-   if any(f=='rail' for f in self.faults.values()):rail=2.4;values=[v*rail/5 for v in values]
+   if any(f=='rail' for f in self.faults.values()):rail=2.4
+   elif any(f=='rail_4v8' for f in self.faults.values()):rail=4.8
+   if rail!=5:values=[v*rail/5 for v in values] # Authored synthetic ratiometric channels, not sensor characterization.
    for i,sid in enumerate(ids):
     fault=self.faults.get(sid,'normal')
     if fault=='short':values[i]=0.
@@ -59,12 +72,13 @@ class Device:
     elif fault=='noise':values[i]=max(0,min(5.25,values[i]+.5*math.sin(t*37)))
    adc=lambda v:round(max(0,min(4095,v/3.3*4095)))
    raw=[adc(v*.6) for v in values]+[adc(12.64/13),adc(rail*.6)]
-   sv=[v*p['adc_reference_v']/4095/.6 for v in raw[:6]];dt=max(0,(now-self.last)*1000)
-   if self.filtered is None:self.filtered=sv.copy()
-   else:
-    for i,s in enumerate(p['sensors']):self.filtered[i]+=dt/(s['filter_ms']+dt)*(sv[i]-self.filtered[i]) if dt else 0
-   self.last=now;out=(Reading*6)();ok=self.bridge.evaluate_profile(json.dumps(p).encode(),(ctypes.c_uint*8)(*raw),(ctypes.c_double*6)(*self.filtered),out);assert ok
-   sensors=[{'id':s['id'],'raw':raw[i],'adc_v':out[i].adc_v,'sensor_v':out[i].sensor_v,'value':out[i].value if out[i].valid else None,'valid':bool(out[i].valid),'confirmed':s['confirmed'],'fault':out[i].fault.decode()} for i,s in enumerate(p['sensors'])]
+   raw_array=(ctypes.c_uint*8)(*raw);basis=(ctypes.c_double*6)();profile_text=json.dumps(p).encode()
+   previous=(ctypes.c_double*6)(*(self.filtered or [0]*6));dt=max(0,(now-self.last)*1000)
+   assert self.bridge.filter_profile(profile_text,raw_array,previous,dt,self.filtered is None,True,basis)
+   self.filtered=list(basis)
+   self.last=now;out=(Reading*6)();ok=self.bridge.evaluate_profile(profile_text,raw_array,(ctypes.c_double*6)(*self.filtered),out);assert ok
+   finite=lambda value:value if math.isfinite(value)else None
+   sensors=[{'id':s['id'],'raw':raw[i],'adc_v':out[i].adc_v,'sensor_v':out[i].sensor_v,'transfer_voltage_v':finite(out[i].transfer_v),'display_transfer_voltage_v':finite(out[i].display_transfer_v),'ratiometric':s['ratiometric'],'value':out[i].value if out[i].valid else None,'valid':bool(out[i].valid),'confirmed':s['confirmed'],'fault':out[i].fault.decode()} for i,s in enumerate(p['sensors'])]
    return dict(simulator=True,firmware='A3 host simulator / no physical hardware',uptime_s=t,sample_age_ms=0,fresh=True,revision=p['revision'],storage_ok=self.storage_ok,storage=self.storage,adc_ok=True,safe=True,interlock=False,overflow=False,synced=False,rpm=0,can_frames=0,cam_edges=0,crank_edges=0,crank_level=0,cam_level=0,arm=False,output_state='All outputs OFF',sensor_5v=raw[7]*p['adc_reference_v']/4095/.6,battery_v=raw[6]*p['adc_reference_v']/4095*13,raw_adc=raw,sensors=sensors)
 class Handler(BaseHTTPRequestHandler):
  server_version='ECUSimulator/1'
@@ -75,6 +89,17 @@ class Handler(BaseHTTPRequestHandler):
  def do_GET(self):
   d=self.server.device
   if self.path in ('/','/index.html'):return self.reply(200,(R/'web/index.html').read_bytes(),'text/html; charset=utf-8')
+  if self.path=='/trigger_logger.js':return self.reply(200,(R/'web/trigger_logger.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/profile_metadata.js':return self.reply(200,(R/'web/profile_metadata.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/cylinder_tuning.js':return self.reply(200,(R/'web/cylinder_tuning.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/boost_control.js':return self.reply(200,(R/'web/boost_control.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/flex_fuel.js':return self.reply(200,(R/'web/flex_fuel.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/secondary_tables.js':return self.reply(200,(R/'web/secondary_tables.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/load_model.js':return self.reply(200,(R/'web/load_model.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/transient_enrichment.js':return self.reply(200,(R/'web/transient_enrichment.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/idle_control.js':return self.reply(200,(R/'web/idle_control.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/tuning_diagnostics.js':return self.reply(200,(R/'web/tuning_diagnostics.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/engine_logger.js':return self.reply(200,(R/'web/engine_logger.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/api/session':return self.reply(200,dict(token=d.token,simulator=True))
   if self.path=='/api/config':
    with d.lock:return self.reply(200,d.profile)
@@ -85,6 +110,39 @@ class Handler(BaseHTTPRequestHandler):
    origin=self.headers.get('Origin');host=self.headers.get('Host','')
    if self.headers.get('X-ECU-Token')!=d.token or (origin and origin!='http://'+host):return self.reply(403,{'error':'Session token or origin rejected.'})
    with d.lock:return self.reply(200,d.radio.status())
+  if self.path=='/api/engine/config':
+   with d.engine.lock:return self.reply(200,d.engine.tune)
+  if self.path=='/api/engine/defaults':return self.reply(200,d.engine.defaults)
+  if self.path=='/api/engine/tuning':
+   origin=self.headers.get('Origin');host=self.headers.get('Host','')
+   if self.headers.get('X-ECU-Token')!=d.token or (origin and origin!='http://'+host):return self.reply(403,{'error':'Session token or origin rejected.'})
+   from tuning_runtime import status
+   return self.reply(200,status(d.engine))
+  if self.path=='/api/engine/status':return self.reply(200,d.engine.status())
+  if self.path=='/api/engine/sample':return self.reply(200,d.engine.coherent_sample())
+  if self.path.split('?',1)[0] in ('/api/engine/data-log','/api/engine/data-log.msl'):
+   origin=self.headers.get('Origin');host=self.headers.get('Host','')
+   if self.headers.get('X-ECU-Token')!=d.token or (origin and origin!='http://'+host):return self.reply(403,{'error':'Session token or origin rejected.'})
+   base,_,query=self.path.partition('?')
+   if base=='/api/engine/data-log' and not query:return self.reply(200,d.engine.data_log_header())
+   match=re.fullmatch(r'log_id=([0-9]{1,10})&after=([0-9]{1,10})',query)
+   if not match or not 1<=int(match[1])<=4294967295 or int(match[2])>4294967295:return self.reply(422,{'error':'Use log_id and after for a bounded row page'})
+   log_id,after=map(int,match.groups());boot=self.headers.get('X-ECU-Log-Boot')
+   if base=='/api/engine/data-log':return self.reply(*d.engine.data_log_page(log_id,after,boot))
+   if after:return self.reply(422,{'error':'Use after=0 for a retained-window export'})
+   try:return self.reply(200,d.engine.data_log_msl(log_id,boot).encode(),'text/plain; charset=utf-8')
+   except ValueError as e:return self.reply(409,{'error':str(e)})
+  if self.path=='/api/engine/timing':return self.reply(200,d.engine.timing_trace())
+  if self.path.split('?',1)[0]=='/api/engine/trigger-log':
+   query=self.path.partition('?')[2];frame_id=offset=0
+   if query:
+    match=re.fullmatch(r'frame_id=([0-9]{1,10})&offset=([0-9]{1,3})',query)
+    if not match or not 1<=int(match[1])<=4294967295 or int(match[2])>512:return self.reply(422,{'error':'Use frame_id and offset for a bounded record page'})
+    frame_id,offset=map(int,match.groups())
+   frame=d.engine.trigger_frame(frame_id,offset,bool(query));return self.reply(409 if frame['snapshot_superseded'] else 200,frame)
+  if self.path=='/api/engine/log':
+   try:return self.reply(200,d.engine.msl().encode(),'text/plain; charset=utf-8')
+   except ValueError as e:return self.reply(409,{'error':str(e)})
   if self.path=='/api/status':return self.reply(200,d.status())
   return self.reply(404,{'error':'Not found'})
  def mutate(self):
@@ -93,7 +151,8 @@ class Handler(BaseHTTPRequestHandler):
   if self.headers.get('Content-Type','').split(';')[0]!='application/json':return self.reply(415,{'error':'Use application/json.'})
   try:length=int(self.headers.get('Content-Length','0'))
   except ValueError:return self.reply(400,{'error':'Invalid length'})
-  if not 0<length<=16384:return self.reply(413,{'error':'Body must be 1-16384 bytes.'})
+  limit=49152 if self.path=='/api/engine/config' else 16384
+  if not 0<length<=limit:return self.reply(413,{'error':f'Body must be 1-{limit} bytes.'})
   body=self.rfile.read(length)
   if self.command=='POST' and self.path=='/api/radio':
    if len(body)>256:return self.reply(413,{'error':'Radio command exceeds 256 bytes.'})
@@ -102,11 +161,17 @@ class Handler(BaseHTTPRequestHandler):
     with d.lock:result=d.radio.command(data)
     return self.reply(*result)
    except (ValueError,KeyError,TypeError):return self.reply(422,{'error':'Invalid radio command.'})
+  if self.command=='PUT' and self.path=='/api/engine/config':return self.reply(*d.engine.save(body))
+  if self.command=='POST' and self.path=='/api/engine/trigger-log':return self.reply(*d.engine.trigger_command(body))
+  if self.command=='POST' and self.path=='/api/engine/data-log':return self.reply(*d.engine.data_log_command(body,self.headers.get('X-ECU-Log-Boot')))
+  if self.command=='POST' and self.path=='/api/engine/run':
+   try:return self.reply(*d.engine.run(json.loads(body)))
+   except ValueError:return self.reply(422,{'error':'Invalid simulation JSON'})
   if self.command=='PUT' and self.path=='/api/config':return self.reply(*d.save(body))
   if self.command=='POST' and self.path=='/api/simulate':
    try:
     data=json.loads(body);sensor=data['sensor'];fault=data['fault']
-    if sensor not in ['map','tps','clt','iat','wideband','postcat'] or fault not in ['normal','short','high','noise','rail']:raise ValueError()
+    if sensor not in ['map','tps','clt','iat','wideband','postcat'] or fault not in ['normal','short','high','noise','rail','rail_4v8']:raise ValueError()
     with d.lock:d.faults[sensor]=fault
     return self.reply(200,{'ok':True})
    except (ValueError,KeyError,TypeError):return self.reply(422,{'error':'Invalid simulator condition'})
@@ -114,9 +179,17 @@ class Handler(BaseHTTPRequestHandler):
  do_PUT=mutate;do_POST=mutate
  def setup(self):super().setup();self.connection.settimeout(5)
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--host',default='127.0.0.1');parser.add_argument('--port',type=int,default=8765);parser.add_argument('--state',type=Path,default=R/'.cache/web/profile.json');args=parser.parse_args()
+ parser=argparse.ArgumentParser();parser.add_argument('--host',default='127.0.0.1');parser.add_argument('--port',type=int,default=8765);parser.add_argument('--state',type=Path,default=R/'.cache/web/profile.json');parser.add_argument('--tuner-port',type=int);parser.add_argument('--tuner-pty',type=Path);args=parser.parse_args()
  server=ThreadingHTTPServer((args.host,args.port),Handler);server.device=Device(args.state,load_bridge());print(f'ECU simulator: http://{args.host}:{args.port} (no hardware)',flush=True)
- try:server.serve_forever()
- except KeyboardInterrupt:pass
- finally:server.server_close()
+ def stop(signum,frame):raise KeyboardInterrupt
+ signal.signal(signal.SIGTERM,stop)
+ with ExitStack() as endpoints:
+  from tuning_server import TcpEndpoint,PtyEndpoint
+  if args.tuner_port is not None:
+   endpoint=endpoints.enter_context(TcpEndpoint(server.device.engine,args.tuner_port));print(f'Shared tuning TCP: 127.0.0.1:{endpoint.port}',flush=True)
+  if args.tuner_pty:
+   endpoint=endpoints.enter_context(PtyEndpoint(server.device.engine,args.tuner_pty));print(f'Shared tuning PTY: {endpoint.link}',flush=True)
+  try:server.serve_forever()
+  except KeyboardInterrupt:pass
+  finally:server.server_close()
 if __name__=='__main__':main()

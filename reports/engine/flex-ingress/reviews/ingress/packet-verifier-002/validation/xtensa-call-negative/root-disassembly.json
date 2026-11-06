@@ -1,0 +1,2802 @@
+[
+  {
+    "pc": "0x40370010",
+    "bytes": "004136",
+    "instruction": "entry\ta1, 32"
+  },
+  {
+    "pc": "0x40370013",
+    "bytes": "fffb81",
+    "instruction": "l32r\ta8, 40370000 <probe_ingress+0x6dffe8> (3fc90000 <probe_clock>)"
+  },
+  {
+    "pc": "0x40370016",
+    "bytes": "2001f2",
+    "instruction": "l8ui\ta15, a1, 32"
+  },
+  {
+    "pc": "0x40370019",
+    "bytes": "100892",
+    "instruction": "l8ui\ta9, a8, 16"
+  },
+  {
+    "pc": "0x4037001c",
+    "bytes": "49cc",
+    "instruction": "bnez.n\ta9, 40370024 <flex_ingress_isr_probe+0x14>"
+  },
+  {
+    "pc": "0x4037001e",
+    "bytes": "110892",
+    "instruction": "l8ui\ta9, a8, 17"
+  },
+  {
+    "pc": "0x40370021",
+    "bytes": "0018c6",
+    "instruction": "j\t40370088 <flex_ingress_isr_probe+0x78>"
+  },
+  {
+    "pc": "0x40370024",
+    "bytes": "18a8",
+    "instruction": "l32i.n\ta10, a8, 4"
+  },
+  {
+    "pc": "0x40370026",
+    "bytes": "0898",
+    "instruction": "l32i.n\ta9, a8, 0"
+  },
+  {
+    "pc": "0x40370028",
+    "bytes": "5a37a7",
+    "instruction": "bltu\ta7, a10, 40370086 <flex_ingress_isr_probe+0x76>"
+  },
+  {
+    "pc": "0x4037002b",
+    "bytes": "029a77",
+    "instruction": "bne\ta10, a7, 40370031 <flex_ingress_isr_probe+0x21>"
+  },
+  {
+    "pc": "0x4037002e",
+    "bytes": "543697",
+    "instruction": "bltu\ta6, a9, 40370086 <flex_ingress_isr_probe+0x76>"
+  },
+  {
+    "pc": "0x40370031",
+    "bytes": "28b8",
+    "instruction": "l32i.n\ta11, a8, 8"
+  },
+  {
+    "pc": "0x40370033",
+    "bytes": "c09690",
+    "instruction": "sub\ta9, a6, a9"
+  },
+  {
+    "pc": "0x40370036",
+    "bytes": "3888",
+    "instruction": "l32i.n\ta8, a8, 12"
+  },
+  {
+    "pc": "0x40370038",
+    "bytes": "82d9b0",
+    "instruction": "mull\ta13, a9, a11"
+  },
+  {
+    "pc": "0x4037003b",
+    "bytes": "828b80",
+    "instruction": "mull\ta8, a11, a8"
+  },
+  {
+    "pc": "0x4037003e",
+    "bytes": "c0e4d0",
+    "instruction": "sub\ta14, a4, a13"
+  },
+  {
+    "pc": "0x40370041",
+    "bytes": "06cd",
+    "instruction": "mov.n\ta12, a6"
+  },
+  {
+    "pc": "0x40370043",
+    "bytes": "07ad",
+    "instruction": "mov.n\ta10, a7"
+  },
+  {
+    "pc": "0x40370045",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x40370047",
+    "bytes": "41b8e7",
+    "instruction": "bgeu\ta8, a14, 4037008c <flex_ingress_isr_probe+0x7c>"
+  },
+  {
+    "pc": "0x4037004a",
+    "bytes": "ffee81",
+    "instruction": "l32r\ta8, 40370004 <probe_ingress+0x6dffec> (1388 <probe_clock-0x3fc8ec78>)"
+  },
+  {
+    "pc": "0x4037004d",
+    "bytes": "c09d40",
+    "instruction": "sub\ta9, a13, a4"
+  },
+  {
+    "pc": "0x40370050",
+    "bytes": "828b80",
+    "instruction": "mull\ta8, a11, a8"
+  },
+  {
+    "pc": "0x40370053",
+    "bytes": "0db897",
+    "instruction": "bgeu\ta8, a9, 40370064 <flex_ingress_isr_probe+0x54>"
+  },
+  {
+    "pc": "0x40370056",
+    "bytes": "690c",
+    "instruction": "movi.n\ta9, 6"
+  },
+  {
+    "pc": "0x40370058",
+    "bytes": "0c0c",
+    "instruction": "movi.n\ta12, 0"
+  },
+  {
+    "pc": "0x4037005a",
+    "bytes": "0a0c",
+    "instruction": "movi.n\ta10, 0"
+  },
+  {
+    "pc": "0x4037005c",
+    "bytes": "02ce96",
+    "instruction": "bltz\ta14, 4037008c <flex_ingress_isr_probe+0x7c>"
+  },
+  {
+    "pc": "0x4037005f",
+    "bytes": "590c",
+    "instruction": "movi.n\ta9, 5"
+  },
+  {
+    "pc": "0x40370061",
+    "bytes": "0009c6",
+    "instruction": "j\t4037008c <flex_ingress_isr_probe+0x7c>"
+  },
+  {
+    "pc": "0x40370064",
+    "bytes": "8b0b",
+    "instruction": "addi.n\ta8, a11, -1"
+  },
+  {
+    "pc": "0x40370066",
+    "bytes": "889a",
+    "instruction": "add.n\ta8, a8, a9"
+  },
+  {
+    "pc": "0x40370068",
+    "bytes": "c288b0",
+    "instruction": "quou\ta8, a8, a11"
+  },
+  {
+    "pc": "0x4037006b",
+    "bytes": "77cc",
+    "instruction": "bnez.n\ta7, 40370076 <flex_ingress_isr_probe+0x66>"
+  },
+  {
+    "pc": "0x4037006d",
+    "bytes": "490c",
+    "instruction": "movi.n\ta9, 4"
+  },
+  {
+    "pc": "0x4037006f",
+    "bytes": "0c0c",
+    "instruction": "movi.n\ta12, 0"
+  },
+  {
+    "pc": "0x40370071",
+    "bytes": "0a0c",
+    "instruction": "movi.n\ta10, 0"
+  },
+  {
+    "pc": "0x40370073",
+    "bytes": "153687",
+    "instruction": "bltu\ta6, a8, 4037008c <flex_ingress_isr_probe+0x7c>"
+  },
+  {
+    "pc": "0x40370076",
+    "bytes": "07ad",
+    "instruction": "mov.n\ta10, a7"
+  },
+  {
+    "pc": "0x40370078",
+    "bytes": "01b687",
+    "instruction": "bgeu\ta6, a8, 4037007d <flex_ingress_isr_probe+0x6d>"
+  },
+  {
+    "pc": "0x4037007b",
+    "bytes": "a70b",
+    "instruction": "addi.n\ta10, a7, -1"
+  },
+  {
+    "pc": "0x4037007d",
+    "bytes": "c0c680",
+    "instruction": "sub\ta12, a6, a8"
+  },
+  {
+    "pc": "0x40370080",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x40370082",
+    "bytes": "000186",
+    "instruction": "j\t4037008c <flex_ingress_isr_probe+0x7c>"
+  },
+  {
+    "pc": "0x40370086",
+    "bytes": "490c",
+    "instruction": "movi.n\ta9, 4"
+  },
+  {
+    "pc": "0x40370088",
+    "bytes": "0c0c",
+    "instruction": "movi.n\ta12, 0"
+  },
+  {
+    "pc": "0x4037008a",
+    "bytes": "0a0c",
+    "instruction": "movi.n\ta10, 0"
+  },
+  {
+    "pc": "0x4037008c",
+    "bytes": "ffdf51",
+    "instruction": "l32r\ta5, 40370008 <probe_ingress+0x6dfff0> (3fc90018 <probe_ingress>)"
+  },
+  {
+    "pc": "0x4037008f",
+    "bytes": "0ad582",
+    "instruction": "addmi\ta8, a5, 0xa00"
+  },
+  {
+    "pc": "0x40370092",
+    "bytes": "08d8",
+    "instruction": "l32i.n\ta13, a8, 0"
+  },
+  {
+    "pc": "0x40370094",
+    "bytes": "18b8",
+    "instruction": "l32i.n\ta11, a8, 4"
+  },
+  {
+    "pc": "0x40370096",
+    "bytes": "020d66",
+    "instruction": "bnei\ta13, -1, 4037009c <flex_ingress_isr_probe+0x8c>"
+  },
+  {
+    "pc": "0x40370099",
+    "bytes": "090b26",
+    "instruction": "beqi\ta11, -1, 403700a6 <flex_ingress_isr_probe+0x96>"
+  },
+  {
+    "pc": "0x4037009c",
+    "bytes": "dd1b",
+    "instruction": "addi.n\ta13, a13, 1"
+  },
+  {
+    "pc": "0x4037009e",
+    "bytes": "0dcc",
+    "instruction": "bnez.n\ta13, 403700a2 <flex_ingress_isr_probe+0x92>"
+  },
+  {
+    "pc": "0x403700a0",
+    "bytes": "bb1b",
+    "instruction": "addi.n\ta11, a11, 1"
+  },
+  {
+    "pc": "0x403700a2",
+    "bytes": "08d9",
+    "instruction": "s32i.n\ta13, a8, 0"
+  },
+  {
+    "pc": "0x403700a4",
+    "bytes": "18b9",
+    "instruction": "s32i.n\ta11, a8, 4"
+  },
+  {
+    "pc": "0x403700a6",
+    "bytes": "20b230",
+    "instruction": "or\ta11, a2, a3"
+  },
+  {
+    "pc": "0x403700a9",
+    "bytes": "00bb16",
+    "instruction": "beqz\ta11, 403700b8 <flex_ingress_isr_probe+0xa8>"
+  },
+  {
+    "pc": "0x403700ac",
+    "bytes": "2828b2",
+    "instruction": "l32i\ta11, a8, 160"
+  },
+  {
+    "pc": "0x403700af",
+    "bytes": "059b27",
+    "instruction": "bne\ta11, a2, 403700b8 <flex_ingress_isr_probe+0xa8>"
+  },
+  {
+    "pc": "0x403700b2",
+    "bytes": "2928b2",
+    "instruction": "l32i\ta11, a8, 164"
+  },
+  {
+    "pc": "0x403700b5",
+    "bytes": "181b37",
+    "instruction": "beq\ta11, a3, 403700d1 <flex_ingress_isr_probe+0xc1>"
+  },
+  {
+    "pc": "0x403700b8",
+    "bytes": "88a8",
+    "instruction": "l32i.n\ta10, a8, 32"
+  },
+  {
+    "pc": "0x403700ba",
+    "bytes": "9898",
+    "instruction": "l32i.n\ta9, a8, 36"
+  },
+  {
+    "pc": "0x403700bc",
+    "bytes": "020a66",
+    "instruction": "bnei\ta10, -1, 403700c2 <flex_ingress_isr_probe+0xb2>"
+  },
+  {
+    "pc": "0x403700bf",
+    "bytes": "090926",
+    "instruction": "beqi\ta9, -1, 403700cc <flex_ingress_isr_probe+0xbc>"
+  },
+  {
+    "pc": "0x403700c2",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x403700c4",
+    "bytes": "0acc",
+    "instruction": "bnez.n\ta10, 403700c8 <flex_ingress_isr_probe+0xb8>"
+  },
+  {
+    "pc": "0x403700c6",
+    "bytes": "991b",
+    "instruction": "addi.n\ta9, a9, 1"
+  },
+  {
+    "pc": "0x403700c8",
+    "bytes": "88a9",
+    "instruction": "s32i.n\ta10, a8, 32"
+  },
+  {
+    "pc": "0x403700ca",
+    "bytes": "9899",
+    "instruction": "s32i.n\ta9, a8, 36"
+  },
+  {
+    "pc": "0x403700cc",
+    "bytes": "1a0c",
+    "instruction": "movi.n\ta10, 1"
+  },
+  {
+    "pc": "0x403700ce",
+    "bytes": "013886",
+    "instruction": "j\t403705b4 <flex_ingress_isr_probe+0x5a4>"
+  },
+  {
+    "pc": "0x403700d1",
+    "bytes": "ed08b2",
+    "instruction": "l8ui\ta11, a8, 237"
+  },
+  {
+    "pc": "0x403700d4",
+    "bytes": "8bdc",
+    "instruction": "bnez.n\ta11, 403700f0 <flex_ingress_isr_probe+0xe0>"
+  },
+  {
+    "pc": "0x403700d6",
+    "bytes": "a8a8",
+    "instruction": "l32i.n\ta10, a8, 40"
+  },
+  {
+    "pc": "0x403700d8",
+    "bytes": "b898",
+    "instruction": "l32i.n\ta9, a8, 44"
+  },
+  {
+    "pc": "0x403700da",
+    "bytes": "020a66",
+    "instruction": "bnei\ta10, -1, 403700e0 <flex_ingress_isr_probe+0xd0>"
+  },
+  {
+    "pc": "0x403700dd",
+    "bytes": "090926",
+    "instruction": "beqi\ta9, -1, 403700ea <flex_ingress_isr_probe+0xda>"
+  },
+  {
+    "pc": "0x403700e0",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x403700e2",
+    "bytes": "0acc",
+    "instruction": "bnez.n\ta10, 403700e6 <flex_ingress_isr_probe+0xd6>"
+  },
+  {
+    "pc": "0x403700e4",
+    "bytes": "991b",
+    "instruction": "addi.n\ta9, a9, 1"
+  },
+  {
+    "pc": "0x403700e6",
+    "bytes": "a8a9",
+    "instruction": "s32i.n\ta10, a8, 40"
+  },
+  {
+    "pc": "0x403700e8",
+    "bytes": "b899",
+    "instruction": "s32i.n\ta9, a8, 44"
+  },
+  {
+    "pc": "0x403700ea",
+    "bytes": "2a0c",
+    "instruction": "movi.n\ta10, 2"
+  },
+  {
+    "pc": "0x403700ec",
+    "bytes": "013106",
+    "instruction": "j\t403705b4 <flex_ingress_isr_probe+0x5a4>"
+  },
+  {
+    "pc": "0x403700f0",
+    "bytes": "ee08b2",
+    "instruction": "l8ui\ta11, a8, 238"
+  },
+  {
+    "pc": "0x403700f3",
+    "bytes": "053b16",
+    "instruction": "beqz\ta11, 4037014a <flex_ingress_isr_probe+0x13a>"
+  },
+  {
+    "pc": "0x403700f6",
+    "bytes": "3128b2",
+    "instruction": "l32i\ta11, a8, 196"
+  },
+  {
+    "pc": "0x403700f9",
+    "bytes": "3028d2",
+    "instruction": "l32i\ta13, a8, 192"
+  },
+  {
+    "pc": "0x403700fc",
+    "bytes": "0537b7",
+    "instruction": "bltu\ta7, a11, 40370105 <flex_ingress_isr_probe+0xf5>"
+  },
+  {
+    "pc": "0x403700ff",
+    "bytes": "479b77",
+    "instruction": "bne\ta11, a7, 4037014a <flex_ingress_isr_probe+0x13a>"
+  },
+  {
+    "pc": "0x40370102",
+    "bytes": "44b6d7",
+    "instruction": "bgeu\ta6, a13, 4037014a <flex_ingress_isr_probe+0x13a>"
+  },
+  {
+    "pc": "0x40370105",
+    "bytes": "3928c2",
+    "instruction": "l32i\ta12, a8, 228"
+  },
+  {
+    "pc": "0x40370108",
+    "bytes": "7878",
+    "instruction": "l32i.n\ta7, a8, 28"
+  },
+  {
+    "pc": "0x4037010a",
+    "bytes": "fe7c",
+    "instruction": "movi.n\ta14, -1"
+  },
+  {
+    "pc": "0x4037010c",
+    "bytes": "68f8",
+    "instruction": "l32i.n\ta15, a8, 24"
+  },
+  {
+    "pc": "0x4037010e",
+    "bytes": "30ece0",
+    "instruction": "xor\ta14, a12, a14"
+  },
+  {
+    "pc": "0x40370111",
+    "bytes": "070766",
+    "instruction": "bnei\ta7, -1, 4037011c <flex_ingress_isr_probe+0x10c>"
+  },
+  {
+    "pc": "0x40370114",
+    "bytes": "fa7c",
+    "instruction": "movi.n\ta10, -1"
+  },
+  {
+    "pc": "0x40370116",
+    "bytes": "ffaf92",
+    "instruction": "movi\ta9, -1"
+  },
+  {
+    "pc": "0x40370119",
+    "bytes": "083ef7",
+    "instruction": "bltu\ta14, a15, 40370125 <flex_ingress_isr_probe+0x115>"
+  },
+  {
+    "pc": "0x4037011c",
+    "bytes": "afca",
+    "instruction": "add.n\ta10, a15, a12"
+  },
+  {
+    "pc": "0x4037011e",
+    "bytes": "079d",
+    "instruction": "mov.n\ta9, a7"
+  },
+  {
+    "pc": "0x40370120",
+    "bytes": "01bac7",
+    "instruction": "bgeu\ta10, a12, 40370125 <flex_ingress_isr_probe+0x115>"
+  },
+  {
+    "pc": "0x40370123",
+    "bytes": "971b",
+    "instruction": "addi.n\ta9, a7, 1"
+  },
+  {
+    "pc": "0x40370125",
+    "bytes": "7899",
+    "instruction": "s32i.n\ta9, a8, 28"
+  },
+  {
+    "pc": "0x40370127",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x40370129",
+    "bytes": "ef4892",
+    "instruction": "s8i\ta9, a8, 239"
+  },
+  {
+    "pc": "0x4037012c",
+    "bytes": "190c",
+    "instruction": "movi.n\ta9, 1"
+  },
+  {
+    "pc": "0x4037012e",
+    "bytes": "68a9",
+    "instruction": "s32i.n\ta10, a8, 24"
+  },
+  {
+    "pc": "0x40370130",
+    "bytes": "f14892",
+    "instruction": "s8i\ta9, a8, 241"
+  },
+  {
+    "pc": "0x40370133",
+    "bytes": "3468d2",
+    "instruction": "s32i\ta13, a8, 208"
+  },
+  {
+    "pc": "0x40370136",
+    "bytes": "3568b2",
+    "instruction": "s32i\ta11, a8, 212"
+  },
+  {
+    "pc": "0x40370139",
+    "bytes": "005f46",
+    "instruction": "j\t403702ba <flex_ingress_isr_probe+0x2aa>"
+  },
+  {
+    "pc": "0x4037013c",
+    "bytes": "020926",
+    "instruction": "beqi\ta9, -1, 40370142 <flex_ingress_isr_probe+0x132>"
+  },
+  {
+    "pc": "0x4037013f",
+    "bytes": "0107c6",
+    "instruction": "j\t40370562 <flex_ingress_isr_probe+0x552>"
+  },
+  {
+    "pc": "0x40370142",
+    "bytes": "190c",
+    "instruction": "movi.n\ta9, 1"
+  },
+  {
+    "pc": "0x40370144",
+    "bytes": "f24892",
+    "instruction": "s8i\ta9, a8, 242"
+  },
+  {
+    "pc": "0x40370147",
+    "bytes": "ffe7c6",
+    "instruction": "j\t403700ea <flex_ingress_isr_probe+0xda>"
+  },
+  {
+    "pc": "0x4037014a",
+    "bytes": "1b0c",
+    "instruction": "movi.n\ta11, 1"
+  },
+  {
+    "pc": "0x4037014c",
+    "bytes": "ee48b2",
+    "instruction": "s8i\ta11, a8, 238"
+  },
+  {
+    "pc": "0x4037014f",
+    "bytes": "306862",
+    "instruction": "s32i\ta6, a8, 192"
+  },
+  {
+    "pc": "0x40370152",
+    "bytes": "316872",
+    "instruction": "s32i\ta7, a8, 196"
+  },
+  {
+    "pc": "0x40370155",
+    "bytes": "b9dc",
+    "instruction": "bnez.n\ta9, 40370174 <flex_ingress_isr_probe+0x164>"
+  },
+  {
+    "pc": "0x40370157",
+    "bytes": "1937a7",
+    "instruction": "bltu\ta7, a10, 40370174 <flex_ingress_isr_probe+0x164>"
+  },
+  {
+    "pc": "0x4037015a",
+    "bytes": "029a77",
+    "instruction": "bne\ta10, a7, 40370160 <flex_ingress_isr_probe+0x150>"
+  },
+  {
+    "pc": "0x4037015d",
+    "bytes": "1336c7",
+    "instruction": "bltu\ta6, a12, 40370174 <flex_ingress_isr_probe+0x164>"
+  },
+  {
+    "pc": "0x40370160",
+    "bytes": "c097a0",
+    "instruction": "sub\ta9, a7, a10"
+  },
+  {
+    "pc": "0x40370163",
+    "bytes": "02b6c7",
+    "instruction": "bgeu\ta6, a12, 40370169 <flex_ingress_isr_probe+0x159>"
+  },
+  {
+    "pc": "0x40370166",
+    "bytes": "ffc992",
+    "instruction": "addi\ta9, a9, -1"
+  },
+  {
+    "pc": "0x40370169",
+    "bytes": "c0b6c0",
+    "instruction": "sub\ta11, a6, a12"
+  },
+  {
+    "pc": "0x4037016c",
+    "bytes": "49cc",
+    "instruction": "bnez.n\ta9, 40370174 <flex_ingress_isr_probe+0x164>"
+  },
+  {
+    "pc": "0x4037016e",
+    "bytes": "ffa591",
+    "instruction": "l32r\ta9, 40370004 <probe_ingress+0x6dffec> (1388 <probe_clock-0x3fc8ec78>)"
+  },
+  {
+    "pc": "0x40370171",
+    "bytes": "0cb9b7",
+    "instruction": "bgeu\ta9, a11, 40370181 <flex_ingress_isr_probe+0x171>"
+  },
+  {
+    "pc": "0x40370174",
+    "bytes": "68d8",
+    "instruction": "l32i.n\ta13, a8, 24"
+  },
+  {
+    "pc": "0x40370176",
+    "bytes": "78e8",
+    "instruction": "l32i.n\ta14, a8, 28"
+  },
+  {
+    "pc": "0x40370178",
+    "bytes": "3928b2",
+    "instruction": "l32i\ta11, a8, 228"
+  },
+  {
+    "pc": "0x4037017b",
+    "bytes": "004386",
+    "instruction": "j\t4037028d <flex_ingress_isr_probe+0x27d>"
+  },
+  {
+    "pc": "0x40370181",
+    "bytes": "372892",
+    "instruction": "l32i\ta9, a8, 220"
+  },
+  {
+    "pc": "0x40370184",
+    "bytes": "3628b2",
+    "instruction": "l32i\ta11, a8, 216"
+  },
+  {
+    "pc": "0x40370187",
+    "bytes": "c09790",
+    "instruction": "sub\ta9, a7, a9"
+  },
+  {
+    "pc": "0x4037018a",
+    "bytes": "02b6b7",
+    "instruction": "bgeu\ta6, a11, 40370190 <flex_ingress_isr_probe+0x180>"
+  },
+  {
+    "pc": "0x4037018d",
+    "bytes": "ffc992",
+    "instruction": "addi\ta9, a9, -1"
+  },
+  {
+    "pc": "0x40370190",
+    "bytes": "c0b6b0",
+    "instruction": "sub\ta11, a6, a11"
+  },
+  {
+    "pc": "0x40370193",
+    "bytes": "79cc",
+    "instruction": "bnez.n\ta9, 4037019e <flex_ingress_isr_probe+0x18e>"
+  },
+  {
+    "pc": "0x40370195",
+    "bytes": "0fa092",
+    "instruction": "movi\ta9, 15"
+  },
+  {
+    "pc": "0x40370198",
+    "bytes": "27d992",
+    "instruction": "addmi\ta9, a9, 0x2700"
+  },
+  {
+    "pc": "0x4037019b",
+    "bytes": "0ab9b7",
+    "instruction": "bgeu\ta9, a11, 403701a9 <flex_ingress_isr_probe+0x199>"
+  },
+  {
+    "pc": "0x4037019e",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x403701a0",
+    "bytes": "366862",
+    "instruction": "s32i\ta6, a8, 216"
+  },
+  {
+    "pc": "0x403701a3",
+    "bytes": "376872",
+    "instruction": "s32i\ta7, a8, 220"
+  },
+  {
+    "pc": "0x403701a6",
+    "bytes": "3a6892",
+    "instruction": "s32i\ta9, a8, 232"
+  },
+  {
+    "pc": "0x403701a9",
+    "bytes": "3a2892",
+    "instruction": "l32i\ta9, a8, 232"
+  },
+  {
+    "pc": "0x403701ac",
+    "bytes": "02c926",
+    "instruction": "beqi\ta9, 32, 403701b2 <flex_ingress_isr_probe+0x1a2>"
+  },
+  {
+    "pc": "0x403701af",
+    "bytes": "002286",
+    "instruction": "j\t4037023d <flex_ingress_isr_probe+0x22d>"
+  },
+  {
+    "pc": "0x403701b2",
+    "bytes": "3928b2",
+    "instruction": "l32i\ta11, a8, 228"
+  },
+  {
+    "pc": "0x403701b5",
+    "bytes": "78e8",
+    "instruction": "l32i.n\ta14, a8, 28"
+  },
+  {
+    "pc": "0x403701b7",
+    "bytes": "fc7c",
+    "instruction": "movi.n\ta12, -1"
+  },
+  {
+    "pc": "0x403701b9",
+    "bytes": "68d8",
+    "instruction": "l32i.n\ta13, a8, 24"
+  },
+  {
+    "pc": "0x403701bb",
+    "bytes": "30cbc0",
+    "instruction": "xor\ta12, a11, a12"
+  },
+  {
+    "pc": "0x403701be",
+    "bytes": "070e66",
+    "instruction": "bnei\ta14, -1, 403701c9 <flex_ingress_isr_probe+0x1b9>"
+  },
+  {
+    "pc": "0x403701c1",
+    "bytes": "fa7c",
+    "instruction": "movi.n\ta10, -1"
+  },
+  {
+    "pc": "0x403701c3",
+    "bytes": "ffaf92",
+    "instruction": "movi\ta9, -1"
+  },
+  {
+    "pc": "0x403701c6",
+    "bytes": "083cd7",
+    "instruction": "bltu\ta12, a13, 403701d2 <flex_ingress_isr_probe+0x1c2>"
+  },
+  {
+    "pc": "0x403701c9",
+    "bytes": "adba",
+    "instruction": "add.n\ta10, a13, a11"
+  },
+  {
+    "pc": "0x403701cb",
+    "bytes": "0e9d",
+    "instruction": "mov.n\ta9, a14"
+  },
+  {
+    "pc": "0x403701cd",
+    "bytes": "01bab7",
+    "instruction": "bgeu\ta10, a11, 403701d2 <flex_ingress_isr_probe+0x1c2>"
+  },
+  {
+    "pc": "0x403701d0",
+    "bytes": "9e1b",
+    "instruction": "addi.n\ta9, a14, 1"
+  },
+  {
+    "pc": "0x403701d2",
+    "bytes": "7899",
+    "instruction": "s32i.n\ta9, a8, 28"
+  },
+  {
+    "pc": "0x403701d4",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x403701d6",
+    "bytes": "ef4892",
+    "instruction": "s8i\ta9, a8, 239"
+  },
+  {
+    "pc": "0x403701d9",
+    "bytes": "190c",
+    "instruction": "movi.n\ta9, 1"
+  },
+  {
+    "pc": "0x403701db",
+    "bytes": "f14892",
+    "instruction": "s8i\ta9, a8, 241"
+  },
+  {
+    "pc": "0x403701de",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x403701e0",
+    "bytes": "68a9",
+    "instruction": "s32i.n\ta10, a8, 24"
+  },
+  {
+    "pc": "0x403701e2",
+    "bytes": "386892",
+    "instruction": "s32i\ta9, a8, 224"
+  },
+  {
+    "pc": "0x403701e5",
+    "bytes": "0a0c",
+    "instruction": "movi.n\ta10, 0"
+  },
+  {
+    "pc": "0x403701e7",
+    "bytes": "396892",
+    "instruction": "s32i\ta9, a8, 228"
+  },
+  {
+    "pc": "0x403701ea",
+    "bytes": "3a6892",
+    "instruction": "s32i\ta9, a8, 232"
+  },
+  {
+    "pc": "0x403701ed",
+    "bytes": "590c",
+    "instruction": "movi.n\ta9, 5"
+  },
+  {
+    "pc": "0x403701ef",
+    "bytes": "765892",
+    "instruction": "s16i\ta9, a8, 236"
+  },
+  {
+    "pc": "0x403701f2",
+    "bytes": "2468a2",
+    "instruction": "s32i\ta10, a8, 144"
+  },
+  {
+    "pc": "0x403701f5",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x403701f7",
+    "bytes": "2668a2",
+    "instruction": "s32i\ta10, a8, 152"
+  },
+  {
+    "pc": "0x403701fa",
+    "bytes": "0e28a2",
+    "instruction": "l32i\ta10, a8, 56"
+  },
+  {
+    "pc": "0x403701fd",
+    "bytes": "256892",
+    "instruction": "s32i\ta9, a8, 148"
+  },
+  {
+    "pc": "0x40370200",
+    "bytes": "276892",
+    "instruction": "s32i\ta9, a8, 156"
+  },
+  {
+    "pc": "0x40370203",
+    "bytes": "346862",
+    "instruction": "s32i\ta6, a8, 208"
+  },
+  {
+    "pc": "0x40370206",
+    "bytes": "356872",
+    "instruction": "s32i\ta7, a8, 212"
+  },
+  {
+    "pc": "0x40370209",
+    "bytes": "0f2892",
+    "instruction": "l32i\ta9, a8, 60"
+  },
+  {
+    "pc": "0x4037020c",
+    "bytes": "020a66",
+    "instruction": "bnei\ta10, -1, 40370212 <flex_ingress_isr_probe+0x202>"
+  },
+  {
+    "pc": "0x4037020f",
+    "bytes": "0a0926",
+    "instruction": "beqi\ta9, -1, 4037021d <flex_ingress_isr_probe+0x20d>"
+  },
+  {
+    "pc": "0x40370212",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x40370214",
+    "bytes": "1acc",
+    "instruction": "bnez.n\ta10, 40370219 <flex_ingress_isr_probe+0x209>"
+  },
+  {
+    "pc": "0x40370216",
+    "bytes": "01c992",
+    "instruction": "addi\ta9, a9, 1"
+  },
+  {
+    "pc": "0x40370219",
+    "bytes": "e8a9",
+    "instruction": "s32i.n\ta10, a8, 56"
+  },
+  {
+    "pc": "0x4037021b",
+    "bytes": "f899",
+    "instruction": "s32i.n\ta9, a8, 60"
+  },
+  {
+    "pc": "0x4037021d",
+    "bytes": "1c28a2",
+    "instruction": "l32i\ta10, a8, 112"
+  },
+  {
+    "pc": "0x40370220",
+    "bytes": "1d2892",
+    "instruction": "l32i\ta9, a8, 116"
+  },
+  {
+    "pc": "0x40370223",
+    "bytes": "050a66",
+    "instruction": "bnei\ta10, -1, 4037022c <flex_ingress_isr_probe+0x21c>"
+  },
+  {
+    "pc": "0x40370226",
+    "bytes": "020966",
+    "instruction": "bnei\ta9, -1, 4037022c <flex_ingress_isr_probe+0x21c>"
+  },
+  {
+    "pc": "0x40370229",
+    "bytes": "00a246",
+    "instruction": "j\t403704b6 <flex_ingress_isr_probe+0x4a6>"
+  },
+  {
+    "pc": "0x4037022c",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x4037022e",
+    "bytes": "002a56",
+    "instruction": "bnez\ta10, 40370234 <flex_ingress_isr_probe+0x224>"
+  },
+  {
+    "pc": "0x40370231",
+    "bytes": "01c992",
+    "instruction": "addi\ta9, a9, 1"
+  },
+  {
+    "pc": "0x40370234",
+    "bytes": "1c68a2",
+    "instruction": "s32i\ta10, a8, 112"
+  },
+  {
+    "pc": "0x40370237",
+    "bytes": "1d6892",
+    "instruction": "s32i\ta9, a8, 116"
+  },
+  {
+    "pc": "0x4037023a",
+    "bytes": "009e06",
+    "instruction": "j\t403704b6 <flex_ingress_isr_probe+0x4a6>"
+  },
+  {
+    "pc": "0x4037023d",
+    "bytes": "991b",
+    "instruction": "addi.n\ta9, a9, 1"
+  },
+  {
+    "pc": "0x4037023f",
+    "bytes": "3a6892",
+    "instruction": "s32i\ta9, a8, 232"
+  },
+  {
+    "pc": "0x40370242",
+    "bytes": "2f2892",
+    "instruction": "l32i\ta9, a8, 188"
+  },
+  {
+    "pc": "0x40370245",
+    "bytes": "2239a7",
+    "instruction": "bltu\ta9, a10, 4037026b <flex_ingress_isr_probe+0x25b>"
+  },
+  {
+    "pc": "0x40370248",
+    "bytes": "0599a7",
+    "instruction": "bne\ta9, a10, 40370251 <flex_ingress_isr_probe+0x241>"
+  },
+  {
+    "pc": "0x4037024b",
+    "bytes": "2e2892",
+    "instruction": "l32i\ta9, a8, 184"
+  },
+  {
+    "pc": "0x4037024e",
+    "bytes": "1939c7",
+    "instruction": "bltu\ta9, a12, 4037026b <flex_ingress_isr_probe+0x25b>"
+  },
+  {
+    "pc": "0x40370251",
+    "bytes": "c8a8",
+    "instruction": "l32i.n\ta10, a8, 48"
+  },
+  {
+    "pc": "0x40370253",
+    "bytes": "d898",
+    "instruction": "l32i.n\ta9, a8, 52"
+  },
+  {
+    "pc": "0x40370255",
+    "bytes": "050a66",
+    "instruction": "bnei\ta10, -1, 4037025e <flex_ingress_isr_probe+0x24e>"
+  },
+  {
+    "pc": "0x40370258",
+    "bytes": "020966",
+    "instruction": "bnei\ta9, -1, 4037025e <flex_ingress_isr_probe+0x24e>"
+  },
+  {
+    "pc": "0x4037025b",
+    "bytes": "ff9b46",
+    "instruction": "j\t403700cc <flex_ingress_isr_probe+0xbc>"
+  },
+  {
+    "pc": "0x4037025e",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x40370260",
+    "bytes": "0acc",
+    "instruction": "bnez.n\ta10, 40370264 <flex_ingress_isr_probe+0x254>"
+  },
+  {
+    "pc": "0x40370262",
+    "bytes": "991b",
+    "instruction": "addi.n\ta9, a9, 1"
+  },
+  {
+    "pc": "0x40370264",
+    "bytes": "c8a9",
+    "instruction": "s32i.n\ta10, a8, 48"
+  },
+  {
+    "pc": "0x40370266",
+    "bytes": "d899",
+    "instruction": "s32i.n\ta9, a8, 52"
+  },
+  {
+    "pc": "0x40370268",
+    "bytes": "ff9806",
+    "instruction": "j\t403700cc <flex_ingress_isr_probe+0xbc>"
+  },
+  {
+    "pc": "0x4037026b",
+    "bytes": "ef0892",
+    "instruction": "l8ui\ta9, a8, 239"
+  },
+  {
+    "pc": "0x4037026e",
+    "bytes": "3928b2",
+    "instruction": "l32i\ta11, a8, 228"
+  },
+  {
+    "pc": "0x40370271",
+    "bytes": "1c4916",
+    "instruction": "beqz\ta9, 40370439 <flex_ingress_isr_probe+0x429>"
+  },
+  {
+    "pc": "0x40370274",
+    "bytes": "332892",
+    "instruction": "l32i\ta9, a8, 204"
+  },
+  {
+    "pc": "0x40370277",
+    "bytes": "3228d2",
+    "instruction": "l32i\ta13, a8, 200"
+  },
+  {
+    "pc": "0x4037027a",
+    "bytes": "02b9a7",
+    "instruction": "bgeu\ta9, a10, 40370280 <flex_ingress_isr_probe+0x270>"
+  },
+  {
+    "pc": "0x4037027d",
+    "bytes": "002406",
+    "instruction": "j\t40370311 <flex_ingress_isr_probe+0x301>"
+  },
+  {
+    "pc": "0x40370280",
+    "bytes": "059a97",
+    "instruction": "bne\ta10, a9, 40370289 <flex_ingress_isr_probe+0x279>"
+  },
+  {
+    "pc": "0x40370283",
+    "bytes": "02bdc7",
+    "instruction": "bgeu\ta13, a12, 40370289 <flex_ingress_isr_probe+0x279>"
+  },
+  {
+    "pc": "0x40370286",
+    "bytes": "0021c6",
+    "instruction": "j\t40370311 <flex_ingress_isr_probe+0x301>"
+  },
+  {
+    "pc": "0x40370289",
+    "bytes": "68d8",
+    "instruction": "l32i.n\ta13, a8, 24"
+  },
+  {
+    "pc": "0x4037028b",
+    "bytes": "78e8",
+    "instruction": "l32i.n\ta14, a8, 28"
+  },
+  {
+    "pc": "0x4037028d",
+    "bytes": "fc7c",
+    "instruction": "movi.n\ta12, -1"
+  },
+  {
+    "pc": "0x4037028f",
+    "bytes": "30cbc0",
+    "instruction": "xor\ta12, a11, a12"
+  },
+  {
+    "pc": "0x40370292",
+    "bytes": "070e66",
+    "instruction": "bnei\ta14, -1, 4037029d <flex_ingress_isr_probe+0x28d>"
+  },
+  {
+    "pc": "0x40370295",
+    "bytes": "fa7c",
+    "instruction": "movi.n\ta10, -1"
+  },
+  {
+    "pc": "0x40370297",
+    "bytes": "ffaf92",
+    "instruction": "movi\ta9, -1"
+  },
+  {
+    "pc": "0x4037029a",
+    "bytes": "083cd7",
+    "instruction": "bltu\ta12, a13, 403702a6 <flex_ingress_isr_probe+0x296>"
+  },
+  {
+    "pc": "0x4037029d",
+    "bytes": "adba",
+    "instruction": "add.n\ta10, a13, a11"
+  },
+  {
+    "pc": "0x4037029f",
+    "bytes": "0e9d",
+    "instruction": "mov.n\ta9, a14"
+  },
+  {
+    "pc": "0x403702a1",
+    "bytes": "01bab7",
+    "instruction": "bgeu\ta10, a11, 403702a6 <flex_ingress_isr_probe+0x296>"
+  },
+  {
+    "pc": "0x403702a4",
+    "bytes": "9e1b",
+    "instruction": "addi.n\ta9, a14, 1"
+  },
+  {
+    "pc": "0x403702a6",
+    "bytes": "7899",
+    "instruction": "s32i.n\ta9, a8, 28"
+  },
+  {
+    "pc": "0x403702a8",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x403702aa",
+    "bytes": "ef4892",
+    "instruction": "s8i\ta9, a8, 239"
+  },
+  {
+    "pc": "0x403702ad",
+    "bytes": "190c",
+    "instruction": "movi.n\ta9, 1"
+  },
+  {
+    "pc": "0x403702af",
+    "bytes": "68a9",
+    "instruction": "s32i.n\ta10, a8, 24"
+  },
+  {
+    "pc": "0x403702b1",
+    "bytes": "f14892",
+    "instruction": "s8i\ta9, a8, 241"
+  },
+  {
+    "pc": "0x403702b4",
+    "bytes": "346862",
+    "instruction": "s32i\ta6, a8, 208"
+  },
+  {
+    "pc": "0x403702b7",
+    "bytes": "356872",
+    "instruction": "s32i\ta7, a8, 212"
+  },
+  {
+    "pc": "0x403702ba",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x403702bc",
+    "bytes": "0a0c",
+    "instruction": "movi.n\ta10, 0"
+  },
+  {
+    "pc": "0x403702be",
+    "bytes": "386892",
+    "instruction": "s32i\ta9, a8, 224"
+  },
+  {
+    "pc": "0x403702c1",
+    "bytes": "396892",
+    "instruction": "s32i\ta9, a8, 228"
+  },
+  {
+    "pc": "0x403702c4",
+    "bytes": "3a6892",
+    "instruction": "s32i\ta9, a8, 232"
+  },
+  {
+    "pc": "0x403702c7",
+    "bytes": "190c",
+    "instruction": "movi.n\ta9, 1"
+  },
+  {
+    "pc": "0x403702c9",
+    "bytes": "765892",
+    "instruction": "s16i\ta9, a8, 236"
+  },
+  {
+    "pc": "0x403702cc",
+    "bytes": "2468a2",
+    "instruction": "s32i\ta10, a8, 144"
+  },
+  {
+    "pc": "0x403702cf",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x403702d1",
+    "bytes": "2668a2",
+    "instruction": "s32i\ta10, a8, 152"
+  },
+  {
+    "pc": "0x403702d4",
+    "bytes": "0e28a2",
+    "instruction": "l32i\ta10, a8, 56"
+  },
+  {
+    "pc": "0x403702d7",
+    "bytes": "256892",
+    "instruction": "s32i\ta9, a8, 148"
+  },
+  {
+    "pc": "0x403702da",
+    "bytes": "276892",
+    "instruction": "s32i\ta9, a8, 156"
+  },
+  {
+    "pc": "0x403702dd",
+    "bytes": "0f2892",
+    "instruction": "l32i\ta9, a8, 60"
+  },
+  {
+    "pc": "0x403702e0",
+    "bytes": "020a66",
+    "instruction": "bnei\ta10, -1, 403702e6 <flex_ingress_isr_probe+0x2d6>"
+  },
+  {
+    "pc": "0x403702e3",
+    "bytes": "0a0926",
+    "instruction": "beqi\ta9, -1, 403702f1 <flex_ingress_isr_probe+0x2e1>"
+  },
+  {
+    "pc": "0x403702e6",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x403702e8",
+    "bytes": "1acc",
+    "instruction": "bnez.n\ta10, 403702ed <flex_ingress_isr_probe+0x2dd>"
+  },
+  {
+    "pc": "0x403702ea",
+    "bytes": "01c992",
+    "instruction": "addi\ta9, a9, 1"
+  },
+  {
+    "pc": "0x403702ed",
+    "bytes": "e8a9",
+    "instruction": "s32i.n\ta10, a8, 56"
+  },
+  {
+    "pc": "0x403702ef",
+    "bytes": "f899",
+    "instruction": "s32i.n\ta9, a8, 60"
+  },
+  {
+    "pc": "0x403702f1",
+    "bytes": "1428a2",
+    "instruction": "l32i\ta10, a8, 80"
+  },
+  {
+    "pc": "0x403702f4",
+    "bytes": "152892",
+    "instruction": "l32i\ta9, a8, 84"
+  },
+  {
+    "pc": "0x403702f7",
+    "bytes": "050a66",
+    "instruction": "bnei\ta10, -1, 40370300 <flex_ingress_isr_probe+0x2f0>"
+  },
+  {
+    "pc": "0x403702fa",
+    "bytes": "020966",
+    "instruction": "bnei\ta9, -1, 40370300 <flex_ingress_isr_probe+0x2f0>"
+  },
+  {
+    "pc": "0x403702fd",
+    "bytes": "006d46",
+    "instruction": "j\t403704b6 <flex_ingress_isr_probe+0x4a6>"
+  },
+  {
+    "pc": "0x40370300",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x40370302",
+    "bytes": "002a56",
+    "instruction": "bnez\ta10, 40370308 <flex_ingress_isr_probe+0x2f8>"
+  },
+  {
+    "pc": "0x40370305",
+    "bytes": "01c992",
+    "instruction": "addi\ta9, a9, 1"
+  },
+  {
+    "pc": "0x40370308",
+    "bytes": "1468a2",
+    "instruction": "s32i\ta10, a8, 80"
+  },
+  {
+    "pc": "0x4037030b",
+    "bytes": "156892",
+    "instruction": "s32i\ta9, a8, 84"
+  },
+  {
+    "pc": "0x4037030e",
+    "bytes": "006906",
+    "instruction": "j\t403704b6 <flex_ingress_isr_probe+0x4a6>"
+  },
+  {
+    "pc": "0x40370311",
+    "bytes": "f008e2",
+    "instruction": "l8ui\ta14, a8, 240"
+  },
+  {
+    "pc": "0x40370314",
+    "bytes": "021ef7",
+    "instruction": "beq\ta14, a15, 4037031a <flex_ingress_isr_probe+0x30a>"
+  },
+  {
+    "pc": "0x40370317",
+    "bytes": "002086",
+    "instruction": "j\t4037039d <flex_ingress_isr_probe+0x38d>"
+  },
+  {
+    "pc": "0x4037031a",
+    "bytes": "78e8",
+    "instruction": "l32i.n\ta14, a8, 28"
+  },
+  {
+    "pc": "0x4037031c",
+    "bytes": "fc7c",
+    "instruction": "movi.n\ta12, -1"
+  },
+  {
+    "pc": "0x4037031e",
+    "bytes": "68d8",
+    "instruction": "l32i.n\ta13, a8, 24"
+  },
+  {
+    "pc": "0x40370320",
+    "bytes": "30cbc0",
+    "instruction": "xor\ta12, a11, a12"
+  },
+  {
+    "pc": "0x40370323",
+    "bytes": "060e66",
+    "instruction": "bnei\ta14, -1, 4037032d <flex_ingress_isr_probe+0x31d>"
+  },
+  {
+    "pc": "0x40370326",
+    "bytes": "fa7c",
+    "instruction": "movi.n\ta10, -1"
+  },
+  {
+    "pc": "0x40370328",
+    "bytes": "f97c",
+    "instruction": "movi.n\ta9, -1"
+  },
+  {
+    "pc": "0x4037032a",
+    "bytes": "083cd7",
+    "instruction": "bltu\ta12, a13, 40370336 <flex_ingress_isr_probe+0x326>"
+  },
+  {
+    "pc": "0x4037032d",
+    "bytes": "adba",
+    "instruction": "add.n\ta10, a13, a11"
+  },
+  {
+    "pc": "0x4037032f",
+    "bytes": "0e9d",
+    "instruction": "mov.n\ta9, a14"
+  },
+  {
+    "pc": "0x40370331",
+    "bytes": "01bab7",
+    "instruction": "bgeu\ta10, a11, 40370336 <flex_ingress_isr_probe+0x326>"
+  },
+  {
+    "pc": "0x40370334",
+    "bytes": "9e1b",
+    "instruction": "addi.n\ta9, a14, 1"
+  },
+  {
+    "pc": "0x40370336",
+    "bytes": "7899",
+    "instruction": "s32i.n\ta9, a8, 28"
+  },
+  {
+    "pc": "0x40370338",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x4037033a",
+    "bytes": "ef4892",
+    "instruction": "s8i\ta9, a8, 239"
+  },
+  {
+    "pc": "0x4037033d",
+    "bytes": "190c",
+    "instruction": "movi.n\ta9, 1"
+  },
+  {
+    "pc": "0x4037033f",
+    "bytes": "f14892",
+    "instruction": "s8i\ta9, a8, 241"
+  },
+  {
+    "pc": "0x40370342",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x40370344",
+    "bytes": "68a9",
+    "instruction": "s32i.n\ta10, a8, 24"
+  },
+  {
+    "pc": "0x40370346",
+    "bytes": "386892",
+    "instruction": "s32i\ta9, a8, 224"
+  },
+  {
+    "pc": "0x40370349",
+    "bytes": "0a0c",
+    "instruction": "movi.n\ta10, 0"
+  },
+  {
+    "pc": "0x4037034b",
+    "bytes": "396892",
+    "instruction": "s32i\ta9, a8, 228"
+  },
+  {
+    "pc": "0x4037034e",
+    "bytes": "3a6892",
+    "instruction": "s32i\ta9, a8, 232"
+  },
+  {
+    "pc": "0x40370351",
+    "bytes": "390c",
+    "instruction": "movi.n\ta9, 3"
+  },
+  {
+    "pc": "0x40370353",
+    "bytes": "765892",
+    "instruction": "s16i\ta9, a8, 236"
+  },
+  {
+    "pc": "0x40370356",
+    "bytes": "2468a2",
+    "instruction": "s32i\ta10, a8, 144"
+  },
+  {
+    "pc": "0x40370359",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x4037035b",
+    "bytes": "2668a2",
+    "instruction": "s32i\ta10, a8, 152"
+  },
+  {
+    "pc": "0x4037035e",
+    "bytes": "e8a8",
+    "instruction": "l32i.n\ta10, a8, 56"
+  },
+  {
+    "pc": "0x40370360",
+    "bytes": "256892",
+    "instruction": "s32i\ta9, a8, 148"
+  },
+  {
+    "pc": "0x40370363",
+    "bytes": "276892",
+    "instruction": "s32i\ta9, a8, 156"
+  },
+  {
+    "pc": "0x40370366",
+    "bytes": "346862",
+    "instruction": "s32i\ta6, a8, 208"
+  },
+  {
+    "pc": "0x40370369",
+    "bytes": "356872",
+    "instruction": "s32i\ta7, a8, 212"
+  },
+  {
+    "pc": "0x4037036c",
+    "bytes": "f898",
+    "instruction": "l32i.n\ta9, a8, 60"
+  },
+  {
+    "pc": "0x4037036e",
+    "bytes": "020a66",
+    "instruction": "bnei\ta10, -1, 40370374 <flex_ingress_isr_probe+0x364>"
+  },
+  {
+    "pc": "0x40370371",
+    "bytes": "090926",
+    "instruction": "beqi\ta9, -1, 4037037e <flex_ingress_isr_probe+0x36e>"
+  },
+  {
+    "pc": "0x40370374",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x40370376",
+    "bytes": "0acc",
+    "instruction": "bnez.n\ta10, 4037037a <flex_ingress_isr_probe+0x36a>"
+  },
+  {
+    "pc": "0x40370378",
+    "bytes": "991b",
+    "instruction": "addi.n\ta9, a9, 1"
+  },
+  {
+    "pc": "0x4037037a",
+    "bytes": "e8a9",
+    "instruction": "s32i.n\ta10, a8, 56"
+  },
+  {
+    "pc": "0x4037037c",
+    "bytes": "f899",
+    "instruction": "s32i.n\ta9, a8, 60"
+  },
+  {
+    "pc": "0x4037037e",
+    "bytes": "1828a2",
+    "instruction": "l32i\ta10, a8, 96"
+  },
+  {
+    "pc": "0x40370381",
+    "bytes": "192892",
+    "instruction": "l32i\ta9, a8, 100"
+  },
+  {
+    "pc": "0x40370384",
+    "bytes": "050a66",
+    "instruction": "bnei\ta10, -1, 4037038d <flex_ingress_isr_probe+0x37d>"
+  },
+  {
+    "pc": "0x40370387",
+    "bytes": "020966",
+    "instruction": "bnei\ta9, -1, 4037038d <flex_ingress_isr_probe+0x37d>"
+  },
+  {
+    "pc": "0x4037038a",
+    "bytes": "004a06",
+    "instruction": "j\t403704b6 <flex_ingress_isr_probe+0x4a6>"
+  },
+  {
+    "pc": "0x4037038d",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x4037038f",
+    "bytes": "1acc",
+    "instruction": "bnez.n\ta10, 40370394 <flex_ingress_isr_probe+0x384>"
+  },
+  {
+    "pc": "0x40370391",
+    "bytes": "01c992",
+    "instruction": "addi\ta9, a9, 1"
+  },
+  {
+    "pc": "0x40370394",
+    "bytes": "1868a2",
+    "instruction": "s32i\ta10, a8, 96"
+  },
+  {
+    "pc": "0x40370397",
+    "bytes": "196892",
+    "instruction": "s32i\ta9, a8, 100"
+  },
+  {
+    "pc": "0x4037039a",
+    "bytes": "004606",
+    "instruction": "j\t403704b6 <flex_ingress_isr_probe+0x4a6>"
+  },
+  {
+    "pc": "0x4037039d",
+    "bytes": "c09a90",
+    "instruction": "sub\ta9, a10, a9"
+  },
+  {
+    "pc": "0x403703a0",
+    "bytes": "01bcd7",
+    "instruction": "bgeu\ta12, a13, 403703a5 <flex_ingress_isr_probe+0x395>"
+  },
+  {
+    "pc": "0x403703a3",
+    "bytes": "990b",
+    "instruction": "addi.n\ta9, a9, -1"
+  },
+  {
+    "pc": "0x403703a5",
+    "bytes": "c0dcd0",
+    "instruction": "sub\ta13, a12, a13"
+  },
+  {
+    "pc": "0x403703a8",
+    "bytes": "08d956",
+    "instruction": "bnez\ta9, 40370439 <flex_ingress_isr_probe+0x429>"
+  },
+  {
+    "pc": "0x403703ab",
+    "bytes": "193c",
+    "instruction": "movi.n\ta9, 49"
+  },
+  {
+    "pc": "0x403703ad",
+    "bytes": "02b9d7",
+    "instruction": "bgeu\ta9, a13, 403703b3 <flex_ingress_isr_probe+0x3a3>"
+  },
+  {
+    "pc": "0x403703b0",
+    "bytes": "002146",
+    "instruction": "j\t40370439 <flex_ingress_isr_probe+0x429>"
+  },
+  {
+    "pc": "0x403703b3",
+    "bytes": "78e8",
+    "instruction": "l32i.n\ta14, a8, 28"
+  },
+  {
+    "pc": "0x403703b5",
+    "bytes": "fc7c",
+    "instruction": "movi.n\ta12, -1"
+  },
+  {
+    "pc": "0x403703b7",
+    "bytes": "68d8",
+    "instruction": "l32i.n\ta13, a8, 24"
+  },
+  {
+    "pc": "0x403703b9",
+    "bytes": "30cbc0",
+    "instruction": "xor\ta12, a11, a12"
+  },
+  {
+    "pc": "0x403703bc",
+    "bytes": "060e66",
+    "instruction": "bnei\ta14, -1, 403703c6 <flex_ingress_isr_probe+0x3b6>"
+  },
+  {
+    "pc": "0x403703bf",
+    "bytes": "fa7c",
+    "instruction": "movi.n\ta10, -1"
+  },
+  {
+    "pc": "0x403703c1",
+    "bytes": "f97c",
+    "instruction": "movi.n\ta9, -1"
+  },
+  {
+    "pc": "0x403703c3",
+    "bytes": "093cd7",
+    "instruction": "bltu\ta12, a13, 403703d0 <flex_ingress_isr_probe+0x3c0>"
+  },
+  {
+    "pc": "0x403703c6",
+    "bytes": "adba",
+    "instruction": "add.n\ta10, a13, a11"
+  },
+  {
+    "pc": "0x403703c8",
+    "bytes": "209ee0",
+    "instruction": "or\ta9, a14, a14"
+  },
+  {
+    "pc": "0x403703cb",
+    "bytes": "01bab7",
+    "instruction": "bgeu\ta10, a11, 403703d0 <flex_ingress_isr_probe+0x3c0>"
+  },
+  {
+    "pc": "0x403703ce",
+    "bytes": "9e1b",
+    "instruction": "addi.n\ta9, a14, 1"
+  },
+  {
+    "pc": "0x403703d0",
+    "bytes": "7899",
+    "instruction": "s32i.n\ta9, a8, 28"
+  },
+  {
+    "pc": "0x403703d2",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x403703d4",
+    "bytes": "ef4892",
+    "instruction": "s8i\ta9, a8, 239"
+  },
+  {
+    "pc": "0x403703d7",
+    "bytes": "190c",
+    "instruction": "movi.n\ta9, 1"
+  },
+  {
+    "pc": "0x403703d9",
+    "bytes": "f14892",
+    "instruction": "s8i\ta9, a8, 241"
+  },
+  {
+    "pc": "0x403703dc",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x403703de",
+    "bytes": "68a9",
+    "instruction": "s32i.n\ta10, a8, 24"
+  },
+  {
+    "pc": "0x403703e0",
+    "bytes": "386892",
+    "instruction": "s32i\ta9, a8, 224"
+  },
+  {
+    "pc": "0x403703e3",
+    "bytes": "0a0c",
+    "instruction": "movi.n\ta10, 0"
+  },
+  {
+    "pc": "0x403703e5",
+    "bytes": "396892",
+    "instruction": "s32i\ta9, a8, 228"
+  },
+  {
+    "pc": "0x403703e8",
+    "bytes": "3a6892",
+    "instruction": "s32i\ta9, a8, 232"
+  },
+  {
+    "pc": "0x403703eb",
+    "bytes": "490c",
+    "instruction": "movi.n\ta9, 4"
+  },
+  {
+    "pc": "0x403703ed",
+    "bytes": "765892",
+    "instruction": "s16i\ta9, a8, 236"
+  },
+  {
+    "pc": "0x403703f0",
+    "bytes": "2468a2",
+    "instruction": "s32i\ta10, a8, 144"
+  },
+  {
+    "pc": "0x403703f3",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x403703f5",
+    "bytes": "2668a2",
+    "instruction": "s32i\ta10, a8, 152"
+  },
+  {
+    "pc": "0x403703f8",
+    "bytes": "e8a8",
+    "instruction": "l32i.n\ta10, a8, 56"
+  },
+  {
+    "pc": "0x403703fa",
+    "bytes": "256892",
+    "instruction": "s32i\ta9, a8, 148"
+  },
+  {
+    "pc": "0x403703fd",
+    "bytes": "276892",
+    "instruction": "s32i\ta9, a8, 156"
+  },
+  {
+    "pc": "0x40370400",
+    "bytes": "346862",
+    "instruction": "s32i\ta6, a8, 208"
+  },
+  {
+    "pc": "0x40370403",
+    "bytes": "356872",
+    "instruction": "s32i\ta7, a8, 212"
+  },
+  {
+    "pc": "0x40370406",
+    "bytes": "f898",
+    "instruction": "l32i.n\ta9, a8, 60"
+  },
+  {
+    "pc": "0x40370408",
+    "bytes": "020a66",
+    "instruction": "bnei\ta10, -1, 4037040e <flex_ingress_isr_probe+0x3fe>"
+  },
+  {
+    "pc": "0x4037040b",
+    "bytes": "0a0926",
+    "instruction": "beqi\ta9, -1, 40370419 <flex_ingress_isr_probe+0x409>"
+  },
+  {
+    "pc": "0x4037040e",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x40370410",
+    "bytes": "1acc",
+    "instruction": "bnez.n\ta10, 40370415 <flex_ingress_isr_probe+0x405>"
+  },
+  {
+    "pc": "0x40370412",
+    "bytes": "01c992",
+    "instruction": "addi\ta9, a9, 1"
+  },
+  {
+    "pc": "0x40370415",
+    "bytes": "e8a9",
+    "instruction": "s32i.n\ta10, a8, 56"
+  },
+  {
+    "pc": "0x40370417",
+    "bytes": "f899",
+    "instruction": "s32i.n\ta9, a8, 60"
+  },
+  {
+    "pc": "0x40370419",
+    "bytes": "1a28a2",
+    "instruction": "l32i\ta10, a8, 104"
+  },
+  {
+    "pc": "0x4037041c",
+    "bytes": "1b2892",
+    "instruction": "l32i\ta9, a8, 108"
+  },
+  {
+    "pc": "0x4037041f",
+    "bytes": "050a66",
+    "instruction": "bnei\ta10, -1, 40370428 <flex_ingress_isr_probe+0x418>"
+  },
+  {
+    "pc": "0x40370422",
+    "bytes": "020966",
+    "instruction": "bnei\ta9, -1, 40370428 <flex_ingress_isr_probe+0x418>"
+  },
+  {
+    "pc": "0x40370425",
+    "bytes": "002346",
+    "instruction": "j\t403704b6 <flex_ingress_isr_probe+0x4a6>"
+  },
+  {
+    "pc": "0x40370428",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x4037042a",
+    "bytes": "002a56",
+    "instruction": "bnez\ta10, 40370430 <flex_ingress_isr_probe+0x420>"
+  },
+  {
+    "pc": "0x4037042d",
+    "bytes": "01c992",
+    "instruction": "addi\ta9, a9, 1"
+  },
+  {
+    "pc": "0x40370430",
+    "bytes": "1a68a2",
+    "instruction": "s32i\ta10, a8, 104"
+  },
+  {
+    "pc": "0x40370433",
+    "bytes": "1b6892",
+    "instruction": "s32i\ta9, a8, 108"
+  },
+  {
+    "pc": "0x40370436",
+    "bytes": "001f06",
+    "instruction": "j\t403704b6 <flex_ingress_isr_probe+0x4a6>"
+  },
+  {
+    "pc": "0x40370439",
+    "bytes": "02db26",
+    "instruction": "beqi\ta11, 64, 4037043f <flex_ingress_isr_probe+0x42f>"
+  },
+  {
+    "pc": "0x4037043c",
+    "bytes": "002146",
+    "instruction": "j\t403704c5 <flex_ingress_isr_probe+0x4b5>"
+  },
+  {
+    "pc": "0x4037043f",
+    "bytes": "7898",
+    "instruction": "l32i.n\ta9, a8, 28"
+  },
+  {
+    "pc": "0x40370441",
+    "bytes": "68a8",
+    "instruction": "l32i.n\ta10, a8, 24"
+  },
+  {
+    "pc": "0x40370443",
+    "bytes": "050966",
+    "instruction": "bnei\ta9, -1, 4037044c <flex_ingress_isr_probe+0x43c>"
+  },
+  {
+    "pc": "0x40370446",
+    "bytes": "bfafb2",
+    "instruction": "movi\ta11, -65"
+  },
+  {
+    "pc": "0x40370449",
+    "bytes": "63aab0",
+    "instruction": "minu\ta10, a10, a11"
+  },
+  {
+    "pc": "0x4037044c",
+    "bytes": "40caa2",
+    "instruction": "addi\ta10, a10, 64"
+  },
+  {
+    "pc": "0x4037044f",
+    "bytes": "01daf6",
+    "instruction": "bgeui\ta10, 64, 40370454 <flex_ingress_isr_probe+0x444>"
+  },
+  {
+    "pc": "0x40370452",
+    "bytes": "991b",
+    "instruction": "addi.n\ta9, a9, 1"
+  },
+  {
+    "pc": "0x40370454",
+    "bytes": "7899",
+    "instruction": "s32i.n\ta9, a8, 28"
+  },
+  {
+    "pc": "0x40370456",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x40370458",
+    "bytes": "ef4892",
+    "instruction": "s8i\ta9, a8, 239"
+  },
+  {
+    "pc": "0x4037045b",
+    "bytes": "190c",
+    "instruction": "movi.n\ta9, 1"
+  },
+  {
+    "pc": "0x4037045d",
+    "bytes": "f14892",
+    "instruction": "s8i\ta9, a8, 241"
+  },
+  {
+    "pc": "0x40370460",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x40370462",
+    "bytes": "68a9",
+    "instruction": "s32i.n\ta10, a8, 24"
+  },
+  {
+    "pc": "0x40370464",
+    "bytes": "386892",
+    "instruction": "s32i\ta9, a8, 224"
+  },
+  {
+    "pc": "0x40370467",
+    "bytes": "0a0c",
+    "instruction": "movi.n\ta10, 0"
+  },
+  {
+    "pc": "0x40370469",
+    "bytes": "396892",
+    "instruction": "s32i\ta9, a8, 228"
+  },
+  {
+    "pc": "0x4037046c",
+    "bytes": "3a6892",
+    "instruction": "s32i\ta9, a8, 232"
+  },
+  {
+    "pc": "0x4037046f",
+    "bytes": "290c",
+    "instruction": "movi.n\ta9, 2"
+  },
+  {
+    "pc": "0x40370471",
+    "bytes": "765892",
+    "instruction": "s16i\ta9, a8, 236"
+  },
+  {
+    "pc": "0x40370474",
+    "bytes": "2468a2",
+    "instruction": "s32i\ta10, a8, 144"
+  },
+  {
+    "pc": "0x40370477",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x40370479",
+    "bytes": "2668a2",
+    "instruction": "s32i\ta10, a8, 152"
+  },
+  {
+    "pc": "0x4037047c",
+    "bytes": "e8a8",
+    "instruction": "l32i.n\ta10, a8, 56"
+  },
+  {
+    "pc": "0x4037047e",
+    "bytes": "256892",
+    "instruction": "s32i\ta9, a8, 148"
+  },
+  {
+    "pc": "0x40370481",
+    "bytes": "276892",
+    "instruction": "s32i\ta9, a8, 156"
+  },
+  {
+    "pc": "0x40370484",
+    "bytes": "346862",
+    "instruction": "s32i\ta6, a8, 208"
+  },
+  {
+    "pc": "0x40370487",
+    "bytes": "356872",
+    "instruction": "s32i\ta7, a8, 212"
+  },
+  {
+    "pc": "0x4037048a",
+    "bytes": "f898",
+    "instruction": "l32i.n\ta9, a8, 60"
+  },
+  {
+    "pc": "0x4037048c",
+    "bytes": "020a66",
+    "instruction": "bnei\ta10, -1, 40370492 <flex_ingress_isr_probe+0x482>"
+  },
+  {
+    "pc": "0x4037048f",
+    "bytes": "090926",
+    "instruction": "beqi\ta9, -1, 4037049c <flex_ingress_isr_probe+0x48c>"
+  },
+  {
+    "pc": "0x40370492",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x40370494",
+    "bytes": "0acc",
+    "instruction": "bnez.n\ta10, 40370498 <flex_ingress_isr_probe+0x488>"
+  },
+  {
+    "pc": "0x40370496",
+    "bytes": "991b",
+    "instruction": "addi.n\ta9, a9, 1"
+  },
+  {
+    "pc": "0x40370498",
+    "bytes": "e8a9",
+    "instruction": "s32i.n\ta10, a8, 56"
+  },
+  {
+    "pc": "0x4037049a",
+    "bytes": "f899",
+    "instruction": "s32i.n\ta9, a8, 60"
+  },
+  {
+    "pc": "0x4037049c",
+    "bytes": "1628a2",
+    "instruction": "l32i\ta10, a8, 88"
+  },
+  {
+    "pc": "0x4037049f",
+    "bytes": "172892",
+    "instruction": "l32i\ta9, a8, 92"
+  },
+  {
+    "pc": "0x403704a2",
+    "bytes": "020a66",
+    "instruction": "bnei\ta10, -1, 403704a8 <flex_ingress_isr_probe+0x498>"
+  },
+  {
+    "pc": "0x403704a5",
+    "bytes": "0d0926",
+    "instruction": "beqi\ta9, -1, 403704b6 <flex_ingress_isr_probe+0x4a6>"
+  },
+  {
+    "pc": "0x403704a8",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x403704aa",
+    "bytes": "002a56",
+    "instruction": "bnez\ta10, 403704b0 <flex_ingress_isr_probe+0x4a0>"
+  },
+  {
+    "pc": "0x403704ad",
+    "bytes": "01c992",
+    "instruction": "addi\ta9, a9, 1"
+  },
+  {
+    "pc": "0x403704b0",
+    "bytes": "1668a2",
+    "instruction": "s32i\ta10, a8, 88"
+  },
+  {
+    "pc": "0x403704b3",
+    "bytes": "176892",
+    "instruction": "s32i\ta9, a8, 92"
+  },
+  {
+    "pc": "0x403704b6",
+    "bytes": "2a28a2",
+    "instruction": "l32i\ta10, a8, 168"
+  },
+  {
+    "pc": "0x403704b9",
+    "bytes": "2b2892",
+    "instruction": "l32i\ta9, a8, 172"
+  },
+  {
+    "pc": "0x403704bc",
+    "bytes": "020a26",
+    "instruction": "beqi\ta10, -1, 403704c2 <flex_ingress_isr_probe+0x4b2>"
+  },
+  {
+    "pc": "0x403704bf",
+    "bytes": "0027c6",
+    "instruction": "j\t40370562 <flex_ingress_isr_probe+0x552>"
+  },
+  {
+    "pc": "0x403704c2",
+    "bytes": "ff1d86",
+    "instruction": "j\t4037013c <flex_ingress_isr_probe+0x12c>"
+  },
+  {
+    "pc": "0x403704c5",
+    "bytes": "28e8",
+    "instruction": "l32i.n\ta14, a8, 8"
+  },
+  {
+    "pc": "0x403704c7",
+    "bytes": "38d8",
+    "instruction": "l32i.n\ta13, a8, 12"
+  },
+  {
+    "pc": "0x403704c9",
+    "bytes": "020e26",
+    "instruction": "beqi\ta14, -1, 403704cf <flex_ingress_isr_probe+0x4bf>"
+  },
+  {
+    "pc": "0x403704cc",
+    "bytes": "002886",
+    "instruction": "j\t40370572 <flex_ingress_isr_probe+0x562>"
+  },
+  {
+    "pc": "0x403704cf",
+    "bytes": "020d26",
+    "instruction": "beqi\ta13, -1, 403704d5 <flex_ingress_isr_probe+0x4c5>"
+  },
+  {
+    "pc": "0x403704d2",
+    "bytes": "002706",
+    "instruction": "j\t40370572 <flex_ingress_isr_probe+0x562>"
+  },
+  {
+    "pc": "0x403704d5",
+    "bytes": "190c",
+    "instruction": "movi.n\ta9, 1"
+  },
+  {
+    "pc": "0x403704d7",
+    "bytes": "78c8",
+    "instruction": "l32i.n\ta12, a8, 28"
+  },
+  {
+    "pc": "0x403704d9",
+    "bytes": "f24892",
+    "instruction": "s8i\ta9, a8, 242"
+  },
+  {
+    "pc": "0x403704dc",
+    "bytes": "f97c",
+    "instruction": "movi.n\ta9, -1"
+  },
+  {
+    "pc": "0x403704de",
+    "bytes": "68a8",
+    "instruction": "l32i.n\ta10, a8, 24"
+  },
+  {
+    "pc": "0x403704e0",
+    "bytes": "309b90",
+    "instruction": "xor\ta9, a11, a9"
+  },
+  {
+    "pc": "0x403704e3",
+    "bytes": "020c66",
+    "instruction": "bnei\ta12, -1, 403704e9 <flex_ingress_isr_probe+0x4d9>"
+  },
+  {
+    "pc": "0x403704e6",
+    "bytes": "0839a7",
+    "instruction": "bltu\ta9, a10, 403704f2 <flex_ingress_isr_probe+0x4e2>"
+  },
+  {
+    "pc": "0x403704e9",
+    "bytes": "eaba",
+    "instruction": "add.n\ta14, a10, a11"
+  },
+  {
+    "pc": "0x403704eb",
+    "bytes": "0cdd",
+    "instruction": "mov.n\ta13, a12"
+  },
+  {
+    "pc": "0x403704ed",
+    "bytes": "01beb7",
+    "instruction": "bgeu\ta14, a11, 403704f2 <flex_ingress_isr_probe+0x4e2>"
+  },
+  {
+    "pc": "0x403704f0",
+    "bytes": "dc1b",
+    "instruction": "addi.n\ta13, a12, 1"
+  },
+  {
+    "pc": "0x403704f2",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x403704f4",
+    "bytes": "ef4892",
+    "instruction": "s8i\ta9, a8, 239"
+  },
+  {
+    "pc": "0x403704f7",
+    "bytes": "190c",
+    "instruction": "movi.n\ta9, 1"
+  },
+  {
+    "pc": "0x403704f9",
+    "bytes": "f14892",
+    "instruction": "s8i\ta9, a8, 241"
+  },
+  {
+    "pc": "0x403704fc",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x403704fe",
+    "bytes": "0a0c",
+    "instruction": "movi.n\ta10, 0"
+  },
+  {
+    "pc": "0x40370500",
+    "bytes": "386892",
+    "instruction": "s32i\ta9, a8, 224"
+  },
+  {
+    "pc": "0x40370503",
+    "bytes": "396892",
+    "instruction": "s32i\ta9, a8, 228"
+  },
+  {
+    "pc": "0x40370506",
+    "bytes": "3a6892",
+    "instruction": "s32i\ta9, a8, 232"
+  },
+  {
+    "pc": "0x40370509",
+    "bytes": "890c",
+    "instruction": "movi.n\ta9, 8"
+  },
+  {
+    "pc": "0x4037050b",
+    "bytes": "765892",
+    "instruction": "s16i\ta9, a8, 236"
+  },
+  {
+    "pc": "0x4037050e",
+    "bytes": "2468a2",
+    "instruction": "s32i\ta10, a8, 144"
+  },
+  {
+    "pc": "0x40370511",
+    "bytes": "090c",
+    "instruction": "movi.n\ta9, 0"
+  },
+  {
+    "pc": "0x40370513",
+    "bytes": "2668a2",
+    "instruction": "s32i\ta10, a8, 152"
+  },
+  {
+    "pc": "0x40370516",
+    "bytes": "e8a8",
+    "instruction": "l32i.n\ta10, a8, 56"
+  },
+  {
+    "pc": "0x40370518",
+    "bytes": "256892",
+    "instruction": "s32i\ta9, a8, 148"
+  },
+  {
+    "pc": "0x4037051b",
+    "bytes": "276892",
+    "instruction": "s32i\ta9, a8, 156"
+  },
+  {
+    "pc": "0x4037051e",
+    "bytes": "68e9",
+    "instruction": "s32i.n\ta14, a8, 24"
+  },
+  {
+    "pc": "0x40370520",
+    "bytes": "78d9",
+    "instruction": "s32i.n\ta13, a8, 28"
+  },
+  {
+    "pc": "0x40370522",
+    "bytes": "346862",
+    "instruction": "s32i\ta6, a8, 208"
+  },
+  {
+    "pc": "0x40370525",
+    "bytes": "356872",
+    "instruction": "s32i\ta7, a8, 212"
+  },
+  {
+    "pc": "0x40370528",
+    "bytes": "f898",
+    "instruction": "l32i.n\ta9, a8, 60"
+  },
+  {
+    "pc": "0x4037052a",
+    "bytes": "020a66",
+    "instruction": "bnei\ta10, -1, 40370530 <flex_ingress_isr_probe+0x520>"
+  },
+  {
+    "pc": "0x4037052d",
+    "bytes": "090926",
+    "instruction": "beqi\ta9, -1, 4037053a <flex_ingress_isr_probe+0x52a>"
+  },
+  {
+    "pc": "0x40370530",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x40370532",
+    "bytes": "0acc",
+    "instruction": "bnez.n\ta10, 40370536 <flex_ingress_isr_probe+0x526>"
+  },
+  {
+    "pc": "0x40370534",
+    "bytes": "991b",
+    "instruction": "addi.n\ta9, a9, 1"
+  },
+  {
+    "pc": "0x40370536",
+    "bytes": "e8a9",
+    "instruction": "s32i.n\ta10, a8, 56"
+  },
+  {
+    "pc": "0x40370538",
+    "bytes": "f899",
+    "instruction": "s32i.n\ta9, a8, 60"
+  },
+  {
+    "pc": "0x4037053a",
+    "bytes": "2228a2",
+    "instruction": "l32i\ta10, a8, 136"
+  },
+  {
+    "pc": "0x4037053d",
+    "bytes": "232892",
+    "instruction": "l32i\ta9, a8, 140"
+  },
+  {
+    "pc": "0x40370540",
+    "bytes": "020a66",
+    "instruction": "bnei\ta10, -1, 40370546 <flex_ingress_isr_probe+0x536>"
+  },
+  {
+    "pc": "0x40370543",
+    "bytes": "0c0926",
+    "instruction": "beqi\ta9, -1, 40370553 <flex_ingress_isr_probe+0x543>"
+  },
+  {
+    "pc": "0x40370546",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x40370548",
+    "bytes": "1acc",
+    "instruction": "bnez.n\ta10, 4037054d <flex_ingress_isr_probe+0x53d>"
+  },
+  {
+    "pc": "0x4037054a",
+    "bytes": "01c992",
+    "instruction": "addi\ta9, a9, 1"
+  },
+  {
+    "pc": "0x4037054d",
+    "bytes": "2268a2",
+    "instruction": "s32i\ta10, a8, 136"
+  },
+  {
+    "pc": "0x40370550",
+    "bytes": "236892",
+    "instruction": "s32i\ta9, a8, 140"
+  },
+  {
+    "pc": "0x40370553",
+    "bytes": "2a28a2",
+    "instruction": "l32i\ta10, a8, 168"
+  },
+  {
+    "pc": "0x40370556",
+    "bytes": "2b2892",
+    "instruction": "l32i\ta9, a8, 172"
+  },
+  {
+    "pc": "0x40370559",
+    "bytes": "050a66",
+    "instruction": "bnei\ta10, -1, 40370562 <flex_ingress_isr_probe+0x552>"
+  },
+  {
+    "pc": "0x4037055c",
+    "bytes": "020966",
+    "instruction": "bnei\ta9, -1, 40370562 <flex_ingress_isr_probe+0x552>"
+  },
+  {
+    "pc": "0x4037055f",
+    "bytes": "fee1c6",
+    "instruction": "j\t403700ea <flex_ingress_isr_probe+0xda>"
+  },
+  {
+    "pc": "0x40370562",
+    "bytes": "aa1b",
+    "instruction": "addi.n\ta10, a10, 1"
+  },
+  {
+    "pc": "0x40370564",
+    "bytes": "0acc",
+    "instruction": "bnez.n\ta10, 40370568 <flex_ingress_isr_probe+0x558>"
+  },
+  {
+    "pc": "0x40370566",
+    "bytes": "991b",
+    "instruction": "addi.n\ta9, a9, 1"
+  },
+  {
+    "pc": "0x40370568",
+    "bytes": "2a68a2",
+    "instruction": "s32i\ta10, a8, 168"
+  },
+  {
+    "pc": "0x4037056b",
+    "bytes": "2b6892",
+    "instruction": "s32i\ta9, a8, 172"
+  },
+  {
+    "pc": "0x4037056e",
+    "bytes": "fede06",
+    "instruction": "j\t403700ea <flex_ingress_isr_probe+0xda>"
+  },
+  {
+    "pc": "0x40370572",
+    "bytes": "ee1b",
+    "instruction": "addi.n\ta14, a14, 1"
+  },
+  {
+    "pc": "0x40370574",
+    "bytes": "0ecc",
+    "instruction": "bnez.n\ta14, 40370578 <flex_ingress_isr_probe+0x568>"
+  },
+  {
+    "pc": "0x40370576",
+    "bytes": "dd1b",
+    "instruction": "addi.n\ta13, a13, 1"
+  },
+  {
+    "pc": "0x40370578",
+    "bytes": "382892",
+    "instruction": "l32i\ta9, a8, 224"
+  },
+  {
+    "pc": "0x4037057b",
+    "bytes": "3368a2",
+    "instruction": "s32i\ta10, a8, 204"
+  },
+  {
+    "pc": "0x4037057e",
+    "bytes": "9b9a",
+    "instruction": "add.n\ta9, a11, a9"
+  },
+  {
+    "pc": "0x40370580",
+    "bytes": "549090",
+    "instruction": "extui\ta9, a9, 0, 6"
+  },
+  {
+    "pc": "0x40370583",
+    "bytes": "a09990",
+    "instruction": "addx4\ta9, a9, a9"
+  },
+  {
+    "pc": "0x40370586",
+    "bytes": "b09950",
+    "instruction": "addx8\ta9, a9, a5"
+  },
+  {
+    "pc": "0x40370589",
+    "bytes": "19a9",
+    "instruction": "s32i.n\ta10, a9, 4"
+  },
+  {
+    "pc": "0x4037058b",
+    "bytes": "09c9",
+    "instruction": "s32i.n\ta12, a9, 0"
+  },
+  {
+    "pc": "0x4037058d",
+    "bytes": "2969",
+    "instruction": "s32i.n\ta6, a9, 8"
+  },
+  {
+    "pc": "0x4037058f",
+    "bytes": "3979",
+    "instruction": "s32i.n\ta7, a9, 12"
+  },
+  {
+    "pc": "0x40370591",
+    "bytes": "4929",
+    "instruction": "s32i.n\ta2, a9, 16"
+  },
+  {
+    "pc": "0x40370593",
+    "bytes": "5939",
+    "instruction": "s32i.n\ta3, a9, 20"
+  },
+  {
+    "pc": "0x40370595",
+    "bytes": "69e9",
+    "instruction": "s32i.n\ta14, a9, 24"
+  },
+  {
+    "pc": "0x40370597",
+    "bytes": "79d9",
+    "instruction": "s32i.n\ta13, a9, 28"
+  },
+  {
+    "pc": "0x40370599",
+    "bytes": "8949",
+    "instruction": "s32i.n\ta4, a9, 32"
+  },
+  {
+    "pc": "0x4037059b",
+    "bytes": "2449f2",
+    "instruction": "s8i\ta15, a9, 36"
+  },
+  {
+    "pc": "0x4037059e",
+    "bytes": "bb1b",
+    "instruction": "addi.n\ta11, a11, 1"
+  },
+  {
+    "pc": "0x403705a0",
+    "bytes": "190c",
+    "instruction": "movi.n\ta9, 1"
+  },
+  {
+    "pc": "0x403705a2",
+    "bytes": "28e9",
+    "instruction": "s32i.n\ta14, a8, 8"
+  },
+  {
+    "pc": "0x403705a4",
+    "bytes": "38d9",
+    "instruction": "s32i.n\ta13, a8, 12"
+  },
+  {
+    "pc": "0x403705a6",
+    "bytes": "3968b2",
+    "instruction": "s32i\ta11, a8, 228"
+  },
+  {
+    "pc": "0x403705a9",
+    "bytes": "ef4892",
+    "instruction": "s8i\ta9, a8, 239"
+  },
+  {
+    "pc": "0x403705ac",
+    "bytes": "3268c2",
+    "instruction": "s32i\ta12, a8, 200"
+  },
+  {
+    "pc": "0x403705af",
+    "bytes": "f048f2",
+    "instruction": "s8i\ta15, a8, 240"
+  },
+  {
+    "pc": "0x403705b2",
+    "bytes": "0a0c",
+    "instruction": "movi.n\ta10, 0"
+  },
+  {
+    "pc": "0x403705b4",
+    "bytes": "fe9681",
+    "instruction": "l32r\ta8, 4037000c <probe_ingress+0x6dfff4> (42000358 <probe_flash_helper>)"
+  },
+  {
+    "pc": "0x403705b7",
+    "bytes": "0008e0",
+    "instruction": "callx8\ta8"
+  },
+  {
+    "pc": "0x403705ba",
+    "bytes": "0a2d",
+    "instruction": "mov.n\ta2, a10"
+  },
+  {
+    "pc": "0x403705bc",
+    "bytes": "f01d",
+    "instruction": "retw.n"
+  }
+]

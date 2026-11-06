@@ -1,0 +1,56 @@
+{
+  "elf_sha256": "8f69ed3c13c7946f71c54241875710f0c94fb796c7b9247b8520183e21afaf69",
+  "root": "flex_ingress_isr_probe",
+  "root_bytes": 1453,
+  "instruction_count": 561,
+  "state": {
+    "probe_ingress": {
+      "address": "0x3fc90018",
+      "bytes": 2808,
+      "section": ".dram0.data"
+    },
+    "probe_clock": {
+      "address": "0x3fc90000",
+      "bytes": 24,
+      "section": ".dram0.data"
+    }
+  },
+  "literals": [
+    {
+      "pc": "0x40370013",
+      "literal": "0x40370000",
+      "value": "0x3fc90000",
+      "value_section": ".dram0.data"
+    },
+    {
+      "pc": "0x4037008c",
+      "literal": "0x40370008",
+      "value": "0x3fc90018",
+      "value_section": ".dram0.data"
+    },
+    {
+      "pc": "0x403705b0",
+      "literal": "0x4037000c",
+      "value": "0x3c000000",
+      "value_section": ".flash.rodata"
+    },
+    {
+      "pc": "0x4037016e",
+      "literal": "0x40370004",
+      "value": "0x1388",
+      "value_section": "UNKNOWN"
+    },
+    {
+      "pc": "0x4037004a",
+      "literal": "0x40370004",
+      "value": "0x1388",
+      "value_section": "UNKNOWN"
+    }
+  ],
+  "failures": [
+    "Flash pointer loaded in ISR",
+    "Unapproved ISR literal value: 0x3c000000"
+  ],
+  "passed": false,
+  "scope": "standalone_ingress_and_clock_static_probe_not_actual_target_callback"
+}

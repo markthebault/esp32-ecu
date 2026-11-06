@@ -1,0 +1,47 @@
+{
+  "elf_sha256": "e7663bfe91374e0b2048dc4c9458050a4821b683afdbeae56c205451b4fa5328",
+  "root": "flex_ingress_isr_probe",
+  "root_bytes": 1442,
+  "instruction_count": 557,
+  "state": {
+    "probe_ingress": {
+      "address": "0x3fc90018",
+      "bytes": 2808,
+      "section": ".dram0.data"
+    },
+    "probe_clock": {
+      "address": "0x3fc90000",
+      "bytes": 24,
+      "section": ".dram0.data"
+    }
+  },
+  "literals": [
+    {
+      "pc": "0x4037000f",
+      "literal": "0x40370000",
+      "value": "0x3fc90000",
+      "value_section": ".dram0.data"
+    },
+    {
+      "pc": "0x40370088",
+      "literal": "0x40370008",
+      "value": "0x3fc90018",
+      "value_section": ".dram0.data"
+    },
+    {
+      "pc": "0x4037016a",
+      "literal": "0x40370004",
+      "value": "0x1388",
+      "value_section": "UNKNOWN"
+    },
+    {
+      "pc": "0x40370046",
+      "literal": "0x40370004",
+      "value": "0x1388",
+      "value_section": "UNKNOWN"
+    }
+  ],
+  "failures": [],
+  "passed": true,
+  "scope": "standalone_ingress_and_clock_static_probe_not_actual_target_callback"
+}

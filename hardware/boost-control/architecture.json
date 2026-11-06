@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "contract": "BOOST-G45-ARCHITECTURE-DRAFT1",
+  "status": "unrouted interface candidate, no fabrication or actuator release",
+  "physical_outputs_enabled": false,
+  "parent": {
+    "path": "hardware/a6-flex-rgb/net_contract.json",
+    "sha256": "2d2d8883d8035c43bde5d7781e491ee5b8cb470fb0c87e3c80975175e99b80e2"
+  },
+  "module": {
+    "variant": "44-pin Type-C N16R8",
+    "gpio": 45,
+    "reference": "U3",
+    "pad": "37",
+    "parent_pad_net": null,
+    "candidate_net": "BOOST_CMD",
+    "permanent_carrier_pulldown_ohm": 2200,
+    "firmware_allocation_active": false,
+    "boot_condition": "No external pull-up or actuator-domain feedback. Confirm actual module flash-voltage/eFuse/strapping behavior without burning eFuses."
+  },
+  "logic_interface": {
+    "candidate_connector": "J24",
+    "family": "JST PH, four positions, keyed",
+    "pins": {"1": "BOOST_CMD", "2": "RUN", "3": "+5V", "4": "GND"},
+    "driver_input": "Buffered optocoupler LEDs powered by carrier5V, logic input draws transistor base current only",
+    "shared_run_load": "Recompute and measure combined RUN loading; existing idle acceptance does not qualify another accessory."
+  },
+  "actuator_interface": {
+    "architecture_reference": "hardware/idle-isolated/net_contract.json",
+    "candidate": "Separate THT low-side solenoid accessory using independent actuator supply/return, hardware RUN gate, supply supervision and inductive clamp",
+    "firmware_polarity": "Increasing energized duty is assumed to increase boost; deenergized plumbing must retain mechanical wastegate spring control",
+    "frequency_hz": [10, 50],
+    "per_command_freshness_us": 20000,
+    "no_current_rating_assigned": true,
+    "no_pin_compatibility_or_interchangeability_claim": true
+  },
+  "carrier_outline_limit_mm": [120, 120],
+  "holds": [
+    "Actual module identity, geometry, eFuse/strapping and reset/download behavior",
+    "Schematic, route, ERC/DRC, copper/return review and connector fit",
+    "Exact valve, deenergized plumbing, coil R/L, duty/frequency response and independent actuator cutoff",
+    "Input buffering, RUN loading, power/return opens, watchdog/interlock and supervisor timing",
+    "Flyback energy, thermal and electrical transient measurements",
+    "Assembly, enclosure/standoffs/sealing and RF clearance",
+    "Target scheduler integration, simultaneous idle/boost timing and physical HIL"
+  ]
+}

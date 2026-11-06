@@ -1,0 +1,332 @@
+{
+  "reviewer": "Independent agent /root/per_tooth_timing_review",
+  "reviewed_at_utc": "2026-11-03T16:19:19.731410+00:00",
+  "scope": "Read-only review of production Speeduino raw-logger comparison and native HAL. Source files were not edited. Only this requested review artifact was written.",
+  "verdict": "PASS for the stated native digital diagnostic comparison. No unresolved functional blocker found. Does not establish whole-ECU equivalence, target capture timing or hardware qualification.",
+  "open_blocking_findings": [],
+  "resolved_findings": [
+    {
+      "severity": "low",
+      "file": "tools/speeduino_runtime.py",
+      "lines": "85-89",
+      "description": "Python bool/float channels compared equal to integers0/1, then were serialized as invalid IPC tokens and terminated the native child. C++ input parsing also used fields before checking extraction.",
+      "original_reproduction": "input_edge(10000,False,True), True,0.0,1.0 each caused RuntimeError and child exit2; rejected other invalid values left the child alive.",
+      "resolution": "Parent added exact-int channel validation and initialized/checked native input extraction before use. Source inspected after fix; independent five-test runtime suite passed.",
+      "independent_post_fix_rejections": [
+        "False",
+        "True",
+        "0.0",
+        "1.0",
+        "'0'",
+        "2",
+        "-1",
+        "None"
+      ],
+      "clock_and_child_preserved": true,
+      "subsequent_valid_input_succeeded": true
+    }
+  ],
+  "reference_provenance": {
+    "speeduino_sha": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+    "unit_test": false,
+    "archive_sha256": "91957f646a2707d7afee362807b14688bd113f1dfbbe004c0efca0cfa65e3140",
+    "binary_sha256": "e111651ef29980fa05d0aa7c8911ccdb7b18b67019ab07a682ab45ff51b33aab",
+    "current_binary_matches_manifest_and_summary": true,
+    "tracked_external_source_diff_clean": true,
+    "cached_archive_files_independently_compared": 254,
+    "cached_archive_content_changes": [
+      "lib/ArduinoFake/SoftwareTimer.h TIMER_RESOLUTION100us to4us, exactly as declared"
+    ],
+    "compile_flags_do_not_define_UNIT_TEST": true,
+    "production_symbols_observed": [
+      "loggerPrimaryISR()",
+      "startToothLogger()",
+      "startCompositeLogger()"
+    ],
+    "mega_irq_mapping_primary_source": "https://raw.githubusercontent.com/arduino/ArduinoCore-avr/1.8.6/variants/mega/pins_arduino.h",
+    "mega_irq_mapping_matches_official": true,
+    "expected_crank_pin_irq": [
+      19,
+      4
+    ],
+    "expected_cam_pin_irq": [
+      18,
+      5
+    ],
+    "logger_cam_profile_observed": {
+      "crank_pin": 19,
+      "cam_pin": 18,
+      "crank_edge": 3,
+      "cam_edge": 3,
+      "injection_layout": 3
+    },
+    "production_data_path": "input command changes virtual pin state, resolves Mega IRQ, invokes the attached callback only on configured edges; actual production start/stop functions install wrappers; readout uses actual toothHistory/compositeLogHistory. No synthetic substitute for logger calculations was found.",
+    "native_hal_changes": [
+      "SoftwareTimer.h TIMER_RESOLUTION 100us to 4us",
+      "override Uno digitalPinToInterrupt macro with Arduino Mega mapping for native GPIO callbacks",
+      "replace wall-clock timer implementation with deterministic single-thread HAL",
+      "drive production oneMSInterval every 1000 virtual microseconds"
+    ]
+  },
+  "evidence": {
+    "original_ten_case_summary_sha256": "110e4cd4554af72d6e825a9d1041f2d288d5566a8deeeb69e5724c9408f5a857",
+    "original_trace_hashes_match": true,
+    "independent_rerun_ten_cases": [
+      {
+        "mode": "composite",
+        "rpm": 200,
+        "case": "clean",
+        "passed": true,
+        "checks": {
+          "all_source_edges_preserved": true,
+          "production_composite_matches_raw_edges": true,
+          "both_frames_frozen_at127": true,
+          "reference_decoder_still_operates": true
+        }
+      },
+      {
+        "mode": "composite",
+        "rpm": 1000,
+        "case": "clean",
+        "passed": true,
+        "checks": {
+          "all_source_edges_preserved": true,
+          "production_composite_matches_raw_edges": true,
+          "both_frames_frozen_at127": true,
+          "reference_decoder_still_operates": true
+        }
+      },
+      {
+        "mode": "composite",
+        "rpm": 6000,
+        "case": "clean",
+        "passed": true,
+        "checks": {
+          "all_source_edges_preserved": true,
+          "production_composite_matches_raw_edges": true,
+          "both_frames_frozen_at127": true,
+          "reference_decoder_still_operates": true
+        }
+      },
+      {
+        "mode": "composite",
+        "rpm": 1000,
+        "case": "jitter",
+        "passed": true,
+        "checks": {
+          "all_source_edges_preserved": true,
+          "production_composite_matches_raw_edges": true,
+          "both_frames_frozen_at127": true,
+          "reference_decoder_still_operates": true
+        }
+      },
+      {
+        "mode": "composite",
+        "rpm": 1000,
+        "case": "noise",
+        "passed": true,
+        "checks": {
+          "all_source_edges_preserved": true,
+          "production_composite_matches_raw_edges": true,
+          "both_frames_frozen_at127": true,
+          "three_microsecond_glitch_visible": true,
+          "reference_decoder_still_operates": true
+        }
+      },
+      {
+        "mode": "composite",
+        "rpm": 1000,
+        "case": "dropout",
+        "passed": true,
+        "checks": {
+          "all_source_edges_preserved": true,
+          "production_composite_matches_raw_edges": true,
+          "both_frames_frozen_at127": true,
+          "declared_signal_gap_visible": true,
+          "reference_decoder_still_operates": true
+        }
+      },
+      {
+        "mode": "composite",
+        "rpm": 1000,
+        "case": "cam",
+        "passed": true,
+        "checks": {
+          "all_source_edges_preserved": true,
+          "production_composite_matches_raw_edges": true,
+          "both_frames_frozen_at127": true,
+          "both_cam_polarities_visible": true,
+          "reference_decoder_still_operates": true
+        }
+      },
+      {
+        "mode": "tooth",
+        "rpm": 200,
+        "case": "clean",
+        "passed": true,
+        "checks": {
+          "native_tooth_frame_full": true,
+          "common_complete_tooth_intervals_match": true,
+          "reference_decoder_still_operates": true
+        }
+      },
+      {
+        "mode": "tooth",
+        "rpm": 1000,
+        "case": "clean",
+        "passed": true,
+        "checks": {
+          "native_tooth_frame_full": true,
+          "common_complete_tooth_intervals_match": true,
+          "reference_decoder_still_operates": true
+        }
+      },
+      {
+        "mode": "tooth",
+        "rpm": 6000,
+        "case": "clean",
+        "passed": true,
+        "checks": {
+          "native_tooth_frame_full": true,
+          "common_complete_tooth_intervals_match": true,
+          "reference_decoder_still_operates": true
+        }
+      }
+    ],
+    "independent_partial_channel_records_time_channel_level_mask0x0B": [
+      [
+        10101,
+        0,
+        true,
+        1
+      ],
+      [
+        10103,
+        1,
+        true,
+        11
+      ],
+      [
+        10104,
+        0,
+        false,
+        2
+      ],
+      [
+        10106,
+        1,
+        false,
+        8
+      ],
+      [
+        10108,
+        0,
+        true,
+        1
+      ]
+    ],
+    "independent_capture_lifecycle": {
+      "duplicate_level_updates_ignored": 3,
+      "stop_preserves_partial_snapshot": true,
+      "rearm_resets_index_and_uses_current_levels": true,
+      "full_127_records_frozen": true,
+      "later_input_edges_ignored_after_full": 43,
+      "rearm_after_full_succeeds": true
+    },
+    "independent_decoder_output_continuity": [
+      {
+        "input": "clean",
+        "mode": "composite",
+        "output_transitions": 176,
+        "status_samples": 60,
+        "identical_to_no_logger": true
+      },
+      {
+        "input": "clean",
+        "mode": "tooth",
+        "output_transitions": 176,
+        "status_samples": 60,
+        "identical_to_no_logger": true
+      },
+      {
+        "input": "noise",
+        "mode": "composite",
+        "output_transitions": 176,
+        "status_samples": 60,
+        "identical_to_no_logger": true
+      },
+      {
+        "input": "noise",
+        "mode": "tooth",
+        "output_transitions": 176,
+        "status_samples": 60,
+        "identical_to_no_logger": true
+      }
+    ],
+    "independent_extra_tooth_fixtures": [
+      {
+        "case": "jitter",
+        "raw_intervals_equal_filtered_reference": true,
+        "final_reference_rpm_matches": true
+      },
+      {
+        "case": "noise",
+        "raw_intervals_equal_filtered_reference": false,
+        "final_reference_rpm_matches": true
+      },
+      {
+        "case": "dropout",
+        "raw_intervals_equal_filtered_reference": false,
+        "final_reference_rpm_matches": true
+      },
+      {
+        "case": "cam",
+        "raw_intervals_equal_filtered_reference": true,
+        "final_reference_rpm_matches": true
+      }
+    ],
+    "independent_runtime_regression_suite": "PYTHONPATH=tools python3 -m unittest tools.test_speeduino_runtime -v:5tests PASS",
+    "project_native_library_sha256": "99e84ab4ef74c496b0126f1cde6ca41fbdb8ac0a7fee519c5891dd87aaaea645",
+    "plant_matrix": "Prior14cases+4convergence report was inspected, not independently rerun in this review. This is separate from the digital logger comparison.",
+    "plant_report_source_changes_at_review": [
+      "tools/speeduino_runtime.py",
+      "tools/speeduino_sim.cpp"
+    ]
+  },
+  "remaining_limits_and_test_gaps": [
+    "Comparison feeds the shared project Capture.append ABI directly. It does not execute ESP32 MCPWM/GPIO capture callbacks, interrupt scheduling, synchronization primitives, pin conditioning or physical wiring.",
+    "Virtual GPIO and timers have zero CPU cost and no ISR jitter, missed hardware captures, capture-latch overwrite, metastability, analog behavior or electrical disturbance model. Preserving a3us virtual glitch is not a target resolution claim.",
+    "Only clean tooth interval parity is asserted. Production Speeduino tooth logging uses valid decoder-filtered trigger edges; the project diagnostic view derives intervals from all recorded raw crank rising edges. Independent noise/dropout tooth comparisons intentionally do not match. Raw composite fidelity remains the applicable claim.",
+    "Reference sync/cycle flag bytes are retained but not asserted equivalent. Independent probes asserted origin and simultaneous channel-level bits only. Project720degree phase/sequential support remains absent.",
+    "Default reference cam pin is disabled. The --logger-cam fixture changes production injection layout to sequential only to obtain a configured secondary interrupt. This is not equivalent controller-strategy parity.",
+    "Fixture resolves reference channels from current pinNumbers. It cannot validate physical Mega or carrier wiring. Official IRQ mapping was separately audited; asserting the expected per-case profile would improve regression detection.",
+    "The comparison final-RPM check alone does not prove continuity through a fault. Independent clean/noisy continuity fixtures strengthen the reference logger evidence, but remain finite ideal native tests.",
+    "The first reference tooth interval is excluded because its beginning precedes the project capture window. The next126 intervals cover common complete intervals and include later missing-tooth gaps.",
+    "Raw logger buffer access bypasses production serial framing. Desktop live TunerStudio acceptance and high-speed serial logger interoperability are unsupported; own ECU identity remains required.",
+    "No physical engine, HIL, ISR jitter, automotive EMI/surge, thermal, splash or printed-fit qualification follows from this review."
+  ],
+  "suggested_nonblocking_followups": [
+    "Keep raw-composite and clean tooth-interval parity claims distinct from decoder-filtered tooth-log equivalence.",
+    "Add lifecycle and duplicate-level GPIO probes to the persistent reference regression suite.",
+    "Include project native-library binary hash and all transitive recorder/parser sources in comparison provenance.",
+    "Refresh stale documentation stating target raw capture is missing when publishing this increment.",
+    "Retain original plant fingerprints or rerun after parser-only adapter changes, so prior external-plant evidence is not silently presented as current-source evidence."
+  ],
+  "source_sha256": {
+    "tools/compare_trigger_loggers.py": "62add2645cc5dbd622904e157bb03bb9144d16cabf8f72a48d49d6b0b9d38498",
+    "tools/speeduino_sim.cpp": "9fe0c3499b24d49d7bfb847fe5c383b4f3770e1fc1b8e875485cd3a150e2e71f",
+    "tools/speeduino_sim_hal.cpp": "155e13433b6568c22577bce9a9a7023c51ca27b14420ae703eeae1b4f31bedad",
+    "tools/speeduino_sim_native.hpp": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9",
+    "tools/speeduino_runtime.py": "abf2d1429fb74f264d7309312b6b69d75949770de1df3133c4d3ff7fda60f30b",
+    "tools/trigger_capture.py": "11765a063924b1ef7eac9a71c3cefa7c53af0cb93854336aa1984cf48f10447c",
+    "tools/trigger_capture_bridge.hpp": "15c809a38a2832da57ddaa8319dc0b10c9b623b6e8ad02beac472145641a957f",
+    "firmware/include/ecu/trigger_log.hpp": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451",
+    "firmware/include/ecu/trigger_log_json.hpp": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58",
+    "scripts/build_speeduino_sim.py": "1fc5defc8adb96c926bd055a7b0373cedb8307a3657af71f9160c6648c8b4d66",
+    "tools/test_speeduino_runtime.py": "cefe29e7697a8973e5e9821465aac6e3fd538d6dba449e007df0b458813d8369",
+    "tools/engine_bridge.cpp": "0cce3136dc88b785fd36aa1337964bbc771b9caef2fa2c1e7e4339e986bd9ea3",
+    "tools/engine_runtime.py": "adba90720d6e260e816e2f5d3ca4e7346869d2148d292b0f7fffb76ac0880bdb",
+    "firmware/include/ecu/json.hpp": "ca420bf9c98e41d07241f50daa8deba2955a2d9bfad8862978d1b019b4bd1c52",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+  }
+}

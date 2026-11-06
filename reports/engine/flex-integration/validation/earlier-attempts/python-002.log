@@ -1,0 +1,182 @@
+................................F..F.F...F...F.F..F....F.FF........................F.F.FF.FF..FF.
+======================================================================
+FAIL: test_atomic_two_map_burn_stale_edit_and_complete_runtime_reply (test_secondary_model.SecondaryTests.test_atomic_two_map_burn_stale_edit_and_complete_runtime_reply)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_secondary_model.py", line 124, in test_atomic_two_map_burn_stale_edit_and_complete_runtime_reply
+    replies=stream.feed(envelope(b'r'+struct.pack('<BBHH',0,0x30,0,LIVE_BYTES)),1000000);self.assertEqual(len(replies[0]),647)
+                                                                                         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 839 != 647
+
+======================================================================
+FAIL: test_json7_retains_load_zero_coefficients_and_stored_bytes (test_secondary_model.SecondaryTests.test_json7_retains_load_zero_coefficients_and_stored_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_secondary_model.py", line 92, in test_json7_retains_load_zero_coefficients_and_stored_bytes
+    path=Path(d)/'old.json';path.write_bytes(body);store=self.store(path);self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['revision'],71);self.assertEqual(store.tune['schema_version'],8);self.assertEqual(store.tune['load_model'],old['load_model']);self.assertEqual(store.tune['maps'],old['maps']);self.assertTrue(all(r['mode']=='off' for r in store.tune['secondary_tables'].values()))
+                                                                                                                                                                                                 ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 9 != 8
+
+======================================================================
+FAIL: test_malformed_observations_reject_and_188_column_msl_keeps_codes (test_secondary_model.SecondaryTests.test_malformed_observations_reject_and_188_column_msl_keeps_codes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_secondary_model.py", line 132, in test_malformed_observations_reject_and_188_column_msl_keeps_codes
+    rows=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));self.assertEqual([len(row) for row in rows[2:]],[188,188,188]);values=dict(zip(rows[2],rows[4]));self.assertEqual(values['SecFuelAvailable'],'1');self.assertEqual(values['SecFuelMode'],'0');self.assertEqual(values['SecFuelObservedUs'],'NaN')
+                                                                  ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [229, 229, 229] != [188, 188, 188]
+
+First differing element 0:
+229
+188
+
+- [229, 229, 229]
++ [188, 188, 188]
+
+======================================================================
+FAIL: test_reserved_regions_and_full_u32_reject_before_narrowing (test_secondary_model.SecondaryTests.test_reserved_regions_and_full_u32_reject_before_narrowing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_secondary_model.py", line 115, in test_reserved_regions_and_full_u32_reject_before_narrowing
+    with self.assertRaises(ValueError):decode_pages({1:bad},t)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_json_and_msq_legacy_bounds_and_migration_preserve_f32_semantics (test_load_model.LoadModelTests.test_json_and_msq_legacy_bounds_and_migration_preserve_f32_semantics)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_load_model.py", line 36, in test_json_and_msq_legacy_bounds_and_migration_preserve_f32_semantics
+    self.assertEqual(r.tune['schema_version'],8);self.assertEqual(r.tune['load_model'],tune()['load_model'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 9 != 8
+
+======================================================================
+FAIL: test_native_log_126_fields_and_sil_log_83_preserve_source_and_unknown (test_load_model.LoadModelTests.test_native_log_126_fields_and_sil_log_83_preserve_source_and_unknown)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_load_model.py", line 89, in test_native_log_126_fields_and_sil_log_83_preserve_source_and_unknown
+    lines=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));self.assertIn('LOG 006',lines[0][0]);self.assertEqual(len(lines[2]),188);self.assertEqual(len(lines[3]),188);self.assertEqual(len(lines[4]),188)
+                                                                   ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'LOG 006' not found in 'ESP32ECU ENGINE LOG 007'
+
+======================================================================
+FAIL: test_single_atomic_live_read_640_bytes_framed_647 (test_load_model.LoadModelTests.test_single_atomic_live_read_640_bytes_framed_647)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_load_model.py", line 76, in test_single_atomic_live_read_640_bytes_framed_647
+    self.assertEqual(LIVE_BYTES,640);request=b'r'+struct.pack('<BBHH',0,0x30,0,640)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+AssertionError: 832 != 640
+
+======================================================================
+FAIL: test_schema5_and_all_old_application_files_preserve_legacy_mode (test_transient.TransientTests.test_schema5_and_all_old_application_files_preserve_legacy_mode)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_transient.py", line 128, in test_schema5_and_all_old_application_files_preserve_legacy_mode
+    self.assertEqual(store.tune,expected)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'schema_version': 9, 'revision': 47, 'strategy': 'semi_sequ[10522 chars]0]}}} != {'schema_version': 8, 'revision': 47, 'strategy': 'semi_sequ[10078 chars]50]}}
+Diff is 77083 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_tune_page_and_atomic_runtime_reply_retain_old_prefix_offsets (test_transient.TransientTests.test_tune_page_and_atomic_runtime_reply_retain_old_prefix_offsets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_transient.py", line 118, in test_tune_page_and_atomic_runtime_reply_retain_old_prefix_offsets
+    self.assertEqual(len(answer),1);self.assertEqual(len(answer[0]),647);self.assertEqual(struct.unpack_from('>H',answer[0])[0],641)
+                                    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 839 != 647
+
+======================================================================
+FAIL: test_zero_decel_and_adder_observations_preserve_dose_and_log_fields (test_transient.TransientTests.test_zero_decel_and_adder_observations_preserve_dose_and_log_fields)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_transient.py", line 104, in test_zero_decel_and_adder_observations_preserve_dose_and_log_fields
+    rows=list(csv.reader(io.StringIO(recorder.msl(1)),delimiter='\t'));self.assertEqual([len(row) for row in rows[2:]],[188]*4)
+                                                                       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [229, 229, 229, 229] != [188, 188, 188, 188]
+
+First differing element 0:
+229
+188
+
+- [229, 229, 229, 229]
++ [188, 188, 188, 188]
+
+======================================================================
+FAIL: test_fuel_and_spark_adjust_physical_cylinder2_before_deadtime (test_engine_cylinder.CylinderTests.test_fuel_and_spark_adjust_physical_cylinder2_before_deadtime)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_engine_cylinder.py", line 23, in test_fuel_and_spark_adjust_physical_cylinder2_before_deadtime
+    rows=list(csv.reader(io.StringIO(recorder.msl(1)),delimiter='\t'));self.assertEqual(len(rows[2]),188);row=dict(zip(rows[2],rows[4]));self.assertEqual(float(row['C2FuelTrim']),120);self.assertAlmostEqual(float(row['C2PW']),c[1]['pulse_ms'],places=5);recorder.close()
+                                                                       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: 229 != 188
+
+======================================================================
+FAIL: test_old_application_msqs_migrate_to_disabled_neutral (test_engine_cylinder.CylinderTests.test_old_application_msqs_migrate_to_disabled_neutral)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_engine_cylinder.py", line 55, in test_old_application_msqs_migrate_to_disabled_neutral
+    tune=import_msq((R/'tuning/examples'/filename).read_bytes());self.assertEqual(tune['schema_version'],8);self.assertFalse(tune['cylinder_trims']['enabled']);self.assertTrue(all(m['cells']==[100]*36 for m in tune['cylinder_trims']['fuel_maps']))
+                                                                 ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 9 != 8
+
+======================================================================
+FAIL: test_v1_and_v2_imports_reset_every_trim_without_rewriting_file (test_engine_cylinder.CylinderTests.test_v1_and_v2_imports_reset_every_trim_without_rewriting_file)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_engine_cylinder.py", line 31, in test_v1_and_v2_imports_reset_every_trim_without_rewriting_file
+    self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['revision'],31);self.assertEqual(store.tune['schema_version'],8)
+                                                                                                                           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 9 != 8
+
+======================================================================
+FAIL: test_whole_page_burn_is_transactional_and_old_output_prefix_is_retained (test_engine_cylinder.CylinderTests.test_whole_page_burn_is_transactional_and_old_output_prefix_is_retained)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_engine_cylinder.py", line 67, in test_whole_page_burn_is_transactional_and_old_output_prefix_is_retained
+    self.assertEqual(session.command(b'b\0\1'),b'\4');self.assertTrue(store.tune['cylinder_trims']['enabled']);self.assertEqual(len(live_block(store)),640);self.assertEqual(struct.unpack_from('<I',live_block(store),52)[0],1)
+                                                                                                               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 832 != 640
+
+======================================================================
+FAIL: test_exact_legacy_migration_preserves_file_and_revision (test_engine_sequential.SequentialTests.test_exact_legacy_migration_preserves_file_and_revision)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_engine_sequential.py", line 20, in test_exact_legacy_migration_preserves_file_and_revision
+    store=EngineStore(path);self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['schema_version'],8);self.assertEqual(store.tune['revision'],old['revision']);self.assertEqual(store.tune['timing'],self.tune['timing'])
+                            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_msq002_roundtrip_and001_explicit_batch_migration (test_engine_sequential.SequentialTests.test_msq002_roundtrip_and001_explicit_batch_migration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_engine_sequential.py", line 44, in test_msq002_roundtrip_and001_explicit_batch_migration
+    old=import_msq((R/'tuning/examples/tunerstudio-roundtrip.msq').read_bytes());self.assertEqual(old['strategy'],'batch_wasted_4cyl');self.assertEqual(old['schema_version'],8);self.assertEqual(old['timing'],self.tune['timing']);self.assertEqual(old['maps']['ve']['cells'][53],92.5)
+                                                                                                                                       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 9 != 8
+
+======================================================================
+FAIL: test_protocol_appended_fields_commit_and_legacy_prefix (test_engine_sequential.SequentialTests.test_protocol_appended_fields_commit_and_legacy_prefix)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_engine_sequential.py", line 53, in test_protocol_appended_fields_commit_and_legacy_prefix
+    block=live_block(store);self.assertEqual(len(block),640);self.assertEqual(struct.unpack_from('<I',block,92)[0],1);self.assertEqual(struct.unpack_from('<I',block,52)[0],1)
+                            ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+AssertionError: 832 != 640
+
+======================================================================
+FAIL: test_schema_aliases_unknown_modes_and_invalid_orders_rejected (test_engine_sequential.SequentialTests.test_schema_aliases_unknown_modes_and_invalid_orders_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_engine_sequential.py", line 35, in test_schema_aliases_unknown_modes_and_invalid_orders_rejected
+    with self.assertRaises(ValueError):r.configure(bad)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 97 tests in 21.616s
+
+FAILED (failures=18)

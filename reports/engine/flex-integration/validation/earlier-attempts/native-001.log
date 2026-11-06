@@ -1,0 +1,6 @@
+117 control scenarios passed
+/home/mark/persospace/esp32-ecu/firmware/tests/engine_test.cpp: In function ‘ecu::engine::Inputs good(uint64_t, double)’:
+/home/mark/persospace/esp32-ecu/firmware/tests/engine_test.cpp:7:99: error: missing initializer for member ‘ecu::engine::Inputs::flex_sample’ [-Werror=missing-field-initializers]
+    7 | Inputs good(std::uint64_t now,double rpm=1000){return {rpm,45,10,85,25,1,13.8,5,now,true,true,true};}
+      |                                                                                                   ^
+cc1plus: all warnings being treated as errors

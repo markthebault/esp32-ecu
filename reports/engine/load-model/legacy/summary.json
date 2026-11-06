@@ -1,0 +1,143 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "legacy-batch-portable",
+      "passed": true,
+      "checks": {
+        "edges": true,
+        "triggers": true,
+        "cams": true,
+        "dwell": true,
+        "spark_timing": true,
+        "injection_timing": true,
+        "ledger": true,
+        "final_rpm": true
+      },
+      "baseline_path": "reports/engine/semi-sequential/legacy/legacy-batch-portable.json.gz",
+      "baseline_sha256": "c6631741ef0b5fc7ec64a8e8c2f7cfd2e1376b620a1c8b9348d1509752a1e552",
+      "executed_edges": 2240
+    },
+    {
+      "name": "legacy-batch-target",
+      "passed": true,
+      "checks": {
+        "edges": true,
+        "triggers": true,
+        "cams": true,
+        "dwell": true,
+        "spark_timing": true,
+        "injection_timing": true,
+        "ledger": true,
+        "final_rpm": true
+      },
+      "baseline_path": "reports/engine/semi-sequential/legacy/legacy-batch-target.json.gz",
+      "baseline_sha256": "fea7c8364d3303d14b311db86a572d7d2a59ef04d55ff1bf7f6091106d4e980e",
+      "executed_edges": 2240
+    },
+    {
+      "name": "legacy-batch-reference32",
+      "passed": true,
+      "checks": {
+        "edges": true,
+        "triggers": true,
+        "cams": true,
+        "dwell": true,
+        "spark_timing": true,
+        "injection_timing": true,
+        "ledger": true,
+        "final_rpm": true
+      },
+      "baseline_path": "reports/engine/semi-sequential/legacy/legacy-batch-reference32.json.gz",
+      "baseline_sha256": "97f3142f1beeab03d070feef4551f9245fd078a047460996a5559ad19dd96fee",
+      "executed_edges": 2348
+    },
+    {
+      "name": "legacy-batch-reference16",
+      "passed": true,
+      "checks": {
+        "edges": true,
+        "triggers": true,
+        "cams": true,
+        "dwell": true,
+        "spark_timing": true,
+        "injection_timing": true,
+        "ledger": true,
+        "final_rpm": true
+      },
+      "baseline_path": "reports/engine/semi-sequential/legacy/legacy-batch-reference16.json.gz",
+      "baseline_sha256": "d1533bc6569bbbfc3b49dd11eceb2d7448ac29930ee93f644aab6fde3df5abfa",
+      "executed_edges": 2348
+    },
+    {
+      "name": "legacy-sequential-portable",
+      "passed": true,
+      "checks": {
+        "edges": true,
+        "triggers": true,
+        "cams": true,
+        "dwell": true,
+        "spark_timing": true,
+        "injection_timing": true,
+        "ledger": true,
+        "final_rpm": true
+      },
+      "baseline_path": "reports/engine/semi-sequential/legacy/legacy-sequential-portable.json.gz",
+      "baseline_sha256": "994dc594025a51900acc353de8d0259cff1248935df7c24ffcf6f9e1f9b34eb4",
+      "executed_edges": 1056
+    },
+    {
+      "name": "legacy-sequential-target",
+      "passed": true,
+      "checks": {
+        "edges": true,
+        "triggers": true,
+        "cams": true,
+        "dwell": true,
+        "spark_timing": true,
+        "injection_timing": true,
+        "ledger": true,
+        "final_rpm": true
+      },
+      "baseline_path": "reports/engine/semi-sequential/legacy/legacy-sequential-target.json.gz",
+      "baseline_sha256": "dd24d709efbd6a7c195ab8981057853f4f60a2f9df3c5cf431aa7b6fcbed4cc0",
+      "executed_edges": 1056
+    },
+    {
+      "name": "legacy-sequential-reference32",
+      "passed": true,
+      "checks": {
+        "edges": true,
+        "triggers": true,
+        "cams": true,
+        "dwell": true,
+        "spark_timing": true,
+        "injection_timing": true,
+        "ledger": true,
+        "final_rpm": true
+      },
+      "baseline_path": "reports/engine/semi-sequential/legacy/legacy-sequential-reference32.json.gz",
+      "baseline_sha256": "e0026121f3d57f56d9a2f831c5acfde0108260fd15a05151a20a3ec654e60a23",
+      "executed_edges": 1174
+    },
+    {
+      "name": "legacy-sequential-reference16",
+      "passed": true,
+      "checks": {
+        "edges": true,
+        "triggers": true,
+        "cams": true,
+        "dwell": true,
+        "spark_timing": true,
+        "injection_timing": true,
+        "ledger": true,
+        "final_rpm": true
+      },
+      "baseline_path": "reports/engine/semi-sequential/legacy/legacy-sequential-reference16.json.gz",
+      "baseline_sha256": "552b7977cda8c907c2a19d8d55daf239379ef4248c009723c2f4798cb3caf03d",
+      "executed_edges": 1174
+    }
+  ],
+  "scope": "Exact actuator/trigger/cam/combustion ledger regression, new diagnostic fields are additive",
+  "baseline_commit": "64c21ed29d5bf5b5a44c471bcc321b88c8ac5d38"
+}

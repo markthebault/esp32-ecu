@@ -1,0 +1,3563 @@
+{
+  "complete": true,
+  "meaning": "Complete conditional experiment and data-chain audit; not physical qualification",
+  "matrix_cases": 52,
+  "scenarios": 26,
+  "native_replays": 1248,
+  "raw_rows": 42903134,
+  "identical_declared_discrete_inputs": true,
+  "identical_native_records": true,
+  "cases": [
+    {
+      "name": "baseline",
+      "scenario": {
+        "name": "baseline",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 0,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 343830,
+      "fine_raw_rows": 1001155,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 42.470992921647905,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "no-sampling-load",
+      "scenario": {
+        "name": "no-sampling-load",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 0,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": false,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 259083,
+      "fine_raw_rows": 916981,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 4.269503067894793e-09,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -0.014379622021372995,
+              -0.014379622021372995
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -0.014379622021372995,
+              -0.014379622021372995
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -0.014379622021372995,
+              -0.014379622021372995
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "coupling-1pf",
+      "scenario": {
+        "name": "coupling-1pf",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 357178,
+      "fine_raw_rows": 1014561,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 39.4324546993169,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "coupling-5pf",
+      "scenario": {
+        "name": "coupling-5pf",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 5,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 368764,
+      "fine_raw_rows": 1026322,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 34.42603805458869,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "coupling-50pf",
+      "scenario": {
+        "name": "coupling-50pf",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 50,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 369402,
+      "fine_raw_rows": 1026596,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 29.667920320213753,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "coupling-500pf",
+      "scenario": {
+        "name": "coupling-500pf",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 500,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 368854,
+      "fine_raw_rows": 1024949,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 28.882549447705625,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.028782894736835374,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.028782894736835374,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.028782894736835374,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "bypass-10pct",
+      "scenario": {
+        "name": "bypass-10pct",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 0.1,
+        "cap164_scale": 0.1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 397818,
+      "fine_raw_rows": 1055296,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 39.43245471053427,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "bypass-50pct",
+      "scenario": {
+        "name": "bypass-50pct",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 0.5,
+        "cap164_scale": 0.5,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 366509,
+      "fine_raw_rows": 1024364,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 39.43365132123952,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "series-stress",
+      "scenario": {
+        "name": "series-stress",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 0.1,
+        "cap164_scale": 0.1,
+        "ceramic_esr_ohm": 1,
+        "ceramic_esl_nh": 100,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 100,
+        "c9_esr_ohm": 1,
+        "coupling_pf": 5,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 436045,
+      "fine_raw_rows": 1093163,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 33.470774645424434,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "five-volt-dip",
+      "scenario": {
+        "name": "five-volt-dip",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0.4,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 358237,
+      "fine_raw_rows": 1015365,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 39.4324546993169,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              -5.155677655677657,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.12765004478949749
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              -5.155677655677657,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.12765004478949749
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              -5.155677655677657,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.12765004478949749
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "three-volt-dip",
+      "scenario": {
+        "name": "three-volt-dip",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0.3,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 359665,
+      "fine_raw_rows": 1016946,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 44.77663873447107,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              4.14529914529914
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              4.14529914529914
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              4.14529914529914
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "module-load-step",
+      "scenario": {
+        "name": "module-load-step",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0.25,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 357554,
+      "fine_raw_rows": 1015374,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 39.4324546993169,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -0.891330891330888
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.0649794801641548
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -0.891330891330888
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.0649794801641548
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -0.891330891330888
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.0649794801641548
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "ripple-five",
+      "scenario": {
+        "name": "ripple-five",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0.1,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 366764,
+      "fine_raw_rows": 1024192,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 39.4324546993169,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "ripple-three",
+      "scenario": {
+        "name": "ripple-three",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0.05,
+        "ripple_hz": 1000000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 388215,
+      "fine_raw_rows": 1044497,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 39.4324546993169,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "open-filter-witness",
+      "scenario": {
+        "name": "open-filter-witness",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 5,
+        "c27_scale": 0,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 2000,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 280070,
+      "fine_raw_rows": 937635,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 29.017305845870634,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.043186180422260634,
+              0.15869744435283906
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.043186180422260634,
+              0.15869744435283906
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.043186180422260634,
+              0.15869744435283906
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "sensor-load-40ma",
+      "scenario": {
+        "name": "sensor-load-40ma",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.04,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 357930,
+      "fine_raw_rows": 1015353,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 37.99914958621857,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.9993894993895012,
+              -1.9993894993895012
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.0433202906651644,
+              0.0433202906651644
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.9993894993895012,
+              -1.9993894993895012
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.0433202906651644,
+              0.0433202906651644
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.9993894993895012,
+              -1.9993894993895012
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.0433202906651644,
+              0.0433202906651644
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "sensor-load-60ma",
+      "scenario": {
+        "name": "sensor-load-60ma",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.06,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 357681,
+      "fine_raw_rows": 1015320,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 36.59092449335877,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 440,
+            "ready": 0,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 440
+            },
+            "settled_map_error_kpa": [
+              -2.9731379731379732,
+              -2.9731379731379732
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 440,
+            "ready": 0,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 440
+            },
+            "settled_map_error_kpa": [
+              0.04345967512112736,
+              0.04345967512112736
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 440,
+            "ready": 0,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 440
+            },
+            "settled_map_error_kpa": [
+              -2.9731379731379732,
+              -2.9731379731379732
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 440,
+            "ready": 0,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 440
+            },
+            "settled_map_error_kpa": [
+              0.04345967512112736,
+              0.04345967512112736
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 440,
+            "ready": 0,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 440
+            },
+            "settled_map_error_kpa": [
+              -2.9731379731379732,
+              -2.9731379731379732
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 440,
+            "ready": 0,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 440
+            },
+            "settled_map_error_kpa": [
+              0.04345967512112736,
+              0.04345967512112736
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "sensor-posttrip-40ma",
+      "scenario": {
+        "name": "sensor-posttrip-40ma",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 7.5,
+        "sensor_load_a": 0.04,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 357802,
+      "fine_raw_rows": 1015286,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 36.075527461372815,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 440,
+            "ready": 0,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 440
+            },
+            "settled_map_error_kpa": [
+              -3.3089133089133043,
+              -3.3089133089133043
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 440,
+            "ready": 0,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 440
+            },
+            "settled_map_error_kpa": [
+              0.0617106773823366,
+              0.0617106773823366
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 440,
+            "ready": 0,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 440
+            },
+            "settled_map_error_kpa": [
+              -3.3089133089133043,
+              -3.3089133089133043
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 440,
+            "ready": 0,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 440
+            },
+            "settled_map_error_kpa": [
+              0.0617106773823366,
+              0.0617106773823366
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 440,
+            "ready": 0,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 440
+            },
+            "settled_map_error_kpa": [
+              -3.3089133089133043,
+              -3.3089133089133043
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 440,
+            "ready": 0,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 440
+            },
+            "settled_map_error_kpa": [
+              0.0617106773823366,
+              0.0617106773823366
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "ripple-five-map-aperture",
+      "scenario": {
+        "name": "ripple-five-map-aperture",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 95160,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0.1,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 367439,
+      "fine_raw_rows": 1024192,
+      "ripple_acquisition_samples": 3,
+      "max_reference_span_fullscale_lsb": 39.4324546993169,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "ripple-five-rail-aperture",
+      "scenario": {
+        "name": "ripple-five-rail-aperture",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 95501,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0.1,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 90
+      },
+      "coarse_raw_rows": 367209,
+      "fine_raw_rows": 1024724,
+      "ripple_acquisition_samples": 1,
+      "max_reference_span_fullscale_lsb": 39.4324546993169,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "ripple-five-whole-scan",
+      "scenario": {
+        "name": "ripple-five-whole-scan",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 95000,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0.1,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 80,
+        "ripple_phase_deg": 37
+      },
+      "coarse_raw_rows": 435567,
+      "fine_raw_rows": 1090241,
+      "ripple_acquisition_samples": 8,
+      "max_reference_span_fullscale_lsb": 39.4324546993169,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "ripple-three-map-aperture",
+      "scenario": {
+        "name": "ripple-three-map-aperture",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 95160,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0.05,
+        "ripple_hz": 970000,
+        "ripple_cycles": 100,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 649517,
+      "fine_raw_rows": 1306289,
+      "ripple_acquisition_samples": 3,
+      "max_reference_span_fullscale_lsb": 47.22401793469971,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -0.7570207570207614
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.33187054306088015
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -0.7570207570207614
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.33187054306088015
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -0.7570207570207614
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.33187054306088015
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "ripple-three-rail-aperture",
+      "scenario": {
+        "name": "ripple-three-rail-aperture",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 95501,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0.05,
+        "ripple_hz": 970000,
+        "ripple_cycles": 100,
+        "ripple_phase_deg": 90
+      },
+      "coarse_raw_rows": 649016,
+      "fine_raw_rows": 1305793,
+      "ripple_acquisition_samples": 1,
+      "max_reference_span_fullscale_lsb": 54.91200676488966,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.21664374140302556
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.21664374140302556
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.21664374140302556
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "ripple-three-whole-scan",
+      "scenario": {
+        "name": "ripple-three-whole-scan",
+        "low_us": 3000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 95000,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0.05,
+        "ripple_hz": 970000,
+        "ripple_cycles": 1000,
+        "ripple_phase_deg": 37
+      },
+      "coarse_raw_rows": 3275745,
+      "fine_raw_rows": 3930215,
+      "ripple_acquisition_samples": 8,
+      "max_reference_span_fullscale_lsb": 46.85254675770548,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -0.05747126436781258,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -0.05747126436781258,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -0.05747126436781258,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "endpoint-1000",
+      "scenario": {
+        "name": "endpoint-1000",
+        "low_us": 1000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 357259,
+      "fine_raw_rows": 1014523,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 39.43391022799095,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 170,
+            "ready": 270,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 170,
+              "0": 270
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "endpoint-5000",
+      "scenario": {
+        "name": "endpoint-5000",
+        "low_us": 5000,
+        "duration_ms": 220,
+        "max_step_us": 1,
+        "solver": "sparse",
+        "minimum_break_s": 1e-15,
+        "cap160_scale": 1,
+        "cap164_scale": 1,
+        "ceramic_esr_ohm": 0.1,
+        "ceramic_esl_nh": 10,
+        "source5_ohm": 0.1,
+        "source33_ohm": 0.1,
+        "branch_ohm": 0.05,
+        "branch_nh": 20,
+        "c9_esr_ohm": 0.3,
+        "coupling_pf": 1,
+        "c27_scale": 1,
+        "sample_pf": 20,
+        "sample_ohm": 1000,
+        "sample_enabled": true,
+        "adc_phase_us": 500,
+        "prior_adc_v": 1.0769230769230769,
+        "sensor_fuse_ohm": 4.5,
+        "sensor_load_a": 0.02,
+        "drop5_v": 0,
+        "drop33_v": 0,
+        "disturbance_us": 94600,
+        "disturbance_duration_us": 1000,
+        "disturbance_rise_us": 1,
+        "extra_module_a": 0,
+        "ripple5_v": 0,
+        "ripple33_v": 0,
+        "ripple_hz": 100000,
+        "ripple_cycles": 10,
+        "ripple_phase_deg": 0
+      },
+      "coarse_raw_rows": 356208,
+      "fine_raw_rows": 1014441,
+      "ripple_acquisition_samples": 0,
+      "max_reference_span_fullscale_lsb": 39.43494641674055,
+      "fullscale_reference_span_is_not_an_adc_error_bound": true,
+      "strategies": {
+        "0": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "1": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        },
+        "2": {
+          "absolute": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              -1.025641025641029,
+              -1.025641025641029
+            ]
+          },
+          "ratiometric": {
+            "rows": 440,
+            "faulted": 180,
+            "ready": 260,
+            "acknowledgements": 0,
+            "fault_masks": {
+              "4": 180,
+              "0": 260
+            },
+            "settled_map_error_kpa": [
+              0.05759736697750384,
+              0.05759736697750384
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "physical_qualification": false
+}

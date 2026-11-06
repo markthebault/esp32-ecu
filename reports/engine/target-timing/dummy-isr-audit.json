@@ -1,0 +1,1920 @@
+{
+  "elf_sha256": "c6350eabc0cd603c582d2f088c3fd28198720dc79f19e4472a4f773aadbae582",
+  "roots": [
+    "0x4037546c",
+    "0x40375c18",
+    "0x4037cbfc",
+    "0x4037cfa4"
+  ],
+  "functions": [
+    {
+      "address": "0x4037cfa4",
+      "name": "mcpwm_capture_default_isr",
+      "section": ".iram0.text",
+      "size": 99,
+      "calls": [
+        {
+          "pc": "0x4037d002",
+          "target": "0x4037fd14",
+          "section": ".iram0.text",
+          "name": "_frxt_setup_switch"
+        }
+      ]
+    },
+    {
+      "address": "0x4037fd14",
+      "name": "_frxt_setup_switch",
+      "section": ".iram0.text",
+      "size": 24,
+      "calls": []
+    },
+    {
+      "address": "0x4037cbfc",
+      "name": "gptimer_default_isr",
+      "section": ".iram0.text",
+      "size": 132,
+      "calls": [
+        {
+          "pc": "0x4037cc17",
+          "target": "0x40385044",
+          "section": ".iram0.text",
+          "name": "timer_hal_capture_and_get_counter_value"
+        },
+        {
+          "pc": "0x4037cc2c",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037cc6a",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        },
+        {
+          "pc": "0x4037cc7b",
+          "target": "0x4037fd14",
+          "section": ".iram0.text",
+          "name": "_frxt_setup_switch"
+        }
+      ]
+    },
+    {
+      "address": "0x4037fc18",
+      "name": "vPortExitCritical",
+      "section": ".iram0.text",
+      "size": 155,
+      "calls": [
+        {
+          "pc": "0x4037fc2a",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037fc47",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037fc6f",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037fc9b",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        }
+      ]
+    },
+    {
+      "address": "0x40386884",
+      "name": "__assert_func",
+      "section": ".iram0.text",
+      "size": 232,
+      "calls": [
+        {
+          "pc": "0x403868a2",
+          "target": "0x4037b960",
+          "section": ".iram0.text",
+          "name": "spi_flash_cache_enabled"
+        },
+        {
+          "pc": "0x403868d5",
+          "target": "0x40386854",
+          "section": ".iram0.text",
+          "name": "ra_to_str"
+        },
+        {
+          "pc": "0x40386969",
+          "target": "0x4037ef10",
+          "section": ".iram0.text",
+          "name": "esp_system_abort"
+        }
+      ]
+    },
+    {
+      "address": "0x4037ef10",
+      "name": "esp_system_abort",
+      "section": ".iram0.text",
+      "size": 8,
+      "calls": [
+        {
+          "pc": "0x4037ef15",
+          "target": "0x4037ad78",
+          "section": ".iram0.text",
+          "name": "panic_abort"
+        }
+      ]
+    },
+    {
+      "address": "0x4037ad78",
+      "name": "panic_abort",
+      "section": ".iram0.text",
+      "size": 22,
+      "calls": []
+    },
+    {
+      "address": "0x40386854",
+      "name": "ra_to_str",
+      "section": ".iram0.text",
+      "size": 47,
+      "calls": []
+    },
+    {
+      "address": "0x4037b960",
+      "name": "spi_flash_cache_enabled",
+      "section": ".iram0.text",
+      "size": 17,
+      "calls": [
+        {
+          "pc": "0x4037b969",
+          "target": "0x403825b8",
+          "section": ".iram0.text",
+          "name": "cache_hal_is_cache_enabled"
+        }
+      ]
+    },
+    {
+      "address": "0x403825b8",
+      "name": "cache_hal_is_cache_enabled",
+      "section": ".iram0.text",
+      "size": 78,
+      "calls": []
+    },
+    {
+      "address": "0x4037fac8",
+      "name": "xPortEnterCriticalTimeout",
+      "section": ".iram0.text",
+      "size": 336,
+      "calls": [
+        {
+          "pc": "0x4037fae0",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037fb05",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037fb1e",
+          "target": "0x4037d008",
+          "section": ".iram0.text",
+          "name": "esp_cpu_compare_and_set"
+        },
+        {
+          "pc": "0x4037fb35",
+          "target": "0x4037d008",
+          "section": ".iram0.text",
+          "name": "esp_cpu_compare_and_set"
+        },
+        {
+          "pc": "0x4037fb51",
+          "target": "0x4037d008",
+          "section": ".iram0.text",
+          "name": "esp_cpu_compare_and_set"
+        },
+        {
+          "pc": "0x4037fb6f",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037fb82",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037fbb3",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037fbcb",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        }
+      ]
+    },
+    {
+      "address": "0x4037d008",
+      "name": "esp_cpu_compare_and_set",
+      "section": ".iram0.text",
+      "size": 20,
+      "calls": []
+    },
+    {
+      "address": "0x40385044",
+      "name": "timer_hal_capture_and_get_counter_value",
+      "section": ".iram0.text",
+      "size": 71,
+      "calls": []
+    },
+    {
+      "address": "0x40375c18",
+      "name": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "section": ".iram0.text",
+      "size": 12481,
+      "calls": [
+        {
+          "pc": "0x40375c20",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x40375c71",
+          "target": "0x4037cc80",
+          "section": ".iram0.text",
+          "name": "gptimer_get_raw_count"
+        },
+        {
+          "pc": "0x40375f2f",
+          "target": "0x4037cc80",
+          "section": ".iram0.text",
+          "name": "gptimer_get_raw_count"
+        },
+        {
+          "pc": "0x40378995",
+          "target": "0x4037cce0",
+          "section": ".iram0.text",
+          "name": "gptimer_set_alarm_action"
+        },
+        {
+          "pc": "0x403789c7",
+          "target": "0x4037cc80",
+          "section": ".iram0.text",
+          "name": "gptimer_get_raw_count"
+        },
+        {
+          "pc": "0x40378a01",
+          "target": "0x4037cce0",
+          "section": ".iram0.text",
+          "name": "gptimer_set_alarm_action"
+        },
+        {
+          "pc": "0x40378cb5",
+          "target": "0x4037cce0",
+          "section": ".iram0.text",
+          "name": "gptimer_set_alarm_action"
+        },
+        {
+          "pc": "0x40378cd1",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        }
+      ]
+    },
+    {
+      "address": "0x4037cce0",
+      "name": "gptimer_set_alarm_action",
+      "section": ".iram0.text",
+      "size": 509,
+      "calls": [
+        {
+          "pc": "0x4037cd43",
+          "target": "0x4037faa4",
+          "section": ".iram0.text",
+          "name": "xPortInIsrContext"
+        },
+        {
+          "pc": "0x4037cd4e",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037cd59",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037cdea",
+          "target": "0x4037faa4",
+          "section": ".iram0.text",
+          "name": "xPortInIsrContext"
+        },
+        {
+          "pc": "0x4037cdf1",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        },
+        {
+          "pc": "0x4037cdfa",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        },
+        {
+          "pc": "0x4037ce03",
+          "target": "0x4037faa4",
+          "section": ".iram0.text",
+          "name": "xPortInIsrContext"
+        },
+        {
+          "pc": "0x4037ce0e",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037ce1c",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037ce32",
+          "target": "0x4037faa4",
+          "section": ".iram0.text",
+          "name": "xPortInIsrContext"
+        },
+        {
+          "pc": "0x4037ce39",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        },
+        {
+          "pc": "0x4037ce43",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        },
+        {
+          "pc": "0x4037ce49",
+          "target": "0x4037faa4",
+          "section": ".iram0.text",
+          "name": "xPortInIsrContext"
+        },
+        {
+          "pc": "0x4037ce52",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037ce5d",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037ceac",
+          "target": "0x4037faa4",
+          "section": ".iram0.text",
+          "name": "xPortInIsrContext"
+        },
+        {
+          "pc": "0x4037ceb5",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        },
+        {
+          "pc": "0x4037cebf",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        }
+      ]
+    },
+    {
+      "address": "0x4037faa4",
+      "name": "xPortInIsrContext",
+      "section": ".iram0.text",
+      "size": 34,
+      "calls": []
+    },
+    {
+      "address": "0x4037cc80",
+      "name": "gptimer_get_raw_count",
+      "section": ".iram0.text",
+      "size": 93,
+      "calls": [
+        {
+          "pc": "0x4037cc98",
+          "target": "0x4037faa4",
+          "section": ".iram0.text",
+          "name": "xPortInIsrContext"
+        },
+        {
+          "pc": "0x4037cca1",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037ccaf",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037ccb5",
+          "target": "0x40385044",
+          "section": ".iram0.text",
+          "name": "timer_hal_capture_and_get_counter_value"
+        },
+        {
+          "pc": "0x4037ccbc",
+          "target": "0x4037faa4",
+          "section": ".iram0.text",
+          "name": "xPortInIsrContext"
+        },
+        {
+          "pc": "0x4037ccc5",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        },
+        {
+          "pc": "0x4037cccf",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        }
+      ]
+    },
+    {
+      "address": "0x4037546c",
+      "name": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+      "section": ".iram0.text",
+      "size": 1962,
+      "calls": [
+        {
+          "pc": "0x4037547a",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037548d",
+          "target": "0x4037cc80",
+          "section": ".iram0.text",
+          "name": "gptimer_get_raw_count"
+        },
+        {
+          "pc": "0x40375872",
+          "target": "0x4037cce0",
+          "section": ".iram0.text",
+          "name": "gptimer_set_alarm_action"
+        },
+        {
+          "pc": "0x40375881",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        },
+        {
+          "pc": "0x40375911",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        },
+        {
+          "pc": "0x40375927",
+          "target": "0x4037f4cc",
+          "section": ".iram0.text",
+          "name": "xQueueGenericSendFromISR"
+        },
+        {
+          "pc": "0x40375bf5",
+          "target": "0x4037cce0",
+          "section": ".iram0.text",
+          "name": "gptimer_set_alarm_action"
+        },
+        {
+          "pc": "0x40375c07",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        }
+      ]
+    },
+    {
+      "address": "0x4037f4cc",
+      "name": "xQueueGenericSendFromISR",
+      "section": ".iram0.text",
+      "size": 220,
+      "calls": [
+        {
+          "pc": "0x4037f4e1",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037f4fa",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037f511",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037f51b",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037f536",
+          "target": "0x4037ef20",
+          "section": ".iram0.text",
+          "name": "prvCopyDataToQueue"
+        },
+        {
+          "pc": "0x4037f551",
+          "target": "0x4037efd4",
+          "section": ".iram0.text",
+          "name": "prvNotifyQueueSetContainer"
+        },
+        {
+          "pc": "0x4037f56c",
+          "target": "0x40380f5c",
+          "section": ".iram0.text",
+          "name": "xTaskRemoveFromEventList"
+        },
+        {
+          "pc": "0x4037f5a2",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        }
+      ]
+    },
+    {
+      "address": "0x40380f5c",
+      "name": "xTaskRemoveFromEventList",
+      "section": ".iram0.text",
+      "size": 508,
+      "calls": [
+        {
+          "pc": "0x40380f5f",
+          "target": "0x4037faa4",
+          "section": ".iram0.text",
+          "name": "xPortInIsrContext"
+        },
+        {
+          "pc": "0x40380f6a",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x40380f78",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x40380fa2",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x40380ff5",
+          "target": "0x40380380",
+          "section": ".iram0.text",
+          "name": "prvCheckTaskCanBeScheduledSMP"
+        },
+        {
+          "pc": "0x403810d4",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x40381121",
+          "target": "0x40380404",
+          "section": ".iram0.text",
+          "name": "prvIsYieldRequiredSMP"
+        },
+        {
+          "pc": "0x40381141",
+          "target": "0x4037faa4",
+          "section": ".iram0.text",
+          "name": "xPortInIsrContext"
+        },
+        {
+          "pc": "0x4038114a",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        },
+        {
+          "pc": "0x40381153",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        }
+      ]
+    },
+    {
+      "address": "0x40380404",
+      "name": "prvIsYieldRequiredSMP",
+      "section": ".iram0.text",
+      "size": 153,
+      "calls": [
+        {
+          "pc": "0x40380418",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x40380481",
+          "target": "0x4037fcb4",
+          "section": ".iram0.text",
+          "name": "vPortYieldOtherCore"
+        }
+      ]
+    },
+    {
+      "address": "0x4037fcb4",
+      "name": "vPortYieldOtherCore",
+      "section": ".iram0.text",
+      "size": 10,
+      "calls": [
+        {
+          "pc": "0x4037fcb9",
+          "target": "0x4037a200",
+          "section": ".iram0.text",
+          "name": "esp_crosscore_int_send_yield"
+        }
+      ]
+    },
+    {
+      "address": "0x4037a200",
+      "name": "esp_crosscore_int_send_yield",
+      "section": ".iram0.text",
+      "size": 15,
+      "calls": [
+        {
+          "pc": "0x4037a209",
+          "target": "0x4037a1ac",
+          "section": ".iram0.text",
+          "name": "esp_crosscore_int_send"
+        }
+      ]
+    },
+    {
+      "address": "0x4037a1ac",
+      "name": "esp_crosscore_int_send",
+      "section": ".iram0.text",
+      "size": 84,
+      "calls": [
+        {
+          "pc": "0x4037a1c1",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037a1c9",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037a1e2",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        }
+      ]
+    },
+    {
+      "address": "0x40380380",
+      "name": "prvCheckTaskCanBeScheduledSMP",
+      "section": ".iram0.text",
+      "size": 70,
+      "calls": []
+    },
+    {
+      "address": "0x4037efd4",
+      "name": "prvNotifyQueueSetContainer",
+      "section": ".iram0.text",
+      "size": 151,
+      "calls": [
+        {
+          "pc": "0x4037efea",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037f006",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4037f00c",
+          "target": "0x4037faa4",
+          "section": ".iram0.text",
+          "name": "xPortInIsrContext"
+        },
+        {
+          "pc": "0x4037f016",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037f023",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4037f036",
+          "target": "0x4037ef20",
+          "section": ".iram0.text",
+          "name": "prvCopyDataToQueue"
+        },
+        {
+          "pc": "0x4037f045",
+          "target": "0x40380f5c",
+          "section": ".iram0.text",
+          "name": "xTaskRemoveFromEventList"
+        },
+        {
+          "pc": "0x4037f055",
+          "target": "0x4037faa4",
+          "section": ".iram0.text",
+          "name": "xPortInIsrContext"
+        },
+        {
+          "pc": "0x4037f05d",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        },
+        {
+          "pc": "0x4037f066",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        }
+      ]
+    },
+    {
+      "address": "0x4037ef20",
+      "name": "prvCopyDataToQueue",
+      "section": ".iram0.text",
+      "size": 144,
+      "calls": [
+        {
+          "pc": "0x4037ef3b",
+          "target": "0x4038190c",
+          "section": ".iram0.text",
+          "name": "xTaskPriorityDisinherit"
+        }
+      ]
+    },
+    {
+      "address": "0x4038190c",
+      "name": "xTaskPriorityDisinherit",
+      "section": ".iram0.text",
+      "size": 232,
+      "calls": [
+        {
+          "pc": "0x40381914",
+          "target": "0x4037fac8",
+          "section": ".iram0.text",
+          "name": "xPortEnterCriticalTimeout"
+        },
+        {
+          "pc": "0x4038193a",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4038194f",
+          "target": "0x40386884",
+          "section": ".iram0.text",
+          "name": "__assert_func"
+        },
+        {
+          "pc": "0x4038196a",
+          "target": "0x4038030c",
+          "section": ".iram0.text",
+          "name": "uxListRemove"
+        },
+        {
+          "pc": "0x403819ef",
+          "target": "0x4037fc18",
+          "section": ".iram0.text",
+          "name": "vPortExitCritical"
+        }
+      ]
+    },
+    {
+      "address": "0x4038030c",
+      "name": "uxListRemove",
+      "section": ".iram0.text",
+      "size": 82,
+      "calls": []
+    }
+  ],
+  "external": [],
+  "indirect_calls": [
+    {
+      "caller": "mcpwm_capture_default_isr",
+      "pc": "0x4037cffd",
+      "instruction": "callx8\ta8",
+      "resolved": null,
+      "resolved_section": null
+    },
+    {
+      "caller": "gptimer_default_isr",
+      "pc": "0x4037cc76",
+      "instruction": "callx8\ta6",
+      "resolved": null,
+      "resolved_section": null
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fcae",
+      "instruction": "callx8\ta8",
+      "resolved": "0x40001c38",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "__assert_func",
+      "pc": "0x40386890",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "__assert_func",
+      "pc": "0x4038689f",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400014c4",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "__assert_func",
+      "pc": "0x4038693c",
+      "instruction": "callx8\ta8",
+      "resolved": "0x40001248",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "__assert_func",
+      "pc": "0x4038694d",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011f4",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ra_to_str",
+      "pc": "0x4038687e",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400014c4",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fbdd",
+      "instruction": "callx8\ta8",
+      "resolved": "0x40001c38",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x40375ee4",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x403761b9",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x40376491",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x40376749",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x40376a01",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x40376cd5",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x40376fb9",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x40377315",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x403773ee",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x403774d9",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x40377791",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x40377a35",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x40377cfd",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x4037807d",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x40378565",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x40378835",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x403789f2",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+      "pc": "0x40378c70",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "xPortInIsrContext",
+      "pc": "0x4037fac1",
+      "instruction": "callx8\ta8",
+      "resolved": "0x40001c38",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+      "pc": "0x40375821",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+      "pc": "0x40375ba5",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011e8",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "prvCopyDataToQueue",
+      "pc": "0x4037ef4f",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011f4",
+      "resolved_section": "ROM"
+    },
+    {
+      "caller": "prvCopyDataToQueue",
+      "pc": "0x4037ef6e",
+      "instruction": "callx8\ta8",
+      "resolved": "0x400011f4",
+      "resolved_section": "ROM"
+    }
+  ],
+  "literals_outside_iram": [],
+  "loads_of_flash_pointers": [
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc1e",
+      "instruction": "l32r\ta13, 40374d90 <_iram_text_start+0x98c> (3c0419e0 <_flash_rodata_start+0x18c0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc21",
+      "instruction": "l32r\ta12, 40374dbc <_iram_text_start+0x9b8> (3c050e3c <__func__$0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc24",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc38",
+      "instruction": "l32r\ta13, 40374dc0 <_iram_text_start+0x9bc> (3c0482ec <_flash_rodata_start+0x81cc>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc3b",
+      "instruction": "l32r\ta12, 40374dbc <_iram_text_start+0x9b8> (3c050e3c <__func__$0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc3e",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc63",
+      "instruction": "l32r\ta13, 40374dc4 <_iram_text_start+0x9c0> (3c04830c <_flash_rodata_start+0x81ec>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc66",
+      "instruction": "l32r\ta12, 40374dbc <_iram_text_start+0x9b8> (3c050e3c <__func__$0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc69",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc8c",
+      "instruction": "l32r\ta13, 40374dc8 <_iram_text_start+0x9c4> (3c048320 <_flash_rodata_start+0x8200>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc8f",
+      "instruction": "l32r\ta12, 40374dcc <_iram_text_start+0x9c8> (3c050e50 <__func__$1>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc92",
+      "instruction": "l32r\ta10, 40374d70 <_iram_text_start+0x96c> (3c04822e <_flash_rodata_start+0x810e>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fad4",
+      "instruction": "l32r\ta13, 40374d90 <_iram_text_start+0x98c> (3c0419e0 <_flash_rodata_start+0x18c0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fad7",
+      "instruction": "l32r\ta12, 40374d94 <_iram_text_start+0x990> (3c050e64 <__func__$2>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fada",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037faf9",
+      "instruction": "l32r\ta13, 40374d9c <_iram_text_start+0x998> (3c048238 <_flash_rodata_start+0x8118>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fafc",
+      "instruction": "l32r\ta12, 40374d94 <_iram_text_start+0x990> (3c050e64 <__func__$2>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037faff",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fb63",
+      "instruction": "l32r\ta13, 40374da0 <_iram_text_start+0x99c> (3c048260 <_flash_rodata_start+0x8140>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fb66",
+      "instruction": "l32r\ta12, 40374d94 <_iram_text_start+0x990> (3c050e64 <__func__$2>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fb69",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fb76",
+      "instruction": "l32r\ta13, 40374da4 <_iram_text_start+0x9a0> (3c048280 <_flash_rodata_start+0x8160>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fb79",
+      "instruction": "l32r\ta12, 40374d94 <_iram_text_start+0x990> (3c050e64 <__func__$2>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fb7c",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fba4",
+      "instruction": "l32r\ta13, 40374dac <_iram_text_start+0x9a8> (3c048294 <_flash_rodata_start+0x8174>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fba7",
+      "instruction": "l32r\ta12, 40374d94 <_iram_text_start+0x990> (3c050e64 <__func__$2>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fbaa",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fbbf",
+      "instruction": "l32r\ta13, 40374db0 <_iram_text_start+0x9ac> (3c0482d8 <_flash_rodata_start+0x81b8>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fbc2",
+      "instruction": "l32r\ta12, 40374d94 <_iram_text_start+0x990> (3c050e64 <__func__$2>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fbc5",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f4d2",
+      "instruction": "l32r\ta13, 40374cbc <_iram_text_start+0x8b8> (3c0477e4 <_flash_rodata_start+0x76c4>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f4d5",
+      "instruction": "l32r\ta12, 40374d1c <_iram_text_start+0x918> (3c050aac <__func__$12>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f4db",
+      "instruction": "l32r\ta10, 40374cb0 <_iram_text_start+0x8ac> (3c047792 <_flash_rodata_start+0x7672>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f4eb",
+      "instruction": "l32r\ta13, 40374cfc <_iram_text_start+0x8f8> (3c04786c <_flash_rodata_start+0x774c>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f4ee",
+      "instruction": "l32r\ta12, 40374d1c <_iram_text_start+0x918> (3c050aac <__func__$12>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f4f4",
+      "instruction": "l32r\ta10, 40374cb0 <_iram_text_start+0x8ac> (3c047792 <_flash_rodata_start+0x7672>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f505",
+      "instruction": "l32r\ta13, 40374d00 <_iram_text_start+0x8fc> (3c0478c4 <_flash_rodata_start+0x77a4>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f508",
+      "instruction": "l32r\ta12, 40374d1c <_iram_text_start+0x918> (3c050aac <__func__$12>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f50e",
+      "instruction": "l32r\ta10, 40374cb0 <_iram_text_start+0x8ac> (3c047792 <_flash_rodata_start+0x7672>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskRemoveFromEventList",
+      "pc": "0x40380f96",
+      "instruction": "l32r\ta13, 40374edc <_iram_text_start+0xad8> (3c047c0c <_flash_rodata_start+0x7aec>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskRemoveFromEventList",
+      "pc": "0x40380f99",
+      "instruction": "l32r\ta12, 40374ee0 <_iram_text_start+0xadc> (3c050d38 <__func__$20>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskRemoveFromEventList",
+      "pc": "0x40380f9f",
+      "instruction": "l32r\ta10, 40374e40 <_iram_text_start+0xa3c> (3c047aee <_flash_rodata_start+0x79ce>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskRemoveFromEventList",
+      "pc": "0x403810c8",
+      "instruction": "l32r\ta13, 40374ee8 <_iram_text_start+0xae4> (3c047c1c <_flash_rodata_start+0x7afc>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskRemoveFromEventList",
+      "pc": "0x403810cb",
+      "instruction": "l32r\ta12, 40374ee0 <_iram_text_start+0xadc> (3c050d38 <__func__$20>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskRemoveFromEventList",
+      "pc": "0x403810d1",
+      "instruction": "l32r\ta10, 40374e40 <_iram_text_start+0xa3c> (3c047aee <_flash_rodata_start+0x79ce>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvIsYieldRequiredSMP",
+      "pc": "0x4038040c",
+      "instruction": "l32r\ta13, 40374e38 <_iram_text_start+0xa34> (3c047aac <_flash_rodata_start+0x798c>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvIsYieldRequiredSMP",
+      "pc": "0x4038040f",
+      "instruction": "l32r\ta12, 40374e3c <_iram_text_start+0xa38> (3c050dd4 <__func__$37>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvIsYieldRequiredSMP",
+      "pc": "0x40380415",
+      "instruction": "l32r\ta10, 40374e40 <_iram_text_start+0xa3c> (3c047aee <_flash_rodata_start+0x79ce>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "esp_crosscore_int_send",
+      "pc": "0x4037a1b5",
+      "instruction": "l32r\ta13, 403745d0 <_iram_text_start+0x1cc> (3c0464c4 <_flash_rodata_start+0x63a4>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "esp_crosscore_int_send",
+      "pc": "0x4037a1b8",
+      "instruction": "l32r\ta12, 403745d4 <_iram_text_start+0x1d0> (3c05067c <__func__$0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "esp_crosscore_int_send",
+      "pc": "0x4037a1be",
+      "instruction": "l32r\ta10, 403745d8 <_iram_text_start+0x1d4> (3c04650c <_flash_rodata_start+0x63ec>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvNotifyQueueSetContainer",
+      "pc": "0x4037efde",
+      "instruction": "l32r\ta13, 40374ca4 <_iram_text_start+0x8a0> (3c047754 <_flash_rodata_start+0x7634>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvNotifyQueueSetContainer",
+      "pc": "0x4037efe1",
+      "instruction": "l32r\ta12, 40374ca8 <_iram_text_start+0x8a4> (3c050ac8 <__func__$13>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvNotifyQueueSetContainer",
+      "pc": "0x4037efe7",
+      "instruction": "l32r\ta10, 40374cb0 <_iram_text_start+0x8ac> (3c047792 <_flash_rodata_start+0x7672>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvNotifyQueueSetContainer",
+      "pc": "0x4037eff7",
+      "instruction": "l32r\ta13, 40374cb4 <_iram_text_start+0x8b0> (3c04779c <_flash_rodata_start+0x767c>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvNotifyQueueSetContainer",
+      "pc": "0x4037effa",
+      "instruction": "l32r\ta12, 40374ca8 <_iram_text_start+0x8a4> (3c050ac8 <__func__$13>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvNotifyQueueSetContainer",
+      "pc": "0x4037f000",
+      "instruction": "l32r\ta10, 40374cb0 <_iram_text_start+0x8ac> (3c047792 <_flash_rodata_start+0x7672>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskPriorityDisinherit",
+      "pc": "0x4038192e",
+      "instruction": "l32r\ta13, 40374f3c <_iram_text_start+0xb38> (3c047db8 <_flash_rodata_start+0x7c98>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskPriorityDisinherit",
+      "pc": "0x40381931",
+      "instruction": "l32r\ta12, 40374f40 <_iram_text_start+0xb3c> (3c050d08 <__func__$15>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskPriorityDisinherit",
+      "pc": "0x40381937",
+      "instruction": "l32r\ta10, 40374e40 <_iram_text_start+0xa3c> (3c047aee <_flash_rodata_start+0x79ce>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskPriorityDisinherit",
+      "pc": "0x40381943",
+      "instruction": "l32r\ta13, 40374f48 <_iram_text_start+0xb44> (3c047de4 <_flash_rodata_start+0x7cc4>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskPriorityDisinherit",
+      "pc": "0x40381946",
+      "instruction": "l32r\ta12, 40374f40 <_iram_text_start+0xb3c> (3c050d08 <__func__$15>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskPriorityDisinherit",
+      "pc": "0x4038194c",
+      "instruction": "l32r\ta10, 40374e40 <_iram_text_start+0xa3c> (3c047aee <_flash_rodata_start+0x79ce>)",
+      "loaded_section": ".flash.rodata"
+    }
+  ],
+  "assertion_argument_only": [
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc1e",
+      "instruction": "l32r\ta13, 40374d90 <_iram_text_start+0x98c> (3c0419e0 <_flash_rodata_start+0x18c0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc21",
+      "instruction": "l32r\ta12, 40374dbc <_iram_text_start+0x9b8> (3c050e3c <__func__$0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc24",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc38",
+      "instruction": "l32r\ta13, 40374dc0 <_iram_text_start+0x9bc> (3c0482ec <_flash_rodata_start+0x81cc>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc3b",
+      "instruction": "l32r\ta12, 40374dbc <_iram_text_start+0x9b8> (3c050e3c <__func__$0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc3e",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc63",
+      "instruction": "l32r\ta13, 40374dc4 <_iram_text_start+0x9c0> (3c04830c <_flash_rodata_start+0x81ec>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc66",
+      "instruction": "l32r\ta12, 40374dbc <_iram_text_start+0x9b8> (3c050e3c <__func__$0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc69",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc8c",
+      "instruction": "l32r\ta13, 40374dc8 <_iram_text_start+0x9c4> (3c048320 <_flash_rodata_start+0x8200>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc8f",
+      "instruction": "l32r\ta12, 40374dcc <_iram_text_start+0x9c8> (3c050e50 <__func__$1>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "vPortExitCritical",
+      "pc": "0x4037fc92",
+      "instruction": "l32r\ta10, 40374d70 <_iram_text_start+0x96c> (3c04822e <_flash_rodata_start+0x810e>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fad4",
+      "instruction": "l32r\ta13, 40374d90 <_iram_text_start+0x98c> (3c0419e0 <_flash_rodata_start+0x18c0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fad7",
+      "instruction": "l32r\ta12, 40374d94 <_iram_text_start+0x990> (3c050e64 <__func__$2>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fada",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037faf9",
+      "instruction": "l32r\ta13, 40374d9c <_iram_text_start+0x998> (3c048238 <_flash_rodata_start+0x8118>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fafc",
+      "instruction": "l32r\ta12, 40374d94 <_iram_text_start+0x990> (3c050e64 <__func__$2>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037faff",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fb63",
+      "instruction": "l32r\ta13, 40374da0 <_iram_text_start+0x99c> (3c048260 <_flash_rodata_start+0x8140>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fb66",
+      "instruction": "l32r\ta12, 40374d94 <_iram_text_start+0x990> (3c050e64 <__func__$2>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fb69",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fb76",
+      "instruction": "l32r\ta13, 40374da4 <_iram_text_start+0x9a0> (3c048280 <_flash_rodata_start+0x8160>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fb79",
+      "instruction": "l32r\ta12, 40374d94 <_iram_text_start+0x990> (3c050e64 <__func__$2>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fb7c",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fba4",
+      "instruction": "l32r\ta13, 40374dac <_iram_text_start+0x9a8> (3c048294 <_flash_rodata_start+0x8174>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fba7",
+      "instruction": "l32r\ta12, 40374d94 <_iram_text_start+0x990> (3c050e64 <__func__$2>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fbaa",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fbbf",
+      "instruction": "l32r\ta13, 40374db0 <_iram_text_start+0x9ac> (3c0482d8 <_flash_rodata_start+0x81b8>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fbc2",
+      "instruction": "l32r\ta12, 40374d94 <_iram_text_start+0x990> (3c050e64 <__func__$2>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xPortEnterCriticalTimeout",
+      "pc": "0x4037fbc5",
+      "instruction": "l32r\ta10, 40374d98 <_iram_text_start+0x994> (3c041a10 <_flash_rodata_start+0x18f0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f4d2",
+      "instruction": "l32r\ta13, 40374cbc <_iram_text_start+0x8b8> (3c0477e4 <_flash_rodata_start+0x76c4>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f4d5",
+      "instruction": "l32r\ta12, 40374d1c <_iram_text_start+0x918> (3c050aac <__func__$12>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f4db",
+      "instruction": "l32r\ta10, 40374cb0 <_iram_text_start+0x8ac> (3c047792 <_flash_rodata_start+0x7672>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f4eb",
+      "instruction": "l32r\ta13, 40374cfc <_iram_text_start+0x8f8> (3c04786c <_flash_rodata_start+0x774c>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f4ee",
+      "instruction": "l32r\ta12, 40374d1c <_iram_text_start+0x918> (3c050aac <__func__$12>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f4f4",
+      "instruction": "l32r\ta10, 40374cb0 <_iram_text_start+0x8ac> (3c047792 <_flash_rodata_start+0x7672>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f505",
+      "instruction": "l32r\ta13, 40374d00 <_iram_text_start+0x8fc> (3c0478c4 <_flash_rodata_start+0x77a4>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f508",
+      "instruction": "l32r\ta12, 40374d1c <_iram_text_start+0x918> (3c050aac <__func__$12>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xQueueGenericSendFromISR",
+      "pc": "0x4037f50e",
+      "instruction": "l32r\ta10, 40374cb0 <_iram_text_start+0x8ac> (3c047792 <_flash_rodata_start+0x7672>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskRemoveFromEventList",
+      "pc": "0x40380f96",
+      "instruction": "l32r\ta13, 40374edc <_iram_text_start+0xad8> (3c047c0c <_flash_rodata_start+0x7aec>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskRemoveFromEventList",
+      "pc": "0x40380f99",
+      "instruction": "l32r\ta12, 40374ee0 <_iram_text_start+0xadc> (3c050d38 <__func__$20>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskRemoveFromEventList",
+      "pc": "0x40380f9f",
+      "instruction": "l32r\ta10, 40374e40 <_iram_text_start+0xa3c> (3c047aee <_flash_rodata_start+0x79ce>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskRemoveFromEventList",
+      "pc": "0x403810c8",
+      "instruction": "l32r\ta13, 40374ee8 <_iram_text_start+0xae4> (3c047c1c <_flash_rodata_start+0x7afc>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskRemoveFromEventList",
+      "pc": "0x403810cb",
+      "instruction": "l32r\ta12, 40374ee0 <_iram_text_start+0xadc> (3c050d38 <__func__$20>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskRemoveFromEventList",
+      "pc": "0x403810d1",
+      "instruction": "l32r\ta10, 40374e40 <_iram_text_start+0xa3c> (3c047aee <_flash_rodata_start+0x79ce>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvIsYieldRequiredSMP",
+      "pc": "0x4038040c",
+      "instruction": "l32r\ta13, 40374e38 <_iram_text_start+0xa34> (3c047aac <_flash_rodata_start+0x798c>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvIsYieldRequiredSMP",
+      "pc": "0x4038040f",
+      "instruction": "l32r\ta12, 40374e3c <_iram_text_start+0xa38> (3c050dd4 <__func__$37>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvIsYieldRequiredSMP",
+      "pc": "0x40380415",
+      "instruction": "l32r\ta10, 40374e40 <_iram_text_start+0xa3c> (3c047aee <_flash_rodata_start+0x79ce>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "esp_crosscore_int_send",
+      "pc": "0x4037a1b5",
+      "instruction": "l32r\ta13, 403745d0 <_iram_text_start+0x1cc> (3c0464c4 <_flash_rodata_start+0x63a4>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "esp_crosscore_int_send",
+      "pc": "0x4037a1b8",
+      "instruction": "l32r\ta12, 403745d4 <_iram_text_start+0x1d0> (3c05067c <__func__$0>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "esp_crosscore_int_send",
+      "pc": "0x4037a1be",
+      "instruction": "l32r\ta10, 403745d8 <_iram_text_start+0x1d4> (3c04650c <_flash_rodata_start+0x63ec>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvNotifyQueueSetContainer",
+      "pc": "0x4037efde",
+      "instruction": "l32r\ta13, 40374ca4 <_iram_text_start+0x8a0> (3c047754 <_flash_rodata_start+0x7634>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvNotifyQueueSetContainer",
+      "pc": "0x4037efe1",
+      "instruction": "l32r\ta12, 40374ca8 <_iram_text_start+0x8a4> (3c050ac8 <__func__$13>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvNotifyQueueSetContainer",
+      "pc": "0x4037efe7",
+      "instruction": "l32r\ta10, 40374cb0 <_iram_text_start+0x8ac> (3c047792 <_flash_rodata_start+0x7672>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvNotifyQueueSetContainer",
+      "pc": "0x4037eff7",
+      "instruction": "l32r\ta13, 40374cb4 <_iram_text_start+0x8b0> (3c04779c <_flash_rodata_start+0x767c>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvNotifyQueueSetContainer",
+      "pc": "0x4037effa",
+      "instruction": "l32r\ta12, 40374ca8 <_iram_text_start+0x8a4> (3c050ac8 <__func__$13>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "prvNotifyQueueSetContainer",
+      "pc": "0x4037f000",
+      "instruction": "l32r\ta10, 40374cb0 <_iram_text_start+0x8ac> (3c047792 <_flash_rodata_start+0x7672>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskPriorityDisinherit",
+      "pc": "0x4038192e",
+      "instruction": "l32r\ta13, 40374f3c <_iram_text_start+0xb38> (3c047db8 <_flash_rodata_start+0x7c98>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskPriorityDisinherit",
+      "pc": "0x40381931",
+      "instruction": "l32r\ta12, 40374f40 <_iram_text_start+0xb3c> (3c050d08 <__func__$15>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskPriorityDisinherit",
+      "pc": "0x40381937",
+      "instruction": "l32r\ta10, 40374e40 <_iram_text_start+0xa3c> (3c047aee <_flash_rodata_start+0x79ce>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskPriorityDisinherit",
+      "pc": "0x40381943",
+      "instruction": "l32r\ta13, 40374f48 <_iram_text_start+0xb44> (3c047de4 <_flash_rodata_start+0x7cc4>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskPriorityDisinherit",
+      "pc": "0x40381946",
+      "instruction": "l32r\ta12, 40374f40 <_iram_text_start+0xb3c> (3c050d08 <__func__$15>)",
+      "loaded_section": ".flash.rodata"
+    },
+    {
+      "caller": "xTaskPriorityDisinherit",
+      "pc": "0x4038194c",
+      "instruction": "l32r\ta10, 40374e40 <_iram_text_start+0xa3c> (3c047aee <_flash_rodata_start+0x79ce>)",
+      "loaded_section": ".flash.rodata"
+    }
+  ],
+  "unclassified_flash_pointers": [],
+  "sdk_assert_source_sha256": "42d25f58eae3d2b315d6e3badc291cd1423a08fcf97e16fe2eee944ad8a2397d",
+  "assertion_path_review": "Reviewed pinned SDK checks cache state before dereferencing file/func/expr and substitutes internal strings/stack text. Full fatal panic restores cache before flash code; no physical fail-low on SDK assertion is established.",
+  "passed_static_placement": true,
+  "failures": [],
+  "data_symbols": [
+    {
+      "name": "ecu::engine_target::(anonymous namespace)::measured",
+      "address": "0x3fc9acc0",
+      "section": ".dram0.data"
+    },
+    {
+      "name": "ecu::engine_target::(anonymous namespace)::installed_alarm",
+      "address": "0x3fc9ace0",
+      "section": ".dram0.data"
+    },
+    {
+      "name": "ecu::engine_target::(anonymous namespace)::external_epoch",
+      "address": "0x3fc9ace8",
+      "section": ".dram0.data"
+    },
+    {
+      "name": "ecu::engine_target::(anonymous namespace)::output",
+      "address": "0x3fc9acec",
+      "section": ".dram0.data"
+    },
+    {
+      "name": "ecu::engine_target::(anonymous namespace)::output_pins",
+      "address": "0x3fc9acf0",
+      "section": ".dram0.data"
+    },
+    {
+      "name": "ecu::engine_target::(anonymous namespace)::lock",
+      "address": "0x3fc9ad10",
+      "section": ".dram0.data"
+    },
+    {
+      "name": "ecu::engine_target::(anonymous namespace)::capture_clock",
+      "address": "0x3fc9ad18",
+      "section": ".dram0.data"
+    },
+    {
+      "name": "ecu::engine_target::(anonymous namespace)::executor",
+      "address": "0x3fc9ad30",
+      "section": ".dram0.data"
+    },
+    {
+      "name": "ecu::engine_target::(anonymous namespace)::configuration_hold",
+      "address": "0x3fc9f328",
+      "section": ".dram0.bss"
+    },
+    {
+      "name": "ecu::engine_target::(anonymous namespace)::commands",
+      "address": "0x3fc9f338",
+      "section": ".dram0.bss"
+    },
+    {
+      "name": "ecu::engine_target::(anonymous namespace)::captures",
+      "address": "0x3fc9f33c",
+      "section": ".dram0.bss"
+    },
+    {
+      "name": "ecu::engine_target::(anonymous namespace)::timer",
+      "address": "0x3fc9f344",
+      "section": ".dram0.bss"
+    }
+  ],
+  "qualification": "Static placement assistance only; assertion-only metadata is separately classified, not hidden. Driver callback targets matched to source registration. Heap allocation, indirect data accesses and physical timing require separate review/evidence."
+}

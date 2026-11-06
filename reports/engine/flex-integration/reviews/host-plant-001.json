@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python3",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host_plant_capture_probe.py",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/plant-capture-001"
+  ],
+  "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002",
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host_plant_capture_probe.py\", line 27, in <module>\n    require(len(r['trace'])==200 and [round(row['time'],8)for row in r['trace']]==[round((n+1)*.02,8)for n in range(200)],name+' independent trace cadence')\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host_plant_capture_probe.py\", line 13, in require\n    if not v:raise AssertionError(label)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: batch_wasted_4cyl-off independent trace cadence\n",
+  "probe_sha256": "747cc39b6ed5d20f487428891fb816c5b790df2be3b87ca5991b543b061ec77c",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-gcov-002",
+    "GCOV_PREFIX_STRIP": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-tmp-002",
+    "PYTHONPATH": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002/tools"
+  }
+}

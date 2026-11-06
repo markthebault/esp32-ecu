@@ -1,0 +1,63 @@
+{
+  "python": {
+    "command": [
+      "python3",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-integration-review/probe.py"
+    ],
+    "returncode": 0,
+    "stdout": "{\n  \"session\": {\n    \"schema_version\": 1,\n    \"identity\": \"ESP32ECU DEV 005 INHIBITED\",\n    \"serial_protocol\": \"002\",\n    \"page_bytes\": 4992,\n    \"live_bytes\": 256,\n    \"state\": \"ready\",\n    \"initialized\": true,\n    \"dirty\": false,\n    \"origin_revision\": 1,\n    \"base_revision\": 3,\n    \"observed_active_revision\": 3,\n    \"last_code\": 4,\n    \"commands\": \"10\",\n    \"reads\": \"3\",\n    \"writes\": \"2\",\n    \"burns\": \"2\",\n    \"rejected\": \"3\",\n    \"resets\": \"1\",\n    \"received_bytes\": \"0\",\n    \"fully_queued_reply_bytes\": \"0\",\n    \"frames\": \"0\",\n    \"crc_errors\": \"0\",\n    \"timeouts\": \"0\",\n    \"framing_errors\": \"0\",\n    \"tx_errors\": \"0\",\n    \"tx_fault\": false,\n    \"buffered_bytes\": 0,\n    \"callback_error\": \"\"\n  },\n  \"passed\": true,\n  \"checks\": [\n    \"schema1/2/3 enabled legacy JSON migrations disable idle, keep fixed defaults/revision and original file bytes\",\n    \"all four historical MSQ signatures forcibly enabled migrate to disabled fixed idle\",\n    \"native JSON rejects extra/missing/unknown and coupled curve/target violations even disabled\",\n    \"96 scalar/nonfinite/reserved binary variants rejected by native whole tune validation\",\n    \"4992B page/256B live exact boundaries, whole-page burn, persistence, stale-writer rejection and stable session origin verified\",\n    \"own005 default MSQ roundtrip native validators retains idle and cylinder data\",\n    \"Every idle/master field changed together survives20 native page chunks, full burn, persisted reload and MSQ with equal float32 payloads\"\n  ]\n}\n",
+    "stderr": ""
+  },
+  "browser": {
+    "command": [
+      "uv",
+      "run",
+      "--offline",
+      "--with",
+      "playwright",
+      "python",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-integration-review/browser_probe.py"
+    ],
+    "returncode": 0,
+    "stdout": "{\n  \"passed\": true,\n  \"checks\": [\n    \"Real Chrome legacy MSQs reset enabled/custom editor idle fields; current export imports through native Python; extra/missing/unknown fields rejected\",\n    \"91-field Chrome/native MSL headers/units match; new PID counter and snapshot identity preserve full64-bit precision\",\n    \"Invalid availability0/null/missing/string is rejected atomically by both Chrome collector and native observation parser\"\n  ],\n  \"details\": {\n    \"availability_type_variants\": {\n      \"labels\": [\n        \"zero\",\n        \"null\",\n        \"missing\",\n        \"string_false\"\n      ],\n      \"browser_rejected\": [\n        true,\n        true,\n        true,\n        true\n      ],\n      \"native_accepted\": [\n        false,\n        false,\n        false,\n        false\n      ]\n    }\n  },\n  \"page_errors\": []\n}\n",
+    "stderr": ""
+  },
+  "allocation": {
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-integration-review/alloc_probe",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-integration-review/snapshot/config/engine/defaults-v3.json"
+    ],
+    "returncode": 0,
+    "stdout": "canonical_cjson_allocation_positions=4000 failed=2485 completed=1515 leaked=0\nalgorithm_growth_allocation_failure=retained_private_document_only\nmaximum_msl_header_bytes=1804 maximum_msl_row_bytes=837 capacity=2048\n",
+    "stderr": ""
+  },
+  "allocation_compile_commands": [
+    [
+      "cc",
+      "-fsanitize=address,undefined",
+      "-g",
+      "-O1",
+      "-c",
+      "/home/mark/.platformio/packages/framework-espidf/components/json/cJSON/cJSON.c",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-integration-review/alloc-cjson.o"
+    ],
+    [
+      "c++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-g",
+      "-O1",
+      "-Ifirmware/include",
+      "-I/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-integration-review/alloc_probe.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-integration-review/alloc-cjson.o",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-integration-review/alloc_probe"
+    ]
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "passed_arithmetic": true,
+  "scope": "Candidate resistor/corner arithmetic; no transistor, protection, temperature, poweroff or target acceptance",
+  "corner_count": 256,
+  "base_current_min_uA": 73.31873581446817,
+  "base_current_max_uA": 216.80985011473228,
+  "forced_beta_max": 8.119546034460193,
+  "worst_forced_beta_case": {
+    "vdd": 2.97,
+    "vd": 1.0,
+    "vbe": 0.95,
+    "rbias": 2222,
+    "rb": 10079.8,
+    "rbe": 99000,
+    "rc": 4653,
+    "base_uA": 73.31873581446817,
+    "collector_uA": 595.3148506339995,
+    "forced_beta": 8.119546034460193
+  },
+  "closed_base_max_V": 0.14502602872876272,
+  "negative_fault": {
+    "vin": -18,
+    "rail_current_per_channel_A": 0.00993112947658402,
+    "rail_current_two_A": 0.01986225895316804,
+    "rbias_power_W": 0.21481033057851237,
+    "base_clamp_current_bound_A": 0.0018218254691200581,
+    "base_resistor_total_power_bound_W": 0.03279285844416105
+  },
+  "positive_fault": {
+    "vin": 18,
+    "base_current_upper_bound_A": 0.0018218254691200581,
+    "bias_diode_reverse_voltage_upper_bound_V": 18,
+    "bias_diode_leak_25C_A": 2.5e-08,
+    "bias_diode_leak_150C_A": 5e-05
+  },
+  "bus": {
+    "rpull_ohm": 4700,
+    "rise_at_200pF_s": 7.964620000000001e-07,
+    "cap_for_1us_rise_F": 2.5111053634699454e-10,
+    "cap_for_300ns_rise_F": 7.533316090409837e-11,
+    "write_olat_27clocks_s": 0.00027,
+    "read11_registers_126clocks_s": 0.00126,
+    "read_iodir_guard_36clocks_s": 0.00036,
+    "guarded_read_162clocks_s": 0.00162,
+    "proposed_measured_acquisition_budget_s": 0.003,
+    "read_period_s": 0.01,
+    "source_freshness_s": 0.02
+  },
+  "loading": {
+    "normal_per_bias_branch_upper_A": 0.0016666666666666666,
+    "normal_per_collector_pullup_upper_A": 0.0007801418439716312,
+    "loop_high_static_A": 3.63036303630363e-05,
+    "two_bus_pullups_low_A": 0.0015602836879432625,
+    "normal_two_channels_conservative_upper_A": 0.004893617021276595,
+    "scope": "Mutually exclusive branches summed conservatively. Add MCP23008, reset, optional bleed and other-board consumption. This is resistor arithmetic, not a guaranteed complete supply budget."
+  },
+  "rc": {
+    "proposed_cap_F": 1e-08,
+    "pullup_nominal_ohm": 4700,
+    "tau_nominal_s": 4.7000000000000004e-05,
+    "rise_from_zero_to_80percent_nominal_s": 7.564358188440272e-05,
+    "scope": "Illustrative RC only; capacitance/tolerance/temperature and actual transistor switching require selected-part review and measurement."
+  },
+  "phantom_kcl_examples": [
+    {
+      "bleed_ohm": null,
+      "model_vrail_V": null,
+      "qualification": "Two4.7k pullups and assumed .6V pin clamps plus100uA injected current; transistorB-C backfeed is an additional path, not bounded here"
+    },
+    {
+      "bleed_ohm": 100000,
+      "model_vrail_V": 10.0,
+      "qualification": "Two4.7k pullups and assumed .6V pin clamps plus100uA injected current; transistorB-C backfeed is an additional path, not bounded here"
+    },
+    {
+      "bleed_ohm": 10000,
+      "model_vrail_V": 2.6437246963562755,
+      "qualification": "Two4.7k pullups and assumed .6V pin clamps plus100uA injected current; transistorB-C backfeed is an additional path, not bounded here"
+    },
+    {
+      "bleed_ohm": 2200,
+      "model_vrail_V": 1.578681318681319,
+      "qualification": "Two4.7k pullups and assumed .6V pin clamps plus100uA injected current; transistorB-C backfeed is an additional path, not bounded here"
+    },
+    {
+      "bleed_ohm": 1000,
+      "model_vrail_V": 0.9746268656716418,
+      "qualification": "Two4.7k pullups and assumed .6V pin clamps plus100uA injected current; transistorB-C backfeed is an additional path, not bounded here"
+    }
+  ],
+  "required_device_measurement": "Establish actual VCE_LOW below0.2*VDD and leakage-compatible HIGH above0.8*VDD at procured transistor/temperature/voltage, plus B-C backfeed and rail/reset behavior. VCE=.2 used only for collector demand, not a proven value."
+}

@@ -1,0 +1,46 @@
+{
+  "passed_declared_arithmetic": true,
+  "corners": 256,
+  "physical_qualification": false,
+  "assumed_open_base_uA": [
+    73.31873581446817,
+    216.80985011473228
+  ],
+  "max_required_collector_base_ratio": 8.133185113051653,
+  "max_closed_base_resistor_divider_v": 0.1450260287287627,
+  "min_high_margin_assuming_zero_Q_leak_v": 0.5882429999999998,
+  "negative18_bias_current_per_channel_ma": 9.93112947658402,
+  "negative18_bias_power_per_channel_w": 0.21481033057851237,
+  "conservative_normal_branch_sum_ma": 9.660253984972965,
+  "branch_terms_ma": {
+    "two_bias": 3.333333333333333,
+    "two_collector": 1.5602836879432624,
+    "bleeder": 3.6666666666666665,
+    "loop": 0.0363036303630363,
+    "reset_asserted": 0.03666666666666667,
+    "expander_test_bound": 1.0,
+    "supervisor_active_test_bound": 0.02,
+    "gpio_leak_budget": 0.007
+  },
+  "two_i2c_pullups_low_additional_ma": 1.5277777777777777,
+  "conservative_two_negative18_branch_sum_ma": 26.189179604807673,
+  "bus_only_poweroff_rail_upper_bound_under_idealized_assumptions_v": 1.0827820437093916,
+  "reset_pullup_current_at_trip_min_uA": 28.85858585858586,
+  "reset_low_at1V_specification_load_uA": 10,
+  "actual100k_lowest_R_pullup_at1V_zero_reset_approx_uA": 10.101010101010102,
+  "actual100k_lowest_R_pullup_at1V_point2V_reset_uA": 8.080808080808081,
+  "nominal_collector_tau_us": 47,
+  "nominal_zero_to_0_8vdd_us": 75.6435818844027,
+  "caveats": [
+    "Input diode and B-E voltage assumptions are not exact-part full-temperature bounds",
+    "Forced ratio does not transfer onsemi VCEsat guarantees to sub-mA/full-temperature operation",
+    "No Q leakage in closed GP high calculation; actual cutoff/high margin is unqualified",
+    "Normal sum deliberately combines mutually exclusive extrema and uses specified chip test-point bounds; no target peak or thermal headroom measurement",
+    "\u00b118V remains a proposed common-ground steady bench characterization envelope, not automotive or input qualification",
+    "Bus-only floating-rail bound omits contact-related or other injection; actual unpowered IC behavior and loaded reset remain unknown",
+    "MCP1210.1uA open-drain leakage is typical only; no guaranteed all-corner released RESET high proof",
+    "Revised100k pullup matches the supervisor datasheet test condition; unknown expander RESET leakage and actual ramp/noise margins remain physical holds",
+    "MCP23008 at3.3V is limited to the documented -40..85C domain, regardless of E/P marking",
+    "I2C100ohm series additions need loaded VOL/rise/fall measurement with actual carrier/harness"
+  ]
+}

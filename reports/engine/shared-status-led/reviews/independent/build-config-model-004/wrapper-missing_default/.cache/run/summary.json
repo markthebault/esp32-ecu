@@ -1,0 +1,66 @@
+{
+  "created_utc": "2026-11-04T21:24:54.162735+00:00",
+  "command": [
+    "pio",
+    "run",
+    "-d",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-missing_default/firmware",
+    "-e",
+    "owned_fake"
+  ],
+  "exit_code": 0,
+  "build_dir_override": "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-missing_default/.cache/run/build",
+  "environments": [
+    "owned_fake"
+  ],
+  "default_cache_retained": false,
+  "default_cache_unchanged": true,
+  "source_inputs_unchanged": true,
+  "generated_sdkconfigs": [
+    {
+      "environment": "owned_fake",
+      "original_present": true,
+      "original_sha256": "8c45b0ad22d49b429255844ab45e8e5593ac1ac23e6a7ab7f9c0134d3ff434a6",
+      "retained": "retained-sdkconfigs/sdkconfig.owned_fake",
+      "after_sha256": "8c45b0ad22d49b429255844ab45e8e5593ac1ac23e6a7ab7f9c0134d3ff434a6",
+      "after_copy": "sdkconfigs-after/sdkconfig.owned_fake"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "build/owned_fake/firmware.bin",
+      "bytes": 21,
+      "sha256": "b0ac074583e941ed6c4f3335634700a200a83d48b0e50a4172e18b7de92a3610"
+    },
+    {
+      "path": "build/owned_fake/firmware.elf",
+      "bytes": 32,
+      "sha256": "02000252fb32ae6c02a682e1bd747e9472d0164bd57a2f4374afbb6080ab5f3b"
+    }
+  ],
+  "elf_archives": [
+    {
+      "environment": "owned_fake",
+      "path": "elf-archives/owned_fake.elf.gz",
+      "bytes": 52,
+      "sha256": "28f3b9bd7626a89d502ca81f05b21dd8f123cc1af13873e27ae5b7a7ffc7a377",
+      "elf_bytes": 32,
+      "elf_sha256": "02000252fb32ae6c02a682e1bd747e9472d0164bd57a2f4374afbb6080ab5f3b"
+    }
+  ],
+  "generated_assets_sha256": "4640a15e8dff3b1f556d960f5ecaf08f6a4db6561729d40ac308ec8bfde55896",
+  "web_index_sha256": "6e6a9e8bbf071b54906a4a74b1cbff8168c70a1e10a836c6f481a5ae98666960",
+  "embedded_UI": [
+    {
+      "environment": "owned_fake",
+      "web_expected": false,
+      "current_index_in_flash_rodata": false
+    }
+  ],
+  "declared_generation_changes": [
+    "firmware/main/web_assets.hpp"
+  ],
+  "generation_only_declared_output": true,
+  "flashed": false,
+  "physical_qualification": false
+}

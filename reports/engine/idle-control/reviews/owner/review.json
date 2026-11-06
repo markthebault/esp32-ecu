@@ -1,0 +1,174 @@
+{
+  "reviewed_at_utc": "2026-11-03T23:23:33.741925+00:00",
+  "reviewer": "Independent read-only /root/target_executor_architecture_review",
+  "scope": "New idle PWM owner implementation review, independent of earlier transport approvals. Read-only production sources; all snapshots, builds and probes confined to .cache/engine/idle-owner-review. No subagents, external service messages, source edits or hardware execution.",
+  "verdict": "Current source/native owner recheck passes after three actionable findings were fixed. This does not approve the new target ELF: final target build, ISR closure and stack/latency evidence are explicitly pending.",
+  "findings": [
+    {
+      "id": "IDLE-O1",
+      "priority": "high",
+      "status": "resolved_rechecked",
+      "finding": "Unconditional common all_low called PwmExecutor.stop on every already-low Stopped command, resetting quiet recovery before the next supervised zero could accumulate20ms. An idle fault could therefore permanently prevent clean stopped recovery.",
+      "fix": "Both owners stop an active/high PWM; an already-low PWM only receives an electrical low request, preserving supervised-zero continuity. Ordinary unsupervised/live/malformed requests and zero gaps still reset recovery in submit.",
+      "evidence": "owner_recheck.json: master-off/master-on PWM fault recovery succeeds and core recovers exactly once; guard_probe.json verifies all interruption/gap cases."
+    },
+    {
+      "id": "IDLE-O2",
+      "priority": "high",
+      "status": "resolved_rechecked",
+      "finding": "A stale phase-context command can be inhibited by the engine executor without a latched TimingStats fault. Deriving PWM enable from the original proposer plus fault-free stats could immediately re-enable idle after the common cut.",
+      "fix": "pwm_command requires the effective accepted executor command, matching sequence/tune/sensor/configuration epoch and no effective output faults. Both owners pass current_command; recovery also requires accepted context.",
+      "evidence": "owner_recheck.json: phase-context wait cannot re-enable idle. guard_probe.json: six effective identity/fault/config-hold mismatches inhibit PWM."
+    },
+    {
+      "id": "IDLE-O3",
+      "priority": "medium",
+      "status": "resolved_rechecked",
+      "finding": "At a100% duty cycle boundary, engine_next_time advertised work but engine_pop returned0 because no GPIO edge occurred. Existing drain callers treated the due work as missing or stopped draining, creating false lateness/faults.",
+      "fix": "The native owner returns explicit0x40000 timer-progress. EngineRuntime returns(-1,False,0,0); compared-controller and Simulation drains skip this marker and continue. It is not a channel8 edge.",
+      "evidence": "owner_probe.json reproduces code0 at10000us; owner_recheck.json returns262144, retains the high with exactly one rise/no fall, then at20000us returns real channel8 low and common cut on expiry. marker-wrapper-probe.json checks Python marker conversion."
+    }
+  ],
+  "explicit_assessments": {
+    "master_enabled_stopped_recovery": "Enabled master does not enable PWM while the effective engine output is Stopped. Both master settings pass repeated fresh stopped recovery; ordinary live demand never clears a latch.",
+    "stopped_DFCO": "A zero high request cuts immediately and cancels PWM deadlines. DFCO/overrun controller demand is zero while engine spark scheduling may continue. Stopped effective proposals remain disabled and can be supervised recovery commands after raw inputs are quiet.",
+    "common_all_low": "Engine stop/trip, configuration and hardware supervision share the ninth-channel low path. Active/high PWM is stopped immediately. Idle faults trip timing::Cause::IdlePwm, cutting the common owner. Already-low repeats preserve recovery continuity without permitting a high.",
+    "deadline_heartbeat": "PWM uses min(command_us,sampled_us)+20000, checked before heartbeat acceptance. Fresh command at exact expiry cannot rescue an old high. The shared alarm is the minimum of engine and PWM alarms; engine producer progress remains a separate5ms guard and does not extend PWM command freshness.",
+    "cycle_latching": "Pending identity/duty is latched at a scheduled cycle boundary. Zero requests cut immediately. Full duty stays high across boundaries, now exposing progress separately from edges. Scheduled phase carries forward rather than accumulating IRQ lateness.",
+    "channel8": "PWM has independent bool/state and one-pin IO. Core injector/coil masks and high-limit loops remain0..7. Native real idle edges use channel8; timer progress uses-1, never an eighth-bit shift or fabricated GPIO transition.",
+    "locking_IRAM": "All target PWM mutation and common alarm selection occur on the existing target lock shared with ISR. Controller math and period/duty conversion are task-side. PWM dispatch/boundary/level/stop/trip and owner hooks use ECU_ISR_CODE and fixed DRAM state, with integer dispatch. New linked IRAM/literal closure and stack usage must still be checked after the final build.",
+    "physical_compile_gates": "Default idle physical policy is0. Idle physical enable without engine dummy policy fails preprocessing; selected N16R8 fails even with both dummy policies. Generic explicit engine+idle dummy policy compiles. GPIO3 writes/initialization are under ECU_IDLE_DUMMY_LOADS; SAFE/J3/armed checks gate physical highs. No physical routing/valve/eFuse claim follows."
+  },
+  "probes": {
+    "sanitizers": "ASan+UBSan, -O1 -g -Wall -Wextra -Werror -fno-omit-frame-pointer. Native owner source included unchanged from copied snapshot; no global cache/library rebuild used.",
+    "owner_before_native_marker_fix": {
+      "stopped_fault_recovery_master_off": true,
+      "stopped_fault_recovery_master_on": true,
+      "core_recoveries_off": 1,
+      "core_recoveries_on": 1,
+      "phase_context_wait_reenabled_idle": false,
+      "full_duty_next_due": 10000,
+      "full_duty_pop_code": 0,
+      "full_duty_next_due_after_empty_pop": 20000,
+      "expiry_before_refresh": true
+    },
+    "current_owner": {
+      "stopped_fault_recovery_master_off": true,
+      "stopped_fault_recovery_master_on": true,
+      "core_recoveries_off": 1,
+      "core_recoveries_on": 1,
+      "phase_context_wait_reenabled_idle": false,
+      "full_duty_next_due": 10000,
+      "full_duty_pop_code": 262144,
+      "full_duty_next_due_after_empty_pop": 20000,
+      "expiry_before_refresh": true
+    },
+    "guard_interruption_and_zero": {
+      "unsupervised_live_malformed_and_gap_restart_recovery": true,
+      "DFCO_zero_cuts_immediately": true,
+      "stopped_zero_remains_low": true,
+      "effective_identity_fault_hold_gates": 6
+    },
+    "physical_compile_cases": 4,
+    "python_marker": {
+      "native_timer_progress_marker": 262144,
+      "wrapper_event": [
+        -1,
+        false,
+        0,
+        0
+      ],
+      "is_output_channel": false,
+      "wrapper_source_sha256": "95bd133402e875467c1dd2537222dae7e35cfa00eb0614ebbb867cd1714135a8"
+    }
+  },
+  "source_sha256": {
+    "firmware/include/ecu/idle_control.hpp": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd",
+    "firmware/include/ecu/idle_pwm.hpp": "392ef3640df5e3ea64c465df7a6815c2272ead28570626bc9540aab8b58a8c42",
+    "firmware/include/ecu/idle_command.hpp": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+    "firmware/include/ecu/idle_pwm_json.hpp": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b",
+    "firmware/include/ecu/timing_executor.hpp": "575e28dbbe8dc08975d9067460968d3464c7089cddf696c90e90c20dcc7eb528",
+    "firmware/include/ecu/engine.hpp": "a777b75a18586de9d8d239efc7fd2b85f0f1a90e069c2a96879b570bad6202bc",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/main/engine_target.cpp": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738",
+    "firmware/main/engine_service.cpp": "ef8e074a5bdee7e61beb82768c72ab84e0731c52833aceca090c5f4cef7a928d",
+    "tools/target_timing_bridge.cpp": "f5574fb4d5a0334a18eb43e9accec5623fdd89bd1fb2e61c9542e1e8e0c2acef",
+    "tools/target_runtime.py": "da5077c158982682a16d8f9cebe5332ca01d88175b68b607169944c9f6e74a6d",
+    "tools/engine_runtime.py": "95bd133402e875467c1dd2537222dae7e35cfa00eb0614ebbb867cd1714135a8",
+    "tools/compare_engine_controllers.py": "649763cbc05b5ffda7b0d15e24f02c1eef769aaa99c527e27ed9b433093ea6af",
+    "tools/engine_sil.py": "1c64f6fecf09f402151124bf1d14fe730e34be00a774f39ff0985c6340081a44"
+  },
+  "tested_source_matches_current": {
+    "firmware/include/ecu/idle_control.hpp": true,
+    "firmware/include/ecu/idle_pwm.hpp": true,
+    "firmware/include/ecu/idle_command.hpp": true,
+    "firmware/include/ecu/idle_hardware.hpp": true,
+    "firmware/include/ecu/idle_pwm_json.hpp": true,
+    "firmware/include/ecu/timing_executor.hpp": true,
+    "firmware/include/ecu/engine.hpp": true,
+    "firmware/include/ecu/realtime.hpp": true,
+    "tools/target_timing_bridge.cpp": true,
+    "firmware/main/engine_target.cpp": true,
+    "firmware/main/engine_service.cpp": true
+  },
+  "commands": {
+    "owner_compile": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I.cache/engine/idle-owner-review/current/include",
+      "-I/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+      ".cache/engine/idle-owner-review/owner_recheck.cpp",
+      ".cache/engine/idle-owner-review/cJSON.o",
+      "-o",
+      ".cache/engine/idle-owner-review/owner_recheck"
+    ],
+    "owner_run": [
+      ".cache/engine/idle-owner-review/owner_recheck"
+    ],
+    "guard_compile": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I.cache/engine/idle-owner-review/snapshot/include",
+      ".cache/engine/idle-owner-review/guard_probe.cpp",
+      "-o",
+      ".cache/engine/idle-owner-review/guard_probe"
+    ],
+    "guard_run": [
+      ".cache/engine/idle-owner-review/guard_probe"
+    ],
+    "physical_commands_artifact": "physical_gate.json"
+  },
+  "artifacts_sha256": {
+    "snapshot-hashes.json": "600eeb9979cda6e0c7f526b386ebc7d38052c41921049f3a42627e2e07d12c16",
+    "current/source-hashes.json": "7ebb3fb9a0df25f7fefc586c039137e55145ed7c0b2968700dc996a7d991c492",
+    "owner_probe.cpp": "3dd6bcec17f92d927a8d4b4c8d915d0cee07e47bf890b49e614302b19239285d",
+    "owner_probe.json": "f56530945b7b59c10d4b7f169f05bacd3164b019ace72550808149cb32da2c5e",
+    "owner_recheck.cpp": "8f2cc21570b24efd1a5d5cb00ea52c7dc5491deff5293413712956ce32d1089f",
+    "owner_recheck.json": "791e39b43b00109f7e5800eada3ae479615fbae94e33f94e6f2ac40303135cc6",
+    "guard_probe.cpp": "a938357a539747fcca7a224eef637dafa22aee6d808f42f363564db0be7babb3",
+    "guard_probe.json": "8766737ffa1de116803ee32f22618b5bff1e4bea2717bcc76cc62bb7c39c7c2d",
+    "physical_gate.cpp": "3cbed8221560fffd20aadd95d838dbb99d8a5c905408e633001d6b6778e23002",
+    "physical_gate.json": "1bb2858b3599b89106b1cf90bea0c28ac8557ab11983a9be45d36c8d5eb4bbf6",
+    "marker-wrapper-probe.json": "21aa09a1ecd49fc897fc82e6ba463f58ecb0df225c899e22eb9ac7556e3374cb"
+  },
+  "limits": [
+    "No target ISR execution or final idle-owner ELF review in this pass. No GPIO/valve, PWM jitter, latency, watchdog physical behavior, task stack high-water or heap minimum measurement.",
+    "Root is still implementing broader UI/plant/reference paths. This review checks marker consumption at its explicit drain sites, not full plant/UI integration.",
+    "Native CPU/peripheral latency is zero in the model; actual25us PWM lateness behavior and the shared ISR budget need final static and hardware evidence."
+  ]
+}

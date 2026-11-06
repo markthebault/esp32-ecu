@@ -1,0 +1,73 @@
+{
+  "passed": true,
+  "checks": 49,
+  "build_summary_sha256": "1a091fe2a1671b92f53d05c2fa852f050f168c70afe6e521af21f0b72353fb39",
+  "source_receipts_equal": false,
+  "declared_generation_only": true,
+  "source_differences": [
+    "firmware/main/web_assets.hpp"
+  ],
+  "retained_current_default_cache_verified": true,
+  "retention_excludes_previously_deleted_caches": true,
+  "source_hash_mismatches_now": [
+    "firmware/main/web_assets.hpp",
+    "scripts/build_firmware_preserved.py"
+  ],
+  "environments": {
+    "compact_n16r8_flex_dev": {
+      "elf_sha256": "f3fa82789a6d6bdf9af37978187b8132a9742151a1065780b86f612e66eb1e13",
+      "command": [
+        "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-nm",
+        "-C",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/shared-led-build-003-audit/compact_n16r8_flex_dev.elf"
+      ],
+      "symbols": [
+        "42036104 T ecu::board_status::request(ecu::status_led::Pattern)",
+        "3fcbbe10 d ecu::switch_service::(anonymous namespace)::led_acquisition"
+      ],
+      "current_UI_in_flash_rodata": true
+    },
+    "compact_n16r8_web": {
+      "elf_sha256": "bbaae5359e7fec34ceb3b4399bc35bce4cefadfe4fa8eb177ec6f9f3bdec2229",
+      "command": [
+        "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-nm",
+        "-C",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/shared-led-build-003-audit/compact_n16r8_web.elf"
+      ],
+      "symbols": [
+        "3fcc7440 b ecu::radio::(anonymous namespace)::led_channel",
+        "3fcc743c b ecu::radio::(anonymous namespace)::led_encoder",
+        "420d4338 T rmt_new_tx_channel",
+        "420d4acc T rmt_transmit"
+      ],
+      "current_UI_in_flash_rodata": true
+    },
+    "compact_a3_web": {
+      "elf_sha256": "caeaa782f68c74dcc08efbfd204dda55df045032f5c12678fa36ead6fce6da0a",
+      "command": [
+        "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-nm",
+        "-C",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/shared-led-build-003-audit/compact_a3_web.elf"
+      ],
+      "symbols": [
+        "3fcc58d8 b ecu::radio::(anonymous namespace)::led_channel",
+        "3fcc58d4 b ecu::radio::(anonymous namespace)::led_encoder",
+        "420d3a5c T rmt_new_tx_channel",
+        "420d41d8 T rmt_transmit"
+      ],
+      "current_UI_in_flash_rodata": true
+    },
+    "compact_a3_timing_bench": {
+      "elf_sha256": "a02337d174e9a1c2225d67b47534bb26921581003a6d9cb46baecfb7abe87d9f",
+      "command": [
+        "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-nm",
+        "-C",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/shared-led-build-003-audit/compact_a3_timing_bench.elf"
+      ],
+      "symbols": [],
+      "current_UI_in_flash_rodata": false
+    }
+  },
+  "tool_sha256": "d968578945d9f62c2769e03a786d8853eb0ba226cfff1e8ee6588550927941a3",
+  "scope": "Read-only metadata/hash checks and nm/ELF section reads on owned target ELF copies; no ELF/device/PlatformIO execution. Retention refers to cache present after previously disclosed deletion. Declared generation exception does not relabel the original source-unchanged flag."
+}

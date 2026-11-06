@@ -1,0 +1,11 @@
+--- upstream/src/nvs_page.cpp
++++ project/src/nvs_page.cpp
+@@ -698,7 +698,7 @@
+         if (lastItemIndex != INVALID_ENTRY) {
+             size_t findItemIndex = 0;
+             Item dupItem;
+-            if (findItem(item.nsIndex, item.datatype, item.key, findItemIndex, dupItem) == ESP_OK) {
++            if (findItem(item.nsIndex, item.datatype, item.key, findItemIndex, dupItem, item.chunkIndex) == ESP_OK) { // ESP32ECU local modification: preserve distinct blob chunks.
+                 if (findItemIndex < lastItemIndex) {
+                     auto err = eraseEntryAndSpan(findItemIndex);
+                     if (err != ESP_OK) {

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/.cache/engine/idle-circuit-review/probe.py", line 95, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/home/mark/persospace/esp32-ecu/.cache/engine/idle-circuit-review/probe.py", line 62, in main
+    assert a.shape[1]==13 and np.all(np.isfinite(a)) and np.all(np.diff(t)>0)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "checks": 105,
+  "diagnostic_differential": {
+    "negative_calibration": {
+      "native_accepted": false,
+      "browser_accepted": false,
+      "error": "Flex E0 frequency: value outside bounds."
+    },
+    "fractional_read_age": {
+      "native_accepted": false,
+      "browser_accepted": false,
+      "error": "Invalid flex read age."
+    },
+    "control_allowed_without_value": {
+      "native_accepted": false,
+      "browser_accepted": false,
+      "error": "Invalid flex control qualification."
+    },
+    "target_unconfirmed": {
+      "native_accepted": false,
+      "browser_accepted": false,
+      "error": "Inconsistent flex source and quality flags."
+    },
+    "bad_raw_counter": {
+      "native_accepted": false,
+      "browser_accepted": false,
+      "error": "Invalid flex timestamp or counter."
+    },
+    "required_false_enabled": {
+      "native_accepted": false,
+      "browser_accepted": false,
+      "error": "Inconsistent flex source and quality flags."
+    }
+  },
+  "configuration_differential": []
+}

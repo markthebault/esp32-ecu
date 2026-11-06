@@ -1,0 +1,174 @@
+{
+  "freeze_manifest_sha256": "7a4a10c085349959da11885936d2eeddf499ca5cf5a5534aa38fdd4e30f7b24c",
+  "runs": [
+    {
+      "name": "parent-engine-flex-003",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-003/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-003/firmware/tests/engine_flex_test.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/parent-engine-flex-003"
+      ],
+      "run": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/parent-engine-flex-003"
+      ],
+      "source_sha256": "87136a700070b3a7381fdd5373ff26183d45b2a3c21b07fa59b9fdf0523da1de",
+      "output_sha256": "d952493e4f7448b50ff125c30d2f91f79f22155c445ee448229d52a2a3128442",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "engine_flex_checks 282\n"
+    },
+    {
+      "name": "kernel-malformed-003",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-003/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-malformed-001.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-malformed-003"
+      ],
+      "run": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-malformed-003"
+      ],
+      "source_sha256": "8c382512ef38b861a961bb4b6cfb711adaf548b2d1128a1bf14d2f6c814d903d",
+      "output_sha256": "dd77b4805515e2d916e2bb8a9d9e795cf74e12b7e4c3030058d0ece68ed4cc02",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "frequency400_above_fault_and_width_above_period faults=4 control_ok=0 raw_qualified=0 fuel_factor=nan temp_factor=nan reason=malformed_capture_sample\nfrequency10_below_calibration faults=4 control_ok=0 raw_qualified=0 fuel_factor=nan temp_factor=nan reason=malformed_capture_sample\nethanol99_from100Hz_filterOff faults=4 control_ok=0 raw_qualified=0 fuel_factor=nan temp_factor=nan reason=malformed_capture_sample\ntemperature120_from3ms_filterOff faults=4 control_ok=0 raw_qualified=0 fuel_factor=nan temp_factor=nan reason=malformed_capture_sample\nunfiltered_values_NaN faults=4 control_ok=0 raw_qualified=0 fuel_factor=nan temp_factor=nan reason=malformed_capture_sample\n"
+    },
+    {
+      "name": "high-gap-003",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-003/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/high-gap-002.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/high-gap-003"
+      ],
+      "run": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/high-gap-003"
+      ],
+      "source_sha256": "15a128eef36c7b30ee97deee16bb98d42b8f3d95e23e1d4849731ba4e11b5464",
+      "output_sha256": "219ceecccc3fffbe452667fb8c47c1f8d24ca7b23c99cacce0e5bdcad5c73a5f",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "gap_us=25 control_ok=0 raw_qualified=0 reason=malformed_capture_sample\n"
+    },
+    {
+      "name": "context-probe-003",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-003/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/context-probe-003.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/context-probe-003"
+      ],
+      "run": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/context-probe-003"
+      ],
+      "source_sha256": "5106a22c9230c71da766c30e965beb22aa3ab5512ac4b1fdc0df28a675100822",
+      "output_sha256": "9927feda7e6c23f218326fcccd7dfa6e04a284c6d3484468171eb298d292c56e",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "context_probe_checks 12\n"
+    },
+    {
+      "name": "kernel-json-003",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-003/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003.cpp",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/cjson-owned",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/cjson-owned/cJSON.o",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003"
+      ],
+      "run": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-json-003",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/json-fixtures-003"
+      ],
+      "source_sha256": "79f1a0bdfa7dd0c485f602186b7e7bb6c0d48fa28f17b835e05792f47bed45cb",
+      "output_sha256": "307e3e83601eeac3dab9001ca9af0a7418b0e88e799f7280f0003aae62ad0296",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "source2_value_qualified_without_raw_qualified_accepted 0\nkernel_json_checks 93\n"
+    },
+    {
+      "name": "off-candidate-003",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-003/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/off-baseline-001.cpp",
+        "-DREVIEW_NEW",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/off-candidate-003"
+      ],
+      "run": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/off-candidate-003"
+      ],
+      "source_sha256": "cfb89d3e8850b31a03744cd8b99c2f35855d170e320245567126bb8b0f2a7101",
+      "output_sha256": "5825b992bb99148fc851c8656e164edde7a54b22cc98d8f8803258df4de6da92",
+      "returncode": 0,
+      "stderr": "",
+      "bit_exact_baseline": true,
+      "rows": 14400
+    }
+  ],
+  "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/gcov",
+  "GCOV_PREFIX_STRIP": "0"
+}

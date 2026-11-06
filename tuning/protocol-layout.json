@@ -1,0 +1,595 @@
+{
+  "signature": "ESP32ECU DEV 012 INHIBITED",
+  "profiles": {
+    "schema_version": 1,
+    "tune_schema": 11,
+    "signature": "ESP32ECU DEV 012 INHIBITED",
+    "maximum_cylinders": 8,
+    "board_injector_commands": 4,
+    "board_coil_commands": 4,
+    "injector_channels": [
+      0,
+      1,
+      2,
+      3,
+      10,
+      11,
+      12,
+      13
+    ],
+    "coil_channels": [
+      4,
+      5,
+      6,
+      7,
+      14,
+      15,
+      16,
+      17
+    ],
+    "strategies": [
+      "batch_wasted",
+      "sequential",
+      "semi_sequential"
+    ],
+    "page": {
+      "extra_order_offset": 9280,
+      "extra_fuel_offset": 9284,
+      "fuel_stride": 192,
+      "extra_spark_offset": 10052,
+      "used_end": 10068
+    },
+    "runtime": {
+      "cylinder_count": 896,
+      "worker_cylinder_count": 900,
+      "board_injector_commands": 904,
+      "board_coil_commands": 908,
+      "virtual_high_mask": 912,
+      "physical_command_mask": 916,
+      "extra_cylinders": 920,
+      "used_end": 984
+    },
+    "msq_maximum_bytes": 131072
+  },
+  "pages": {
+    "1": 12288
+  },
+  "boost_scalar_offsets": {
+    "maximum_map_kpa": 8204,
+    "cut_kpa": 8208,
+    "cut_hysteresis_kpa": 8212,
+    "recovery_ms": 8216,
+    "frequency_hz": 8220,
+    "control_period_ms": 8224,
+    "min_pct": 8228,
+    "max_pct": 8232,
+    "minimum_rpm": 8236,
+    "minimum_tps_pct": 8240,
+    "activation_kpa": 8244,
+    "activation_hysteresis_kpa": 8248,
+    "inactive_pct": 8252,
+    "kp": 8256,
+    "ki": 8260,
+    "kd": 8264,
+    "integral_limit_pct": 8268,
+    "derivative_filter_s": 8272,
+    "slew_pct_s": 8276
+  },
+  "boost_table_offsets": {
+    "open_duty": 8320,
+    "target": 8640,
+    "feedforward": 8960
+  },
+  "boost_live_offset": 832,
+  "boost_values": [
+    "duty_pct",
+    "demand_pct",
+    "target_kpa",
+    "feedforward_pct",
+    "error_kpa",
+    "p_term",
+    "i_term",
+    "d_term"
+  ],
+  "flex_config_offsets": {
+    "enabled": 7808,
+    "temperature_enabled": 7812,
+    "input_confirmed": 7816,
+    "cycles": 7820,
+    "low_hz": 7824,
+    "high_hz": 7828,
+    "fault_hz": 7832,
+    "tolerance_hz": 7836,
+    "stale_ms": 7840,
+    "filter_ms": 7844,
+    "ethanol_bins": 7848,
+    "fuel_pct": 7872,
+    "spark_deg": 7896,
+    "temperature_c": 7920,
+    "temperature_pct": 7944
+  },
+  "flex_live_offset": 640,
+  "flex_values": [
+    "frequency_hz",
+    "low_pulse_us",
+    "ethanol_pct",
+    "fuel_temp_c",
+    "unfiltered_ethanol_pct",
+    "unfiltered_fuel_temp_c",
+    "sample_age_ms",
+    "fuel_pct",
+    "spark_add_deg",
+    "temperature_pct"
+  ],
+  "flex_flags": [
+    "required",
+    "configuration_match",
+    "value_qualified",
+    "raw_capture_qualified",
+    "control_ok",
+    "capture_valid",
+    "sample_value_valid",
+    "pending_fault",
+    "frequency_clamped",
+    "temperature_clamped",
+    "input_confirmed",
+    "corrections_enabled",
+    "corrections_valid",
+    "spark_bypassed",
+    "spark_clamped",
+    "zero_factor",
+    "available"
+  ],
+  "flex_codes": [
+    "source_code",
+    "reason_code",
+    "capture_reason_code",
+    "last_fault_code",
+    "correction_reason_code",
+    "window_cycles",
+    "configuration_revision"
+  ],
+  "flex_times": [
+    "sample_us",
+    "window_start_us",
+    "last_edge_us",
+    "raw_edges",
+    "fault_generation",
+    "acknowledged_generation",
+    "config_epoch"
+  ],
+  "secondary_rule_offsets": {
+    "fuel": 5376,
+    "spark": 5412
+  },
+  "secondary_map_offsets": {
+    "fuel": 5504,
+    "spark": 6656
+  },
+  "secondary_live_offset": 416,
+  "secondary_live_stride": 80,
+  "secondary_values": [
+    "primary",
+    "primary_corrected",
+    "secondary",
+    "combined",
+    "coordinate",
+    "condition_value",
+    "input_age_ms",
+    "threshold",
+    "debounce_ms"
+  ],
+  "secondary_enums": {
+    "mode": [
+      "off",
+      "multiply",
+      "add",
+      "conditional",
+      "input"
+    ],
+    "source": [
+      "map",
+      "tps",
+      "imap_emap"
+    ],
+    "axis": [
+      "map_kpa",
+      "tps_pct",
+      "imap_emap_pct"
+    ],
+    "cells": [
+      "absolute",
+      "multiplier",
+      "adder"
+    ],
+    "condition": [
+      "rpm",
+      "map_kpa",
+      "tps_pct",
+      "ethanol_pct"
+    ]
+  },
+  "numeric_fields": [
+    [
+      "engine",
+      "cylinders"
+    ],
+    [
+      "engine",
+      "displacement_cc"
+    ],
+    [
+      "engine",
+      "injector_cc_min"
+    ],
+    [
+      "engine",
+      "fuel_density_g_cc"
+    ],
+    [
+      "engine",
+      "stoich_afr"
+    ],
+    [
+      "settings",
+      "cranking_rpm"
+    ],
+    [
+      "settings",
+      "crank_advance_deg"
+    ],
+    [
+      "settings",
+      "rpm_limit"
+    ],
+    [
+      "settings",
+      "rpm_hysteresis"
+    ],
+    [
+      "settings",
+      "soft_limit_band"
+    ],
+    [
+      "settings",
+      "max_duty"
+    ],
+    [
+      "settings",
+      "max_injection_ms"
+    ],
+    [
+      "settings",
+      "max_dwell_ms"
+    ],
+    [
+      "settings",
+      "tooth1_btdc_deg"
+    ],
+    [
+      "settings",
+      "afterstart_pct"
+    ],
+    [
+      "settings",
+      "afterstart_s"
+    ],
+    [
+      "settings",
+      "accel_threshold_pct_s"
+    ],
+    [
+      "settings",
+      "accel_gain"
+    ],
+    [
+      "settings",
+      "accel_decay_s"
+    ],
+    [
+      "settings",
+      "ego_kp"
+    ],
+    [
+      "settings",
+      "ego_ki"
+    ],
+    [
+      "settings",
+      "ego_limit"
+    ],
+    [
+      "settings",
+      "ego_min_clt"
+    ],
+    [
+      "settings",
+      "dfco_rpm"
+    ],
+    [
+      "settings",
+      "dfco_hysteresis"
+    ],
+    [
+      "settings",
+      "dfco_tps"
+    ],
+    [
+      "settings",
+      "dfco_delay_s"
+    ],
+    [
+      "settings",
+      "idle_target_rpm"
+    ],
+    [
+      "settings",
+      "idle_kp"
+    ],
+    [
+      "settings",
+      "idle_ki"
+    ],
+    [
+      "settings",
+      "fan_on_c"
+    ],
+    [
+      "settings",
+      "fan_off_c"
+    ],
+    [
+      "settings",
+      "pump_prime_s"
+    ]
+  ],
+  "flags": [
+    "ego_enabled",
+    "dfco_enabled",
+    "idle_enabled"
+  ],
+  "curves": [
+    [
+      "coolant_c",
+      6
+    ],
+    [
+      "warmup_pct",
+      6
+    ],
+    [
+      "crank_pct",
+      6
+    ],
+    [
+      "battery_v",
+      5
+    ],
+    [
+      "deadtime_ms",
+      5
+    ],
+    [
+      "dwell_ms",
+      5
+    ]
+  ],
+  "idle_scalars": {
+    "frequency_hz": 4772,
+    "control_period_ms": 4776,
+    "min_pct": 4780,
+    "max_pct": 4784,
+    "tps_closed_pct": 4788,
+    "tps_hysteresis_pct": 4792,
+    "entry_rpm_above": 4796,
+    "exit_rpm_above": 4800,
+    "entry_delay_s": 4804,
+    "afterstart_taper_s": 4808,
+    "dashpot_pct": 4812,
+    "dashpot_decay_pct_s": 4816,
+    "slew_pct_s": 4820,
+    "integral_limit_pct": 4824,
+    "kd": 4828,
+    "derivative_filter_s": 4832,
+    "fast_idle_temp_c": 4836,
+    "fast_idle_hysteresis_c": 4840
+  },
+  "idle_arrays": {
+    "coolant_c": 4844,
+    "run_pct": 4868,
+    "crank_pct": 4892,
+    "target_add_rpm": 4916
+  },
+  "transient_scalars": {
+    "sample_period_ms": 5000,
+    "tps_threshold_pct_s": 5004,
+    "map_threshold_kpa_s": 5008,
+    "tps_min_change_pct": 5012,
+    "map_min_change_kpa": 5016,
+    "duration_ms": 5020,
+    "max_enrichment_pct": 5024,
+    "decel_fuel_pct": 5028,
+    "rpm_taper_start": 5032,
+    "rpm_taper_end": 5036,
+    "cold_multiplier_pct": 5040,
+    "cold_taper_start_c": 5044,
+    "cold_taper_end_c": 5048
+  },
+  "transient_arrays": {
+    "tps_rates": 5052,
+    "tps_added_pct": 5068,
+    "map_rates": 5084,
+    "map_added_pct": 5100
+  },
+  "transient_offset": 4992,
+  "transient_live_fields": [
+    "aeTpsDot",
+    "aeMapDot",
+    "aeWindowMs",
+    "aeTriggerDot",
+    "aeCorrectionPct",
+    "aeUnclampedPct",
+    "aeRemainingAtSampleMs",
+    "aeAddedFuelMg"
+  ],
+  "load_enum_offsets": {
+    "fuel_source": 5120,
+    "spark_source": 5124,
+    "lambda_source": 5128,
+    "trim_source": 5132,
+    "pressure": 5136,
+    "aux_role": 5140,
+    "baro_source": 5144,
+    "ve_axis": 5148,
+    "spark_axis": 5152,
+    "lambda_axis": 5156,
+    "trim_axis": 5160,
+    "afr": 5164
+  },
+  "load_scalar_offsets": {
+    "fixed_baro_kpa": 5168,
+    "afr_delay_s": 5172
+  },
+  "load_enums": {
+    "fuel_source": [
+      "map",
+      "tps",
+      "imap_emap"
+    ],
+    "spark_source": [
+      "map",
+      "tps",
+      "imap_emap"
+    ],
+    "lambda_source": [
+      "map",
+      "tps",
+      "imap_emap",
+      "follow_fuel"
+    ],
+    "trim_source": [
+      "map",
+      "tps",
+      "imap_emap",
+      "follow_fuel"
+    ],
+    "pressure": [
+      "none",
+      "map_100kpa",
+      "map_baro"
+    ],
+    "aux_role": [
+      "postcat_monitor",
+      "emap",
+      "baro"
+    ],
+    "baro_source": [
+      "fixed",
+      "aux"
+    ],
+    "ve_axis": [
+      "map_kpa",
+      "tps_pct",
+      "imap_emap_pct"
+    ],
+    "spark_axis": [
+      "map_kpa",
+      "tps_pct",
+      "imap_emap_pct"
+    ],
+    "lambda_axis": [
+      "map_kpa",
+      "tps_pct",
+      "imap_emap_pct"
+    ],
+    "trim_axis": [
+      "map_kpa",
+      "tps_pct",
+      "imap_emap_pct"
+    ],
+    "afr": [
+      "off",
+      "target",
+      "measured"
+    ]
+  },
+  "load_live_offset": 320,
+  "load_live_values": [
+    "fuel_load",
+    "spark_load",
+    "lambda_load",
+    "trim_load",
+    "pressure_factor",
+    "baro_kpa",
+    "emap_kpa",
+    "aux_kpa",
+    "afr_factor"
+  ],
+  "load_live_fields": [
+    "loadFuel",
+    "loadSpark",
+    "loadLambda",
+    "loadTrim",
+    "loadPressureFactor",
+    "loadBaro",
+    "loadEmap",
+    "loadAux",
+    "loadAfrFactor"
+  ],
+  "load_afr_states": [
+    "off",
+    "target_incorporation",
+    "running_delay",
+    "cranking_neutral",
+    "wideband_unavailable",
+    "measured_ratio",
+    "invalid_target",
+    "running_clock_unavailable"
+  ],
+  "load_flag_available_bit": 16,
+  "load_flag_afr_available_bit": 17,
+  "load_reason_shift": 24,
+  "live_fields": [
+    "time",
+    "rpm",
+    "map_kpa",
+    "tps",
+    "lambda_measured",
+    "pulse_ms",
+    "advance_deg",
+    "dwell_ms",
+    "ve_pct",
+    "target_lambda",
+    "ego"
+  ],
+  "live_block_bytes": 1152,
+  "timing_fields": [
+    [
+      "injection_end_deg",
+      276
+    ],
+    [
+      "cam_sync_deg",
+      280
+    ],
+    [
+      "cam_window_deg",
+      284
+    ]
+  ],
+  "strategy_offset": 272,
+  "firing_order_offset": 288,
+  "revision_offset": 268,
+  "serial_protocol": "002",
+  "page_offsets": {
+    "header": 0,
+    "ve": 512,
+    "spark": 1664,
+    "lambda_target": 2816,
+    "cylinder": 3968,
+    "idle": 4768
+  },
+  "origin_revision_read_only": true,
+  "commit_behavior": "whole-tune stage; burn persists/activates and resets control; stable session origin",
+  "scope": "shared native and inhibited target USB Serial/JTAG; UART0 diagnostics separate; physical USB unmeasured; TunerStudio own-identity online gate unresolved"
+}

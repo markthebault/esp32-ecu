@@ -1,0 +1,42 @@
+{
+  "session": {
+    "schema_version": 1,
+    "identity": "ESP32ECU DEV 005 INHIBITED",
+    "serial_protocol": "002",
+    "page_bytes": 4992,
+    "live_bytes": 256,
+    "state": "ready",
+    "initialized": true,
+    "dirty": false,
+    "origin_revision": 1,
+    "base_revision": 3,
+    "observed_active_revision": 3,
+    "last_code": 4,
+    "commands": "10",
+    "reads": "3",
+    "writes": "2",
+    "burns": "2",
+    "rejected": "3",
+    "resets": "1",
+    "received_bytes": "0",
+    "fully_queued_reply_bytes": "0",
+    "frames": "0",
+    "crc_errors": "0",
+    "timeouts": "0",
+    "framing_errors": "0",
+    "tx_errors": "0",
+    "tx_fault": false,
+    "buffered_bytes": 0,
+    "callback_error": ""
+  },
+  "passed": true,
+  "checks": [
+    "schema1/2/3 enabled legacy JSON migrations disable idle, keep fixed defaults/revision and original file bytes",
+    "all four historical MSQ signatures forcibly enabled migrate to disabled fixed idle",
+    "native JSON rejects extra/missing/unknown and coupled curve/target violations even disabled",
+    "96 scalar/nonfinite/reserved binary variants rejected by native whole tune validation",
+    "4992B page/256B live exact boundaries, whole-page burn, persistence, stale-writer rejection and stable session origin verified",
+    "own005 default MSQ roundtrip native validators retains idle and cylinder data",
+    "Every idle/master field changed together survives20 native page chunks, full burn, persisted reload and MSQ with equal float32 payloads"
+  ]
+}

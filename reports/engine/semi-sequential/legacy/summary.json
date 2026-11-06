@@ -1,0 +1,70 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "mode": "batch",
+      "profile": "portable",
+      "passed": true,
+      "final_second_rpm": 919.4911435943319,
+      "pre_acquisition_phase_inhibit": false,
+      "trace": "legacy-batch-portable.json"
+    },
+    {
+      "mode": "batch",
+      "profile": "target",
+      "passed": true,
+      "final_second_rpm": 919.4911435943319,
+      "pre_acquisition_phase_inhibit": false,
+      "trace": "legacy-batch-target.json"
+    },
+    {
+      "mode": "batch",
+      "profile": "reference32",
+      "passed": true,
+      "final_second_rpm": 916.6632375916408,
+      "pre_acquisition_phase_inhibit": false,
+      "trace": "legacy-batch-reference32.json"
+    },
+    {
+      "mode": "batch",
+      "profile": "reference16",
+      "passed": true,
+      "final_second_rpm": 916.6632375916408,
+      "pre_acquisition_phase_inhibit": false,
+      "trace": "legacy-batch-reference16.json"
+    },
+    {
+      "mode": "sequential",
+      "profile": "portable",
+      "passed": true,
+      "final_second_rpm": 919.3960622144068,
+      "pre_acquisition_phase_inhibit": true,
+      "trace": "legacy-sequential-portable.json"
+    },
+    {
+      "mode": "sequential",
+      "profile": "target",
+      "passed": true,
+      "final_second_rpm": 919.3960622144068,
+      "pre_acquisition_phase_inhibit": true,
+      "trace": "legacy-sequential-target.json"
+    },
+    {
+      "mode": "sequential",
+      "profile": "reference32",
+      "passed": true,
+      "final_second_rpm": 916.6633809678532,
+      "pre_acquisition_phase_inhibit": false,
+      "trace": "legacy-sequential-reference32.json"
+    },
+    {
+      "mode": "sequential",
+      "profile": "reference16",
+      "passed": true,
+      "final_second_rpm": 916.6633809678532,
+      "pre_acquisition_phase_inhibit": false,
+      "trace": "legacy-sequential-reference16.json"
+    }
+  ],
+  "scope": "warm-start compatibility regression; full sequential inhibits before phase acquisition, no post-acquisition fault"
+}

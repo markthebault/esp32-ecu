@@ -1,0 +1,1147 @@
+{
+  "revision": "IAC-DRAFT2",
+  "status": "ROUTED_DESIGN_HOLD_NOT_FOR_FABRICATION",
+  "board_mm": [
+    90,
+    60
+  ],
+  "copper_layers": 2,
+  "physical_default": false,
+  "isolation_gap_mm": 5,
+  "domains": {
+    "carrier": [
+      "CARRIER_5V",
+      "CARRIER_GND",
+      "IDLE_CMD",
+      "RUN_5V"
+    ],
+    "actuator": [
+      "ACT_12V",
+      "ACT_GND",
+      "LOGIC_GND",
+      "ACT_5V2",
+      "IAC_LS"
+    ]
+  },
+  "return_star": {
+    "reference": "NT1",
+    "location": "Q1 source pin3",
+    "assembly": "Copper only, no fitted part"
+  },
+  "minimum_physical_pulse_us": null,
+  "physical_qualification": false,
+  "parts": [
+    {
+      "reference": "J1",
+      "value": "CARRIER INPUT DOMAIN",
+      "footprint": "ECU:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical",
+      "pins": {
+        "1": "IDLE_CMD",
+        "2": "RUN_5V",
+        "3": "CARRIER_5V",
+        "4": "CARRIER_GND"
+      },
+      "pin_names": {
+        "1": "GPIO3",
+        "2": "HARDWARE RUN",
+        "3": "INPUT LED POWER",
+        "4": "INPUT RETURN"
+      },
+      "pin_types": {
+        "1": "output",
+        "2": "output",
+        "3": "power_out",
+        "4": "power_out"
+      },
+      "mpn": "B4B-XH-A(LF)(SN)",
+      "note": "Only optocoupler LED/buffer circuitry uses carrier power/ground. A5 J21; permanent carrier GPIO3 bias required.",
+      "placed_xy_mm": [
+        15,
+        24
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "J2",
+      "value": "PROTECTED ACTUATOR SUPPLY",
+      "footprint": "ECU:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
+      "pins": {
+        "1": "ACT_12V",
+        "2": "ACT_GND"
+      },
+      "pin_names": {
+        "1": "EXTERNAL FUSED SWITCHED 9-16V",
+        "2": "ACTUATOR RETURN"
+      },
+      "pin_types": {
+        "1": "power_out",
+        "2": "power_out"
+      },
+      "mpn": "1715721",
+      "note": "Separate externally fused, relay-switched, reverse/transient-protected branch. Never carrier/sensor supply. No onboard coil current limit.",
+      "placed_xy_mm": [
+        90,
+        57
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "J3",
+      "value": "NC TWO-WIRE VALVE",
+      "footprint": "ECU:JST_VH_B2P-VH_1x02_P3.96mm_Vertical",
+      "pins": {
+        "1": "ACT_12V",
+        "2": "IAC_LS"
+      },
+      "pin_names": {
+        "1": "VALVE PLUS",
+        "2": "VALVE LOW SIDE"
+      },
+      "pin_types": {},
+      "mpn": "B2P-VH(LF)(SN)",
+      "note": "Normally closed, continuous PWM, energize-to-open; actual coil <=2A across voltage/temp. Valve selection and decay remain unqualified.",
+      "placed_xy_mm": [
+        90,
+        23
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "Q1",
+      "value": "IRLZ44NPBF",
+      "footprint": "ECU:TO-220-3_Vertical",
+      "pins": {
+        "1": "GATE",
+        "2": "IAC_LS",
+        "3": "ACT_GND"
+      },
+      "pin_names": {
+        "1": "GATE",
+        "2": "DRAIN / LIVE TAB",
+        "3": "SOURCE"
+      },
+      "pin_types": {},
+      "mpn": "IRLZ44NPBF",
+      "note": "Fast logic-level MOSFET, no automatic current/thermal shutdown or fault feedback. Drain tab must not bridge domains or share an uninsulated regulator heatsink.",
+      "placed_xy_mm": [
+        90,
+        39
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "Q2",
+      "value": "2N3904",
+      "footprint": "ECU:TO-92_Inline_Wide",
+      "pins": {
+        "1": "CARRIER_GND",
+        "2": "PWM_BASE",
+        "3": "PWM_LED_K"
+      },
+      "pin_names": {
+        "1": "EMITTER",
+        "2": "BASE",
+        "3": "COLLECTOR"
+      },
+      "pin_types": {},
+      "mpn": "2N3904BU",
+      "note": "Input-side LED buffer, E-B-C formed leads at2.54mm. Loaded GPIO/RUN levels, saturation and storage over temperature require bench acceptance.",
+      "placed_xy_mm": [
+        21,
+        38
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "Q3",
+      "value": "2N3904",
+      "footprint": "ECU:TO-92_Inline_Wide",
+      "pins": {
+        "1": "CARRIER_GND",
+        "2": "RUN_BASE",
+        "3": "RUN_LED_K"
+      },
+      "pin_names": {
+        "1": "EMITTER",
+        "2": "BASE",
+        "3": "COLLECTOR"
+      },
+      "pin_types": {},
+      "mpn": "2N3904BU",
+      "note": "Input-side LED buffer, E-B-C formed leads at2.54mm. Loaded GPIO/RUN levels, saturation and storage over temperature require bench acceptance.",
+      "placed_xy_mm": [
+        21,
+        55
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "U2",
+      "value": "6N137",
+      "footprint": "ECU:DIP-8_W7.62mm_LongPads",
+      "pins": {
+        "1": null,
+        "2": "PWM_LED_A",
+        "3": "PWM_LED_K",
+        "4": null,
+        "5": "LOGIC_GND",
+        "6": "PWM_N",
+        "7": "ACT_5V2",
+        "8": "ACT_5V2"
+      },
+      "pin_names": {
+        "1": "NC1",
+        "2": "ANODE",
+        "3": "CATHODE",
+        "4": "NC4",
+        "5": "GND",
+        "6": "OUT",
+        "7": "ENABLE",
+        "8": "VCC"
+      },
+      "pin_types": {
+        "5": "power_in",
+        "6": "open_collector",
+        "7": "input",
+        "8": "power_in"
+      },
+      "mpn": "6N137",
+      "note": "Vishay DIP8, direct solder. No copper across optical gap. Actual pullup/load and input-current timing conditions require verification.",
+      "placed_xy_mm": [
+        34,
+        22
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "U3",
+      "value": "6N137",
+      "footprint": "ECU:DIP-8_W7.62mm_LongPads",
+      "pins": {
+        "1": null,
+        "2": "RUN_LED_A",
+        "3": "RUN_LED_K",
+        "4": null,
+        "5": "LOGIC_GND",
+        "6": "RUN_N",
+        "7": "ACT_5V2",
+        "8": "ACT_5V2"
+      },
+      "pin_names": {
+        "1": "NC1",
+        "2": "ANODE",
+        "3": "CATHODE",
+        "4": "NC4",
+        "5": "GND",
+        "6": "OUT",
+        "7": "ENABLE",
+        "8": "VCC"
+      },
+      "pin_types": {
+        "5": "power_in",
+        "6": "open_collector",
+        "7": "input",
+        "8": "power_in"
+      },
+      "mpn": "6N137",
+      "note": "Vishay DIP8, direct solder. No copper across optical gap. Actual pullup/load and input-current timing conditions require verification.",
+      "placed_xy_mm": [
+        34,
+        45
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "U4",
+      "value": "SN74HCT02N",
+      "footprint": "ECU:DIP-14_W7.62mm_LongPads_BypassClearSilk",
+      "pins": {
+        "1": "PWM_RUN",
+        "2": "PWM_N",
+        "3": "RUN_N",
+        "4": null,
+        "5": "LOGIC_GND",
+        "6": "LOGIC_GND",
+        "7": "LOGIC_GND",
+        "8": "LOGIC_GND",
+        "9": "LOGIC_GND",
+        "10": null,
+        "11": "LOGIC_GND",
+        "12": "LOGIC_GND",
+        "13": null,
+        "14": "ACT_5V2"
+      },
+      "pin_names": {
+        "1": "1Y",
+        "2": "1A",
+        "3": "1B",
+        "4": "2Y_NC",
+        "5": "2A",
+        "6": "2B",
+        "7": "GND",
+        "8": "3A",
+        "9": "3B",
+        "10": "3Y_NC",
+        "11": "4A",
+        "12": "4B",
+        "13": "4Y_NC",
+        "14": "VCC"
+      },
+      "pin_types": {
+        "1": "output",
+        "2": "input",
+        "3": "input",
+        "4": "output",
+        "5": "input",
+        "6": "input",
+        "7": "power_in",
+        "8": "input",
+        "9": "input",
+        "10": "output",
+        "11": "input",
+        "12": "input",
+        "13": "output",
+        "14": "power_in"
+      },
+      "mpn": "SN74HCT02N",
+      "note": "Ordinary TTL NOR accepts opto VOL0.6V under its0.8V VIL. NOR(PWM_N,RUN_N) is high only when both input LEDs are lit. Unused inputs grounded.",
+      "placed_xy_mm": [
+        51,
+        30
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "U1",
+      "value": "UCC27524P",
+      "footprint": "ECU:DIP-8_W7.62mm_LongPads_BypassClearSilk",
+      "pins": {
+        "1": "ENA",
+        "2": "INA",
+        "3": "LOGIC_GND",
+        "4": "LOGIC_GND",
+        "5": null,
+        "6": "ACT_5V2",
+        "7": "DRIVE",
+        "8": "LOGIC_GND"
+      },
+      "pin_names": {
+        "1": "ENA",
+        "2": "INA",
+        "3": "GND",
+        "4": "INB",
+        "5": "OUTB_NC",
+        "6": "VDD",
+        "7": "OUTA",
+        "8": "ENB"
+      },
+      "pin_types": {
+        "1": "input",
+        "2": "input",
+        "3": "power_in",
+        "4": "input",
+        "5": "output",
+        "6": "power_in",
+        "7": "output",
+        "8": "input"
+      },
+      "mpn": "UCC27524P.B",
+      "note": "Direct PDIP8, no socket. Exact procured P/P.B electrical guarantee remains a release item. Local supervisor gates ENA independently of logic.",
+      "placed_xy_mm": [
+        77,
+        38
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "U5",
+      "value": "MCP100-485DI/TO",
+      "footprint": "ECU:TO-92_Inline_Wide",
+      "pins": {
+        "1": "LOCAL_OK",
+        "2": "ACT_5V2",
+        "3": "LOGIC_GND"
+      },
+      "pin_names": {
+        "1": "RESET_N / D BONDOUT",
+        "2": "VDD",
+        "3": "VSS"
+      },
+      "pin_types": {
+        "1": "output",
+        "2": "power_in",
+        "3": "power_in"
+      },
+      "mpn": "MCP100-485DI/TO",
+      "note": "D-bondout only. Static trip4.60-4.85V; assertion10us is typical without a maximum. No hard brownout-latency claim.",
+      "placed_xy_mm": [
+        68,
+        21
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "U6",
+      "value": "LM317AT/NOPB",
+      "footprint": "ECU:TO-220-3_Vertical",
+      "pins": {
+        "1": "ADJ",
+        "2": "ACT_5V2",
+        "3": "ACT_12V"
+      },
+      "pin_names": {
+        "1": "ADJ",
+        "2": "OUT / LIVE TAB",
+        "3": "IN"
+      },
+      "pin_types": {
+        "1": "input",
+        "2": "power_out",
+        "3": "power_in"
+      },
+      "mpn": "LM317AT/NOPB",
+      "note": "120/374ohm1% divider: DC4.967-5.346V, >=10mA minimum load, >=3V headroom at9V input. Tab is output, not ground. No rail transient/thermal qualification.",
+      "placed_xy_mm": [
+        71,
+        58
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "D1",
+      "value": "SB5H100-E3",
+      "footprint": "ECU:D_DO-201AD_P15.24mm_Horizontal",
+      "pins": {
+        "1": "ACT_12V",
+        "2": "IAC_LS"
+      },
+      "pin_names": {
+        "1": "K / BAND",
+        "2": "A"
+      },
+      "pin_types": {},
+      "mpn": "SB5H100-E3/54",
+      "note": "Flyback cathode at valve+, anode at drain. Close coil/diode loop; current decays after cut.",
+      "placed_xy_mm": [
+        70,
+        15
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "D2",
+      "value": "1N4007",
+      "footprint": "ECU:D_DO-41_SOD81_P10.16mm_Horizontal",
+      "pins": {
+        "1": "ACT_12V",
+        "2": "ACT_5V2"
+      },
+      "pin_names": {
+        "1": "K / BAND",
+        "2": "A"
+      },
+      "pin_types": {},
+      "mpn": "1N4007-E3/54",
+      "note": "LM317 output-discharge protection: A atOUT, K atIN. Does not provide input reverse-battery protection.",
+      "placed_xy_mm": [
+        72,
+        65
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "D3",
+      "value": "1N4148",
+      "footprint": "ECU:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp",
+      "pins": {
+        "1": "PWM_BASE",
+        "2": "CARRIER_GND"
+      },
+      "pin_names": {
+        "1": "K / BAND",
+        "2": "A"
+      },
+      "pin_types": {},
+      "mpn": "1N4148-TAP",
+      "note": "Input transistor reverse BE clamp only; not an isolation bridge.",
+      "placed_xy_mm": [
+        26.5,
+        31.5
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "D4",
+      "value": "1N4148",
+      "footprint": "ECU:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp",
+      "pins": {
+        "1": "RUN_BASE",
+        "2": "CARRIER_GND"
+      },
+      "pin_names": {
+        "1": "K / BAND",
+        "2": "A"
+      },
+      "pin_types": {},
+      "mpn": "1N4148-TAP",
+      "note": "Input transistor reverse BE clamp only; not an isolation bridge.",
+      "placed_xy_mm": [
+        28,
+        62
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R1",
+      "value": "1k 1%",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "IDLE_CMD",
+        "2": "PWM_BASE"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "GPIO buffer base; loaded GPIO voltage unmeasured; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        15,
+        35
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R2",
+      "value": "2k2 1%",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "RUN_5V",
+        "2": "RUN_BASE"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "RUN buffer; combined R47/R50/R53/Q7/HCT loading is not guaranteed over temperature/faults and needs bench acceptance; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        15,
+        52
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R3",
+      "value": "357R 1%",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "CARRIER_5V",
+        "2": "PWM_LED_A"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "LED current conditional7.63-14.85mA; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        27,
+        21
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R4",
+      "value": "357R 1%",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "CARRIER_5V",
+        "2": "RUN_LED_A"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "LED current conditional7.63-14.85mA; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        27,
+        45
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R5",
+      "value": "100k",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "PWM_BASE",
+        "2": "CARRIER_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Base-emitter off bias; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        21,
+        44
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R6",
+      "value": "100k",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "RUN_BASE",
+        "2": "CARRIER_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Base-emitter off bias; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        21,
+        61
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R7",
+      "value": "1k",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "ACT_5V2",
+        "2": "PWM_N"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Opto pullup; timing load condition must match; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        46.5,
+        21
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R8",
+      "value": "1k",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "ACT_5V2",
+        "2": "RUN_N"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Opto pullup; timing load condition must match; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        47,
+        49
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R9",
+      "value": "1k",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "PWM_RUN",
+        "2": "INA"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Logic-to-driver input series; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        62,
+        36
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R10",
+      "value": "10k",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "INA",
+        "2": "LOGIC_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Driver input off bias; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        62,
+        43
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R11",
+      "value": "1k",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "LOCAL_OK",
+        "2": "ENA"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Independent local supervisor enable; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        63,
+        28
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R12",
+      "value": "4k7",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "ENA",
+        "2": "LOGIC_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Mandatory enable off bias overrides internal pullup; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        73,
+        33
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R13",
+      "value": "33R",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical_BackAssembly",
+      "pins": {
+        "1": "DRIVE",
+        "2": "GATE"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Back-side gate damping; switching/underside clearance remain unmeasured; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        88.5,
+        43.5
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "back",
+      "fitted": true
+    },
+    {
+      "reference": "R14",
+      "value": "10k",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical_BackAssembly",
+      "pins": {
+        "1": "GATE",
+        "2": "ACT_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Back-side local gate-source off bias; verify underside clearance; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        87,
+        49
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "back",
+      "fitted": true
+    },
+    {
+      "reference": "R15",
+      "value": "120R 1%",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "ACT_5V2",
+        "2": "ADJ"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Regulator minimum load and divider high arm; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        66,
+        51
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "R16",
+      "value": "374R 1%",
+      "footprint": "ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "ADJ",
+        "2": "LOGIC_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Regulator divider low arm; exact leaded passive part/temperature rating pending",
+      "placed_xy_mm": [
+        61,
+        57
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "C1",
+      "value": "100nF 50V",
+      "footprint": "ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm_BackAssembly",
+      "pins": {
+        "1": "ACT_5V2",
+        "2": "LOGIC_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Back-side local bypass; confirm under-board clearance. Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending",
+      "placed_xy_mm": [
+        44.5,
+        23.31
+      ],
+      "placed_angle_deg": 90,
+      "placed_side": "back",
+      "fitted": true
+    },
+    {
+      "reference": "C2",
+      "value": "100nF 50V",
+      "footprint": "ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm_BackAssembly",
+      "pins": {
+        "1": "ACT_5V2",
+        "2": "LOGIC_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Back-side local bypass; confirm under-board clearance. Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending",
+      "placed_xy_mm": [
+        44.5,
+        46.31
+      ],
+      "placed_angle_deg": 90,
+      "placed_side": "back",
+      "fitted": true
+    },
+    {
+      "reference": "C3",
+      "value": "100nF 50V",
+      "footprint": "ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm_BackAssembly",
+      "pins": {
+        "1": "ACT_5V2",
+        "2": "LOGIC_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Back-side local bypass; confirm under-board clearance. Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending",
+      "placed_xy_mm": [
+        58,
+        27
+      ],
+      "placed_angle_deg": 180,
+      "placed_side": "back",
+      "fitted": true
+    },
+    {
+      "reference": "C4",
+      "value": "100nF 50V",
+      "footprint": "ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm_BackAssembly",
+      "pins": {
+        "1": "ACT_5V2",
+        "2": "LOGIC_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Back-side local bypass; confirm under-board clearance. Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending",
+      "placed_xy_mm": [
+        80.81,
+        40.3
+      ],
+      "placed_angle_deg": 90,
+      "placed_side": "back",
+      "fitted": true
+    },
+    {
+      "reference": "C5",
+      "value": "100nF 50V",
+      "footprint": "ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm_BackAssembly",
+      "pins": {
+        "1": "ACT_5V2",
+        "2": "LOGIC_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Back-side local bypass; confirm under-board clearance. Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending",
+      "placed_xy_mm": [
+        69.31,
+        24
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "back",
+      "fitted": true
+    },
+    {
+      "reference": "C8",
+      "value": "100nF 50V",
+      "footprint": "ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "ACT_12V",
+        "2": "LOGIC_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending",
+      "placed_xy_mm": [
+        80,
+        55.5
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "C9",
+      "value": "100nF 50V",
+      "footprint": "ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "CARRIER_5V",
+        "2": "CARRIER_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending",
+      "placed_xy_mm": [
+        22,
+        15
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "C10",
+      "value": "1uF 16V+ FILM",
+      "footprint": "ECU:C_Rect_L7.2mm_W5.0mm_P5.00mm_BackAssembly",
+      "pins": {
+        "1": "ACT_5V2",
+        "2": "LOGIC_GND"
+      },
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Back-side local driver bulk in parallel with C4. Exact low-ESR leaded part, under-board clearance and transient scope acceptance required.",
+      "placed_xy_mm": [
+        83.31,
+        50.5
+      ],
+      "placed_angle_deg": 180,
+      "placed_side": "back",
+      "fitted": true
+    },
+    {
+      "reference": "C6",
+      "value": "100uF 50V",
+      "footprint": "ECU:CP_Radial_D8.0mm_P3.50mm",
+      "pins": {
+        "1": "ACT_12V",
+        "2": "ACT_GND"
+      },
+      "pin_names": {
+        "1": "PLUS",
+        "2": "MINUS"
+      },
+      "pin_types": {},
+      "mpn": "",
+      "note": "Input reservoir; exact D8/P3.5 leaded part, ripple/thermal and interruption response pending",
+      "placed_xy_mm": [
+        44.5,
+        61
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "C7",
+      "value": "22uF 16V",
+      "footprint": "ECU:CP_Radial_D8.0mm_P3.50mm",
+      "pins": {
+        "1": "ACT_5V2",
+        "2": "LOGIC_GND"
+      },
+      "pin_names": {
+        "1": "PLUS",
+        "2": "MINUS"
+      },
+      "pin_types": {},
+      "mpn": "",
+      "note": "LM317 local output reservoir, no generic old-LDO ESR-window claim; exact leaded part/fit and transient behavior pending",
+      "placed_xy_mm": [
+        61,
+        64
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "H1",
+      "value": "M3 ISOLATED MOUNT",
+      "footprint": "ECU:MountingHole_3.2mm_M3",
+      "pins": {},
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Unplated mount. Insulating spacers/hardware must not bridge carrier/actuator ground or live TO220 tabs. Case fit unmeasured.",
+      "placed_xy_mm": [
+        14,
+        14
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "H2",
+      "value": "M3 ISOLATED MOUNT",
+      "footprint": "ECU:MountingHole_3.2mm_M3",
+      "pins": {},
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Unplated mount. Insulating spacers/hardware must not bridge carrier/actuator ground or live TO220 tabs. Case fit unmeasured.",
+      "placed_xy_mm": [
+        96,
+        14
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "H3",
+      "value": "M3 ISOLATED MOUNT",
+      "footprint": "ECU:MountingHole_3.2mm_M3",
+      "pins": {},
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Unplated mount. Insulating spacers/hardware must not bridge carrier/actuator ground or live TO220 tabs. Case fit unmeasured.",
+      "placed_xy_mm": [
+        14,
+        66
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "H4",
+      "value": "M3 ISOLATED MOUNT",
+      "footprint": "ECU:MountingHole_3.2mm_M3",
+      "pins": {},
+      "pin_names": {},
+      "pin_types": {},
+      "mpn": "",
+      "note": "Unplated mount. Insulating spacers/hardware must not bridge carrier/actuator ground or live TO220 tabs. Case fit unmeasured.",
+      "placed_xy_mm": [
+        96,
+        66
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": true
+    },
+    {
+      "reference": "NT1",
+      "value": "SOURCE RETURN STAR / COPPER ONLY",
+      "footprint": "ECU:NetTie_Source_Star",
+      "pins": {
+        "1": "ACT_GND",
+        "2": "LOGIC_GND"
+      },
+      "pin_names": {
+        "1": "Q1 SOURCE COPPER",
+        "2": "KELVIN LOGIC RETURN"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "power_out"
+      },
+      "mpn": "",
+      "note": "Unfitted board-only copper tie, no SMD assembly. Pad1 overlaps Q1source copper intentionally. No other low-impedance logic-to-power return join allowed.",
+      "placed_xy_mm": [
+        95.08,
+        39
+      ],
+      "placed_angle_deg": 0,
+      "placed_side": "front",
+      "fitted": false
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "command": [
+    "python3",
+    "/home/mark/persospace/esp32-ecu/tools/verify_tuning_online_evidence.py",
+    "--report",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/tuning-online-protocol-review/revision006/negative-changed-artifact"
+  ],
+  "exit_code": 1,
+  "changed_owned_artifact": "own/mainController.ini",
+  "manifest_left_unchanged": true,
+  "expected_rejection": "Changed artifact: own/mainController.ini",
+  "rejection_observed": true,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/tools/verify_tuning_online_evidence.py\", line 227, in <module>\n    verify(args.report, args.check_live_sources, args.replay)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/tools/verify_tuning_online_evidence.py\", line 129, in verify\n    require(len(body) == row[\"bytes\"] and sha(body) == row[\"sha256\"], \"Changed artifact: \" + row[\"path\"])\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/tools/verify_tuning_online_evidence.py\", line 30, in require\n    raise ValueError(message)\nValueError: Changed artifact: own/mainController.ini\n"
+}

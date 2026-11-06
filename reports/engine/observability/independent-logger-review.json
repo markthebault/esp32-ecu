@@ -1,0 +1,292 @@
+{
+  "reviewed_at_utc": "2026-11-03T19:19:06.405598+00:00",
+  "reviewer": "independent architecture reviewer /root/target_executor_architecture_review",
+  "scope": "Read-only review of coherent controller snapshot publication, target measurement handoff, fixed task logger, JSON paging and stopped retained-window MSL export; no production edits or subagents.",
+  "verdict": "No unresolved source or final-image binding issue in reviewed logger/snapshot paths. All three supplied ELF hashes match; final target frame/allocation checks and independent ISR placement reruns pass. Physical timing and runtime stack/heap headroom remain unmeasured.",
+  "source_sha256": {
+    "firmware/include/ecu/engine_data.hpp": "29f11e01b350e7a996ce211d965e2b894b66d192ba80ff2233ca8b0da663b153",
+    "firmware/include/ecu/engine_data_json.hpp": "9a3ecb9b319e0904013e501a3dc949b4451e6edc17ad2b2a9137bc65d5ebbebf",
+    "firmware/include/ecu/engine_log.hpp": "bae67855be063678eaabf15585541b6d10fa01dd81a9eb26583306b1428eef13",
+    "firmware/include/ecu/engine_log_json.hpp": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6",
+    "firmware/include/ecu/engine_log_msl.hpp": "053d3d799f44d26316ce833970376df98f600971f37cb8f2ab5346aa368b6ef5",
+    "firmware/include/ecu/engine_log_service.hpp": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f",
+    "firmware/include/ecu/heap_object.hpp": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51",
+    "firmware/include/ecu/engine_binding.hpp": "f1e8d39d850b70e4f8de70bc61c89f161305aa48a4cec4258333710484a0aa92",
+    "firmware/include/ecu/engine_service.hpp": "102e706e667dfea868152f393888e78359ed199c74d6cee21c04a7cc828b3efe",
+    "firmware/include/ecu/engine_target.hpp": "0cfcef7fa43cadaf105da094a4524aded50dcff0f88ddb6449799155e63b25b0",
+    "firmware/include/ecu/web_config.hpp": "8d954bf30d639daa06cbae6e6cc41a2a4c0b0579d3d9914aff44327085243ca1",
+    "firmware/main/engine_log_service.cpp": "05666d7be694be72719515709a083b0cf65701ebcd410fdb32fc0aa0e9fbbd53",
+    "firmware/main/engine_service.cpp": "6cd5cd489020e31771e5454943f6e9e82168045a8926dcc0ea5bb94d32483d36",
+    "firmware/main/engine_target.cpp": "5c5f76b8eed55158caa200538869ed0c56d32570dd324bf25cd8242b3d5b5de7",
+    "firmware/main/app.cpp": "b00afe666c83d9391530a53b495279d4b5bdb3323495a75f0e0b633047283c44",
+    "firmware/main/web_config.cpp": "128a171558a5a05980b59d6882e6c0117d23598556dd2db15fdd6b33dd131a4a",
+    "firmware/sdkconfig.compact_n16r8_web": "5f70ef37d531d5c262738ad0b5df3bca52039b69668a555302243a97436950e8",
+    "firmware/tests/engine_observability_test.cpp": "32e6ede339ec83a67e6765bfdee944ef6b740b6ed646d17964e882289f997aa6",
+    "firmware/include/ecu/engine_radio.hpp": "b3ceca49949a3c42dbd9735b99ca834c1d84ea886695af16010de8b5fb66e4c9",
+    "firmware/sdkconfig.compact_a3_web": "b5cb80264f595019e6c879a6120e7ee9b8bc002c566d31fb1898bd48439af51d",
+    "firmware/sdkconfig.compact_a3_timing_bench": "b5cb80264f595019e6c879a6120e7ee9b8bc002c566d31fb1898bd48439af51d",
+    "firmware/platformio.ini": "a93018eb58131ff33e9b640873b544c4cc3e77b21f05adaa1f5c1ab5678f2338",
+    "scripts/audit_target_isr.py": "550781826ea29b6fe55f802278422cda70bb80cb61aab76c717904b26dd83f4d"
+  },
+  "coherence_and_locking": [
+    "RuntimeSample is built from the same final bound Inputs and controller Output as its submitted command, with its own 64-bit sequence and GP clock timestamps. Failed observe try-lock leaves the caller cache intact, retaining the older timestamps and revisions.",
+    "Earlier worker command observation is copied under the executor portMUX and carries separate sequence/revisions/fault/masks. It is explicitly not proof that the new controller proposal executed. PhaseEpoch is external configuration context; WorkerEpoch is executor generation.",
+    "Producer task uses logger mutex try-lock(0), then bounded fixed-size accounting/copy only. HTTP page copying and export-row reads use the task mutex; all JSON, formatting, network sends and per-row vTaskDelay occur after releasing it. No new logger call, allocation, JSON, flash, network I/O or floating point was added to the ISR paths.",
+    "A copied 16-row page is an immutable point-in-time observation. A later overwrite or new log does not retroactively invalidate it. IDs and boot headers distinguish old pages; copied_page discloses that this is not a current-at-transmission guarantee.",
+    "MSL exports require a frozen nonempty ring. A lease prevents rearming while rows are streamed, without holding the logger mutex across formatting or network I/O. Disconnect/error returns unwind the local lease.",
+    "Sample revisions, timing faults, masks and ages preserve configuration transitions and stale observations. Ring source/sequence/presence and future control/sample timestamps are checked before retaining a row; invalid sensor inputs serialize as null/NaN."
+  ],
+  "resolved_findings": [
+    {
+      "id": "LOG-01",
+      "severity": "high",
+      "issue": "Unobserved due sampling slots at explicit stop or timeout were omitted from missed_periods.",
+      "resolution": "missed_through counts remaining due slots; timeout uses deadline-1, making deadline exclusive. Explicit stop includes a due slot at stop time.",
+      "validation": "ASan/UBSan independent probe: terminal timeout misses=9, stop misses=5; 360 randomized/deterministic full-session accounting cases pass."
+    },
+    {
+      "id": "LOG-02",
+      "severity": "high",
+      "issue": "make_unique<Page>, and the first new(nothrow) replacement, could abort on target allocation failure with the pinned no-exceptions IDF stubs.",
+      "resolution": "Page and Tune helper use checked malloc, placement new for non-allocating constructors and free deleter. Selected and generic sdkconfig leave heap-abort-on-failure disabled.",
+      "validation": "Pinned libstdc++ new/new(nothrow) disassembly and IDF cxx_exception_stubs inspected. Final selected/generic ELF Page and Tune helpers, and final dummy Tune helper, independently disassembled: malloc call, null-result branch, non-allocating constructor only on success. All three SDK configurations disable heap-abort-on-failure."
+    },
+    {
+      "id": "LOG-03",
+      "severity": "high",
+      "issue": "HTTPD priority 5 could monopolize CPU while serializing writable JSON/MSL responses above the app/control task priority 1.",
+      "resolution": "vTaskDelay(1) after each bounded JSON or MSL row, outside mutex. One-row DOM limits simultaneous server-side JSON allocations.",
+      "validation": "Source recheck of both response loops; no physical duration or preemption measurement claimed."
+    },
+    {
+      "id": "LOG-04",
+      "severity": "medium",
+      "issue": "MSL retained-window metadata originally omitted loss/session details needed to interpret exported data.",
+      "resolution": "MSL metadata now includes boot/log identity, period/duration, retained range, overwritten/missed/repeated/invalid counters and epoch domains.",
+      "validation": "Source recheck and recompiled ASan/UBSan native test confirm 58 matching name/unit/data columns including InputValidMask. Independent stress probe: 1290-byte maximum-counter header and 501-byte stress row fit 2048-byte formatter buffer; undersized buffers return false."
+    },
+    {
+      "id": "LOG-05",
+      "severity": "medium",
+      "issue": "A POST with a query string could mutate recording state then fail when responding through the page-query GET path.",
+      "resolution": "POST rejects any query before boot/body parsing or start/stop mutation.",
+      "validation": "Source order rechecked at engine_data_log_post."
+    },
+    {
+      "id": "LOG-06",
+      "severity": "medium",
+      "issue": "PhaseEpoch and WorkerEpoch initially looked directly comparable despite having separate counter domains.",
+      "resolution": "JSON and MSL now explicitly label external_configuration_context vs executor_generation.",
+      "validation": "Source recheck of data_json worker observation and MSL metadata."
+    },
+    {
+      "id": "LOG-07",
+      "severity": "medium",
+      "issue": "Recorder::page created a full 3544-byte temporary on the HTTP stack while holding the logger mutex.",
+      "resolution": "Reset metadata/count/flags only, then copy valid rows; entries beyond count remain unspecified and are never serialized.",
+      "validation": "All final web ELF Recorder::page entry instructions encode a 32-byte frame, agreeing with pinned target cache -fstack-usage compile. Earlier image frame was 3584 bytes. Native re-used Page, identity and gap tests pass after metadata-only reset."
+    }
+  ],
+  "independent_validation": {
+    "portable_recorder_and_json": {
+      "recorder_bytes": 55384,
+      "runtime_sample_bytes": 200,
+      "row_bytes": 216,
+      "page_bytes": 3544,
+      "timeout_terminal_misses": 9,
+      "stop_terminal_misses": 5,
+      "schedule_accounting_cases": 360,
+      "copied_pages_survive_overwrite_and_rearm": true,
+      "invalid_inputs_are_null": true,
+      "u64_ids_remain_lossless": true,
+      "future_age_invalid": true
+    },
+    "streaming_failure_model": {
+      "allocation_positions": 4500,
+      "header_failures_before_response": 56,
+      "truncated_invalid_json_responses": 2688,
+      "complete_valid_pages": 1756,
+      "peak_cjson_server_bytes_native": 9767,
+      "all_partial_responses_rejected_by_json_parse": true,
+      "no_cjson_leaks": true,
+      "limitations": "Mirrors one-row JSON DOM streaming and models a client accepting only completed parseable JSON. It is not an ESP HTTPD/socket test. Header in this independent model includes a subset of endpoint metadata; native cJSON peak excludes Page, socket, allocator overhead and client string allocations."
+    },
+    "actual_service_with_host_fixtures": {
+      "boot_guards_passed": true,
+      "producer_returns_while_reader_mutex_is_held": true,
+      "contention_count": 1,
+      "missed_period_after_contention": 1,
+      "lease_blocks_rearm": true,
+      "lease_rows_remain_stable": true,
+      "stale_stop_rejected": true,
+      "copied_page_survives_new_log": true,
+      "limitations": "Compiles actual engine_log_service.cpp against std::mutex/atomic fake RTOS+GP clock, using ASan/UBSan. Producer nonblocking check is a host scheduling assertion, not a physical latency measurement."
+    },
+    "repository_native_regression": {
+      "source": "firmware/tests/engine_observability_test.cpp",
+      "result": "pass after final 58-column and zero-session source updates",
+      "log": ".cache/engine/telemetry-review/observability-test.log",
+      "allocation_failure_positions": 4500,
+      "rejected_incomplete_pages": 2664,
+      "complete_pages": 1836,
+      "sanitizers": "AddressSanitizer + UndefinedBehaviorSanitizer + leak detection",
+      "msl_columns": 58
+    },
+    "compilation": "Native probes: g++ -std=c++17 -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined; pinned ESP-IDF cJSON C object, -pthread for service fixture. Target sizes: pinned xtensa-esp32s3-elf-g++ 14.2.0. Current task source stack compilation reuses CMake compile includes/options, explicitly adding selected PlatformIO defines ECU_COMPACT_A3=1 ECU_CONFIG_WEB=1 ECU_SELECTED_N16R8=1 and -std=gnu++17 -fstack-usage; output objects/depfiles remain in cache.",
+    "target_layout_bytes": {
+      "RuntimeSample": 200,
+      "Row": 216,
+      "Page": 3544,
+      "Recorder": 55384
+    },
+    "target_cache_compilation_frames_bytes": {
+      "bool ecu::engine_service::observe(const ecu::web::Sample&, const ecu::config::Config&, uint64_t, uint64_t, ecu::engine::RuntimeSample&)": 800,
+      "void app_main()": 6592,
+      "void ecu::engine_log::Recorder::page(uint32_t, uint32_t, ecu::engine_log::Page&) const": 32,
+      "bool ecu::engine_log::Recorder::append(const ecu::engine::RuntimeSample&, uint64_t)": 256,
+      "void ecu::engine_log_service::observe(const ecu::engine::RuntimeSample&)": 48,
+      "void ecu::engine_log_service::page(uint32_t, uint32_t, ecu::engine_log::Page&)": 32,
+      "esp_err_t ecu::web::{anonymous}::engine_data_log_msl_get(httpd_req_t*)": 2368,
+      "esp_err_t ecu::web::{anonymous}::engine_data_log_get(httpd_req_t*)": 112
+    },
+    "target_frame_limits": "Individual decoded ELF/compiler frames only, not a complete system/library call-stack bound. All three images: app_main6592, observe800, worker3184+command helper2160, capture ISR128, alarm ISR112. Web images: HTTP page112+Recorder::page32, MSL2368+formatter112, diagnostic ISR96. Main/timing/HTTP task stacks configured16KiB; ISR stack1536. Runtime high-water remains unmeasured.",
+    "final_format_and_guard_probe": {
+      "msl_columns": 58,
+      "input_valid_mask_column": 27,
+      "input_valid_mask_value": 165,
+      "maximum_counter_header_bytes": 1290,
+      "stress_row_bytes": 501,
+      "bounded_buffer_failures_rejected": true,
+      "zero_session_rejected_without_writes": true
+    }
+  },
+  "image_binding": {
+    "artifact": ".cache/engine/telemetry-review/final-target-image-binding.json",
+    "artifact_sha256": "ac72fa4aa043d438c9abf2c1f478b3a679946b377944db32220d907ae82d4182",
+    "images": {
+      "compact_n16r8_web": {
+        "elf": "firmware/.pio/build/compact_n16r8_web/firmware.elf",
+        "elf_sha256": "de3b045c7bbbd6e8578c57498c32a8dc37a9b1ffe0f59771e0c7647e58259a9f",
+        "matches_parent_supplied_hash": true,
+        "recorder_symbols": [
+          {
+            "name": "ecu::engine_log_service::(anonymous namespace)::recorder",
+            "address": "0x3fcaffe0",
+            "size": 55384,
+            "section": ".dram0.bss"
+          }
+        ],
+        "linker_static_ram_data_bss_bytes": 125428,
+        "heap_object_disassembly": ".cache/engine/telemetry-review/final-selected-heap-objects.txt",
+        "heap_object_path_review": "Every linked heap_object helper calls malloc, tests the returned pointer before running its fixed non-allocating constructor, and returns null on failure. Page helper is absent from dummy image because HTTP endpoints are not linked. No allocating operator new call occurs in these helpers.",
+        "independently_rerun_isr_audit": {
+          "path": ".cache/engine/telemetry-review/final-isr-selected/closure.json",
+          "sha256": "5258d929c5846c8cc109df308ec62056f453fe276dac999414bc923c6dcd7a42",
+          "functions": 30,
+          "roots": 5,
+          "literals_outside_iram": 0,
+          "unclassified_flash_pointers": 0,
+          "assertion_argument_only": 63,
+          "passed_static_placement": true
+        }
+      },
+      "compact_a3_web": {
+        "elf": "firmware/.pio/build/compact_a3_web/firmware.elf",
+        "elf_sha256": "7852943d292cf799a33362bb0dc9c786c4a7f2366f82afcdb14003762fe86d67",
+        "matches_parent_supplied_hash": true,
+        "recorder_symbols": [
+          {
+            "name": "ecu::engine_log_service::(anonymous namespace)::recorder",
+            "address": "0x3fcae378",
+            "size": 55384,
+            "section": ".dram0.bss"
+          }
+        ],
+        "linker_static_ram_data_bss_bytes": 124176,
+        "heap_object_disassembly": ".cache/engine/telemetry-review/final-generic-heap-objects.txt",
+        "heap_object_path_review": "Every linked heap_object helper calls malloc, tests the returned pointer before running its fixed non-allocating constructor, and returns null on failure. Page helper is absent from dummy image because HTTP endpoints are not linked. No allocating operator new call occurs in these helpers.",
+        "independently_rerun_isr_audit": {
+          "path": ".cache/engine/telemetry-review/final-isr-generic/closure.json",
+          "sha256": "aa3d96540d3708c5ded393051fc5b0e973197d96325c68ba5770130ac8ee4205",
+          "functions": 30,
+          "roots": 5,
+          "literals_outside_iram": 0,
+          "unclassified_flash_pointers": 0,
+          "assertion_argument_only": 63,
+          "passed_static_placement": true
+        }
+      },
+      "compact_a3_timing_bench": {
+        "elf": "firmware/.pio/build/compact_a3_timing_bench/firmware.elf",
+        "elf_sha256": "19f443fe56cb6c40e11adf949a42625aa6353d4f18b1caff6492a7907e1e5059",
+        "matches_parent_supplied_hash": true,
+        "recorder_symbols": [
+          {
+            "name": "ecu::engine_log_service::(anonymous namespace)::recorder",
+            "address": "0x3fca3d38",
+            "size": 55384,
+            "section": ".dram0.bss"
+          }
+        ],
+        "linker_static_ram_data_bss_bytes": 99256,
+        "heap_object_disassembly": ".cache/engine/telemetry-review/final-dummy-heap-objects.txt",
+        "heap_object_path_review": "Every linked heap_object helper calls malloc, tests the returned pointer before running its fixed non-allocating constructor, and returns null on failure. Page helper is absent from dummy image because HTTP endpoints are not linked. No allocating operator new call occurs in these helpers.",
+        "independently_rerun_isr_audit": {
+          "path": ".cache/engine/telemetry-review/final-isr-dummy/closure.json",
+          "sha256": "aaf59feefce76ee7ae4fff595eb6b3c770d578fc329503fc285c9249d8227172",
+          "functions": 29,
+          "roots": 4,
+          "literals_outside_iram": 0,
+          "unclassified_flash_pointers": 0,
+          "assertion_argument_only": 63,
+          "passed_static_placement": true
+        }
+      }
+    },
+    "state": "All three final supplied images independently hash-matched. Actual ELF ENTRY frames and heap helper disassembly checked; all three static ISR placement audits rerun independently against these exact bytes. All reviewed source hashes recorded after final source changes.",
+    "ram_limit_caution": "Static data+bss is not free internal heap: IRAM aliases, task stacks, WiFi/network buffers, fragmentation and allocations also consume resources."
+  },
+  "remaining_limits": [
+    "No connected ESP32 execution, flashing, physical output or electrical measurement. Selected N16R8 output policy source gates remain unchanged.",
+    "Physical IRQ duration/latency, capture latch overwrite/polarity races, actual timing jitter, AP/radio load interaction, minimum internal heap and task/ISR stack high-water remain unmeasured.",
+    "Native allocation failure tests cover checked JSON trees/stream completion semantics; they do not prove entire existing firmware tolerates global heap exhaustion, network stack OOM or all legacy std::string allocations.",
+    "Wireless protocol/session semantics and browser collector behavior have separate reviews/tests; this report does not substitute for their final validation."
+  ],
+  "cache_artifacts": [
+    ".cache/engine/telemetry-review/logger-probe.cpp",
+    ".cache/engine/telemetry-review/logger-probe.json",
+    ".cache/engine/telemetry-review/logger-stream-probe.cpp",
+    ".cache/engine/telemetry-review/logger-stream-probe.json",
+    ".cache/engine/telemetry-review/logger-service-probe.cpp",
+    ".cache/engine/telemetry-review/logger-service-probe.json",
+    ".cache/engine/telemetry-review/observability-test.log",
+    ".cache/engine/telemetry-review/target-layout-probe.cpp",
+    ".cache/engine/telemetry-review/target-layout-probe.o",
+    ".cache/engine/telemetry-review/target-layout.json",
+    ".cache/engine/telemetry-review/target-stack-current.json",
+    ".cache/engine/telemetry-review/engine_log_service.cpp.review.su",
+    ".cache/engine/telemetry-review/web_config.cpp.review.su",
+    ".cache/engine/telemetry-review/app.cpp.review.su",
+    ".cache/engine/telemetry-review/engine_service.cpp.review.su",
+    ".cache/engine/telemetry-review/sdk-no-rtti-new_opnt.txt",
+    ".cache/engine/telemetry-review/sdk-no-rtti-new_op.txt",
+    ".cache/engine/telemetry-review/final-target-image-binding.json",
+    ".cache/engine/telemetry-review/final-selected-heap-objects.txt",
+    ".cache/engine/telemetry-review/final-generic-heap-objects.txt",
+    ".cache/engine/telemetry-review/final-dummy-heap-objects.txt",
+    ".cache/engine/telemetry-review/final-format-probe.cpp",
+    ".cache/engine/telemetry-review/final-format-probe.json",
+    ".cache/engine/telemetry-review/final-isr-selected/closure.json",
+    ".cache/engine/telemetry-review/final-isr-generic/closure.json",
+    ".cache/engine/telemetry-review/final-isr-dummy/closure.json"
+  ],
+  "final_recheck": {
+    "source_edits": false,
+    "children": false,
+    "new_issues": [],
+    "elf_hashes_match": true,
+    "independent_isr_reruns": "selected30/5, generic30/5, dummy29/4 functions/roots; zero non-IRAM literals and zero unclassified flash pointers; all PASS",
+    "msl_input_valid_mask": "58-column labels, units and row positions agree; mask column is zero-based27.",
+    "encoder_zero_session": "Guard inspected and independently probed: rejects zero session before writing output buffer; valid nonzero session still encodes."
+  }
+}

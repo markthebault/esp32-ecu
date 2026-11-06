@@ -1,0 +1,57 @@
+
+.cache/engine/telemetry-review/sdk-no-rtti-new_op.o:     file format elf32-xtensa-le
+
+
+Disassembly of section .literal._Znwj:
+
+00000000 <.literal._Znwj>:
+	...
+			0: R_XTENSA_32	vtable for std::bad_alloc+0x8
+			4: R_XTENSA_32	std::bad_alloc::~bad_alloc()
+			8: R_XTENSA_32	typeinfo for std::bad_alloc
+			c: R_XTENSA_32	std::get_new_handler()
+			10: R_XTENSA_32	__cxa_allocate_exception
+			14: R_XTENSA_32	__cxa_throw
+			18: R_XTENSA_32	malloc
+
+Disassembly of section .text._Znwj:
+
+00000000 <operator new(unsigned int)>:
+   0:	004136        	entry	a1, 32
+   3:	180c      	movi.n	a8, 1
+   5:	737280        	maxu	a7, a2, a8
+   8:	000906        	j	30 <operator new(unsigned int)+0x30>
+			8: R_XTENSA_SLOT0_OP	.text._Znwj+0x30
+   b:	00          	.byte	00
+   c:	000081        	l32r	a8, fffc000c <operator new(unsigned int)+0xfffc000c>
+			c: R_XTENSA_SLOT0_OP	.literal._Znwj+0xc
+			c: R_XTENSA_ASM_EXPAND	std::get_new_handler()
+   f:	0008e0        	callx8	a8
+  12:	7adc      	bnez.n	a10, 2d <operator new(unsigned int)+0x2d>
+			12: R_XTENSA_SLOT0_OP	.text._Znwj+0x2d
+  14:	4a0c      	movi.n	a10, 4
+  16:	000081        	l32r	a8, fffc0018 <operator new(unsigned int)+0xfffc0018>
+			16: R_XTENSA_SLOT0_OP	.literal._Znwj+0x10
+			16: R_XTENSA_ASM_EXPAND	__cxa_allocate_exception
+  19:	0008e0        	callx8	a8
+  1c:	000081        	l32r	a8, fffc001c <operator new(unsigned int)+0xfffc001c>
+			1c: R_XTENSA_SLOT0_OP	.literal._Znwj
+  1f:	0000c1        	l32r	a12, fffc0020 <operator new(unsigned int)+0xfffc0020>
+			1f: R_XTENSA_SLOT0_OP	.literal._Znwj+0x4
+  22:	0000b1        	l32r	a11, fffc0024 <operator new(unsigned int)+0xfffc0024>
+			22: R_XTENSA_SLOT0_OP	.literal._Znwj+0x8
+  25:	0a89      	s32i.n	a8, a10, 0
+  27:	000081        	l32r	a8, fffc0028 <operator new(unsigned int)+0xfffc0028>
+			27: R_XTENSA_SLOT0_OP	.literal._Znwj+0x14
+			27: R_XTENSA_ASM_EXPAND	__cxa_throw
+  2a:	0008e0        	callx8	a8
+  2d:	000ae0        	callx8	a10
+  30:	07ad      	mov.n	a10, a7
+  32:	000081        	l32r	a8, fffc0034 <operator new(unsigned int)+0xfffc0034>
+			32: R_XTENSA_SLOT0_OP	.literal._Znwj+0x18
+			32: R_XTENSA_ASM_EXPAND	malloc
+  35:	0008e0        	callx8	a8
+  38:	0a2d      	mov.n	a2, a10
+  3a:	fcea16        	beqz	a10, c <operator new(unsigned int)+0xc>
+			3a: R_XTENSA_SLOT0_OP	.text._Znwj+0xc
+  3d:	f01d      	retw.n

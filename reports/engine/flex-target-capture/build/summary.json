@@ -1,0 +1,166 @@
+{
+  "created_utc": "2026-11-04T22:47:50.426937+00:00",
+  "command": [
+    "pio",
+    "run",
+    "-d",
+    "/home/mark/persospace/esp32-ecu/firmware",
+    "-e",
+    "compact_n16r8_flex_dev",
+    "-e",
+    "compact_n16r8_web",
+    "-e",
+    "compact_a3_web",
+    "-e",
+    "compact_a3_timing_bench"
+  ],
+  "exit_code": 0,
+  "build_dir_override": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-capture-build-003/build",
+  "environments": [
+    "compact_n16r8_flex_dev",
+    "compact_n16r8_web",
+    "compact_a3_web",
+    "compact_a3_timing_bench"
+  ],
+  "default_cache_retained": true,
+  "default_cache_unchanged": true,
+  "source_inputs_unchanged": true,
+  "generated_sdkconfigs": [
+    {
+      "environment": "compact_n16r8_flex_dev",
+      "original_present": true,
+      "original_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_n16r8_flex_dev",
+      "after_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_n16r8_flex_dev"
+    },
+    {
+      "environment": "compact_n16r8_web",
+      "original_present": true,
+      "original_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_n16r8_web",
+      "after_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_n16r8_web"
+    },
+    {
+      "environment": "compact_a3_web",
+      "original_present": true,
+      "original_sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_a3_web",
+      "after_sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_a3_web"
+    },
+    {
+      "environment": "compact_a3_timing_bench",
+      "original_present": true,
+      "original_sha256": "b5cb80264f595019e6c879a6120e7ee9b8bc002c566d31fb1898bd48439af51d",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_a3_timing_bench",
+      "after_sha256": "b5cb80264f595019e6c879a6120e7ee9b8bc002c566d31fb1898bd48439af51d",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_a3_timing_bench"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "build/compact_a3_timing_bench/firmware.bin",
+      "bytes": 681136,
+      "sha256": "e2c5177ffae6685f32ce718e28431deb162ddc42388b1551570c59919dd31ca3"
+    },
+    {
+      "path": "build/compact_a3_timing_bench/firmware.elf",
+      "bytes": 8425748,
+      "sha256": "e65d198886cdca21f751e4c9414b1fe5c53b11e0ec253ddec18d11a203c9f4e8"
+    },
+    {
+      "path": "build/compact_a3_web/firmware.bin",
+      "bytes": 1656976,
+      "sha256": "1e7da24eeae931248db58ed83b33597daaabcba2c2b1a881f698325786f0a122"
+    },
+    {
+      "path": "build/compact_a3_web/firmware.elf",
+      "bytes": 13939304,
+      "sha256": "4363ffd833a295d86050a73690060071181ecaa780b2c13d10d35308a9fb1af7"
+    },
+    {
+      "path": "build/compact_n16r8_flex_dev/firmware.bin",
+      "bytes": 1696112,
+      "sha256": "b7015604cc468e7d7a07963016e96d82bf2ea44c04780b7f6250bc1ec82a7545"
+    },
+    {
+      "path": "build/compact_n16r8_flex_dev/firmware.elf",
+      "bytes": 14322480,
+      "sha256": "b59017e9aa7ce52d461b1dc3897ee45d898cbc8c31503fcc696b7b9c65aabe70"
+    },
+    {
+      "path": "build/compact_n16r8_web/firmware.bin",
+      "bytes": 1667872,
+      "sha256": "c0db7f951c500fc93df8f548a44b49516975dc0d08c3d31a17995845594fbfa7"
+    },
+    {
+      "path": "build/compact_n16r8_web/firmware.elf",
+      "bytes": 14235244,
+      "sha256": "55c4d3bbd865a55b4c76323ea25b20cae64ad1b461aed55fd60498ce9af83d40"
+    }
+  ],
+  "elf_archives": [
+    {
+      "environment": "compact_a3_timing_bench",
+      "path": "elf-archives/compact_a3_timing_bench.elf.gz",
+      "bytes": 2835082,
+      "sha256": "c2f97769e9c2ee850bcb6acf2ddb1c4c61a8a50e745b08a1a0ba93787ab9c6a9",
+      "elf_bytes": 8425748,
+      "elf_sha256": "e65d198886cdca21f751e4c9414b1fe5c53b11e0ec253ddec18d11a203c9f4e8"
+    },
+    {
+      "environment": "compact_a3_web",
+      "path": "elf-archives/compact_a3_web.elf.gz",
+      "bytes": 4875726,
+      "sha256": "36e813f4727311086fcbaf2ab2af93f1e88a8277a7ce10aa4541355568ab6316",
+      "elf_bytes": 13939304,
+      "elf_sha256": "4363ffd833a295d86050a73690060071181ecaa780b2c13d10d35308a9fb1af7"
+    },
+    {
+      "environment": "compact_n16r8_flex_dev",
+      "path": "elf-archives/compact_n16r8_flex_dev.elf.gz",
+      "bytes": 4933172,
+      "sha256": "1256e086643882e2c5016046915a2be101637df40d2dfd07b0d2ca6cafd6d60c",
+      "elf_bytes": 14322480,
+      "elf_sha256": "b59017e9aa7ce52d461b1dc3897ee45d898cbc8c31503fcc696b7b9c65aabe70"
+    },
+    {
+      "environment": "compact_n16r8_web",
+      "path": "elf-archives/compact_n16r8_web.elf.gz",
+      "bytes": 4918999,
+      "sha256": "709692f62df3c44124fdd0c33cc33d1226dbbaa5a183dd7417691a9602e5689d",
+      "elf_bytes": 14235244,
+      "elf_sha256": "55c4d3bbd865a55b4c76323ea25b20cae64ad1b461aed55fd60498ce9af83d40"
+    }
+  ],
+  "generated_assets_sha256": "ffbedea9509a06b74782df84dcfb8d342dc36347adcf5676c185fdd999d91b65",
+  "web_index_sha256": "0876875cc6a17766d750d44f4f57cbba1b947f59d9e3f4b6c3909c61a27a2798",
+  "embedded_UI": [
+    {
+      "environment": "compact_n16r8_flex_dev",
+      "web_expected": true,
+      "current_index_in_flash_rodata": true
+    },
+    {
+      "environment": "compact_n16r8_web",
+      "web_expected": true,
+      "current_index_in_flash_rodata": true
+    },
+    {
+      "environment": "compact_a3_web",
+      "web_expected": true,
+      "current_index_in_flash_rodata": true
+    },
+    {
+      "environment": "compact_a3_timing_bench",
+      "web_expected": false,
+      "current_index_in_flash_rodata": false
+    }
+  ],
+  "declared_generation_changes": [],
+  "generation_only_declared_output": true,
+  "flashed": false,
+  "physical_qualification": false
+}

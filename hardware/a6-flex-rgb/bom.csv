@@ -1,0 +1,265 @@
+Reference,Value,MPN,Footprint,DNP,Assembly,Note
+J1,FUSED_KEY_12V,B2P-VH(LF)(SN),Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical,False,Direct-solder THT,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+D1,1.5KE27CA,1.5KE27CA,Diode_THT:D_DO-201AD_P5.08mm_Vertical_AnodeUp,False,Direct-solder THT,Axial bidirectional TVS; 23.1V standoff and specified 37.5V pulse clamp. No load-dump qualification claim.
+D2,SB5100,SB5100-B,Diode_THT:D_DO-201AD_P15.24mm_Horizontal,False,Direct-solder THT,100 V series reverse-polarity blocking diode; check forward loss and pulse stress.
+C1,47u 63V,,Capacitor_THT:CP_Radial_D8.0mm_P3.50mm,False,Direct-solder THT,"Electrolytic, exact series must be qualified."
+C2,47u 63V,,Capacitor_THT:CP_Radial_D8.0mm_P3.50mm,False,Direct-solder THT,
+C3,100n 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+U1,Pololu D36V6F5,Pololu 3792,ECU:Pololu_D36V6F5_vertical,False,Purchased module,A3 hand-solder revision; see docs/compact.md
+C5,22u 16V electrolytic,,Capacitor_THT:CP_Radial_D8.0mm_P3.50mm,False,Direct-solder THT,Radial electrolytic on the 5V rail; select exact series and verify rail stability/ripple over temperature.
+C6,22u 16V electrolytic,,Capacitor_THT:CP_Radial_D8.0mm_P3.50mm,False,Direct-solder THT,Radial electrolytic on the 5V rail; select exact series and verify rail stability/ripple over temperature.
+U2,LD1117V33,LD1117V33,Package_TO_SOT_THT:TO-220-3_Vertical,False,Direct-solder THT,3V3 regulator. 200mA continuous target pending thermal measurement. Use specified electrolytic ESR; no USB/carrier dual power.
+C9,22u 10V ESR 0.3-1R,,ECU:CP_Radial_D8.0mm_P3.50mm_A6_C9,False,Direct-solder THT,Select exact electrolytic series to satisfy LDO stability over temperature.
+C10,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+R7,100R 0.25W,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,33 mA rail bleed provides a sink for fault clamp current. Must validate unpowered injection.
+F2,PTC 100mA radial,MF-R010,ECU:PTC_MF_R010,False,Direct-solder THT,"100mA hold rating at datasheet ambient; thermal derating and slow trip, not an electronic current limiter."
+C11,1u,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Direct-solder THT,
+U3,ESP32-S3 44-pin Type-C N16R8,AliExpress 1005006418608267 / S3-N16R8,ECU:ESP32_S3_DevKitC_1_socket,False,Purchased module,"User-selected 16MB flash / 8MB PSRAM. 44-pin order from saved supplier pinout. Socket row spacing 22.86mm PROVISIONAL. Inward antenna extension 10mm; module PCB underside +8.5mm above carrier top is an assumed socket stack. Internal RGB pin is disputed (47 pinout / 48 schematic). Use separate RGB LED on GPIO38, socket pad32; no engine pulses. Verify actual board fit and RF performance before fabrication/use. A5 adds GPIO3 idle service through J21 and permanent R154 bias; actual eFuse/JTAG routing and loaded output behavior remain unverified. A6 GPIO38 only receives protected flex candidate; oldGPIO38 RMT/LED builds incompatible. Use compact_n16r8_flex_dev only; engine outputs inhibited."
+R8,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C12,1u,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Direct-solder THT,
+D3,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+C13,10u,,Capacitor_THT:CP_Radial_D8.0mm_P3.50mm,False,Direct-solder THT,
+C14,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+R9,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+J2,UART_FLASH_3V3_ONLY,,Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,False,Direct-solder THT,"External USB UART, 3.3 V logic. Supply board via J1; no USB backfeed."
+U4,MAX1232EPA+,MAX1232EPA+,Package_DIP:DIP-8_W7.62mm_LongPads,False,Direct-solder THT,"5V monitor and watchdog: TD=VCC, 500..2000ms watchdog (1.2s typical); reset active 250..1000ms. TTL ST accepts 3V3. Open-drain reset wired to 3V3 SAFE_N."
+R11,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R12,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C15,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+U5,MCP120-315DI/TO,MCP120-315DI/TO,Package_TO_SOT_THT:TO-92_Inline_Wide,False,Direct-solder THT,"D bondout TO-92: RESET, VDD, VSS. Different bondout suffixes are not drop-in."
+C16,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+R13,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+J3,NORMALLY_OPEN_INTERLOCK,,Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,False,Direct-solder THT,Fit only on supervised dummy-load bench. Open contact forces output inhibit independent of MCU.
+R14,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R15,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+J4,EXPANSION_3V3,,Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,False,Direct-solder THT,
+R16,4.7k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R17,4.7k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R20,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R21,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C20,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+D100,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D101,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R22,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R23,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C21,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+D110,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D111,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R24,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R25,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C22,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+D120,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D121,BAT85,"BAT85,113",ECU:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp_A6_D121,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R26,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R27,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C23,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+D130,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D131,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R28,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R29,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C24,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+D140,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D141,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R30,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R31,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C25,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+D150,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D151,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R32,2.49k 1% NTC,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,True,Direct-solder THT,Populate only for passive NTC sensor; transfer curve must match selected sensor.
+R33,2.49k 1% NTC,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,True,Direct-solder THT,Populate only for passive NTC sensor; transfer curve must match selected sensor.
+R34,120k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R35,10k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C26,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+D160,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D161,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R36,22k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R37,33k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C27,10n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+D170,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D171,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+U6,MCP3208-CI/P,MCP3208-CI/P,Package_DIP:DIP-16_W7.62mm_LongPads,False,Direct-solder THT,
+C28,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+C29,1u,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Direct-solder THT,
+R38,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R40,33k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C30,100p C0G,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+D200,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D201,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R41,2.2k HALL PULLUP,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,True,Direct-solder THT,
+R42,33k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C31,100p C0G,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+D210,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+D211,BAT85,"BAT85,113",Diode_THT:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature.
+R43,2.2k HALL PULLUP,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,True,Direct-solder THT,
+U7,SN74HC14N,SN74HC14N,Package_DIP:DIP-14_W7.62mm_LongPads,False,Direct-solder THT,A3 hand-solder revision; see docs/compact.md
+C32,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+U8,MCP2562-E/P,MCP2562-E/P,Package_DIP:DIP-8_W7.62mm_LongPads,False,Direct-solder THT,Standby by default. JP1 open; firmware listen-only. Not a silent normal-mode transceiver.
+C33,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+C34,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+R44,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R45,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+JP1,CAN_TX_ENABLE_OPEN,,Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,False,Direct-solder THT,Open by default. Silent hardware plus software listen-only.
+J7,CAN_H_L_G_SHIELD,B4B-XH-A(LF)(SN),Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical,False,Direct-solder THT,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+D22,P6KE24CA,P6KE24CA,Diode_THT:D_DO-15_P12.70mm_Horizontal,False,Direct-solder THT,Axial bidirectional CAN surge clamp; verify overshoot and capacitance on assembled bus.
+R46,120R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+JP2,CAN_TERMINATION_OPEN,,Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,False,Direct-solder THT,
+U9,SN74HCT08N,SN74HCT08N,Package_DIP:DIP-14_W7.62mm_LongPads,False,Direct-solder THT,
+C35,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+R47,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R48,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R51,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+Q5,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Direct-solder THT,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+R54,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R49,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R52,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+Q6,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Direct-solder THT,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+R55,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R50,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R53,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+Q7,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Direct-solder THT,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+J8,EXTERNAL_RELAYS,B4P-VH(LF)(SN),Connector_JST:JST_VH_B4P-VH_1x04_P3.96mm_Vertical,False,Direct-solder THT,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+U10,SN74HCT08N,SN74HCT08N,Package_DIP:DIP-14_W7.62mm_LongPads,False,Direct-solder THT,
+C36,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+U16,SN74HCT08N,SN74HCT08N,Package_DIP:DIP-14_W7.62mm_LongPads,False,Direct-solder THT,
+C42,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+U12,CD74HCT221E,CD74HCT221E,Package_DIP:DIP-16_W7.62mm_LongPads,False,Direct-solder THT,"Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism."
+C38,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+R61,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C61,270n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Direct-solder THT,
+R65,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R62,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C62,270n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Direct-solder THT,
+R66,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+U13,CD74HCT221E,CD74HCT221E,Package_DIP:DIP-16_W7.62mm_LongPads,False,Direct-solder THT,"Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism."
+C39,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+R63,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C63,270n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Direct-solder THT,
+R67,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R64,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C64,270n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Direct-solder THT,
+R68,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R101,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R105,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+Q1,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Direct-solder THT,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+R102,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R106,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+Q2,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Direct-solder THT,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+R103,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R107,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+Q3,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Direct-solder THT,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+R104,1k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R108,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+Q4,VNP35N07-E,VNP35N07-E,Package_TO_SOT_THT:TO-220-3_Vertical,False,Direct-solder THT,"Protected low-side TO-220, INPUT / DRAIN / SOURCE. Tab is live drain. External branch fuses required; current/thermal/clamp targets need tests."
+J9,INJECTOR_LOW_SIDES,B8P-VH(LF)(SN),Connector_JST:JST_VH_B8P-VH_1x08_P3.96mm_Vertical,False,Direct-solder THT,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+U11,SN74HCT08N,SN74HCT08N,Package_DIP:DIP-14_W7.62mm_LongPads,False,Direct-solder THT,
+C37,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+U17,SN74HCT08N,SN74HCT08N,Package_DIP:DIP-14_W7.62mm_LongPads,False,Direct-solder THT,
+C43,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+U14,CD74HCT221E,CD74HCT221E,Package_DIP:DIP-16_W7.62mm_LongPads,False,Direct-solder THT,"Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism."
+C40,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+R81,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C81,68n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Direct-solder THT,
+R85,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R82,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C82,68n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Direct-solder THT,
+R86,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+U15,CD74HCT221E,CD74HCT221E,Package_DIP:DIP-16_W7.62mm_LongPads,False,Direct-solder THT,"Industrial part. Non-retriggerable. Pulse cutoff is an independent ceiling, not a qualified safety mechanism."
+C41,100n,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+R83,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C83,68n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Direct-solder THT,
+R87,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R84,100k 1%,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+C84,68n 5% FILM,,Capacitor_THT:C_Rect_L7.2mm_W5.0mm_P5.00mm,False,Direct-solder THT,
+R88,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R111,220R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R115,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R112,220R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R116,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R113,220R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R117,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R114,220R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R118,10k,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+J10,SMART_COIL_5V_LOGIC,B5P-VH(LF)(SN),Connector_JST:JST_VH_B5P-VH_1x05_P3.96mm_Vertical,False,Direct-solder THT,Polarized internal loom connector. Separate fused relay-switched actuator supply. See pinout.
+TP1,GND,,TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm,False,PCB feature,
+TP2,VIN_PROT,,TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm,False,PCB feature,
+TP3,+5V,,TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm,False,PCB feature,
+TP4,+3V3,,TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm,False,PCB feature,
+TP5,SAFE_N,,TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm,False,PCB feature,
+TP6,RUN_5V,,TestPoint:TestPoint_THTPad_D2.5mm_Drill1.2mm,False,PCB feature,
+H1,M3 NPTH,,MountingHole:MountingHole_3.2mm_M3,False,PCB feature,
+H2,M3 NPTH,,MountingHole:MountingHole_3.2mm_M3,False,PCB feature,
+H3,M3 NPTH,,MountingHole:MountingHole_3.2mm_M3,False,PCB feature,
+H4,M3 NPTH,,MountingHole:MountingHole_3.2mm_M3,False,PCB feature,
+J11,MAP,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Direct-solder THT,A3 internal locking connector; not sealed. See connector-pinout.csv
+J12,TPS,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Direct-solder THT,A3 internal locking connector; not sealed. See connector-pinout.csv
+J13,CLT,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Direct-solder THT,A3 internal locking connector; not sealed. See connector-pinout.csv
+J14,IAT,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Direct-solder THT,A3 internal locking connector; not sealed. See connector-pinout.csv
+J15,LAMBDA_WB,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Direct-solder THT,A3 internal locking connector; not sealed. See connector-pinout.csv
+J16,POSTCAT_BUF,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Direct-solder THT,A3 internal locking connector; not sealed. See connector-pinout.csv
+J17,CRANK,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Direct-solder THT,A3 internal locking connector; not sealed. See connector-pinout.csv
+J18,CAM,B3B-XH-A(LF)(SN),Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical,False,Direct-solder THT,A3 internal locking connector; not sealed. See connector-pinout.csv
+D23,P6KE24CA,P6KE24CA,Diode_THT:D_DO-15_P12.70mm_Horizontal,False,Direct-solder THT,
+L2,47uH input filter,RLB0914-470KL,Inductor_THT:L_Radial_D10.0mm_P5.00mm_Fastron_07P,False,Direct-solder THT,"Radial choke, 5mm pitch. 1.56A datasheet current; check derating. Not the converter switching inductor."
+R150,1R 0.5W damping,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,False,Direct-solder THT,Series RC damping branch across converter input; verify input impedance/load-step stability.
+C45,47u 63V,,Capacitor_THT:CP_Radial_D8.0mm_P3.50mm,False,Direct-solder THT,
+C46,100n 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,
+J19,POWER_RETURN,B2P-VH(LF)(SN),Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical,False,Direct-solder THT,Both pins are actuator return. Two adequately sized parallel wires to engine ground star; never use sensor wires for injector return.
+J20,SHIELD_BOND PH2,B2B-PH-K-S(LF)(SN),ECU:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical,False,Direct-solder THT,"Internal shield/lining bond only; no normal load current. Smaller keyed PH2 occupies the former VH2 courtyard. Housing PHR-2 with2 SPH-002T-P0.5S contacts replaces this connector's VH housing/contacts. H5 remains the designated chassis lug. Short strap, crimp, surge/RF/current/thermal and assembled fit remain unqualified. A6 conditional development draft, no fabrication/physical qualification."
+C47,4.7n 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,RF coupling of shield and signal ground; not galvanic isolation.
+R151,1M,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,"Static bleed, not a protective earth bond."
+C150,1n C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C151,1n C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C152,1n C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C153,1n C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C154,1n C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C155,1n C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C156,100p C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+C157,100p C0G 100V,,Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,"Cable-entry RF shunt to shield, before series input resistor. Validate edge delay and fault stress."
+H5,M3 SHIELD LUG,,MountingHole:MountingHole_3.2mm_M3_Pad,False,PCB feature,"Conductive plated lug, bolt and short broad braid to enclosure side stud; not a signal-ground mounting point."
+R152,47R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R153,47R,,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,
+R154,2k2 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,"Permanent carrier-side GPIO3 bias, retained when idle harness is unplugged. Exact leaded part and actual strap/eFuse behavior require acceptance."
+J21,ISOLATED_IDLE_LOGIC,B4B-PH-K-S(LF)(SN),ECU:JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical,False,Direct-solder THT,"PH4 carrier to XH4 IAC-DRAFT2 J1 harness, same1..4 order. Carrier5V feeds optical LED buffers, never actuator logic/coil. Harness/case access and source loading unqualified."
+U18,LM2903P,LM2903P,ECU:DIP-8_W7.62mm_LongPads,False,Direct-solder THT,"TI classic non-B PDIP8 direct solder, no socket. Common-mode and timing must use classic limits. Unused half has IN+ GND, IN- reference and OUT NC. B-version model cannot qualify this device. A6 conditional development draft, no fabrication/physical qualification."
+U19,MCP23008-E/P,MCP23008-E/P,ECU:DIP-18_W7.62mm_LongPads,False,Direct-solder THT,"PDIP18 direct solder, no socket. Address0x21; GP0/1/2 drive red/green/blue; unused GP3..7 NC and software low outputs. GP7 output-only. Full IODIR0 and IOCON4 readback contract unchanged. A6 conditional development draft, no fabrication/physical qualification."
+U20,MCP121-270E/TO,MCP121-270E/TO,ECU:TO-92_Inline_Wide,False,Direct-solder THT,"Candidate open-drain TO92 supervisor with100k pullup. DS20001906E: trip2.564..2.696V over-40..125C;25C trip max2.670V plus25C hysteresis max0.158V gives2.828V release threshold before80..180ms delay under stated load. Combining full-temperature trip max with25C hysteresis gives only a conditional2.854V estimate. Full-temperature/loaded-reset release, leakage, deep brownout and ramps remain holds. This is not a3.0V brownout monitor. A6 conditional development draft, no fabrication/physical qualification."
+J22,FLEX 12V SENSOR,B3P-VH(LF)(SN),ECU:JST_VH_B3P-VH_1x03_P3.96mm_Vertical,False,Direct-solder THT,"VH3 keyed internal connector. Deliberately not XH3 sensor5V. Housing/crimp/gland and sensor-side mapping unqualified. A6 conditional development draft, no fabrication/physical qualification."
+J23,ORDINARY RGB LED PH5,B5B-PH-K-S(LF)(SN),ECU:JST_PH_B5B-PH-K_1x05_P2.00mm_Vertical,False,Direct-solder THT,"Unique PH5, four contacts only; position5NC no wire. Pin1 is supplied through common R179330R, in addition to the three cathode resistors. Differs from PH4 idle, XH4 switch and VH3 flex. Internal harness to ordinary common-anode LED; not a sealed connector/window qualification. A6 conditional development draft, no fabrication/physical qualification."
+F3,PTC 100mA radial candidate,MF-R010,ECU:PTC_MF_R010,False,Direct-solder THT,"Sensor current, derating, hold/trip and supply9..18V at sensor remain acceptance holds; existing VIN_PROT is not an18V regulator. A6 conditional development draft, no fabrication/physical qualification."
+Q8,2N3904BU,2N3904BU,ECU:TO-92_Inline_Wide,False,Direct-solder THT,"onsemi E-B-C bondout, manually formed leads. Active-high base drive sinks LED cathode. Saturation/leakage/current/temperature and assembly need measurement. A6 conditional development draft, no fabrication/physical qualification."
+Q9,2N3904BU,2N3904BU,ECU:TO-92_Inline_Wide,False,Direct-solder THT,"onsemi E-B-C bondout, manually formed leads. Active-high base drive sinks LED cathode. Saturation/leakage/current/temperature and assembly need measurement. A6 conditional development draft, no fabrication/physical qualification."
+Q10,2N3904BU,2N3904BU,ECU:TO-92_Inline_Wide,False,Direct-solder THT,"onsemi E-B-C bondout, manually formed leads. Active-high base drive sinks LED cathode. Saturation/leakage/current/temperature and assembly need measurement. A6 conditional development draft, no fabrication/physical qualification."
+C160,100nF X7R 10% 50V,C315C104K5R5TA,ECU:C_Radial_KEMET_C315_L3.81mm_W2.54mm_P2.54mm,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification."
+C161,100nF 50V candidate,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,"Leaded local bypass; exact capacitor and physical lead/body fit pending. A6 conditional development draft, no fabrication/physical qualification."
+C162,100nF 50V candidate,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm,False,Direct-solder THT,"Leaded local bypass; exact capacitor and physical lead/body fit pending. A6 conditional development draft, no fabrication/physical qualification."
+C163,10uF 16V radial candidate,,ECU:CP_Radial_D8.0mm_P3.50mm,False,Direct-solder THT,"Local radial bulk D8/P3.5 candidate; exact leakage/ESR/temperature and lead fit pending. A6 conditional development draft, no fabrication/physical qualification."
+R155,750R 1% 0.6W,MRS25000C7500FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R156,750R 1% 0.6W,MRS25000C7500FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R157,27400R 1% 0.4W,MRS16000C2742FCT00,ECU:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical,False,Direct-solder THT," Compact ordinary leaded MRS16 candidate. Conditional branch dissipation, TCR, pulse/temperature and upright lead-form acceptance remain required. A6 conditional development draft, no fabrication/physical qualification. Candidate MRS16 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R158,24900R 1% 0.4W,MRS16000C2492FCT00,ECU:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical,False,Direct-solder THT," Compact ordinary leaded MRS16 candidate. Conditional branch dissipation, TCR, pulse/temperature and upright lead-form acceptance remain required. A6 conditional development draft, no fabrication/physical qualification. Candidate MRS16 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+C158,47pF C0G 5% 50V,C315C470J5G5TA,ECU:C_Radial_KEMET_C315_L3.81mm_W2.54mm_P2.54mm,False,Direct-solder THT,"Filter is upstream of hysteresis summing node. Comparator input parasitic capacitance still requires stability review. A6 conditional development draft, no fabrication/physical qualification."
+R159,4990R 1% 0.4W,MRS16000C4991FCT00,ECU:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical,False,Direct-solder THT," Compact ordinary leaded MRS16 candidate. Conditional branch dissipation, TCR, pulse/temperature and upright lead-form acceptance remain required. A6 conditional development draft, no fabrication/physical qualification. Candidate MRS16 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+C159,10nF C0G 5% 50V,C315C103J5G5TA,ECU:C_Radial_KEMET_C315_L3.81mm_W2.54mm_P2.54mm,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification."
+R160,330000R 1% 0.4W,MRS16000C3303FCT00,ECU:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical,False,Direct-solder THT," Compact ordinary leaded MRS16 candidate. Conditional branch dissipation, TCR, pulse/temperature and upright lead-form acceptance remain required. A6 conditional development draft, no fabrication/physical qualification. Candidate MRS16 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R161,100000R 1% 0.4W,MRS16000C1003FCT00,ECU:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical,False,Direct-solder THT," Compact ordinary leaded MRS16 candidate. Conditional branch dissipation, TCR, pulse/temperature and upright lead-form acceptance remain required. A6 conditional development draft, no fabrication/physical qualification. Candidate MRS16 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R162,4990R 1% 0.4W,MRS16000C4991FCT00,ECU:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical,False,Direct-solder THT," Compact ordinary leaded MRS16 candidate. Conditional branch dissipation, TCR, pulse/temperature and upright lead-form acceptance remain required. A6 conditional development draft, no fabrication/physical qualification. Candidate MRS16 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R163,2200R 1% 0.4W,MRS16000C2201FCT00,ECU:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical,False,Direct-solder THT," Compact ordinary leaded MRS16 candidate. Conditional branch dissipation, TCR, pulse/temperature and upright lead-form acceptance remain required. A6 conditional development draft, no fabrication/physical qualification. Candidate MRS16 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R164,4700R 1% 0.4W,MRS16000C4701FCT00,ECU:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical,False,Direct-solder THT," Compact ordinary leaded MRS16 candidate. Conditional branch dissipation, TCR, pulse/temperature and upright lead-form acceptance remain required. A6 conditional development draft, no fabrication/physical qualification. Candidate MRS16 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R165,47000R 1% 0.4W,MRS16000C4702FCT00,ECU:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical,False,Direct-solder THT," Compact ordinary leaded MRS16 candidate. Conditional branch dissipation, TCR, pulse/temperature and upright lead-form acceptance remain required. A6 conditional development draft, no fabrication/physical qualification. Candidate MRS16 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R166,750R 1% 0.6W,MRS25000C7500FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT,"Third series pullup resistor shares conditional sustained negative-fault dissipation; total2250R. Actual temperature/rating/assembly remains unqualified. A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R167,2200R 1% 0.6W,MRS25000C2201FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R168,100000R 1% 0.6W,MRS25000C1003FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R169,2200R 1% 0.6W,MRS25000C2201FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R170,100000R 1% 0.6W,MRS25000C1003FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R171,2200R 1% 0.6W,MRS25000C2201FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R172,100000R 1% 0.6W,MRS25000C1003FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R173,680R 1% 0.6W,MRS25000C6800FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R174,470R 1% 0.6W,MRS25000C4700FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R175,470R 1% 0.6W,MRS25000C4700FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R176,100R 1% 0.6W,MRS25000C1000FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R177,100R 1% 0.6W,MRS25000C1000FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+R178,100000R 1% 0.6W,MRS25000C1003FCT00,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,False,Direct-solder THT," A6 conditional development draft, no fabrication/physical qualification. Candidate MRS25 order code; availability, TCR/derating, formed body and thermal acceptance pending."
+D212,1N4148-TAP,1N4148-TAP,ECU:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,"Anode supply, cathode bias. Blocks positive signal fault from directly feeding sensor rail; not a general power-sequence guarantee. A6 conditional development draft, no fabrication/physical qualification."
+D213,1N4148-TAP,1N4148-TAP,ECU:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,False,Direct-solder THT,"Low-leakage clamp upstream of final divider resistor. Conditional cold Vf and hot leakage bounds must be checked; no full-temperature physical rating inferred. A6 conditional development draft, no fabrication/physical qualification."
+R179,330R 1% 0.4W,MRS16000C3300FCT00,ECU:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical,False,Direct-solder THT,"Common-anode supply series resistor. Prevents an anode/cathode harness-to-ground fault from bypassing every current-limiting resistor. At5.25V and-1%R, zero-drop upper bound16.07mA and0.0844W. Bounds require stated rail/resistance and do not qualify temperature, surge, faults to external supplies, brightness or assembled heat. A6 conditional development draft, no fabrication/physical qualification. Candidate MRS16 order code; availability, TCR/derating, formed body and thermal acceptance pending. Use the declared mounting side and footprint; physical forming, heat and fit acceptance pending."
+C164,100nF X7R 10% 50V,C315C104K5R5TA,ECU:C_Radial_KEMET_C315_L3.81mm_W2.54mm_P2.54mm,False,Direct-solder THT,"Additional local bypass at remote R163 pullup. Existing modeled3V3 rail is an assumed source; this does not establish target supply transients, parasitics or physical stability. A6 conditional development draft, no fabrication/physical qualification."

@@ -1,0 +1,174 @@
+{
+  "reviewed_at_utc": "2026-11-04T15:08:33.221960+00:00",
+  "own_head": "0b05d09257412b3b62ecaa293843a86ad3ad806a",
+  "speeduino_head": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+  "scope": "Read-only independent review of current own009 Session/Stream/INI and native pinned-Speeduino serial positive-control design. Frozen source; no parent source edits, proprietary application changes, identity substitution, external contacts or physical device use.",
+  "verdict": "No blocking current wire-contract defect found in the reviewed commands. Native protocol/revision/persistence probes pass; this does not establish unchanged TunerStudio online support. Historical own004 application evidence reaches Q then explicitly rejects controller identity before page traffic. Current own009 application reproduction and genuine-Speeduino positive control are owned by root and pending this report.",
+  "probe": {
+    "passed": true,
+    "discovery_responses": 7,
+    "page_read_bytes": 8192,
+    "maximum_M_frame_bytes": 269,
+    "split_boundaries": 268,
+    "full_runtime_wire_bytes": 647,
+    "crc_fixture": "cbf43926",
+    "burn_origin_stable": true,
+    "external_save_conflict": true,
+    "timeout_crc_no_execution": true,
+    "failed_burn_reply_stops_following_commands": true,
+    "storage_rejection_retains_active_tune": true,
+    "disconnect_drops_stage_but_next_M_lazy_opens": true
+  },
+  "probe_build": {
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I",
+      ".cache/engine/tuning-online-protocol-review/revision001/own-source/firmware/include",
+      ".cache/engine/tuning-online-protocol-review/revision001/protocol_probe.cpp",
+      "-o",
+      ".cache/engine/tuning-online-protocol-review/revision001/protocol-probe"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "probe_execution": {
+    "exit_code": 0,
+    "stderr": "",
+    "binary_sha256": "fa0466cc458d089b0e5157e6f472eb6d046bd0f3e128e17141180bd154c85b46",
+    "source_sha256": "62d08ca8b703f97c14072f302b750e3f53be6d1ee1f1d746de97c532633526e8"
+  },
+  "reviewed_contract": [
+    {
+      "item": "discovery and capability",
+      "own": "raw F returns ASCII002; framed F returns status00+002; I returns status00+CANID0; f00/fFF return000201000100; Q own009 matches INI.",
+      "speeduino": "Pinned F and f use protocol002/2. Native board advertises121-byte write factor and64-byte table factor; own256 factors describe own bounded implementation and need not match reference."
+    },
+    {
+      "item": "framing/endianness",
+      "own": "BE16 payload length, status-inclusive reflected CRC32 transmitted BE32; p/M offsets and lengths LE16; constant/runtime values little endian. Maximum M256 data uses269 wire bytes; full640 runtime uses647 wire bytes.",
+      "speeduino": "Same envelope, field order and page/output channel command forms in comms.cpp and reference INI."
+    },
+    {
+      "item": "page commands",
+      "own": "p/M use node0,page1; d returns BE32 page CRC; b returns04 only after backend commit succeeds. Strict range/length/read-only/reserved-byte checks before mutation.",
+      "speeduino": "p/M/d/b command letters and success/error codes match declared protocol forms. Upstream updates RAM at M and may defer storage at b; own staged/whole-tune behavior is an intentional semantic difference."
+    },
+    {
+      "item": "CAS/origin/persistence",
+      "own": "Mapped origin remains stable after successful burn, including page CRC. Backend expected revision advances separately. Existing-session external save conflicts permanently with84; storage-blocked84, transient allocation/contention85.",
+      "target_source": "engine_service.cpp98..107 persists under final revision check, activates/reset only after success; failure retains active calibration but storage fault/fence can stop outputs."
+    }
+  ],
+  "findings": [
+    {
+      "id": "REF-SERIAL-001",
+      "severity": "blocking positive-control precondition",
+      "source": [
+        "tools/speeduino_sim.cpp31..33",
+        "ArduinoNativeFake/src/serialSetup.h31..50"
+      ],
+      "finding": "Default fakeMega binds RX and TX to one stringstream. Fake available() reports absolute input end even after consumption; availableForWrite() reports output end (zero initially). Naive injection can echo TX into RX, spin on exhausted input or block all TX.",
+      "recommendation": "Keep default numerical benchmark unmodified. Opt-in adapter needs distinct bounded RX/TX queues with correct queue-length/room semantics."
+    },
+    {
+      "id": "REF-SERIAL-002",
+      "severity": "blocking positive-control precondition",
+      "source": [
+        "speeduino/comms.cpp124..127",
+        "speeduino/comms.cpp169..195",
+        "tools/speeduino_sim.cpp prepare_hal",
+        "tools/speeduino_sim_hal.cpp"
+      ],
+      "finding": "Production length/CRC readers busy-wait for missing bytes while millis() checks timeout. Deterministic clock freezes during loop(); a partial length/CRC can hang forever if bytes only arrive between loop calls.",
+      "recommendation": "Serial-only adapter needs concurrent RX and progressing time inside those waits. Characterize stopped-engine communication separately from numerical/timing benchmark; set wall baseline after setup to current virtual time."
+    },
+    {
+      "id": "REF-SERIAL-003",
+      "severity": "blocking positive-control precondition",
+      "source": [
+        "speeduino/comms_legacy.cpp142..144",
+        "lib/ArduinoFake/FakeMega.cpp181..189",
+        "ArduinoNativeFake/src/printSetupDetail.hpp"
+      ],
+      "finding": "Legacy raw F calls inherited Print::print(FlashString), whose fake sends directly to configured ostream. _Serial write overrides alone do not capture it.",
+      "recommendation": "Bind inherited Print output to actual adapter TX as well; execute production F path, never synthesize a discovery reply."
+    },
+    {
+      "id": "OWN-BOUNDARY-001",
+      "severity": "integration boundary / nonblocking source observation",
+      "source": [
+        "firmware/include/ecu/tuning_stream.hpp disconnect",
+        "firmware/include/ecu/tuning_session.hpp82"
+      ],
+      "finding": "Disconnect discards staging, but next p/M/d/b lazily opens latest backend without requiring raw F. Source CAS guarantees are per open session; they do not prove a client refreshed its cached page after reconnect. Independent probe confirms next M starts new origin at latest revision.",
+      "recommendation": "Actual app reconnect test should verify fresh page/cache synchronization before edits; keep claim limited to existing-session CAS. A stricter discovery-only mutation gate is a separate policy choice, not an identified cause of vendor rejection."
+    },
+    {
+      "id": "REF-QUIRK-001",
+      "severity": "reference fidelity",
+      "source": [
+        "speeduino/comms.cpp686..688"
+      ],
+      "finding": "Pinned I copies two CAN-ID bytes but transmits sizeof(serialVersion)=4, including trailing prior-buffer bytes.",
+      "recommendation": "Preserve upstream behavior in genuine reference; do not add this quirk to own I or normalize the reference reply."
+    },
+    {
+      "id": "DOC-001",
+      "severity": "documentation follow-up",
+      "source": [
+        "tuning/vendor-integration-request.md"
+      ],
+      "finding": "Unsent draft is stale at own005/4992-byte page/256-byte runtime while current implementation is own009/8192/640. Root already identified it.",
+      "recommendation": "Update concrete unsent packet after current app and positive-control results; keep historical own003/004 claims distinct."
+    }
+  ],
+  "primary_sources_verified": [
+    {
+      "url": "https://github.com/speeduino/speeduino/blob/9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20/speeduino/comms.cpp",
+      "role": "Pinned production command implementation; local pin source frozen and hashed."
+    },
+    {
+      "url": "https://github.com/speeduino/speeduino/blob/9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20/reference/speeduino.ini",
+      "role": "Pinned reference command definitions and identity; local source frozen and hashed."
+    },
+    {
+      "url": "https://tunerstudio.com/index.php?Itemid=38&id=24&option=com_content&view=article",
+      "role": "Official FAQ says hardware-vendor coordination is path for support of another ECU; not a promise of arbitrary-identity support."
+    },
+    {
+      "url": "https://www.efianalytics.com/TunerStudio/docs/EFI%20Analytics%20ECU%20Definition%20files.pdf",
+      "role": "Official public definition reference found via web; current fetch timed out. Prior local audit download retained separately; not used as a license grant or independently reread in this pass."
+    },
+    {
+      "url": "https://www.msextra.com/doc/pdf/Megasquirt_Serial_Protocol-2014-10-28.pdf",
+      "role": "Official protocol documentation located; cover limits applicability and contains restriction on other engine-management systems. Current own implementation review relies on pinned GPL Speeduino source, not a claim that this document licenses an independent ECU."
+    }
+  ],
+  "application_evidence_reviewed": {
+    "wire": "reports/engine/tuning-usb/application-wire.log",
+    "debug": "reports/engine/tuning-usb/application-debug.log",
+    "protocol_version_comparison": "reports/engine/tuning-usb/application-f002-comparison.json",
+    "historical_identity": "ESP32ECU DEV 004 INHIBITED (comparison also records own003)",
+    "observed": "F002/I/f00/fFF/Q cycles; debug contains explicit Unsupported Controller Firmware. No p/M/d/b/r in reviewed discovery wire.",
+    "independent_validation": "historical-application-wire-validation.json",
+    "request_count": 460,
+    "response_count": 460,
+    "explicit_unsupported_warnings": 92
+  },
+  "limits": [
+    "No current application run performed by this reviewer; root owns fresh own009 reproduction and genuine reference application exercise.",
+    "Backend probe is a typed memory fake, not real flash/file persistence or live plant. Target persistence/fence inspected only at source.",
+    "No physical USB enumeration, UART, GPIO or engine qualification. Native parser test cannot characterize driver overflow, boot/panic traffic, throughput or task timing.",
+    "No custom-controller vendor acceptance claim or arbitrary-identity workaround.",
+    "No proprietary app code, configuration internals or license controls modified."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "checked_date": "2026-11-03",
+  "speeduino": {
+    "url": "https://github.com/speeduino/speeduino",
+    "commit": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+    "local_checkout": "../speeduino",
+    "license": "GPL-2.0 source in external checkout; linked executable not distributed",
+    "scope": "Production non-UNIT_TEST setup/loop/decoder/schedulers in a deterministic native HAL, plus earlier fuel-kernel reference; not AVR emulation"
+  },
+  "modelica_mvem": {
+    "url": "https://github.com/modelica-3rdparty/Modelica-MVEM",
+    "commit": "57c7aa394d70bffe6106afb2703b92bc532a05d1",
+    "scope": "Verified unchanged air-path components through FMI/CVODE; local empirical pulse/fuel/ignition/free-shaft closure; uncalibrated research comparison"
+  },
+  "tcsi": {
+    "url": "https://github.com/nkymark/TCSISimTestbed",
+    "commit": "66a972d6c7206d258deb0c21b4cd6aded8a827e2",
+    "doi": "10.1109/MCS.2019.2961793",
+    "scope": "Source assessment only; MATLAB/Simulink unavailable"
+  },
+  "engine_sim": {
+    "url": "https://github.com/ange-yaghi/engine-sim",
+    "scope": "Assessed audio/response simulator; not used as engineering/tuning oracle"
+  },
+  "efi_analytics": {
+    "tunerstudio_version": "3.3.01",
+    "megalogviewer_hd_version": "4.6.14",
+    "tunerstudio_download": "https://www.efianalytics.com/TunerStudio/download/TunerStudioMS_v3.3.01.tar.gz",
+    "megalogviewer_download": "https://www.efianalytics.com/MegaLogViewerHD/download/MegaLogViewerHD_v4.6.14.tar.gz",
+    "definition_reference": "https://www.efianalytics.com/TunerStudio/docs/EFI%20Analytics%20ECU%20Definition%20files.pdf",
+    "archives": {
+      "TunerStudioMS_v3.3.01.tar.gz": {
+        "bytes": 67951826,
+        "sha256": "4f4781a6ff90127ef36672cc43d3edc78c4f61ef682dca38a02f9e17e652517f"
+      },
+      "MegaLogViewerHD_v4.6.14.tar.gz": {
+        "bytes": 12988588,
+        "sha256": "7468fd3b8fbb288b41d55fc5c7289205fa47b137361fab0d410b6854be963bce"
+      }
+    },
+    "scope": "Installed unchanged outside repository; free/unregistered GUI used; no commercial binaries redistributed"
+  }
+}

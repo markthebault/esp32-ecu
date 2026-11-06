@@ -1,0 +1,26 @@
+Independent SW2 analog polarity experiment normal-85-1000000000000.0
+* Assumed NPN/diode parameters, not manufacturer guarantees.
+.temp 85
+.model NPNCOND NPN(IS=1e-15 BF=40 BR=2 VAF=50 RB=100 RC=10 RE=1 CJE=10p CJC=5p TF=.5n TR=100n)
+.model CLAMP D(IS=2e-9 N=1.7 RS=1 CJO=3p TT=5n)
+Vrail rail 0 3.3
+Dfeed rail feed CLAMP
+Rbias feed sw 2200
+RbaseA sw mid 4990
+RbaseB mid b 4990
+Roff b 0 100k
+Rcollector rail c 4700
+Rprotect c gp 1000
+Ccollector c 0 10n
+Qinput c b 0 NPNCOND
+Iinput gp 0 -1u
+Dnegative 0 b CLAMP
+Rcontact sw 0 1000000000000.0
+.control
+set wr_singlescale
+set wr_vecnames
+op
+wrdata values.txt v(sw) v(b) v(c) v(gp) i(Vrail)
+quit
+.endc
+.end

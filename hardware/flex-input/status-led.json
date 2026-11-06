@@ -1,0 +1,351 @@
+{
+  "contract": "RGB-MCP21-DRAFT4",
+  "status": "circuit_concept_under_review_not_for_fabrication",
+  "intended_carrier": "A6_FLEX_RGB_HOLD_copy_of_A5",
+  "software_build": "compact_n16r8_flex_dev",
+  "address": 33,
+  "GP_high_is_on": true,
+  "unused_gpio_low": true,
+  "shared_bus_clock_hz": 100000,
+  "extra_bus_pullups": false,
+  "parts": [
+    {
+      "ref": "U19",
+      "value": "MCP23008-E/P",
+      "pins": {
+        "1": "LED_SCL",
+        "2": "LED_SDA",
+        "3": "GND",
+        "4": "GND",
+        "5": "+3V3",
+        "6": "LED_RESET_N",
+        "7": null,
+        "8": null,
+        "9": "GND",
+        "10": "LED_GP0",
+        "11": "LED_GP1",
+        "12": "LED_GP2",
+        "13": null,
+        "14": null,
+        "15": null,
+        "16": null,
+        "17": null,
+        "18": "+3V3"
+      },
+      "mpn": "MCP23008-E/P",
+      "note": "PDIP18 direct solder, no socket. Address0x21; GP0/1/2 drive red/green/blue; unused GP3..7 NC and software low outputs. GP7 output-only. Full IODIR0 and IOCON4 readback contract unchanged."
+    },
+    {
+      "ref": "U20",
+      "value": "MCP121-270E/TO",
+      "pins": {
+        "1": "LED_RESET_N",
+        "2": "+3V3",
+        "3": "GND"
+      },
+      "mpn": "MCP121-270E/TO",
+      "note": "Candidate open-drain TO92 supervisor with100k pullup. DS20001906E: trip2.564..2.696V over-40..125C;25C trip max2.670V plus25C hysteresis max0.158V gives2.828V release threshold before80..180ms delay under stated load. Combining full-temperature trip max with25C hysteresis gives only a conditional2.854V estimate. Full-temperature/loaded-reset release, leakage, deep brownout and ramps remain holds. This is not a3.0V brownout monitor."
+    },
+    {
+      "ref": "J23",
+      "value": "ORDINARY RGB LED PH5",
+      "pins": {
+        "1": "LED_5V",
+        "2": "LED_RED_K",
+        "3": "LED_GREEN_K",
+        "4": "LED_BLUE_K",
+        "5": null
+      },
+      "mpn": "B5B-PH-K-S(LF)(SN)",
+      "note": "Unique PH5, four contacts only; position5NC no wire. Pin1 is supplied through common R179330R, in addition to the three cathode resistors. Differs from PH4 idle, XH4 switch and VH3 flex. Internal harness to ordinary common-anode LED; not a sealed connector/window qualification."
+    },
+    {
+      "ref": "R179",
+      "value": "330R 1% 0.4W",
+      "pins": {
+        "1": "+5V",
+        "2": "LED_5V"
+      },
+      "mpn": "",
+      "ohm": 330,
+      "mounting": {
+        "side": "F.Cu",
+        "orientation": "upright",
+        "footprint": "R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical",
+        "candidate_mpn": "MRS16000C3300FCT00",
+        "dimension_source": "https://www.vishay.com/docs/28724/mrs16m25.pdf",
+        "manufacturer_max_body_mm": [
+          3.6,
+          1.6
+        ],
+        "rated_dissipation_P70_w": 0.4,
+        "physical_fit_qualified": false,
+        "thermal_qualification": false,
+        "note": "Rated power applies only with permissible film temperature. Actual forming, soldering, heat and case fit remain holds. Back-mount attempts were not accepted."
+      },
+      "note": "Common-anode supply series resistor. Prevents an anode/cathode harness-to-ground fault from bypassing every current-limiting resistor. At5.25V and-1%R, zero-drop upper bound16.07mA and0.0844W. Bounds require stated rail/resistance and do not qualify temperature, surge, faults to external supplies, brightness or assembled heat."
+    },
+    {
+      "ref": "Q8",
+      "value": "2N3904BU",
+      "pins": {
+        "1": "GND",
+        "2": "LED_RED_B",
+        "3": "LED_RED_COL"
+      },
+      "mpn": "2N3904BU",
+      "note": "onsemi E-B-C bondout, manually formed leads. Active-high base drive sinks LED cathode. Saturation/leakage/current/temperature and assembly need measurement."
+    },
+    {
+      "ref": "R167",
+      "value": "2200R 1% 0.6W",
+      "pins": {
+        "1": "LED_GP0",
+        "2": "LED_RED_B"
+      },
+      "mpn": "",
+      "note": "",
+      "ohm": 2200
+    },
+    {
+      "ref": "R168",
+      "value": "100000R 1% 0.6W",
+      "pins": {
+        "1": "LED_RED_B",
+        "2": "GND"
+      },
+      "mpn": "",
+      "note": "",
+      "ohm": 100000
+    },
+    {
+      "ref": "Q9",
+      "value": "2N3904BU",
+      "pins": {
+        "1": "GND",
+        "2": "LED_GREEN_B",
+        "3": "LED_GREEN_COL"
+      },
+      "mpn": "2N3904BU",
+      "note": "onsemi E-B-C bondout, manually formed leads. Active-high base drive sinks LED cathode. Saturation/leakage/current/temperature and assembly need measurement."
+    },
+    {
+      "ref": "R169",
+      "value": "2200R 1% 0.6W",
+      "pins": {
+        "1": "LED_GP1",
+        "2": "LED_GREEN_B"
+      },
+      "mpn": "",
+      "note": "",
+      "ohm": 2200
+    },
+    {
+      "ref": "R170",
+      "value": "100000R 1% 0.6W",
+      "pins": {
+        "1": "LED_GREEN_B",
+        "2": "GND"
+      },
+      "mpn": "",
+      "note": "",
+      "ohm": 100000
+    },
+    {
+      "ref": "Q10",
+      "value": "2N3904BU",
+      "pins": {
+        "1": "GND",
+        "2": "LED_BLUE_B",
+        "3": "LED_BLUE_COL"
+      },
+      "mpn": "2N3904BU",
+      "note": "onsemi E-B-C bondout, manually formed leads. Active-high base drive sinks LED cathode. Saturation/leakage/current/temperature and assembly need measurement."
+    },
+    {
+      "ref": "R171",
+      "value": "2200R 1% 0.6W",
+      "pins": {
+        "1": "LED_GP2",
+        "2": "LED_BLUE_B"
+      },
+      "mpn": "",
+      "note": "",
+      "ohm": 2200
+    },
+    {
+      "ref": "R172",
+      "value": "100000R 1% 0.6W",
+      "pins": {
+        "1": "LED_BLUE_B",
+        "2": "GND"
+      },
+      "mpn": "",
+      "note": "",
+      "ohm": 100000
+    },
+    {
+      "ref": "R173",
+      "value": "680R 1% 0.6W",
+      "pins": {
+        "1": "LED_RED_K",
+        "2": "LED_RED_COL"
+      },
+      "mpn": "",
+      "note": "",
+      "ohm": 680
+    },
+    {
+      "ref": "R174",
+      "value": "470R 1% 0.6W",
+      "pins": {
+        "1": "LED_GREEN_K",
+        "2": "LED_GREEN_COL"
+      },
+      "mpn": "",
+      "note": "",
+      "ohm": 470
+    },
+    {
+      "ref": "R175",
+      "value": "470R 1% 0.6W",
+      "pins": {
+        "1": "LED_BLUE_K",
+        "2": "LED_BLUE_COL"
+      },
+      "mpn": "",
+      "note": "",
+      "ohm": 470
+    },
+    {
+      "ref": "R176",
+      "value": "100R 1% 0.6W",
+      "pins": {
+        "1": "I2C_SDA",
+        "2": "LED_SDA"
+      },
+      "mpn": "",
+      "note": "",
+      "ohm": 100
+    },
+    {
+      "ref": "R177",
+      "value": "100R 1% 0.6W",
+      "pins": {
+        "1": "I2C_SCL",
+        "2": "LED_SCL"
+      },
+      "mpn": "",
+      "note": "",
+      "ohm": 100
+    },
+    {
+      "ref": "R178",
+      "value": "100000R 1% 0.6W",
+      "pins": {
+        "1": "+3V3",
+        "2": "LED_RESET_N"
+      },
+      "mpn": "",
+      "note": "",
+      "ohm": 100000
+    },
+    {
+      "ref": "C161",
+      "value": "100nF 50V candidate",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "mpn": "",
+      "note": "Leaded local bypass; exact capacitor and physical lead/body fit pending.",
+      "farad": 1e-07
+    },
+    {
+      "ref": "C162",
+      "value": "100nF 50V candidate",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "mpn": "",
+      "note": "Leaded local bypass; exact capacitor and physical lead/body fit pending.",
+      "farad": 1e-07
+    },
+    {
+      "ref": "C163",
+      "value": "10uF 16V radial candidate",
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "mpn": "",
+      "note": "Local radial bulk D8/P3.5 candidate; exact leakage/ESR/temperature and lead fit pending.",
+      "farad": 1e-05
+    }
+  ],
+  "external_led": {
+    "mpn": "WP154A4SEJ3VBDZGW/CA",
+    "configuration": "common_anode",
+    "pins": {
+      "1": "red_cathode",
+      "2": "common_anode",
+      "3": "blue_cathode",
+      "4": "green_cathode"
+    },
+    "J23_to_led_pin": {
+      "1": "2",
+      "2": "1",
+      "3": "4",
+      "4": "3",
+      "5": null
+    },
+    "source": "https://www.kingbrightusa.com/images/catalog/SPEC/WP154A4SEJ3VBDZGW-CA.pdf",
+    "source_revision": "DSAN1168_V7A_2024-11-02",
+    "optical_brightness_and_sealing_qualified": false
+  },
+  "electrical_scope": {
+    "normal_3v3_rail_v": [
+      3.0,
+      3.6
+    ],
+    "mcp23008_low_voltage_table_temperature_c": [
+      -40,
+      85
+    ],
+    "mcp23008_extended_temperature_note": "DS20001919I-40..125C DC table requires4.5..5.5V. E/P ordering alone does not establish3.3V operation over that range, nor a carrier temperature rating.",
+    "supervisor_source": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/MCP102-Data-Sheet-DS20001906.pdf",
+    "supervisor_source_revision": "DS20001906E_2023",
+    "supervisor_release_guaranteed_over_temperature": false,
+    "loaded_output_readback_note": "MCP23008 VOH table test points do not establish loaded GPIO-high readback at3.0..3.6V with the approximately1mA2.2k NPN base drive. GPIO VIH is0.8VDD; neither brightness nor high-pin verification over rail/temperature follows from interpolation of the1.8V/400uA and4.5V/3mA rows. Actual loaded voltage, input readback and optical behavior remain holds.",
+    "normal_rail_or_temperature_is_not_a_physical_carrier_rating": true
+  },
+  "harness_supply_revision": {
+    "parent_contract": "RGB-MCP21-DRAFT2",
+    "parent_source_sha256": "eafa5b5974f0f21cdad9bf7bd71ca728558dd3a8c3a85613a4b403d972cdfe00",
+    "added_reference": "R179",
+    "changed_existing_pin": {
+      "J23": {
+        "1": {
+          "old": "+5V",
+          "new": "LED_5V"
+        }
+      }
+    },
+    "all_other_existing_pins_unchanged": true,
+    "normal_brightness_with_shared_series_resistor_qualified": false,
+    "vehicle_or_arbitrary_harness_fault_protection_rating": false,
+    "supersedes_guard_candidate": "RGB-MCP21-DRAFT3",
+    "superseded_source_sha256": "027f4e9e082cc0c12166024bf1cd5efa5082788144df6903fa9fbe8d31d50c86"
+  },
+  "holds": [
+    "Candidate exact passives, current/voltage/bondout, reset/partial power and I2C loading require electrical and fit checks",
+    "No optical or sealed-window test; GP outputs may retain green after CPU/bus failure",
+    "Carrier rail/thermal headroom and actual ESP32 radio peaks remain unqualified",
+    "MCP121-270 selected after300 variant could remain reset at low normal rail; full-temperature/loaded-reset release remains unqualified and threshold hysteresis limits are specified at25C",
+    "MCP23008 loaded-high GPIO readback at3.3V and current NPN drive is not guaranteed by the tabulated VOH test points; measure loaded GPIO voltage/readback/brightness across actual rail and temperature",
+    "R179 adds a conditional resistor bound for ground faults, with lower normal LED current; no physical brightness, thermal, reverse LED or external-supply fault qualification",
+    "Conditional DC/capture models exist; final native circuit/copper and physical tests remain incomplete"
+  ],
+  "engine_outputs_enabled": false
+}

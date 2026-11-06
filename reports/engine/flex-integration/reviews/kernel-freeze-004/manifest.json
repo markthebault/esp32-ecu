@@ -1,0 +1,119 @@
+{
+  "utc": "2026-11-04T18:43:02.451574+00:00",
+  "files": [
+    {
+      "path": "firmware/include/ecu/engine.hpp",
+      "sha256": "96782e593914078d96b2229c381d7de633c1cf2b676f7c70979b16651ca4d6fa",
+      "bytes": 29685
+    },
+    {
+      "path": "firmware/include/ecu/flex_fuel.hpp",
+      "sha256": "6bda00e1df16c9782245e74cabe67f4a4da75420b17e82a7cba80898e4ad2a38",
+      "bytes": 14079
+    },
+    {
+      "path": "firmware/include/ecu/flex_engine.hpp",
+      "sha256": "9291bc341bcfef8a180e3960f958b4060bcbbab4ab588f726d7442047eeac5c0",
+      "bytes": 5416
+    },
+    {
+      "path": "firmware/include/ecu/flex_runtime.hpp",
+      "sha256": "abacf194ac5d0fc0b0512a351ca988f9aa12fee80adb6a9d73da9f9f2d2aa6f2",
+      "bytes": 5961
+    },
+    {
+      "path": "firmware/include/ecu/flex_json.hpp",
+      "sha256": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45",
+      "bytes": 6399
+    },
+    {
+      "path": "firmware/include/ecu/flex_runtime_json.hpp",
+      "sha256": "e125f511ad9b9b0e9a2ce8618c11decc6cf25c4a94f81506b7b44de2b606f99f",
+      "bytes": 6149
+    },
+    {
+      "path": "firmware/include/ecu/engine_json.hpp",
+      "sha256": "e2ce934844850c3096db7acd974300521ec414f6d24cce1936f7d526a65eca37",
+      "bytes": 19796
+    },
+    {
+      "path": "firmware/tests/engine_flex_test.cpp",
+      "sha256": "090b879fe59153534b46b09f5fe1a6f31f0fc973e3f8d4acce013bd8d2f2c0f1",
+      "bytes": 9366
+    },
+    {
+      "path": "firmware/include/ecu/engine_log.hpp",
+      "sha256": "c17b1d3435879e4ac0fcb1b4621b85f58d9975d044952fc0b083284e56e1a4fc",
+      "bytes": 5418,
+      "scope": "retention/documented external integration context only"
+    },
+    {
+      "path": "web/engine_logger.js",
+      "sha256": "05d6ebfa8c020a6c105b23d13b19f2546331506cfc9c6a11706efc9f2a9ce337",
+      "bytes": 20734,
+      "scope": "retention/documented external integration context only"
+    },
+    {
+      "path": "web/flex_fuel_logic.js",
+      "sha256": "898b66548568ac003bef9d59dbf0bf23f085b2a4393fad4c9c0f36159a56f58b",
+      "bytes": 10727,
+      "scope": "retention/documented external integration context only"
+    }
+  ],
+  "include_dependencies": {
+    "firmware/include/ecu/capture_clock.hpp": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+    "firmware/include/ecu/config.hpp": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39",
+    "firmware/include/ecu/control.hpp": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b",
+    "firmware/include/ecu/engine.hpp": "96782e593914078d96b2229c381d7de633c1cf2b676f7c70979b16651ca4d6fa",
+    "firmware/include/ecu/engine_binding.hpp": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9",
+    "firmware/include/ecu/engine_data.hpp": "1e9773a82c824839fa6d8fee2700840f993305424c7257a9b809cf070d11ada6",
+    "firmware/include/ecu/engine_data_json.hpp": "1928528b4f21dec94bd93df9c492314c07fbcc6daf1e7c6bbe5fa0c88aa911d8",
+    "firmware/include/ecu/engine_json.hpp": "e2ce934844850c3096db7acd974300521ec414f6d24cce1936f7d526a65eca37",
+    "firmware/include/ecu/engine_limits.hpp": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d",
+    "firmware/include/ecu/engine_log.hpp": "c17b1d3435879e4ac0fcb1b4621b85f58d9975d044952fc0b083284e56e1a4fc",
+    "firmware/include/ecu/engine_log_json.hpp": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6",
+    "firmware/include/ecu/engine_log_msl.hpp": "c44439aa9f3e863bb0c4468f8cfa10912d4f52a32f4a9d32714f483a5a17ef5c",
+    "firmware/include/ecu/engine_log_service.hpp": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f",
+    "firmware/include/ecu/engine_phase.hpp": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27",
+    "firmware/include/ecu/engine_radio.hpp": "70413d02362a1f5f960bbdc76bf1e789befca72e47a93887effd006b522b7758",
+    "firmware/include/ecu/engine_scheduler.hpp": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a",
+    "firmware/include/ecu/engine_service.hpp": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0",
+    "firmware/include/ecu/engine_storage.hpp": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e",
+    "firmware/include/ecu/engine_target.hpp": "0cfcef7fa43cadaf105da094a4524aded50dcff0f88ddb6449799155e63b25b0",
+    "firmware/include/ecu/engine_tuning.hpp": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6",
+    "firmware/include/ecu/espnow.hpp": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc",
+    "firmware/include/ecu/espnow_protocol.hpp": "634bd5a99ddd8c682a20959720f5599a0e39f20c25d8cadf4b3e8024eca25b6a",
+    "firmware/include/ecu/flex_engine.hpp": "9291bc341bcfef8a180e3960f958b4060bcbbab4ab588f726d7442047eeac5c0",
+    "firmware/include/ecu/flex_fuel.hpp": "6bda00e1df16c9782245e74cabe67f4a4da75420b17e82a7cba80898e4ad2a38",
+    "firmware/include/ecu/flex_json.hpp": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45",
+    "firmware/include/ecu/flex_runtime.hpp": "abacf194ac5d0fc0b0512a351ca988f9aa12fee80adb6a9d73da9f9f2d2aa6f2",
+    "firmware/include/ecu/flex_runtime_json.hpp": "e125f511ad9b9b0e9a2ce8618c11decc6cf25c4a94f81506b7b44de2b606f99f",
+    "firmware/include/ecu/heap_object.hpp": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51",
+    "firmware/include/ecu/idle_command.hpp": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310",
+    "firmware/include/ecu/idle_control.hpp": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+    "firmware/include/ecu/idle_pwm.hpp": "392ef3640df5e3ea64c465df7a6815c2272ead28570626bc9540aab8b58a8c42",
+    "firmware/include/ecu/idle_pwm_json.hpp": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b",
+    "firmware/include/ecu/json.hpp": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+    "firmware/include/ecu/load_json.hpp": "04048aac889a77b29beac77ba4d43b93694fe61a23a089bb2e09d87ec72de218",
+    "firmware/include/ecu/load_model.hpp": "4ebcebe554ebf29f4dc7db29a8a51302d3ebbc8647ba9f73d5278ef85503074b",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/include/ecu/secondary_json.hpp": "54653a90fdbadeeebe926980bacbb25e54b6f61f93e83d4b97be5bf260a4c497",
+    "firmware/include/ecu/secondary_tables.hpp": "08aa9b41b7c424b3168d34350a31477ef2e44a3439209bf9cb38e0e151ef3613",
+    "firmware/include/ecu/switch_acquisition.hpp": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb",
+    "firmware/include/ecu/switch_service.hpp": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e",
+    "firmware/include/ecu/switch_transport.hpp": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932",
+    "firmware/include/ecu/timing_executor.hpp": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db",
+    "firmware/include/ecu/transient_enrichment.hpp": "75250d519305aa604ebefb4a177ec64cf2c38d14a3d31f60e99cc88322052911",
+    "firmware/include/ecu/transient_json.hpp": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88",
+    "firmware/include/ecu/trigger_log.hpp": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451",
+    "firmware/include/ecu/trigger_log_json.hpp": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58",
+    "firmware/include/ecu/tuning_document.hpp": "96e6e5bfde427f5f7d0e4ad8959b4b5db534f31079754cd0118279e17b9ce957",
+    "firmware/include/ecu/tuning_layout.hpp": "2dffbc95204918efe2fde6d6ee98438978ddd91d4f49c65bcb7fde70854b62f5",
+    "firmware/include/ecu/tuning_live.hpp": "6d9dc7b328631e20c1e99d513efdebec6b9448532baaab26361f7dc8b4f873e1",
+    "firmware/include/ecu/tuning_session.hpp": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e",
+    "firmware/include/ecu/tuning_stream.hpp": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042",
+    "firmware/include/ecu/web_config.hpp": "984d5447a6f07e626987819d2338489aa25004a15b529c460c29bde497e7a019"
+  }
+}

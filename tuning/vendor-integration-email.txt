@@ -1,0 +1,22 @@
+To: support@efianalytics.com
+Subject: Independent ESP32-S3 controller: supported TunerStudio integration
+
+Hello EFI Analytics,
+
+We are developing an open-source ESP32-S3 bench ECU research controller and would like supported TunerStudio integration under our own controller identity.
+
+Our current identity is ESP32ECU DEV 011 INHIBITED. The definition has one12288-byte calibration page,1152-byte runtime, MS-envelope framing, serial protocol002 and256-byte chunks. Target physical engine writes remain compiled out.
+
+Unmodified TunerStudio MS Lite3.3.01 parses the definition and edits/saves its MSQs offline. A fresh own011 online trial completes1685 correctly framed/CRC-validated discovery exchanges but reports337 unsupported-firmware warnings before any page/runtime/write/burn request. The same JAR previously completed online reads/edit/burn/MSQ with a separate genuine pinned production Speeduino fixture. We do not use that identity for our controller.
+
+Could you advise the supported onboarding/identity-registration process, applicable terms and protocol/definition requirements for an independent controller? Is an own-controller transport/driver or supported TunerStudio integration available, and which additional checks do you need?
+
+The prepared diagnostic ZIP includes our current INI, raw host capture and analysis, actual application files and reproducible evidence. No proprietary application executable, registration data or vendor PDF is included.
+
+Project: https://github.com/markthebault/esp32-ecu
+Branch: feature/engine-development-sil
+Details: tuning/vendor-integration-request.md and docs/engine-tuning-application.md
+
+Thank you.
+
+[LOCAL DRAFT: not sent.]

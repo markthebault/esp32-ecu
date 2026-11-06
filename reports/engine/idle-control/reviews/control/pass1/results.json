@@ -1,0 +1,44 @@
+{
+  "probe": {
+    "compile_command": [
+      "c++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-g",
+      "-O1",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/idle-control-review/pass1/include",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-control-review/pass1/probe.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-control-review/pass1/probe"
+    ],
+    "compile_returncode": 0,
+    "compile_stderr": "",
+    "run_returncode": 0,
+    "stdout": "fresh_throttle_band tps=2.25 entry_threshold=2 state=closed_loop duty=20\nchanged_limit before=80 configured_max=25 actual=79 flags=67\nnonzero_disabled_recovery high_us=5000 fault=none recoveries=1\nlate_boundary actual_write=10020 stats_observed=10000 lateness=20 high=1\nmixed_applied_observation sequence=2 tune=2 actual_latched_high=5000 sequence2_requested_high=2500\nnonfinite_validation_passes=135\nsupply_boundary_cases=8\ninvalid_input_cases=12 freshness_boundary_cases=3\nnormalized_integral_period_cases=3\nantiwindup_no_progress hard_limit=0 target=900 rpm=800 duty=20 integral=0 flags=135\nantiwindup_no_progress hard_limit=1 target=2500 rpm=600 duty=20 integral=0 flags=135\n",
+    "stderr": ""
+  },
+  "properties": {
+    "compile_command": [
+      "c++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-g",
+      "-O1",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/idle-control-review/pass1/include",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-control-review/pass1/properties.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-control-review/pass1/properties"
+    ],
+    "compile_returncode": 0,
+    "compile_stderr": "",
+    "run_returncode": 0,
+    "stdout": "random_controller_samples=900000 constant_pwm_cases=25 write_failure_cases=2 invalid_pwm_cases=12 all_passed\n",
+    "stderr": ""
+  }
+}

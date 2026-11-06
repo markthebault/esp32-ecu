@@ -1,0 +1,72 @@
+{
+  "cause": "Native fixture linked read-only upstream coverage-instrumented dependency archives; libgcov wrote generated coverage data on normal exit",
+  "tracked_source_changed": false,
+  "numerical_fixtures_changed": false,
+  "generated_files_touched": [
+    {
+      "path": ".pio/build/native_code_coverage/libcb2/ArduinoNativeFake/streamSetup.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.914592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/libcb2/ArduinoNativeFake/functionSetup.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/libcb2/ArduinoNativeFake/serialSetup.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.914592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/SimpleArduinoFake.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/PrintFake.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/EEPROMFake.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/SPIFake.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/FunctionFake.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/WireFake.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/ClientFake.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/SerialFake.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.917592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/StreamFake.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/arduino/noniso.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/arduino/IPAddress.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/lib012/SimpleArduinoFake/arduino/WString.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+    },
+    {
+      "path": ".pio/build/native_code_coverage/libc1b/FastCRC/FastCRCsw.gcda",
+      "mtime_utc": "2026-11-04T16:57:29.916592+00:00"
+    }
+  ],
+  "mitigation": "All subsequent executable probes must use GCOV_PREFIX under this review directory, GCOV_PREFIX_STRIP=0. No guessed restoration or deletion of preexisting generated coverage."
+}

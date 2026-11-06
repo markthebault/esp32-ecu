@@ -1,0 +1,621 @@
+{
+  "compact_n16r8_web": {
+    "elf_sha256": "8bcac74ea53bce7829d3c3fa5145a03962559ad4ccafd918e901388f8fd6d99a",
+    "binary_sha256": "9216f3de1d4ca43e1133f819bfcd614b832dd4ebe0340f1cc74176b6fdd6e212",
+    "static_internal_data_bss_bytes": 156276,
+    "iram_code_bytes": 133623,
+    "entry_frames": [
+      {
+        "name": "std::unique_ptr<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text, ecu::HeapObjectDelete<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text> > ecu::heap_object<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text>()",
+        "address": "0x4200c414",
+        "entry_bytes": "364100",
+        "frame_bytes": 32,
+        "code_bytes": 36
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "address": "0x40375b20",
+        "entry_bytes": "360101",
+        "frame_bytes": 128,
+        "code_bytes": 3953
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::on_trigger_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "address": "0x403758f4",
+        "entry_bytes": "36c100",
+        "frame_bytes": 96,
+        "code_bytes": 554
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::run(void*)",
+        "address": "0x42020c20",
+        "entry_bytes": "36c11c",
+        "frame_bytes": 3680,
+        "code_bytes": 14878
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+        "address": "0x40376a94",
+        "entry_bytes": "36e100",
+        "frame_bytes": 112,
+        "code_bytes": 14221
+      },
+      {
+        "name": "ecu::engine_tuning::(anonymous namespace)::run(void*)",
+        "address": "0x4202746c",
+        "entry_bytes": "366102",
+        "frame_bytes": 304,
+        "code_bytes": 459
+      },
+      {
+        "name": "ecu::engine_service::(anonymous namespace)::persist_prepared(ecu::engine::Tune const&, unsigned long, std::unique_ptr<char, void (*)(void*)>, char const*&)",
+        "address": "0x420104f8",
+        "entry_bytes": "36e102",
+        "frame_bytes": 368,
+        "code_bytes": 409
+      },
+      {
+        "name": "ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)",
+        "address": "0x420168a8",
+        "entry_bytes": "368100",
+        "frame_bytes": 64,
+        "code_bytes": 464
+      },
+      {
+        "name": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+        "address": "0x420145ac",
+        "entry_bytes": "36a10a",
+        "frame_bytes": 1360,
+        "code_bytes": 1322
+      },
+      {
+        "name": "void ecu::tuning::Stream::feed<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&>(unsigned char const*, unsigned int, unsigned long long, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+        "address": "0x42027240",
+        "entry_bytes": "36a102",
+        "frame_bytes": 336,
+        "code_bytes": 554
+      },
+      {
+        "name": "void ecu::tuning::Stream::send<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(unsigned char const*, unsigned int, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+        "address": "0x42024f18",
+        "entry_bytes": "364100",
+        "frame_bytes": 32,
+        "code_bytes": 72
+      },
+      {
+        "name": "void ecu::tuning::Stream::error<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(unsigned char, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+        "address": "0x420271c4",
+        "entry_bytes": "366102",
+        "frame_bytes": 304,
+        "code_bytes": 38
+      },
+      {
+        "name": "void ecu::tuning::Stream::expire<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&>(unsigned long long, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+        "address": "0x420271ec",
+        "entry_bytes": "364100",
+        "frame_bytes": 32,
+        "code_bytes": 83
+      },
+      {
+        "name": "void ecu::tuning::Stream::framed<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(ecu::tuning::Reply const&, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+        "address": "0x42027160",
+        "entry_bytes": "366102",
+        "frame_bytes": 304,
+        "code_bytes": 100
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+        "address": "0x42020248",
+        "entry_bytes": "36e112",
+        "frame_bytes": 2416,
+        "code_bytes": 2519
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+        "address": "0x4201ad90",
+        "entry_bytes": "364100",
+        "frame_bytes": 32,
+        "code_bytes": 75
+      },
+      {
+        "name": "ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}::operator()(unsigned char const*, unsigned int) const",
+        "address": "0x42024e90",
+        "entry_bytes": "364100",
+        "frame_bytes": 32,
+        "code_bytes": 136
+      },
+      {
+        "name": "app_main",
+        "address": "0x42003758",
+        "entry_bytes": "364135",
+        "frame_bytes": 6816,
+        "code_bytes": 2020
+      }
+    ],
+    "ISR_state_placement": [
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::cam_context",
+        "address": "0x3fca7e08",
+        "bytes": 1,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::idle_output",
+        "address": "0x3fcabf00",
+        "bytes": 1,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::capture_clock",
+        "address": "0x3fcabee8",
+        "bytes": 24,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::idle_executor",
+        "address": "0x3fcabf08",
+        "bytes": 240,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::trigger_clock",
+        "address": "0x3fca7e98",
+        "bytes": 24,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::external_epoch",
+        "address": "0x3fca7e88",
+        "bytes": 4,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::installed_alarm",
+        "address": "0x3fca7e80",
+        "bytes": 8,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::trigger_capture",
+        "address": "0x3fca7eb0",
+        "bytes": 16440,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::configuration_hold",
+        "address": "0x3fcb2910",
+        "bytes": 1,
+        "section": ".dram0.bss"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::lock",
+        "address": "0x3fca7e90",
+        "bytes": 8,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::timer",
+        "address": "0x3fcb2940",
+        "bytes": 4,
+        "section": ".dram0.bss"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::output",
+        "address": "0x3fca7e8c",
+        "bytes": 4,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::executor",
+        "address": "0x3fcabff8",
+        "bytes": 5456,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::measured",
+        "address": "0x3fca7e10",
+        "bytes": 112,
+        "section": ".dram0.data"
+      }
+    ],
+    "engine_dummy_flag": false,
+    "idle_physical_flag_explicitly_enabled": false,
+    "selected_board_flag": false,
+    "compile_command_sha256": "eedc58a14442937b9fe48dc94e1d5a1147d162e5c8f7d0777341581965c4010b",
+    "closure": {
+      "path": ".cache/engine/idle-owner-review/final/isr-selected/closure.json",
+      "sha256": "201ca4b0b175a0d1980c2de620a7c1618c2ff294e61d59b5756e82b991ab2168",
+      "roots": 5,
+      "functions": 30,
+      "flash_literals": 0,
+      "unclassified_flash_pointers": 0,
+      "external": [],
+      "passed": true
+    }
+  },
+  "compact_a3_web": {
+    "elf_sha256": "e1ce9d980ad3e71d1953232584275b1e76a3926e93342524dbc42776d753f621",
+    "binary_sha256": "fea0d1a33415b22ec21afea5de42853e4ed8940fc76ce9a65facfba06bac567c",
+    "static_internal_data_bss_bytes": 155024,
+    "iram_code_bytes": 127683,
+    "entry_frames": [
+      {
+        "name": "std::unique_ptr<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text, ecu::HeapObjectDelete<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text> > ecu::heap_object<ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)::Text>()",
+        "address": "0x4200c418",
+        "entry_bytes": "364100",
+        "frame_bytes": 32,
+        "code_bytes": 36
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "address": "0x403759d0",
+        "entry_bytes": "360101",
+        "frame_bytes": 128,
+        "code_bytes": 3953
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::on_trigger_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "address": "0x403757a4",
+        "entry_bytes": "36c100",
+        "frame_bytes": 96,
+        "code_bytes": 554
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::run(void*)",
+        "address": "0x42020c24",
+        "entry_bytes": "36c11c",
+        "frame_bytes": 3680,
+        "code_bytes": 14878
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+        "address": "0x40376944",
+        "entry_bytes": "36e100",
+        "frame_bytes": 112,
+        "code_bytes": 14221
+      },
+      {
+        "name": "ecu::engine_tuning::(anonymous namespace)::run(void*)",
+        "address": "0x42027468",
+        "entry_bytes": "366102",
+        "frame_bytes": 304,
+        "code_bytes": 459
+      },
+      {
+        "name": "ecu::engine_service::(anonymous namespace)::persist_prepared(ecu::engine::Tune const&, unsigned long, std::unique_ptr<char, void (*)(void*)>, char const*&)",
+        "address": "0x420104fc",
+        "entry_bytes": "36e102",
+        "frame_bytes": 368,
+        "code_bytes": 409
+      },
+      {
+        "name": "ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)",
+        "address": "0x420168ac",
+        "entry_bytes": "368100",
+        "frame_bytes": 64,
+        "code_bytes": 464
+      },
+      {
+        "name": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+        "address": "0x420145b0",
+        "entry_bytes": "36a10a",
+        "frame_bytes": 1360,
+        "code_bytes": 1322
+      },
+      {
+        "name": "void ecu::tuning::Stream::feed<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&>(unsigned char const*, unsigned int, unsigned long long, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+        "address": "0x4202723c",
+        "entry_bytes": "36a102",
+        "frame_bytes": 336,
+        "code_bytes": 554
+      },
+      {
+        "name": "void ecu::tuning::Stream::send<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(unsigned char const*, unsigned int, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+        "address": "0x42024f14",
+        "entry_bytes": "364100",
+        "frame_bytes": 32,
+        "code_bytes": 72
+      },
+      {
+        "name": "void ecu::tuning::Stream::error<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(unsigned char, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+        "address": "0x420271c0",
+        "entry_bytes": "366102",
+        "frame_bytes": 304,
+        "code_bytes": 38
+      },
+      {
+        "name": "void ecu::tuning::Stream::expire<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&>(unsigned long long, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+        "address": "0x420271e8",
+        "entry_bytes": "364100",
+        "frame_bytes": 32,
+        "code_bytes": 83
+      },
+      {
+        "name": "void ecu::tuning::Stream::framed<ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}>(ecu::tuning::Reply const&, ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}&)",
+        "address": "0x4202715c",
+        "entry_bytes": "366102",
+        "frame_bytes": 304,
+        "code_bytes": 100
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+        "address": "0x4202024c",
+        "entry_bytes": "36e112",
+        "frame_bytes": 2416,
+        "code_bytes": 2519
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+        "address": "0x4201ad94",
+        "entry_bytes": "364100",
+        "frame_bytes": 32,
+        "code_bytes": 75
+      },
+      {
+        "name": "ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}::operator()(unsigned char const*, unsigned int) const",
+        "address": "0x42024e8c",
+        "entry_bytes": "364100",
+        "frame_bytes": 32,
+        "code_bytes": 136
+      },
+      {
+        "name": "app_main",
+        "address": "0x420036e8",
+        "entry_bytes": "364135",
+        "frame_bytes": 6816,
+        "code_bytes": 2020
+      }
+    ],
+    "ISR_state_placement": [
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::cam_context",
+        "address": "0x3fca65f8",
+        "bytes": 1,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::idle_output",
+        "address": "0x3fcaa6f0",
+        "bytes": 1,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::capture_clock",
+        "address": "0x3fcaa6d8",
+        "bytes": 24,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::idle_executor",
+        "address": "0x3fcaa6f8",
+        "bytes": 240,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::trigger_clock",
+        "address": "0x3fca6688",
+        "bytes": 24,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::external_epoch",
+        "address": "0x3fca6678",
+        "bytes": 4,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::installed_alarm",
+        "address": "0x3fca6670",
+        "bytes": 8,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::trigger_capture",
+        "address": "0x3fca66a0",
+        "bytes": 16440,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::configuration_hold",
+        "address": "0x3fcb0ca8",
+        "bytes": 1,
+        "section": ".dram0.bss"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::lock",
+        "address": "0x3fca6680",
+        "bytes": 8,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::timer",
+        "address": "0x3fcb0cd8",
+        "bytes": 4,
+        "section": ".dram0.bss"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::output",
+        "address": "0x3fca667c",
+        "bytes": 4,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::executor",
+        "address": "0x3fcaa7e8",
+        "bytes": 5456,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::measured",
+        "address": "0x3fca6600",
+        "bytes": 112,
+        "section": ".dram0.data"
+      }
+    ],
+    "engine_dummy_flag": false,
+    "idle_physical_flag_explicitly_enabled": false,
+    "selected_board_flag": false,
+    "compile_command_sha256": "0f61f214e6cffe9941e1056bd27c21ca001d1689519eac74a318b3b56516a38f",
+    "closure": {
+      "path": ".cache/engine/idle-owner-review/final/isr-generic/closure.json",
+      "sha256": "7c0545502bb2a4eab899700b8fd4b8ccf1b138d792d7f3b9b07967bc4908b028",
+      "roots": 5,
+      "functions": 30,
+      "flash_literals": 0,
+      "unclassified_flash_pointers": 0,
+      "external": [],
+      "passed": true
+    }
+  },
+  "compact_a3_timing_bench": {
+    "elf_sha256": "dec4f1d182a0259a388b0fc5c1d1fdc6ed6599038dd222e3a3c7496b9c723576",
+    "binary_sha256": "cdbe59b0398f238cf61eca72e29fe708947f2313038e6c02f6ba5fdd05f4e217",
+    "static_internal_data_bss_bytes": 129880,
+    "iram_code_bytes": 93695,
+    "entry_frames": [
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "address": "0x40375484",
+        "entry_bytes": "360101",
+        "frame_bytes": 128,
+        "code_bytes": 4289
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::run(void*)",
+        "address": "0x42015580",
+        "entry_bytes": "36c11c",
+        "frame_bytes": 3680,
+        "code_bytes": 16618
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+        "address": "0x40376548",
+        "entry_bytes": "36e100",
+        "frame_bytes": 112,
+        "code_bytes": 17365
+      },
+      {
+        "name": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+        "address": "0x4200ba60",
+        "entry_bytes": "36a10a",
+        "frame_bytes": 1360,
+        "code_bytes": 1322
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+        "address": "0x42014aa0",
+        "entry_bytes": "36e112",
+        "frame_bytes": 2416,
+        "code_bytes": 2783
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+        "address": "0x42011490",
+        "entry_bytes": "364100",
+        "frame_bytes": 32,
+        "code_bytes": 75
+      },
+      {
+        "name": "app_main",
+        "address": "0x42002358",
+        "entry_bytes": "364135",
+        "frame_bytes": 6816,
+        "code_bytes": 1916
+      }
+    ],
+    "ISR_state_placement": [
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::cam_context",
+        "address": "0x3fc9cadc",
+        "bytes": 1,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::idle_output",
+        "address": "0x3fca0bd8",
+        "bytes": 1,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::capture_clock",
+        "address": "0x3fca0bc0",
+        "bytes": 24,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::idle_executor",
+        "address": "0x3fca0be0",
+        "bytes": 240,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::external_epoch",
+        "address": "0x3fc9cb58",
+        "bytes": 4,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::installed_alarm",
+        "address": "0x3fc9cb50",
+        "bytes": 8,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::trigger_capture",
+        "address": "0x3fc9cb88",
+        "bytes": 16440,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::configuration_hold",
+        "address": "0x3fca5a80",
+        "bytes": 1,
+        "section": ".dram0.bss"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::lock",
+        "address": "0x3fc9cb80",
+        "bytes": 8,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::timer",
+        "address": "0x3fca5aa8",
+        "bytes": 4,
+        "section": ".dram0.bss"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::output",
+        "address": "0x3fc9cb5c",
+        "bytes": 4,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::executor",
+        "address": "0x3fca0cd0",
+        "bytes": 5456,
+        "section": ".dram0.data"
+      },
+      {
+        "name": "ecu::engine_target::(anonymous namespace)::measured",
+        "address": "0x3fc9cae0",
+        "bytes": 112,
+        "section": ".dram0.data"
+      }
+    ],
+    "engine_dummy_flag": false,
+    "idle_physical_flag_explicitly_enabled": false,
+    "selected_board_flag": false,
+    "compile_command_sha256": "ef6b789c219c1c8869e2b14c67ce24783b7412b971087e22a90bdca6081a1de9",
+    "closure": {
+      "path": ".cache/engine/idle-owner-review/final/isr-dummy/closure.json",
+      "sha256": "bc7406273a7e2481aa0a50e2e62c35e1af85fed0b90909b21953012643c41bd5",
+      "roots": 4,
+      "functions": 29,
+      "flash_literals": 0,
+      "unclassified_flash_pointers": 0,
+      "external": [],
+      "passed": true
+    }
+  }
+}

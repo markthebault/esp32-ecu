@@ -1,0 +1,168 @@
+{
+  "passed": true,
+  "scope": "Abstract independent model only; production and HIL tests still required",
+  "reset_boundary_cases": [
+    {
+      "challenge": 0,
+      "reset_before_burst_byte": 0,
+      "unguarded_accept": false,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 0,
+      "reset_before_burst_byte": 1,
+      "unguarded_accept": true,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 0,
+      "reset_before_burst_byte": 2,
+      "unguarded_accept": true,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 0,
+      "reset_before_burst_byte": 3,
+      "unguarded_accept": true,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 0,
+      "reset_before_burst_byte": 4,
+      "unguarded_accept": true,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 0,
+      "reset_before_burst_byte": 5,
+      "unguarded_accept": true,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 0,
+      "reset_before_burst_byte": 6,
+      "unguarded_accept": true,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 0,
+      "reset_before_burst_byte": 7,
+      "unguarded_accept": true,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 0,
+      "reset_before_burst_byte": 8,
+      "unguarded_accept": true,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 0,
+      "reset_before_burst_byte": 9,
+      "unguarded_accept": true,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 0,
+      "reset_before_burst_byte": 10,
+      "unguarded_accept": true,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 0,
+      "reset_before_burst_byte": 11,
+      "unguarded_accept": true,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 1,
+      "reset_before_burst_byte": 0,
+      "unguarded_accept": false,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 1,
+      "reset_before_burst_byte": 1,
+      "unguarded_accept": false,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 1,
+      "reset_before_burst_byte": 2,
+      "unguarded_accept": false,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 1,
+      "reset_before_burst_byte": 3,
+      "unguarded_accept": false,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 1,
+      "reset_before_burst_byte": 4,
+      "unguarded_accept": false,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 1,
+      "reset_before_burst_byte": 5,
+      "unguarded_accept": false,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 1,
+      "reset_before_burst_byte": 6,
+      "unguarded_accept": false,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 1,
+      "reset_before_burst_byte": 7,
+      "unguarded_accept": false,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 1,
+      "reset_before_burst_byte": 8,
+      "unguarded_accept": false,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 1,
+      "reset_before_burst_byte": 9,
+      "unguarded_accept": false,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 1,
+      "reset_before_burst_byte": 10,
+      "unguarded_accept": false,
+      "guarded_accept": false
+    },
+    {
+      "challenge": 1,
+      "reset_before_burst_byte": 11,
+      "unguarded_accept": true,
+      "guarded_accept": false
+    }
+  ],
+  "healthy_challenge_states": 2,
+  "unguarded_accepted_reset_cases": 12,
+  "guarded_accepted_reset_cases": 0,
+  "latch_checks": [
+    "invalid survives observation lock skip and fast recovery",
+    "old fault-id acknowledgment cannot clear newer fault",
+    "matching observed invalid allows later valid recovery"
+  ],
+  "clock_checks": [
+    "source stamp equals acquisition start",
+    "held stamp is retained",
+    "20ms freshness inclusive and20ms+1us stale"
+  ],
+  "unavoidable_limits": [
+    "reset after final guard is outside observed interval",
+    "fixed straps and loop do not uniquely identify accessory",
+    "two-wire contact continuity cannot be inferred"
+  ]
+}

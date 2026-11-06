@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "browser": "Installed Chrome via Playwright",
+  "checks": [
+    "Source edits preserve axes/cells, mismatch blocks Save, explicit acknowledgement precedes axis replacement; coefficient below20 saves from schema7 onward",
+    "Browser own0098192-byte complete-page MSQ preserves sources, basis metadata and all map fields through native roundtrip",
+    "Actual TunerStudio008 file imports measured-AFR/99.5kPa/2.5s edits and all F32 table cells exactly, preserving loaded CAS and leaving active tune unchanged",
+    "All21 frozen own001..007 import outcomes agree; JSON6 migrates to MAP/target while preserving its transient settings, without publication",
+    "J16 role conflicts and blank pressure input reject; concurrent Save is409 and preserves active configuration",
+    "Native/browser188-column MSL006 agree exactly including unavailable MAP; malformed load observations reject before cursor publication",
+    "Load editor and source-labelled map/trim grids fit320/390/768/1440px"
+  ],
+  "page_errors": []
+}
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_transient_ui.py", line 83, in <module>
+    try:asyncio.run(check(f'http://127.0.0.1:{server.server_address[1]}',server.device,a.report_dir))
+        ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/mark/persospace/esp32-ecu/tools/test_transient_ui.py", line 41, in check
+    assert value['schema_version']==8 and value['transient_enrichment']['mode']=='legacy_tps',old.name
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: tunerstudio-secondary-roundtrip.msq
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/home/mark/.cache/uv/builds-v0/.tmpcLKtJD/bin/python', 'tools/test_transient_ui.py', '--report-dir', '.cache/engine/secondary-integration/browser-transient']' returned non-zero exit status 1.

@@ -1,0 +1,500 @@
+{
+  "passed": true,
+  "matrix": ".cache/engine/secondary-plant-matrix-003",
+  "scope": "Independent exact fault-ID ACK/counter liveness, no hidden good-read recovery, source freshness/debounce chronology, and all-low after completed fault observations. Saved coupled trace review, not physical timing validation.",
+  "runs": [
+    {
+      "name": "portable-nack",
+      "source_sha256": "56c8406e95f28db8b62379e17400c1f5b717c67211bffb8b1e1738800bc6c959",
+      "passed": true,
+      "checks": 4132,
+      "errors": [],
+      "fault_ids": [
+        1
+      ],
+      "acks": [
+        {
+          "time_us": 3000400,
+          "fault_id": 1,
+          "reads": 298,
+          "observed_us": 2990000
+        }
+      ],
+      "first_ready_after_ack": [
+        {
+          "fault_id": 1,
+          "observed_us": 3125000,
+          "at_us": 3126800
+        }
+      ],
+      "first_qualified_after_ack": [
+        {
+          "kind": "fuel",
+          "fault_id": 1,
+          "at_us": 3146800,
+          "observed_us": 3145000,
+          "first_healthy_source_us": 3125000
+        },
+        {
+          "kind": "spark",
+          "fault_id": 1,
+          "at_us": 3146800,
+          "observed_us": 3145000,
+          "first_healthy_source_us": 3125000
+        }
+      ]
+    },
+    {
+      "name": "portable-timeout",
+      "source_sha256": "7f6eb0ed0f994fb73361bad854d7391380f8074242fcd4d5f95ac33abb0a741a",
+      "passed": true,
+      "checks": 4132,
+      "errors": [],
+      "fault_ids": [
+        1
+      ],
+      "acks": [
+        {
+          "time_us": 3003000,
+          "fault_id": 1,
+          "reads": 298,
+          "observed_us": 2990000
+        }
+      ],
+      "first_ready_after_ack": [
+        {
+          "fault_id": 1,
+          "observed_us": 3125000,
+          "at_us": 3126800
+        }
+      ],
+      "first_qualified_after_ack": [
+        {
+          "kind": "fuel",
+          "fault_id": 1,
+          "at_us": 3146800,
+          "observed_us": 3145000,
+          "first_healthy_source_us": 3125000
+        },
+        {
+          "kind": "spark",
+          "fault_id": 1,
+          "at_us": 3146800,
+          "observed_us": 3145000,
+          "first_healthy_source_us": 3125000
+        }
+      ]
+    },
+    {
+      "name": "portable-underfill",
+      "source_sha256": "05aea2b66ebfa1ec41499e932ef00b67488b0764966a724906c13fac171b8143",
+      "passed": true,
+      "checks": 4132,
+      "errors": [],
+      "fault_ids": [
+        1
+      ],
+      "acks": [
+        {
+          "time_us": 3001800,
+          "fault_id": 1,
+          "reads": 298,
+          "observed_us": 2990000
+        }
+      ],
+      "first_ready_after_ack": [
+        {
+          "fault_id": 1,
+          "observed_us": 3125000,
+          "at_us": 3126800
+        }
+      ],
+      "first_qualified_after_ack": [
+        {
+          "kind": "fuel",
+          "fault_id": 1,
+          "at_us": 3146800,
+          "observed_us": 3145000,
+          "first_healthy_source_us": 3125000
+        },
+        {
+          "kind": "spark",
+          "fault_id": 1,
+          "at_us": 3146800,
+          "observed_us": 3145000,
+          "first_healthy_source_us": 3125000
+        }
+      ]
+    },
+    {
+      "name": "portable-mid_read_reset",
+      "source_sha256": "f0bcf25e6dccc720fde14e654f0966f7d6075fbcdb4231507ecb5783943084f8",
+      "passed": true,
+      "checks": 4126,
+      "errors": [],
+      "fault_ids": [
+        1
+      ],
+      "acks": [
+        {
+          "time_us": 3011800,
+          "fault_id": 1,
+          "reads": 299,
+          "observed_us": 3000000
+        }
+      ],
+      "first_ready_after_ack": [
+        {
+          "fault_id": 1,
+          "observed_us": 3135000,
+          "at_us": 3136800
+        }
+      ],
+      "first_qualified_after_ack": [
+        {
+          "kind": "fuel",
+          "fault_id": 1,
+          "at_us": 3156800,
+          "observed_us": 3155000,
+          "first_healthy_source_us": 3135000
+        },
+        {
+          "kind": "spark",
+          "fault_id": 1,
+          "at_us": 3156800,
+          "observed_us": 3155000,
+          "first_healthy_source_us": 3135000
+        }
+      ]
+    },
+    {
+      "name": "portable-producer_pause",
+      "source_sha256": "506f72a75bfdb85cbfe56e454544f58dfba44a28910849c48e284c0ee6eb6e3c",
+      "passed": true,
+      "checks": 4101,
+      "errors": [],
+      "fault_ids": [
+        1
+      ],
+      "acks": [
+        {
+          "time_us": 3080000,
+          "fault_id": 1,
+          "reads": 298,
+          "observed_us": 2990000
+        }
+      ],
+      "first_ready_after_ack": [
+        {
+          "fault_id": 1,
+          "observed_us": 3200000,
+          "at_us": 3201800
+        }
+      ],
+      "first_qualified_after_ack": [
+        {
+          "kind": "fuel",
+          "fault_id": 1,
+          "at_us": 3221800,
+          "observed_us": 3220000,
+          "first_healthy_source_us": 3200000
+        },
+        {
+          "kind": "spark",
+          "fault_id": 1,
+          "at_us": 3221800,
+          "observed_us": 3220000,
+          "first_healthy_source_us": 3200000
+        }
+      ]
+    },
+    {
+      "name": "portable-control_busy",
+      "source_sha256": "ba62fde179d9274fa67b6c2b7538e2a6cb7c89b4eb7fcb41a21d2dcf7fd5414c",
+      "passed": true,
+      "checks": 4024,
+      "errors": [],
+      "fault_ids": [
+        1
+      ],
+      "acks": [
+        {
+          "time_us": 3300300,
+          "fault_id": 1,
+          "reads": 316,
+          "observed_us": 3295000
+        }
+      ],
+      "first_ready_after_ack": [
+        {
+          "fault_id": 1,
+          "observed_us": 3305000,
+          "at_us": 3306800
+        }
+      ],
+      "first_qualified_after_ack": [
+        {
+          "kind": "fuel",
+          "fault_id": 1,
+          "at_us": 3326800,
+          "observed_us": 3325000,
+          "first_healthy_source_us": 3305000
+        },
+        {
+          "kind": "spark",
+          "fault_id": 1,
+          "at_us": 3326800,
+          "observed_us": 3325000,
+          "first_healthy_source_us": 3305000
+        }
+      ]
+    },
+    {
+      "name": "target-nack",
+      "source_sha256": "594fb2e4a06db6e94f806882596a7fee56d9731059ada0bf447fe0e3cc5174e9",
+      "passed": true,
+      "checks": 4132,
+      "errors": [],
+      "fault_ids": [
+        1
+      ],
+      "acks": [
+        {
+          "time_us": 3000400,
+          "fault_id": 1,
+          "reads": 298,
+          "observed_us": 2990000
+        }
+      ],
+      "first_ready_after_ack": [
+        {
+          "fault_id": 1,
+          "observed_us": 3125000,
+          "at_us": 3126800
+        }
+      ],
+      "first_qualified_after_ack": [
+        {
+          "kind": "fuel",
+          "fault_id": 1,
+          "at_us": 3146800,
+          "observed_us": 3145000,
+          "first_healthy_source_us": 3125000
+        },
+        {
+          "kind": "spark",
+          "fault_id": 1,
+          "at_us": 3146800,
+          "observed_us": 3145000,
+          "first_healthy_source_us": 3125000
+        }
+      ]
+    },
+    {
+      "name": "target-timeout",
+      "source_sha256": "257f6cc9869fd5cda1482f9850e4633ac9bbaa640982c162d5d221e9fdc4c44d",
+      "passed": true,
+      "checks": 4132,
+      "errors": [],
+      "fault_ids": [
+        1
+      ],
+      "acks": [
+        {
+          "time_us": 3003000,
+          "fault_id": 1,
+          "reads": 298,
+          "observed_us": 2990000
+        }
+      ],
+      "first_ready_after_ack": [
+        {
+          "fault_id": 1,
+          "observed_us": 3125000,
+          "at_us": 3126800
+        }
+      ],
+      "first_qualified_after_ack": [
+        {
+          "kind": "fuel",
+          "fault_id": 1,
+          "at_us": 3146800,
+          "observed_us": 3145000,
+          "first_healthy_source_us": 3125000
+        },
+        {
+          "kind": "spark",
+          "fault_id": 1,
+          "at_us": 3146800,
+          "observed_us": 3145000,
+          "first_healthy_source_us": 3125000
+        }
+      ]
+    },
+    {
+      "name": "target-underfill",
+      "source_sha256": "2047716cd5d696e33e60f57474efc9d5d03eaa27bc380e1e5bca1ff59f1b146e",
+      "passed": true,
+      "checks": 4132,
+      "errors": [],
+      "fault_ids": [
+        1
+      ],
+      "acks": [
+        {
+          "time_us": 3001800,
+          "fault_id": 1,
+          "reads": 298,
+          "observed_us": 2990000
+        }
+      ],
+      "first_ready_after_ack": [
+        {
+          "fault_id": 1,
+          "observed_us": 3125000,
+          "at_us": 3126800
+        }
+      ],
+      "first_qualified_after_ack": [
+        {
+          "kind": "fuel",
+          "fault_id": 1,
+          "at_us": 3146800,
+          "observed_us": 3145000,
+          "first_healthy_source_us": 3125000
+        },
+        {
+          "kind": "spark",
+          "fault_id": 1,
+          "at_us": 3146800,
+          "observed_us": 3145000,
+          "first_healthy_source_us": 3125000
+        }
+      ]
+    },
+    {
+      "name": "target-mid_read_reset",
+      "source_sha256": "e2757de1b240936f29bed275ddb148d7846996e46db9037bff2dac6c9dd72cc7",
+      "passed": true,
+      "checks": 4126,
+      "errors": [],
+      "fault_ids": [
+        1
+      ],
+      "acks": [
+        {
+          "time_us": 3011800,
+          "fault_id": 1,
+          "reads": 299,
+          "observed_us": 3000000
+        }
+      ],
+      "first_ready_after_ack": [
+        {
+          "fault_id": 1,
+          "observed_us": 3135000,
+          "at_us": 3136800
+        }
+      ],
+      "first_qualified_after_ack": [
+        {
+          "kind": "fuel",
+          "fault_id": 1,
+          "at_us": 3156800,
+          "observed_us": 3155000,
+          "first_healthy_source_us": 3135000
+        },
+        {
+          "kind": "spark",
+          "fault_id": 1,
+          "at_us": 3156800,
+          "observed_us": 3155000,
+          "first_healthy_source_us": 3135000
+        }
+      ]
+    },
+    {
+      "name": "target-producer_pause",
+      "source_sha256": "0aca67f393f249ef09e24bf6f9472dce8a041583f913f6ae730ad28617d65d78",
+      "passed": true,
+      "checks": 4101,
+      "errors": [],
+      "fault_ids": [
+        1
+      ],
+      "acks": [
+        {
+          "time_us": 3080000,
+          "fault_id": 1,
+          "reads": 298,
+          "observed_us": 2990000
+        }
+      ],
+      "first_ready_after_ack": [
+        {
+          "fault_id": 1,
+          "observed_us": 3200000,
+          "at_us": 3201800
+        }
+      ],
+      "first_qualified_after_ack": [
+        {
+          "kind": "fuel",
+          "fault_id": 1,
+          "at_us": 3221800,
+          "observed_us": 3220000,
+          "first_healthy_source_us": 3200000
+        },
+        {
+          "kind": "spark",
+          "fault_id": 1,
+          "at_us": 3221800,
+          "observed_us": 3220000,
+          "first_healthy_source_us": 3200000
+        }
+      ]
+    },
+    {
+      "name": "target-control_busy",
+      "source_sha256": "9609e48e6bc0bac9ecfd76777600c7d127c8045a9849d5ce8bbb3b6e0e7c789b",
+      "passed": true,
+      "checks": 4176,
+      "errors": [],
+      "fault_ids": [
+        1
+      ],
+      "acks": [
+        {
+          "time_us": 3300300,
+          "fault_id": 1,
+          "reads": 316,
+          "observed_us": 3295000
+        }
+      ],
+      "first_ready_after_ack": [
+        {
+          "fault_id": 1,
+          "observed_us": 3305000,
+          "at_us": 3306800
+        }
+      ],
+      "first_qualified_after_ack": [
+        {
+          "kind": "fuel",
+          "fault_id": 1,
+          "at_us": 3326800,
+          "observed_us": 3325000,
+          "first_healthy_source_us": 3305000
+        },
+        {
+          "kind": "spark",
+          "fault_id": 1,
+          "at_us": 3326800,
+          "observed_us": 3325000,
+          "first_healthy_source_us": 3305000
+        }
+      ]
+    }
+  ],
+  "total_checks": 49446
+}

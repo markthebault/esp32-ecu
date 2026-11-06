@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "checks": 17,
+  "wrapper_source_sha256": "e9f1ecb60cb29c3f9d29f6f677b62b8b840f7a5932d64aa746c04a434bc2099a",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-config_mutation/scripts/build_firmware_preserved.py",
+        "--output",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-config_mutation/.cache/illegal-generation",
+        "--environment",
+        "owned_fake"
+      ],
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-config_mutation/scripts/build_firmware_preserved.py\", line 178, in <module>\n    run(arguments.output, arguments.environment)\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-config_mutation/scripts/build_firmware_preserved.py\", line 114, in run\n    raise ValueError(\"Asset generation changed an undeclared project source\")\nValueError: Asset generation changed an undeclared project source\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-missing_default/scripts/build_firmware_preserved.py",
+        "--output",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-missing_default/.cache/asset-symlink",
+        "--environment",
+        "owned_fake"
+      ],
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-missing_default/scripts/build_firmware_preserved.py\", line 178, in <module>\n    run(arguments.output, arguments.environment)\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/build-config-model-004/wrapper-missing_default/scripts/build_firmware_preserved.py\", line 98, in run\n    raise ValueError(\"Preserve historical generated-asset symlink\")\nValueError: Preserve historical generated-asset symlink\n"
+    }
+  ],
+  "scope": "Owned fake-PIO generation contracts and read-only owned ELF checker controls; no target ELF execution, actual PlatformIO build, service, device or hardware action."
+}

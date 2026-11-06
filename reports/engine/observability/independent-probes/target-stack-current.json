@@ -1,0 +1,156 @@
+{
+  "elf_sha256": "1cc49949a99d99add023c1e06e3a7a9efec339b239a14ae8ca4862f604ede458",
+  "elf_mtime_utc": "2026-11-03T19:02:00.687215+00:00",
+  "frames": [
+    {
+      "symbol": "app_main",
+      "address": "42003860",
+      "entry_frame_bytes": 6592,
+      "initial_instructions": [
+        "42003860:\t338136        \tentry\ta1, 0x19c0",
+        "42003863:\tffd665        \tcall8\t420035c8 <(anonymous namespace)::init_gpio()>",
+        "42003866:\t0a3c      \tmovi.n\ta10, 48"
+      ]
+    },
+    {
+      "symbol": "ecu::engine::data_json(ecu::engine::RuntimeSample const&, unsigned long long)",
+      "address": "42006174",
+      "entry_frame_bytes": 64,
+      "initial_instructions": [
+        "42006174:\t008136        \tentry\ta1, 64",
+        "42006177:\t162f65        \tcall8\t4201c46c <cJSON_CreateObject>",
+        "4200617a:\t0161a2        \ts32i\ta10, a1, 4"
+      ]
+    },
+    {
+      "symbol": "ecu::engine_log::msl_row(ecu::engine_log::Header const&, ecu::engine_log::Row const&, char*, unsigned int)::{lambda(unsigned long long)#1}::operator()(unsigned long long) const",
+      "address": "42006c44",
+      "entry_frame_bytes": 32,
+      "initial_instructions": [
+        "42006c44:\t004136        \tentry\ta1, 32",
+        "42006c47:\t0d0466        \tbnei\ta4, -1, 42006c58 <ecu::engine_log::msl_row(ecu::engine_log::Header const&, ecu::engine_log::Row const&, char*, unsigned int)::{lambda(unsigned long long)#1}::operator()(unsigned long long) const+0x14>",
+        "42006c4a:\t0a0566        \tbnei\ta5, -1, 42006c58 <ecu::engine_log::msl_row(ecu::engine_log::Header const&, ecu::engine_log::Row const&, char*, unsigned int)::{lambda(unsigned long long)#1}::operator()(unsigned long long) const+0x14>"
+      ]
+    },
+    {
+      "symbol": "ecu::engine_log::msl_row(ecu::engine_log::Header const&, ecu::engine_log::Row const&, char*, unsigned int)",
+      "address": "42006ca4",
+      "entry_frame_bytes": 112,
+      "initial_instructions": [
+        "42006ca4:\t00e136        \tentry\ta1, 112",
+        "42006ca7:\t8149      \ts32i.n\ta4, a1, 32",
+        "42006ca9:\t9159      \ts32i.n\ta5, a1, 36"
+      ]
+    },
+    {
+      "symbol": "ecu::web::(anonymous namespace)::engine_data_log_msl_get(httpd_req*)",
+      "address": "42006ff4",
+      "entry_frame_bytes": 2368,
+      "initial_instructions": [
+        "42006ff4:\t128136        \tentry\ta1, 0x940",
+        "42006ff7:\t20a220        \tor\ta10, a2, a2",
+        "42006ffa:\tfd5165        \tcall8\t42004510 <ecu::web::(anonymous namespace)::authorized(httpd_req*)>"
+      ]
+    },
+    {
+      "symbol": "ecu::web::(anonymous namespace)::engine_data_log_get(httpd_req*)",
+      "address": "42007c98",
+      "entry_frame_bytes": 112,
+      "initial_instructions": [
+        "42007c98:\t00e136        \tentry\ta1, 112",
+        "42007c9b:\t207220        \tor\ta7, a2, a2",
+        "42007c9e:\t20a220        \tor\ta10, a2, a2"
+      ]
+    },
+    {
+      "symbol": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+      "address": "420108cc",
+      "entry_frame_bytes": 800,
+      "initial_instructions": [
+        "420108cc:\t064136        \tentry\ta1, 0x320",
+        "420108cf:\tb96172        \ts32i\ta7, a1, 0x2e4",
+        "420108d2:\tb86162        \ts32i\ta6, a1, 0x2e0"
+      ]
+    },
+    {
+      "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+      "address": "42014224",
+      "entry_frame_bytes": 32,
+      "initial_instructions": [
+        "42014224:\t004136        \tentry\ta1, 32",
+        "42014227:\tfb7c      \tmovi.n\ta11, -1",
+        "42014229:\tb37ca1        \tl32r\ta10, 4200101c <_stext+0xffc> (3fca5b80 <ecu::engine_target::(anonymous namespace)::lock>)"
+      ]
+    },
+    {
+      "symbol": "ecu::engine_target::measurement()",
+      "address": "42015a70",
+      "entry_frame_bytes": 48,
+      "initial_instructions": [
+        "42015a70:\t006136        \tentry\ta1, 48",
+        "42015a73:\tfb7c      \tmovi.n\ta11, -1",
+        "42015a75:\tad69a1        \tl32r\ta10, 4200101c <_stext+0xffc> (3fca5b80 <ecu::engine_target::(anonymous namespace)::lock>)"
+      ]
+    },
+    {
+      "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+      "address": "4201775c",
+      "entry_frame_bytes": 2160,
+      "initial_instructions": [
+        "4201775c:\t10e136        \tentry\ta1, 0x870",
+        "4201775f:\tf8a682        \tmovi\ta8, 0x6f8",
+        "42017762:\t40c172        \taddi\ta7, a1, 64"
+      ]
+    },
+    {
+      "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)",
+      "address": "42017d08",
+      "entry_frame_bytes": 3184,
+      "initial_instructions": [
+        "42017d08:\t18e136        \tentry\ta1, 0xc70",
+        "42017d0b:\tfd6ae5        \tcall8\t420153b8 <ecu::engine_target::(anonymous namespace)::init_peripherals()>",
+        "42017d0e:\ta54781        \tl32r\ta8, 4200122c <_stext+0x120c> (3fca3e88 <ecu::engine_target::(anonymous namespace)::initial_wheel>)"
+      ]
+    },
+    {
+      "symbol": "ecu::engine_log::Recorder::page(unsigned long, unsigned long, ecu::engine_log::Page&) const",
+      "address": "4201a7f0",
+      "entry_frame_bytes": 3584,
+      "initial_instructions": [
+        "4201a7f0:\t1c0136        \tentry\ta1, 0xe00",
+        "4201a7f3:\t9806c1        \tl32r\ta12, 4200080c <_stext+0x7ec> (dd8 <UserFrameTotalSize+0xcd8>)",
+        "4201a7f6:\t0b0c      \tmovi.n\ta11, 0"
+      ]
+    },
+    {
+      "symbol": "ecu::engine_log::Recorder::append(ecu::engine::RuntimeSample const&, unsigned long long)",
+      "address": "4201aa68",
+      "entry_frame_bytes": 256,
+      "initial_instructions": [
+        "4201aa68:\t020136        \tentry\ta1, 0x100",
+        "4201aa6b:\t04cd      \tmov.n\ta12, a4",
+        "4201aa6d:\t05dd      \tmov.n\ta13, a5"
+      ]
+    },
+    {
+      "symbol": "ecu::engine_log_service::observe(ecu::engine::RuntimeSample const&)",
+      "address": "4201ac84",
+      "entry_frame_bytes": null,
+      "initial_instructions": [
+        "4201ac84:\t0c006136 \t",
+        "4201ac88:\t99cd810b \t",
+        "4201ac8c:\t810028a2 \t"
+      ]
+    },
+    {
+      "symbol": "ecu::engine_log_service::page(unsigned long, unsigned long, ecu::engine_log::Page&)",
+      "address": "4201ae14",
+      "entry_frame_bytes": null,
+      "initial_instructions": [
+        "4201ae14:\t71004136 \t",
+        "4201ae18:\tafb2996a \t",
+        "4201ae1c:\t0027a2ff \t"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "compile": [
+    "c++",
+    "-std=c++17",
+    "-O1",
+    "-g",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-Wno-misleading-indentation",
+    "-pedantic",
+    "-I/home/mark/persospace/esp32-ecu/firmware/include",
+    "-I/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-core-review/probe.cpp",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-core-review/cJSON.o",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-core-review/probe"
+  ],
+  "returncode": 0,
+  "command": [
+    "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-core-review/probe",
+    "/home/mark/persospace/esp32-ecu/config/engine/defaults-v2.json",
+    "/home/mark/persospace/esp32-ecu/config/engine/defaults-v3.json",
+    "/home/mark/persospace/esp32-ecu/config/engine/defaults-v4.json",
+    "/home/mark/persospace/esp32-ecu/config/engine/defaults-v5.json",
+    "/home/mark/persospace/esp32-ecu/config/engine/defaults-v6.json",
+    "/home/mark/persospace/esp32-ecu/config/engine/defaults.json"
+  ],
+  "fixtures": {
+    "config/engine/defaults-v2.json": 2,
+    "config/engine/defaults-v3.json": 3,
+    "config/engine/defaults-v4.json": 4,
+    "config/engine/defaults-v5.json": 5,
+    "config/engine/defaults-v6.json": 6,
+    "config/engine/defaults.json": 7
+  }
+}

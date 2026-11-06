@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "scope": "Independent review of actual latched timing reason in capacity negative fixture; worker-originated target trips may leave summary.protection_stops empty, so trace reasons are used.",
+  "runs": [
+    {
+      "label": "portable",
+      "passed": true,
+      "capacity_us": 3085000,
+      "first_timing_fault": {
+        "time_us": 4000000,
+        "reason": "cam_phase_lost",
+        "stops": 1,
+        "faults": 128
+      },
+      "last_timing_fault": {
+        "time_us": 5980000,
+        "reason": "cam_phase_lost",
+        "stops": 1,
+        "faults": 0
+      },
+      "observed_timing_reasons": [
+        "cam_phase_lost"
+      ],
+      "summary_protection_stops": [
+        {
+          "time_us": 3998102,
+          "reason": "cam_phase_lost"
+        },
+        {
+          "time_us": 4018263,
+          "reason": "cam_phase_lost"
+        }
+      ]
+    },
+    {
+      "label": "target",
+      "passed": true,
+      "capacity_us": 3085000,
+      "first_timing_fault": {
+        "time_us": 4000000,
+        "reason": "cam_phase_lost",
+        "stops": 1,
+        "faults": 128
+      },
+      "last_timing_fault": {
+        "time_us": 5980000,
+        "reason": "cam_phase_lost",
+        "stops": 1,
+        "faults": 0
+      },
+      "observed_timing_reasons": [
+        "cam_phase_lost"
+      ],
+      "summary_protection_stops": []
+    }
+  ]
+}

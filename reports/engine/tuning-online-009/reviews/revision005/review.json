@@ -1,0 +1,171 @@
+{
+  "reviewed_at_utc": "2026-11-04T16:14:54.379699+00:00",
+  "decision": "Accepted within stopped-engine serial positive-control scope; no implementation blockers remain.",
+  "scope": "Read-only independent source/native/application audit. No parent-source edits, application patches/decompilation, foreign identity in own ECU, child agents, external contacts, or physical device use.",
+  "frozen_implementation": {
+    "scripts/build_speeduino_serial.py": {
+      "frozen_sha256": "4286491a28090c935fb335c6a5dab837ef897d2ec8e62b5113c133a86027389b",
+      "current_sha256": "4286491a28090c935fb335c6a5dab837ef897d2ec8e62b5113c133a86027389b",
+      "matches": true
+    },
+    "tools/speeduino_serial_sim.cpp": {
+      "frozen_sha256": "ffc0c24fe3e99aac70abe8fdcff53e98a71df309d1bf4a0786f2efc6dfdc2832",
+      "current_sha256": "ffc0c24fe3e99aac70abe8fdcff53e98a71df309d1bf4a0786f2efc6dfdc2832",
+      "matches": true
+    },
+    "tools/speeduino_serial_runtime.py": {
+      "frozen_sha256": "87719bc286899d64ea1afe5c6874ea7dfe77f4a9c3789b68201c11bce758497b",
+      "current_sha256": "87719bc286899d64ea1afe5c6874ea7dfe77f4a9c3789b68201c11bce758497b",
+      "matches": true
+    },
+    "tools/test_speeduino_serial.py": {
+      "frozen_sha256": "144e86c2de0abba2e873d9085db37a26e24032e6b7957b29b4fcb27302b8fc88",
+      "current_sha256": "144e86c2de0abba2e873d9085db37a26e24032e6b7957b29b4fcb27302b8fc88",
+      "matches": true
+    },
+    "tools/analyze_tuning_wire.py": {
+      "frozen_sha256": "b84f24f08e54c3077045ccafe3b71ef325c14665ca118e90bff08b3fbdceb7ce",
+      "current_sha256": "b84f24f08e54c3077045ccafe3b71ef325c14665ca118e90bff08b3fbdceb7ce",
+      "matches": true
+    },
+    "tools/test_tuning_wire_analysis.py": {
+      "frozen_sha256": "52e50f29f4a37ce699adace6c776368c9cc7d9edf923566ac377732625d888f3",
+      "current_sha256": "52e50f29f4a37ce699adace6c776368c9cc7d9edf923566ac377732625d888f3",
+      "matches": true
+    }
+  },
+  "original_numerical_noninterference": {
+    "tools/speeduino_sim.cpp": {
+      "baseline": "dc5ef41e64539e18c21be2aa9cf748820969271117923569b592fc6ae3b42f50",
+      "current": "dc5ef41e64539e18c21be2aa9cf748820969271117923569b592fc6ae3b42f50",
+      "unchanged": true
+    },
+    "tools/speeduino_sim_hal.cpp": {
+      "baseline": "0d28c0c73308f8ac1333b0e3eefa38d9b6bef4fe0e7ca31e6342c7a9e8074409",
+      "current": "0d28c0c73308f8ac1333b0e3eefa38d9b6bef4fe0e7ca31e6342c7a9e8074409",
+      "unchanged": true
+    },
+    "tools/speeduino_sim_native.hpp": {
+      "baseline": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9",
+      "current": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9",
+      "unchanged": true
+    },
+    "scripts/build_speeduino_sim.py": {
+      "baseline": "1c8c53bc55cb15cdbfb6186fd7b7fb4ed42058a99c3a1a70d943497af7f43e4a",
+      "current": "1c8c53bc55cb15cdbfb6186fd7b7fb4ed42058a99c3a1a70d943497af7f43e4a",
+      "unchanged": true
+    },
+    ".cache/engine/speeduino-sim/speeduino-sim": {
+      "baseline": "046389d754c996c34cb7e7171b1e42088f5ae6c0615133a3c5e74743f9f6d52c",
+      "current": "046389d754c996c34cb7e7171b1e42088f5ae6c0615133a3c5e74743f9f6d52c",
+      "unchanged": true
+    },
+    ".cache/engine/speeduino-sim/build-manifest.json": {
+      "baseline": "989f215a2cb669b12c90dca6368a49264ccb9dffc80a990bd2315011fe349a3e",
+      "current": "989f215a2cb669b12c90dca6368a49264ccb9dffc80a990bd2315011fe349a3e",
+      "unchanged": true
+    },
+    ".cache/engine/speeduino-sim16/speeduino-sim": {
+      "baseline": "a7c0dc7bd342131660d83f3fb84c010bff3aa792043bd62bb0360c6622102c98",
+      "current": "a7c0dc7bd342131660d83f3fb84c010bff3aa792043bd62bb0360c6622102c98",
+      "unchanged": true
+    },
+    ".cache/engine/speeduino-sim16/build-manifest.json": {
+      "baseline": "bbb2e7093b88b8bd4b1d4f466b5bde800fb70bbcb0135d863de836e557c12cbe",
+      "current": "bbb2e7093b88b8bd4b1d4f466b5bde800fb70bbcb0135d863de836e557c12cbe",
+      "unchanged": true
+    }
+  },
+  "external_speeduino_git_status": "",
+  "resolved_findings": [
+    {
+      "id": "BUILD-001",
+      "status": "resolved",
+      "evidence": "../revision004/build-provenance-probes.json",
+      "verification": "Base shared-lock wait,565 original input hashes, exact109-object baseline relink, identicalc02e74 serial rebuild, and rejection of an owned modified comms object."
+    },
+    {
+      "id": "TRACE-001",
+      "status": "resolved",
+      "evidence": "../revision004/trace-order-comparison.json",
+      "verification": "Same controlled concurrency barrier reproduces old Q,C trace/C,Q replies; current trace and production replies both Q,C."
+    },
+    {
+      "id": "ANALYZER-001",
+      "status": "resolved",
+      "evidence": "response-before-request-final-analysis.json",
+      "verification": "Early TX remains disclosed orphan data and cannot pair with a later RX request. Final4 analyzer tests and original12 serial tests pass."
+    }
+  ],
+  "validation": {
+    "final_frozen_tests": "final-frozen-tests.log",
+    "test_count": 16,
+    "tests_passed": true,
+    "extra_lifecycle_groups": "../revision004/runtime-probes.json",
+    "extra_lifecycle_groups_passed": 6,
+    "provenance_negative_and_lock_tests": "../revision004/build-provenance-probes.json",
+    "own009_native_parser_probe": "../revision001/protocol-probe.json",
+    "own009_current_application_review": "../revision002/review.json"
+  },
+  "actual_public_application": {
+    "application_jar_sha256": "3ebafb867fef3722816e768879501845904f81bc5e13249c77d170e9adf61cf8",
+    "same_unmodified_app_as_own009": true,
+    "genuine_reference_identity": "speeduino 202504-dev",
+    "pinned_ini_matches": true,
+    "request_count": 10838,
+    "response_count": 10838,
+    "commands": {
+      "F": 1,
+      "I": 1,
+      "f": 2,
+      "Q": 1,
+      "S": 1,
+      "d": 18,
+      "p": 22,
+      "r": 10790,
+      "M": 1,
+      "b": 1
+    },
+    "invalid_frames": [],
+    "unmatched_tail": false,
+    "actual_app_write": {
+      "page": 2,
+      "offset": 240,
+      "before": 85,
+      "after": 86,
+      "ACK": "00"
+    },
+    "actual_app_burn": {
+      "page": 2,
+      "ACK": "04"
+    },
+    "full_page_read_and_M_reconstruction_equals_MSQ": true,
+    "post_burn_controller_M_latest_page_crc32": "be04ef33",
+    "application_msq_bytes": 91855,
+    "application_msq_sha256": "fef17c4bd702dfc882dc379dd8f403d535eeb3f79fa3298d773210e90e226b0a",
+    "detail": "public-application-write-burn-review.json",
+    "launch_source_hashes_match": true,
+    "original_input_hashes_verified": 565,
+    "clean_native_exit": true,
+    "owned_application_native_Xvfb_processes_remaining": false,
+    "byte_accounting": "Native TX event sum equals complete bridge TX752363; closure.stats is an earlier requested observation."
+  },
+  "own009_comparison": {
+    "actual_current_identity": "ESP32ECU DEV 009 INHIBITED",
+    "same_application_jar": true,
+    "discovery_transactions": 1640,
+    "unsupported_firmware_warnings": 328,
+    "page_runtime_write_burn_requests": 0,
+    "conclusion": "Own009 receives explicit unsupported-controller rejection after valid discovery. Genuine pinned Speeduino proceeds through online reads, app write/burn, controller CRC and MSQ save. This is an observed application acceptance boundary; it does not establish own009 online compatibility."
+  },
+  "material_limits": [
+    "Stopped engine, static virtual ADC, real native production serial/control code; no running-plant or engine-timing model claim.",
+    "Source/native/application evidence only; no ESP32 enumeration, physical USB/GPIO, real engine, flash/power-loss or electrical qualification.",
+    "Reference M updates RAM immediately; b may defer fake EEPROM writes. New native process configures its own fake EEPROM; no physical or restart persistence proof.",
+    "Adapter queue bounds do not qualify unchecked malformed-length behavior in pinned production parser; valid owned application traffic only.",
+    "Closure stats are the last requested sample, not final total counters.",
+    "Own-session CAS protects an existing session; application refresh after reconnect must be validated before claiming stale-client protection.",
+    "TunerStudio support for own009 remains unresolved; no vendor identity workaround or external contact was attempted."
+  ],
+  "documentation_review": "Pending separate parent documentation freeze; this acceptance covers the six implementation files and closed captures above."
+}

@@ -1,0 +1,21 @@
+....F...........................
+======================================================================
+FAIL: test_live_metadata_clears_old_sample_and_preserves_session_origin (test_tuning.TuningTests.test_live_metadata_clears_old_sample_and_preserves_session_origin)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_tuning.py", line 100, in test_live_metadata_clears_old_sample_and_preserves_session_origin
+    completed=s.command(b'r'+struct.pack('<BBHH',0,0x30,0,LIVE_BYTES))[1:];self.assertEqual(struct.unpack_from('<II',completed,56),(1,1));self.assertGreater(struct.unpack_from('<I',completed,208)[0],0)
+                                                                           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (0, 0) != (1, 1)
+
+First differing element 0:
+0
+1
+
+- (0, 0)
++ (1, 1)
+
+----------------------------------------------------------------------
+Ran 32 tests in 7.200s
+
+FAILED (failures=1)

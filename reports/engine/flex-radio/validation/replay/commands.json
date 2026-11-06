@@ -1,0 +1,104 @@
+[
+  {
+    "command": [
+      "cc",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-c",
+      "/home/mark/persospace/esp32-ecu/reports/engine/flex-radio/dependencies/cJSON/cJSON.c",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/cjson.o"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/project/firmware/include",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/project/firmware/tests/engine_radio_flex_test.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/pair"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/pair"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-pthread",
+      "-DECU_COMPACT_A3=1",
+      "-DECU_SELECTED_N16R8=1",
+      "-DECU_FLEX_G38_DRAFT=1",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/reports/engine/flex-radio/dependencies/cJSON",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/project/firmware/tests/radio_fakes",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/project/firmware/tests/target_fakes",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/project/firmware/include",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/project/firmware/tests/radio_service_test.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/cjson.o",
+      "-lcrypto",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/service"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/service",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/fixtures"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/project/tools/check_radio_service_fixtures.py",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/fixtures",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-replay-48e7c270496440c182e503842f95925c/interop.json"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "test_flex_radio",
+      "test_engine_observability",
+      "test_load_radio",
+      "test_secondary_radio"
+    ],
+    "returncode": 0
+  }
+]

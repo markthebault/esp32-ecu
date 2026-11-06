@@ -1,0 +1,32 @@
+{
+  "compile_command": [
+    "c++",
+    "-std=c++17",
+    "-O1",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-pedantic",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-003/firmware/include",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/query_clock_probe.cpp",
+    "-o",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/query-clock-001"
+  ],
+  "compile_returncode": 0,
+  "compile_stderr": "",
+  "run_command": [
+    "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/query-clock-001"
+  ],
+  "run_returncode": 0,
+  "stdout": "{\"observed_us\":125000,\"completed_us\":125100,\"query_us\":125099,\"ready\":true,\"fresh\":true}\n",
+  "stderr": "",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  },
+  "scope": "Portable synthetic reply and reversed query clock only; no hardware execution, no engine dependency"
+}

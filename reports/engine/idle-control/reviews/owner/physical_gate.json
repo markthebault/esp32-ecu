@@ -1,0 +1,60 @@
+[
+  {
+    "case": "default_inhibited",
+    "compile_allowed": true,
+    "expected": true,
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-fsyntax-only",
+      "-I.cache/engine/idle-owner-review/snapshot/include",
+      ".cache/engine/idle-owner-review/physical_gate.cpp"
+    ],
+    "error": ""
+  },
+  {
+    "case": "idle_without_engine_dummy",
+    "compile_allowed": false,
+    "expected": false,
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-fsyntax-only",
+      "-I.cache/engine/idle-owner-review/snapshot/include",
+      ".cache/engine/idle-owner-review/physical_gate.cpp",
+      "-DECU_IDLE_DUMMY_LOADS=1"
+    ],
+    "error": "In file included from .cache/engine/idle-owner-review/physical_gate.cpp:1:\n.cache/engine/idle-owner-review/snapshot/include/ecu/idle_hardware.hpp:8:2: error: #error Idle physical policy requires the explicit engine dummy-load policy\n    8 | #error Idle physical policy requires the explicit engine dummy-load policy\n      |  ^~~~~"
+  },
+  {
+    "case": "selected_idle_rejected",
+    "compile_allowed": false,
+    "expected": false,
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-fsyntax-only",
+      "-I.cache/engine/idle-owner-review/snapshot/include",
+      ".cache/engine/idle-owner-review/physical_gate.cpp",
+      "-DECU_IDLE_DUMMY_LOADS=1",
+      "-DECU_ENGINE_DUMMY_LOADS=1",
+      "-DECU_SELECTED_N16R8=1"
+    ],
+    "error": "In file included from .cache/engine/idle-owner-review/physical_gate.cpp:1:\n.cache/engine/idle-owner-review/snapshot/include/ecu/idle_hardware.hpp:11:2: error: #error Selected N16R8 GPIO3/eFuse routing, module fit and accessory qualification remain unverified\n   11 | #error Selected N16R8 GPIO3/eFuse routing, module fit and accessory qualification remain unverified\n      |  ^~~~~"
+  },
+  {
+    "case": "generic_explicit_dummy",
+    "compile_allowed": true,
+    "expected": true,
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-fsyntax-only",
+      "-I.cache/engine/idle-owner-review/snapshot/include",
+      ".cache/engine/idle-owner-review/physical_gate.cpp",
+      "-DECU_IDLE_DUMMY_LOADS=1",
+      "-DECU_ENGINE_DUMMY_LOADS=1"
+    ],
+    "error": ""
+  }
+]

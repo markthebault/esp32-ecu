@@ -1,0 +1,272 @@
+{
+  "signature": "ESP32ECU DEV 007 INHIBITED",
+  "pages": {
+    "1": 5120
+  },
+  "numeric_fields": [
+    [
+      "engine",
+      "cylinders"
+    ],
+    [
+      "engine",
+      "displacement_cc"
+    ],
+    [
+      "engine",
+      "injector_cc_min"
+    ],
+    [
+      "engine",
+      "fuel_density_g_cc"
+    ],
+    [
+      "engine",
+      "stoich_afr"
+    ],
+    [
+      "settings",
+      "cranking_rpm"
+    ],
+    [
+      "settings",
+      "crank_advance_deg"
+    ],
+    [
+      "settings",
+      "rpm_limit"
+    ],
+    [
+      "settings",
+      "rpm_hysteresis"
+    ],
+    [
+      "settings",
+      "soft_limit_band"
+    ],
+    [
+      "settings",
+      "max_duty"
+    ],
+    [
+      "settings",
+      "max_injection_ms"
+    ],
+    [
+      "settings",
+      "max_dwell_ms"
+    ],
+    [
+      "settings",
+      "tooth1_btdc_deg"
+    ],
+    [
+      "settings",
+      "afterstart_pct"
+    ],
+    [
+      "settings",
+      "afterstart_s"
+    ],
+    [
+      "settings",
+      "accel_threshold_pct_s"
+    ],
+    [
+      "settings",
+      "accel_gain"
+    ],
+    [
+      "settings",
+      "accel_decay_s"
+    ],
+    [
+      "settings",
+      "ego_kp"
+    ],
+    [
+      "settings",
+      "ego_ki"
+    ],
+    [
+      "settings",
+      "ego_limit"
+    ],
+    [
+      "settings",
+      "ego_min_clt"
+    ],
+    [
+      "settings",
+      "dfco_rpm"
+    ],
+    [
+      "settings",
+      "dfco_hysteresis"
+    ],
+    [
+      "settings",
+      "dfco_tps"
+    ],
+    [
+      "settings",
+      "dfco_delay_s"
+    ],
+    [
+      "settings",
+      "idle_target_rpm"
+    ],
+    [
+      "settings",
+      "idle_kp"
+    ],
+    [
+      "settings",
+      "idle_ki"
+    ],
+    [
+      "settings",
+      "fan_on_c"
+    ],
+    [
+      "settings",
+      "fan_off_c"
+    ],
+    [
+      "settings",
+      "pump_prime_s"
+    ]
+  ],
+  "flags": [
+    "ego_enabled",
+    "dfco_enabled",
+    "idle_enabled"
+  ],
+  "curves": [
+    [
+      "coolant_c",
+      6
+    ],
+    [
+      "warmup_pct",
+      6
+    ],
+    [
+      "crank_pct",
+      6
+    ],
+    [
+      "battery_v",
+      5
+    ],
+    [
+      "deadtime_ms",
+      5
+    ],
+    [
+      "dwell_ms",
+      5
+    ]
+  ],
+  "idle_scalars": {
+    "frequency_hz": 4772,
+    "control_period_ms": 4776,
+    "min_pct": 4780,
+    "max_pct": 4784,
+    "tps_closed_pct": 4788,
+    "tps_hysteresis_pct": 4792,
+    "entry_rpm_above": 4796,
+    "exit_rpm_above": 4800,
+    "entry_delay_s": 4804,
+    "afterstart_taper_s": 4808,
+    "dashpot_pct": 4812,
+    "dashpot_decay_pct_s": 4816,
+    "slew_pct_s": 4820,
+    "integral_limit_pct": 4824,
+    "kd": 4828,
+    "derivative_filter_s": 4832,
+    "fast_idle_temp_c": 4836,
+    "fast_idle_hysteresis_c": 4840
+  },
+  "idle_arrays": {
+    "coolant_c": 4844,
+    "run_pct": 4868,
+    "crank_pct": 4892,
+    "target_add_rpm": 4916
+  },
+  "transient_scalars": {
+    "sample_period_ms": 5000,
+    "tps_threshold_pct_s": 5004,
+    "map_threshold_kpa_s": 5008,
+    "tps_min_change_pct": 5012,
+    "map_min_change_kpa": 5016,
+    "duration_ms": 5020,
+    "max_enrichment_pct": 5024,
+    "decel_fuel_pct": 5028,
+    "rpm_taper_start": 5032,
+    "rpm_taper_end": 5036,
+    "cold_multiplier_pct": 5040,
+    "cold_taper_start_c": 5044,
+    "cold_taper_end_c": 5048
+  },
+  "transient_arrays": {
+    "tps_rates": 5052,
+    "tps_added_pct": 5068,
+    "map_rates": 5084,
+    "map_added_pct": 5100
+  },
+  "transient_offset": 4992,
+  "transient_live_fields": [
+    "aeTpsDot",
+    "aeMapDot",
+    "aeWindowMs",
+    "aeTriggerDot",
+    "aeCorrectionPct",
+    "aeUnclampedPct",
+    "aeRemainingAtSampleMs",
+    "aeAddedFuelMg"
+  ],
+  "live_fields": [
+    "time",
+    "rpm",
+    "map_kpa",
+    "tps",
+    "lambda_measured",
+    "pulse_ms",
+    "advance_deg",
+    "dwell_ms",
+    "ve_pct",
+    "target_lambda",
+    "ego"
+  ],
+  "live_block_bytes": 320,
+  "timing_fields": [
+    [
+      "injection_end_deg",
+      276
+    ],
+    [
+      "cam_sync_deg",
+      280
+    ],
+    [
+      "cam_window_deg",
+      284
+    ]
+  ],
+  "strategy_offset": 272,
+  "firing_order_offset": 288,
+  "revision_offset": 268,
+  "serial_protocol": "002",
+  "page_offsets": {
+    "header": 0,
+    "ve": 512,
+    "spark": 1664,
+    "lambda_target": 2816,
+    "cylinder": 3968,
+    "idle": 4768
+  },
+  "origin_revision_read_only": true,
+  "commit_behavior": "whole-tune stage; burn persists/activates and resets control; stable session origin",
+  "scope": "shared native and inhibited target USB Serial/JTAG; UART0 diagnostics separate; physical USB unmeasured; TunerStudio own-identity online gate unresolved"
+}

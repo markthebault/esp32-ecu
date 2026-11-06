@@ -1,0 +1,1086 @@
+{
+  "reviewed_at_utc": "2026-11-04T05:12:09.244235+00:00",
+  "scope": "Independent read-only transient execution increment: controller fuel math, selective cut/scheduler handoff, final ELF physical policy/IRAM/data/frame budgets, enlarged USB live response, and native reference/independent plant comparison. No production edits, rebuilds, services, child agents, device flashing or physical measurements.",
+  "verdict": "PASS within the stated software/static scope; no remaining production blocker identified. Initial matrix coverage failures are preserved and separately closed by explicit profile/audit corrections.",
+  "closed_findings": [
+    {
+      "id": "matrix-decel-threshold",
+      "initial": "The declared30%/s closing ramp was below the default40%/s threshold, so decel_zero never entered deceleration or fuel cut.",
+      "resolution": "Corrected profile explicitly selects20%/s, preserving the failed original traces. Both portable/target corrected traces contain20 sampled fuel-only-cut observations, no injector rise after1ms in the sampled cut interval3640000..4020000us, and44 coil lows. This observed1ms allowance is scenario-specific, not a universal cut-latency guarantee."
+    },
+    {
+      "id": "matrix-map-min-change",
+      "initial": "Slow MAP load motion was eliminated by the default0.5kPa minimum-change gate, yielding no qualified event.",
+      "resolution": "Corrected map_load profile explicitly selects1kPa/s and0kPa minimum change. It demonstrates a sensitivity profile, not default-tune AE."
+    },
+    {
+      "id": "reference-neutral-phase",
+      "initial": "Reference zero extra-fuel curves/neutral decel/zero duration retained production AE phase flags at100% correction. Requiring absent phase flags falsely failed the negative control.",
+      "resolution": "Corrected audit requires100% correction for all reference neutral observations; project off additionally has no phase. Negative sensitivity requires non100% corrected samples on, none off, and an executed-edge fuel ledger difference. No production algorithm is altered."
+    }
+  ],
+  "controller_and_executor": {
+    "fuel_math": "Effective full-cycle fuel mass receives multiplier or independent100kPa/25C/VE100/lambda1 reference adder; split by1 sequential or2 nonsequential openings; apply physical-cylinder fuel trim; add unchanged deadtime once per opening. Decel0 sets explicit fuel_cut and zero scalar/cylinder widths/duty; spark remains enabled. Partial decel scales fuel contribution before deadtime. EGO is gated while new transient phase is active.",
+    "capacity": "Actual per-cylinder demand is judged against existing width/duty bounds; any capacity failure inhibits all eight channels. No15ms injector/3.5ms coil hardware limit was relaxed.",
+    "handoff": "Controller and transient math remain producer-task owned. Command generation increments reject a candidate calculated from an older fuel-cut command. New selective cuts cancel unstarted injector events at the next accepted tooth; already active pulses retain exact bounded closing edges, spark continues. Command refresh alone does not immediately cancel pending starts: visibility in proposal telemetry precedes scheduling and is not proof of instantaneous electrical inhibition.",
+    "faults": "Fault/stopped/stale/configuration cuts retain the existing common all-low/epoch paths. Normal transient fuel-only cut does not weaken independent producer/command/tooth/phase/high-time guards.",
+    "independent_sanitizer_probe": {
+      "dose_cases": 18,
+      "zero_and_partial_decel_deadtime": true,
+      "whole_command_capacity": true,
+      "stale_candidate_retry_after_fuel_cut": true,
+      "live_payload_bytes": 321,
+      "live_wire_bytes": 327,
+      "sizes": {
+        "Tune": 4840,
+        "Output": 368,
+        "Controller": 416,
+        "RuntimeSample": 352,
+        "Recorder": 94296,
+        "Page": 5976,
+        "Command": 520,
+        "Candidate": 1096,
+        "Executor": 5496,
+        "Session": 10040,
+        "Stream": 368
+      }
+    },
+    "independent_selective_cut_cases": [
+      {
+        "strategy": 0,
+        "slots": 36,
+        "first_injector_rise_us": 45000,
+        "cut_request_us": 45500,
+        "cut_installed_on_tooth_us": 46668,
+        "retained_injector_closures": 4,
+        "coil_lows_after_cut": 36,
+        "injector_width_us": 3000
+      },
+      {
+        "strategy": 0,
+        "slots": 60,
+        "first_injector_rise_us": 45001,
+        "cut_request_us": 45501,
+        "cut_installed_on_tooth_us": 46001,
+        "retained_injector_closures": 4,
+        "coil_lows_after_cut": 36,
+        "injector_width_us": 3000
+      },
+      {
+        "strategy": 0,
+        "slots": 120,
+        "first_injector_rise_us": 45001,
+        "cut_request_us": 45501,
+        "cut_installed_on_tooth_us": 45501,
+        "retained_injector_closures": 4,
+        "coil_lows_after_cut": 36,
+        "injector_width_us": 3000
+      },
+      {
+        "strategy": 1,
+        "slots": 36,
+        "first_injector_rise_us": 12002,
+        "cut_request_us": 12502,
+        "cut_installed_on_tooth_us": 13334,
+        "retained_injector_closures": 1,
+        "coil_lows_after_cut": 19,
+        "injector_width_us": 3000
+      },
+      {
+        "strategy": 1,
+        "slots": 60,
+        "first_injector_rise_us": 12001,
+        "cut_request_us": 12501,
+        "cut_installed_on_tooth_us": 13001,
+        "retained_injector_closures": 1,
+        "coil_lows_after_cut": 19,
+        "injector_width_us": 3000
+      },
+      {
+        "strategy": 1,
+        "slots": 120,
+        "first_injector_rise_us": 12001,
+        "cut_request_us": 12501,
+        "cut_installed_on_tooth_us": 12501,
+        "retained_injector_closures": 1,
+        "coil_lows_after_cut": 19,
+        "injector_width_us": 3000
+      },
+      {
+        "strategy": 2,
+        "slots": 36,
+        "first_injector_rise_us": 12002,
+        "cut_request_us": 12502,
+        "cut_installed_on_tooth_us": 13334,
+        "retained_injector_closures": 2,
+        "coil_lows_after_cut": 38,
+        "injector_width_us": 3000
+      },
+      {
+        "strategy": 2,
+        "slots": 60,
+        "first_injector_rise_us": 12001,
+        "cut_request_us": 12501,
+        "cut_installed_on_tooth_us": 13001,
+        "retained_injector_closures": 2,
+        "coil_lows_after_cut": 38,
+        "injector_width_us": 3000
+      },
+      {
+        "strategy": 2,
+        "slots": 120,
+        "first_injector_rise_us": 12001,
+        "cut_request_us": 12501,
+        "cut_installed_on_tooth_us": 12501,
+        "retained_injector_closures": 2,
+        "coil_lows_after_cut": 38,
+        "injector_width_us": 3000
+      }
+    ],
+    "compiled_test_log": "engine-transient-test.log"
+  },
+  "USB": {
+    "maximum_live_data_bytes": 320,
+    "maximum_status_plus_data_payload_bytes": 321,
+    "maximum_enveloped_reply_bytes": 327,
+    "RX_ring_bytes": 1024,
+    "TX_ring_bytes": 1024,
+    "driver_ring_kind": "RINGBUF_TYPE_BYTEBUF for both; one327-byte frame fits the ring. This is capacity arithmetic, not a throughput guarantee.",
+    "probe": "Patterned full live request independently exercised Stream/Session under ASan/UBSan; exact327-byte framing,321-byte payload, last byte and CRC verified, one sample and zero commits.",
+    "runtime_bounds": "Existing64-byte RX slices,2ms send retry budget,1ms tick/mandatory yield, CPU0 priority1 and checked heap-owned session remain. Backpressure may still fail/truncate a reply and latch TX fault; physical sustained throughput is unmeasured.",
+    "cache_safety": "Both exact image audits pass UART0-only/exclusive USB and local driver source checks. USB ISR is flash with flags0 and remains explicitly not cache-safe."
+  },
+  "final_images": {
+    "compact_n16r8_web": {
+      "elf_sha256": "fddf4881845547a14156fc7f447877c4e26cc9b8f38249d3e55000ce15b47bd6",
+      "policy_strings": {
+        "DUMMY LOADS ONLY": [],
+        "COMPILE-TIME INHIBITED": [
+          {
+            "section": ".flash.rodata",
+            "address": "0x3c0d4ce0"
+          }
+        ],
+        "hardware_timer_virtual_outputs": [
+          {
+            "section": ".flash.rodata",
+            "address": "0x3c0d5028"
+          }
+        ],
+        "hardware_timer_dummy_loads": []
+      },
+      "engine_dummy_policy": false,
+      "compiled_output_pins": null,
+      "on_alarm_gpio_literal_refs": 0,
+      "static_internal_data_bss_bytes": 167100,
+      "static_objects": [
+        {
+          "symbol": "ecu::web::(anonymous namespace)::latest",
+          "address": "0x3fca5128",
+          "size": 496,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::web::(anonymous namespace)::active",
+          "address": "0x3fca5318",
+          "size": 2832,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_service::(anonymous namespace)::latest_data",
+          "address": "0x3fca6338",
+          "size": 352,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_service::(anonymous namespace)::latest",
+          "address": "0x3fca6498",
+          "size": 368,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_service::(anonymous namespace)::controller",
+          "address": "0x3fca6608",
+          "size": 416,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_log_service::(anonymous namespace)::recorder",
+          "address": "0x3fca67b8",
+          "size": 94296,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_tuning::(anonymous namespace)::latest",
+          "address": "0x3fcbd810",
+          "size": 176,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::measured",
+          "address": "0x3fcbf500",
+          "size": 112,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::output",
+          "address": "0x3fcbf57c",
+          "size": 4,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::idle_executor",
+          "address": "0x3fcc35f8",
+          "size": 240,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::executor",
+          "address": "0x3fcc36e8",
+          "size": 5496,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_service::(anonymous namespace)::active",
+          "address": "0x3fcc8aa4",
+          "size": 4840,
+          "section": ".dram0.bss"
+        }
+      ],
+      "stack_frames": [
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_trigger_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x403758f4",
+          "code_section": ".iram0.text",
+          "frame_bytes": 96
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x40375b20",
+          "code_section": ".iram0.text",
+          "frame_bytes": 128
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+          "address": "0x40376b04",
+          "code_section": ".iram0.text",
+          "frame_bytes": 112
+        },
+        {
+          "symbol": "app_main",
+          "address": "0x42003700",
+          "code_section": ".flash.text",
+          "frame_bytes": 6896
+        },
+        {
+          "symbol": "ecu::engine::Controller::step(ecu::engine::Tune const&, ecu::engine::Inputs const&, unsigned long long)::{lambda()#1}::operator()() const",
+          "address": "0x4201054c",
+          "code_section": ".flash.text",
+          "frame_bytes": 192
+        },
+        {
+          "symbol": "ecu::engine::Controller::step(ecu::engine::Tune const&, ecu::engine::Inputs const&, unsigned long long)",
+          "address": "0x42014b60",
+          "code_section": ".flash.text",
+          "frame_bytes": 656
+        },
+        {
+          "symbol": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+          "address": "0x42016540",
+          "code_section": ".flash.text",
+          "frame_bytes": 1472
+        },
+        {
+          "symbol": "ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)",
+          "address": "0x420189a4",
+          "code_section": ".flash.text",
+          "frame_bytes": 64
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+          "address": "0x4201cf84",
+          "code_section": ".flash.text",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+          "address": "0x420225c0",
+          "code_section": ".flash.text",
+          "frame_bytes": 2448
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)",
+          "address": "0x42022fd0",
+          "code_section": ".flash.text",
+          "frame_bytes": 3760
+        },
+        {
+          "symbol": "ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}::operator()(unsigned char const*, unsigned int) const",
+          "address": "0x4202742c",
+          "code_section": ".flash.text",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::tuning::Session::command(unsigned char const*, unsigned int)::{lambda(unsigned char)#1}::operator()(unsigned char) const",
+          "address": "0x420276a0",
+          "code_section": ".flash.text",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::tuning::Session::command(unsigned char const*, unsigned int)::{lambda(char const*)#2}::operator()(char const*) const",
+          "address": "0x420276e8",
+          "code_section": ".flash.text",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::tuning::Session::command(unsigned char const*, unsigned int)::{lambda(char const*)#1}::operator()(char const*) const",
+          "address": "0x420276e8",
+          "code_section": ".flash.text",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::tuning::Session::command(unsigned char const*, unsigned int)",
+          "address": "0x4202948c",
+          "code_section": ".flash.text",
+          "frame_bytes": 784
+        },
+        {
+          "symbol": "ecu::engine_tuning::(anonymous namespace)::run(void*)",
+          "address": "0x42029df0",
+          "code_section": ".flash.text",
+          "frame_bytes": 304
+        }
+      ],
+      "ISR_closure_current": true
+    },
+    "compact_a3_web": {
+      "elf_sha256": "e756725ed013d3d0009fc4bf6898b1aef2bdf99cf7efe8cdc23d208384165ff7",
+      "policy_strings": {
+        "DUMMY LOADS ONLY": [],
+        "COMPILE-TIME INHIBITED": [
+          {
+            "section": ".flash.rodata",
+            "address": "0x3c0d4ce0"
+          }
+        ],
+        "hardware_timer_virtual_outputs": [
+          {
+            "section": ".flash.rodata",
+            "address": "0x3c0d5028"
+          }
+        ],
+        "hardware_timer_dummy_loads": []
+      },
+      "engine_dummy_policy": false,
+      "compiled_output_pins": null,
+      "on_alarm_gpio_literal_refs": 0,
+      "static_internal_data_bss_bytes": 165848,
+      "static_objects": [
+        {
+          "symbol": "ecu::web::(anonymous namespace)::latest",
+          "address": "0x3fca3a28",
+          "size": 496,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::web::(anonymous namespace)::active",
+          "address": "0x3fca3c18",
+          "size": 2832,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_service::(anonymous namespace)::latest_data",
+          "address": "0x3fca4c38",
+          "size": 352,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_service::(anonymous namespace)::latest",
+          "address": "0x3fca4d98",
+          "size": 368,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_service::(anonymous namespace)::controller",
+          "address": "0x3fca4f08",
+          "size": 416,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_log_service::(anonymous namespace)::recorder",
+          "address": "0x3fca50b8",
+          "size": 94296,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_tuning::(anonymous namespace)::latest",
+          "address": "0x3fcbc110",
+          "size": 176,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::measured",
+          "address": "0x3fcbddf0",
+          "size": 112,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::output",
+          "address": "0x3fcbde6c",
+          "size": 4,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::idle_executor",
+          "address": "0x3fcc1ee8",
+          "size": 240,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::executor",
+          "address": "0x3fcc1fd8",
+          "size": 5496,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_service::(anonymous namespace)::active",
+          "address": "0x3fcc6f3c",
+          "size": 4840,
+          "section": ".dram0.bss"
+        }
+      ],
+      "stack_frames": [
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_trigger_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x403757a4",
+          "code_section": ".iram0.text",
+          "frame_bytes": 96
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x403759d0",
+          "code_section": ".iram0.text",
+          "frame_bytes": 128
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+          "address": "0x403769b4",
+          "code_section": ".iram0.text",
+          "frame_bytes": 112
+        },
+        {
+          "symbol": "app_main",
+          "address": "0x4200365c",
+          "code_section": ".flash.text",
+          "frame_bytes": 6896
+        },
+        {
+          "symbol": "ecu::engine::Controller::step(ecu::engine::Tune const&, ecu::engine::Inputs const&, unsigned long long)::{lambda()#1}::operator()() const",
+          "address": "0x4201051c",
+          "code_section": ".flash.text",
+          "frame_bytes": 192
+        },
+        {
+          "symbol": "ecu::engine::Controller::step(ecu::engine::Tune const&, ecu::engine::Inputs const&, unsigned long long)",
+          "address": "0x42014b30",
+          "code_section": ".flash.text",
+          "frame_bytes": 656
+        },
+        {
+          "symbol": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+          "address": "0x42016510",
+          "code_section": ".flash.text",
+          "frame_bytes": 1472
+        },
+        {
+          "symbol": "ecu::engine_service::tuning_commit(ecu::engine::Tune const&, unsigned long&)",
+          "address": "0x42018974",
+          "code_section": ".flash.text",
+          "frame_bytes": 64
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+          "address": "0x4201cf54",
+          "code_section": ".flash.text",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+          "address": "0x42022590",
+          "code_section": ".flash.text",
+          "frame_bytes": 2448
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)",
+          "address": "0x42022fa0",
+          "code_section": ".flash.text",
+          "frame_bytes": 3760
+        },
+        {
+          "symbol": "ecu::engine_tuning::(anonymous namespace)::run(void*)::{lambda(unsigned char const*, unsigned int)#1}::operator()(unsigned char const*, unsigned int) const",
+          "address": "0x420273f4",
+          "code_section": ".flash.text",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::tuning::Session::command(unsigned char const*, unsigned int)::{lambda(unsigned char)#1}::operator()(unsigned char) const",
+          "address": "0x42027668",
+          "code_section": ".flash.text",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::tuning::Session::command(unsigned char const*, unsigned int)::{lambda(char const*)#2}::operator()(char const*) const",
+          "address": "0x420276b0",
+          "code_section": ".flash.text",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::tuning::Session::command(unsigned char const*, unsigned int)::{lambda(char const*)#1}::operator()(char const*) const",
+          "address": "0x420276b0",
+          "code_section": ".flash.text",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::tuning::Session::command(unsigned char const*, unsigned int)",
+          "address": "0x42029454",
+          "code_section": ".flash.text",
+          "frame_bytes": 784
+        },
+        {
+          "symbol": "ecu::engine_tuning::(anonymous namespace)::run(void*)",
+          "address": "0x42029db8",
+          "code_section": ".flash.text",
+          "frame_bytes": 304
+        }
+      ],
+      "ISR_closure_current": true
+    },
+    "compact_a3_timing_bench": {
+      "elf_sha256": "3de5810430f4aab5d264612ef11d7ebde29a4834e73051b42226e85a8b9ff16d",
+      "policy_strings": {
+        "DUMMY LOADS ONLY": [
+          {
+            "section": ".flash.rodata",
+            "address": "0x3c0502f8"
+          }
+        ],
+        "COMPILE-TIME INHIBITED": [],
+        "hardware_timer_virtual_outputs": [],
+        "hardware_timer_dummy_loads": []
+      },
+      "engine_dummy_policy": true,
+      "compiled_output_pins": [
+        4,
+        5,
+        6,
+        7,
+        15,
+        16,
+        17,
+        18
+      ],
+      "on_alarm_gpio_literal_refs": 81,
+      "static_internal_data_bss_bytes": 140616,
+      "static_objects": [
+        {
+          "symbol": "ecu::web::(anonymous namespace)::active",
+          "address": "0x3fc9b528",
+          "size": 2832,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_service::(anonymous namespace)::latest_data",
+          "address": "0x3fc9c048",
+          "size": 352,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_service::(anonymous namespace)::latest",
+          "address": "0x3fc9c1a8",
+          "size": 368,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_service::(anonymous namespace)::controller",
+          "address": "0x3fc9c318",
+          "size": 416,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_log_service::(anonymous namespace)::recorder",
+          "address": "0x3fc9c4c8",
+          "size": 94296,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::measured",
+          "address": "0x3fcb3fb0",
+          "size": 112,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::output",
+          "address": "0x3fcb402c",
+          "size": 4,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::output_pins",
+          "address": "0x3fcb4030",
+          "size": 32,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::idle_executor",
+          "address": "0x3fcb80b0",
+          "size": 240,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::executor",
+          "address": "0x3fcb81a0",
+          "size": 5496,
+          "section": ".dram0.data"
+        },
+        {
+          "symbol": "ecu::web::(anonymous namespace)::latest",
+          "address": "0x3fcbb9b8",
+          "size": 496,
+          "section": ".dram0.bss"
+        },
+        {
+          "symbol": "ecu::engine_service::(anonymous namespace)::active",
+          "address": "0x3fcbbbc4",
+          "size": 4840,
+          "section": ".dram0.bss"
+        }
+      ],
+      "stack_frames": [
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+          "address": "0x40375484",
+          "code_section": ".iram0.text",
+          "frame_bytes": 128
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+          "address": "0x403765b8",
+          "code_section": ".iram0.text",
+          "frame_bytes": 112
+        },
+        {
+          "symbol": "app_main",
+          "address": "0x420023c4",
+          "code_section": ".flash.text",
+          "frame_bytes": 6896
+        },
+        {
+          "symbol": "ecu::engine::Controller::step(ecu::engine::Tune const&, ecu::engine::Inputs const&, unsigned long long)::{lambda()#1}::operator()() const",
+          "address": "0x4200826c",
+          "code_section": ".flash.text",
+          "frame_bytes": 192
+        },
+        {
+          "symbol": "ecu::engine::Controller::step(ecu::engine::Tune const&, ecu::engine::Inputs const&, unsigned long long)",
+          "address": "0x4200bc18",
+          "code_section": ".flash.text",
+          "frame_bytes": 656
+        },
+        {
+          "symbol": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+          "address": "0x4200d5ec",
+          "code_section": ".flash.text",
+          "frame_bytes": 1472
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+          "address": "0x42013194",
+          "code_section": ".flash.text",
+          "frame_bytes": 32
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+          "address": "0x4201688c",
+          "code_section": ".flash.text",
+          "frame_bytes": 2448
+        },
+        {
+          "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)",
+          "address": "0x420173a0",
+          "code_section": ".flash.text",
+          "frame_bytes": 3760
+        }
+      ],
+      "ISR_closure_current": true
+    }
+  },
+  "memory_and_stack": {
+    "native_type_sizes": {
+      "Tune": 4840,
+      "Output": 368,
+      "Controller": 416,
+      "RuntimeSample": 352,
+      "Recorder": 94296,
+      "Page": 5976,
+      "Command": 520,
+      "Candidate": 1096,
+      "Executor": 5496,
+      "Session": 10040,
+      "Stream": 368
+    },
+    "actual_target_static_sizes": "ELF independently confirms Output368,Controller416,RuntimeSample352,Recorder94296,Executor5496 bytes, internal DRAM. Recorder is below its96KiB static assertion;256 rows and16-row pages remain fixed.",
+    "page_allocation": "New native16-row Page is5976 bytes; HTTP uses checked heap_object<Page> and streams serialization outside recorder mutex, so it is not a task-stack Page local.",
+    "frames": "Actual ELF prologues: timer ISR112,capture128,diagnostic96; target worker3760 plus command helper2448 in16KiB task; app_main6896 plus observe1472,Controller656 and finish192 in16KiB main task; USB run304 and Session::command784 in12KiB task. These are named static frames, not complete worst-case call-path/high-water proof.",
+    "placement": "Fresh selected/generic/dummy closure audits pass30/30/29 functions, zero flash literals/unclassified flash pointers;63 pinned SDK assertion-only metadata arguments separately classified. Increased diagnostic/controller state adds no transient math, JSON, heap or IO to the engine ISR.",
+    "limits": "Runtime heap minimum, actual stack high-water, lock/copy duration, control execution budget, IRQ latency and jitter remain unmeasured."
+  },
+  "reference_and_plant": {
+    "pin": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+    "upstream_head": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+    "tracked_production_sources_clean": true,
+    "builds": [
+      {
+        "name": "speeduino-sim",
+        "manifest_sha256": "ef09364119477be0e7973f230b6fc86ca83b6b91ca3f5837a7141bc635d4c49b",
+        "binary_sha256": "f209ced5c4b505a2f8943f04f2893b69e9b50b7425a3799f780cf936b66151a3",
+        "production_source_matches": 105,
+        "declared_HAL_only_difference": [
+          "speeduino/board_native.cpp"
+        ],
+        "timer_bits": 32,
+        "wrapper_source_matches": true
+      },
+      {
+        "name": "speeduino-sim16",
+        "manifest_sha256": "082da556f0eb8f3be316ad747cf8a6e2e461b47e02b5f8dc750aa41ddf8c79c3",
+        "binary_sha256": "6ee6e81b459bfaf21775a3dfc40ca134f070eace1fae45e9f022134a7ffbdae1",
+        "production_source_matches": 105,
+        "declared_HAL_only_difference": [
+          "speeduino/board_native.cpp"
+        ],
+        "timer_bits": 16,
+        "wrapper_source_matches": true
+      }
+    ],
+    "profile_readback": "reference-readback.json",
+    "plant_sha256": "a849b9b84e4be9d5a02d91a6315b77b9c0953a922312bf3d877faa03038fb74a",
+    "plant_evidence": "One new ResearchPlant per run; fixed independent fuel-flow/deadtime/wall-film/physical order. Only declared cold initial condition chooses fixed warm/cold film. Config is passed only to controllers, executed actuator edges alone deliver fuel/work.",
+    "scope": "Native HAL production algorithms unchanged. CPU/IRQ, ADC physics, AVR execution, loaded hardware and calibrated engine behavior unmeasured."
+  },
+  "comparison_scope": {
+    "source_ownership": "aeconfig changes only declared config/table bytes before virtual time starts, reads every byte back, and refuses repeat or post-start configuration; six32/16 TPS/MAP/neutral profile readbacks independently passed. Production correction/sensor/fuel/scheduler algorithms are retained.",
+    "independent_plant": "Separate ResearchPlant instance for each controller; no ECU fuel/VE/transient config is injected into plant physics. Fixed injector300cc/min,0.9ms actuator deadtime, warm5%/50ms and cold45%/1.5s empirical film, fixed physical firing order. Only executed edges deliver fuel/work.",
+    "declared_differences": "Project sample window, opposite-sign cancellation and maximum-extra clamp have no exact reference equivalent. Reference retains normal33ms TPS and1ms MAP dispatch, quantized sensor/rate/table arithmetic,32/16 virtual timers and zero CPU cost. Halving coupling step also changes reference loop cadence; refinement is not isolated solver convergence.",
+    "cold_case_limit": "cold_adder selects a cold plant; its requested cold_multiplier_pct remains100, so this matrix does not establish equivalence of nonneutral cold AE taper behavior.",
+    "matrix": {
+      "initial_summary": {
+        "path": ".cache/engine/transient/matrix/summary.json",
+        "sha256": "77f8dc9b0b8ec0a0e24cf6cb9405cf1bdca66e3ef3955ded0d780dcc7f8077b7",
+        "passed": false,
+        "failures": [
+          {
+            "name": "portable-decel_zero-250",
+            "errors": [
+              "decel fuel-only cut not exercised"
+            ]
+          },
+          {
+            "name": "portable-map_load-250",
+            "errors": [
+              "requested transient mode was not exercised"
+            ]
+          },
+          {
+            "name": "target-decel_zero-250",
+            "errors": [
+              "decel fuel-only cut not exercised"
+            ]
+          },
+          {
+            "name": "target-map_load-250",
+            "errors": [
+              "requested transient mode was not exercised"
+            ]
+          },
+          {
+            "name": "speeduino32-tps_adder-off-250",
+            "errors": [
+              "disabled negative control has a transient correction"
+            ]
+          },
+          {
+            "name": "speeduino32-tps_adder-negative",
+            "errors": [
+              "disabled sensitivity not exercised"
+            ]
+          },
+          {
+            "name": "speeduino32-cold_adder-off-250",
+            "errors": [
+              "disabled negative control has a transient correction"
+            ]
+          },
+          {
+            "name": "speeduino32-cold_adder-negative",
+            "errors": [
+              "disabled sensitivity not exercised"
+            ]
+          },
+          {
+            "name": "speeduino16-tps_adder-off-250",
+            "errors": [
+              "disabled negative control has a transient correction"
+            ]
+          },
+          {
+            "name": "speeduino16-tps_adder-negative",
+            "errors": [
+              "disabled sensitivity not exercised"
+            ]
+          },
+          {
+            "name": "speeduino16-cold_adder-off-250",
+            "errors": [
+              "disabled negative control has a transient correction"
+            ]
+          },
+          {
+            "name": "speeduino16-cold_adder-negative",
+            "errors": [
+              "disabled sensitivity not exercised"
+            ]
+          }
+        ],
+        "source_hashes": {
+          "tools/run_transient_scenarios.py": "122aafc4ceea61a6525561918da02c901a3b4354cfe9b00935797737d60947b2",
+          "tools/compare_engine_controllers.py": "a78de92496b35f51be17b279c6583585111b4555893f848431f596d24186afa1",
+          "tools/run_target_scenarios.py": "042cf2d7e9f7c181594c9c4212d757461a697ab1b83ec9bf7dddd133e3bd6aa6",
+          "tools/engine_research_plant.py": "a849b9b84e4be9d5a02d91a6315b77b9c0953a922312bf3d877faa03038fb74a",
+          "tools/engine_runtime.py": "804a0aae598b0e39c8e713bcbf0e8f57fa06480909e4d6d6549ea5419ddc015e",
+          "tools/engine_bridge.cpp": "2dba5632c0a3b40e9eceeea66e60a631e4f61a619ab2d22875dad7b1dbbfdd21",
+          "tools/target_runtime.py": "9e2c3c38ebacc31e9c01b246da3cb17371257c14b53b27aeec41614f5ad79aed",
+          "tools/target_timing_bridge.cpp": "45004577761bd958566e200f29d4b203684266e6bc6deeff53a8424d6631fa05",
+          "tools/speeduino_runtime.py": "a6b89a432cd50e5b06e72590ad4c256cb052135e0d755ce77cc4c407a34c85b5",
+          "tools/speeduino_sim.cpp": "ccaeb6b884060ba12a1d51e7f4319ea1333d84ac46941ee022be012cce1394d7",
+          "tools/speeduino_sim_hal.cpp": "0d28c0c73308f8ac1333b0e3eefa38d9b6bef4fe0e7ca31e6342c7a9e8074409",
+          "tools/speeduino_sim_native.hpp": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9",
+          "scripts/build_speeduino_sim.py": "1c8c53bc55cb15cdbfb6186fd7b7fb4ed42058a99c3a1a70d943497af7f43e4a",
+          "simulation/modelica/EngineAirPath.mo": "303df3396c660d1c4f8da48f19c698a6f63c46d1050c7964b92fba56be653c3c",
+          "config/engine/defaults.json": "c9007e8875392e436771cd64778d4ac1e17f8d85ff112d401d4293a6cfb46dba",
+          "firmware/include/ecu/capture_clock.hpp": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+          "firmware/include/ecu/config.hpp": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39",
+          "firmware/include/ecu/control.hpp": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b",
+          "firmware/include/ecu/engine.hpp": "7af82ae6eabe4d1371a028bd6138c5e952dbced2c13e8fbdfed333f9218240b5",
+          "firmware/include/ecu/engine_binding.hpp": "f1e8d39d850b70e4f8de70bc61c89f161305aa48a4cec4258333710484a0aa92",
+          "firmware/include/ecu/engine_data.hpp": "c251b572dfa9eb91e32fae6bee71ac31f4d037fccec33fdaedc95d8d0c8dc4d6",
+          "firmware/include/ecu/engine_data_json.hpp": "e5219b85ca069e76ff1c41241f6868902f5a642ca8fa8dd6ba6c9b268cd792e6",
+          "firmware/include/ecu/engine_json.hpp": "ed835355d725865eb77b2b057850a7f36d0773e19e2f0026dd657c177c26ef02",
+          "firmware/include/ecu/engine_limits.hpp": "aaaa07e76744f92cbf03f7ba07b5a297d813ffdceb7d5d5a68a8d6328d2dce14",
+          "firmware/include/ecu/engine_log.hpp": "f4dc3d4641c35c90f9fe3a46ec6c6300a4baadc7372d4989dad90837aef20d82",
+          "firmware/include/ecu/engine_log_json.hpp": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6",
+          "firmware/include/ecu/engine_log_msl.hpp": "d0407900dd58bb8efe8bf063cd59b467804d3f15c2fdbbadd366214fdccdfb75",
+          "firmware/include/ecu/engine_log_service.hpp": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f",
+          "firmware/include/ecu/engine_phase.hpp": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27",
+          "firmware/include/ecu/engine_radio.hpp": "c9835cd575b8a24ba0c6969e6f7adcf860b0e1ed7eac1bd80442e821acc8adb2",
+          "firmware/include/ecu/engine_scheduler.hpp": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a",
+          "firmware/include/ecu/engine_service.hpp": "d7b34562c70e0aa60d5b2e9eca0cf01aac3005ffed7924cccbea00ddccc71bbe",
+          "firmware/include/ecu/engine_storage.hpp": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e",
+          "firmware/include/ecu/engine_target.hpp": "0cfcef7fa43cadaf105da094a4524aded50dcff0f88ddb6449799155e63b25b0",
+          "firmware/include/ecu/engine_tuning.hpp": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6",
+          "firmware/include/ecu/espnow.hpp": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc",
+          "firmware/include/ecu/espnow_protocol.hpp": "634bd5a99ddd8c682a20959720f5599a0e39f20c25d8cadf4b3e8024eca25b6a",
+          "firmware/include/ecu/heap_object.hpp": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51",
+          "firmware/include/ecu/idle_command.hpp": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310",
+          "firmware/include/ecu/idle_control.hpp": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd",
+          "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+          "firmware/include/ecu/idle_pwm.hpp": "392ef3640df5e3ea64c465df7a6815c2272ead28570626bc9540aab8b58a8c42",
+          "firmware/include/ecu/idle_pwm_json.hpp": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b",
+          "firmware/include/ecu/json.hpp": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+          "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+          "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+          "firmware/include/ecu/timing_executor.hpp": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db",
+          "firmware/include/ecu/transient_enrichment.hpp": "f7ae37a4ce2187d3874597f97176a6a482b0e7fc576af1620c8b95cda0bbf6c3",
+          "firmware/include/ecu/transient_json.hpp": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88",
+          "firmware/include/ecu/trigger_log.hpp": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451",
+          "firmware/include/ecu/trigger_log_json.hpp": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58",
+          "firmware/include/ecu/tuning_document.hpp": "fbec5d9f8f134a2fa28f11b8a0f82246664f4a17f33ad6b879f7a957df98f514",
+          "firmware/include/ecu/tuning_layout.hpp": "f12eefbf0f0317e21651eda1b0368517b77bf4ac51b54df3c450b90bf328ef1f",
+          "firmware/include/ecu/tuning_live.hpp": "f5910c10c581dd53d9fe16229474ba6c3ced6b8d380212901e53f49fea84210a",
+          "firmware/include/ecu/tuning_session.hpp": "ab3dc15ed4c0b1e838eef9c935769357bc7d3b2ed206e63c138e3e58f4670765",
+          "firmware/include/ecu/tuning_stream.hpp": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042",
+          "firmware/include/ecu/web_config.hpp": "8d954bf30d639daa06cbae6e6cc41a2a4c0b0579d3d9914aff44327085243ca1"
+        }
+      },
+      "corrected_summary_path": ".cache/engine/transient/matrix-qualified/summary.json",
+      "corrected_summary_sha256": "e3960ba2c49aa2e7ef95026fa20720d7bbd43c7492587283440818c315b192aa",
+      "corrected_passed": true,
+      "controller_cases": 48,
+      "refinement_cases": 8,
+      "negative_cases": 8,
+      "total64_trace_edge_replays": true,
+      "corrected_source_hash_count": 57,
+      "all_corrected_source_hashes_match": true,
+      "initial64_trace_edge_replays": true,
+      "no_wait_for_matrix_required": "The corrected summary completed naturally before the bounded final snapshot; reviewer did not start/wait for matrix simulations."
+    }
+  },
+  "source_sha256_initial": {
+    "firmware/include/ecu/trigger_log.hpp": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451",
+    "firmware/include/ecu/engine_json.hpp": "ed835355d725865eb77b2b057850a7f36d0773e19e2f0026dd657c177c26ef02",
+    "firmware/include/ecu/idle_command.hpp": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+    "firmware/include/ecu/idle_control.hpp": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd",
+    "firmware/include/ecu/heap_object.hpp": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51",
+    "firmware/include/ecu/tuning_live.hpp": "f5910c10c581dd53d9fe16229474ba6c3ced6b8d380212901e53f49fea84210a",
+    "firmware/include/ecu/engine.hpp": "7af82ae6eabe4d1371a028bd6138c5e952dbced2c13e8fbdfed333f9218240b5",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/include/ecu/engine_phase.hpp": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27",
+    "firmware/include/ecu/espnow_protocol.hpp": "634bd5a99ddd8c682a20959720f5599a0e39f20c25d8cadf4b3e8024eca25b6a",
+    "firmware/include/ecu/tuning_layout.hpp": "f12eefbf0f0317e21651eda1b0368517b77bf4ac51b54df3c450b90bf328ef1f",
+    "firmware/include/ecu/engine_limits.hpp": "aaaa07e76744f92cbf03f7ba07b5a297d813ffdceb7d5d5a68a8d6328d2dce14",
+    "firmware/include/ecu/engine_log_msl.hpp": "d0407900dd58bb8efe8bf063cd59b467804d3f15c2fdbbadd366214fdccdfb75",
+    "firmware/include/ecu/engine_data_json.hpp": "e5219b85ca069e76ff1c41241f6868902f5a642ca8fa8dd6ba6c9b268cd792e6",
+    "firmware/include/ecu/idle_pwm.hpp": "392ef3640df5e3ea64c465df7a6815c2272ead28570626bc9540aab8b58a8c42",
+    "firmware/include/ecu/engine_log.hpp": "f4dc3d4641c35c90f9fe3a46ec6c6300a4baadc7372d4989dad90837aef20d82",
+    "firmware/include/ecu/espnow.hpp": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc",
+    "firmware/include/ecu/engine_log_service.hpp": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f",
+    "firmware/include/ecu/trigger_log_json.hpp": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58",
+    "firmware/include/ecu/control.hpp": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b",
+    "firmware/include/ecu/timing_executor.hpp": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db",
+    "firmware/include/ecu/engine_binding.hpp": "f1e8d39d850b70e4f8de70bc61c89f161305aa48a4cec4258333710484a0aa92",
+    "firmware/include/ecu/engine_target.hpp": "0cfcef7fa43cadaf105da094a4524aded50dcff0f88ddb6449799155e63b25b0",
+    "firmware/include/ecu/engine_log_json.hpp": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6",
+    "firmware/include/ecu/engine_service.hpp": "d7b34562c70e0aa60d5b2e9eca0cf01aac3005ffed7924cccbea00ddccc71bbe",
+    "firmware/include/ecu/tuning_document.hpp": "fbec5d9f8f134a2fa28f11b8a0f82246664f4a17f33ad6b879f7a957df98f514",
+    "firmware/include/ecu/tuning_stream.hpp": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042",
+    "firmware/include/ecu/idle_pwm_json.hpp": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b",
+    "firmware/include/ecu/transient_enrichment.hpp": "f7ae37a4ce2187d3874597f97176a6a482b0e7fc576af1620c8b95cda0bbf6c3",
+    "firmware/include/ecu/config.hpp": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39",
+    "firmware/include/ecu/transient_json.hpp": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88",
+    "firmware/include/ecu/web_config.hpp": "8d954bf30d639daa06cbae6e6cc41a2a4c0b0579d3d9914aff44327085243ca1",
+    "firmware/include/ecu/engine_radio.hpp": "c9835cd575b8a24ba0c6969e6f7adcf860b0e1ed7eac1bd80442e821acc8adb2",
+    "firmware/include/ecu/engine_tuning.hpp": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6",
+    "firmware/include/ecu/engine_storage.hpp": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e",
+    "firmware/include/ecu/engine_scheduler.hpp": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a",
+    "firmware/include/ecu/engine_data.hpp": "c251b572dfa9eb91e32fae6bee71ac31f4d037fccec33fdaedc95d8d0c8dc4d6",
+    "firmware/include/ecu/capture_clock.hpp": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+    "firmware/include/ecu/json.hpp": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+    "firmware/include/ecu/tuning_session.hpp": "ab3dc15ed4c0b1e838eef9c935769357bc7d3b2ed206e63c138e3e58f4670765",
+    "firmware/main/engine_target.cpp": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738",
+    "firmware/main/engine_service.cpp": "b48c5a7a77f7d03505fb3e6898ad0ab76ae09171c59d84eafaf1f7eb0b7245dd",
+    "firmware/main/app.cpp": "a5d196a1e6140c1b5b68fdb2e2fdeab8048cb67eff6ef69799a6cddb5da4f272",
+    "firmware/main/engine_tuning.cpp": "24b846ed8cc4a03c7b323afd4b58eea7f411b243e71e569f5b9c08c9343d851a",
+    "firmware/platformio.ini": "579f4075495f9c070a80d14cdcedf1ec4f9de13c4d233ebd1a48b97947e3f3d0",
+    "tools/test_transient.py": "3050a856e9dcbde6ffd6e0ac981dffde9f5ebc94dbff02d2a665327a400ae5bd",
+    "tools/run_transient_scenarios.py": "122aafc4ceea61a6525561918da02c901a3b4354cfe9b00935797737d60947b2",
+    "tools/compare_engine_controllers.py": "a78de92496b35f51be17b279c6583585111b4555893f848431f596d24186afa1",
+    "tools/speeduino_sim.cpp": "ccaeb6b884060ba12a1d51e7f4319ea1333d84ac46941ee022be012cce1394d7",
+    "tools/speeduino_runtime.py": "a6b89a432cd50e5b06e72590ad4c256cb052135e0d755ce77cc4c407a34c85b5",
+    "tools/engine_research_plant.py": "a849b9b84e4be9d5a02d91a6315b77b9c0953a922312bf3d877faa03038fb74a",
+    "scripts/build_speeduino_sim.py": "1c8c53bc55cb15cdbfb6186fd7b7fb4ed42058a99c3a1a70d943497af7f43e4a"
+  },
+  "source_sha256_final": {
+    "firmware/include/ecu/trigger_log.hpp": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451",
+    "firmware/include/ecu/engine_json.hpp": "ed835355d725865eb77b2b057850a7f36d0773e19e2f0026dd657c177c26ef02",
+    "firmware/include/ecu/idle_command.hpp": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+    "firmware/include/ecu/idle_control.hpp": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd",
+    "firmware/include/ecu/heap_object.hpp": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51",
+    "firmware/include/ecu/tuning_live.hpp": "f5910c10c581dd53d9fe16229474ba6c3ced6b8d380212901e53f49fea84210a",
+    "firmware/include/ecu/engine.hpp": "7af82ae6eabe4d1371a028bd6138c5e952dbced2c13e8fbdfed333f9218240b5",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/include/ecu/engine_phase.hpp": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27",
+    "firmware/include/ecu/espnow_protocol.hpp": "634bd5a99ddd8c682a20959720f5599a0e39f20c25d8cadf4b3e8024eca25b6a",
+    "firmware/include/ecu/tuning_layout.hpp": "f12eefbf0f0317e21651eda1b0368517b77bf4ac51b54df3c450b90bf328ef1f",
+    "firmware/include/ecu/engine_limits.hpp": "aaaa07e76744f92cbf03f7ba07b5a297d813ffdceb7d5d5a68a8d6328d2dce14",
+    "firmware/include/ecu/engine_log_msl.hpp": "d0407900dd58bb8efe8bf063cd59b467804d3f15c2fdbbadd366214fdccdfb75",
+    "firmware/include/ecu/engine_data_json.hpp": "e5219b85ca069e76ff1c41241f6868902f5a642ca8fa8dd6ba6c9b268cd792e6",
+    "firmware/include/ecu/idle_pwm.hpp": "392ef3640df5e3ea64c465df7a6815c2272ead28570626bc9540aab8b58a8c42",
+    "firmware/include/ecu/engine_log.hpp": "f4dc3d4641c35c90f9fe3a46ec6c6300a4baadc7372d4989dad90837aef20d82",
+    "firmware/include/ecu/espnow.hpp": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc",
+    "firmware/include/ecu/engine_log_service.hpp": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f",
+    "firmware/include/ecu/trigger_log_json.hpp": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58",
+    "firmware/include/ecu/control.hpp": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b",
+    "firmware/include/ecu/timing_executor.hpp": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db",
+    "firmware/include/ecu/engine_binding.hpp": "f1e8d39d850b70e4f8de70bc61c89f161305aa48a4cec4258333710484a0aa92",
+    "firmware/include/ecu/engine_target.hpp": "0cfcef7fa43cadaf105da094a4524aded50dcff0f88ddb6449799155e63b25b0",
+    "firmware/include/ecu/engine_log_json.hpp": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6",
+    "firmware/include/ecu/engine_service.hpp": "d7b34562c70e0aa60d5b2e9eca0cf01aac3005ffed7924cccbea00ddccc71bbe",
+    "firmware/include/ecu/tuning_document.hpp": "fbec5d9f8f134a2fa28f11b8a0f82246664f4a17f33ad6b879f7a957df98f514",
+    "firmware/include/ecu/tuning_stream.hpp": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042",
+    "firmware/include/ecu/idle_pwm_json.hpp": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b",
+    "firmware/include/ecu/transient_enrichment.hpp": "f7ae37a4ce2187d3874597f97176a6a482b0e7fc576af1620c8b95cda0bbf6c3",
+    "firmware/include/ecu/config.hpp": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39",
+    "firmware/include/ecu/transient_json.hpp": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88",
+    "firmware/include/ecu/web_config.hpp": "8d954bf30d639daa06cbae6e6cc41a2a4c0b0579d3d9914aff44327085243ca1",
+    "firmware/include/ecu/engine_radio.hpp": "c9835cd575b8a24ba0c6969e6f7adcf860b0e1ed7eac1bd80442e821acc8adb2",
+    "firmware/include/ecu/engine_tuning.hpp": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6",
+    "firmware/include/ecu/engine_storage.hpp": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e",
+    "firmware/include/ecu/engine_scheduler.hpp": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a",
+    "firmware/include/ecu/engine_data.hpp": "c251b572dfa9eb91e32fae6bee71ac31f4d037fccec33fdaedc95d8d0c8dc4d6",
+    "firmware/include/ecu/capture_clock.hpp": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+    "firmware/include/ecu/json.hpp": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+    "firmware/include/ecu/tuning_session.hpp": "ab3dc15ed4c0b1e838eef9c935769357bc7d3b2ed206e63c138e3e58f4670765",
+    "firmware/main/engine_target.cpp": "276967b7a74f0a3a036c1a665e180a65a78a685e6caf1e37d8b1672af7c1f738",
+    "firmware/main/engine_service.cpp": "b48c5a7a77f7d03505fb3e6898ad0ab76ae09171c59d84eafaf1f7eb0b7245dd",
+    "firmware/main/app.cpp": "a5d196a1e6140c1b5b68fdb2e2fdeab8048cb67eff6ef69799a6cddb5da4f272",
+    "firmware/main/engine_tuning.cpp": "24b846ed8cc4a03c7b323afd4b58eea7f411b243e71e569f5b9c08c9343d851a",
+    "firmware/platformio.ini": "579f4075495f9c070a80d14cdcedf1ec4f9de13c4d233ebd1a48b97947e3f3d0",
+    "tools/test_transient.py": "3050a856e9dcbde6ffd6e0ac981dffde9f5ebc94dbff02d2a665327a400ae5bd",
+    "tools/run_transient_scenarios.py": "4f3c10b043cef548ee079bfcf895cb7dc4657c47ce9ebb4fa5e279036293b9f5",
+    "tools/compare_engine_controllers.py": "a78de92496b35f51be17b279c6583585111b4555893f848431f596d24186afa1",
+    "tools/speeduino_sim.cpp": "ccaeb6b884060ba12a1d51e7f4319ea1333d84ac46941ee022be012cce1394d7",
+    "tools/speeduino_runtime.py": "a6b89a432cd50e5b06e72590ad4c256cb052135e0d755ce77cc4c407a34c85b5",
+    "tools/engine_research_plant.py": "a849b9b84e4be9d5a02d91a6315b77b9c0953a922312bf3d877faa03038fb74a",
+    "scripts/build_speeduino_sim.py": "1c8c53bc55cb15cdbfb6186fd7b7fb4ed42058a99c3a1a70d943497af7f43e4a"
+  },
+  "source_changes_during_review": {
+    "tools/run_transient_scenarios.py": {
+      "before": "122aafc4ceea61a6525561918da02c901a3b4354cfe9b00935797737d60947b2",
+      "after": "4f3c10b043cef548ee079bfcf895cb7dc4657c47ce9ebb4fa5e279036293b9f5"
+    }
+  },
+  "artifact_sha256": {
+    "source-hashes.json": "c095c7e0c7325c4cb1f395fe2a50902827b3a2739b392ad3f208e9468e4c3dda",
+    "probe.cpp": "d90e9324b8d17a9f1d4f75544ee9c0d568f7a52f0cb9af2cef23ed1e2e8cb9b6",
+    "probe.json": "d5b7befcc8d199bca566e0862cc9e626a3aed3224259d4b962c3b06879f5bad3",
+    "selective_cut_probe.cpp": "2fb6734e95f61a14afd758a3f3fbee243cb13e68df781a826530fd7751463952",
+    "selective-cut-probe.json": "45d8cb52bec7e8d3cb5638173fb168743772233ce37faca38fd0d4366ccf3d7e",
+    "engine-transient-test.log": "7fca101528c00e73152f6315ccd20ceea6204b033b57182996915aaf3c9409c1",
+    "elf_probe.py": "c1d40c041b74f67af1528cde12ddafc1e4d524016f3eb8b5874a7aa63565e894",
+    "images.json": "a2847393b86676512d427411a0d7ffa182cf017d06c636b53fac64c6f9de8f36",
+    "reference-readback.json": "be554b5cdf6f2407cb0a7d38147bbb523ab8428a57285dbdf6080644e56637c7",
+    "reference-integrity.json": "dfe86dfbd8b9b9888c0ec17b8f67ad505c003fcd0a12f56641f6bb8a8231eb8c",
+    "matrix_probe.py": "9126361ccc4c336592b3059927cbf7f89498d2b3077b0474664cad081b99bd69",
+    "matrix-probe.json": "ed6f8e4eb1b3fcf971c787914432be222ebf4d394ece79290deb283d663f4dbc",
+    "runner-reviewed-initial.py": "122aafc4ceea61a6525561918da02c901a3b4354cfe9b00935797737d60947b2",
+    "runner-reviewed-current.py": "4f3c10b043cef548ee079bfcf895cb7dc4657c47ce9ebb4fa5e279036293b9f5",
+    "usb-selected.json": "4ad4e39d91d75deccb60928f494f1d0403e168afc486314f9ff75ae901e2cc97",
+    "usb-generic.json": "b246e549cc6f0b97130d23e1cd3bdc999a9fced72c26ce73826f823a32dbf4a7",
+    "isr-selected/closure.json": "73830c7c1f18ae5d11f81c29083e7508e1f5682354191b440831f4af23038722",
+    "isr-generic/closure.json": "2de1e47a85b46359fb9004a523ed2987123183448c411eaae979d79668486c30",
+    "isr-dummy/closure.json": "7479aa56ed701bdbb18953a81afaf14d246bcf09d1a76600d4ba20a1d4ff9b5c"
+  },
+  "initial_build_log_sha256": "363e7e803b9f3e70052e8bb1ad77738133ea7cb0bc910829b135926a8b26713e",
+  "image_recheck": "Both web ELFs changed during review while all reviewed production core source hashes stayed identical. Initial audits are preserved under initial-build-audits/. Fresh ISR/USB/policy/data/frame audits were run against final_images; bench ELF remained unchanged.",
+  "commands": [
+    "c++ -std=c++17 -Wall -Wextra -Werror -g -O1 -fsanitize=address,undefined -fno-omit-frame-pointer -I.cache/engine/transient-execution-review/snapshot .cache/engine/transient-execution-review/probe.cpp -o .cache/engine/transient-execution-review/probe",
+    "ASAN_OPTIONS=detect_leaks=1 .cache/engine/transient-execution-review/probe",
+    "c++ -std=c++17 -Wall -Wextra -Werror -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -I.cache/engine/transient-execution-review/snapshot .cache/engine/transient-execution-review/selective_cut_probe.cpp -o .cache/engine/transient-execution-review/selective_cut_probe",
+    "ASAN_OPTIONS=detect_leaks=1 .cache/engine/transient-execution-review/selective_cut_probe",
+    "c++ -std=c++17 -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -I.cache/engine/transient-execution-review/snapshot .cache/engine/transient-execution-review/snapshot/engine_transient_test.cpp -o .cache/engine/transient-execution-review/engine_transient_test",
+    "ASAN_OPTIONS=detect_leaks=1 .cache/engine/transient-execution-review/engine_transient_test",
+    "python3 scripts/audit_target_isr.py firmware/.pio/build/<environment>/firmware.elf .cache/engine/transient-execution-review/isr-<selected|generic|dummy>",
+    "python3 scripts/audit_tuning_build.py <compact_n16r8_web|compact_a3_web> .cache/engine/transient-execution-review/usb-<selected|generic>.json",
+    "python3 .cache/engine/transient-execution-review/elf_probe.py",
+    "PYTHONDONTWRITEBYTECODE=1 python3 .cache/engine/transient-execution-review/matrix_probe.py"
+  ],
+  "remaining_limits": [
+    "Source/static/native simulation evidence only; no device was flashed or driven.",
+    "Selected/generic engine physical writes remain inhibited; separate bench engine dummy-load writes are compiled in with existing gates. Idle channel8 remains separately default0. CMake compile_commands absence was not used as macro evidence.",
+    "No calibrated engine, injector/driver loading, module pin/fit, gate latency, USB physical/cache-stall behavior, EMI/temperature or sustained-target qualification.",
+    "Native independent plant results establish bounded software behavior in declared scenarios, not an engine calibration or universal transient performance claim."
+  ]
+}

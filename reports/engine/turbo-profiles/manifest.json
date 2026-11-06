@@ -1,0 +1,2949 @@
+{
+  "status": "reviewed_research_foundation_goal_active",
+  "baseline_commit": "4daa4d8aadd05675759cc1f330d232bd331a304b",
+  "goal_complete": false,
+  "engine_outputs_inhibited": true,
+  "physical_operation_verified": false,
+  "fitted_injector_commands": 4,
+  "fitted_coil_commands": 4,
+  "source_identities": {
+    "tools/turbo_components.py": {
+      "bytes": 8359,
+      "sha256": "1481fc41b1e655118a457210b74617e92ccc326e03b1b5590600226ca9c07954"
+    },
+    "tools/turbo_gas_path.py": {
+      "bytes": 12848,
+      "sha256": "8073a61fd08cd8150ffc5163645128e270b6fa05c4d603faad6d6f57a98aee83"
+    },
+    "tools/boost_research_plant.py": {
+      "bytes": 8120,
+      "sha256": "9788edf87d8ca69399ae7ad0a07c1d3e0d2a2616fc08d04cbd94418efa52b887"
+    },
+    "tools/run_boost_engine.py": {
+      "bytes": 15366,
+      "sha256": "97096e03b0d08dd56996ff2019e3af02d1860b2fb760b5743a740a65efa28f5d"
+    },
+    "tools/boost_engine_provenance.py": {
+      "bytes": 10714,
+      "sha256": "1470c93684b96ed95d8114efdd01111c275a017611a850fdd45a45f819f335a4"
+    },
+    "tools/test_engine_profile_plants.py": {
+      "bytes": 10250,
+      "sha256": "705cad0f0221b2e78844a04161bc5eb0397515b3f7f777204806576dd8245a6b"
+    },
+    "tools/test_turbo_geometry.py": {
+      "bytes": 7907,
+      "sha256": "0e8687ca69fd6c314f446d4ea178ff873f64c2bf99777ee1c0baf16b15698f90"
+    },
+    "tools/verify_turbo_geometry_run.py": {
+      "bytes": 7164,
+      "sha256": "7ba63262a9cea2588a3f1d88cdd7ad3215795f4ad60f9a7ddf9c3eba969fa9c0"
+    },
+    "tools/package_turbo_profiles.py": {
+      "bytes": 8962,
+      "sha256": "c9ae850b3132139fbaabfe219195c7cf4b1c51b73a2e83ad17657301feda5d3d"
+    },
+    "docs/engine-turbo-profiles.md": {
+      "bytes": 6357,
+      "sha256": "8809fd5afdb0c6f5ea25d580b51f90f60f074f74813fff7819e09d64b682e5ff"
+    },
+    "docs/engine-cylinder-profiles.md": {
+      "bytes": 14021,
+      "sha256": "5491d325e8a697ded3a317d2d3f634d5ef98fc7ca6e2d6dc16ab4faa795ec115"
+    },
+    "docs/engine-feature-coverage.md": {
+      "bytes": 19501,
+      "sha256": "5cf9758ca81655ddaf97d8a9f908cd3933635d890992dc2d2acc5a7b85e6d4b1"
+    }
+  },
+  "reviews": {
+    "turbo-profile-review-001": {
+      "assessment_sha256": "7bfb2b2c7804597e53c543d3f783f5821e88c185e5cd896ba56237992198ebba",
+      "scope": "Independent read-only source review and synthetic host probes of EngineGeometry binding in TurboComponents, TurboGasPath and BoostResearchPlant. No controller target/edge timing, vehicle, physical device, calibration or ECU qualification conclusion."
+    },
+    "turbo-coupling-review-001": {
+      "assessment_sha256": "fa62af1d7cadb43eb4ebc4e0136cfda32bc4e7586349c143821be22bd4eca638",
+      "scope": "Independent source review; three reviewer-owned actual native N7/3500cc semi-sequential runs; saved-artifact audits of parent N8/4000cc sequential runs; schema/readback and rejection probes. This is not an expanded Speeduino comparison or a physical ECU/engine qualification."
+    }
+  },
+  "cases": {
+    "turbo-profiles-controller-003": {
+      "passed": true,
+      "run": "/home/mark/persospace/esp32-ecu/.cache/engine/turbo-profiles-controller-003",
+      "source_sha256": "7ba63262a9cea2588a3f1d88cdd7ad3215795f4ad60f9a7ddf9c3eba969fa9c0",
+      "result_sha256": "57560f9b5f496d92184f742394813be22e8d1da3790dafd4c4ebbc440f1ff080",
+      "cylinders": 8,
+      "strategy": "sequential",
+      "mode": "off",
+      "duration_s": 3.9572,
+      "edges": 560,
+      "boost_edges": 0,
+      "prefix_only": false,
+      "post_halt_physics_verified": true,
+      "charged_cut": {
+        "time_s": 3.9572000000000003,
+        "channel": 17,
+        "dwell_us": 1745.0000000005516,
+        "energy_j": 0.05350829126456097,
+        "chemical_delta_j": 436.8316805067734
+      },
+      "final_rpm": 2213.550579729841,
+      "conservation": {
+        "coupled_mass_residual_kg": 2.1163626406917047e-16,
+        "coupled_energy_residual_j": -2.2689365807189443e-08,
+        "heat_partition_residual_j": -1.134594640461728e-10
+      },
+      "current_source_differences": [],
+      "scope": "Declared native project turbo run; source/layout, executed edges and conservation audit. No expanded Speeduino, target or physical qualification"
+    },
+    "turbo-coupling-review-001/n7-semi-charged-cut-final": {
+      "passed": true,
+      "run": "/home/mark/persospace/esp32-ecu/.cache/engine/turbo-coupling-review-001/n7-semi-charged-cut-final",
+      "source_sha256": "7ba63262a9cea2588a3f1d88cdd7ad3215795f4ad60f9a7ddf9c3eba969fa9c0",
+      "result_sha256": "162811bb4f2095c41eb58ec5f3d1d88e08eae1175f493add6d991d6190029ed6",
+      "cylinders": 7,
+      "strategy": "semi_sequential",
+      "mode": "off",
+      "duration_s": 1.978,
+      "edges": 268,
+      "boost_edges": 0,
+      "prefix_only": false,
+      "post_halt_physics_verified": true,
+      "charged_cut": {
+        "time_s": 1.978,
+        "channel": 16,
+        "dwell_us": 1637.0000000001105,
+        "energy_j": 0.04821186789484324,
+        "chemical_delta_j": 0.0
+      },
+      "final_rpm": 626.031944701685,
+      "conservation": {
+        "coupled_mass_residual_kg": 2.0816681711721685e-17,
+        "coupled_energy_residual_j": -2.059252918185095e-08,
+        "heat_partition_residual_j": 4.689582056016661e-12
+      },
+      "current_source_differences": [],
+      "scope": "Declared native project turbo run; source/layout, executed edges and conservation audit. No expanded Speeduino, target or physical qualification"
+    },
+    "turbo-profiles-single-001": {
+      "passed": true,
+      "run": "/home/mark/persospace/esp32-ecu/.cache/engine/turbo-profiles-single-001",
+      "source_sha256": "7ba63262a9cea2588a3f1d88cdd7ad3215795f4ad60f9a7ddf9c3eba969fa9c0",
+      "result_sha256": "b947e19f63dce6ff638e9285b776704bd336da955dc2e10649dc586c320bd9aa",
+      "cylinders": 1,
+      "strategy": "batch_wasted",
+      "mode": "off",
+      "duration_s": 4.0,
+      "edges": 132,
+      "boost_edges": 0,
+      "prefix_only": true,
+      "post_halt_physics_verified": false,
+      "charged_cut": null,
+      "final_rpm": 1109.6569282031824,
+      "conservation": {
+        "coupled_mass_residual_kg": 1.97758476261356e-16,
+        "coupled_energy_residual_j": -2.4524282971147976e-09,
+        "heat_partition_residual_j": 3.728928277269006e-11
+      },
+      "current_source_differences": [
+        "tools/run_boost_engine.py"
+      ],
+      "scope": "Declared native project turbo run; source/layout, executed edges and conservation audit. No expanded Speeduino, target or physical qualification"
+    },
+    "turbo-profiles-open-loop-001": {
+      "passed": true,
+      "run": "/home/mark/persospace/esp32-ecu/.cache/engine/turbo-profiles-open-loop-001",
+      "source_sha256": "7ba63262a9cea2588a3f1d88cdd7ad3215795f4ad60f9a7ddf9c3eba969fa9c0",
+      "result_sha256": "3fa671557e1e6da3c3bbf824eea4f3cdbe85c898be22eb2a838dcd918c0a2801",
+      "cylinders": 8,
+      "strategy": "sequential",
+      "mode": "open_loop",
+      "duration_s": 8.0,
+      "edges": 4180,
+      "boost_edges": 234,
+      "prefix_only": true,
+      "post_halt_physics_verified": false,
+      "charged_cut": null,
+      "final_rpm": 3689.309726003554,
+      "conservation": {
+        "coupled_mass_residual_kg": -1.3253287356462806e-15,
+        "coupled_energy_residual_j": -2.652825712157192e-07,
+        "heat_partition_residual_j": 9.659970601205714e-10
+      },
+      "current_source_differences": [
+        "tools/run_boost_engine.py"
+      ],
+      "scope": "Declared native project turbo run; source/layout, executed edges and conservation audit. No expanded Speeduino, target or physical qualification"
+    }
+  },
+  "failed_experiment": {
+    "time_us": 4730343,
+    "error": {
+      "type": "ValueError",
+      "message": "Turbo speed outside declared0..24000rad/s"
+    },
+    "accepted_as_passing_evidence": false
+  },
+  "archives": {
+    "sources": {
+      "file": "sources.zip",
+      "bytes": 49688,
+      "sha256": "b9c761306325a5238997139cf6ce2614de71f9e06870e163baaf981f7e1beb6b",
+      "payloads": {
+        "docs/engine-cylinder-profiles.md": {
+          "bytes": 14021,
+          "sha256": "5491d325e8a697ded3a317d2d3f634d5ef98fc7ca6e2d6dc16ab4faa795ec115"
+        },
+        "docs/engine-feature-coverage.md": {
+          "bytes": 19501,
+          "sha256": "5cf9758ca81655ddaf97d8a9f908cd3933635d890992dc2d2acc5a7b85e6d4b1"
+        },
+        "docs/engine-turbo-profiles.md": {
+          "bytes": 6357,
+          "sha256": "8809fd5afdb0c6f5ea25d580b51f90f60f074f74813fff7819e09d64b682e5ff"
+        },
+        "tools/boost_engine_provenance.py": {
+          "bytes": 10714,
+          "sha256": "1470c93684b96ed95d8114efdd01111c275a017611a850fdd45a45f819f335a4"
+        },
+        "tools/boost_research_plant.py": {
+          "bytes": 8120,
+          "sha256": "9788edf87d8ca69399ae7ad0a07c1d3e0d2a2616fc08d04cbd94418efa52b887"
+        },
+        "tools/package_turbo_profiles.py": {
+          "bytes": 8962,
+          "sha256": "c9ae850b3132139fbaabfe219195c7cf4b1c51b73a2e83ad17657301feda5d3d"
+        },
+        "tools/run_boost_engine.py": {
+          "bytes": 15366,
+          "sha256": "97096e03b0d08dd56996ff2019e3af02d1860b2fb760b5743a740a65efa28f5d"
+        },
+        "tools/test_engine_profile_plants.py": {
+          "bytes": 10250,
+          "sha256": "705cad0f0221b2e78844a04161bc5eb0397515b3f7f777204806576dd8245a6b"
+        },
+        "tools/test_turbo_geometry.py": {
+          "bytes": 7907,
+          "sha256": "0e8687ca69fd6c314f446d4ea178ff873f64c2bf99777ee1c0baf16b15698f90"
+        },
+        "tools/turbo_components.py": {
+          "bytes": 8359,
+          "sha256": "1481fc41b1e655118a457210b74617e92ccc326e03b1b5590600226ca9c07954"
+        },
+        "tools/turbo_gas_path.py": {
+          "bytes": 12848,
+          "sha256": "8073a61fd08cd8150ffc5163645128e270b6fa05c4d603faad6d6f57a98aee83"
+        },
+        "tools/verify_turbo_geometry_run.py": {
+          "bytes": 7164,
+          "sha256": "7ba63262a9cea2588a3f1d88cdd7ad3215795f4ad60f9a7ddf9c3eba969fa9c0"
+        }
+      }
+    },
+    "validation": {
+      "file": "validation.zip",
+      "bytes": 727405,
+      "sha256": "1e87e7e8995e08460f01f0d2d0b5b3db8d980de76d5a17a0b5077cb457c062d1",
+      "payloads": {
+        "geometry-tests.log": {
+          "bytes": 1418,
+          "sha256": "66e0aa3ac7c0ebe73e0971e0f40e65276471e53b36356b593e72a088bcc343d5"
+        },
+        "geometry-tests/summary.json": {
+          "bytes": 994,
+          "sha256": "693bbf8f764b352745dab6b2ed5c17bb570cfa090d465c1d95e9b719448cfcd0"
+        },
+        "historical-default-replay/after-clock-fix.json.gz": {
+          "bytes": 111624,
+          "sha256": "a6197696a5ccb8b419c949b8781382fa3a6d109321b4ab8ba39f76fa52bafb3e"
+        },
+        "historical-default-replay/after.json.gz": {
+          "bytes": 111624,
+          "sha256": "a6197696a5ccb8b419c949b8781382fa3a6d109321b4ab8ba39f76fa52bafb3e"
+        },
+        "historical-default-replay/before.json.gz": {
+          "bytes": 111624,
+          "sha256": "a6197696a5ccb8b419c949b8781382fa3a6d109321b4ab8ba39f76fa52bafb3e"
+        },
+        "historical-default-replay/comparison.json": {
+          "bytes": 181,
+          "sha256": "59d8d37de8b9c8cdfc309c8f841d389f2dc30495c710bfbf8c544970638aae1c"
+        },
+        "historical-default-replay/probe.py": {
+          "bytes": 1022,
+          "sha256": "44fb06e19709baaab92fc79b7bb2a9db7c67ff796640b100aecce6c69a55d325"
+        },
+        "historical-default-replay/source-identities.json": {
+          "bytes": 696,
+          "sha256": "045a66b19420cc3ed176613ebec06057417f4ae4f76296914ff6907f7d5cc04e"
+        },
+        "historical-default-replay/sources/tools/boost_research_plant.py": {
+          "bytes": 7060,
+          "sha256": "e13d06eb82405e9a8ba3571e3aaec52aac00b3a5ad17e9fb98cadf31cd958298"
+        },
+        "historical-default-replay/sources/tools/engine_geometry.py": {
+          "bytes": 3231,
+          "sha256": "a3981690fb46a1e21285b51335a4478706a63cb91fd2307e4b2aa5fde4ab9e06"
+        },
+        "historical-default-replay/sources/tools/engine_research_plant.py": {
+          "bytes": 16207,
+          "sha256": "927eecb546625061d18d860ac5dc202615ef714882f842404af8b072a7ebf029"
+        },
+        "historical-default-replay/sources/tools/run_boost_engine.py": {
+          "bytes": 11704,
+          "sha256": "10e7a90b16236810a993cb268787e1852f7c50f1e214bef20d6e7d4548c722df"
+        },
+        "historical-default-replay/sources/tools/tcsi_graph.py": {
+          "bytes": 11547,
+          "sha256": "3edc3b4e014ac658e5f5090e33a15d5568ef6c73154053a9b176d8c9a44e94ec"
+        },
+        "historical-default-replay/sources/tools/turbo_components.py": {
+          "bytes": 6431,
+          "sha256": "89200227a95d120d44d089fccdec70c369ab5170c05523cc684652c7605a0aed"
+        },
+        "historical-default-replay/sources/tools/turbo_gas_path.py": {
+          "bytes": 12531,
+          "sha256": "9035934da3d98f21afeca8d24434069d38f27a5402975a16f4087b617b9f1813"
+        },
+        "independent/turbo-coupling-review-001/analysis.json": {
+          "bytes": 30266,
+          "sha256": "5229a0ec15a2f3b3328ca40aacb74c8a9885c26245bbe20c4f9ba2103cf5f8b6"
+        },
+        "independent/turbo-coupling-review-001/analyze_coupling.py": {
+          "bytes": 7156,
+          "sha256": "1ac1a7412bb5254d0c67555a2d1a71b03bd035ecc8208e7024077eb3b76192c7"
+        },
+        "independent/turbo-coupling-review-001/assessment.json": {
+          "bytes": 12875,
+          "sha256": "fa62af1d7cadb43eb4ebc4e0136cfda32bc4e7586349c143821be22bd4eca638"
+        },
+        "independent/turbo-coupling-review-001/canonical-tune-probe.json": {
+          "bytes": 1800,
+          "sha256": "9247a4dbd0fcbabfee611d78c593cdd0cef9e66df820fa485d9f74a1e2c07c8b"
+        },
+        "independent/turbo-coupling-review-001/layout-provenance-probe.json": {
+          "bytes": 298,
+          "sha256": "de61756ad04d1572545c0d837cb63204796ec83418f8a5879131d7a6a3ff8e39"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut-final/edges.jsonl": {
+          "bytes": 22640,
+          "sha256": "90cc36816973e8569363bd70379cd3651219ffa87cdf91260de79db7639a8ff4"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut-final/progress.json": {
+          "bytes": 11841,
+          "sha256": "2689cbb1462e72319552a9e8addd16e6c7465d82ca9593fd6903898a7d63c3eb"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/manifest.json": {
+          "bytes": 89036,
+          "sha256": "0a2c8fc277bef0c0293f29ea32985684b868bf4f0c6c23e48a729d3938664355"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/config/engine-profile.json": {
+          "bytes": 798,
+          "sha256": "d8e2e028f8e30b1a7caeb718b149f98bdff412be42bb0212b15edbc4741b31dc"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/boost_engine_provenance.py": {
+          "bytes": 10714,
+          "sha256": "1470c93684b96ed95d8114efdd01111c275a017611a850fdd45a45f819f335a4"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/run_boost_engine.py": {
+          "bytes": 15366,
+          "sha256": "97096e03b0d08dd56996ff2019e3af02d1860b2fb760b5743a740a65efa28f5d"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut-final/result.json": {
+          "bytes": 38349,
+          "sha256": "162811bb4f2095c41eb58ec5f3d1d88e08eae1175f493add6d991d6190029ed6"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut-final/trace.jsonl": {
+          "bytes": 1169841,
+          "sha256": "187d52cf96f5352371c1eb714e90079c526d85932bfcbc1c307c59ce021c4900"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut-final/trigger-stimuli.jsonl": {
+          "bytes": 50893,
+          "sha256": "351586578bb4af0cd775438bcf3ce457a19fcacb1ed6ce0552862039313fdf1e"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut-final/tune.json": {
+          "bytes": 34529,
+          "sha256": "63f5fe0d12e523ad95d8a55e3d9391e25e60727c3ef3be9179658812e18de6b2"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut/edges.jsonl": {
+          "bytes": 22640,
+          "sha256": "90cc36816973e8569363bd70379cd3651219ffa87cdf91260de79db7639a8ff4"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut/progress.json": {
+          "bytes": 11841,
+          "sha256": "40af29fe0ca20c20a67c679118ffdf864d9bc8aa859a4be876e36ff694d789bb"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut/provenance/manifest.json": {
+          "bytes": 88994,
+          "sha256": "a3ce0349e3639718908c6e90730a1803e6d3b74eb0cf7042d2915025e5f3ef4e"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut/result.json": {
+          "bytes": 32121,
+          "sha256": "1851b0f61b5b333343431ed30e170c966161c1ffaf63f99a7fbe2eea16ef32e7"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut/trace.jsonl": {
+          "bytes": 1169841,
+          "sha256": "187d52cf96f5352371c1eb714e90079c526d85932bfcbc1c307c59ce021c4900"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut/trigger-stimuli.jsonl": {
+          "bytes": 50893,
+          "sha256": "351586578bb4af0cd775438bcf3ce457a19fcacb1ed6ce0552862039313fdf1e"
+        },
+        "independent/turbo-coupling-review-001/n7-semi-charged-cut/tune.json": {
+          "bytes": 34529,
+          "sha256": "63f5fe0d12e523ad95d8a55e3d9391e25e60727c3ef3be9179658812e18de6b2"
+        },
+        "independent/turbo-coupling-review-001/n7-semi/edges.jsonl": {
+          "bytes": 22972,
+          "sha256": "60f8e6f228cdf631d42fa5b57157ad7f46aba7fcf7602d967a87863dd343daec"
+        },
+        "independent/turbo-coupling-review-001/n7-semi/progress.json": {
+          "bytes": 11738,
+          "sha256": "d7e40db70f1071d8fbf5f0ceb6fbd7a65717c8a260f479270e5b3070ac2d24c2"
+        },
+        "independent/turbo-coupling-review-001/n7-semi/provenance/manifest.json": {
+          "bytes": 87653,
+          "sha256": "787ee609f0a1ad0e18b5df8ad2ef4f282be869d368e5ff8003a5dbbf5d8fdf7c"
+        },
+        "independent/turbo-coupling-review-001/n7-semi/result.json": {
+          "bytes": 32031,
+          "sha256": "bc39d8f4d0c9e8cb812bdc3a82d638ca8ce7d170886d072767ce5adab2d75df5"
+        },
+        "independent/turbo-coupling-review-001/n7-semi/trace.jsonl": {
+          "bytes": 1181784,
+          "sha256": "80be5b21d3c866ca7a172f21457ba8c341af1b2e88c644d2eeb03400d42e9b6a"
+        },
+        "independent/turbo-coupling-review-001/n7-semi/trigger-stimuli.jsonl": {
+          "bytes": 51971,
+          "sha256": "e98e21f3b2cf13ad8f6d7abe6558cc75dbe700b9a7244b64af4ed6d4deb2632e"
+        },
+        "independent/turbo-coupling-review-001/n7-semi/tune.json": {
+          "bytes": 34529,
+          "sha256": "63f5fe0d12e523ad95d8a55e3d9391e25e60727c3ef3be9179658812e18de6b2"
+        },
+        "independent/turbo-coupling-review-001/reference-guard-probe.json": {
+          "bytes": 1192,
+          "sha256": "1fc09651e64c9bb39d4a0d887fa1faeca2d2c914730e74391e03c05d80a8b38e"
+        },
+        "independent/turbo-coupling-review-001/source_hashes.json": {
+          "bytes": 2601,
+          "sha256": "7d73aacfbc96f5880247d01913f7c1fb9bd72e30848c5e1da82e75f9b621768f"
+        },
+        "independent/turbo-profile-review-001/assessment.json": {
+          "bytes": 5834,
+          "sha256": "7bfb2b2c7804597e53c543d3f783f5821e88c185e5cd896ba56237992198ebba"
+        },
+        "independent/turbo-profile-review-001/baseline.json": {
+          "bytes": 53736,
+          "sha256": "63a07641579131a13abd79c325ecbd9d8ca09b1dd1963d87bc287fe8be426d40"
+        },
+        "independent/turbo-profile-review-001/capture_baseline.py": {
+          "bytes": 2334,
+          "sha256": "fade3869e8efd951dddca300e8670b825f85f059278b9f4f4b0ad2ccf7980a27"
+        },
+        "independent/turbo-profile-review-001/probe_results.json": {
+          "bytes": 20600,
+          "sha256": "7ea99c7c0700ae9e0953916edaea39df1aeb9b019f9b4ec0623d49b55cb97d4e"
+        },
+        "independent/turbo-profile-review-001/probe_tests.py": {
+          "bytes": 16228,
+          "sha256": "33769280432d4dacae25749f15a4a17368ec534670dbf247aa24ba8ff853e2a2"
+        },
+        "independent/turbo-profile-review-001/source_hashes.json": {
+          "bytes": 1889,
+          "sha256": "0513bea15d63aab197828a6e140cc539dc340bf9bf1664958d3ff41dfcf16445"
+        },
+        "independent/turbo-profile-review-001/tolerated_clock_cut_probe.json": {
+          "bytes": 367,
+          "sha256": "56f214116725a2bc9ca7f6e22b597aa5b2f9e673a239adfa4b2a67cf9fae6911"
+        },
+        "integration-readback/summary.json": {
+          "bytes": 4247,
+          "sha256": "a7dec46e7690e12d46fbe8a9e81201d9fe3f45b1d91a32ed2d9c326392405328"
+        },
+        "regression/turbo-profiles-composition-regression-002.log": {
+          "bytes": 859,
+          "sha256": "2a351ee6d701d421c5584a2a6943528380fd2f76d0e6c7e55ff454a9331b70af"
+        },
+        "regression/turbo-profiles-gas-regression-001.log": {
+          "bytes": 811,
+          "sha256": "b4d48763d779903e12a24f3d24f3ec5ee8b266b0bab9634eedfe4a733da26ea1"
+        },
+        "regression/turbo-profiles-integration-001.log": {
+          "bytes": 1201,
+          "sha256": "248a1577a27b7849ace715fc0a101bc7b9dff1aae07333e6023846d78b6a199a"
+        }
+      }
+    },
+    "runs": {
+      "file": "runs.zip",
+      "bytes": 2837566,
+      "sha256": "a93970c17aed2cff6cc7d66963d21030a648340caa91219a8a353fe303fd0fcf",
+      "payloads": {
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/edges.jsonl": {
+          "bytes": 22640,
+          "sha256": "90cc36816973e8569363bd70379cd3651219ffa87cdf91260de79db7639a8ff4"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/progress.json": {
+          "bytes": 11841,
+          "sha256": "2689cbb1462e72319552a9e8addd16e6c7465d82ca9593fd6903898a7d63c3eb"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/build-0.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/build-1.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/cJSON.d": {
+          "bytes": 4696,
+          "sha256": "b600ebee481e229c7f0cdcf4b2d23366aa65aac3e5a8beee71cc63483a47239b"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/cc-version.txt": {
+          "bytes": 238,
+          "sha256": "f6ab9d76ae8dcab3e133254944fbc77f41e0ba766287e289345c1ab77df09c45"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/cpp-version.txt": {
+          "bytes": 239,
+          "sha256": "e3bac80fa6d4e3a292f39091c2f4f2e33986cc7c91cbcb034c0de3cd27560881"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/dynamic-libraries.txt": {
+          "bytes": 390,
+          "sha256": "db063f34940d9181c81098880c614cac100593277469f7903a1b49d3a795fccd"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/external/cJSON/cJSON.c": {
+          "bytes": 80399,
+          "sha256": "f892717f26cf3d21b7108de50cea95b6e48092950427615fe1d8d9c46ea09cca"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/external/cJSON/cJSON.h": {
+          "bytes": 16394,
+          "sha256": "fda63720ffad1d007802f62204831018d167084c26e2ce08ad36f11529a90682"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/manifest.json": {
+          "bytes": 89036,
+          "sha256": "0a2c8fc277bef0c0293f29ea32985684b868bf4f0c6c23e48a729d3938664355"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/model-inputs/commit.json": {
+          "bytes": 2161,
+          "sha256": "e25973b9185283cf5878a6bd25c390be612435975f8a3bc2e252cbf5491849c6"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/model-inputs/provenance.json": {
+          "bytes": 541,
+          "sha256": "67ad245d41ee25feb7a339107892ba9adbfa52ccceaa6d9cd36a14fdb55051d9"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/model-inputs/source/Engine.mdl": {
+          "bytes": 590334,
+          "sha256": "b1eff999f74c5f6b67b4149652df1c255831a208b4ec97dc6f1abce0a2bac3ca"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/model-inputs/source/EngineData.m": {
+          "bytes": 5193,
+          "sha256": "013daa0f9181cf094cdcf338196b954addb08da2bd85cd0be1bef037b03af8cd"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/model-inputs/source/RunEngine.m": {
+          "bytes": 7266,
+          "sha256": "3c7d51f2fe94c458b45bad02be544353b56580e4cf2eb9eaffa381e62914abe5"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/model-inputs/tree.json": {
+          "bytes": 1317,
+          "sha256": "c242cd79175350f8e90faf0381f079420fd740bf72dbcee4017f1516139faef5"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/config/engine-profile.json": {
+          "bytes": 798,
+          "sha256": "d8e2e028f8e30b1a7caeb718b149f98bdff412be42bb0212b15edbc4741b31dc"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/config/engine/defaults.json": {
+          "bytes": 34399,
+          "sha256": "b24680872f36721591b10c15f643cd10c985e30f5bd860b96591b203a00d3f2e"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/board_status.hpp": {
+          "bytes": 305,
+          "sha256": "4ad055e17cdfc081db4cb6f17763bcd2ce299fecd8786a7b1220ff8e350d53d7"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/boost_command.hpp": {
+          "bytes": 1615,
+          "sha256": "34c9871c2addc9054b95688dca63c0270dc84da422ae50c4361da658631a870d"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/boost_control.hpp": {
+          "bytes": 11161,
+          "sha256": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/boost_json.hpp": {
+          "bytes": 4920,
+          "sha256": "93db1549ffb1491af8eee73e02e4044ab7d1151f9f510844f1f243e1c9f9d0e9"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/boost_pwm.hpp": {
+          "bytes": 375,
+          "sha256": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/boost_pwm_json.hpp": {
+          "bytes": 549,
+          "sha256": "6891cdb627ae14043717fcf644bba2a2a76f931ec30e76c2b5a5de240f7053c6"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/boost_runtime.hpp": {
+          "bytes": 2310,
+          "sha256": "2bd7df42100f065228a34023c85421b5f62bd09b610892eb5404faea21793102"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/boost_runtime_json.hpp": {
+          "bytes": 3203,
+          "sha256": "732d52aa667e42c4c9d93f8ab84dd96565ea91f600251eeda1e3721f2b2e0f1d"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/capture_clock.hpp": {
+          "bytes": 3448,
+          "sha256": "5c0f88793019c236b3dc6eea7a39e9a9b1a080bf5adc3159b6651ba45bdc8511"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/config.hpp": {
+          "bytes": 5442,
+          "sha256": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/config_storage.hpp": {
+          "bytes": 2363,
+          "sha256": "b7ec2f7029e00abb6440b3a9b1e1210d76ddf1f2309d19f7c52d81bc59990c45"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/control.hpp": {
+          "bytes": 10954,
+          "sha256": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/cylinder_channels.hpp": {
+          "bytes": 2530,
+          "sha256": "1dd9c57f10ed3544283750ed560ac7039df261035075c0e11d95b34114ab70e8"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine.hpp": {
+          "bytes": 34516,
+          "sha256": "4181ff9b8ff361a2035f129e2e22c929d276124b782870f7c50fb0ff90cb8d9f"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_binding.hpp": {
+          "bytes": 3197,
+          "sha256": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_data.hpp": {
+          "bytes": 6729,
+          "sha256": "4670fb0abb643a0957b2f679290e40ce7423df15219222896ad2a99d3d6ec4d7"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_data_json.hpp": {
+          "bytes": 9328,
+          "sha256": "c663a76867496d5a05eecb7c84a19be75f79258066198569a39f4acb7919f491"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_json.hpp": {
+          "bytes": 23169,
+          "sha256": "130c84c5bdd49cce6336c3481c537fec571eb10b2181279d465597e1c2663288"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_limits.hpp": {
+          "bytes": 107,
+          "sha256": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_log.hpp": {
+          "bytes": 5418,
+          "sha256": "eadcf8344a14791649c6a434f5be73cb179f061605fd7d0fb5c7e77072613a84"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_log_json.hpp": {
+          "bytes": 3996,
+          "sha256": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_log_msl.hpp": {
+          "bytes": 11692,
+          "sha256": "f63cc50ef8c6ca953c1a31d663bb2abcb30b4376d0492dbbfe1e26ec3f60dcbb"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_log_service.hpp": {
+          "bytes": 754,
+          "sha256": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_phase.hpp": {
+          "bytes": 8778,
+          "sha256": "227748fd088563ef15be4056c8102f768a10a4f279676d02961169e1f0c2d671"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_radio.hpp": {
+          "bytes": 11066,
+          "sha256": "d3380ce44a5b97cd915234548a3e16d6ac07d128f16e77047c05e5afd36cfab4"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_radio_boost.hpp": {
+          "bytes": 1235,
+          "sha256": "cac1c58a9492d435f08ab77e83da58bc922cc445ccfc5cd775edd36df1d9ab6d"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_radio_cylinders.hpp": {
+          "bytes": 1557,
+          "sha256": "4dfd45793996e1e2d1af89e2b97169d7df75e9a76d425dd93a94967661c76e91"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_radio_flex.hpp": {
+          "bytes": 4793,
+          "sha256": "7f93304fdfd3cdcc571e0956aa58edcd23bfbc7a8113d35d8a8873d1a67bc258"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_radio_health.hpp": {
+          "bytes": 1009,
+          "sha256": "94919a86f184cf7bccdc767c67de753a10b0d1dba40478479ddd9341e311cc75"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_scheduler.hpp": {
+          "bytes": 11208,
+          "sha256": "af03a89e6d541b1915ff6e696dac38761363e53b9d4a8ed0a51ab01d0a3a943d"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_service.hpp": {
+          "bytes": 976,
+          "sha256": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_storage.hpp": {
+          "bytes": 3105,
+          "sha256": "0e794be42d9a643e055d6f2e86b497ff6bd21ad2446b2b09b51a297819d02e4c"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_target.hpp": {
+          "bytes": 2491,
+          "sha256": "7ae0c12c272f620bdf23afa45a5d3f34f8142045a76ae3de144b2bd907e5b8bd"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/engine_tuning.hpp": {
+          "bytes": 120,
+          "sha256": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/espnow.hpp": {
+          "bytes": 336,
+          "sha256": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/espnow_protocol.hpp": {
+          "bytes": 2797,
+          "sha256": "aff9fd75b7489f20cac497aaa2486d2579616b2d7c64a764ce59f862b30ee77a"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/flex_capture_json.hpp": {
+          "bytes": 5288,
+          "sha256": "5721d4889b351bb9001a259801cb4ae465ddd8852a9d69553a6564684d0a85fb"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/flex_capture_owner.hpp": {
+          "bytes": 12562,
+          "sha256": "3f4f69618b9e7b376c2ea1a1717ffdd328d782d5e54416da9296a2a95d6efb84"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/flex_engine.hpp": {
+          "bytes": 5999,
+          "sha256": "b24c940bdee8e71e427f552d126efdba7d5ca29110aa70d7d4396fcef6eba468"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/flex_fuel.hpp": {
+          "bytes": 14382,
+          "sha256": "ce233744b7f8b938f2d2a4a491138b2ba115a62ec0a5270612a89261e1729c22"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/flex_hardware.hpp": {
+          "bytes": 493,
+          "sha256": "bd01b82d25c37f25169aead71d7df3fc4992923c52e941df4766943e290a6380"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/flex_ingress.hpp": {
+          "bytes": 9452,
+          "sha256": "29a7ab7040b9918f7dde65356c138b8b619b484588954230bbc8d8d43cff4216"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/flex_json.hpp": {
+          "bytes": 6399,
+          "sha256": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/flex_runtime.hpp": {
+          "bytes": 8991,
+          "sha256": "74bffa63c8930ea35c123250c98e30b5c9f588eb6761a812881d1e1a0b981051"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/flex_runtime_json.hpp": {
+          "bytes": 4014,
+          "sha256": "4b1c0424f5ac2bd50f520d1d04badb4347bbe246cfb02070988175a50a45d6d7"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/heap_object.hpp": {
+          "bytes": 540,
+          "sha256": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/idle_command.hpp": {
+          "bytes": 1489,
+          "sha256": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/idle_control.hpp": {
+          "bytes": 10973,
+          "sha256": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/idle_hardware.hpp": {
+          "bytes": 616,
+          "sha256": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/idle_pwm.hpp": {
+          "bytes": 6903,
+          "sha256": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/idle_pwm_json.hpp": {
+          "bytes": 1434,
+          "sha256": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/json.hpp": {
+          "bytes": 2130,
+          "sha256": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/load_json.hpp": {
+          "bytes": 8013,
+          "sha256": "75a0b2fb5939e671c44c0ae0e49e380db187bcc3c413fc20375f6ede6abfb931"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/load_model.hpp": {
+          "bytes": 11873,
+          "sha256": "5d25340d26a20b58f29501491357e2264e30f91284bc0691bf0f06f34ec26361"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/pins.hpp": {
+          "bytes": 1139,
+          "sha256": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/realtime.hpp": {
+          "bytes": 387,
+          "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/secondary_json.hpp": {
+          "bytes": 11890,
+          "sha256": "25037e11278fac1bb2f4e0a394b9e992e25336f497147f849e6109af9d00eed1"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/secondary_tables.hpp": {
+          "bytes": 16600,
+          "sha256": "4ea26b399ae6cb29bb82823572698a11d65bc51ac570097ab6b22803119d02f2"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/status_led.hpp": {
+          "bytes": 6608,
+          "sha256": "47dc3b311195c72348849e24521b47e743cfec90b751fcd1b9626b39ff034902"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/switch_acquisition.hpp": {
+          "bytes": 9371,
+          "sha256": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/switch_service.hpp": {
+          "bytes": 416,
+          "sha256": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/switch_transport.hpp": {
+          "bytes": 2438,
+          "sha256": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/timing_executor.hpp": {
+          "bytes": 16260,
+          "sha256": "4b692a218335b2288f5da983e1347f54e2110a9cb24ea65ccabc6296a6d9de87"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/transient_enrichment.hpp": {
+          "bytes": 12008,
+          "sha256": "cb29b19871a4b900008e46356bd5d43c89313a271dd5b84996f9dbb4a6fb3403"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/transient_json.hpp": {
+          "bytes": 3294,
+          "sha256": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/trigger_log.hpp": {
+          "bytes": 2952,
+          "sha256": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/trigger_log_json.hpp": {
+          "bytes": 4155,
+          "sha256": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/tuning_document.hpp": {
+          "bytes": 7415,
+          "sha256": "e7f8729cfae8d510332d25a4f22678415a2ce625dbeac1f57f3c084d56d63183"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/tuning_layout.hpp": {
+          "bytes": 32726,
+          "sha256": "9690e6d9e72699f7f54029a76e19bf2e89b04894d1faa552b86fec6d77d4f700"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/tuning_live.hpp": {
+          "bytes": 6899,
+          "sha256": "9949836f290ffff9e4b1b0af276abffe02596abb065a3daba6c7e6183e9601f6"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/tuning_session.hpp": {
+          "bytes": 7958,
+          "sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/tuning_stream.hpp": {
+          "bytes": 3028,
+          "sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/include/ecu/web_config.hpp": {
+          "bytes": 1088,
+          "sha256": "d1277da304e7e84fec29a0b6bcbddd9730fb068135d6f14ffc3c7369d79c8e47"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/firmware/main/config_json.hpp": {
+          "bytes": 3373,
+          "sha256": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/scripts/build_speeduino_flex.py": {
+          "bytes": 6401,
+          "sha256": "6c4fa2b9a47d1f5d0b1efc0bd50cf9fd45fc3fc61380e318733aa64effe11dd7"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/scripts/build_speeduino_turbo.py": {
+          "bytes": 4579,
+          "sha256": "11476321809bd878afea5a166f7996286d78349a6a4a894de30f59ef4048f3fa"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/boost_engine_provenance.py": {
+          "bytes": 10714,
+          "sha256": "1470c93684b96ed95d8114efdd01111c275a017611a850fdd45a45f819f335a4"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/boost_research_plant.py": {
+          "bytes": 8120,
+          "sha256": "9788edf87d8ca69399ae7ad0a07c1d3e0d2a2616fc08d04cbd94418efa52b887"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/boost_valve_plant.py": {
+          "bytes": 2677,
+          "sha256": "d5e93258a6e42795789aeb8e763236d30f150bb530e344fa0a02d18981887f67"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/compare_engine_controllers.py": {
+          "bytes": 35024,
+          "sha256": "7a5d92bf5bbcad744d8164e0d3e8b409622fc2e9fb50b47b935f1ee35b96e80f"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/engine_geometry.py": {
+          "bytes": 3231,
+          "sha256": "a3981690fb46a1e21285b51335a4478706a63cb91fd2307e4b2aa5fde4ab9e06"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/engine_research_plant.py": {
+          "bytes": 16207,
+          "sha256": "927eecb546625061d18d860ac5dc202615ef714882f842404af8b072a7ebf029"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/engine_runtime.py": {
+          "bytes": 19208,
+          "sha256": "db48c8b51a3c8fd5864a316512d7acda8327092bf6050cd505224da37a1bb19a"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/idle_valve_plant.py": {
+          "bytes": 3564,
+          "sha256": "ecf84faf3c556c200831bf361c59459dc8e3fc43fe3637022e0f64cc5d963b65"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/profile_config.py": {
+          "bytes": 1114,
+          "sha256": "6c9a6374b148d0cd8d433dcd5719de421385c0ec7d33a3b4e77164b278461f24"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/run_boost_engine.py": {
+          "bytes": 15366,
+          "sha256": "97096e03b0d08dd56996ff2019e3af02d1860b2fb760b5743a740a65efa28f5d"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/sequential_metrics.py": {
+          "bytes": 812,
+          "sha256": "190e5cf95c0821c5241d92dfa80aa4843fa1f311c3f4beaaa51f6714cffd39d4"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/speeduino_runtime.py": {
+          "bytes": 32019,
+          "sha256": "0e3372a6a90cb6700eeecb1daab1fefe26cca3a4e7460e63f4ba4c5f6fe18372"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/speeduino_sim.cpp": {
+          "bytes": 36845,
+          "sha256": "dc5ef41e64539e18c21be2aa9cf748820969271117923569b592fc6ae3b42f50"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/speeduino_sim_hal.cpp": {
+          "bytes": 2442,
+          "sha256": "0d28c0c73308f8ac1333b0e3eefa38d9b6bef4fe0e7ca31e6342c7a9e8074409"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/speeduino_sim_native.hpp": {
+          "bytes": 381,
+          "sha256": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/speeduino_turbo_runtime.py": {
+          "bytes": 8300,
+          "sha256": "03313765401ddcd2478738254efe8f307c0983a2bb0b5470101a4bff81768fbc"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/speeduino_turbo_sim.cpp": {
+          "bytes": 9629,
+          "sha256": "e58ca7a7d2a2d8b8ef857210c4bc8068bb6965e96fdb5e0300e6cd519520ff27"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/target_runtime.py": {
+          "bytes": 3472,
+          "sha256": "a6f3e9407e511eb39f96fc85e65ba513d34f5637ab23b08a9de27e8dda55c3e2"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/target_timing_bridge.cpp": {
+          "bytes": 15719,
+          "sha256": "5e9db35232ef8b4cde7fcd6ed1972557bf9ca165357edeb4ba301723a6053322"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/tcsi_graph.py": {
+          "bytes": 11547,
+          "sha256": "3edc3b4e014ac658e5f5090e33a15d5568ef6c73154053a9b176d8c9a44e94ec"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/tcsi_mdl.py": {
+          "bytes": 6301,
+          "sha256": "1635bd037eead55be8750e5b344becf81d8711c752c69b988966cdc6a1ca9edf"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/turbo_components.py": {
+          "bytes": 8359,
+          "sha256": "1481fc41b1e655118a457210b74617e92ccc326e03b1b5590600226ca9c07954"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/sources/tools/turbo_gas_path.py": {
+          "bytes": 12848,
+          "sha256": "8073a61fd08cd8150ffc5163645128e270b6fa05c4d603faad6d6f57a98aee83"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/provenance/target.d": {
+          "bytes": 11488,
+          "sha256": "7fb25d88d137c8b6183e0f74964e450292eb3d444680ff451ed95f81503541f3"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/result.json": {
+          "bytes": 38349,
+          "sha256": "162811bb4f2095c41eb58ec5f3d1d88e08eae1175f493add6d991d6190029ed6"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/trace.jsonl": {
+          "bytes": 1169841,
+          "sha256": "187d52cf96f5352371c1eb714e90079c526d85932bfcbc1c307c59ce021c4900"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/trigger-stimuli.jsonl": {
+          "bytes": 50893,
+          "sha256": "351586578bb4af0cd775438bcf3ce457a19fcacb1ed6ce0552862039313fdf1e"
+        },
+        "current/turbo-coupling-review-001/n7-semi-charged-cut-final/tune.json": {
+          "bytes": 34529,
+          "sha256": "63f5fe0d12e523ad95d8a55e3d9391e25e60727c3ef3be9179658812e18de6b2"
+        },
+        "current/turbo-profiles-controller-003/edges.jsonl": {
+          "bytes": 47508,
+          "sha256": "258fd7cd51f28b45cf0f313c43e011f9333da44a51b0abce12710ed387f83dc0"
+        },
+        "current/turbo-profiles-controller-003/progress.json": {
+          "bytes": 11843,
+          "sha256": "29537d5dee741fc4f95e8b0824f9d5e506c7cd7531a1d3f2eec32e7f3207df7f"
+        },
+        "current/turbo-profiles-controller-003/provenance/build-0.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "current/turbo-profiles-controller-003/provenance/build-1.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "current/turbo-profiles-controller-003/provenance/cJSON.d": {
+          "bytes": 4674,
+          "sha256": "1b375c8ba761e51864bf8ea6e5cf7a1a1159742a671454a49bf4d2a6829ce94e"
+        },
+        "current/turbo-profiles-controller-003/provenance/cc-version.txt": {
+          "bytes": 238,
+          "sha256": "f6ab9d76ae8dcab3e133254944fbc77f41e0ba766287e289345c1ab77df09c45"
+        },
+        "current/turbo-profiles-controller-003/provenance/cpp-version.txt": {
+          "bytes": 239,
+          "sha256": "e3bac80fa6d4e3a292f39091c2f4f2e33986cc7c91cbcb034c0de3cd27560881"
+        },
+        "current/turbo-profiles-controller-003/provenance/dynamic-libraries.txt": {
+          "bytes": 390,
+          "sha256": "11a246ace38e1a596b7ca2c6ce713dd2f1f29d89298797efed47dd33ab7a0ed6"
+        },
+        "current/turbo-profiles-controller-003/provenance/external/cJSON/cJSON.c": {
+          "bytes": 80399,
+          "sha256": "f892717f26cf3d21b7108de50cea95b6e48092950427615fe1d8d9c46ea09cca"
+        },
+        "current/turbo-profiles-controller-003/provenance/external/cJSON/cJSON.h": {
+          "bytes": 16394,
+          "sha256": "fda63720ffad1d007802f62204831018d167084c26e2ce08ad36f11529a90682"
+        },
+        "current/turbo-profiles-controller-003/provenance/manifest.json": {
+          "bytes": 88882,
+          "sha256": "58278a999df34551962b48fa2563d716f4bc1718a42cf7001ddcd341a118699a"
+        },
+        "current/turbo-profiles-controller-003/provenance/model-inputs/commit.json": {
+          "bytes": 2161,
+          "sha256": "e25973b9185283cf5878a6bd25c390be612435975f8a3bc2e252cbf5491849c6"
+        },
+        "current/turbo-profiles-controller-003/provenance/model-inputs/provenance.json": {
+          "bytes": 541,
+          "sha256": "67ad245d41ee25feb7a339107892ba9adbfa52ccceaa6d9cd36a14fdb55051d9"
+        },
+        "current/turbo-profiles-controller-003/provenance/model-inputs/source/Engine.mdl": {
+          "bytes": 590334,
+          "sha256": "b1eff999f74c5f6b67b4149652df1c255831a208b4ec97dc6f1abce0a2bac3ca"
+        },
+        "current/turbo-profiles-controller-003/provenance/model-inputs/source/EngineData.m": {
+          "bytes": 5193,
+          "sha256": "013daa0f9181cf094cdcf338196b954addb08da2bd85cd0be1bef037b03af8cd"
+        },
+        "current/turbo-profiles-controller-003/provenance/model-inputs/source/RunEngine.m": {
+          "bytes": 7266,
+          "sha256": "3c7d51f2fe94c458b45bad02be544353b56580e4cf2eb9eaffa381e62914abe5"
+        },
+        "current/turbo-profiles-controller-003/provenance/model-inputs/tree.json": {
+          "bytes": 1317,
+          "sha256": "c242cd79175350f8e90faf0381f079420fd740bf72dbcee4017f1516139faef5"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/config/engine-profile.json": {
+          "bytes": 798,
+          "sha256": "d8e2e028f8e30b1a7caeb718b149f98bdff412be42bb0212b15edbc4741b31dc"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/config/engine/defaults.json": {
+          "bytes": 34399,
+          "sha256": "b24680872f36721591b10c15f643cd10c985e30f5bd860b96591b203a00d3f2e"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/board_status.hpp": {
+          "bytes": 305,
+          "sha256": "4ad055e17cdfc081db4cb6f17763bcd2ce299fecd8786a7b1220ff8e350d53d7"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/boost_command.hpp": {
+          "bytes": 1615,
+          "sha256": "34c9871c2addc9054b95688dca63c0270dc84da422ae50c4361da658631a870d"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/boost_control.hpp": {
+          "bytes": 11161,
+          "sha256": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/boost_json.hpp": {
+          "bytes": 4920,
+          "sha256": "93db1549ffb1491af8eee73e02e4044ab7d1151f9f510844f1f243e1c9f9d0e9"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/boost_pwm.hpp": {
+          "bytes": 375,
+          "sha256": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/boost_pwm_json.hpp": {
+          "bytes": 549,
+          "sha256": "6891cdb627ae14043717fcf644bba2a2a76f931ec30e76c2b5a5de240f7053c6"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/boost_runtime.hpp": {
+          "bytes": 2310,
+          "sha256": "2bd7df42100f065228a34023c85421b5f62bd09b610892eb5404faea21793102"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/boost_runtime_json.hpp": {
+          "bytes": 3203,
+          "sha256": "732d52aa667e42c4c9d93f8ab84dd96565ea91f600251eeda1e3721f2b2e0f1d"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/capture_clock.hpp": {
+          "bytes": 3448,
+          "sha256": "5c0f88793019c236b3dc6eea7a39e9a9b1a080bf5adc3159b6651ba45bdc8511"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/config.hpp": {
+          "bytes": 5442,
+          "sha256": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/config_storage.hpp": {
+          "bytes": 2363,
+          "sha256": "b7ec2f7029e00abb6440b3a9b1e1210d76ddf1f2309d19f7c52d81bc59990c45"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/control.hpp": {
+          "bytes": 10954,
+          "sha256": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/cylinder_channels.hpp": {
+          "bytes": 2530,
+          "sha256": "1dd9c57f10ed3544283750ed560ac7039df261035075c0e11d95b34114ab70e8"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine.hpp": {
+          "bytes": 34516,
+          "sha256": "4181ff9b8ff361a2035f129e2e22c929d276124b782870f7c50fb0ff90cb8d9f"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_binding.hpp": {
+          "bytes": 3197,
+          "sha256": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_data.hpp": {
+          "bytes": 6729,
+          "sha256": "4670fb0abb643a0957b2f679290e40ce7423df15219222896ad2a99d3d6ec4d7"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_data_json.hpp": {
+          "bytes": 9328,
+          "sha256": "c663a76867496d5a05eecb7c84a19be75f79258066198569a39f4acb7919f491"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_json.hpp": {
+          "bytes": 23169,
+          "sha256": "130c84c5bdd49cce6336c3481c537fec571eb10b2181279d465597e1c2663288"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_limits.hpp": {
+          "bytes": 107,
+          "sha256": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_log.hpp": {
+          "bytes": 5418,
+          "sha256": "eadcf8344a14791649c6a434f5be73cb179f061605fd7d0fb5c7e77072613a84"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_log_json.hpp": {
+          "bytes": 3996,
+          "sha256": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_log_msl.hpp": {
+          "bytes": 11692,
+          "sha256": "f63cc50ef8c6ca953c1a31d663bb2abcb30b4376d0492dbbfe1e26ec3f60dcbb"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_log_service.hpp": {
+          "bytes": 754,
+          "sha256": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_phase.hpp": {
+          "bytes": 8778,
+          "sha256": "227748fd088563ef15be4056c8102f768a10a4f279676d02961169e1f0c2d671"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_radio.hpp": {
+          "bytes": 11066,
+          "sha256": "d3380ce44a5b97cd915234548a3e16d6ac07d128f16e77047c05e5afd36cfab4"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_radio_boost.hpp": {
+          "bytes": 1235,
+          "sha256": "cac1c58a9492d435f08ab77e83da58bc922cc445ccfc5cd775edd36df1d9ab6d"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_radio_cylinders.hpp": {
+          "bytes": 1557,
+          "sha256": "4dfd45793996e1e2d1af89e2b97169d7df75e9a76d425dd93a94967661c76e91"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_radio_flex.hpp": {
+          "bytes": 4793,
+          "sha256": "7f93304fdfd3cdcc571e0956aa58edcd23bfbc7a8113d35d8a8873d1a67bc258"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_radio_health.hpp": {
+          "bytes": 1009,
+          "sha256": "94919a86f184cf7bccdc767c67de753a10b0d1dba40478479ddd9341e311cc75"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_scheduler.hpp": {
+          "bytes": 11208,
+          "sha256": "af03a89e6d541b1915ff6e696dac38761363e53b9d4a8ed0a51ab01d0a3a943d"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_service.hpp": {
+          "bytes": 976,
+          "sha256": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_storage.hpp": {
+          "bytes": 3105,
+          "sha256": "0e794be42d9a643e055d6f2e86b497ff6bd21ad2446b2b09b51a297819d02e4c"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_target.hpp": {
+          "bytes": 2491,
+          "sha256": "7ae0c12c272f620bdf23afa45a5d3f34f8142045a76ae3de144b2bd907e5b8bd"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/engine_tuning.hpp": {
+          "bytes": 120,
+          "sha256": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/espnow.hpp": {
+          "bytes": 336,
+          "sha256": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/espnow_protocol.hpp": {
+          "bytes": 2797,
+          "sha256": "aff9fd75b7489f20cac497aaa2486d2579616b2d7c64a764ce59f862b30ee77a"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/flex_capture_json.hpp": {
+          "bytes": 5288,
+          "sha256": "5721d4889b351bb9001a259801cb4ae465ddd8852a9d69553a6564684d0a85fb"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/flex_capture_owner.hpp": {
+          "bytes": 12562,
+          "sha256": "3f4f69618b9e7b376c2ea1a1717ffdd328d782d5e54416da9296a2a95d6efb84"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/flex_engine.hpp": {
+          "bytes": 5999,
+          "sha256": "b24c940bdee8e71e427f552d126efdba7d5ca29110aa70d7d4396fcef6eba468"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/flex_fuel.hpp": {
+          "bytes": 14382,
+          "sha256": "ce233744b7f8b938f2d2a4a491138b2ba115a62ec0a5270612a89261e1729c22"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/flex_hardware.hpp": {
+          "bytes": 493,
+          "sha256": "bd01b82d25c37f25169aead71d7df3fc4992923c52e941df4766943e290a6380"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/flex_ingress.hpp": {
+          "bytes": 9452,
+          "sha256": "29a7ab7040b9918f7dde65356c138b8b619b484588954230bbc8d8d43cff4216"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/flex_json.hpp": {
+          "bytes": 6399,
+          "sha256": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/flex_runtime.hpp": {
+          "bytes": 8991,
+          "sha256": "74bffa63c8930ea35c123250c98e30b5c9f588eb6761a812881d1e1a0b981051"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/flex_runtime_json.hpp": {
+          "bytes": 4014,
+          "sha256": "4b1c0424f5ac2bd50f520d1d04badb4347bbe246cfb02070988175a50a45d6d7"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/heap_object.hpp": {
+          "bytes": 540,
+          "sha256": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/idle_command.hpp": {
+          "bytes": 1489,
+          "sha256": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/idle_control.hpp": {
+          "bytes": 10973,
+          "sha256": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/idle_hardware.hpp": {
+          "bytes": 616,
+          "sha256": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/idle_pwm.hpp": {
+          "bytes": 6903,
+          "sha256": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/idle_pwm_json.hpp": {
+          "bytes": 1434,
+          "sha256": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/json.hpp": {
+          "bytes": 2130,
+          "sha256": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/load_json.hpp": {
+          "bytes": 8013,
+          "sha256": "75a0b2fb5939e671c44c0ae0e49e380db187bcc3c413fc20375f6ede6abfb931"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/load_model.hpp": {
+          "bytes": 11873,
+          "sha256": "5d25340d26a20b58f29501491357e2264e30f91284bc0691bf0f06f34ec26361"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/pins.hpp": {
+          "bytes": 1139,
+          "sha256": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/realtime.hpp": {
+          "bytes": 387,
+          "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/secondary_json.hpp": {
+          "bytes": 11890,
+          "sha256": "25037e11278fac1bb2f4e0a394b9e992e25336f497147f849e6109af9d00eed1"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/secondary_tables.hpp": {
+          "bytes": 16600,
+          "sha256": "4ea26b399ae6cb29bb82823572698a11d65bc51ac570097ab6b22803119d02f2"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/status_led.hpp": {
+          "bytes": 6608,
+          "sha256": "47dc3b311195c72348849e24521b47e743cfec90b751fcd1b9626b39ff034902"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/switch_acquisition.hpp": {
+          "bytes": 9371,
+          "sha256": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/switch_service.hpp": {
+          "bytes": 416,
+          "sha256": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/switch_transport.hpp": {
+          "bytes": 2438,
+          "sha256": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/timing_executor.hpp": {
+          "bytes": 16260,
+          "sha256": "4b692a218335b2288f5da983e1347f54e2110a9cb24ea65ccabc6296a6d9de87"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/transient_enrichment.hpp": {
+          "bytes": 12008,
+          "sha256": "cb29b19871a4b900008e46356bd5d43c89313a271dd5b84996f9dbb4a6fb3403"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/transient_json.hpp": {
+          "bytes": 3294,
+          "sha256": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/trigger_log.hpp": {
+          "bytes": 2952,
+          "sha256": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/trigger_log_json.hpp": {
+          "bytes": 4155,
+          "sha256": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/tuning_document.hpp": {
+          "bytes": 7415,
+          "sha256": "e7f8729cfae8d510332d25a4f22678415a2ce625dbeac1f57f3c084d56d63183"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/tuning_layout.hpp": {
+          "bytes": 32726,
+          "sha256": "9690e6d9e72699f7f54029a76e19bf2e89b04894d1faa552b86fec6d77d4f700"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/tuning_live.hpp": {
+          "bytes": 6899,
+          "sha256": "9949836f290ffff9e4b1b0af276abffe02596abb065a3daba6c7e6183e9601f6"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/tuning_session.hpp": {
+          "bytes": 7958,
+          "sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/tuning_stream.hpp": {
+          "bytes": 3028,
+          "sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/include/ecu/web_config.hpp": {
+          "bytes": 1088,
+          "sha256": "d1277da304e7e84fec29a0b6bcbddd9730fb068135d6f14ffc3c7369d79c8e47"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/firmware/main/config_json.hpp": {
+          "bytes": 3373,
+          "sha256": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/scripts/build_speeduino_flex.py": {
+          "bytes": 6401,
+          "sha256": "6c4fa2b9a47d1f5d0b1efc0bd50cf9fd45fc3fc61380e318733aa64effe11dd7"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/scripts/build_speeduino_turbo.py": {
+          "bytes": 4579,
+          "sha256": "11476321809bd878afea5a166f7996286d78349a6a4a894de30f59ef4048f3fa"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/boost_engine_provenance.py": {
+          "bytes": 10714,
+          "sha256": "1470c93684b96ed95d8114efdd01111c275a017611a850fdd45a45f819f335a4"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/boost_research_plant.py": {
+          "bytes": 8120,
+          "sha256": "9788edf87d8ca69399ae7ad0a07c1d3e0d2a2616fc08d04cbd94418efa52b887"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/boost_valve_plant.py": {
+          "bytes": 2677,
+          "sha256": "d5e93258a6e42795789aeb8e763236d30f150bb530e344fa0a02d18981887f67"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/compare_engine_controllers.py": {
+          "bytes": 35024,
+          "sha256": "7a5d92bf5bbcad744d8164e0d3e8b409622fc2e9fb50b47b935f1ee35b96e80f"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/engine_geometry.py": {
+          "bytes": 3231,
+          "sha256": "a3981690fb46a1e21285b51335a4478706a63cb91fd2307e4b2aa5fde4ab9e06"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/engine_research_plant.py": {
+          "bytes": 16207,
+          "sha256": "927eecb546625061d18d860ac5dc202615ef714882f842404af8b072a7ebf029"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/engine_runtime.py": {
+          "bytes": 19208,
+          "sha256": "db48c8b51a3c8fd5864a316512d7acda8327092bf6050cd505224da37a1bb19a"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/idle_valve_plant.py": {
+          "bytes": 3564,
+          "sha256": "ecf84faf3c556c200831bf361c59459dc8e3fc43fe3637022e0f64cc5d963b65"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/profile_config.py": {
+          "bytes": 1114,
+          "sha256": "6c9a6374b148d0cd8d433dcd5719de421385c0ec7d33a3b4e77164b278461f24"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/run_boost_engine.py": {
+          "bytes": 15366,
+          "sha256": "97096e03b0d08dd56996ff2019e3af02d1860b2fb760b5743a740a65efa28f5d"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/sequential_metrics.py": {
+          "bytes": 812,
+          "sha256": "190e5cf95c0821c5241d92dfa80aa4843fa1f311c3f4beaaa51f6714cffd39d4"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/speeduino_runtime.py": {
+          "bytes": 32019,
+          "sha256": "0e3372a6a90cb6700eeecb1daab1fefe26cca3a4e7460e63f4ba4c5f6fe18372"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/speeduino_sim.cpp": {
+          "bytes": 36845,
+          "sha256": "dc5ef41e64539e18c21be2aa9cf748820969271117923569b592fc6ae3b42f50"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/speeduino_sim_hal.cpp": {
+          "bytes": 2442,
+          "sha256": "0d28c0c73308f8ac1333b0e3eefa38d9b6bef4fe0e7ca31e6342c7a9e8074409"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/speeduino_sim_native.hpp": {
+          "bytes": 381,
+          "sha256": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/speeduino_turbo_runtime.py": {
+          "bytes": 8300,
+          "sha256": "03313765401ddcd2478738254efe8f307c0983a2bb0b5470101a4bff81768fbc"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/speeduino_turbo_sim.cpp": {
+          "bytes": 9629,
+          "sha256": "e58ca7a7d2a2d8b8ef857210c4bc8068bb6965e96fdb5e0300e6cd519520ff27"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/target_runtime.py": {
+          "bytes": 3472,
+          "sha256": "a6f3e9407e511eb39f96fc85e65ba513d34f5637ab23b08a9de27e8dda55c3e2"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/target_timing_bridge.cpp": {
+          "bytes": 15719,
+          "sha256": "5e9db35232ef8b4cde7fcd6ed1972557bf9ca165357edeb4ba301723a6053322"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/tcsi_graph.py": {
+          "bytes": 11547,
+          "sha256": "3edc3b4e014ac658e5f5090e33a15d5568ef6c73154053a9b176d8c9a44e94ec"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/tcsi_mdl.py": {
+          "bytes": 6301,
+          "sha256": "1635bd037eead55be8750e5b344becf81d8711c752c69b988966cdc6a1ca9edf"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/turbo_components.py": {
+          "bytes": 8359,
+          "sha256": "1481fc41b1e655118a457210b74617e92ccc326e03b1b5590600226ca9c07954"
+        },
+        "current/turbo-profiles-controller-003/provenance/sources/tools/turbo_gas_path.py": {
+          "bytes": 12848,
+          "sha256": "8073a61fd08cd8150ffc5163645128e270b6fa05c4d603faad6d6f57a98aee83"
+        },
+        "current/turbo-profiles-controller-003/provenance/target.d": {
+          "bytes": 11466,
+          "sha256": "bc8bc527fa185fe8eba7e356b0e6cf96d26388eeb4e6d22571cfce8ef3214d04"
+        },
+        "current/turbo-profiles-controller-003/result.json": {
+          "bytes": 38365,
+          "sha256": "57560f9b5f496d92184f742394813be22e8d1da3790dafd4c4ebbc440f1ff080"
+        },
+        "current/turbo-profiles-controller-003/trace.jsonl": {
+          "bytes": 2314813,
+          "sha256": "a80596b0a9ec2f1153c9a00f34fdfc7836c1a0c8918bb482c30d265425a0f1cc"
+        },
+        "current/turbo-profiles-controller-003/trigger-stimuli.jsonl": {
+          "bytes": 182233,
+          "sha256": "9f131ea24d735dfe302aad702a44f3d42bfe11e5b49057fa9d29d3c0779c3d52"
+        },
+        "current/turbo-profiles-controller-003/tune.json": {
+          "bytes": 34522,
+          "sha256": "0adcd2e1ab46b401c43d270052ed169a62a70701abf9f5deab7efc6c1ba8d515"
+        },
+        "failed-source-map-domain/edges.jsonl": {
+          "bytes": 123382,
+          "sha256": "1b1246b15a9ba11813d6b9d3f5658f951e52722560789bb9f932f7f5ab59c535"
+        },
+        "failed-source-map-domain/progress.json": {
+          "bytes": 11928,
+          "sha256": "ec5b5314ce4340de7aff4c8afefd5bf5dd2d0f88afadf41bf11dc3240363b6cb"
+        },
+        "failed-source-map-domain/provenance/build-0.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "failed-source-map-domain/provenance/build-1.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "failed-source-map-domain/provenance/cJSON.d": {
+          "bytes": 4673,
+          "sha256": "bcf3d64df9052ee98ad23f88565ed49148a50c426f6064667b2adbf4ffdf6dde"
+        },
+        "failed-source-map-domain/provenance/cc-version.txt": {
+          "bytes": 238,
+          "sha256": "f6ab9d76ae8dcab3e133254944fbc77f41e0ba766287e289345c1ab77df09c45"
+        },
+        "failed-source-map-domain/provenance/cpp-version.txt": {
+          "bytes": 239,
+          "sha256": "e3bac80fa6d4e3a292f39091c2f4f2e33986cc7c91cbcb034c0de3cd27560881"
+        },
+        "failed-source-map-domain/provenance/dynamic-libraries.txt": {
+          "bytes": 390,
+          "sha256": "502958d9f529de5eaf0151ee6fe41b19a6cc6f55ccd4e763d0014fd1f23bf6b1"
+        },
+        "failed-source-map-domain/provenance/external/cJSON/cJSON.c": {
+          "bytes": 80399,
+          "sha256": "f892717f26cf3d21b7108de50cea95b6e48092950427615fe1d8d9c46ea09cca"
+        },
+        "failed-source-map-domain/provenance/external/cJSON/cJSON.h": {
+          "bytes": 16394,
+          "sha256": "fda63720ffad1d007802f62204831018d167084c26e2ce08ad36f11529a90682"
+        },
+        "failed-source-map-domain/provenance/manifest.json": {
+          "bytes": 88875,
+          "sha256": "fbb44b36731abfe1afc116eb80a1a3137541f26cfe2ceef30e10a7c71723ec4e"
+        },
+        "failed-source-map-domain/provenance/model-inputs/commit.json": {
+          "bytes": 2161,
+          "sha256": "e25973b9185283cf5878a6bd25c390be612435975f8a3bc2e252cbf5491849c6"
+        },
+        "failed-source-map-domain/provenance/model-inputs/provenance.json": {
+          "bytes": 541,
+          "sha256": "67ad245d41ee25feb7a339107892ba9adbfa52ccceaa6d9cd36a14fdb55051d9"
+        },
+        "failed-source-map-domain/provenance/model-inputs/source/Engine.mdl": {
+          "bytes": 590334,
+          "sha256": "b1eff999f74c5f6b67b4149652df1c255831a208b4ec97dc6f1abce0a2bac3ca"
+        },
+        "failed-source-map-domain/provenance/model-inputs/source/EngineData.m": {
+          "bytes": 5193,
+          "sha256": "013daa0f9181cf094cdcf338196b954addb08da2bd85cd0be1bef037b03af8cd"
+        },
+        "failed-source-map-domain/provenance/model-inputs/source/RunEngine.m": {
+          "bytes": 7266,
+          "sha256": "3c7d51f2fe94c458b45bad02be544353b56580e4cf2eb9eaffa381e62914abe5"
+        },
+        "failed-source-map-domain/provenance/model-inputs/tree.json": {
+          "bytes": 1317,
+          "sha256": "c242cd79175350f8e90faf0381f079420fd740bf72dbcee4017f1516139faef5"
+        },
+        "failed-source-map-domain/provenance/sources/config/engine-profile.json": {
+          "bytes": 798,
+          "sha256": "d8e2e028f8e30b1a7caeb718b149f98bdff412be42bb0212b15edbc4741b31dc"
+        },
+        "failed-source-map-domain/provenance/sources/config/engine/defaults.json": {
+          "bytes": 34399,
+          "sha256": "b24680872f36721591b10c15f643cd10c985e30f5bd860b96591b203a00d3f2e"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/board_status.hpp": {
+          "bytes": 305,
+          "sha256": "4ad055e17cdfc081db4cb6f17763bcd2ce299fecd8786a7b1220ff8e350d53d7"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/boost_command.hpp": {
+          "bytes": 1615,
+          "sha256": "34c9871c2addc9054b95688dca63c0270dc84da422ae50c4361da658631a870d"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/boost_control.hpp": {
+          "bytes": 11161,
+          "sha256": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/boost_json.hpp": {
+          "bytes": 4920,
+          "sha256": "93db1549ffb1491af8eee73e02e4044ab7d1151f9f510844f1f243e1c9f9d0e9"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/boost_pwm.hpp": {
+          "bytes": 375,
+          "sha256": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/boost_pwm_json.hpp": {
+          "bytes": 549,
+          "sha256": "6891cdb627ae14043717fcf644bba2a2a76f931ec30e76c2b5a5de240f7053c6"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/boost_runtime.hpp": {
+          "bytes": 2310,
+          "sha256": "2bd7df42100f065228a34023c85421b5f62bd09b610892eb5404faea21793102"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/boost_runtime_json.hpp": {
+          "bytes": 3203,
+          "sha256": "732d52aa667e42c4c9d93f8ab84dd96565ea91f600251eeda1e3721f2b2e0f1d"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/capture_clock.hpp": {
+          "bytes": 3448,
+          "sha256": "5c0f88793019c236b3dc6eea7a39e9a9b1a080bf5adc3159b6651ba45bdc8511"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/config.hpp": {
+          "bytes": 5442,
+          "sha256": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/config_storage.hpp": {
+          "bytes": 2363,
+          "sha256": "b7ec2f7029e00abb6440b3a9b1e1210d76ddf1f2309d19f7c52d81bc59990c45"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/control.hpp": {
+          "bytes": 10954,
+          "sha256": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/cylinder_channels.hpp": {
+          "bytes": 2530,
+          "sha256": "1dd9c57f10ed3544283750ed560ac7039df261035075c0e11d95b34114ab70e8"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine.hpp": {
+          "bytes": 34516,
+          "sha256": "4181ff9b8ff361a2035f129e2e22c929d276124b782870f7c50fb0ff90cb8d9f"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_binding.hpp": {
+          "bytes": 3197,
+          "sha256": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_data.hpp": {
+          "bytes": 6729,
+          "sha256": "4670fb0abb643a0957b2f679290e40ce7423df15219222896ad2a99d3d6ec4d7"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_data_json.hpp": {
+          "bytes": 9328,
+          "sha256": "c663a76867496d5a05eecb7c84a19be75f79258066198569a39f4acb7919f491"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_json.hpp": {
+          "bytes": 23169,
+          "sha256": "130c84c5bdd49cce6336c3481c537fec571eb10b2181279d465597e1c2663288"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_limits.hpp": {
+          "bytes": 107,
+          "sha256": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_log.hpp": {
+          "bytes": 5418,
+          "sha256": "eadcf8344a14791649c6a434f5be73cb179f061605fd7d0fb5c7e77072613a84"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_log_json.hpp": {
+          "bytes": 3996,
+          "sha256": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_log_msl.hpp": {
+          "bytes": 11692,
+          "sha256": "f63cc50ef8c6ca953c1a31d663bb2abcb30b4376d0492dbbfe1e26ec3f60dcbb"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_log_service.hpp": {
+          "bytes": 754,
+          "sha256": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_phase.hpp": {
+          "bytes": 8778,
+          "sha256": "227748fd088563ef15be4056c8102f768a10a4f279676d02961169e1f0c2d671"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_radio.hpp": {
+          "bytes": 11066,
+          "sha256": "d3380ce44a5b97cd915234548a3e16d6ac07d128f16e77047c05e5afd36cfab4"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_radio_boost.hpp": {
+          "bytes": 1235,
+          "sha256": "cac1c58a9492d435f08ab77e83da58bc922cc445ccfc5cd775edd36df1d9ab6d"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_radio_cylinders.hpp": {
+          "bytes": 1557,
+          "sha256": "4dfd45793996e1e2d1af89e2b97169d7df75e9a76d425dd93a94967661c76e91"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_radio_flex.hpp": {
+          "bytes": 4793,
+          "sha256": "7f93304fdfd3cdcc571e0956aa58edcd23bfbc7a8113d35d8a8873d1a67bc258"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_radio_health.hpp": {
+          "bytes": 1009,
+          "sha256": "94919a86f184cf7bccdc767c67de753a10b0d1dba40478479ddd9341e311cc75"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_scheduler.hpp": {
+          "bytes": 11208,
+          "sha256": "af03a89e6d541b1915ff6e696dac38761363e53b9d4a8ed0a51ab01d0a3a943d"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_service.hpp": {
+          "bytes": 976,
+          "sha256": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_storage.hpp": {
+          "bytes": 3105,
+          "sha256": "0e794be42d9a643e055d6f2e86b497ff6bd21ad2446b2b09b51a297819d02e4c"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_target.hpp": {
+          "bytes": 2491,
+          "sha256": "7ae0c12c272f620bdf23afa45a5d3f34f8142045a76ae3de144b2bd907e5b8bd"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/engine_tuning.hpp": {
+          "bytes": 120,
+          "sha256": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/espnow.hpp": {
+          "bytes": 336,
+          "sha256": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/espnow_protocol.hpp": {
+          "bytes": 2797,
+          "sha256": "aff9fd75b7489f20cac497aaa2486d2579616b2d7c64a764ce59f862b30ee77a"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/flex_capture_json.hpp": {
+          "bytes": 5288,
+          "sha256": "5721d4889b351bb9001a259801cb4ae465ddd8852a9d69553a6564684d0a85fb"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/flex_capture_owner.hpp": {
+          "bytes": 12562,
+          "sha256": "3f4f69618b9e7b376c2ea1a1717ffdd328d782d5e54416da9296a2a95d6efb84"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/flex_engine.hpp": {
+          "bytes": 5999,
+          "sha256": "b24c940bdee8e71e427f552d126efdba7d5ca29110aa70d7d4396fcef6eba468"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/flex_fuel.hpp": {
+          "bytes": 14382,
+          "sha256": "ce233744b7f8b938f2d2a4a491138b2ba115a62ec0a5270612a89261e1729c22"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/flex_hardware.hpp": {
+          "bytes": 493,
+          "sha256": "bd01b82d25c37f25169aead71d7df3fc4992923c52e941df4766943e290a6380"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/flex_ingress.hpp": {
+          "bytes": 9452,
+          "sha256": "29a7ab7040b9918f7dde65356c138b8b619b484588954230bbc8d8d43cff4216"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/flex_json.hpp": {
+          "bytes": 6399,
+          "sha256": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/flex_runtime.hpp": {
+          "bytes": 8991,
+          "sha256": "74bffa63c8930ea35c123250c98e30b5c9f588eb6761a812881d1e1a0b981051"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/flex_runtime_json.hpp": {
+          "bytes": 4014,
+          "sha256": "4b1c0424f5ac2bd50f520d1d04badb4347bbe246cfb02070988175a50a45d6d7"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/heap_object.hpp": {
+          "bytes": 540,
+          "sha256": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/idle_command.hpp": {
+          "bytes": 1489,
+          "sha256": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/idle_control.hpp": {
+          "bytes": 10973,
+          "sha256": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/idle_hardware.hpp": {
+          "bytes": 616,
+          "sha256": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/idle_pwm.hpp": {
+          "bytes": 6903,
+          "sha256": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/idle_pwm_json.hpp": {
+          "bytes": 1434,
+          "sha256": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/json.hpp": {
+          "bytes": 2130,
+          "sha256": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/load_json.hpp": {
+          "bytes": 8013,
+          "sha256": "75a0b2fb5939e671c44c0ae0e49e380db187bcc3c413fc20375f6ede6abfb931"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/load_model.hpp": {
+          "bytes": 11873,
+          "sha256": "5d25340d26a20b58f29501491357e2264e30f91284bc0691bf0f06f34ec26361"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/pins.hpp": {
+          "bytes": 1139,
+          "sha256": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/realtime.hpp": {
+          "bytes": 387,
+          "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/secondary_json.hpp": {
+          "bytes": 11890,
+          "sha256": "25037e11278fac1bb2f4e0a394b9e992e25336f497147f849e6109af9d00eed1"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/secondary_tables.hpp": {
+          "bytes": 16600,
+          "sha256": "4ea26b399ae6cb29bb82823572698a11d65bc51ac570097ab6b22803119d02f2"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/status_led.hpp": {
+          "bytes": 6608,
+          "sha256": "47dc3b311195c72348849e24521b47e743cfec90b751fcd1b9626b39ff034902"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/switch_acquisition.hpp": {
+          "bytes": 9371,
+          "sha256": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/switch_service.hpp": {
+          "bytes": 416,
+          "sha256": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/switch_transport.hpp": {
+          "bytes": 2438,
+          "sha256": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/timing_executor.hpp": {
+          "bytes": 16260,
+          "sha256": "4b692a218335b2288f5da983e1347f54e2110a9cb24ea65ccabc6296a6d9de87"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/transient_enrichment.hpp": {
+          "bytes": 12008,
+          "sha256": "cb29b19871a4b900008e46356bd5d43c89313a271dd5b84996f9dbb4a6fb3403"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/transient_json.hpp": {
+          "bytes": 3294,
+          "sha256": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/trigger_log.hpp": {
+          "bytes": 2952,
+          "sha256": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/trigger_log_json.hpp": {
+          "bytes": 4155,
+          "sha256": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/tuning_document.hpp": {
+          "bytes": 7415,
+          "sha256": "e7f8729cfae8d510332d25a4f22678415a2ce625dbeac1f57f3c084d56d63183"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/tuning_layout.hpp": {
+          "bytes": 32726,
+          "sha256": "9690e6d9e72699f7f54029a76e19bf2e89b04894d1faa552b86fec6d77d4f700"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/tuning_live.hpp": {
+          "bytes": 6899,
+          "sha256": "9949836f290ffff9e4b1b0af276abffe02596abb065a3daba6c7e6183e9601f6"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/tuning_session.hpp": {
+          "bytes": 7958,
+          "sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/tuning_stream.hpp": {
+          "bytes": 3028,
+          "sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/include/ecu/web_config.hpp": {
+          "bytes": 1088,
+          "sha256": "d1277da304e7e84fec29a0b6bcbddd9730fb068135d6f14ffc3c7369d79c8e47"
+        },
+        "failed-source-map-domain/provenance/sources/firmware/main/config_json.hpp": {
+          "bytes": 3373,
+          "sha256": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6"
+        },
+        "failed-source-map-domain/provenance/sources/scripts/build_speeduino_flex.py": {
+          "bytes": 6401,
+          "sha256": "6c4fa2b9a47d1f5d0b1efc0bd50cf9fd45fc3fc61380e318733aa64effe11dd7"
+        },
+        "failed-source-map-domain/provenance/sources/scripts/build_speeduino_turbo.py": {
+          "bytes": 4579,
+          "sha256": "11476321809bd878afea5a166f7996286d78349a6a4a894de30f59ef4048f3fa"
+        },
+        "failed-source-map-domain/provenance/sources/tools/boost_engine_provenance.py": {
+          "bytes": 10714,
+          "sha256": "1470c93684b96ed95d8114efdd01111c275a017611a850fdd45a45f819f335a4"
+        },
+        "failed-source-map-domain/provenance/sources/tools/boost_research_plant.py": {
+          "bytes": 8120,
+          "sha256": "9788edf87d8ca69399ae7ad0a07c1d3e0d2a2616fc08d04cbd94418efa52b887"
+        },
+        "failed-source-map-domain/provenance/sources/tools/boost_valve_plant.py": {
+          "bytes": 2677,
+          "sha256": "d5e93258a6e42795789aeb8e763236d30f150bb530e344fa0a02d18981887f67"
+        },
+        "failed-source-map-domain/provenance/sources/tools/compare_engine_controllers.py": {
+          "bytes": 35024,
+          "sha256": "7a5d92bf5bbcad744d8164e0d3e8b409622fc2e9fb50b47b935f1ee35b96e80f"
+        },
+        "failed-source-map-domain/provenance/sources/tools/engine_geometry.py": {
+          "bytes": 3231,
+          "sha256": "a3981690fb46a1e21285b51335a4478706a63cb91fd2307e4b2aa5fde4ab9e06"
+        },
+        "failed-source-map-domain/provenance/sources/tools/engine_research_plant.py": {
+          "bytes": 16207,
+          "sha256": "927eecb546625061d18d860ac5dc202615ef714882f842404af8b072a7ebf029"
+        },
+        "failed-source-map-domain/provenance/sources/tools/engine_runtime.py": {
+          "bytes": 19208,
+          "sha256": "db48c8b51a3c8fd5864a316512d7acda8327092bf6050cd505224da37a1bb19a"
+        },
+        "failed-source-map-domain/provenance/sources/tools/idle_valve_plant.py": {
+          "bytes": 3564,
+          "sha256": "ecf84faf3c556c200831bf361c59459dc8e3fc43fe3637022e0f64cc5d963b65"
+        },
+        "failed-source-map-domain/provenance/sources/tools/profile_config.py": {
+          "bytes": 1114,
+          "sha256": "6c9a6374b148d0cd8d433dcd5719de421385c0ec7d33a3b4e77164b278461f24"
+        },
+        "failed-source-map-domain/provenance/sources/tools/run_boost_engine.py": {
+          "bytes": 15366,
+          "sha256": "97096e03b0d08dd56996ff2019e3af02d1860b2fb760b5743a740a65efa28f5d"
+        },
+        "failed-source-map-domain/provenance/sources/tools/sequential_metrics.py": {
+          "bytes": 812,
+          "sha256": "190e5cf95c0821c5241d92dfa80aa4843fa1f311c3f4beaaa51f6714cffd39d4"
+        },
+        "failed-source-map-domain/provenance/sources/tools/speeduino_runtime.py": {
+          "bytes": 32019,
+          "sha256": "0e3372a6a90cb6700eeecb1daab1fefe26cca3a4e7460e63f4ba4c5f6fe18372"
+        },
+        "failed-source-map-domain/provenance/sources/tools/speeduino_sim.cpp": {
+          "bytes": 36845,
+          "sha256": "dc5ef41e64539e18c21be2aa9cf748820969271117923569b592fc6ae3b42f50"
+        },
+        "failed-source-map-domain/provenance/sources/tools/speeduino_sim_hal.cpp": {
+          "bytes": 2442,
+          "sha256": "0d28c0c73308f8ac1333b0e3eefa38d9b6bef4fe0e7ca31e6342c7a9e8074409"
+        },
+        "failed-source-map-domain/provenance/sources/tools/speeduino_sim_native.hpp": {
+          "bytes": 381,
+          "sha256": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9"
+        },
+        "failed-source-map-domain/provenance/sources/tools/speeduino_turbo_runtime.py": {
+          "bytes": 8300,
+          "sha256": "03313765401ddcd2478738254efe8f307c0983a2bb0b5470101a4bff81768fbc"
+        },
+        "failed-source-map-domain/provenance/sources/tools/speeduino_turbo_sim.cpp": {
+          "bytes": 9629,
+          "sha256": "e58ca7a7d2a2d8b8ef857210c4bc8068bb6965e96fdb5e0300e6cd519520ff27"
+        },
+        "failed-source-map-domain/provenance/sources/tools/target_runtime.py": {
+          "bytes": 3472,
+          "sha256": "a6f3e9407e511eb39f96fc85e65ba513d34f5637ab23b08a9de27e8dda55c3e2"
+        },
+        "failed-source-map-domain/provenance/sources/tools/target_timing_bridge.cpp": {
+          "bytes": 15719,
+          "sha256": "5e9db35232ef8b4cde7fcd6ed1972557bf9ca165357edeb4ba301723a6053322"
+        },
+        "failed-source-map-domain/provenance/sources/tools/tcsi_graph.py": {
+          "bytes": 11547,
+          "sha256": "3edc3b4e014ac658e5f5090e33a15d5568ef6c73154053a9b176d8c9a44e94ec"
+        },
+        "failed-source-map-domain/provenance/sources/tools/tcsi_mdl.py": {
+          "bytes": 6301,
+          "sha256": "1635bd037eead55be8750e5b344becf81d8711c752c69b988966cdc6a1ca9edf"
+        },
+        "failed-source-map-domain/provenance/sources/tools/turbo_components.py": {
+          "bytes": 8359,
+          "sha256": "1481fc41b1e655118a457210b74617e92ccc326e03b1b5590600226ca9c07954"
+        },
+        "failed-source-map-domain/provenance/sources/tools/turbo_gas_path.py": {
+          "bytes": 12848,
+          "sha256": "8073a61fd08cd8150ffc5163645128e270b6fa05c4d603faad6d6f57a98aee83"
+        },
+        "failed-source-map-domain/provenance/target.d": {
+          "bytes": 11465,
+          "sha256": "f3034e2ca4ad711fe3347f042018e1c0f4e0fb3750ac2c126896c679955d63db"
+        },
+        "failed-source-map-domain/trace.jsonl": {
+          "bytes": 2786346,
+          "sha256": "78bae867557d38a14ddbc3691646ae8902b6b066875f504c156e4e7a0e1fd004"
+        },
+        "failed-source-map-domain/trigger-stimuli.jsonl": {
+          "bytes": 412530,
+          "sha256": "3104577e00befcab4fd4ed0a84d47908e97e5d91780fd9c78ef05021562dc56f"
+        },
+        "failed-source-map-domain/tune.json": {
+          "bytes": 34528,
+          "sha256": "e1367f3c5e71c50679152f45ca6ff6ea8535cac26e4d30d776fd16915af2d147"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/edges.jsonl": {
+          "bytes": 358263,
+          "sha256": "4df3eca8dc47b9fbcadc92b4a55d56bbb586efc9b3445da6c7ec50e952d15a19"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/progress.json": {
+          "bytes": 11845,
+          "sha256": "a68733b490bcfb73ae9493ef372870e8b3ab4082dfa73e50ae07fe767b35e9c8"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/build-0.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/build-1.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/cJSON.d": {
+          "bytes": 4673,
+          "sha256": "9fd1669fad73f54f11594064ce191ffc4dae5523a904d7ee31e968a61fbf3bd9"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/cc-version.txt": {
+          "bytes": 238,
+          "sha256": "f6ab9d76ae8dcab3e133254944fbc77f41e0ba766287e289345c1ab77df09c45"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/cpp-version.txt": {
+          "bytes": 239,
+          "sha256": "e3bac80fa6d4e3a292f39091c2f4f2e33986cc7c91cbcb034c0de3cd27560881"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/dynamic-libraries.txt": {
+          "bytes": 390,
+          "sha256": "37dbf22a23b0fd2cfce6a03ed3b5a95bee34d944dc0d3ef9f2222278ce5d9714"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/external/cJSON/cJSON.c": {
+          "bytes": 80399,
+          "sha256": "f892717f26cf3d21b7108de50cea95b6e48092950427615fe1d8d9c46ea09cca"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/external/cJSON/cJSON.h": {
+          "bytes": 16394,
+          "sha256": "fda63720ffad1d007802f62204831018d167084c26e2ce08ad36f11529a90682"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/manifest.json": {
+          "bytes": 88875,
+          "sha256": "5eaf96d84b32b559bcdf1270b2bf6fdfd0a4d25ba38eb94feeb9a3df54b26a29"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/model-inputs/commit.json": {
+          "bytes": 2161,
+          "sha256": "e25973b9185283cf5878a6bd25c390be612435975f8a3bc2e252cbf5491849c6"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/model-inputs/provenance.json": {
+          "bytes": 541,
+          "sha256": "67ad245d41ee25feb7a339107892ba9adbfa52ccceaa6d9cd36a14fdb55051d9"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/model-inputs/source/Engine.mdl": {
+          "bytes": 590334,
+          "sha256": "b1eff999f74c5f6b67b4149652df1c255831a208b4ec97dc6f1abce0a2bac3ca"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/model-inputs/source/EngineData.m": {
+          "bytes": 5193,
+          "sha256": "013daa0f9181cf094cdcf338196b954addb08da2bd85cd0be1bef037b03af8cd"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/model-inputs/source/RunEngine.m": {
+          "bytes": 7266,
+          "sha256": "3c7d51f2fe94c458b45bad02be544353b56580e4cf2eb9eaffa381e62914abe5"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/model-inputs/tree.json": {
+          "bytes": 1317,
+          "sha256": "c242cd79175350f8e90faf0381f079420fd740bf72dbcee4017f1516139faef5"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/config/engine-profile.json": {
+          "bytes": 798,
+          "sha256": "d8e2e028f8e30b1a7caeb718b149f98bdff412be42bb0212b15edbc4741b31dc"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/config/engine/defaults.json": {
+          "bytes": 34399,
+          "sha256": "b24680872f36721591b10c15f643cd10c985e30f5bd860b96591b203a00d3f2e"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/board_status.hpp": {
+          "bytes": 305,
+          "sha256": "4ad055e17cdfc081db4cb6f17763bcd2ce299fecd8786a7b1220ff8e350d53d7"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/boost_command.hpp": {
+          "bytes": 1615,
+          "sha256": "34c9871c2addc9054b95688dca63c0270dc84da422ae50c4361da658631a870d"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/boost_control.hpp": {
+          "bytes": 11161,
+          "sha256": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/boost_json.hpp": {
+          "bytes": 4920,
+          "sha256": "93db1549ffb1491af8eee73e02e4044ab7d1151f9f510844f1f243e1c9f9d0e9"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/boost_pwm.hpp": {
+          "bytes": 375,
+          "sha256": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/boost_pwm_json.hpp": {
+          "bytes": 549,
+          "sha256": "6891cdb627ae14043717fcf644bba2a2a76f931ec30e76c2b5a5de240f7053c6"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/boost_runtime.hpp": {
+          "bytes": 2310,
+          "sha256": "2bd7df42100f065228a34023c85421b5f62bd09b610892eb5404faea21793102"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/boost_runtime_json.hpp": {
+          "bytes": 3203,
+          "sha256": "732d52aa667e42c4c9d93f8ab84dd96565ea91f600251eeda1e3721f2b2e0f1d"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/capture_clock.hpp": {
+          "bytes": 3448,
+          "sha256": "5c0f88793019c236b3dc6eea7a39e9a9b1a080bf5adc3159b6651ba45bdc8511"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/config.hpp": {
+          "bytes": 5442,
+          "sha256": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/config_storage.hpp": {
+          "bytes": 2363,
+          "sha256": "b7ec2f7029e00abb6440b3a9b1e1210d76ddf1f2309d19f7c52d81bc59990c45"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/control.hpp": {
+          "bytes": 10954,
+          "sha256": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/cylinder_channels.hpp": {
+          "bytes": 2530,
+          "sha256": "1dd9c57f10ed3544283750ed560ac7039df261035075c0e11d95b34114ab70e8"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine.hpp": {
+          "bytes": 34516,
+          "sha256": "4181ff9b8ff361a2035f129e2e22c929d276124b782870f7c50fb0ff90cb8d9f"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_binding.hpp": {
+          "bytes": 3197,
+          "sha256": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_data.hpp": {
+          "bytes": 6729,
+          "sha256": "4670fb0abb643a0957b2f679290e40ce7423df15219222896ad2a99d3d6ec4d7"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_data_json.hpp": {
+          "bytes": 9328,
+          "sha256": "c663a76867496d5a05eecb7c84a19be75f79258066198569a39f4acb7919f491"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_json.hpp": {
+          "bytes": 23169,
+          "sha256": "130c84c5bdd49cce6336c3481c537fec571eb10b2181279d465597e1c2663288"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_limits.hpp": {
+          "bytes": 107,
+          "sha256": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_log.hpp": {
+          "bytes": 5418,
+          "sha256": "eadcf8344a14791649c6a434f5be73cb179f061605fd7d0fb5c7e77072613a84"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_log_json.hpp": {
+          "bytes": 3996,
+          "sha256": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_log_msl.hpp": {
+          "bytes": 11692,
+          "sha256": "f63cc50ef8c6ca953c1a31d663bb2abcb30b4376d0492dbbfe1e26ec3f60dcbb"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_log_service.hpp": {
+          "bytes": 754,
+          "sha256": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_phase.hpp": {
+          "bytes": 8778,
+          "sha256": "227748fd088563ef15be4056c8102f768a10a4f279676d02961169e1f0c2d671"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_radio.hpp": {
+          "bytes": 11066,
+          "sha256": "d3380ce44a5b97cd915234548a3e16d6ac07d128f16e77047c05e5afd36cfab4"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_radio_boost.hpp": {
+          "bytes": 1235,
+          "sha256": "cac1c58a9492d435f08ab77e83da58bc922cc445ccfc5cd775edd36df1d9ab6d"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_radio_cylinders.hpp": {
+          "bytes": 1557,
+          "sha256": "4dfd45793996e1e2d1af89e2b97169d7df75e9a76d425dd93a94967661c76e91"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_radio_flex.hpp": {
+          "bytes": 4793,
+          "sha256": "7f93304fdfd3cdcc571e0956aa58edcd23bfbc7a8113d35d8a8873d1a67bc258"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_radio_health.hpp": {
+          "bytes": 1009,
+          "sha256": "94919a86f184cf7bccdc767c67de753a10b0d1dba40478479ddd9341e311cc75"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_scheduler.hpp": {
+          "bytes": 11208,
+          "sha256": "af03a89e6d541b1915ff6e696dac38761363e53b9d4a8ed0a51ab01d0a3a943d"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_service.hpp": {
+          "bytes": 976,
+          "sha256": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_storage.hpp": {
+          "bytes": 3105,
+          "sha256": "0e794be42d9a643e055d6f2e86b497ff6bd21ad2446b2b09b51a297819d02e4c"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_target.hpp": {
+          "bytes": 2491,
+          "sha256": "7ae0c12c272f620bdf23afa45a5d3f34f8142045a76ae3de144b2bd907e5b8bd"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/engine_tuning.hpp": {
+          "bytes": 120,
+          "sha256": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/espnow.hpp": {
+          "bytes": 336,
+          "sha256": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/espnow_protocol.hpp": {
+          "bytes": 2797,
+          "sha256": "aff9fd75b7489f20cac497aaa2486d2579616b2d7c64a764ce59f862b30ee77a"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/flex_capture_json.hpp": {
+          "bytes": 5288,
+          "sha256": "5721d4889b351bb9001a259801cb4ae465ddd8852a9d69553a6564684d0a85fb"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/flex_capture_owner.hpp": {
+          "bytes": 12562,
+          "sha256": "3f4f69618b9e7b376c2ea1a1717ffdd328d782d5e54416da9296a2a95d6efb84"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/flex_engine.hpp": {
+          "bytes": 5999,
+          "sha256": "b24c940bdee8e71e427f552d126efdba7d5ca29110aa70d7d4396fcef6eba468"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/flex_fuel.hpp": {
+          "bytes": 14382,
+          "sha256": "ce233744b7f8b938f2d2a4a491138b2ba115a62ec0a5270612a89261e1729c22"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/flex_hardware.hpp": {
+          "bytes": 493,
+          "sha256": "bd01b82d25c37f25169aead71d7df3fc4992923c52e941df4766943e290a6380"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/flex_ingress.hpp": {
+          "bytes": 9452,
+          "sha256": "29a7ab7040b9918f7dde65356c138b8b619b484588954230bbc8d8d43cff4216"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/flex_json.hpp": {
+          "bytes": 6399,
+          "sha256": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/flex_runtime.hpp": {
+          "bytes": 8991,
+          "sha256": "74bffa63c8930ea35c123250c98e30b5c9f588eb6761a812881d1e1a0b981051"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/flex_runtime_json.hpp": {
+          "bytes": 4014,
+          "sha256": "4b1c0424f5ac2bd50f520d1d04badb4347bbe246cfb02070988175a50a45d6d7"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/heap_object.hpp": {
+          "bytes": 540,
+          "sha256": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/idle_command.hpp": {
+          "bytes": 1489,
+          "sha256": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/idle_control.hpp": {
+          "bytes": 10973,
+          "sha256": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/idle_hardware.hpp": {
+          "bytes": 616,
+          "sha256": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/idle_pwm.hpp": {
+          "bytes": 6903,
+          "sha256": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/idle_pwm_json.hpp": {
+          "bytes": 1434,
+          "sha256": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/json.hpp": {
+          "bytes": 2130,
+          "sha256": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/load_json.hpp": {
+          "bytes": 8013,
+          "sha256": "75a0b2fb5939e671c44c0ae0e49e380db187bcc3c413fc20375f6ede6abfb931"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/load_model.hpp": {
+          "bytes": 11873,
+          "sha256": "5d25340d26a20b58f29501491357e2264e30f91284bc0691bf0f06f34ec26361"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/pins.hpp": {
+          "bytes": 1139,
+          "sha256": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/realtime.hpp": {
+          "bytes": 387,
+          "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/secondary_json.hpp": {
+          "bytes": 11890,
+          "sha256": "25037e11278fac1bb2f4e0a394b9e992e25336f497147f849e6109af9d00eed1"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/secondary_tables.hpp": {
+          "bytes": 16600,
+          "sha256": "4ea26b399ae6cb29bb82823572698a11d65bc51ac570097ab6b22803119d02f2"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/status_led.hpp": {
+          "bytes": 6608,
+          "sha256": "47dc3b311195c72348849e24521b47e743cfec90b751fcd1b9626b39ff034902"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/switch_acquisition.hpp": {
+          "bytes": 9371,
+          "sha256": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/switch_service.hpp": {
+          "bytes": 416,
+          "sha256": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/switch_transport.hpp": {
+          "bytes": 2438,
+          "sha256": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/timing_executor.hpp": {
+          "bytes": 16260,
+          "sha256": "4b692a218335b2288f5da983e1347f54e2110a9cb24ea65ccabc6296a6d9de87"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/transient_enrichment.hpp": {
+          "bytes": 12008,
+          "sha256": "cb29b19871a4b900008e46356bd5d43c89313a271dd5b84996f9dbb4a6fb3403"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/transient_json.hpp": {
+          "bytes": 3294,
+          "sha256": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/trigger_log.hpp": {
+          "bytes": 2952,
+          "sha256": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/trigger_log_json.hpp": {
+          "bytes": 4155,
+          "sha256": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/tuning_document.hpp": {
+          "bytes": 7415,
+          "sha256": "e7f8729cfae8d510332d25a4f22678415a2ce625dbeac1f57f3c084d56d63183"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/tuning_layout.hpp": {
+          "bytes": 32726,
+          "sha256": "9690e6d9e72699f7f54029a76e19bf2e89b04894d1faa552b86fec6d77d4f700"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/tuning_live.hpp": {
+          "bytes": 6899,
+          "sha256": "9949836f290ffff9e4b1b0af276abffe02596abb065a3daba6c7e6183e9601f6"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/tuning_session.hpp": {
+          "bytes": 7958,
+          "sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/tuning_stream.hpp": {
+          "bytes": 3028,
+          "sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/include/ecu/web_config.hpp": {
+          "bytes": 1088,
+          "sha256": "d1277da304e7e84fec29a0b6bcbddd9730fb068135d6f14ffc3c7369d79c8e47"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/firmware/main/config_json.hpp": {
+          "bytes": 3373,
+          "sha256": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/scripts/build_speeduino_flex.py": {
+          "bytes": 6401,
+          "sha256": "6c4fa2b9a47d1f5d0b1efc0bd50cf9fd45fc3fc61380e318733aa64effe11dd7"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/scripts/build_speeduino_turbo.py": {
+          "bytes": 4579,
+          "sha256": "11476321809bd878afea5a166f7996286d78349a6a4a894de30f59ef4048f3fa"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/boost_engine_provenance.py": {
+          "bytes": 10714,
+          "sha256": "1470c93684b96ed95d8114efdd01111c275a017611a850fdd45a45f819f335a4"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/boost_research_plant.py": {
+          "bytes": 8120,
+          "sha256": "9788edf87d8ca69399ae7ad0a07c1d3e0d2a2616fc08d04cbd94418efa52b887"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/boost_valve_plant.py": {
+          "bytes": 2677,
+          "sha256": "d5e93258a6e42795789aeb8e763236d30f150bb530e344fa0a02d18981887f67"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/compare_engine_controllers.py": {
+          "bytes": 35024,
+          "sha256": "7a5d92bf5bbcad744d8164e0d3e8b409622fc2e9fb50b47b935f1ee35b96e80f"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/engine_geometry.py": {
+          "bytes": 3231,
+          "sha256": "a3981690fb46a1e21285b51335a4478706a63cb91fd2307e4b2aa5fde4ab9e06"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/engine_research_plant.py": {
+          "bytes": 16207,
+          "sha256": "927eecb546625061d18d860ac5dc202615ef714882f842404af8b072a7ebf029"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/engine_runtime.py": {
+          "bytes": 19208,
+          "sha256": "db48c8b51a3c8fd5864a316512d7acda8327092bf6050cd505224da37a1bb19a"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/idle_valve_plant.py": {
+          "bytes": 3564,
+          "sha256": "ecf84faf3c556c200831bf361c59459dc8e3fc43fe3637022e0f64cc5d963b65"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/profile_config.py": {
+          "bytes": 1114,
+          "sha256": "6c9a6374b148d0cd8d433dcd5719de421385c0ec7d33a3b4e77164b278461f24"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/run_boost_engine.py": {
+          "bytes": 14430,
+          "sha256": "6344461368e09cc56438208b07fecb55853536544581945e9ece15e3b4fb8b6e"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/sequential_metrics.py": {
+          "bytes": 812,
+          "sha256": "190e5cf95c0821c5241d92dfa80aa4843fa1f311c3f4beaaa51f6714cffd39d4"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/speeduino_runtime.py": {
+          "bytes": 32019,
+          "sha256": "0e3372a6a90cb6700eeecb1daab1fefe26cca3a4e7460e63f4ba4c5f6fe18372"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/speeduino_sim.cpp": {
+          "bytes": 36845,
+          "sha256": "dc5ef41e64539e18c21be2aa9cf748820969271117923569b592fc6ae3b42f50"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/speeduino_sim_hal.cpp": {
+          "bytes": 2442,
+          "sha256": "0d28c0c73308f8ac1333b0e3eefa38d9b6bef4fe0e7ca31e6342c7a9e8074409"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/speeduino_sim_native.hpp": {
+          "bytes": 381,
+          "sha256": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/speeduino_turbo_runtime.py": {
+          "bytes": 8300,
+          "sha256": "03313765401ddcd2478738254efe8f307c0983a2bb0b5470101a4bff81768fbc"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/speeduino_turbo_sim.cpp": {
+          "bytes": 9629,
+          "sha256": "e58ca7a7d2a2d8b8ef857210c4bc8068bb6965e96fdb5e0300e6cd519520ff27"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/target_runtime.py": {
+          "bytes": 3472,
+          "sha256": "a6f3e9407e511eb39f96fc85e65ba513d34f5637ab23b08a9de27e8dda55c3e2"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/target_timing_bridge.cpp": {
+          "bytes": 15719,
+          "sha256": "5e9db35232ef8b4cde7fcd6ed1972557bf9ca165357edeb4ba301723a6053322"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/tcsi_graph.py": {
+          "bytes": 11547,
+          "sha256": "3edc3b4e014ac658e5f5090e33a15d5568ef6c73154053a9b176d8c9a44e94ec"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/tcsi_mdl.py": {
+          "bytes": 6301,
+          "sha256": "1635bd037eead55be8750e5b344becf81d8711c752c69b988966cdc6a1ca9edf"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/turbo_components.py": {
+          "bytes": 8359,
+          "sha256": "1481fc41b1e655118a457210b74617e92ccc326e03b1b5590600226ca9c07954"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/sources/tools/turbo_gas_path.py": {
+          "bytes": 12848,
+          "sha256": "8073a61fd08cd8150ffc5163645128e270b6fa05c4d603faad6d6f57a98aee83"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/provenance/target.d": {
+          "bytes": 11465,
+          "sha256": "40f12cc27523a6eea89d41f279159b921ce9a2782001d8fe754fc8166c58f364"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/result.json": {
+          "bytes": 32089,
+          "sha256": "3fa671557e1e6da3c3bbf824eea4f3cdbe85c898be22eb2a838dcd918c0a2801"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/trace.jsonl": {
+          "bytes": 4742484,
+          "sha256": "9d27c9806b85e4ab1948bbaff2ff72742190ea47c7236a10c1bf6c6bc9c1476d"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/trigger-stimuli.jsonl": {
+          "bytes": 1145922,
+          "sha256": "091fb62a00e88a82fe61b0e3e608d50f90ad6995096bc66bf9b0bc390ad64659"
+        },
+        "prefix-only/turbo-profiles-open-loop-001/tune.json": {
+          "bytes": 34528,
+          "sha256": "e1367f3c5e71c50679152f45ca6ff6ea8535cac26e4d30d776fd16915af2d147"
+        },
+        "prefix-only/turbo-profiles-single-001/edges.jsonl": {
+          "bytes": 11040,
+          "sha256": "1dadf64d8009e0034f02c539e81bc5a8d18f81b7e021ac4314e13b5559725366"
+        },
+        "prefix-only/turbo-profiles-single-001/progress.json": {
+          "bytes": 11841,
+          "sha256": "50d08b74d4f896fc222ad6854b0b08072fa3037997f82ed43889b9eca62e9452"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/build-0.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/build-1.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/cJSON.d": {
+          "bytes": 4670,
+          "sha256": "54857fb23f591975089754384e01959b906870d1f6b924411b290c654d3fa4ec"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/cc-version.txt": {
+          "bytes": 238,
+          "sha256": "f6ab9d76ae8dcab3e133254944fbc77f41e0ba766287e289345c1ab77df09c45"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/cpp-version.txt": {
+          "bytes": 239,
+          "sha256": "e3bac80fa6d4e3a292f39091c2f4f2e33986cc7c91cbcb034c0de3cd27560881"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/dynamic-libraries.txt": {
+          "bytes": 390,
+          "sha256": "8eaba7f24a05b6e79650d45fad716beaa38beecb554c2ce96dcf0157eb56394b"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/external/cJSON/cJSON.c": {
+          "bytes": 80399,
+          "sha256": "f892717f26cf3d21b7108de50cea95b6e48092950427615fe1d8d9c46ea09cca"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/external/cJSON/cJSON.h": {
+          "bytes": 16394,
+          "sha256": "fda63720ffad1d007802f62204831018d167084c26e2ce08ad36f11529a90682"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/manifest.json": {
+          "bytes": 88854,
+          "sha256": "331451a0febceb93609deb879a530b822a41c1ca28764f2075431c38a8c497c8"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/model-inputs/commit.json": {
+          "bytes": 2161,
+          "sha256": "e25973b9185283cf5878a6bd25c390be612435975f8a3bc2e252cbf5491849c6"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/model-inputs/provenance.json": {
+          "bytes": 541,
+          "sha256": "67ad245d41ee25feb7a339107892ba9adbfa52ccceaa6d9cd36a14fdb55051d9"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/model-inputs/source/Engine.mdl": {
+          "bytes": 590334,
+          "sha256": "b1eff999f74c5f6b67b4149652df1c255831a208b4ec97dc6f1abce0a2bac3ca"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/model-inputs/source/EngineData.m": {
+          "bytes": 5193,
+          "sha256": "013daa0f9181cf094cdcf338196b954addb08da2bd85cd0be1bef037b03af8cd"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/model-inputs/source/RunEngine.m": {
+          "bytes": 7266,
+          "sha256": "3c7d51f2fe94c458b45bad02be544353b56580e4cf2eb9eaffa381e62914abe5"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/model-inputs/tree.json": {
+          "bytes": 1317,
+          "sha256": "c242cd79175350f8e90faf0381f079420fd740bf72dbcee4017f1516139faef5"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/config/engine-profile.json": {
+          "bytes": 798,
+          "sha256": "d8e2e028f8e30b1a7caeb718b149f98bdff412be42bb0212b15edbc4741b31dc"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/config/engine/defaults.json": {
+          "bytes": 34399,
+          "sha256": "b24680872f36721591b10c15f643cd10c985e30f5bd860b96591b203a00d3f2e"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/board_status.hpp": {
+          "bytes": 305,
+          "sha256": "4ad055e17cdfc081db4cb6f17763bcd2ce299fecd8786a7b1220ff8e350d53d7"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/boost_command.hpp": {
+          "bytes": 1615,
+          "sha256": "34c9871c2addc9054b95688dca63c0270dc84da422ae50c4361da658631a870d"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/boost_control.hpp": {
+          "bytes": 11161,
+          "sha256": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/boost_json.hpp": {
+          "bytes": 4920,
+          "sha256": "93db1549ffb1491af8eee73e02e4044ab7d1151f9f510844f1f243e1c9f9d0e9"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/boost_pwm.hpp": {
+          "bytes": 375,
+          "sha256": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/boost_pwm_json.hpp": {
+          "bytes": 549,
+          "sha256": "6891cdb627ae14043717fcf644bba2a2a76f931ec30e76c2b5a5de240f7053c6"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/boost_runtime.hpp": {
+          "bytes": 2310,
+          "sha256": "2bd7df42100f065228a34023c85421b5f62bd09b610892eb5404faea21793102"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/boost_runtime_json.hpp": {
+          "bytes": 3203,
+          "sha256": "732d52aa667e42c4c9d93f8ab84dd96565ea91f600251eeda1e3721f2b2e0f1d"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/capture_clock.hpp": {
+          "bytes": 3448,
+          "sha256": "5c0f88793019c236b3dc6eea7a39e9a9b1a080bf5adc3159b6651ba45bdc8511"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/config.hpp": {
+          "bytes": 5442,
+          "sha256": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/config_storage.hpp": {
+          "bytes": 2363,
+          "sha256": "b7ec2f7029e00abb6440b3a9b1e1210d76ddf1f2309d19f7c52d81bc59990c45"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/control.hpp": {
+          "bytes": 10954,
+          "sha256": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/cylinder_channels.hpp": {
+          "bytes": 2530,
+          "sha256": "1dd9c57f10ed3544283750ed560ac7039df261035075c0e11d95b34114ab70e8"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine.hpp": {
+          "bytes": 34516,
+          "sha256": "4181ff9b8ff361a2035f129e2e22c929d276124b782870f7c50fb0ff90cb8d9f"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_binding.hpp": {
+          "bytes": 3197,
+          "sha256": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_data.hpp": {
+          "bytes": 6729,
+          "sha256": "4670fb0abb643a0957b2f679290e40ce7423df15219222896ad2a99d3d6ec4d7"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_data_json.hpp": {
+          "bytes": 9328,
+          "sha256": "c663a76867496d5a05eecb7c84a19be75f79258066198569a39f4acb7919f491"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_json.hpp": {
+          "bytes": 23169,
+          "sha256": "130c84c5bdd49cce6336c3481c537fec571eb10b2181279d465597e1c2663288"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_limits.hpp": {
+          "bytes": 107,
+          "sha256": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_log.hpp": {
+          "bytes": 5418,
+          "sha256": "eadcf8344a14791649c6a434f5be73cb179f061605fd7d0fb5c7e77072613a84"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_log_json.hpp": {
+          "bytes": 3996,
+          "sha256": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_log_msl.hpp": {
+          "bytes": 11692,
+          "sha256": "f63cc50ef8c6ca953c1a31d663bb2abcb30b4376d0492dbbfe1e26ec3f60dcbb"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_log_service.hpp": {
+          "bytes": 754,
+          "sha256": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_phase.hpp": {
+          "bytes": 8778,
+          "sha256": "227748fd088563ef15be4056c8102f768a10a4f279676d02961169e1f0c2d671"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_radio.hpp": {
+          "bytes": 11066,
+          "sha256": "d3380ce44a5b97cd915234548a3e16d6ac07d128f16e77047c05e5afd36cfab4"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_radio_boost.hpp": {
+          "bytes": 1235,
+          "sha256": "cac1c58a9492d435f08ab77e83da58bc922cc445ccfc5cd775edd36df1d9ab6d"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_radio_cylinders.hpp": {
+          "bytes": 1557,
+          "sha256": "4dfd45793996e1e2d1af89e2b97169d7df75e9a76d425dd93a94967661c76e91"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_radio_flex.hpp": {
+          "bytes": 4793,
+          "sha256": "7f93304fdfd3cdcc571e0956aa58edcd23bfbc7a8113d35d8a8873d1a67bc258"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_radio_health.hpp": {
+          "bytes": 1009,
+          "sha256": "94919a86f184cf7bccdc767c67de753a10b0d1dba40478479ddd9341e311cc75"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_scheduler.hpp": {
+          "bytes": 11208,
+          "sha256": "af03a89e6d541b1915ff6e696dac38761363e53b9d4a8ed0a51ab01d0a3a943d"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_service.hpp": {
+          "bytes": 976,
+          "sha256": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_storage.hpp": {
+          "bytes": 3105,
+          "sha256": "0e794be42d9a643e055d6f2e86b497ff6bd21ad2446b2b09b51a297819d02e4c"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_target.hpp": {
+          "bytes": 2491,
+          "sha256": "7ae0c12c272f620bdf23afa45a5d3f34f8142045a76ae3de144b2bd907e5b8bd"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/engine_tuning.hpp": {
+          "bytes": 120,
+          "sha256": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/espnow.hpp": {
+          "bytes": 336,
+          "sha256": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/espnow_protocol.hpp": {
+          "bytes": 2797,
+          "sha256": "aff9fd75b7489f20cac497aaa2486d2579616b2d7c64a764ce59f862b30ee77a"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/flex_capture_json.hpp": {
+          "bytes": 5288,
+          "sha256": "5721d4889b351bb9001a259801cb4ae465ddd8852a9d69553a6564684d0a85fb"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/flex_capture_owner.hpp": {
+          "bytes": 12562,
+          "sha256": "3f4f69618b9e7b376c2ea1a1717ffdd328d782d5e54416da9296a2a95d6efb84"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/flex_engine.hpp": {
+          "bytes": 5999,
+          "sha256": "b24c940bdee8e71e427f552d126efdba7d5ca29110aa70d7d4396fcef6eba468"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/flex_fuel.hpp": {
+          "bytes": 14382,
+          "sha256": "ce233744b7f8b938f2d2a4a491138b2ba115a62ec0a5270612a89261e1729c22"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/flex_hardware.hpp": {
+          "bytes": 493,
+          "sha256": "bd01b82d25c37f25169aead71d7df3fc4992923c52e941df4766943e290a6380"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/flex_ingress.hpp": {
+          "bytes": 9452,
+          "sha256": "29a7ab7040b9918f7dde65356c138b8b619b484588954230bbc8d8d43cff4216"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/flex_json.hpp": {
+          "bytes": 6399,
+          "sha256": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/flex_runtime.hpp": {
+          "bytes": 8991,
+          "sha256": "74bffa63c8930ea35c123250c98e30b5c9f588eb6761a812881d1e1a0b981051"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/flex_runtime_json.hpp": {
+          "bytes": 4014,
+          "sha256": "4b1c0424f5ac2bd50f520d1d04badb4347bbe246cfb02070988175a50a45d6d7"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/heap_object.hpp": {
+          "bytes": 540,
+          "sha256": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/idle_command.hpp": {
+          "bytes": 1489,
+          "sha256": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/idle_control.hpp": {
+          "bytes": 10973,
+          "sha256": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/idle_hardware.hpp": {
+          "bytes": 616,
+          "sha256": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/idle_pwm.hpp": {
+          "bytes": 6903,
+          "sha256": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/idle_pwm_json.hpp": {
+          "bytes": 1434,
+          "sha256": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/json.hpp": {
+          "bytes": 2130,
+          "sha256": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/load_json.hpp": {
+          "bytes": 8013,
+          "sha256": "75a0b2fb5939e671c44c0ae0e49e380db187bcc3c413fc20375f6ede6abfb931"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/load_model.hpp": {
+          "bytes": 11873,
+          "sha256": "5d25340d26a20b58f29501491357e2264e30f91284bc0691bf0f06f34ec26361"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/pins.hpp": {
+          "bytes": 1139,
+          "sha256": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/realtime.hpp": {
+          "bytes": 387,
+          "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/secondary_json.hpp": {
+          "bytes": 11890,
+          "sha256": "25037e11278fac1bb2f4e0a394b9e992e25336f497147f849e6109af9d00eed1"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/secondary_tables.hpp": {
+          "bytes": 16600,
+          "sha256": "4ea26b399ae6cb29bb82823572698a11d65bc51ac570097ab6b22803119d02f2"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/status_led.hpp": {
+          "bytes": 6608,
+          "sha256": "47dc3b311195c72348849e24521b47e743cfec90b751fcd1b9626b39ff034902"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/switch_acquisition.hpp": {
+          "bytes": 9371,
+          "sha256": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/switch_service.hpp": {
+          "bytes": 416,
+          "sha256": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/switch_transport.hpp": {
+          "bytes": 2438,
+          "sha256": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/timing_executor.hpp": {
+          "bytes": 16260,
+          "sha256": "4b692a218335b2288f5da983e1347f54e2110a9cb24ea65ccabc6296a6d9de87"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/transient_enrichment.hpp": {
+          "bytes": 12008,
+          "sha256": "cb29b19871a4b900008e46356bd5d43c89313a271dd5b84996f9dbb4a6fb3403"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/transient_json.hpp": {
+          "bytes": 3294,
+          "sha256": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/trigger_log.hpp": {
+          "bytes": 2952,
+          "sha256": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/trigger_log_json.hpp": {
+          "bytes": 4155,
+          "sha256": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/tuning_document.hpp": {
+          "bytes": 7415,
+          "sha256": "e7f8729cfae8d510332d25a4f22678415a2ce625dbeac1f57f3c084d56d63183"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/tuning_layout.hpp": {
+          "bytes": 32726,
+          "sha256": "9690e6d9e72699f7f54029a76e19bf2e89b04894d1faa552b86fec6d77d4f700"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/tuning_live.hpp": {
+          "bytes": 6899,
+          "sha256": "9949836f290ffff9e4b1b0af276abffe02596abb065a3daba6c7e6183e9601f6"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/tuning_session.hpp": {
+          "bytes": 7958,
+          "sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/tuning_stream.hpp": {
+          "bytes": 3028,
+          "sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/include/ecu/web_config.hpp": {
+          "bytes": 1088,
+          "sha256": "d1277da304e7e84fec29a0b6bcbddd9730fb068135d6f14ffc3c7369d79c8e47"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/firmware/main/config_json.hpp": {
+          "bytes": 3373,
+          "sha256": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/scripts/build_speeduino_flex.py": {
+          "bytes": 6401,
+          "sha256": "6c4fa2b9a47d1f5d0b1efc0bd50cf9fd45fc3fc61380e318733aa64effe11dd7"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/scripts/build_speeduino_turbo.py": {
+          "bytes": 4579,
+          "sha256": "11476321809bd878afea5a166f7996286d78349a6a4a894de30f59ef4048f3fa"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/boost_engine_provenance.py": {
+          "bytes": 10714,
+          "sha256": "1470c93684b96ed95d8114efdd01111c275a017611a850fdd45a45f819f335a4"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/boost_research_plant.py": {
+          "bytes": 8120,
+          "sha256": "9788edf87d8ca69399ae7ad0a07c1d3e0d2a2616fc08d04cbd94418efa52b887"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/boost_valve_plant.py": {
+          "bytes": 2677,
+          "sha256": "d5e93258a6e42795789aeb8e763236d30f150bb530e344fa0a02d18981887f67"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/compare_engine_controllers.py": {
+          "bytes": 35024,
+          "sha256": "7a5d92bf5bbcad744d8164e0d3e8b409622fc2e9fb50b47b935f1ee35b96e80f"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/engine_geometry.py": {
+          "bytes": 3231,
+          "sha256": "a3981690fb46a1e21285b51335a4478706a63cb91fd2307e4b2aa5fde4ab9e06"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/engine_research_plant.py": {
+          "bytes": 16207,
+          "sha256": "927eecb546625061d18d860ac5dc202615ef714882f842404af8b072a7ebf029"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/engine_runtime.py": {
+          "bytes": 19208,
+          "sha256": "db48c8b51a3c8fd5864a316512d7acda8327092bf6050cd505224da37a1bb19a"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/idle_valve_plant.py": {
+          "bytes": 3564,
+          "sha256": "ecf84faf3c556c200831bf361c59459dc8e3fc43fe3637022e0f64cc5d963b65"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/profile_config.py": {
+          "bytes": 1114,
+          "sha256": "6c9a6374b148d0cd8d433dcd5719de421385c0ec7d33a3b4e77164b278461f24"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/run_boost_engine.py": {
+          "bytes": 14430,
+          "sha256": "6344461368e09cc56438208b07fecb55853536544581945e9ece15e3b4fb8b6e"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/sequential_metrics.py": {
+          "bytes": 812,
+          "sha256": "190e5cf95c0821c5241d92dfa80aa4843fa1f311c3f4beaaa51f6714cffd39d4"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/speeduino_runtime.py": {
+          "bytes": 32019,
+          "sha256": "0e3372a6a90cb6700eeecb1daab1fefe26cca3a4e7460e63f4ba4c5f6fe18372"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/speeduino_sim.cpp": {
+          "bytes": 36845,
+          "sha256": "dc5ef41e64539e18c21be2aa9cf748820969271117923569b592fc6ae3b42f50"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/speeduino_sim_hal.cpp": {
+          "bytes": 2442,
+          "sha256": "0d28c0c73308f8ac1333b0e3eefa38d9b6bef4fe0e7ca31e6342c7a9e8074409"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/speeduino_sim_native.hpp": {
+          "bytes": 381,
+          "sha256": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/speeduino_turbo_runtime.py": {
+          "bytes": 8300,
+          "sha256": "03313765401ddcd2478738254efe8f307c0983a2bb0b5470101a4bff81768fbc"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/speeduino_turbo_sim.cpp": {
+          "bytes": 9629,
+          "sha256": "e58ca7a7d2a2d8b8ef857210c4bc8068bb6965e96fdb5e0300e6cd519520ff27"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/target_runtime.py": {
+          "bytes": 3472,
+          "sha256": "a6f3e9407e511eb39f96fc85e65ba513d34f5637ab23b08a9de27e8dda55c3e2"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/target_timing_bridge.cpp": {
+          "bytes": 15719,
+          "sha256": "5e9db35232ef8b4cde7fcd6ed1972557bf9ca165357edeb4ba301723a6053322"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/tcsi_graph.py": {
+          "bytes": 11547,
+          "sha256": "3edc3b4e014ac658e5f5090e33a15d5568ef6c73154053a9b176d8c9a44e94ec"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/tcsi_mdl.py": {
+          "bytes": 6301,
+          "sha256": "1635bd037eead55be8750e5b344becf81d8711c752c69b988966cdc6a1ca9edf"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/turbo_components.py": {
+          "bytes": 8359,
+          "sha256": "1481fc41b1e655118a457210b74617e92ccc326e03b1b5590600226ca9c07954"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/sources/tools/turbo_gas_path.py": {
+          "bytes": 12848,
+          "sha256": "8073a61fd08cd8150ffc5163645128e270b6fa05c4d603faad6d6f57a98aee83"
+        },
+        "prefix-only/turbo-profiles-single-001/provenance/target.d": {
+          "bytes": 11462,
+          "sha256": "4ffaaafee63465658b227e1d599a5a049a8887adb1f526f3d64af77a2efc4ffb"
+        },
+        "prefix-only/turbo-profiles-single-001/result.json": {
+          "bytes": 31487,
+          "sha256": "b947e19f63dce6ff638e9285b776704bd336da955dc2e10649dc586c320bd9aa"
+        },
+        "prefix-only/turbo-profiles-single-001/trace.jsonl": {
+          "bytes": 2333631,
+          "sha256": "05ae334a72ef149ca6181dcaee01da3819c5b0ba17ec97d15dfb0b19fb18b816"
+        },
+        "prefix-only/turbo-profiles-single-001/trigger-stimuli.jsonl": {
+          "bytes": 155760,
+          "sha256": "9f0f33dabd46ae3a2b54a432f14d3b3635a2d087ba1a2b7d148aa651712c9a76"
+        },
+        "prefix-only/turbo-profiles-single-001/tune.json": {
+          "bytes": 34523,
+          "sha256": "9273a90e656f4903c786e2996e4a4a5380140285b49b58b09e5fe1aed3f7e6cf"
+        }
+      }
+    }
+  },
+  "limits": [
+    "Uncalibrated source-backed gas graph/empirical combustion and native zero-CPU-time dispatcher",
+    "Fixed source turbo/maps/volumes are not automatically matched to every engine displacement",
+    "Project1/7/8-cylinder cases, not an expanded genuine Speeduino turbo comparison",
+    "Prefix-only histories do not establish post-halt physical inventories",
+    "No dynamic cam-dropout, expanded closed-loop tracking, target/HIL or physical qualification"
+  ]
+}

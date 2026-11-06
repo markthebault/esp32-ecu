@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "checks": 103,
+  "source_sha256": "f065bc7dfa85bec03ebf9e22625fbcd24b8635d0bf67848e2f986d65edfdf9fe",
+  "function_sha256": "01472ba241a4684cbf9879ace7a2892e2ebcbe7a5c86aecf4df669660c4517dd",
+  "outputs": [
+    {
+      "fixture": "bus_recovered.json",
+      "text": "Requested steady green. Expander latch verified green, 9.8 ms old. Advisory only; light output and live CPU health are unproven."
+    },
+    {
+      "fixture": "green_ready.json",
+      "text": "Requested steady green. Expander latch verified green, 5.0 ms old. Advisory only; light output and live CPU health are unproven."
+    },
+    {
+      "fixture": "led_recovered.json",
+      "text": "Requested steady green. Expander latch verified green, 4.8 ms old. Advisory only; light output and live CPU health are unproven."
+    },
+    {
+      "fixture": "led_timeout.json",
+      "text": "Requested steady green. Historical latch: green, 114.8 ms old. Current verification unavailable (i2c_timeout, SDK 263). Advisory only; light output and live CPU health are unproven."
+    },
+    {
+      "fixture": "shared_bus_fault.json",
+      "text": "Requested steady green. Historical latch: green, 115.0 ms old. Current verification unavailable (i2c_timeout, SDK 263). Advisory only; light output and live CPU health are unproven."
+    },
+    {
+      "fixture": "stale_latch.json",
+      "text": "Requested steady green. Historical latch: green, 259.8 ms old. Current verification unavailable (none, SDK 0). Advisory only; light output and live CPU health are unproven."
+    }
+  ],
+  "scope": "Pure extracted JavaScript validator plus native fake-SDK service fixtures; no browser, device, service or hardware execution."
+}

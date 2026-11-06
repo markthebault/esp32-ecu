@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "native": {
+    "cjson": 64,
+    "tune": 7204,
+    "observation": 64,
+    "sample": 528,
+    "row": 544,
+    "page": 8792,
+    "recorder": 139352,
+    "session": 8272,
+    "reply": 656
+  },
+  "target": {
+    "cjson": 40,
+    "observation": 64,
+    "page": 8792,
+    "recorder": 139352,
+    "reply": 648,
+    "row": 544,
+    "sample": 528,
+    "session": 8272,
+    "tune": 7204
+  },
+  "commands": [
+    [
+      "g++",
+      "-std=c++17",
+      "-O2",
+      "-Ifirmware/include",
+      "-I/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-integration/target/actual-sizes.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-integration/target/native-sizes"
+    ],
+    [
+      "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-g++",
+      "-std=c++17",
+      "-O2",
+      "-DTARGET_SIZE_ONLY",
+      "-Ifirmware/include",
+      "-I/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+      "-c",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-integration/target/actual-sizes.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-integration/target/target-sizes.o"
+    ]
+  ],
+  "runtime_heap_stack_measured": false
+}

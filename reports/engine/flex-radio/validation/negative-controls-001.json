@@ -1,0 +1,99 @@
+{
+  "passed": true,
+  "scope": "Owned hardlink copies with copy-before-write JSON mutation and recomputed artifact manifests; original report byte checks remain separate",
+  "original_artifact_manifest_sha256": "ff095fcd2b19465b12ca0a987ceac76b007aa3b9332024ff21fbe44a69457d27",
+  "output": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-negative-987b175a0f614c23b4eebe57d24be3ef",
+  "cases": [
+    {
+      "name": "partial-engine-ack",
+      "returncode": 1,
+      "expected": "Partial ACK labeling differs",
+      "rejected": true,
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/tools/verify_flex_radio_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-negative-987b175a0f614c23b4eebe57d24be3ef/partial-engine-ack"
+      ]
+    },
+    {
+      "name": "wrong-wire-budget",
+      "returncode": 1,
+      "expected": "Source snapshot differs",
+      "rejected": true,
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/tools/verify_flex_radio_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-negative-987b175a0f614c23b4eebe57d24be3ef/wrong-wire-budget"
+      ]
+    },
+    {
+      "name": "review-rejected",
+      "returncode": 1,
+      "expected": "Independent acceptance missing",
+      "rejected": true,
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/tools/verify_flex_radio_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-negative-987b175a0f614c23b4eebe57d24be3ef/review-rejected"
+      ]
+    },
+    {
+      "name": "build-sources-changed",
+      "returncode": 1,
+      "expected": "Build attestation failed",
+      "rejected": true,
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/tools/verify_flex_radio_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-negative-987b175a0f614c23b4eebe57d24be3ef/build-sources-changed"
+      ]
+    },
+    {
+      "name": "raw-flex-stale-hidden",
+      "returncode": 1,
+      "expected": "Independent raw expiry differs",
+      "rejected": true,
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/tools/verify_flex_radio_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-negative-987b175a0f614c23b4eebe57d24be3ef/raw-flex-stale-hidden"
+      ]
+    },
+    {
+      "name": "full-parity-overclaim",
+      "returncode": 1,
+      "expected": "Overstated qualification",
+      "rejected": true,
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/tools/verify_flex_radio_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-negative-987b175a0f614c23b4eebe57d24be3ef/full-parity-overclaim"
+      ]
+    },
+    {
+      "name": "legacy-byte-claim",
+      "returncode": 1,
+      "expected": "Reviewer evidence differs",
+      "rejected": true,
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/mark/persospace/esp32-ecu/tools/verify_flex_radio_evidence.py",
+        "--report",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-negative-987b175a0f614c23b4eebe57d24be3ef/legacy-byte-claim"
+      ]
+    }
+  ]
+}

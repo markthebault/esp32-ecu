@@ -1,0 +1,341 @@
+{
+  "scope": "portable_raw_edge_acquisition_and_separate_correction_groundwork_only",
+  "verdict": "accepted_in_scope",
+  "utc": "2026-11-04T17:34:11.473616+00:00",
+  "production_cases_reexecuted": 25,
+  "independent_assertions": 63773,
+  "cases": [
+    {
+      "snapshots": 9,
+      "raw_edges": 321,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "e0-neutral-startup",
+      "passed": true,
+      "input_sha256": "4bf3c2b4240affba94fd6cb2c49764423554a0711737dad3fe1c7fab53ea2cb1",
+      "output_sha256": "98a11f41904dc85b5b2f3245feb31c9956d22ee5f96db3cb1a8a49afe3291654",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 641,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "e50-ramp",
+      "passed": true,
+      "input_sha256": "5eb207c186b7beef0317c62f534534fdac0b18f9a742f6456eb32c3f4b9af393",
+      "output_sha256": "a1622ac591b211f12acadddecea9574ce00ae2a8de87538499829aefd4ea07fc",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 641,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "e50-neutral",
+      "passed": true,
+      "input_sha256": "5eb207c186b7beef0317c62f534534fdac0b18f9a742f6456eb32c3f4b9af393",
+      "output_sha256": "e8292e9c674ff4b2885242028b3b6db29f87dc08ac23a797dcfc64ea28e87e47",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 641,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "e50-cold-ramp",
+      "passed": true,
+      "input_sha256": "1e2c6e8b39cd49e52de4cecb52309067758878035d10c8ce25de2f25e5c8d22b",
+      "output_sha256": "e75d07ef71938ddbb8b1f78423a9c6e29006f1549206c4139a050fa47d3bd212",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 641,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "e50-hot-ramp",
+      "passed": true,
+      "input_sha256": "bbe92ca5918938604a1bb2f53d50b03b2f860f994e7756c36b728212c999590a",
+      "output_sha256": "315cdd9c9c4bd4f2f57ce831a786c26d4877a0ef4384743520a80d42933b4648",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 865,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "e85-ramp",
+      "passed": true,
+      "input_sha256": "010f0b9c168c13b876b41b5e839aebd3c48e507135e1429733bcb5d7f99fd576",
+      "output_sha256": "be753192603a3ce73e2789a5a9407eb774a96fee5f2ae69321e2a437bad91da9",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 961,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "e100-neutral",
+      "passed": true,
+      "input_sha256": "3ac1f907c032db20b91a1afc436651791b6a5a04b2dff3a17345ba11510348fe",
+      "output_sha256": "f9baaeceaac841727884381cba1a6ae4ebf378551eeea36da1e273c8c0e25c29",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 327,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "e1-reference-deadband",
+      "passed": true,
+      "input_sha256": "b5568ce93854b0980db2a14914f120a52418ff7bf264a8cf3cf5f928a757889b",
+      "output_sha256": "4f39d302f9f16baf722b760543813c98c7e5ced90c4c7a58692c3a19a51e29ec",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 307,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "frequency_out_of_range",
+      "name": "low-frequency48",
+      "passed": true,
+      "input_sha256": "a1f3ec3be8d3fc2341fe15b97c126eb60e5eadaed84fe60bdb56dafb96b15fcf",
+      "output_sha256": "6a3875e43f983be04a37e7aa0412f5d6f51e784514c61e01ef7007c2f616b092",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 1025,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "frequency_out_of_range",
+      "name": "high-frequency160",
+      "passed": true,
+      "input_sha256": "9ed22c533cbdb5915d47ec38e7c043cc7c1cb605ccb1eb37656d6491865f65bf",
+      "output_sha256": "900b9000c59917f131574dd459f92aff782a0d0d98488ea3e1fbb3030bbdf239",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 1089,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "sensor_fault_frequency",
+      "name": "sensor-fault170",
+      "passed": true,
+      "input_sha256": "32d73b6c6349c1981a62283abb904c606cd3f38bab1e2f4d4809a78b8fae26d6",
+      "output_sha256": "8825e8cea21aa2cc8196fe3e343f7e906422679f685a65e012b2c94aeff6162f",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 2279,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "sensor_fault_frequency",
+      "name": "counter-wrap356",
+      "passed": true,
+      "input_sha256": "a0601b2f20fafb1dc4492fea3a489d08433172177e066e540d1775d34e5f5648",
+      "output_sha256": "2d39eed351b44436c34d52214aa6fc92776b708a3216c64e7eb6aa0e1745857c",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 641,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "low_pulse_width_out_of_range",
+      "name": "short-low-pulse",
+      "passed": true,
+      "input_sha256": "1c737117ff448958fea08704673a73b4c6e8881a3f8ffcc8c425679c8a47af43",
+      "output_sha256": "b31120fe23d1656ff8eee0a76609f715191d384088d562a3d3139b82be1f7838",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 641,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "low_pulse_width_out_of_range",
+      "name": "long-low-pulse",
+      "passed": true,
+      "input_sha256": "b911ffa54c603be08d9aa3e58867d5d267779a1fa75c2d654f1d37323de900db",
+      "output_sha256": "f5499fd479a12b0d5ffbdcd18a7df7d24e54f5effff6065a023a1c53d4d801eb",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 313,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "lower-tolerance49",
+      "passed": true,
+      "input_sha256": "e18553c65d3029c56402ddbdb4ebe098eeda2b083d62cab8f33199186129ccb3",
+      "output_sha256": "e0d6ee14a2ae778fb3ee69dc015cbdc74f9a385151a551a84e576b5b1fc7ff7e",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 967,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "upper-tolerance151",
+      "passed": true,
+      "input_sha256": "3f2dd59a9bf59a02697832fde5bc8b7c7fb3f29913119e050488289866115e5c",
+      "output_sha256": "0f5752876170e686714fbefd57d798c76e675ea92ca9ce39ffdd40242e8101b4",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 641,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "custom40-160-span",
+      "passed": true,
+      "input_sha256": "5eb207c186b7beef0317c62f534534fdac0b18f9a742f6456eb32c3f4b9af393",
+      "output_sha256": "efe00c01ed0b5924b7c59cdbe47d265b5a67842e18649a33b70ba1a5e20690ef",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 641,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "reference-filter75",
+      "passed": true,
+      "input_sha256": "5eb207c186b7beef0317c62f534534fdac0b18f9a742f6456eb32c3f4b9af393",
+      "output_sha256": "bd55a263a21d8a09e717466490bb364f4bf39705b22ccaba3ff8eec2e6fabb0f",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 641,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "disabled-curves-live-acquisition",
+      "passed": true,
+      "input_sha256": "5eb207c186b7beef0317c62f534534fdac0b18f9a742f6456eb32c3f4b9af393",
+      "output_sha256": "020a1157a2c3c14ec5122a72c3e306c5a8746e87c8e55c99a1288ca76a6a050c",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 8,
+      "raw_edges": 400,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "stale",
+      "name": "dropout",
+      "passed": true,
+      "input_sha256": "57971f1771976548c07935dce940d2c6ee814b8b66e8e95df8c1f96be85f5ba8",
+      "output_sha256": "ab798e68d2b334f5aa4a46882db0f2df050211e62e513fcc591083b8fcf3ae2b",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 6,
+      "raw_edges": 641,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "hidden-width-fault-and-ack",
+      "passed": true,
+      "input_sha256": "dce0c4735367cd838553e51fb10a3173bd78bdebefb7ba86f4c6cd3ec2c43afb",
+      "output_sha256": "0df9720fce6d05aa847d13d142b6da1963de753bcbb885017650bcba16fbcfbe",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 1,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "stale",
+      "name": "flat-high",
+      "passed": true,
+      "input_sha256": "cdd6fe4c6b2736264b171de6ee4044f4e5bbbd2ff3e767078cb6d36368ed5b58",
+      "output_sha256": "5f2edf96e158dd808a515dcb59b4466e81440ef39e8a98b0445641853a1629ba",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 0,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "acquiring",
+      "name": "flat-low",
+      "passed": true,
+      "input_sha256": "77002b448f742273b6f956e8ab993968d6fafa4f58f2ee720fe4bd1838b1678d",
+      "output_sha256": "f577e82ba762ffdcc651981d5d4099d2dd0ed8d1092d19addaf20d8f245fdd67",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 9,
+      "raw_edges": 640,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "e50-phase1us",
+      "passed": true,
+      "input_sha256": "cce03c1942760297d26b7bf1ac7b80207140213a9efbf0ed1b9d031f46a580ba",
+      "output_sha256": "5c638b652d39ac19f160961f78744621816e61bc0954db2d510047b7a2019561",
+      "exit_code": 0
+    },
+    {
+      "snapshots": 3202,
+      "raw_edges": 641,
+      "trigger_callbacks": 6189,
+      "final_own_reason": "ready",
+      "name": "e50-loop-refinement",
+      "passed": true,
+      "input_sha256": "527357681f4c0c0367fb6df870cf1bc433e87df6ba9ae93c7178eeee63542913",
+      "output_sha256": "9ad1004b56831b7bb2714a8236033f93ffb86fd091ccaaaae6d7df3a564f862c",
+      "exit_code": 0
+    }
+  ],
+  "controls": [
+    "same-stimulus neutral/ramp acquisition and correction causality",
+    "query-cadence refinement",
+    "1us phase shift"
+  ],
+  "independent_rejected_corruptions": [
+    {
+      "name": "counter_alias_erased",
+      "rejected": true,
+      "reason": "counter-wrap356:3200000 independent reference counter/filter/temperature oracle"
+    },
+    {
+      "name": "span_conversion_erased",
+      "rejected": true,
+      "reason": "custom40-160-span:3200000 independent reference counter/filter/temperature oracle"
+    },
+    {
+      "name": "wrong_fault_class",
+      "rejected": true,
+      "reason": "short-low-pulse final invalid class"
+    },
+    {
+      "name": "wrong_temperature_rounding",
+      "rejected": true,
+      "reason": "e50-ramp:3200000 independent reference counter/filter/temperature oracle"
+    },
+    {
+      "name": "forged_target_source",
+      "rejected": true,
+      "reason": "e50-ramp:3200000 source"
+    },
+    {
+      "name": "wrong_window_origin",
+      "rejected": true,
+      "reason": "e50-ramp:3200000 coherent window timestamps"
+    },
+    {
+      "name": "nonneutral_curves",
+      "rejected": true,
+      "reason": "e50-neutral:3200000 independent correction curves"
+    },
+    {
+      "name": "hidden_recovered_fault",
+      "rejected": true,
+      "reason": "hidden-width-fault-and-ack hidden fault survives reacquisition"
+    }
+  ],
+  "binary_sha256": "1f3b546e9d52ffb1defee63d870540b99579305c0a6566a638436d7905e71ff2",
+  "binary_owned_copy": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/final-freeze-003/.cache/engine/speeduino-flex-sim/speeduino-flex-sim",
+  "GCOV_PREFIX_before_startup": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-acquisition-review/final-freeze-003/.cache/engine/speeduino-flex-sim/gcov",
+  "GCOV_PREFIX_STRIP": "0",
+  "original565_inputs_before_after_stable": true,
+  "generated_coverage_unchanged_by_these_replays": true,
+  "generated_coverage_excluded_from_global_unchanged_claim": true,
+  "physical_qualification": false,
+  "full_flex_target_UI_config_hardware_plant_integration": false,
+  "review_script_sha256": "cec0006eb03d4f6bdcdf7700131faf9e5d772abbb25580e647f3239f6b139c90"
+}

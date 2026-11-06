@@ -1,0 +1,52 @@
+Reference,Value,MPN candidate,Footprint,Assembly,Note
+C1,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm_BackAssembly,back,"Back-side local bypass; confirm under-board clearance. Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C2,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm_BackAssembly,back,"Back-side local bypass; confirm under-board clearance. Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C3,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm_BackAssembly,back,"Back-side local bypass; confirm under-board clearance. Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C4,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm_BackAssembly,back,"Back-side local bypass; confirm under-board clearance. Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C5,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm_BackAssembly,back,"Back-side local bypass; confirm under-board clearance. Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C6,100uF 50V,,ECU:CP_Radial_D8.0mm_P3.50mm,front,"Input reservoir; exact D8/P3.5 leaded part, ripple/thermal and interruption response pending"
+C7,22uF 16V,,ECU:CP_Radial_D8.0mm_P3.50mm,front,"LM317 local output reservoir, no generic old-LDO ESR-window claim; exact leaded part/fit and transient behavior pending"
+C8,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm,front,"Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C9,100nF 50V,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm,front,"Local leaded decoupler; exact part, lead spacing, rail transients and placement acceptance pending"
+C10,1uF 16V+ FILM,,ECU:C_Rect_L7.2mm_W5.0mm_P5.00mm_BackAssembly,back,"Back-side local driver bulk in parallel with C4. Exact low-ESR leaded part, under-board clearance and transient scope acceptance required."
+C11,100nF FILM 25V+ 5%,,ECU:C_Rect_L7.2mm_W5.0mm_P5.00mm_BackAssembly,back,Explicit gate-source film capacitance for Miller/hotplug suppression. Short pulses may not transfer; physical minimum remains unqualified. Exact leaded film part/temperature/ESR and back clearance remain open.
+C12,100nF FILM 25V+ 5%,,ECU:C_Rect_L7.2mm_W5.0mm_P5.00mm_BackAssembly,back,Explicit gate-source film capacitance for Miller/hotplug suppression. Short pulses may not transfer; physical minimum remains unqualified. Exact leaded film part/temperature/ESR and back clearance remain open.
+D1,SB5H100-E3,SB5H100-E3/54,ECU:D_DO-201AD_P15.24mm_Horizontal,front,"Flyback cathode at valve+, anode at drain. Close coil/diode loop; current decays after cut."
+D2,1N4007,1N4007-E3/54,ECU:D_DO-41_SOD81_P10.16mm_Horizontal,front,"LM317 output-discharge protection: A atOUT, K atIN. Does not provide input reverse-battery protection."
+D3,1N4148,1N4148-TAP,ECU:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,front,Negative gate-source clamp; no positive signal-to-carrier5V path. Not isolation protection or automotive transient qualification.
+D4,1N4148,1N4148-TAP,ECU:D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp,front,Negative gate-source clamp; no positive signal-to-carrier5V path. Not isolation protection or automotive transient qualification.
+H1,M3 ISOLATED MOUNT,,ECU:MountingHole_3.2mm_M3,front,Unplated mount. Insulating spacers/hardware must not bridge carrier/actuator ground or live TO220 tabs. Case fit unmeasured.
+H2,M3 ISOLATED MOUNT,,ECU:MountingHole_3.2mm_M3,front,Unplated mount. Insulating spacers/hardware must not bridge carrier/actuator ground or live TO220 tabs. Case fit unmeasured.
+H3,M3 ISOLATED MOUNT,,ECU:MountingHole_3.2mm_M3,front,Unplated mount. Insulating spacers/hardware must not bridge carrier/actuator ground or live TO220 tabs. Case fit unmeasured.
+H4,M3 ISOLATED MOUNT,,ECU:MountingHole_3.2mm_M3,front,Unplated mount. Insulating spacers/hardware must not bridge carrier/actuator ground or live TO220 tabs. Case fit unmeasured.
+J1,BOOST LOGIC ZH4,B4B-ZR-3.4(LF)(SN),ECU:JST_ZH_B4B-ZR-3.4_1x04_P1.50mm_Vertical,front,"ZH4 for low-power optical input only. ZHR-4 housings, SZH-002T-P0.5 contacts for AWG26..28. Same1..4 order as A7 J24; distinct from idle PH4 and switch XH4.3.4mm solder length for1.6mm PCB; actual crimp/retention/fit/finished-hole acceptance remains open."
+J2,PROTECTED ACTUATOR SUPPLY,1715721,"ECU:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",front,"Separate externally fused, relay-switched, reverse/transient-protected branch. Never carrier/sensor supply. No onboard coil current limit."
+J3,BOOST VALVE VH6 TWO CONTACTS,B6P-VH(LF)(SN),ECU:JST_VH_B6P-VH_1x06_P3.96mm_Vertical,front,"VHR-6N, only positions1/2 wired; no contacts3..6. VH6 differs from existing carrier VH4 auxiliaries, VH3 flex and VH2 idle. Actual valve polarity/plumbing/current/RL and independent cutoff remain unqualified."
+NT1,SOURCE RETURN STAR / COPPER ONLY,,ECU:NetTie_Source_Star,front,"Unfitted board-only copper tie, no SMD assembly. Pad1 overlaps Q1source copper intentionally. No other low-impedance logic-to-power return join allowed."
+Q1,IRLZ44NPBF,IRLZ44NPBF,ECU:TO-220-3_Vertical,front,"Fast logic-level MOSFET, no automatic current/thermal shutdown or fault feedback. Drain tab must not bridge domains or share an uninsulated regulator heatsink."
+Q2,TN0702N3-G,TN0702N3-G,ECU:TO-92_Inline_Wide_FrontBackCap,front,"Microchip DS20005941A pins1S2G3D. Form TO92 leads to existing2.54mm pitch. Low-voltage Rds limits are25C pulse tests. Gate filter/off bias and body diode are explicit; temperature, formed-lead fit and electrical transfer remain unqualified."
+Q3,TN0702N3-G,TN0702N3-G,ECU:TO-92_Inline_Wide_FrontBackCap,front,"Microchip DS20005941A pins1S2G3D. Form TO92 leads to existing2.54mm pitch. Low-voltage Rds limits are25C pulse tests. Gate filter/off bias and body diode are explicit; temperature, formed-lead fit and electrical transfer remain unqualified."
+R1,1k 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,"MOS gate series/filter resistor, not BJT base drive. Exact leaded passive remains procurement/fit hold."
+R2,4k7 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,"MOS gate series/filter resistor, not BJT base drive. Exact leaded passive remains procurement/fit hold."
+R3,357R 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,LED current conditional7.63-14.85mA; exact leaded passive part/temperature rating pending
+R4,357R 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,LED current conditional7.63-14.85mA; exact leaded passive part/temperature rating pending
+R5,10k 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,"Local gate-source off bias, including disconnected signal. Static loading included in combined RUN study. Exact leaded part/temperature/fit remains open."
+R6,10k 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,"Local gate-source off bias, including disconnected signal. Static loading included in combined RUN study. Exact leaded part/temperature/fit remains open."
+R7,1k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,Opto pullup; timing load condition must match; exact leaded passive part/temperature rating pending
+R8,1k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,Opto pullup; timing load condition must match; exact leaded passive part/temperature rating pending
+R9,1k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,Logic-to-driver input series; exact leaded passive part/temperature rating pending
+R10,10k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,Driver input off bias; exact leaded passive part/temperature rating pending
+R11,1k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,Independent local supervisor enable; exact leaded passive part/temperature rating pending
+R12,4k7,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,Mandatory enable off bias overrides internal pullup; exact leaded passive part/temperature rating pending
+R13,33R,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical_BackAssembly,back,Back-side gate damping; switching/underside clearance remain unmeasured; exact leaded passive part/temperature rating pending
+R14,10k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical_BackAssembly,back,Back-side local gate-source off bias; verify underside clearance; exact leaded passive part/temperature rating pending
+R15,120R 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,Regulator minimum load and divider high arm; exact leaded passive part/temperature rating pending
+R16,374R 1%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,Regulator divider low arm; exact leaded passive part/temperature rating pending
+U1,UCC27524P,UCC27524P.B,ECU:DIP-8_W7.62mm_LongPads_BypassClearSilk,front,"Direct PDIP8, no socket. Exact procured P/P.B electrical guarantee remains a release item. Local supervisor gates ENA independently of logic."
+U2,6N137,6N137,ECU:DIP-8_W7.62mm_LongPads,front,"Vishay DIP8, direct solder. No copper across optical gap. Actual pullup/load and input-current timing conditions require verification."
+U3,6N137,6N137,ECU:DIP-8_W7.62mm_LongPads,front,"Vishay DIP8, direct solder. No copper across optical gap. Actual pullup/load and input-current timing conditions require verification."
+U4,SN74HCT02N,SN74HCT02N,ECU:DIP-14_W7.62mm_LongPads_BypassClearSilk,front,"Ordinary TTL NOR accepts opto VOL0.6V under its0.8V VIL. NOR(PWM_N,RUN_N) is high only when both input LEDs are lit. Unused inputs grounded."
+U5,MCP100-485DI/TO,MCP100-485DI/TO,ECU:TO-92_Inline_Wide,front,D-bondout only. Static trip4.60-4.85V; assertion10us is typical without a maximum. No hard brownout-latency claim.
+U6,LM317AT/NOPB,LM317AT/NOPB,ECU:TO-220-3_Vertical,front,"120/374ohm1% divider: DC4.967-5.346V, >=10mA minimum load, >=3V headroom at9V input. Tab is output, not ground. No rail transient/thermal qualification."
+R17,47R 1W 5%,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,front,Local optical LED-supply slew resistor. Exact leaded1W/pulse-rated part must satisfy recorded inrush/energy and fit; not a current limiter for actuator power.
+C13,2.2uF 16V 20%,,ECU:CP_Radial_D5.0mm_P2.00mm,front,Local LED-supply slew reservoir with C9. Stored power after supply opening and effective capacitance/ESR/leakage/temperature must be checked. Exact D5/P2 leaded part/height pending.

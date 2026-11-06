@@ -1,0 +1,78 @@
+{
+  "accepted": true,
+  "open_findings": [],
+  "created_utc": "2026-11-04T21:53:04.307172+00:00",
+  "scope": "Packaging and verifier only for the already accepted shared-I2C LED software checkpoint. No new functional, target capture, circuit, CAD, hardware, physical/WCET or parity acceptance.",
+  "source_hashes": {
+    "tools/verify_shared_led_evidence.py": "4f2b919568fa23703ff6a18d28ba732528db5c8215a4904d3239ee539ea7592b"
+  },
+  "candidate": ".cache/engine/shared-led-publication-002",
+  "candidate_artifact_manifest_sha256": "9168ff65dd794cffc914e68d26665a9e00a4fa0826746d9d76b7ec07c78d29d6",
+  "original_functional_review_sha256": "77e30e68cec3dadb0e05a98f1593ef2f62aaf0c3f6f6713550bd6cdbc8698d6c",
+  "functional_reviewed_sources_preserved": 29,
+  "all_254_current_source_hashes_match": true,
+  "indexed_artifacts": 1261,
+  "files_including_index": 1262,
+  "validation": {
+    "positive_frozen_replay_exit_code": 0,
+    "portable_sanitizer_assertions": 518,
+    "legacy_service_sanitizer_assertions": 243,
+    "shared_service_sanitizer_assertions_with_exports": 2366,
+    "exact_native_fixtures": 6,
+    "refreshed_manifest_corruptions_rejected": 10,
+    "corruptions": [
+      "overstated_scope",
+      "missing_independent_acceptance",
+      "empty_review_bindings",
+      "missing_required_execution_binding",
+      "missing_required_compilation_binding",
+      "false_compile_source_binding",
+      "false_policy_source_binding",
+      "wrong_actual_compiled_UI",
+      "wrong_policy_ELF_binding",
+      "native_fixture_replay_differs"
+    ],
+    "native_replay_scope": "Three frozen portable/native programs with ASan/UBSan and owned coverage prefix. Existing browser/policy/ISR/full-regression captures are preserved and digest-bound; those applications/target audits were not reexecuted by this packaging review.",
+    "execution_commands_and_environment": "replay-002.json and corruptions-003.json retain exact arguments, stdout/stderr, pre-start GCOV_PREFIX and bytecode suppression. Positive replay uses an owned TMPDIR."
+  },
+  "closed_packaging_findings": [
+    {
+      "id": "compile_source_binding",
+      "old_verifier_sha256": "9c5494782843a37b1d1e5ec4c143d072c0a912ad2f0e933514f4b2979c4e29a6",
+      "old_probe": "corruptions-002.json false_compile_source_binding accepted a zero digest in both before/after maps",
+      "resolution": "Compiled input digests now compare to summary/frozen snapshot hashes, with required compilation keys enforced; old and missing-key corruptions reject."
+    },
+    {
+      "id": "policy_source_binding",
+      "old_probe": "corruptions-002.json false_policy_source_binding accepted a zero engine_target digest",
+      "resolution": "Exact five policy source paths and digests now bind to summary/frozen sources. Linked USB driver/config/ELF digests are additionally checked; policy-source and wrong-ELF corruptions reject."
+    },
+    {
+      "id": "vacuous_review_bindings",
+      "resolution": "Exact29 independent reviewed source paths and required execution bindings are enforced; empty-review and removed-required-source controls reject."
+    }
+  ],
+  "conclusions": {
+    "read_only": "Original candidate and owned positive copy match all1262 pre-replay hashes after native replay. Only temporary native binaries/objects and owned logs/corruption copies are written. Helper import suppresses bytecode. No firmware/upstream ELF execution, services, hardware or child agents.",
+    "integrity_and_losslessness": "Complete artifact set, size/hash manifest, safe relative paths and no symlinks; four bounded gzip ELF decompressions match original ELF digests/lengths; app bins, current UI, linked policy and ISR closure bind to actual retained images.",
+    "source_and_review": "All254 frozen/current source hashes match; canonical29-source independent review and every artifact referenced by that sealed review are byte-identical to the accepted originals. Exact review/source and build-source maps now cross-check.",
+    "scope": "Completion overclaims reject. Architecture, advisory LED readback, pending worker/input/circuit/CAD, inhibited selected outputs and native-only qualification limits stay explicit. Archived captures are source-bound records, not reruns or physical validation.",
+    "history": "Initial stale-UI/build003-generation receipts remain historical, not relabeled successes. Final004 retained current-cache/source receipts and lossless ELFs are used. Prior16 generated gcda updates and lost default PlatformIO caches remain explicitly disclosed with unchanged sealed records; no restoration or unchanged-old-cache claim."
+  },
+  "limits": [
+    "This is consistency/replay verification of the sealed checkpoint, not cryptographic authentication of an arbitrary self-rewritten packet.",
+    "Source/toolchain environment is not claimed hermetic. Native replay does not qualify the actual bus, sensor frontend, target callback/worker, timing/heap/stack, optical LED or vehicle."
+  ],
+  "evidence_hashes": {
+    "freeze-001.json": "b8df603fff35fa013494a4dac0df86318f1172900211eede5a1f3724013dd1a5",
+    "freeze-002.json": "3a8b284afab048e47a4397358ad32d6b42462af35929084d031471b4b54c5bbe",
+    "replay-001.json": "d648aa5e972fa56db228a54bb0a03b017b0cc9c13958e1a71155ed471bc98547",
+    "replay-002.json": "eb2df6263009f51213351c746bc220c4b3704e5576700aba531aff28226a3611",
+    "corruptions-001.json": "2dbe4acb9c0850ace875801eebc17468e540441da8d3fba29dccc3e23dda16f8",
+    "corruptions-002.json": "28954223bed39a7fb8cd746bf32a3b265a990804b76f892a6bc38f9e4c7228d6",
+    "corruptions-003.json": "e298a3507290b587456daa0e697bb08e9a23eff6fc4bc09e78c67541de80e28f",
+    "corruptions.py": "61f88678d4cab1fe359c4db6f5e7d16b90c978a2d8adf7f9af9ad1184a83fd6a",
+    "verify-001.py": "9c5494782843a37b1d1e5ec4c143d072c0a912ad2f0e933514f4b2979c4e29a6",
+    "verify-002.py": "4f2b919568fa23703ff6a18d28ba732528db5c8215a4904d3239ee539ea7592b"
+  }
+}

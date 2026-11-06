@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host_plant_capture_probe.py", line 27, in <module>
+    require(len(r['trace'])==200 and [round(row['time'],8)for row in r['trace']]==[round((n+1)*.02,8)for n in range(200)],name+' independent trace cadence')
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host_plant_capture_probe.py", line 13, in require
+    if not v:raise AssertionError(label)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: batch_wasted_4cyl-off independent trace cadence

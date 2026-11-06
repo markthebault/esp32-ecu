@@ -1,0 +1,54 @@
+[
+  {
+    "argv": [
+      "kicad-cli",
+      "sch",
+      "erc",
+      "--severity-all",
+      "--format",
+      "json",
+      "--exit-code-violations",
+      "--output",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/final/native-working-erc.json",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/final/native-working-copy/isolated.kicad_sch"
+    ],
+    "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/final/native-working-copy",
+    "returncode": 0,
+    "stdout": "Found 0 violations\nSaved ERC Report to /home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/final/native-working-erc.json\n"
+  },
+  {
+    "argv": [
+      "kicad-cli",
+      "pcb",
+      "drc",
+      "--severity-all",
+      "--all-track-errors",
+      "--schematic-parity",
+      "--format",
+      "json",
+      "--exit-code-violations",
+      "--output",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/final/native-working-drc.json",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/final/native-working-copy/isolated.kicad_pcb"
+    ],
+    "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/final/native-working-copy",
+    "returncode": 0,
+    "stdout": "Found 0 violations\nFound 0 unconnected items\nFound 0 schematic parity issues\nSaved DRC Report to /home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/final/native-working-drc.json\n"
+  },
+  {
+    "argv": [
+      "kicad-cli",
+      "sch",
+      "export",
+      "netlist",
+      "--format",
+      "kicadxml",
+      "--output",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/final/schematic-netlist.xml",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/final/native-working-copy/isolated.kicad_sch"
+    ],
+    "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/idle-isolated-layout-review/final/native-working-copy",
+    "returncode": 0,
+    "stdout": ""
+  }
+]

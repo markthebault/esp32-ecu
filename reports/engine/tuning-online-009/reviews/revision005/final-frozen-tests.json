@@ -1,0 +1,4 @@
+{
+  "exit_code": 0,
+  "script": "import sys,unittest;sys.path.insert(0,'/home/mark/persospace/esp32-ecu/.cache/engine/tuning-online-protocol-review/revision005/fixture-root/tools');sys.path.append('/home/mark/persospace/esp32-ecu/tools');suite=unittest.defaultTestLoader.loadTestsFromNames(['test_speeduino_serial','test_tuning_wire_analysis']);r=unittest.TextTestRunner(verbosity=2).run(suite);sys.exit(not r.wasSuccessful())"
+}

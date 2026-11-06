@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/parent-shared-003",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/ui-fixtures-owned-003"
+  ],
+  "returncode": 0,
+  "stdout": "{\"passed\":true,\"shared_service_checks\":2366,\"status_allocation_cuts\":74,\"physical_i2c_or_LED_test\":false}\n",
+  "stderr": "",
+  "payload_hashes": {
+    "green_ready.json": "93bd8ce6652c0604f1f3ab21740be7555302fa5b83ce7091c7fcc529625cb08b",
+    "shared_bus_fault.json": "89c236441c9622d34333faf1b9e69548ab9004ce4f8963daa9dd64e861468d0a",
+    "bus_recovered.json": "ce6f81c26154bbcf4fc4429ec5c7fd5075a42db755477ff39cedd8951e49bfc6",
+    "led_timeout.json": "eeff7b18f313e11cfd925085894d62b7ed0690faa801c296c21816ab35a15038",
+    "led_recovered.json": "f61bf5e535df95fc89435831460b07c4b423fb9e384f9d0ba1454ea420554b7d",
+    "stale_latch.json": "4826f515f748f7c4ff3194fe93860f28a4f94bb1fb52fdab169cfb9629f1a930"
+  },
+  "same_bytes_as_pre_query_hardening": true,
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  }
+}

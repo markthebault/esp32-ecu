@@ -1,0 +1,34 @@
+[
+  {
+    "scenario": "overrev",
+    "reason": "unreachable_deadline",
+    "rpm": 6000,
+    "expected_passed": false,
+    "actual_passed": false,
+    "exit_code": "Unexpected scheduler failure; inspect reports/engine/sil-scenarios.json"
+  },
+  {
+    "scenario": "overrev",
+    "reason": "dwell_limit",
+    "rpm": 128,
+    "expected_passed": false,
+    "actual_passed": false,
+    "exit_code": "Unexpected scheduler failure; inspect reports/engine/sil-scenarios.json"
+  },
+  {
+    "scenario": "load_step",
+    "reason": "dwell_limit",
+    "rpm": 600,
+    "expected_passed": false,
+    "actual_passed": false,
+    "exit_code": "Unexpected scheduler failure; inspect reports/engine/sil-scenarios.json"
+  },
+  {
+    "scenario": "load_step",
+    "reason": "dwell_limit",
+    "rpm": 128,
+    "expected_passed": true,
+    "actual_passed": true,
+    "exit_code": 0
+  }
+]

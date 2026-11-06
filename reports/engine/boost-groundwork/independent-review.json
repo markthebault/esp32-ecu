@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-11-05T14:45:07.164041+00:00",
+  "status": "complete_no_unresolved_blocker_within_isolated_groundwork_scope",
+  "conclusion": "The reviewed portable boost kernel, dedicated supervised PWM alias, exact idle-alias preservation, inactive GPIO45/J24 architecture candidate, and native reference/kernel probe machinery have no unresolved blocker within this deliberately isolated development scope. This does not accept a full boost feature, broader goal, target boost execution, hardware or vehicle/engine use.",
+  "head": "c780c3ada8bc8c74415bbb04a86b0bc4ab9ea564",
+  "reviewed_source_sha256": {
+    "README.md": "3ea3407ae805e1280bead166efb569f3f8d2113b9185e88743f64396ae303d6c",
+    "docs/engine-feature-coverage.md": "8e73adb005639a1b39aaa51c303807336233fa887352980a708ce740db1211e9",
+    "docs/engine-boost-development.md": "d380e69f911b737f0a6417417b24e65cb31c3a3e1cd456ff174ba5691f2cf4ce",
+    "firmware/include/ecu/boost_control.hpp": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b",
+    "firmware/include/ecu/boost_pwm.hpp": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255",
+    "firmware/include/ecu/idle_pwm.hpp": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/tests/boost_control_test.cpp": "b032e3f6afec416ecf856ac146967097f206169e053aad17b1dddc488a4e897a",
+    "firmware/tests/idle_pwm_test.cpp": "6a19fbfcbb3d562fefd07941521666fbe16f62cad26da0638c2828941c647f5a",
+    "scripts/test_firmware.sh": "a60a10f031d5548da9df9ee3bc5d5d69bc2d9349e5890fa6c52c5a5d03eec2ee",
+    "scripts/build_speeduino_boost.py": "591ccffd2aea4b6121c9eb8b68597777db7217a9437c23442b91ffb10f6ac241",
+    "scripts/build_speeduino_flex.py": "6c4fa2b9a47d1f5d0b1efc0bd50cf9fd45fc3fc61380e318733aa64effe11dd7",
+    "tools/speeduino_boost_sim.cpp": "76f70883ed6f9a9f5e4c683ca8c5ee22604948ada84fea5a4c6a2329e4d63160",
+    "tools/boost_core_sim.cpp": "2bbe1e2fa8a4f70ae1ae17b7ea83f132d99d69c8641c015dd3378594b5372248",
+    "tools/run_boost_groundwork.py": "ae7bf978104c6de6da92e51dae824b1f5b8f5bdf110fe732739c56432c4b0ffc",
+    "tools/test_boost_architecture.py": "af85be643a053987143be54d18c5f5df22707d719f8f1039bc153b03d3dfd4a2",
+    "hardware/boost-control/architecture.json": "ee46cfe1639ca8fbfc7815aed2a4addcf18d29a4a71ab58f8727f882c893e374"
+  },
+  "supporting_current_source_sha256": {
+    "firmware/include/ecu/engine.hpp": "18ceb68768c435139fa3917da435de6b8164bdeb28c46173dfead5a8c64cb4a9",
+    "firmware/include/ecu/tuning_layout.hpp": "2dffbc95204918efe2fde6d6ee98438978ddd91d4f49c65bcb7fde70854b62f5",
+    "tools/flex_config.py": "bb70f8423ef4332919de2fdca97c2461701df531a6fe0d621be93de895c1a5c2",
+    "hardware/a6-flex-rgb/net_contract.json": "2d2d8883d8035c43bde5d7781e491ee5b8cb470fb0c87e3c80975175e99b80e2",
+    "scripts/test_flex_target_service.py": "4aa896b04bdc3ad4b4a4c1b099b4cd216abbcd3f7a65ffc2aff3de106b35de55",
+    "scripts/audit_target_isr.py": "64b9f514de9282654922d9988703970c084bc530aefad2543de01677741b4ee8"
+  },
+  "frozen_idle": {
+    "git_revision": "c780c3ada8bc8c74415bbb04a86b0bc4ab9ea564",
+    "path": "firmware/include/ecu/idle_pwm.hpp",
+    "sha256": "392ef3640df5e3ea64c465df7a6815c2272ead28570626bc9540aab8b58a8c42",
+    "namespace_only_probe_copy_sha256": "bb90c433c5a1318733a95346afeb4b9826f03ba26d76aebe5b6fa98c57cdca2b",
+    "transformation": "Only opening namespace ecu::idle renamed to ecu::frozen_idle for side-by-side execution. Original frozen bytes retained separately."
+  },
+  "independent_evidence": [
+    {
+      "name": "frozen_HEAD_vs_current_idle_behavior",
+      "passed": true,
+      "boundary_cases": 9600,
+      "full_observation_comparisons": 759600,
+      "native_object_size_bytes": 240,
+      "checked": "Every API return, all exposed stats, pending command, next alarm, IO levels/edges/write/clear counters. Isolated period/age/near-uint64 boundaries plus deterministic randomized submit/dispatch/stop/trip/configuration/IO-failure/clock-reversal traces. ASan/UBSan.",
+      "artifacts": [
+        "idle_differential.cpp",
+        "idle-differential-run.log",
+        "test-results.json"
+      ]
+    },
+    {
+      "name": "current_and_frozen_idle_unit_tests",
+      "passed": true,
+      "artifacts": [
+        "idle-current-run.log",
+        "idle-frozen-run.log",
+        "test-results.json"
+      ]
+    },
+    {
+      "name": "boost_unit_tests_final_source",
+      "passed": true,
+      "assertions": 162,
+      "test_source_sha256": "b032e3f6afec416ecf856ac146967097f206169e053aad17b1dddc488a4e897a",
+      "binary_sha256": "57707800aa080436b680ebf23103a35bc0df25457cce9780bd92d73954652fd7",
+      "artifacts": [
+        "boost-kernel-final-results.json",
+        "boost-kernel-final-run.log"
+      ],
+      "note": "Original159-assertion run retained separately; final source adds only3 lookup assertions."
+    },
+    {
+      "name": "independent_kernel_table_PWM_properties",
+      "passed": true,
+      "checks": 500281,
+      "checked": "Analytical bilinear surface and clamping; overboost/stale/gap recovery boundaries; randomized finite output/PID/integral bounds and active slew; independent channel state; exact20ms deadline and25us lateness boundaries. ASan/UBSan.",
+      "artifacts": [
+        "kernel_properties.cpp",
+        "kernel-properties-results.json",
+        "kernel-properties-run.log"
+      ]
+    },
+    {
+      "name": "native_target_services",
+      "passed": true,
+      "modes": 4,
+      "checks_by_mode": [
+        27665,
+        14,
+        14,
+        14
+      ],
+      "note": "Actual target/control sources compiled against native fake APIs. No ESP32 hardware execution.",
+      "artifacts": [
+        "target-suite/commands.json",
+        "target-suite/summary.json",
+        "target-suite/run-0.log",
+        "target-suite/run-1.log",
+        "target-suite/run-2.log",
+        "target-suite/run-3.log"
+      ]
+    },
+    {
+      "name": "static_target_ISR_closure",
+      "passed": true,
+      "elf_sha256": "2f63917bad76154b406a5494bdc3cfef805849d18019c705c5d610e8d1255db7",
+      "matched_idle_source_sha256": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20",
+      "reachable_functions": 31,
+      "note": "Re-audited parent-built flex-dev ELF. Idle state in DRAM, static ISR placement passed. Does not measure runtime latency, combined boost load or physical fail-low.",
+      "artifacts": [
+        "target-iram-audit/review-summary.json",
+        "target-iram-audit/closure.json"
+      ]
+    },
+    {
+      "name": "architecture_contract",
+      "passed": true,
+      "tests": 3,
+      "checked": "Exact A6 parent digest, unused GPIO45/U3.37 and candidate ref, inactive allocation/output flags; rejection of RGB J23 and a reserved/active binding.",
+      "artifacts": [
+        "architecture-tests-results.json",
+        "architecture-tests-run.log",
+        "hardware-initial-finding.json"
+      ]
+    },
+    {
+      "name": "independent_copied_reference003_probes",
+      "passed": true,
+      "reference_binary_sha256": "a57f34d1fce9bb1e033f01f692b8ce4474f397856ef2632a27af1dcc8ad96877",
+      "observed": "Seeded open60 has9 measured cycles41664us/25000us; unchanged-default compare has request60% and no edges; TPS20 has request20% and9 cycles41664us/8332us. Both long closed cases first get target150 at exactly3300000us; positive has20 measured cycles after3.6s, below-activation has no high edge.",
+      "artifacts": [
+        "reference-probes/results.json",
+        "reference-probes/closed-cadence-results.json",
+        "reference-probes/initial-expectation-failure-and-resolution.json"
+      ],
+      "honesty": "Initial independent assertion copied the incorrect doubled-duty expectation, failed, and was corrected by tracing yFactor2 in pinned primary source. Raw outputs retained; no production code/status injection."
+    },
+    {
+      "name": "final_paired003_raw_output_audit",
+      "passed": true,
+      "cases": 14,
+      "paired_results_sha256": "538fa54c5888c18389c1a3bcf0829b6fa1d1606b4cc7e3cd0d17a272d636f5f0",
+      "reference004_binary_sha256": "9c4b4762eb3c2593703bdc0fcc05815b21ce36e0733b1d7058678b05b22bb5ef",
+      "base_exact_relink_sha256": "046389d754c996c34cb7e7171b1e42088f5ae6c0615133a3c5e74743f9f6d52c",
+      "attested_original_inputs": 565,
+      "checked": "Recomputed complete sample/timestamp inventory, provenance false, alternating executed edges, periods/duties, zero-case high-edge absence, own accepted/fault-free commands and closed-target acquisition prerequisites. Original attested inputs all remain exact.",
+      "artifacts": [
+        "paired-final-artifact-audit.json"
+      ]
+    }
+  ],
+  "resolved_findings": [
+    {
+      "id": "R1",
+      "finding": "Candidate boost J23 conflicted with attested A6 RGB PH5 J23.",
+      "resolution": "Changed inactive candidate to unused J24; parent CAD untouched; new negative contract test rejects J23."
+    },
+    {
+      "id": "R2",
+      "finding": "TPS pre-conversion lookup argument alone was incorrectly interpreted as doubled physical duty.",
+      "resolution": "Traced Load yFactor2, exported factor/stored coordinate and compared physical TPS within declared ADC/table quantization. No upstream TPS-defect claim."
+    },
+    {
+      "id": "R3",
+      "finding": "A1.2s closed reference probe never reached its nested33ms/100ms target-update gates.",
+      "resolution": "Unmodified native cadence independently reproduced at3300000us; closed runs extend4.5s, require a nonzero target and inspect actual PWM after3.6s. Native-cadence result only."
+    },
+    {
+      "id": "R4",
+      "finding": "Zero-duty and TPS-ramp checks initially relied too heavily on sampled requested state.",
+      "resolution": "Final runner checks high-edge absence between queries and actual PWM period/duty for ramp witnesses."
+    },
+    {
+      "id": "R5",
+      "finding": "Opt-in inactive/spool output applies directly and bypasses active min/slew/limit flags.",
+      "resolution": "Final documentation names that behavior explicitly; default remains0. Policy must be explicit beside any future UI setting."
+    },
+    {
+      "id": "R6",
+      "finding": "A collective percent/kPa gain label omitted integral/derivative time dimensions.",
+      "resolution": "Final doc explicitly gives Kp %/kPa, Ki %/(kPa*s), Kd %*s/kPa."
+    }
+  ],
+  "unresolved_blockers_within_reviewed_scope": [],
+  "integration_notes": [
+    "Core must be reset by whole-tune owner on configuration changes; core itself is not a migration/storage/CAS owner.",
+    "Kernel sample-age boundary accepts20000us while executor requires age<20000us. Future adapter must preserve immutable acquisition/command timestamps and respect the stricter executor deadline.",
+    "Step clock is strictly advancing with maximum100ms gap; PID period is independently20..250ms. Long boost periods still need fresh heartbeats before20ms.",
+    "Closed replay authors RPM/running and fresh sampled_us, so paired probes do not validate Engine Controller timing, stale ingress, target ownership or crank-to-boost integration.",
+    "Reference pressure ADC quantization and authored portable samples differ. Reported policy/quantization differences are retained, including overboost reference duty60% with scheduling masks cut versus own valve0%/inhibit request.",
+    "Existing tune page8192 bytes, used exclusive end7968, tail224 bytes; three float8x8 tables plus axes do not fit that tail. New tune layout and memory/storage review required without reusing old file/wire identities."
+  ],
+  "not_accepted_or_completed": [
+    "Forced-induction Engine Tune/pressure-envelope integration; NA110kPa guard remains in place.",
+    "Engine/control owner and target boost PWM/GPIO allocation, combined idle/boost GPTimer scheduling, source/age/fault/applied-output propagation.",
+    "Tune layout/migration/storage/CAS, browser controls, own TunerStudio definition, USB/wire schema, MSL/log/screen/radio telemetry.",
+    "Pulse-driven turbo/wastegate/solenoid plant and full engine comparison against real production-reference output edges.",
+    "Actual GPIO45 module identity/strap/eFuse/reset/download behavior; no allocation or eFuse burn.",
+    "Schematic/route/ERC/DRC/copper/return, J24 connector/keying/fit,120x120 geometry, module/antenna/RF and enclosure qualification.",
+    "RUN loading with existing accessories, buffer/opto/driver timing, coil R/L/current/frequency response, polarity and deenergized wastegate plumbing, independent actuator cutoff.",
+    "Supply/brownout/open-return/interlock/watchdog, inductive clamp/transient/energy/thermal measurements, minimum physical pulse and actuator closure evidence.",
+    "Crank/cam acquisition, CPU/timer/ISR/flash/RF load or latency; vehicle/engine operation and physical safety."
+  ],
+  "preservation": {
+    "implementation_edits_by_reviewer": false,
+    "reviewer_writes_confined_to": ".cache/engine/boost-001/independent-review-001",
+    "existing_study_sources_binaries_and_data_mutated_by_reviewer": false,
+    "reference_runs": "Copied reference003 executable into the owned review directory so GCOV output remains owned; linked reference/production files untouched.",
+    "unrelated_TDK_alternatives_and_logs": "Untouched",
+    "head_unchanged": true
+  },
+  "archive_policy": "Use archive-whitelist.json only. No recursive cache inclusion, AGENTS.md, executables, objects, ELF, linked GPL binary or upstream GPL source. Linked reference binaries and reviewer test binaries stay in cache."
+}

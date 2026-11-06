@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "browser": "Installed Chrome via Playwright",
+  "checks": [
+    "Optional ratio mode starts Off and changing basis clears calibration confirmation",
+    "Live capture uses unsaved ratio/reference settings, not the old saved conversion basis",
+    "Stale samples, invalid supply and ADC failure block capture without a raw-voltage fallback",
+    "A complete ratio calibration persists and roundtrips as sensor profile2",
+    "Importing profile1 into an enabled editor explicitly resets every ratio setting to Off",
+    "Table mode offers ratio conversion; voltage/NTC transitions clear it to prevent double compensation",
+    "Calibration controls fit320/390/768/1440px without page overflow",
+    "An old profile1 backend gets legacy-only saves and rejects profile2 import before sending"
+  ],
+  "page_errors": []
+}

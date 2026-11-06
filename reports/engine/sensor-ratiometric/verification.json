@@ -1,0 +1,60 @@
+{
+  "scope": "Optional sensor ratiometric calibration and bounded NVS storage development increment",
+  "passed": true,
+  "core_native_checks": 93,
+  "storage_api_model_checks": 60,
+  "host_tests": {
+    "configuration_api": 20,
+    "ratiometric": 10,
+    "engine": 21,
+    "engine_http": 7,
+    "radio": 8
+  },
+  "chrome_grouped_checks": 8,
+  "legacy_compared_readings": 12288,
+  "legacy_raw_vectors": 2048,
+  "production_speeduino_adc_cases": 8,
+  "current_firmware_environments": [
+    "compact_a3_web",
+    "compact_n16r8_web",
+    "compact_n16r8_flex_dev"
+  ],
+  "review_firmware_environments": [
+    "compact_a3_web",
+    "compact_n16r8_web",
+    "compact_n16r8_flex_dev"
+  ],
+  "independent_review_sha256": "f07be7f0f424891121ed85081ed1c1da7aba58a52035ca3253c4c10a68853d63",
+  "post_review_followup": {
+    "changed_reviewed_files": [
+      "web/index.html",
+      "docs/sensor-ratiometric.md",
+      "tools/test_sensor_ratiometric_ui.py",
+      "firmware/main/web_assets.hpp"
+    ],
+    "description": "Calibration unit edits now refresh endpoint labels and clear confirmation; matching browser assertions/screenshots, documentation wording and generated assets. No core math/parser/NVS/radio change.",
+    "review_build": "firmware-002",
+    "current_build": "firmware-003",
+    "independently_rechecked": false,
+    "verification": [
+      "ui-tests.json",
+      "current firmware metadata and exact ELF assets in firmware.tar.xz"
+    ],
+    "before_sha256": {
+      "web/index.html": "344b915e0823b6f961350500e637355ee3e125e6bfc0dbecbe6676c9e3b92a3f",
+      "docs/sensor-ratiometric.md": "1b56e9d475aceb0f29d7326b1e1bf45f11422544b53159c063aac7b83855ef29",
+      "tools/test_sensor_ratiometric_ui.py": "7d006cb115dd5000bf15d778f085786a42a25a84952acaaeb21181941d5a0be9",
+      "firmware/main/web_assets.hpp": "042267504d326092156270d6d418f1123bfaa14f6f43733873f2d727373f1910"
+    },
+    "after_sha256": {
+      "web/index.html": "70eb38c6dba702ec534a270cc6afe35bd68bba7c56bca6f1dbb2b57b30e2bb59",
+      "docs/sensor-ratiometric.md": "250d0c53266d889050f366dd68db0178d40274e64135c3175c762fd2ee49e3e8",
+      "tools/test_sensor_ratiometric_ui.py": "b47abca456ddc77e0fb15a1a06ffd65b5c1b2fdb22655f5c570ef9c6f18e2b07",
+      "firmware/main/web_assets.hpp": "165223ec5aa870faa9f02c1f2e23155b1c27af7e4a424e699d870aafb4852a2d"
+    }
+  },
+  "physical_outputs_inhibited": true,
+  "physical_qualification": false,
+  "nonideal_circuit_study_accepted": false,
+  "full_speeduino_goal_complete": false
+}

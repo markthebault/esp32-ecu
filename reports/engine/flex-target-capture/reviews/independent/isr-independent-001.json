@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-004/scripts/audit_target_isr.py",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/build-003-audit-002/compact_n16r8_flex_dev.elf",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/isr-independent-001"
+  ],
+  "returncode": 0,
+  "stdout": "{\n  \"elf_sha256\": \"b59017e9aa7ce52d461b1dc3897ee45d898cbc8c31503fcc696b7b9c65aabe70\",\n  \"functions\": 31,\n  \"external\": [],\n  \"indirect_calls\": 45,\n  \"literals_outside_iram\": [],\n  \"assertion_argument_only\": 63,\n  \"unclassified_flash_pointers\": []\n}\nStatic placement checks: PASS []\n",
+  "stderr": "",
+  "script_sha256": "64b9f514de9282654922d9988703970c084bc530aefad2543de01677741b4ee8",
+  "elf_sha256": "b59017e9aa7ce52d461b1dc3897ee45d898cbc8c31503fcc696b7b9c65aabe70",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  }
+}

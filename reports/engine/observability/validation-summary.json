@@ -1,0 +1,106 @@
+{
+  "scope": "Reviewed engine observation/radio/logging increment; entire Speeduino feature-parity goal remains active",
+  "baseline_commit": "dfccd662bb21953ddfe6400580218c6356a0b296",
+  "branch": "feature/engine-development-sil",
+  "python_tests": 100,
+  "native_test_binaries": 10,
+  "control_scenarios": 117,
+  "json_page_allocation_positions": 4500,
+  "browser_suites": [
+    {
+      "file": "ui-tests.json",
+      "checks": 10
+    },
+    {
+      "file": "engine-ui-regression.json",
+      "checks": 10
+    },
+    {
+      "file": "sequential-ui-regression.json",
+      "checks": 8
+    },
+    {
+      "file": "trigger-ui-regression.json",
+      "checks": 8
+    }
+  ],
+  "browser_checks": 36,
+  "external_plant_controller_cases": 6,
+  "external_plant_network_cases": 3,
+  "exact_previous_control_traces_preserved": 3,
+  "network_authenticated_deliveries_per_case": [
+    119,
+    119,
+    119
+  ],
+  "network_value_mismatches": 0,
+  "network_age_underestimates": 0,
+  "log_gaps_disclosed": [
+    [
+      [
+        39,
+        120
+      ]
+    ],
+    [
+      [
+        39,
+        120
+      ]
+    ],
+    [
+      [
+        39,
+        120
+      ]
+    ]
+  ],
+  "recorder_bytes": 55384,
+  "runtime_sample_bytes": 200,
+  "row_bytes": 216,
+  "page_bytes": 3544,
+  "msl_columns": 58,
+  "images": [
+    {
+      "environment": "compact_n16r8_web",
+      "flash_mb": 16,
+      "elf_sha256": "de3b045c7bbbd6e8578c57498c32a8dc37a9b1ffe0f59771e0c7647e58259a9f",
+      "bin_sha256": "5b8925e05f852a9e083319cca7349979f0c6062291ebead1790a67d0a0c2591f",
+      "physical_policy": "inhibited"
+    },
+    {
+      "environment": "compact_a3_web",
+      "flash_mb": 8,
+      "elf_sha256": "7852943d292cf799a33362bb0dc9c786c4a7f2366f82afcdb14003762fe86d67",
+      "bin_sha256": "0a79a4dffbbdd7415fda8871b7a1e0176bdbfea0e3af4e4990aa16b6153c56c3",
+      "physical_policy": "inhibited"
+    },
+    {
+      "environment": "compact_a3_timing_bench",
+      "flash_mb": 8,
+      "elf_sha256": "19f443fe56cb6c40e11adf949a42625aa6353d4f18b1caff6492a7907e1e5059",
+      "bin_sha256": "6f6b0160a5eaa4e09e333cae7fef8f2306279bd42606a1dcef1b44905563c495",
+      "physical_policy": "explicit_dummy_loads_only_no_web_or_radio"
+    }
+  ],
+  "independent_reviews": [
+    "independent-telemetry-review.json",
+    "independent-logger-review.json"
+  ],
+  "independent_source_hashes_match": true,
+  "independent_timing_cases": 4000,
+  "independent_authentication_mutations": 416,
+  "independent_recorder_accounting_cases": 360,
+  "megalogviewer_check": "megalogviewer-check.json",
+  "physical_board_connected": false,
+  "physical_validation": false,
+  "known_limits": [
+    "Live TunerStudio own-identity support unresolved",
+    "Physical RF, load, timing, GPIO/ADC, heap and stack measurements pending",
+    "Selected N16R8 outputs inhibited",
+    "Default derived AFR display at missing lambda may show extreme viewer values; source NaN and validity mask retained",
+    "External plant combustion/free shaft uncalibrated; native reference HAL is not AVR/peripheral emulation",
+    "Broader control/PCB feature gaps remain in docs/engine-feature-coverage.md"
+  ],
+  "passed": true
+}

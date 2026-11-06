@@ -1,0 +1,111 @@
+{
+  "reviewed_at_utc": "2026-11-04T03:34:30.233011+00:00",
+  "baseline_commit": "8b2f8ec25aacaaa4fd60c81f16e45e2951f96f1c",
+  "scope": "Independent read-only schema5/own006 storage review. No source edits, subagents, root shared server, external app changes or vendor messages.",
+  "status": "No reproducible storage, migration, import, failed-save activation or revision-CAS blocker found.",
+  "findings": [],
+  "source_hashes_sha256": {
+    "firmware/include/ecu/engine_json.hpp": "3267a037f7f0ff636a4376a622f324cd998bfefc6a1f010c9870f3001b667ab1",
+    "firmware/include/ecu/engine.hpp": "0c7d2a92cb3fb2f3db673a66b72f3407bbc0754bc4a3cad7d12db4ec3e17b87b",
+    "firmware/include/ecu/tuning_document.hpp": "4ba03e0fbb7a104088882e167a625ac1af4f2ad1f4ed1572d3c40a01305b43bc",
+    "firmware/include/ecu/tuning_layout.hpp": "cc3bcce84363f58208de0dd406c14292baca4d0369a17cdf57f54ab632e7bbf7",
+    "firmware/include/ecu/tuning_session.hpp": "6ddc1c495a3a0ef860bdd9b14267de37934e2578f61ad0557ba99f7d7dd22734",
+    "firmware/include/ecu/tuning_live.hpp": "56c35c8addf3915e4f8ae91951946bdc5e0fd62cd3755a7d716a1fc606afa643",
+    "firmware/main/engine_service.cpp": "b48c5a7a77f7d03505fb3e6898ad0ab76ae09171c59d84eafaf1f7eb0b7245dd",
+    "tools/engine_runtime.py": "2b68a5852405de21889f4b60bf8d95edc895d4fbb8d01ae2fcf2e7032a69dda0",
+    "tools/engine_protocol.py": "8087a266f692790a717a150a7b727ea302805575c7d8a8b13469ad47846f7c0b",
+    "tools/engine_protocol_legacy.py": "0b8144daea19b5b201d5d49fed09f7215988b75122591d8ae9809c69c935a0c2",
+    "tools/engine_msq.py": "fd05d8e172e3fc3063416c487fff6f810953c0d29157dcbd30498c8c74007323",
+    "tools/tuning_runtime.py": "aa0563fafc552f5ddc4b775faf1e1ed2060ef8ad8859fcd6d40601ffdc0e865b",
+    "tools/tuning_bridge.cpp": "39e3af34f5ae6fe3b29a6a2286d849ed4ac2968f01e8a65771ba5b1438ed056e",
+    "scripts/generate_tuning_wire.py": "a460177cf782ffe1dcadb7da204b4d61679ee9ce01eadaf3f99c25edaf5964ef",
+    "scripts/generate_tunerstudio_ini.py": "b880a5e2f22bd1fa289b6a67c26a1d7139227612ee04f0534fab688a84f8b284",
+    "web/index.html": "4e5452518162166a21c420e603e3177feba0b4e6b395b4c39e55c369044f3158",
+    "web/cylinder_tuning.js": "b62730556575c9a55f00bdbb0a379c14ae7135fc00d992cce4506ffa4994de3a",
+    "web/idle_control.js": "6527c03afb5e4ecd4d8a88907afb39bcee6ccd0a41d7d0c7cfce1d062b606f4b",
+    "web/idle_control_logic.js": "7f69537f794a1ccedf504080101a8d88095c9068c31b5709a295fbcd73e8a054",
+    "config/engine/defaults.json": "e169b5e20eb15f18cf4e61a8eb385c9cded0a0fcf9ca6bb65ad1df6abf58dda9",
+    "config/engine/defaults-v4.json": "5c18c92edab479ddafa47e207928a0bd29aa68fcdf7e55708ff9514ab8cee01e",
+    "tuning/esp32-ecu-idle.ini": "3387dab922dd8a88b6bb10ab9a9fb5af33cd3505dae98c9a3c231c1f651c31bc",
+    "tuning/esp32-ecu-semi.ini": "2c9bdde35bb1384d5d357550c058c7e34c523f9d58ada6a2cba3448a7cb35210",
+    "tuning/protocol-layout.json": "798a8bcd37f4e802d28536b28999289f960575e244ef69e798e524ffb35ffa57"
+  },
+  "native_results": {
+    "schema4": "Raw file retained on load; idle/trims/revision unchanged in RAM; explicit save bumps schema5 and revision37\u219238",
+    "legacy_json": {
+      "1": "Fixed disabled idle, raw bytes/revision retained, expected trims preserved/neutralized",
+      "2": "Fixed disabled idle, raw bytes/revision retained, expected trims preserved/neutralized",
+      "3": "Fixed disabled idle, raw bytes/revision retained, expected trims preserved/neutralized"
+    },
+    "atomic_trim_rejection": "HTTP and typed burn reject enabled trims atomically; explicit disabling commits semi while retaining all nonneutral maps, spark offsets and idle configuration",
+    "strategy_string_oom": {
+      "parse_allocations": 2520,
+      "allocations_attempted": 2521,
+      "result": "Busy; no active/file change, no leak, staged bytes retained; retry succeeds"
+    },
+    "wire": "Full4992-byte pages unchanged for old modes; semi differs only enum272; old256-byte live bytes unchanged; semi strategy92=2; original005 INI byte-identical",
+    "msq": "005 full idle/trims/revision preserved; all23 idle fields mandatory; new enum rejected by005;006 semi roundtrip preserves disabled nonneutral trims",
+    "ini_unit_fields_checked": 94
+  },
+  "browser_results": {
+    "passed": true,
+    "checks": [
+      "Schema4 import/load upgrades only the in-memory schema and preserves enabled idle, nonneutral trims, revision and raw file",
+      "Switch to semi never silently disables enabled trims or loses maps; Save rejects and retains active/file state plus local edits",
+      "Explicit trim disabling commits semi37\u219238 while retaining all stored nonneutral trim data",
+      "Browser006 export passes native MSQ validation and preserves all4992 mapped bytes",
+      "Own005 keeps full idle and trim settings, treats origin as metadata, and saves against the loaded editor CAS base",
+      "Browser rejects enum2 under005 and semi strategy under legacy JSON4",
+      "Own006 stale editor CAS remains39 after import and conflicts against native tuning writer40, without hidden fetch/rebase"
+    ],
+    "page_errors": [],
+    "server_scope": "Private ephemeral localhost port and temporary files, separate from root server; isolated native libraries"
+  },
+  "generator_results": {
+    "generated_files_match": [
+      "firmware/include/ecu/tuning_layout.hpp",
+      "tuning/esp32-ecu-semi.ini",
+      "tuning/protocol-layout.json"
+    ],
+    "generator_writes_intercepted": true,
+    "populated_old_mode_live256_bytes_equal": true,
+    "semi_populated_live_only_strategy92_changes": true
+  },
+  "additional_checks": {
+    "retained_defaults_v4_byte_identical_to_HEAD_defaults": true,
+    "requested_review_sources_unchanged_after_isolated_build": true,
+    "own005_idle_constants_individually_required": 23,
+    "ini_scalar_array_units_checked": 94,
+    "page_bytes": 4992,
+    "live_bytes": 256,
+    "strategy_page_offset": 272,
+    "strategy_live_offset": 92,
+    "long_strategy_allocation_failure": {
+      "parse_allocations": 2520,
+      "failed_allocation": 2521,
+      "no_leaks": true,
+      "active_and_file_unchanged": true,
+      "staged_bytes_retained": true,
+      "retry_succeeded": true
+    }
+  },
+  "conclusions": [
+    "Schema4\u21925 preserves enabled idle/configuration, enabled trims/maps/spark offsets, revision and raw file bytes until explicit Save; Save persists5 and increments once. Schema1..3 retains fixed disabled-idle migration and expected legacy trim behavior.",
+    "Only schema5/current006 admits semi strategy2. Old005 full idle and trim data imports correctly; old005 rejects the new enum and its original INI remains byte-identical.",
+    "Semi with enabled trims rejects atomically through HTTP validation and typed burn. Selecting semi in Chrome does not silently disable trims or drop maps; explicit user disabling commits semi with all nonneutral stored trim data intact.",
+    "Native typed document update handles the longer semi strategy allocation failure without mutation or leaks. Private serializer compatibility placeholders never replace active tune strategy or stored maps.",
+    "Old modes retain all 4992 mapped bytes and all populated 256 live bytes. Semi changes only the strategy word for otherwise-identical data. Read-only generator capture matches current codec, new INI and manifest exactly.",
+    "Chrome own005/006 imports preserve loaded editor CAS rather than fetching/rebasing. A stale006 editor39 conflicts against a native writer40; no overwrite occurs."
+  ],
+  "reproduction": [
+    "python3 .cache/engine/semi-storage-review/native_probe.py",
+    "uv run --offline --with playwright python .cache/engine/semi-storage-review/browser_probe.py",
+    "python3 .cache/engine/semi-storage-review/generator_probe.py"
+  ],
+  "evidence_notes": [
+    "Private libraries and review wrappers are under this evidence directory. Chrome used an ephemeral localhost port with temporary files, separate from the root server.",
+    "Generator Path.write_text calls were intercepted only in the probe process; production generated files were not written.",
+    "Checks use actual current source and pinned local ESP-IDF cJSON. Whole-page serialization preserves F32 field values; decimal spellings may change after explicit Save."
+  ],
+  "limits": "Native/filesystem model and private headless Chrome only. No physical flash, power-loss, USB, actuator or electrical qualification. Scheduler and combustion correctness are outside this storage review."
+}

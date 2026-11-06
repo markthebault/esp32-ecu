@@ -1,0 +1,42 @@
+Independent protected-switch implementation review
+Reviewer: /root/switch_input_implementation_review
+Date: 2026-11-04
+Status: final software source freeze replay passed;12,278 independent assertions, physical/CAD/HIL acceptance excluded
+
+Scope
+
+Review of the SW2-J4-DRAFT1 software acquisition path: portable acquisition and transport, production switch_service.cpp, app task integration, actual engine service/mask getter/binding/runtime output, and acquisition diagnostics. This is not acceptance of the proposed accessory circuit, PCB, enclosure, physical installation, bus timing or an engine ECU. No project implementation file was edited by this reviewer. All reviewer writes are confined to this cache directory. No subagents were spawned.
+
+Initial independent finding
+
+F1. Initial Acquisition::disable() cleared a fatal clock/internal state even though its phase name said reset_required. A genuine Off followed by Input could re-arm without boot. Parent fixed this by preserving the fatal phase/fault while Off removes sample availability and permits bus release. Both a portable code review and independent production-service fatal/Off/Input probe verify the fix in the current sources. The final immutable-source replay passes this check.
+
+F2. UI status() initially treated every absent/unrecognized acquisition source as host synthetic data, including a simulator=false response without supported target diagnostics. This was reported as a small provenance wording issue. The explicit host branch should require host provenance/simulator evidence and otherwise report missing/unsupported diagnostics as unknown. Parent fixed this in the frozen UI.21 independent Node VM/minimal DOM assignment-fixture assertions pass, including unknown/host/target provenance, full-width decimal strings, stale samples and escaped diagnostic markup. This is not browser visual acceptance. No control-loop consequence was identified.
+
+Current software assessment
+
+The intended single-monitor-task ownership, fixed address, pre-write marker guard, readback of all semantically owned registers, alternating physical GP6 feedback, independent trailing IODIR check, source-read-start timestamp, measured whole-operation budget, floored remaining per-call timeout, and fault-ID consumption latch form a coherent acquisition design. The marker and feedback do not authenticate device identity. Saving an Input rule is the explicit ownership choice. Off does not produce healthy/open inputs or refresh source timestamps. The current app preserves the previous request mask if its zero-wait engine mutex read skips, passes copied samples through web::Sample to bind_inputs(), and acknowledges a source fault only after observe() completes for that snapshot.
+
+The source latch is important: successful wire reads do not make the source valid while an invalid sample awaits a completed controller observation. A later fault obtains another identity, so an old acknowledgment cannot clear it. Acknowledgment itself does not publish a fresh sample. The core then applies its normal source-time qualification and20ms freshness rules. Sensor/phase/configuration gates and selected physical-output inhibition remain separate existing layers.
+
+The current SDK adapter retains partially allocated resources on add/remove/delete failures rather than overwriting handles. It performs no register traffic in Off mode and retries cleanup at100ms cadence. SDK allocation/deletion APIs and internal locks have no caller-supplied hard deadline. Per-transfer timeouts plus elapsed rejection must therefore be described as a measured data-acceptance budget, not proof of a3ms task execution deadline. Exact SDK source references are retained with the final packet.
+
+Independent probes, final immutable-source replay
+
+1. adversarial_probe.cpp:11,890 ASan/UBSan assertions,26 reset cases,144 one-bit owned-register corruptions and720 setup/first-read/guard timing combinations. It reverses every observed execute-clock checkpoint and exercises exact20ms freshness, debounce0/20/500ms, both raw levels/channels, recovery through a skipped observation and old/new fault identity acknowledgment. Before/final-guard reset placements reject. Reset immediately after the final guard is correctly acknowledged as a later unobserved event and detected on the subsequent guarded read; no instantaneous detection claim is made.
+2. service_probe.cpp:15 fresh-process production switch_service.cpp scenarios with225 ASan/UBSan assertions. It omits each guarded response byte independently while the SDK fixture returns ESP_OK. Every semantically owned byte rejects because poison cannot satisfy its readback test. Historical INTCAP byte8 is intentionally ignored and its omission alone is not a semantic failure. It tests actual-service recovery/fault replacement/old acknowledgment and fatal→Off→Input behavior.
+3. engine_integration_probe.cpp:142 ASan/UBSan assertions compiling both actual engine_service.cpp and switch_service.cpp with local NVS/RTOS/SDK/target-command fixtures. It exercises real typed tune commit, requested-mask union, skipped getter preservation, actual production binding/runtime source timestamps, both channel filters, repeated actual engine mutex misses while the bus recovers, and eventual BadSensor plus fuel/spark proposal cuts when the invalid snapshot is consumed. Fresh observed samples then requalify normally.
+
+The final replay passes12,257 native assertions plus21 UI assignment-fixture assertions,12,278 total. These are deterministic native digital/API and JavaScript fixtures. They do not run an ESP peripheral, measure the true scheduler/interrupt workload, establish flash atomicity, exercise a transistor or contact, qualify RESET/power paths, prove wire continuity, or establish a real engine's behavior. The parent remains responsible for target builds, full project regressions, browser workflows, CAD/circuit acceptance and independently reviewed secondary-enabled external-plant comparisons.
+
+Physical and remaining feature gates
+
+An accessory absent from a physical build remains absent even when its driver compiles. Exact selected leaded parts, poweroff backfeed, RESET margins, current/thermal budget, contact dry-circuit behavior, all electrical fault envelopes, bus rise/fall/loading and scheduler traces, harness/case fit and automotive/vehicle/EMI/surge/ingress qualification remain open. The carrier J4 fifth pin is SAFE_N and must stay completely unconnected by this accessory. Existing module USB/carrier3V3 power restrictions remain required. This software review does not close the larger Speeduino feature-parity goal or the pending secondary-enabled external engine-plant comparison.
+
+Source binding and replay
+
+The final source-bindings.json freezes69 project files and4 exact external SDK cJSON/I2C files. Critical implementation hashes are listed in review.json. sources/ and external/ hold the exact copied inputs. commands.json records each compiler/run command and output. run_review.py replays against the copied inputs by default; --freeze is an explicit development-only operation that replaces the binding with current project source.
+
+F3, low publication note: the context-only copied docs/engine-secondary-tables.md still reflects the earlier published software state and says target acquisition is unimplemented. Parent must update that guide before publishing the new feature. This is not an unresolved medium/high implementation defect and the old contextual text is not accepted as the new feature release documentation. Hardware drafting and broader release validation continue outside this software review.
+
+Decision: accept the reviewed software implementation, with no open medium/high software findings in scope. Parent full regression/publication checks and all separately listed physical/CAD/HIL/external-plant gates remain open. No complete Speeduino parity or physical ECU qualification is established.

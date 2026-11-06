@@ -1,0 +1,22 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "test_engine_flex",
+    "test_tuning",
+    "-v"
+  ],
+  "cwd": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002",
+  "returncode": 0,
+  "stdout": "",
+  "stderr": "test_both_host_bridges_use_raw_edges_and_same_captured_time (test_engine_flex.FlexIntegration.test_both_host_bridges_use_raw_edges_and_same_captured_time) ... ok\ntest_complete_page_roundtrip_reserved_tail_and_full_width_rejection (test_engine_flex.FlexIntegration.test_complete_page_roundtrip_reserved_tail_and_full_width_rejection) ... ok\ntest_explicit_scalar_selection_cannot_be_used_for_corrections (test_engine_flex.FlexIntegration.test_explicit_scalar_selection_cannot_be_used_for_corrections) ... ok\ntest_fault_must_be_consumed_by_completed_control (test_engine_flex.FlexIntegration.test_fault_must_be_consumed_by_completed_control) ... ok\ntest_live_append_and_legacy_radio_suppression (test_engine_flex.FlexIntegration.test_live_append_and_legacy_radio_suppression) ... ok\ntest_own010_msq_and_nine_retained_identities (test_engine_flex.FlexIntegration.test_own010_msq_and_nine_retained_identities) ... ok\ntest_runtime_json_log_preserves_flags_and_exact_u64 (test_engine_flex.FlexIntegration.test_runtime_json_log_preserves_flags_and_exact_u64) ... ok\ntest_same_calibration_reconfigure_cannot_relabel_old_window (test_engine_flex.FlexIntegration.test_same_calibration_reconfigure_cannot_relabel_old_window) ... ok\ntest_schema9_requires_complete_strict_flex_config (test_engine_flex.FlexIntegration.test_schema9_requires_complete_strict_flex_config) ... ok\ntest_stimulus_retains_waveform_when_queries_are_refined (test_engine_flex.FlexIntegration.test_stimulus_retains_waveform_when_queries_are_refined) ... ok\ntest_tune_schema1_through8_migrate_neutral_and_keep_original_bytes (test_engine_flex.FlexIntegration.test_tune_schema1_through8_migrate_neutral_and_keep_original_bytes) ... ok\ntest_actual_app_omits_readonly_origin_without_omitting_tune (test_tuning.TuningTests.test_actual_app_omits_readonly_origin_without_omitting_tune) ... ok\ntest_closed_session_registry_and_use_are_explicit (test_tuning.TuningTests.test_closed_session_registry_and_use_are_explicit) ... ok\ntest_corruption_timeout_discovery_and_chunk_limits (test_tuning.TuningTests.test_corruption_timeout_discovery_and_chunk_limits) ... ok\ntest_failed_host_observation_preserves_inhibition_and_unknown_age (test_tuning.TuningTests.test_failed_host_observation_preserves_inhibition_and_unknown_age) ... ok\ntest_live_metadata_clears_old_sample_and_preserves_session_origin (test_tuning.TuningTests.test_live_metadata_clears_old_sample_and_preserves_session_origin) ... ok\ntest_msq_map_units_survive_one_page_mapping (test_tuning.TuningTests.test_msq_map_units_survive_one_page_mapping) ... ok\ntest_native_golden_whole_tune_and_historical_layout (test_tuning.TuningTests.test_native_golden_whole_tune_and_historical_layout) ... ok\ntest_persistence_failure_is_permanent_until_store_recovery (test_tuning.TuningTests.test_persistence_failure_is_permanent_until_store_recovery) ... ok\ntest_preparation_memory_error_is_retryable_without_activation (test_tuning.TuningTests.test_preparation_memory_error_is_retryable_without_activation) ... ok\ntest_readonly_and_reserved_violations_reject_entire_chunk (test_tuning.TuningTests.test_readonly_and_reserved_violations_reject_entire_chunk) ... ok\ntest_strategy_and_trim_disable_are_one_transaction (test_tuning.TuningTests.test_strategy_and_trim_disable_are_one_transaction) ... ok\ntest_successive_burns_keep_wire_origin_and_crc_stable (test_tuning.TuningTests.test_successive_burns_keep_wire_origin_and_crc_stable) ... ok\ntest_two_native_writers_and_clean_burn_require_explicit_discovery (test_tuning.TuningTests.test_two_native_writers_and_clean_burn_require_explicit_discovery) ... ok\n\n----------------------------------------------------------------------\nRan 24 tests in 0.578s\n\nOK\n",
+  "freeze_manifest_sha256": "8fc7d3f1a28608f663be8e0015c70efc8574cbcab4d20e6382a7c11c95a73ea3",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-gcov-002",
+    "GCOV_PREFIX_STRIP": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-tmp-002",
+    "PYTHONPATH": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002/tools"
+  }
+}

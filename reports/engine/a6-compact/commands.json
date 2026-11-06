@@ -1,0 +1,220 @@
+[
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "command": [
+      "kicad-cli",
+      "pcb",
+      "drc",
+      "--format",
+      "json",
+      "--all-track-errors",
+      "--schematic-parity",
+      "--severity-all",
+      "--exit-code-violations",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/native-drc.json",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/freeze/.cache/engine/flex-circuit/a6-compact-width-001-native/esp32-ecu.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "seconds": 2.2130813598632812
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "command": [
+      "kicad-cli",
+      "sch",
+      "erc",
+      "--format",
+      "json",
+      "--severity-all",
+      "--exit-code-violations",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/native-erc.json",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/freeze/.cache/engine/flex-circuit/a6-compact-width-001-native/esp32-ecu.kicad_sch"
+    ],
+    "exit_code": 0,
+    "seconds": 0.2990903854370117
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "command": [
+      "kicad-cli",
+      "sch",
+      "export",
+      "netlist",
+      "--format",
+      "kicadxml",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/native-netlist.xml",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/freeze/.cache/engine/flex-circuit/a6-compact-width-001-native/esp32-ecu.kicad_sch"
+    ],
+    "exit_code": 0,
+    "seconds": 0.28957056999206543
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "command": [
+      "python3",
+      "-B",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/freeze/tools/run_flex_circuit.py",
+      "--ngspice",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/ngspice-review",
+      "--output",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/matrix-rerun",
+      "--frontend",
+      "hardware/flex-input/frontend-compact.json"
+    ],
+    "exit_code": 0,
+    "seconds": 82.0393238067627,
+    "ngspice_elf_sha256": "25b6a73fafd9b489b92347a6c55fe307db502c1638f53d7d0bf439b5f7c65e38"
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "command": [
+      "python3",
+      "-B",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/freeze/tools/test_flex_frontend.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "seconds": 0.29787445068359375
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "command": [
+      "kicad-cli",
+      "pcb",
+      "export",
+      "svg",
+      "--layers",
+      "F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,B.Cu",
+      "--page-size-mode",
+      "2",
+      "--exclude-drawing-sheet",
+      "--mode-multi",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/native-svg",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/freeze/.cache/engine/flex-circuit/a6-compact-width-001-native/esp32-ecu.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "seconds": 0.6773736476898193
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "command": [
+      "kicad-cli",
+      "pcb",
+      "drc",
+      "--format",
+      "json",
+      "--all-track-errors",
+      "--schematic-parity",
+      "--severity-all",
+      "--exit-code-violations",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/supply/drc.json",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/supply/esp32-ecu.kicad_pcb"
+    ],
+    "exit_code": 5,
+    "seconds": 1.984994888305664
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "command": [
+      "kicad-cli",
+      "pcb",
+      "drc",
+      "--format",
+      "json",
+      "--all-track-errors",
+      "--schematic-parity",
+      "--severity-all",
+      "--exit-code-violations",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/power/drc.json",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/power/esp32-ecu.kicad_pcb"
+    ],
+    "exit_code": 5,
+    "seconds": 2.053746223449707
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "command": [
+      "kicad-cli",
+      "pcb",
+      "drc",
+      "--format",
+      "json",
+      "--all-track-errors",
+      "--schematic-parity",
+      "--severity-all",
+      "--exit-code-violations",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/extra-INJ1-neck/drc.json",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/extra-INJ1-neck/esp32-ecu.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "seconds": 1.962174415588379
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "command": [
+      "kicad-cli",
+      "pcb",
+      "drc",
+      "--format",
+      "json",
+      "--all-track-errors",
+      "--schematic-parity",
+      "--severity-all",
+      "--exit-code-violations",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/alter-literal-neck/drc.json",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/a6-compact-increment-review/revision001/negative-native/alter-literal-neck/esp32-ecu.kicad_pcb"
+    ],
+    "exit_code": 0,
+    "seconds": 1.9839446544647217
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "shell_command": "python3 -B .cache/engine/a6-compact-increment-review/revision001/inspect_native.py > .cache/engine/a6-compact-increment-review/revision001/independent-native-inspection.log 2>&1",
+    "script_sha256": "7822a2ae6921a8351a2d1e9f0011719a89ddc8a8d775e023e9251cdc146f4f23",
+    "result": "completed; result files and logs retained"
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "shell_command": "python3 -B .cache/engine/a6-compact-increment-review/revision001/negative_native.py > .cache/engine/a6-compact-increment-review/revision001/independent-native-negative-controls.log 2>&1",
+    "script_sha256": "991464255b527901040218130d8a16a84e40a62d956a3cbe51908d14e12c281f",
+    "result": "completed; result files and logs retained"
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "shell_command": "python3 -B .cache/engine/a6-compact-increment-review/revision001/inspect_models.py > .cache/engine/a6-compact-increment-review/revision001/independent-model-inspection.log 2>&1",
+    "script_sha256": "baf40c9da87bdb73e352ba05040d1d5b2e5276e7410caa193b2af28396d26378",
+    "result": "completed; result files and logs retained"
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "shell_command": "python3 -B .cache/engine/a6-compact-increment-review/revision001/inspect_publication.py > .cache/engine/a6-compact-increment-review/revision001/publication-comparison.log 2>&1",
+    "script_sha256": "da5350ae14d01b6737a3975d3621cba603622e3837aa979213af9b49153e8149",
+    "result": "completed; result files and logs retained"
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "shell_command": "python3 -B .cache/engine/a6-compact-increment-review/revision001/inspect_guardrails.py > .cache/engine/a6-compact-increment-review/revision001/declared-audit-controls.log 2>&1",
+    "script_sha256": "5f8d7f84583c340492c657969dcf96f68efb3b4added196cbf1d95e677959ad2",
+    "result": "completed; result files and logs retained"
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "shell_command": "python3 -B .cache/engine/a6-compact-increment-review/revision001/inspect_assets.py > .cache/engine/a6-compact-increment-review/revision001/footprint-provenance-checks.log 2>&1",
+    "script_sha256": "8ba4572714cf07f64b8c3cbf3f4250f5670cd127659ffb73c7bddbe1f7822634",
+    "result": "completed; result files and logs retained"
+  },
+  {
+    "cwd": "/home/mark/persospace/esp32-ecu",
+    "shell_command": "python3 -B .cache/engine/a6-compact-increment-review/revision001/render_locality.py > .cache/engine/a6-compact-increment-review/revision001/render-locality.log 2>&1",
+    "script_sha256": "9ad5d9a735915ffbab553a7b739de1e8d878f44931d2ff5fdcc0b4766b1d944b",
+    "result": "completed; result files and logs retained"
+  }
+]

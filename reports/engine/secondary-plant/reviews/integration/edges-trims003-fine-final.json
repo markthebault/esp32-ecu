@@ -1,0 +1,678 @@
+{
+  "passed": true,
+  "matrix": ".cache/engine/secondary-plant-fine-001",
+  "scope": "Independent integration of every executed injector edge using declared300cc/min,0.745g/cc,900us opening delay; scheduled physical spark count replay; actual late per-cylinder trimmed discharge angles and pulses. No commanded-demand plant shortcut or fitted physical acceptance.",
+  "runs": [
+    {
+      "name": "portable-input_bounce-125.json",
+      "source_sha256": "7662be7023e01891b5211706df0e236da5b9ab0bc5ae486ea3ee2e5c51d7c116",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4130.384299999994,
+      "plant_fuel_mg": 4130.384299998939,
+      "difference_mg": 1.0550138540565968e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1032.5960749999995,
+        1032.5960749999995,
+        1032.5960749999995,
+        1032.5960749999995
+      ],
+      "edge_sparks": 616,
+      "plant_sparks": 616
+    },
+    {
+      "name": "portable-multiply-125.json",
+      "source_sha256": "895c9578bce665dcff849f97e276c2779c963329bc3a1c250f235cb6ed602ee9",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4454.459299999992,
+      "plant_fuel_mg": 4454.459299998137,
+      "difference_mg": 1.8553691916167736e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1113.6148250000003,
+        1113.6148250000003,
+        1113.6148250000003,
+        1113.6148250000003
+      ],
+      "edge_sparks": 614,
+      "plant_sparks": 614
+    },
+    {
+      "name": "portable-producer_pause-125.json",
+      "source_sha256": "3bdda973109b2ee9c3b8c2715abdd0c0016b463c76fd7ddbd87bee9e52d95669",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 3937.2057999999943,
+      "plant_fuel_mg": 3937.2057999979634,
+      "difference_mg": 2.0309016690589488e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        984.3014499999998,
+        984.3014499999998,
+        984.3014499999998,
+        984.3014499999998
+      ],
+      "edge_sparks": 552,
+      "plant_sparks": 552
+    },
+    {
+      "name": "portable-ratio_mixed-125.json",
+      "source_sha256": "6f584a60c2e400c771814761fd9b0b636fcacc8b870ac611ad9758bfd9198b16",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4526.1878999999935,
+      "plant_fuel_mg": 4526.187899998244,
+      "difference_mg": 1.749867806211114e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1131.5469749999997,
+        1131.5469749999997,
+        1131.5469749999997,
+        1131.5469749999997
+      ],
+      "edge_sparks": 616,
+      "plant_sparks": 616
+    },
+    {
+      "name": "portable-trim_multiply-125.json",
+      "source_sha256": "8c0df7addbaf2a298d49c8edb7a819bd519ddc5a6da19bdbb804f1cba8d3a2c4",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4295.696075,
+      "plant_fuel_mg": 4295.696074998821,
+      "difference_mg": 1.178705133497715e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1193.322375,
+        955.1384250000003,
+        1080.88325,
+        1066.3520250000004
+      ],
+      "edge_sparks": 298,
+      "plant_sparks": 298
+    },
+    {
+      "name": "speeduino16-input_bounce-125.json",
+      "source_sha256": "aa46d3d585ef4e214f408f47667160d427d1342e769bf64de55918f196893860",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4200.548399999996,
+      "plant_fuel_mg": 4200.548399999085,
+      "difference_mg": 9.113136911764741e-10,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1050.1370999999988,
+        1050.1370999999988,
+        1050.1370999999988,
+        1050.1370999999988
+      ],
+      "edge_sparks": 646,
+      "plant_sparks": 646
+    },
+    {
+      "name": "speeduino16-multiply-125.json",
+      "source_sha256": "a54eecbdb732ab5d4142d02b243b96f41801d4fcefe11efd438eac09cfe50116",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4551.055999999997,
+      "plant_fuel_mg": 4551.055999998683,
+      "difference_mg": 1.3142198440618813e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1137.7640000000044,
+        1137.7640000000044,
+        1137.7640000000044,
+        1137.7640000000044
+      ],
+      "edge_sparks": 644,
+      "plant_sparks": 644
+    },
+    {
+      "name": "speeduino16-producer_pause-125.json",
+      "source_sha256": "033ab12cddf997ce533636da654430ebf235b9821caa8f1ebf273a693f2e18eb",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4397.347599999989,
+      "plant_fuel_mg": 4397.347599999037,
+      "difference_mg": 9.522409527562559e-10,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1099.3368999999975,
+        1099.3368999999975,
+        1099.3368999999975,
+        1099.3368999999975
+      ],
+      "edge_sparks": 658,
+      "plant_sparks": 658
+    },
+    {
+      "name": "speeduino16-ratio_mixed-125.json",
+      "source_sha256": "41292c8bf124b3c90bc2a82015b52a876978523c5a4dd6439bd085fe8130d093",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4571.379600000007,
+      "plant_fuel_mg": 4571.379599998667,
+      "difference_mg": 1.3396856957115233e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1142.8449000000041,
+        1142.8449000000041,
+        1142.8449000000041,
+        1142.8449000000041
+      ],
+      "edge_sparks": 648,
+      "plant_sparks": 648
+    },
+    {
+      "name": "speeduino16-trim_multiply-125.json",
+      "source_sha256": "4776b91bbd4ee9bd016ce2fc33b95cb1e7c2238897042551c64c6320b08af47f",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4569.964099999999,
+      "plant_fuel_mg": 4569.964099998655,
+      "difference_mg": 1.344233169220388e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1275.0376999999994,
+        998.2254999999993,
+        1154.2881,
+        1142.4127999999998
+      ],
+      "edge_sparks": 329,
+      "plant_sparks": 329
+    },
+    {
+      "name": "speeduino32-input_bounce-125.json",
+      "source_sha256": "9ca9813e104b76396bf8bac20a3f8363ce7d53a0b499f1a2abd455ff3455935b",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4200.548399999996,
+      "plant_fuel_mg": 4200.548399999085,
+      "difference_mg": 9.113136911764741e-10,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1050.1370999999988,
+        1050.1370999999988,
+        1050.1370999999988,
+        1050.1370999999988
+      ],
+      "edge_sparks": 646,
+      "plant_sparks": 646
+    },
+    {
+      "name": "speeduino32-multiply-125.json",
+      "source_sha256": "880339bd94c154582655b851890fc2e576c950279b3d6a6091a24a161e6be70c",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4551.055999999997,
+      "plant_fuel_mg": 4551.055999998683,
+      "difference_mg": 1.3142198440618813e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1137.7640000000044,
+        1137.7640000000044,
+        1137.7640000000044,
+        1137.7640000000044
+      ],
+      "edge_sparks": 644,
+      "plant_sparks": 644
+    },
+    {
+      "name": "speeduino32-producer_pause-125.json",
+      "source_sha256": "8c7a2cc086651424cb631b333b2277d9eb23fa56ac920f574f9c02f8667b3fe6",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4397.347599999989,
+      "plant_fuel_mg": 4397.347599999037,
+      "difference_mg": 9.522409527562559e-10,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1099.3368999999975,
+        1099.3368999999975,
+        1099.3368999999975,
+        1099.3368999999975
+      ],
+      "edge_sparks": 658,
+      "plant_sparks": 658
+    },
+    {
+      "name": "speeduino32-ratio_mixed-125.json",
+      "source_sha256": "878ca35d3445b139f2f352feb267f21c689e6adacc176e7c5a7d75c8fc25e7a4",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4571.379600000007,
+      "plant_fuel_mg": 4571.379599998667,
+      "difference_mg": 1.3396856957115233e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1142.8449000000041,
+        1142.8449000000041,
+        1142.8449000000041,
+        1142.8449000000041
+      ],
+      "edge_sparks": 648,
+      "plant_sparks": 648
+    },
+    {
+      "name": "speeduino32-trim_multiply-125.json",
+      "source_sha256": "12d4500c1e3fd2d41e54d3e65ff1bfbf86d99417353547ac4f6c01b56d0feafa",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4569.964099999999,
+      "plant_fuel_mg": 4569.964099998655,
+      "difference_mg": 1.344233169220388e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1275.0376999999994,
+        998.2254999999993,
+        1154.2881,
+        1142.4127999999998
+      ],
+      "edge_sparks": 329,
+      "plant_sparks": 329
+    },
+    {
+      "name": "target-input_bounce-125.json",
+      "source_sha256": "44d3bfe097dc58cb518003b8e6cf15bdcb3d7e5f7ba37ef8c4c14f84dbbb4bdd",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4130.384299999994,
+      "plant_fuel_mg": 4130.384299998939,
+      "difference_mg": 1.0550138540565968e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1032.5960749999995,
+        1032.5960749999995,
+        1032.5960749999995,
+        1032.5960749999995
+      ],
+      "edge_sparks": 616,
+      "plant_sparks": 616
+    },
+    {
+      "name": "target-multiply-125.json",
+      "source_sha256": "86fc76d82d03fc3e23b6cd7dd5f0b6d300ee50629c5ce4e2fdc19e5e2ac69e88",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4454.459299999992,
+      "plant_fuel_mg": 4454.459299998137,
+      "difference_mg": 1.8553691916167736e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1113.6148250000003,
+        1113.6148250000003,
+        1113.6148250000003,
+        1113.6148250000003
+      ],
+      "edge_sparks": 614,
+      "plant_sparks": 614
+    },
+    {
+      "name": "target-producer_pause-125.json",
+      "source_sha256": "cbd305754e1ceeebf1ebd0c5e886081b006ae13f124b598e895d94a308ac115f",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 3937.2057999999943,
+      "plant_fuel_mg": 3937.2057999979634,
+      "difference_mg": 2.0309016690589488e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        984.3014499999998,
+        984.3014499999998,
+        984.3014499999998,
+        984.3014499999998
+      ],
+      "edge_sparks": 552,
+      "plant_sparks": 552
+    },
+    {
+      "name": "target-ratio_mixed-125.json",
+      "source_sha256": "5402d66649be8b0d99d6fd5ac6cfb0122d85cb4cfd37ddd1c80b8e4a69607894",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4526.1878999999935,
+      "plant_fuel_mg": 4526.187899998244,
+      "difference_mg": 1.749867806211114e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1131.5469749999997,
+        1131.5469749999997,
+        1131.5469749999997,
+        1131.5469749999997
+      ],
+      "edge_sparks": 616,
+      "plant_sparks": 616
+    },
+    {
+      "name": "target-trim_multiply-125.json",
+      "source_sha256": "b749c8c9366e02684a18aed6a17db3735f5b29d75c1a09ef14c0f70d323037fd",
+      "passed": true,
+      "errors": [],
+      "edge_integral_fuel_mg": 4295.696075,
+      "plant_fuel_mg": 4295.696074998821,
+      "difference_mg": 1.178705133497715e-09,
+      "edge_integral_fuel_by_cylinder_mg": [
+        1193.322375,
+        955.1384250000003,
+        1080.88325,
+        1066.3520250000004
+      ],
+      "edge_sparks": 298,
+      "plant_sparks": 298
+    }
+  ],
+  "trim_runs": [
+    {
+      "label": "portable",
+      "passed": true,
+      "errors": [],
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "expected_source_order_demand_deg": 18,
+          "sparks": 47,
+          "mean_actual_deg": 17.99258758842939,
+          "actual_range_deg": [
+            17.969813198164047,
+            18.014796437521
+          ],
+          "max_abs_difference_from_expected_deg": 0.030186801835952792,
+          "mean_delivered_pulse_us": 5001.063829787234,
+          "pulse_range_us": [
+            4846,
+            5418
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 15.277421516650763
+        },
+        {
+          "cylinder": 2,
+          "expected_source_order_demand_deg": 12,
+          "sparks": 47,
+          "mean_actual_deg": 11.991818616866595,
+          "actual_range_deg": [
+            11.970444653838058,
+            12.01364530142746
+          ],
+          "max_abs_difference_from_expected_deg": 0.029555346161941998,
+          "mean_delivered_pulse_us": 4257.851063829788,
+          "pulse_range_us": [
+            4129,
+            4606
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 12.509249322746545
+        },
+        {
+          "cylinder": 3,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.98781839865834,
+          "actual_range_deg": [
+            14.971447709707718,
+            15.006406242828234
+          ],
+          "max_abs_difference_from_expected_deg": 0.028552290292282123,
+          "mean_delivered_pulse_us": 4628.021739130435,
+          "pulse_range_us": [
+            4489,
+            4993
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.921724797647629
+        },
+        {
+          "cylinder": 4,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.985961837213914,
+          "actual_range_deg": [
+            14.965762292304134,
+            15.00644701228157
+          ],
+          "max_abs_difference_from_expected_deg": 0.03423770769586554,
+          "mean_delivered_pulse_us": 4633.978723404255,
+          "pulse_range_us": [
+            4488,
+            5028
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.910230475581598
+        }
+      ],
+      "source_policy": "project trims before secondary multiplication and opening time; reference individual spark trims after composition and fuel trims on full pulse using percentageApprox",
+      "angle_acceptance": "Actual ranges and differences are reported, with no fitted angle tolerance; per-cylinder ordering and nonvacuous executed edges are asserted.",
+      "late_project_control_samples": 100
+    },
+    {
+      "label": "speeduino16",
+      "passed": true,
+      "errors": [],
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "expected_source_order_demand_deg": 17,
+          "sparks": 47,
+          "mean_actual_deg": 16.813746415736496,
+          "actual_range_deg": [
+            16.198529019435227,
+            17.502508316283638
+          ],
+          "max_abs_difference_from_expected_deg": 0.8014709805647726,
+          "mean_delivered_pulse_us": 5065.872340425532,
+          "pulse_range_us": [
+            4872,
+            5476
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 15.521961591018222
+        },
+        {
+          "cylinder": 2,
+          "expected_source_order_demand_deg": 13,
+          "sparks": 47,
+          "mean_actual_deg": 12.775359717586902,
+          "actual_range_deg": [
+            12.171851911814883,
+            13.33254024145208
+          ],
+          "max_abs_difference_from_expected_deg": 0.8281480881851166,
+          "mean_delivered_pulse_us": 4152.085106382979,
+          "pulse_range_us": [
+            3988,
+            4484
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 12.11414926537185
+        },
+        {
+          "cylinder": 3,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.882571150220718,
+          "actual_range_deg": [
+            14.391065440999228,
+            15.49427695403574
+          ],
+          "max_abs_difference_from_expected_deg": 0.6089345590007724,
+          "mean_delivered_pulse_us": 4606.382978723404,
+          "pulse_range_us": [
+            4432,
+            4980
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.849252396992279
+        },
+        {
+          "cylinder": 4,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.905229838388047,
+          "actual_range_deg": [
+            14.359666752672638,
+            15.51780503376358
+          ],
+          "max_abs_difference_from_expected_deg": 0.6403332473273622,
+          "mean_delivered_pulse_us": 4614.808510638298,
+          "pulse_range_us": [
+            4432,
+            4980
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.838378157648258
+        }
+      ],
+      "source_policy": "project trims before secondary multiplication and opening time; reference individual spark trims after composition and fuel trims on full pulse using percentageApprox",
+      "angle_acceptance": "Actual ranges and differences are reported, with no fitted angle tolerance; per-cylinder ordering and nonvacuous executed edges are asserted.",
+      "late_project_control_samples": 0
+    },
+    {
+      "label": "speeduino32",
+      "passed": true,
+      "errors": [],
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "expected_source_order_demand_deg": 17,
+          "sparks": 47,
+          "mean_actual_deg": 16.813746415736496,
+          "actual_range_deg": [
+            16.198529019435227,
+            17.502508316283638
+          ],
+          "max_abs_difference_from_expected_deg": 0.8014709805647726,
+          "mean_delivered_pulse_us": 5065.872340425532,
+          "pulse_range_us": [
+            4872,
+            5476
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 15.521961591018222
+        },
+        {
+          "cylinder": 2,
+          "expected_source_order_demand_deg": 13,
+          "sparks": 47,
+          "mean_actual_deg": 12.775359717586902,
+          "actual_range_deg": [
+            12.171851911814883,
+            13.33254024145208
+          ],
+          "max_abs_difference_from_expected_deg": 0.8281480881851166,
+          "mean_delivered_pulse_us": 4152.085106382979,
+          "pulse_range_us": [
+            3988,
+            4484
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 12.11414926537185
+        },
+        {
+          "cylinder": 3,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.882571150220718,
+          "actual_range_deg": [
+            14.391065440999228,
+            15.49427695403574
+          ],
+          "max_abs_difference_from_expected_deg": 0.6089345590007724,
+          "mean_delivered_pulse_us": 4606.382978723404,
+          "pulse_range_us": [
+            4432,
+            4980
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.849252396992279
+        },
+        {
+          "cylinder": 4,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.905229838388047,
+          "actual_range_deg": [
+            14.359666752672638,
+            15.51780503376358
+          ],
+          "max_abs_difference_from_expected_deg": 0.6403332473273622,
+          "mean_delivered_pulse_us": 4614.808510638298,
+          "pulse_range_us": [
+            4432,
+            4980
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.838378157648258
+        }
+      ],
+      "source_policy": "project trims before secondary multiplication and opening time; reference individual spark trims after composition and fuel trims on full pulse using percentageApprox",
+      "angle_acceptance": "Actual ranges and differences are reported, with no fitted angle tolerance; per-cylinder ordering and nonvacuous executed edges are asserted.",
+      "late_project_control_samples": 0
+    },
+    {
+      "label": "target",
+      "passed": true,
+      "errors": [],
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "expected_source_order_demand_deg": 18,
+          "sparks": 47,
+          "mean_actual_deg": 17.99258758842939,
+          "actual_range_deg": [
+            17.969813198164047,
+            18.014796437521
+          ],
+          "max_abs_difference_from_expected_deg": 0.030186801835952792,
+          "mean_delivered_pulse_us": 5001.063829787234,
+          "pulse_range_us": [
+            4846,
+            5418
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 15.277421516650763
+        },
+        {
+          "cylinder": 2,
+          "expected_source_order_demand_deg": 12,
+          "sparks": 47,
+          "mean_actual_deg": 11.991818616866595,
+          "actual_range_deg": [
+            11.970444653838058,
+            12.01364530142746
+          ],
+          "max_abs_difference_from_expected_deg": 0.029555346161941998,
+          "mean_delivered_pulse_us": 4257.851063829788,
+          "pulse_range_us": [
+            4129,
+            4606
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 12.509249322746545
+        },
+        {
+          "cylinder": 3,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.98781839865834,
+          "actual_range_deg": [
+            14.971447709707718,
+            15.006406242828234
+          ],
+          "max_abs_difference_from_expected_deg": 0.028552290292282123,
+          "mean_delivered_pulse_us": 4628.021739130435,
+          "pulse_range_us": [
+            4489,
+            4993
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.921724797647629
+        },
+        {
+          "cylinder": 4,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.985961837213914,
+          "actual_range_deg": [
+            14.965762292304134,
+            15.00644701228157
+          ],
+          "max_abs_difference_from_expected_deg": 0.03423770769586554,
+          "mean_delivered_pulse_us": 4633.978723404255,
+          "pulse_range_us": [
+            4488,
+            5028
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.910230475581598
+        }
+      ],
+      "source_policy": "project trims before secondary multiplication and opening time; reference individual spark trims after composition and fuel trims on full pulse using percentageApprox",
+      "angle_acceptance": "Actual ranges and differences are reported, with no fitted angle tolerance; per-cylinder ordering and nonvacuous executed edges are asserted.",
+      "late_project_control_samples": 100
+    }
+  ],
+  "max_abs_fuel_residual_mg": 2.0309016690589488e-09
+}

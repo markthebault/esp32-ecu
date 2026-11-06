@@ -1,0 +1,207 @@
+(footprint "D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp_A6_D121"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Diode, DO-35_SOD27 series, Axial, Vertical, pin pitch=3.81mm, length*diameter=4*2mm^2, http://www.diodes.com/_files/packages/DO-35.pdf")
+	(tags "Diode DO-35_SOD27 series Axial Vertical pin pitch 3.81mm  length 4mm diameter 2mm")
+	(property "Reference" "D121"
+		(at 1.905 -2.326371 0)
+		(layer "F.Fab")
+		(uuid "938d54f8-4291-40e2-ade3-f9e5f6e8c943")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "BAT85"
+		(at 1.905 2.326371 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "88cdd683-d988-435c-9267-b7894952a3b4")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8dfd117a-a87c-4106-bac6-5601a44e7587")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "84db3f86-64cd-413d-ace5-2731c3f6249b")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "KiLib_Generator" "diode/THT"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "ce2cb8d4-ddce-432c-9354-caf5ffcd76ea")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "MPN" "BAT85,113"
+		(at 0 0 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "71ff1061-10a7-4ffb-b052-0137ac449484")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "DesignNote" "Axial Schottky mounted vertically. Validate input clamp voltage/leakage at temperature."
+		(at 0 0 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "875045b5-5660-4a9c-aa67-3ebb14d0ed12")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_line
+		(start 1.326371 0)
+		(end 2.71 0)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "77aee719-96a3-4278-97df-ad2c969acfe2")
+	)
+	(fp_rect
+		(start -1.25 -1.25)
+		(end 4.86 1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "522a026e-cd93-4547-b782-6c17d6f502de")
+	)
+	(fp_line
+		(start 0 0)
+		(end 3.81 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "5833d226-65d7-4ce5-977d-c44e9f124abb")
+	)
+	(fp_circle
+		(center 0 0)
+		(end 1 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "42c64d4c-98f5-4069-b7f6-fae91f96b37a")
+	)
+	(fp_circle
+		(center 0 0)
+		(end 1.326371 0)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "25935049-e683-4cab-9743-ceed5caeb3b7")
+	)
+	(fp_text user "A"
+		(at 2.31 0.8 0)
+		(layer "F.SilkS")
+		(uuid "a9f55f68-297d-4338-a0eb-eedfa36a8004")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "${REFERENCE}"
+		(at 1.905 -2.326371 0)
+		(layer "F.Fab")
+		(uuid "61d49758-b094-4e79-97cc-dcf4ef8da2c6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "A"
+		(at 2.31 0.8 0)
+		(layer "F.Fab")
+		(uuid "c96ca563-1504-4ab6-a586-739817c24525")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole roundrect
+		(at 0 0)
+		(size 1.6 1.6)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.15625)
+		(uuid "05b49035-893b-4a92-b066-390710d9fb9e")
+	)
+	(pad "2" thru_hole circle
+		(at 3.81 0)
+		(size 1.6 1.6)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "42afe0c4-4a5b-4567-afe6-216dbc686f54")
+	)
+	(embedded_fonts no)
+	(model "${KICAD10_3DMODEL_DIR}/Diode_THT.3dshapes/D_DO-35_SOD27_P3.81mm_Vertical_AnodeUp.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

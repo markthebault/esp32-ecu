@@ -1,0 +1,25 @@
+{
+  "application": "TunerStudio MS Lite3.3.01",
+  "scope": "Actual offline application read/edit/save, not online acceptance or physical USB qualification",
+  "identity": "ESP32ECU DEV 005 INHIBITED",
+  "fixture": "tuning/examples/tunerstudio-idle-roundtrip.msq",
+  "sha256": "82a493ad1404eb79677ed7d96ed24c2cfc5db2f688e66a7d14c96107fda9acce",
+  "changes": {
+    "frequency_hz": [
+      80,
+      90
+    ],
+    "algorithm": [
+      "closed_loop",
+      "open_loop"
+    ],
+    "running_duty_at70C": [
+      17,
+      17.01
+    ]
+  },
+  "origin": "Application omitted readOnly baseRevision; importer uses placeholder1 or explicit caller base; UI retains loaded CAS",
+  "physical_outputs_enabled": false,
+  "final_ini": "tuning/esp32-ecu-idle.ini",
+  "ini_used_sha256": "c895d033a04f46886dcd207fe9e01708888f9ddc7cf7d4fe92668d69c7822de9"
+}

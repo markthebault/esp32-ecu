@@ -1,0 +1,102 @@
+{
+  "identity": "speeduino 202504-dev",
+  "application_jar_sha256": "3ebafb867fef3722816e768879501845904f81bc5e13249c77d170e9adf61cf8",
+  "same_application_as_own009": true,
+  "pinned_ini_sha256": "60bb12a911281255667953a087c0ddd7ef8e69e1c250f5172d74eeb2752d298a",
+  "application_ini_sha256": "60bb12a911281255667953a087c0ddd7ef8e69e1c250f5172d74eeb2752d298a",
+  "ini_matches_pinned": true,
+  "application_msq_sha256": "fef17c4bd702dfc882dc379dd8f403d535eeb3f79fa3298d773210e90e226b0a",
+  "application_msq_bytes": 91855,
+  "changed_bytes": [
+    {
+      "offset": 240,
+      "before": 85,
+      "after": 86
+    }
+  ],
+  "write_transactions": [
+    {
+      "transaction": 4349,
+      "request_line": 8699,
+      "response_line": 8700,
+      "page": 2,
+      "offset": 240,
+      "count": 1,
+      "before_hex": "55",
+      "after_hex": "56",
+      "reply_hex": "00",
+      "request_hex": "4d0002f000010056"
+    }
+  ],
+  "burn_transactions": [
+    {
+      "transaction": 5208,
+      "request_line": 10417,
+      "response_line": 10418,
+      "page": 2,
+      "reply_hex": "04"
+    }
+  ],
+  "controller_crc_checks": [
+    {
+      "transaction": 2202,
+      "request_line": 4405,
+      "response_line": 4406,
+      "wire_hex": "f8d6da57",
+      "computed_hex": "f8d6da57",
+      "after_burn": false
+    },
+    {
+      "transaction": 5209,
+      "request_line": 10419,
+      "response_line": 10420,
+      "wire_hex": "be04ef33",
+      "computed_hex": "be04ef33",
+      "after_burn": true
+    }
+  ],
+  "msq_complete_page_bytes": 288,
+  "msq_page_equals_controller_reconstruction": true,
+  "msq_page_crc32": "be04ef33",
+  "initial_page_crc32": "f8d6da57",
+  "msq_axis_scales": {
+    "rpm": 100,
+    "fuel_load": 2
+  },
+  "sources_match_launch": {
+    "tools/speeduino_serial_sim.cpp": {
+      "expected": "ffc0c24fe3e99aac70abe8fdcff53e98a71df309d1bf4a0786f2efc6dfdc2832",
+      "current": "ffc0c24fe3e99aac70abe8fdcff53e98a71df309d1bf4a0786f2efc6dfdc2832",
+      "matches": true
+    },
+    "tools/speeduino_serial_runtime.py": {
+      "expected": "87719bc286899d64ea1afe5c6874ea7dfe77f4a9c3789b68201c11bce758497b",
+      "current": "87719bc286899d64ea1afe5c6874ea7dfe77f4a9c3789b68201c11bce758497b",
+      "matches": true
+    },
+    "scripts/build_speeduino_serial.py": {
+      "expected": "4286491a28090c935fb335c6a5dab837ef897d2ec8e62b5113c133a86027389b",
+      "current": "4286491a28090c935fb335c6a5dab837ef897d2ec8e62b5113c133a86027389b",
+      "matches": true
+    }
+  },
+  "locked_original_inputs_verified": 565,
+  "native_build_binary_sha256": "c02e74a93744dc1999262ac6b47c99be55f818187f57daa219d8fe4f8a3fd760",
+  "native_TX_bytes_equal_bridge_TX": 752363,
+  "unsupported_warnings": 0,
+  "app_debug_burn_confirmed": true,
+  "closure": {
+    "returncode": 0,
+    "failure": "",
+    "stats": {
+      "loops": 469970,
+      "received": 131497,
+      "transmitted": 702684
+    },
+    "physical_interface": false
+  },
+  "recorded_stats_are_final_totals": false,
+  "recorded_stats_meaning": "Last explicitly requested runtime observation; final byte totals come from complete wire/native-event captures.",
+  "owned_processes_remaining": "",
+  "scope": "Unmodified actual TunerStudio + genuine pinned Speeduino stopped-engine native serial read/edit/burn positive control. Fake EEPROM only; no physical persistence, engine, target USB or running-plant claim."
+}

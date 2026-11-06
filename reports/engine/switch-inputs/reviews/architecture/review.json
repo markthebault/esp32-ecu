@@ -1,0 +1,113 @@
+{
+  "reviewer": "/root/switch_input_architecture_review",
+  "date": "2026-11-04",
+  "baseline": "b0c39a9daf3334f9ddec0e181ade62aecb10e2f9",
+  "scope": "Independent architecture review; no production-driver, CAD, HIL or physical qualification acceptance",
+  "decision": "Proceed with implementation/prototype subject to explicit remaining gates",
+  "root_project_files_edited": false,
+  "physical_artifacts_created": false,
+  "subagents_spawned": false,
+  "recommendation": {
+    "device": "MCP23008 PDIP18",
+    "address": "0x20",
+    "bus_Hz": 100000,
+    "contact_channels": [
+      "GP0",
+      "GP1"
+    ],
+    "j4_pin5": "SAFE_N, unfitted/NC on accessory",
+    "conditioner": "resistor-isolated2N3904 per assessment",
+    "acquisition_budget_us": 3000,
+    "nominal_service_us": 5000,
+    "nominal_read_period_us": 10000,
+    "core_freshness_us": 20000,
+    "clock": "engine_target GP clock, source timestamp=acquisition start",
+    "fault_delivery": "latch invalid with fault ID until same invalid snapshot successfully observed"
+  },
+  "findings": [
+    {
+      "id": "R1",
+      "priority": "required",
+      "topic": "Fault delivery",
+      "status": "parent proposed fix; implementation unreviewed",
+      "finding": "Quick recovery can hide invalid snapshot when controller mutex observation skips; fault-ID acknowledgment required."
+    },
+    {
+      "id": "R2",
+      "priority": "required",
+      "topic": "Mid-read reset",
+      "status": "parent proposed guard; abstract counterexample reproduced",
+      "finding": "Initial IODIR plus low challenge can pass after a reset; trailing IODIR check required. Later reset remains outside observation interval."
+    },
+    {
+      "id": "R3",
+      "priority": "required",
+      "topic": "Bounded clock and latency",
+      "status": "architecture acceptable; HIL open",
+      "finding": "3ms measured engine-clock total, per-call remaining-time budget, fresh source-start timestamps and20ms consumer age. SDK timeout alone insufficient."
+    },
+    {
+      "id": "R4",
+      "priority": "required physical gate",
+      "topic": "Discrete conditioner",
+      "status": "conditional corner arithmetic passed; characterization open",
+      "finding": "Forced beta<=8.120 under assumptions; saturation/full-temp cutoff not guaranteed by cited transistor test conditions."
+    },
+    {
+      "id": "R5",
+      "priority": "required physical gate",
+      "topic": "Poweroff/reset",
+      "status": "unqualified",
+      "finding": "B-C/I2C backfeed paths exist; magnitude and RESET margin need exact circuit/model/measurement. No unconditional arbitrary-ramp guarantee."
+    },
+    {
+      "id": "R6",
+      "priority": "required",
+      "topic": "Accessory ownership",
+      "status": "proposed policy",
+      "finding": "Marker/loopback is not identity; fixed explicit owner required before writes, no auto-configuring unknown0x20 device."
+    },
+    {
+      "id": "R7",
+      "priority": "scope limit",
+      "topic": "Continuity",
+      "status": "intrinsic two-wire limitation",
+      "finding": "Open/short contact and corresponding wiring faults cannot be distinguished."
+    },
+    {
+      "id": "R8",
+      "priority": "documentation",
+      "topic": "Rail ownership",
+      "status": "existing USB restriction documented",
+      "finding": "U3 5V pad21 is NC in actual A5 PCB/contract; do not report a new direct parallel regulator source. Simultaneous USB/carrier3V3 remains prohibited;200mA rail target is not accessory headroom."
+    }
+  ],
+  "probes": [
+    {
+      "command": "python3 .cache/engine/switch-input-architecture-review/electrical_probe.py",
+      "result": "passed arithmetic only",
+      "corners": 256,
+      "output": "electrical-probe.json"
+    },
+    {
+      "command": "python3 .cache/engine/switch-input-architecture-review/protocol_probe.py",
+      "result": "passed abstract model only",
+      "reset_boundary_cases": 24,
+      "unguarded_accepts": 12,
+      "guarded_accepts": 0,
+      "output": "protocol-probe.json"
+    }
+  ],
+  "open_gates": [
+    "production acquisition/binding tests and independent review",
+    "exact schematic/BOM/CAD parity/DRC/ERC",
+    "selected transistor/diode/resistor/reset margin and poweroff tests",
+    "actual bus/scheduler/clock/wire timing HIL",
+    "supply loading and thermal qualification",
+    "physical harness/enclosure fit",
+    "vehicle surge/EMI/ingress qualification; no claims made"
+  ],
+  "primary_reference_index": "reference-index.json",
+  "baseline_sources": "source-bindings.json",
+  "human_report": "assessment.txt"
+}

@@ -1,0 +1,159 @@
+FLEX-G38 conditional circuit open-filter-witness
+* Authored assumed equivalents, not manufacturer models or hardware guarantees.
+* Delay1.3us is a declared symmetric assumption, not a full-temperature bound.
+.options reltol=1e-5 abstol=1e-12 vntol=1e-8 method=gear
+.temp 25
+.model DFEED D(IS=1e-9 N=1.8 RS=2 CJO=2p TT=4n)
+.model SENSOR SW(RON=50 ROFF=1e12 VT=.5 VH=.1)
+V5 supply5 0 5
+V33 supply33 0 3.3
+R5wire supply5 bus5 0.1
+R33wire supply33 bus33 0.1
+* Actual inherited R7 bleeder, not an ideal powered-off rail sink.
+Rcarrier7 bus33 0 100
+Rmodel_C9 bus33 C9_series_r 0.3
+Lmodel_C9 C9_series_r C9_body 10n
+C9 C9_body 0 2.2e-05
+Rload5 bus5 0 10000
+Vsensor flex_12v 0 12
+D212 flex_12v flex_bias DFEED
+D213 0 flex_input_mid DFEED
+R155 flex_bias flex_pull_mid 750.0
+R156 flex_pull_mid flex_pull_mid2 750.0
+R157 flex_raw flex_input_mid 27400.0
+R158 flex_input_mid flex_in 24900.0
+R159 flex_in 0 4990.0
+R160 flex_cmp flex_in 330000.0
+R161 rail5 flex_ref 100000.0
+R162 flex_ref 0 4990.0
+R163 rail33 flex_cmp 2200.0
+R164 flex_cmp gpio 4700.0
+R165 gpio 0 47000.0
+C158 flex_input_mid 0 4.7e-11
+C159 flex_ref 0 1e-08
+Rmodel_C160 rail5 C160_series_r 0.1
+Lmodel_C160 C160_series_r C160_body 10n
+C160 C160_body 0 1e-07
+R166 flex_pull_mid2 flex_raw 750.0
+Rmodel_C164 rail33 C164_series_r 0.1
+Lmodel_C164 C164_series_r C164_body 10n
+C164 C164_body 0 1e-07
+Craw_shunt flex_raw 0 500p
+Ileak flex_raw 0 10u
+Ibiasp 0 flex_in 25n
+Ibiasn 0 flex_ref 25n
+Bclamp_leak flex_input_mid 0 I=min(max(v(flex_input_mid)/.01,0),1)*0u
+Ccomparator_input flex_in 0 5p
+Ccomparator_output flex_cmp 0 15p
+Igpio_leak gpio 0 0u
+Vwave wave 0 PULSE(0 1 2m 1e-08 1e-08 0.003 0.01)
+Ssensor flex_raw 0 wave 0 SENSOR
+Bdecision decision 0 V=ternary_fcn(v(rail5)>2,ternary_fcn(v(flex_in)>v(flex_ref)+0m,0,1),0)
+Bdelay decision delayed I=(v(decision)-v(delayed))/ternary_fcn(v(decision)>v(delayed),1875.5035531556525,1875.5035531556525)
+Cdelay delayed 0 1n
+Boutput flex_cmp 0 I=ternary_fcn(v(delayed)>.5, max(v(flex_cmp)-0.15,0)/30,0)
+Cmodule gpio 0 10p
+* Generic GPIO protection equivalents; no real unpowered-chip model.
+.model DGPIO D(IS=1e-12 N=1 RS=10 CJO=5p)
+Dgpiohi gpio module33 DGPIO
+Dgpiolo 0 gpio DGPIO
+* Nonideal local branches are authored fixtures, not extracted interconnect.
+* Source33 is an independent Thevenin equivalent, not an LD1117 loop/dropout model.
+* CPU operation and GPIO transfer thresholds during rail changes are assumed.
+Rmodel_branch_rail5 bus5 branch_rail5 0.05
+Lmodel_branch_rail5 branch_rail5 rail5 20n
+Rmodel_branch_rail33 bus33 branch_rail33 0.05
+Lmodel_branch_rail33 branch_rail33 rail33 20n
+Rmodel_branch_module33 bus33 branch_module33 0.05
+Lmodel_branch_module33 branch_module33 module33 20n
+Rmodel_branch_adc_ref bus33 branch_adc_ref 0.05
+Lmodel_branch_adc_ref branch_adc_ref adc_ref 20n
+Rmodel_branch_rgb33 bus33 branch_rgb33 0.05
+Lmodel_branch_rgb33 branch_rgb33 rgb33 20n
+Rmodel_C5 bus5 C5_series_r 0.3
+Lmodel_C5 C5_series_r C5_body 10n
+C5 C5_body 0 2.2e-05
+Rmodel_C6 bus5 C6_series_r 0.3
+Lmodel_C6 C6_series_r C6_body 10n
+C6 C6_body 0 2.2e-05
+Rmodel_C13 module33 C13_series_r 0.3
+Lmodel_C13 C13_series_r C13_body 10n
+C13 C13_body 0 1e-05
+Rmodel_C14 module33 C14_series_r 0.1
+Lmodel_C14 C14_series_r C14_body 10n
+C14 C14_body 0 1e-07
+Rmodel_C28 adc_ref C28_series_r 0.1
+Lmodel_C28 C28_series_r C28_body 10n
+C28 C28_body 0 1e-07
+Rmodel_C29 adc_ref C29_series_r 0.1
+Lmodel_C29 C29_series_r C29_body 10n
+C29 C29_body 0 1e-06
+Rmodel_C163 rgb33 C163_series_r 0.3
+Lmodel_C163 C163_series_r C163_body 10n
+C163 C163_body 0 1e-05
+Imodel_module module33 0 .04
+Imodel_comp rail5 0 1m
+Imodel_adc adc_ref 0 300u
+Imodel_rgb rgb33 0 2m
+* Input-current mirror only; regulator dynamics/efficiency are not modeled.
+Bmodel_reg_input bus5 0 I=max(-i(V33),0)
+* Constant F2 resistance probes cold/post-trip values, not thermal/trip behavior.
+Rmodel_F2 bus5 sensor5 4.5
+Rmodel_C11 sensor5 C11_series_r 0.1
+Lmodel_C11 C11_series_r C11_body 10n
+C11 C11_body 0 1e-06
+Imodel_sensors sensor5 0 0.02
+R36 sensor5 adc7 22000
+R37 adc7 0 33000
+* ADC pin/hold equivalent follows DS21298E Fig4-1 typical quantities.
+Cmodel_adc_pin adc7 0 7p
+.model DADC D(IS=1e-12 N=1 RS=10 CJO=5p)
+Dmodel_adc_hi adc7 adc_ref DADC
+Dmodel_adc_lo 0 adc7 DADC
+.model ADC_SAMPLE SW(RON=1000 ROFF=1e12 VT=.5 VH=0)
+Cmodel_adc_sample adc_hold 0 20p
+Vmodel_previous adc_previous 0 1.0769230769230769
+Bmodel_previous_control previous_control 0 V=1-v(sample7)
+Smodel_previous adc_previous adc_hold previous_control 0 ADC_SAMPLE
+Smodel_sample adc7 adc_hold sample7 0 ADC_SAMPLE
+* Fault witness: C27 and its authored ESR/ESL branch are physically open.
+* Fixed true MAP50kPa/TPS10pct at nominal5V. Ideal sensor outputs;
+* their loaded board22k/33k/10nF paths below are simulated.
+Bmodel_map MAP 0 V=.42*v(sensor5)
+Bmodel_tps TPS 0 V=.18*v(sensor5)
+* Optional R32/R33 are fitted in this synthetic NTC fixture only.
+R20 MAP map_adc 22000
+R21 map_adc 0 33000
+Rmodel_C20 map_adc C20_series_r 0.1
+Lmodel_C20 C20_series_r C20_body 10n
+C20 C20_body 0 1e-08
+R22 TPS tps_adc 22000
+R23 tps_adc 0 33000
+Rmodel_C21 tps_adc C21_series_r 0.1
+Lmodel_C21 C21_series_r C21_body 10n
+C21 C21_body 0 1e-08
+R24 CLT clt_adc 22000
+R25 clt_adc 0 33000
+Rmodel_C22 clt_adc C22_series_r 0.1
+Lmodel_C22 C22_series_r C22_body 10n
+C22 C22_body 0 1e-08
+R26 IAT iat_adc 22000
+R27 iat_adc 0 33000
+Rmodel_C23 iat_adc C23_series_r 0.1
+Lmodel_C23 C23_series_r C23_body 10n
+C23 C23_body 0 1e-08
+R32 sensor5 CLT 2490
+Rmodel_ntc2 CLT 0 1086.6707693930255
+R33 sensor5 IAT 2490
+Rmodel_ntc3 IAT 0 10000
+Vmodel_sample sample7 0 PULSE(0 1 2000u 1n 1n 2.999u 5000u)
+Cmodel_coupling adc7 flex_in 5p
+.control
+set wr_singlescale
+set wr_vecnames
+set numdgt=16
+tran 0.25u 220m 0 0.25u
+wrdata values.txt v(wave) v(flex_raw) v(flex_in) v(flex_ref) v(flex_cmp) v(gpio) v(rail33) v(rail5) v(flex_bias) v(flex_pull_mid) v(flex_input_mid) i(Vsensor) i(V5) i(V33) v(flex_pull_mid2) v(module33) v(bus5) v(bus33) v(adc7) v(adc_hold) v(adc_ref) v(sample7) v(sensor5) v(map_adc) v(tps_adc) v(clt_adc) v(iat_adc)
+quit
+.endc
+.end

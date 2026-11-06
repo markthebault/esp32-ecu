@@ -1,0 +1,58 @@
+{
+  "scope": "Conservative 2D body/pad projection audit, not a physical-fit certificate.\n\nBack-side Fab bodies must not overlap another front-side solder pad. Separately\nreport back-component lead ends projected beneath front bodies, requiring the\ndocumented trim/inspection order and actual lead/body/standoff measurements.\n",
+  "board_sha256": "dd12136d7c7dec1464d7119dcd1fefe8740fa3743c33520e7c524a3910bb3d2e",
+  "closest_front_solder_pad_per_back_body": [
+    {
+      "back": "R14",
+      "front_pad": "U1.5",
+      "fab_body_to_pad_box_mm": 1.2800000000000011
+    },
+    {
+      "back": "C5",
+      "front_pad": "U5.2",
+      "fab_body_to_pad_box_mm": 0.9499999999999993
+    },
+    {
+      "back": "C10",
+      "front_pad": "U1.4",
+      "fab_body_to_pad_box_mm": 1.5300000000000011
+    },
+    {
+      "back": "C3",
+      "front_pad": "U4.14",
+      "fab_body_to_pad_box_mm": 0.8999999999999986
+    },
+    {
+      "back": "C2",
+      "front_pad": "U3.6",
+      "fab_body_to_pad_box_mm": 0.38000000000000256
+    },
+    {
+      "back": "C1",
+      "front_pad": "U2.6",
+      "fab_body_to_pad_box_mm": 0.38000000000000256
+    },
+    {
+      "back": "C4",
+      "front_pad": "U1.2",
+      "fab_body_to_pad_box_mm": 1.3100000000000023
+    },
+    {
+      "back": "R13",
+      "front_pad": "U1.6",
+      "fab_body_to_pad_box_mm": 1.3800000000000097
+    }
+  ],
+  "lead_ends_under_front_body_projection": [
+    {
+      "back_lead": "C4.1",
+      "front_body": "U1"
+    },
+    {
+      "back_lead": "C4.2",
+      "front_body": "U1"
+    }
+  ],
+  "back_body_overlaps_front_pad": false,
+  "qualification": "Nominal library2D projections only. Fab bodies are not exact selected part envelopes; solder bulge, lead trim, body stand-off, height and case clearance remain unmeasured."
+}

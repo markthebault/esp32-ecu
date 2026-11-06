@@ -1,0 +1,40 @@
+{
+  "findings": [
+    {
+      "review": "telemetry",
+      "issue": "Schema1-only protocol documentation",
+      "resolution": "docs/espnow-engine.md describes exact schema1/2 selection, per-peer fallback, current/history17 and unchanged scalar232byte payload; upgrade-needed is ECU/web diagnostics only."
+    },
+    {
+      "review": "telemetry",
+      "issue": "Fault17 and downgrade tests",
+      "resolution": "Committed test checks old batch/sequential current17 and historical17 independently, plus native matrix and2->1 negotiation; independent old receiver/464 byte mutations retained."
+    },
+    {
+      "review": "telemetry",
+      "issue": "Mixed-peer UI coverage",
+      "resolution": "Installed Chrome synthetic schema1/schema2 peer fixture shows exactly one upgrade warning; transport fallback remains source-reviewed, no actual RF test."
+    },
+    {
+      "review": "execution",
+      "issue": "Initial audit conflated runtime faults and instantaneous loss detection",
+      "resolution": "Final audit checks exact per-runtime cause and native accepted-crank timeout; raw initial cases retained. No ECU limits changed."
+    },
+    {
+      "review": "execution",
+      "issue": "Low RPM watchdog test used declared drop instead of last accepted edge",
+      "resolution": "12-test suite records actual(1685000,40000), asserts no rise at/after1725000 or edge later; native getters only expose existing decoder state."
+    },
+    {
+      "review": "storage",
+      "issue": "No storage/CAS blocker reproduced",
+      "resolution": "Native OOM, retained files/maps, old005 units/pages/live ABI and actual Chrome stale-editor tests retained."
+    },
+    {
+      "review": "root policy crosscheck",
+      "issue": "CMake compile database does not expose extra PlatformIO SCons macros",
+      "resolution": "Actual web ELF policy literals are inhibited; bench ELF retains DUMMY LOADS ONLY. Separate corrected independent policy audit supersedes the erroneous false bench field. Original reports remain exact history."
+    }
+  ],
+  "physical_qualification": false
+}

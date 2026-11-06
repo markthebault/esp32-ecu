@@ -1,0 +1,152 @@
+{
+  "reviewed_at_utc": "2026-11-03T17:27:58.079539+00:00",
+  "scope": "Independent read-only implementation recheck of schema2/native canonicalizer, host/target storage integration, own protocol002, MSQ001/002 and browser imports. No production edits or child agents.",
+  "status": "No remaining storage/protocol blocker identified in inspected implementation after parent fixes.",
+  "blockers": [],
+  "source_hashes_sha256": {
+    "firmware/include/ecu/engine_json.hpp": "9a40e4b413a23be91f62d9cc9d0e811e2b574e6f41aa06a1c55eb47049ae43ac",
+    "firmware/include/ecu/json.hpp": "3330c7a4fa23042c5c38332737b08843b111b39bf31f6a87bf2b16a8af88a5df",
+    "firmware/include/ecu/engine_storage.hpp": "1d9a6d15142a50428d33ff97e175f83a6d2f1e94c88f3328d6ca4d12f30e7a6c",
+    "firmware/main/engine_service.cpp": "8d4eb23b4c14e811260a0a7df1aced4f8e13bd002303dfc34101eaed5880c37d",
+    "tools/engine_bridge.cpp": "0922c39e1f417a682243f52a583d45b5cc0afc93c88b32e14f42e3dce9a081b3",
+    "tools/engine_runtime.py": "09753140284f6c0d52590cc761b7f33805c4085af5a13ddeca8a45e1e05717f9",
+    "tools/engine_protocol.py": "4b896a27a4e80147fbb8da2173e6349ea89aacde3463e74dc758a94a5e626c06",
+    "tools/engine_msq.py": "a9a502195c76866306e55770d5ddd0a78888d2898f76c29d226c3cc83f88ccf5",
+    "scripts/generate_tunerstudio_ini.py": "0106b1f71c25b76d451d8e3bf3f9e5494662de044b3de8c32330a371a5bed1ee",
+    "web/index.html": "c96a8c6827302527ab2484485545454a9d6fdbf0cbb484a89bd4251102175f17",
+    "tuning/esp32-ecu-sil.ini": "ea2f672628670235daf2e95b5bab9b7b1cf63eab92d9db30c6331c35c94d8a43",
+    "tuning/esp32-ecu-sequential.ini": "c7477f7e202b5e2720e5f699e3a4d098b393a97e00ba7bfeaa6906ca7a615cc5"
+  },
+  "independent_probe_build": {
+    "directory": "/tmp/ecu-storage-final-4tj16gg5",
+    "source": "Actual tools/engine_bridge.cpp with private review wrappers; pinned local ESP-IDF cJSON; compiled to isolated probe.so. No shared .cache/engine libraries were rebuilt.",
+    "commands": [
+      "python3 /tmp/ecu-storage-final-4tj16gg5/probe.py",
+      "python3 /tmp/ecu-storage-final-4tj16gg5/extra.py",
+      "python3 /tmp/ecu-storage-final-4tj16gg5/size.py",
+      "python3 /tmp/ecu-storage-final-4tj16gg5/protocol-msq.py"
+    ]
+  },
+  "probes": {
+    "nul_rejected": {
+      "baseline": true,
+      "strategy_alias": false,
+      "physical_alias": false,
+      "key_alias": false
+    },
+    "schema_matrix": {
+      "legacy_exact": true,
+      "canonical_exact": true,
+      "legacy_with_timing": false,
+      "legacy_sequential": false,
+      "v2_missing_timing": false,
+      "unknown_schema": false,
+      "duplicate_order": false
+    },
+    "allocation_sweeps": {
+      "1": {
+        "failures": 1976,
+        "successes": 1224,
+        "leaks": 0
+      },
+      "2": {
+        "failures": 1983,
+        "successes": 1217,
+        "leaks": 0
+      }
+    },
+    "configure_failed_context_unchanged": 1977,
+    "legacy_msq": {
+      "schema": 2,
+      "strategy": "batch_wasted_4cyl",
+      "timing": {
+        "firing_order": [
+          1,
+          3,
+          4,
+          2
+        ],
+        "injection_end_deg": 540,
+        "cam_sync_deg": 450,
+        "cam_window_deg": 20
+      },
+      "signature001_present": true
+    },
+    "msq_002_roundtrip": {
+      "equal": true,
+      "order_types": [
+        "int",
+        "int",
+        "int",
+        "int"
+      ],
+      "pack_pages": "ok"
+    },
+    "file_revision_failures": "legacy1/canonical2 load preserves bytes; explicit save increments once; restart and stale client checked; prepare and persistence failures leave runtime unchanged",
+    "wire": "HEAD page1 prefix[0:272], map pages, revision268, appended272..291, old telemetry prefix76/new100 all verified"
+  },
+  "python_and_browser_probes": {
+    "python_configure_memoryerror": {
+      "native_context_changed": false,
+      "python_tune_unchanged": true
+    },
+    "browser_import_schema": {
+      "0": "Unsupported engine schema version.",
+      "2": "accepted",
+      "3": "Unsupported engine schema version.",
+      "999": "Unsupported engine schema version.",
+      "1.5": "Unsupported engine schema version."
+    }
+  },
+  "near_limit_record": {
+    "input_bytes": 16347,
+    "native_valid": true,
+    "canonical2_bytes": 0,
+    "file_unchanged": true,
+    "storage_ok": false,
+    "message": "Saved engine tune invalid; file preserved, defaults shadow-only",
+    "active_schema": 2,
+    "save_response": 503
+  },
+  "protocol_and_required_msq_fields": {
+    "msq_missing_required_rejected": [
+      "engineStrategy",
+      "injection_end_deg",
+      "cam_sync_deg",
+      "cam_window_deg",
+      "fireOrder1",
+      "fireOrder2",
+      "fireOrder3",
+      "fireOrder4"
+    ],
+    "protocol": "Q002/F002 distinct; r76/r100/extension and bounds; revision tamper/enum/order invalid burns rejected"
+  },
+  "issues_reported_and_now_rechecked": [
+    "MSQ002 firing order returned floats and could not pack into U8 wire fields; parent now returns canonical runtime.tune. Verified integer order values and pages(decoded) success.",
+    "Browser accepted unsupported numeric schema values; exact schema equality now rejects0,1.5,3,999 and accepts2.",
+    "Target allocated document after persistence; now constructs next_document before save and swaps it after success.",
+    "Python configure applied native tune before JSON allocation; now json.loads occurs first. Injected MemoryError leaves both native context and Python tune unchanged.",
+    "Prior escaped-NUL aliases now rejected; literal escape scanning respects backslashes. Native cJSON failure sweep and temporary-Tune configure show no leaked allocations or partial native state."
+  ],
+  "nonblocking_notes": [
+    {
+      "topic": "Valid legacy record too large after schema upgrade",
+      "evidence": "A 16347-byte minified/cJSON-encoded schema1 record is valid but adding timing exceeds 16384. Native canonicalize fails; host keeps file byte-for-byte, disables saving with 503, and uses schema2 defaults. This matches the stated preservation/error policy.",
+      "artifact": "/tmp/ecu-storage-final-4tj16gg5/near-limit-legacy.json",
+      "diagnostic": "Host message calls this valid record invalid. Target now maps any post-load canonicalization failure to ESP_ERR_NO_MEM, including size overflow. Prefer a neutral load/migration-failure message mentioning encoded-size/allocation limits; avoid implying the saved bytes were corrupt."
+    },
+    {
+      "topic": "Freeze legacy migration defaults and layout metadata",
+      "evidence": "Current001 import produces batch plus expected timing and accepts the genuine unnumbered metadata page. Python import derives its new timing/strategy from current mutable DEFAULT and field lists from current default object order.",
+      "recommendation": "Keep explicit fixed legacy batch/timing defaults and freeze old field ordering, or retain golden compatibility tests that fail if future default edits change001 migration or legacy byte offsets."
+    }
+  ],
+  "static_checks": [
+    "engine_storage retains original legacy string on default partition, copies its original schema1 bytes during legacy-partition migration, and does not receive canonical2 for an automatic rewrite. Target canonicalizes only the in-memory document after load.",
+    "Host load preserves raw original file bytes and revision; save persists canonical2 and increments once. Runtime is prepared before filesystem mutation. Target prebuilds the document then updates active state only after successful persistence.",
+    "Storage errors disable later saves. A failed persistence operation must not be described as guaranteed flash/file rollback: NVS remove failure or directory fsync failure can leave the new record written.",
+    "Q advertises002 identity while F retains transport identifier002. Page1 revision268 and old272-byte prefix are unchanged; appended bytes272..291 and the24-byte telemetry extension align with the generated INI.",
+    "Original001 INI and genuine MSQ fixture remain available; no foreign identity alias was added."
+  ],
+  "limitations": "Native/API/filesystem-model evidence only. No target flash, raw-corruption preservation, brownout, endurance, physical flash capacity, or power-loss qualification. General C++ heap exhaustion recovery is not established by checked cJSON allocator tests; target exceptions remain disabled. Parent owns final dedicated regressions and target build."
+}

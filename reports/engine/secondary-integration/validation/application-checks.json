@@ -1,0 +1,99 @@
+{
+  "passed": true,
+  "scope": "Actual isolated offline vendor applications; synthetic controller file fixtures, not coupled plant acceptance",
+  "tunerstudio": {
+    "version": "MS Lite3.3.01",
+    "identity": "ESP32ECU DEV 009 INHIBITED",
+    "passed": true,
+    "complete_f32_page_exact": true,
+    "page_bytes": 8192,
+    "sha256": "1862ab1112e47591d353f4db0061328883a5cd561787879b6b78bc1e0024910e",
+    "edits": {
+      "fuel_threshold": [
+        20.25,
+        23.75
+      ],
+      "fuel_debounce_ms": [
+        27.5,
+        22.5
+      ],
+      "fuel_cell0": [
+        123.125,
+        124.5
+      ],
+      "spark_threshold": [
+        65.5,
+        64.25
+      ],
+      "spark_cell0": [
+        -2.5,
+        -3.75
+      ]
+    },
+    "definition_sha256": "e9e581971c563fd96603327a13ac925ed7ce31b65f454dcc6a2662b6c95f34a0",
+    "file_sha256": "67e02a806284298d29c57d0292722649cec0a11649284b7004f508c5ebe4497d",
+    "definition_parser_errors": 0,
+    "unit_warnings": 0,
+    "limits": "No online ECU acceptance, USB hardware or flashing; startup JDK reflective-access diagnostic is outside the INI",
+    "base_revision_supplied": 37,
+    "origin_omitted_by_application": true
+  },
+  "megalogviewer": {
+    "version": "HD Lite4.6.14",
+    "files": {
+      "engine188.msl": {
+        "fields": 188,
+        "rows": 120,
+        "sha256": "5399197823b9b76e844962b9aeebe13fb404601e72d75428ea4feebded82d88e"
+      },
+      "direct145.msl": {
+        "fields": 145,
+        "rows": 120,
+        "sha256": "514b13f28fdd9dd1d8a2019ce24b0cd9b254c857faab0612990a37cbab6b6e61"
+      },
+      "ui/browser006.msl": {
+        "fields": 188,
+        "rows": 2,
+        "sha256": "989d2ad26b564d64d41d4321f1117efd1d583be720229f51d7eab52ede17066c"
+      }
+    },
+    "plotted_fields": [
+      "SecFuelActive",
+      "SecFuelInputQualified",
+      "SecSparkActive",
+      "SecFuelReason",
+      "SecFuelPrimary",
+      "SecFuelSecondary",
+      "SecFuelCombined",
+      "SecFuelInputSource",
+      "SecSparkPrimaryCorrected",
+      "SecSparkSecondary",
+      "SecSparkCombined",
+      "SecSparkReason"
+    ],
+    "limits": "NaN remains unknown; vendor maxima can displayNaN. Built-in calculated fields and large integer identity precision are not qualified. Both120-row files are fixed-input synthetic native probes, not a coupled engine trajectory."
+  },
+  "owned_applications_closed": true,
+  "owned_processes": [
+    {
+      "kind": "java_pid",
+      "pid": 1273948,
+      "closed": true
+    },
+    {
+      "kind": "xvfb_pid",
+      "pid": 1273945,
+      "closed": true
+    },
+    {
+      "kind": "java_pid",
+      "pid": 1273508,
+      "closed": true
+    },
+    {
+      "kind": "xvfb_pid",
+      "pid": 1273505,
+      "closed": true
+    }
+  ]
+}

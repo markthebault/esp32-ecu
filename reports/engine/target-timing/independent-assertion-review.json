@@ -1,0 +1,351 @@
+{
+  "scope": "Read-only independent source/ELF follow-up. No production source edits, no child agents, no hardware execution.",
+  "sdk": {
+    "version": "ESP-IDF 5.5.0, PlatformIO framework-espidf package 3.50500.0",
+    "source_sha256": {
+      "/home/mark/.platformio/packages/framework-espidf/components/newlib/src/assert.c": "42d25f58eae3d2b315d6e3badc291cd1423a08fcf97e16fe2eee944ad8a2397d",
+      "/home/mark/.platformio/packages/framework-espidf/components/newlib/src/newlib.lf": "04998ea80aa77ece31533a02ed184a07405ee8a93f4ddc39357e9a0140cb009a",
+      "/home/mark/.platformio/packages/framework-espidf/components/esp_hw_support/include/esp_memory_utils.h": "44795245de7dd1f2da399f5316cebc5dac8aa98a6eba2ce0d814af5937d4974c",
+      "/home/mark/.platformio/packages/framework-espidf/components/esp_hw_support/include/spinlock.h": "97673e8d7495c206bc4339c677c28912c5579bbf4d8e3f25ecbd929c286789fc",
+      "/home/mark/.platformio/packages/framework-espidf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c": "747f3b861ae4a4ccb74e603fece20866be47e2d1f526df9c3f7c47cf09916cda",
+      "/home/mark/.platformio/packages/framework-espidf/components/freertos/FreeRTOS-Kernel/queue.c": "6794db86ab086372ea2789d043d83e0b1efd0534a0c0deb5d28cffb342feaa0e",
+      "/home/mark/.platformio/packages/framework-espidf/components/freertos/FreeRTOS-Kernel/tasks.c": "193c3d8379acc847097632da8e6d4dd2ee0bf8e069d78979d68dd26b653d48df",
+      "/home/mark/.platformio/packages/framework-espidf/components/esp_system/crosscore_int.c": "1384237adc8a25b4db825d371b0ee0f805888079e2e142a873df6e24f1627355",
+      "/home/mark/.platformio/packages/framework-espidf/components/spi_flash/cache_utils.c": "82ced66b0757bfb57163b6a351421b572b966c87b9d8dd7d3a8a617319031112",
+      "/home/mark/.platformio/packages/framework-espidf/components/esp_mm/esp_cache_utils.c": "d8dbb3de2e500531069d9a2dc20f3fe167680f63a23f13af8a335d9a4c0ed907",
+      "/home/mark/.platformio/packages/framework-espidf/components/hal/cache_hal.c": "afd1f1447f107c577e785c94a9ade52b7c0b59d2b6ebd385601bcdd1a8999641",
+      "/home/mark/.platformio/packages/framework-espidf/components/esp_system/panic.c": "abfdea228b82631976d9b1a20924512d6087780576c0353c3edfe9b0c5e61c1d",
+      "/home/mark/.platformio/packages/framework-espidf/components/esp_system/port/panic_handler.c": "584679511e33c4dbaca26366866741cf9c56ac2ad4c825e718710c17ff3773e5",
+      "/home/mark/.platformio/packages/framework-espidf/components/esp_system/port/esp_system_chip.c": "840441d902707a1e1e15ea74dba4e77003cf37b3530acfbd6bbf58e8c12e9ed9",
+      "/home/mark/.platformio/packages/framework-espidf/components/esp_system/port/soc/esp32s3/cache_err_int.c": "6056c340f5ace1b7f4e969c0f983c69109838e1208147f31e39e04c7ff2609c5",
+      "/home/mark/.platformio/packages/framework-espidf/components/esp_system/linker.lf": "e209cb47d2ebaf958817db549cd82ae184cfb55ce75ec6ce1d3f589bb64e6d8e",
+      "/home/mark/.platformio/packages/framework-espidf/components/soc/esp32s3/include/soc/soc.h": "0e28401a641d92aece3c61ad29ae9b18e9cc0c1a0ec7131949c4a585e40881a9",
+      "/home/mark/.platformio/packages/framework-espidf/components/soc/esp32s3/include/soc/soc_caps.h": "dc510583003c41e74d8a2d759c920037a18297c531ef62c5d53f6cf1ab146690",
+      "/home/mark/.platformio/packages/framework-espidf/package.json": "1cc05e4ea172de6be2e6b961994de42a0f7433406619f6474811b11066718908"
+    }
+  },
+  "conclusion": "All 63 flagged flash-address values per current ELF are assertion-only metadata at 21 immediate __assert_func call sites. No flagged site dereferences those pointers. The reviewed SDK formats these DROM arguments safely when its cache predicate reports disabled, using internal replacement strings/stack text before first strlen/memcpy. The later fatal exception path calls cache restoration before executing remaining flash code; this is not an unconditional cache-independent panic path or physical fail-low proof.",
+  "builds": {
+    "compact_n16r8_web": {
+      "elf_sha256": "54283d2003a92574114a71c4eb1e597de39425fcef83399715cdfcac9e712c94",
+      "elf_copy": ".cache/engine/target-independent-review/assert-selected.elf",
+      "sdkconfig_sha256": "5f70ef37d531d5c262738ad0b5df3bca52039b69668a555302243a97436950e8",
+      "raw_load_count": 63,
+      "assertion_only_load_count": 63,
+      "assertion_callsite_count": 21,
+      "unclassified_load_count": 0,
+      "caller_counts": {
+        "vPortExitCritical": 12,
+        "xPortEnterCriticalTimeout": 18,
+        "xQueueGenericSendFromISR": 9,
+        "xTaskRemoveFromEventList": 6,
+        "prvIsYieldRequiredSMP": 3,
+        "esp_crosscore_int_send": 3,
+        "prvNotifyQueueSetContainer": 6,
+        "xTaskPriorityDisinherit": 6
+      },
+      "literal_fetches_outside_iram": [],
+      "application_flash_pointers": [],
+      "parent_bounded_audit_passed": true,
+      "functions": {
+        "panic_enable_cache": {
+          "address": "0x4037a2a0",
+          "size": 32,
+          "section": ".iram0.text",
+          "bytes_sha256": "ae9ba929bcbec0ad38220f558cafd2328e7eb8a3c89e1f6ec02cf6af6a5fde8f"
+        },
+        "panicHandler": {
+          "address": "0x4037a2c0",
+          "size": 18,
+          "section": ".iram0.text",
+          "bytes_sha256": "07ca0e7682ebb9056c4630b08b4ab2219cc8d7685bbf33381b785c794c15a369"
+        },
+        "xt_unhandled_exception": {
+          "address": "0x4037a2d4",
+          "size": 18,
+          "section": ".iram0.text",
+          "bytes_sha256": "757faae0fc8b80826c689d4c50a0cbf96f45b87c497d34f021394cb0eb2f0a81"
+        },
+        "esp_ipc_isr_stall_abort": {
+          "address": "0x4037a2e8",
+          "size": 15,
+          "section": ".iram0.text",
+          "bytes_sha256": "75549e7b21b500ff095cde82f252f203e601c349e39bde368dc01e9e7aee1303"
+        },
+        "panic_abort": {
+          "address": "0x4037a8f8",
+          "size": 22,
+          "section": ".iram0.text",
+          "bytes_sha256": "df932d8de053c3d057fbf48b57787951365f8323f77954221d17f2bcad96cc87"
+        },
+        "spi_flash_restore_cache": {
+          "address": "0x4037b600",
+          "size": 8,
+          "section": ".iram0.text",
+          "bytes_sha256": "d5ce7147592e906d268cedc64fe25429152a20577d9937d29abe491549628575"
+        },
+        "spi_flash_enable_cache": {
+          "address": "0x4037b6d4",
+          "size": 15,
+          "section": ".iram0.text",
+          "bytes_sha256": "782a7f1382cbd70766f06f164b74be1c089013093be7af22f3d0803296321f62"
+        },
+        "spi_flash_cache_enabled": {
+          "address": "0x4037b6e4",
+          "size": 17,
+          "section": ".iram0.text",
+          "bytes_sha256": "53c41c8a55d63419e044004b36e0a6d9e8fe1029a266a881c460c6d6e2eee02f"
+        },
+        "esp_cache_resume_ext_mem_cache": {
+          "address": "0x40381d28",
+          "size": 15,
+          "section": ".iram0.text",
+          "bytes_sha256": "bf7b2bffae9ce22935e5312c7e249a7057905bbaf43a13f55d7e40ed9b3264ee"
+        },
+        "esp_system_abort": {
+          "address": "0x40382c34",
+          "size": 8,
+          "section": ".iram0.text",
+          "bytes_sha256": "5641e0d2446352120d737c31e934b586ec815be83d7551ffb88cf383af0cf6e9"
+        },
+        "cache_hal_resume": {
+          "address": "0x40386a88",
+          "size": 106,
+          "section": ".iram0.text",
+          "bytes_sha256": "5af2eaa31559b17af8a558f0de5846e84ba81d81d135b94e727df40528d60a94"
+        },
+        "cache_hal_is_cache_enabled": {
+          "address": "0x40386af4",
+          "size": 78,
+          "section": ".iram0.text",
+          "bytes_sha256": "9e0c8da14b4c7eeb306b6f6f320ef2556ec46b68f6c67d4a10515b49ce8dc084"
+        },
+        "ra_to_str": {
+          "address": "0x4038bdd0",
+          "size": 47,
+          "section": ".iram0.text",
+          "bytes_sha256": "57686d75ae86d508e88da3325fc8f89676e4a460c8b05b4cbd968f6e58148072"
+        },
+        "__assert_func": {
+          "address": "0x4038be00",
+          "size": 232,
+          "section": ".iram0.text",
+          "bytes_sha256": "8e04cfe055aba5a03b1569b2adb5acb255091d598851d6b50f2c23274a2ec14b"
+        },
+        "panic_handler": {
+          "address": "0x4201fb6c",
+          "size": 244,
+          "section": ".flash.text",
+          "bytes_sha256": "b4d28a12045f3509cdd61186bb08b954fb1b1efd20648985d66bbfb12b2dab13"
+        },
+        "esp_cache_err_acs_save_and_clr": {
+          "address": "0x420203a0",
+          "size": 176,
+          "section": ".flash.text",
+          "bytes_sha256": "d410268ebbd775f73b13dc5655d79a3a679011d4af6295164399877fac3d94bf"
+        },
+        "esp_panic_handler": {
+          "address": "0x42020948",
+          "size": 305,
+          "section": ".flash.text",
+          "bytes_sha256": "e1e404c77372c78fb54b20867475c98920de6228ec2e27de1f820f03db6f297a"
+        }
+      },
+      "classification_artifact": ".cache/engine/target-independent-review/assert-selected-closure/assertion-load-classification.json",
+      "fatal_disassembly_artifact": ".cache/engine/target-independent-review/assert-selected-fatal-path-disassembly.txt"
+    },
+    "compact_a3_timing_bench": {
+      "elf_sha256": "c6350eabc0cd603c582d2f088c3fd28198720dc79f19e4472a4f773aadbae582",
+      "elf_copy": ".cache/engine/target-independent-review/assert-dummy.elf",
+      "sdkconfig_sha256": "b5cb80264f595019e6c879a6120e7ee9b8bc002c566d31fb1898bd48439af51d",
+      "raw_load_count": 63,
+      "assertion_only_load_count": 63,
+      "assertion_callsite_count": 21,
+      "unclassified_load_count": 0,
+      "caller_counts": {
+        "vPortExitCritical": 12,
+        "xPortEnterCriticalTimeout": 18,
+        "xQueueGenericSendFromISR": 9,
+        "xTaskRemoveFromEventList": 6,
+        "prvIsYieldRequiredSMP": 3,
+        "esp_crosscore_int_send": 3,
+        "prvNotifyQueueSetContainer": 6,
+        "xTaskPriorityDisinherit": 6
+      },
+      "literal_fetches_outside_iram": [],
+      "application_flash_pointers": [],
+      "parent_bounded_audit_passed": true,
+      "functions": {
+        "panic_enable_cache": {
+          "address": "0x4037a780",
+          "size": 32,
+          "section": ".iram0.text",
+          "bytes_sha256": "f92d4a1db32b652fa173e3535a2cc437b954a33b76cf4c0857c9199532cce39b"
+        },
+        "panicHandler": {
+          "address": "0x4037a7a0",
+          "size": 18,
+          "section": ".iram0.text",
+          "bytes_sha256": "48c742c3970f184f02fcf5338155d9525bfe712651d9e2815796f95dfccc5af9"
+        },
+        "xt_unhandled_exception": {
+          "address": "0x4037a7b4",
+          "size": 18,
+          "section": ".iram0.text",
+          "bytes_sha256": "584a717271968aa02f9a060635477cc2d731cb6c49c03fe61c609920be4e1332"
+        },
+        "esp_ipc_isr_stall_abort": {
+          "address": "0x4037a7c8",
+          "size": 15,
+          "section": ".iram0.text",
+          "bytes_sha256": "301e1df9fc734271533463221f8b2f64dbedbad842d0f3a371ad811c58747e27"
+        },
+        "panic_abort": {
+          "address": "0x4037ad78",
+          "size": 22,
+          "section": ".iram0.text",
+          "bytes_sha256": "0ff59dcfb66593d13e7ea8c2e0eaab1acf8ec8edef402ae97fd957bb0e0f54a8"
+        },
+        "spi_flash_restore_cache": {
+          "address": "0x4037b87c",
+          "size": 8,
+          "section": ".iram0.text",
+          "bytes_sha256": "fa0012a9d4e67d9e312bcf598470cb6ffea8dcf499174d4e159c92eab9e68f02"
+        },
+        "spi_flash_enable_cache": {
+          "address": "0x4037b950",
+          "size": 15,
+          "section": ".iram0.text",
+          "bytes_sha256": "782a7f1382cbd70766f06f164b74be1c089013093be7af22f3d0803296321f62"
+        },
+        "spi_flash_cache_enabled": {
+          "address": "0x4037b960",
+          "size": 17,
+          "section": ".iram0.text",
+          "bytes_sha256": "4b2e037d5de6c19150a657318281504bc640bbdc39fe53b8f70fc084f5a6d9a1"
+        },
+        "esp_cache_resume_ext_mem_cache": {
+          "address": "0x4037e800",
+          "size": 15,
+          "section": ".iram0.text",
+          "bytes_sha256": "1de494be2d908c6e85b68a2f4c163077b5b0b7b9b77be1d32bd5a8a16043ab4c"
+        },
+        "esp_system_abort": {
+          "address": "0x4037ef10",
+          "size": 8,
+          "section": ".iram0.text",
+          "bytes_sha256": "db2cf69c258795f61cde99d0e680b6864eaf087c287bbe998c84ab9cc1563703"
+        },
+        "cache_hal_resume": {
+          "address": "0x4038254c",
+          "size": 106,
+          "section": ".iram0.text",
+          "bytes_sha256": "d8ae297d9fa1f4baf3ecb1e96e8be3ee455bc9866561d04c20363cc7b4bbfeb3"
+        },
+        "cache_hal_is_cache_enabled": {
+          "address": "0x403825b8",
+          "size": 78,
+          "section": ".iram0.text",
+          "bytes_sha256": "62bb7a3ff2206fcedc82730328d8d7ce20771622fd6c6a3280682594e9e8e244"
+        },
+        "ra_to_str": {
+          "address": "0x40386854",
+          "size": 47,
+          "section": ".iram0.text",
+          "bytes_sha256": "f47a3bac2cec407c02110205ccba359e011159b7ac4f77894180f98c0fc67468"
+        },
+        "__assert_func": {
+          "address": "0x40386884",
+          "size": 232,
+          "section": ".iram0.text",
+          "bytes_sha256": "f456042d2ed90305440bce91e0308e41d591443c16849cbf93df64263eb7401c"
+        },
+        "panic_handler": {
+          "address": "0x42015628",
+          "size": 232,
+          "section": ".flash.text",
+          "bytes_sha256": "044be3d73f87199ab4a3dcef06e9de0b08e9cba92bdad132bbe5fe1d074052e4"
+        },
+        "esp_cache_err_acs_save_and_clr": {
+          "address": "0x42015e44",
+          "size": 176,
+          "section": ".flash.text",
+          "bytes_sha256": "ec147d3ab9b63f822d45f3a7f525ea7831ec7df98d722bcd927bd2fe42b4b4b1"
+        },
+        "esp_panic_handler": {
+          "address": "0x420163ec",
+          "size": 301,
+          "section": ".flash.text",
+          "bytes_sha256": "b73a72f77c32438854280175b792c53155cce43174a2b705eaa8050b04e100fc"
+        }
+      },
+      "classification_artifact": ".cache/engine/target-independent-review/assert-dummy-closure/assertion-load-classification.json",
+      "fatal_disassembly_artifact": ".cache/engine/target-independent-review/assert-dummy-fatal-path-disassembly.txt"
+    }
+  },
+  "classification_method": {
+    "rule": "Require l32r destination a10/file, a12/func or a13/expr; follow at most 12 sequential decoded instructions to direct call8 __assert_func. Only argument-register l32r/movi and exact no-ops are permitted. Reject branches, dereferences, overwrites of the original argument register, other calls and wrong destination registers.",
+    "literal_semantics": "The l32r instruction reads an address value from an IRAM literal pool. A value in the DROM range is not itself a DROM read. Each observed pointer points to a NUL-terminated SDK assertion string in .flash.rodata.",
+    "callsite_source_check": "All 21 call sites match their embedded file/line to an assert/configASSERT line in the pinned source. Eight compiled caller functions contain those sites; no application callback contains a flagged flash pointer load.",
+    "negative_fixtures": {
+      "positive": "assertion_argument_only",
+      "dereference": "needs_review",
+      "overwrite": "needs_review",
+      "branch": "needs_review",
+      "other_call": "needs_review",
+      "wrong_register": "needs_review"
+    },
+    "checker_comparison": "Updated scripts/audit_target_isr.py and the independent cache-only classifier agree on all current sites. Both retain the 63 raw loads; the production checker rejects unclassified loads and pins the reviewed SDK assert.c source SHA."
+  },
+  "formatter_source_review": {
+    "source": "/home/mark/.platformio/packages/framework-espidf/components/newlib/src/assert.c",
+    "cache_test_line": 50,
+    "file_replacement_lines": [
+      53,
+      54
+    ],
+    "func_replacement_lines": [
+      57,
+      58,
+      59
+    ],
+    "expr_replacement_lines": [
+      62,
+      63
+    ],
+    "first_string_read_line": 70,
+    "copy_line": 72,
+    "abort_line": 80,
+    "argument_range_check": "esp_ptr_in_drom compares integer addresses against SOC_DROM_LOW=0x3c000000 and SOC_DROM_HIGH=0x3e000000. Both current configs disable the 16 KiB D-cache special offset. All 63 metadata pointer values per build are inside the checked DROM range.",
+    "cache_disabled_data_flow": "file and expr are replaced by a .dram0.data <cached disabled> string; func is replaced by a return-address string written to the local internal stack. ASSERT_STR and separator strings are also in DRAM. Only after substitution are strings passed to ROM strlen/memcpy.",
+    "primitives": "ELF targets are ROM memset 0x400011e8, itoa 0x400014c4, strlen 0x40001248 and memcpy 0x400011f4; ra_to_str and cache predicate/helper are in IRAM.",
+    "linker_config": "CONFIG_LIBC_MISC_IN_IRAM=y selects assert (noflash) in newlib.lf; both linked __assert_func bodies are in .iram0.text and their replacement/formatting constants are in internal DRAM."
+  },
+  "fatal_path_source_review": {
+    "assertion_path": "__assert_func -> esp_system_abort -> panic_abort: all IRAM. panic_abort stores the stack-buffer pointer and fatal flag in DRAM, then executes ill; it does not resume the ISR.",
+    "exception_path": "IRAM panicHandler and xt_unhandled_exception call IRAM panic_enable_cache. When cache is disabled, it calls esp_ipc_isr_stall_abort then spi_flash_enable_cache -> spi_flash_restore_cache -> esp_cache_resume_ext_mem_cache -> cache_hal_resume. Linked restoration code/ctx are internal and Cache_Resume_ICache/Cache_Resume_DCache targets are ROM.",
+    "first_post_restore_flash_use": "panic_enable_cache then calls flash-resident esp_cache_err_acs_save_and_clr. Its caller subsequently enters flash-resident panic_handler. Their ordering is after either the cache-enabled predicate branch or the cache-restoration call.",
+    "config": "CONFIG_ESP_PANIC_HANDLER_IRAM is disabled and CONFIG_ESP_SYSTEM_PANIC_PRINT_REBOOT is enabled in both current builds. The full fatal handler intentionally depends on restored flash access.",
+    "limit": "The original ISR closure walker stops at ill and does not automatically traverse CPU exception edges. This follow-up separately inspected the relevant entry/restoration sequence, not the complete exception-vector, diagnostic, peripheral-reset and reboot graph."
+  },
+  "bounded_audit_policy": [
+    "Keep raw flash-address references in the report; separately label the structurally verified assertion-only arguments.",
+    "Require the exact immediate argument-flow pattern and reviewed formatter source/config/ELF evidence. Function names alone must not suppress a warning.",
+    "Continue to fail literal fetches outside IRAM, non-IRAM/ROM callback code, unclassified flash pointers and unresolved callback/data behavior outside the reviewed scope.",
+    "Re-review changed SDK formatter implementations, relevant compile options or linked formatter/control-flow changes; a local source hash alone does not prove a binary was built from that source.",
+    "Treat the checker as bounded placement/control-flow assistance, not full pointer taint analysis, a cache-transition concurrency proof or a proof that fatal panic completes."
+  ],
+  "uncertainties": [
+    "No hardware cache-disabled assertion, panic, flash-write interruption or reset fault injection was run.",
+    "SDK cache-state reporting, cross-core flash-operation synchronization, valid internal stack/CPU state and working cache/flash hardware are assumed. Static instruction inspection does not prove those runtime conditions or successful cache restoration.",
+    "SDK fatal assertions do not call the executor all-low path. No software maximum-high-time or measured electrical fail-low guarantee follows from the formatting/panic evidence.",
+    "The raw audit detects specific literal-loaded pointers and code calls; it is not exhaustive analysis of computed or aliased indirect data accesses."
+  ],
+  "suggested_claim": "Both ELFs pass bounded ISR placement review. All 63 flagged flash-address values per build are SDK fatal-assertion metadata passed directly to a cache-aware IRAM formatter; none of those sites dereferences flash. Fatal entry calls cache restoration before subsequent flash code. This does not establish successful panic completion, ISR timing or physical fail-low behavior.",
+  "artifacts": {
+    "independent_classifier": ".cache/engine/target-independent-review/classify_assertion_loads.py",
+    "source_callsite_matches": ".cache/engine/target-independent-review/assertion-source-callsite-matches.json",
+    "parent_script": "scripts/audit_target_isr.py",
+    "parent_script_sha256": "afedebd9f2d99fc6b6b2d20425da983870845e2afc31d7f884df3da358e70078"
+  }
+}

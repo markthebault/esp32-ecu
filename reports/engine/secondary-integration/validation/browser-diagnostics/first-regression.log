@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "browser": "Installed Chrome via Playwright",
+  "checks": [
+    "Host diagnostics never claim target USB or application presence",
+    "Actual native session staging and protocol errors are visible",
+    "Diagnostics export preserves counters, source and unknown driver drops",
+    "Own009 file origin is metadata, explicit Save uses loaded editor CAS",
+    "Browser own009 complete-page MSQ roundtrips through native validation",
+    "Concurrent writer is never silently rebased during file import",
+    "Historical own004 application file may omit its origin; missing metadata never rebases stale editor",
+    "Historical own001/002/003 application-authored MSQs remain importable",
+    "Diagnostics and own009/legacy import UI fit320/390/768/1440px"
+  ],
+  "page_errors": []
+}
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_load_ui.py", line 93, in <module>
+    try:asyncio.run(check(f'http://127.0.0.1:{server.server_address[1]}',server.device,a.report_dir))
+        ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/mark/persospace/esp32-ecu/tools/test_load_ui.py", line 54, in check
+    await page.locator('#engine-save-state').filter(has_text='Imported edits').wait_for();assert await page.evaluate('engineTune.schema_version')==7 and await page.locator('#ae-mode').input_value()=='map_rate';assert device.engine.tune==saved
+                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/home/mark/.cache/uv/builds-v0/.tmpixTW13/bin/python', 'tools/test_load_ui.py', '--report-dir', '.cache/engine/secondary-integration/browser-load']' returned non-zero exit status 1.

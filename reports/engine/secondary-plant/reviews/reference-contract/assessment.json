@@ -1,0 +1,147 @@
+{
+  "scope": "Independent design/source contract review and native production-loop diagnostic probes. Fresh secondary-enabled coupled external-plant implementation has not yet been reviewed or accepted in this packet.",
+  "project_head": "1c3e9eaa27820d4462289ba653394e6f30dc1b20",
+  "speeduino_head": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+  "historical_evidence_not_new_acceptance": [
+    "342 isolated function/interpolation/corrections checks",
+    "7776 secondary-disabled regression rows"
+  ],
+  "source_hashes": {
+    "reference/speeduino/secondaryTables.cpp": "bd62fdbc77c5c77ce1efaae7176d23885a8dd5deace02d2d5e14c1bbd1088c83",
+    "reference/speeduino/load_source.h": "b6454950638ba0d8570d074e88f268ddb2decf1bf1cf4b13e438102dd44af050",
+    "reference/speeduino/units.h": "d6a215c440fd941e8fdfacc7436cb6758d879975bd14d8c02ab095249f0a266c",
+    "reference/speeduino/init.cpp": "c21311f2c5155789e371eb35d3480c1742a2c72be9253102bf481bb87f2d10ca",
+    "reference/speeduino/speeduino.ino": "b355adc865317ab38c9b643e871644c4af40cf99fbe23e71bd3cc51bf83702a0",
+    "reference/speeduino/sensors.cpp": "bbd36fa91d5a432caf86b72fb58ad83750a7185d55b6b94b99ceb770ec531424",
+    "reference/speeduino/sensors.h": "a07978f21db88255eb9a985978f4d6ae26accbb2ac6da198e6402554d69cd4a5",
+    "reference/speeduino/config_pages.h": "97eed771a7da0c3f357adf1034e484bf1ea6ba54c3c1346f637e9b9aac1a5da2",
+    "reference/speeduino/statuses.h": "7898852cc8f062f56151e3b420ee459b6e604796a046b4c9424081c4dceb1eac",
+    "reference/speeduino/fuel_calcs.cpp": "f5c6d867e995a8269fa3071e9719387052e1cfe0acaae350c865aa7f8fa59bb1",
+    "reference/speeduino/scheduler_fuel_controller.cpp": "625be32b39e521f4dad30495fab907bb5fa1cc2aad89e8c29df666d3ee09389a",
+    "reference/speeduino/scheduler_ignition_controller.cpp": "6b97559534a04e70baeb2dd6cd7b4daf907e33b56d97cd827f854dc6655c156b",
+    "reference/speeduino/corrections.cpp": "f4423734830aacd50b5d7172fbe08e057889b91f3fbd997ae81a7a6e44d5f276",
+    "reference/speeduino/board_native.h": "75c011891838ef7d81b2acc2d895657c5904b0e2a741e2e7fb95847ff3317f2d",
+    "reference/speeduino/board_native.cpp": "e3655fdbd8a2d762bc9e74f3e6135fbba5309c4e8be15f78da6ce3ad2f125a22",
+    "reference/speeduino/table3d.h": "7584c1cceaa9d522c6e6a964c2b9fc2ceb9b0ebc7857180c5e05265819c739af",
+    "reference/speeduino/table3d_axes.h": "89039a90cfc081db453ee809a9f4848e065f92e1c4bb8516c2ad722239d39373",
+    "reference/speeduino/src/pins/pinMapping.cpp": "5b9b08d434984a62089b14d17475ff3f9959c5aeba2457c80839c4664a8a9f2b",
+    "project/firmware/include/ecu/secondary_tables.hpp": "085d414ac3bee096170638b95815f949f155d427f5e985b3b70f71287a71c561",
+    "project/firmware/include/ecu/load_model.hpp": "4ebcebe554ebf29f4dc7db29a8a51302d3ebbc8647ba9f73d5278ef85503074b",
+    "project/firmware/include/ecu/engine.hpp": "92f57e82305b4db6fb098523a1951bff4e014cab0a1fa202bb9629e476db494c",
+    "project/firmware/include/ecu/switch_acquisition.hpp": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb",
+    "project/firmware/include/ecu/switch_transport.hpp": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932",
+    "project/firmware/main/switch_service.cpp": "813f488d127fb25dd3c2287b7bc53968dc9c5e821050159fbe2978e590aed25a",
+    "project/firmware/main/app.cpp": "487d5e03a964f686939dcb46a148a91c02e516678cfd6c7d342ec0ba269ce9e6",
+    "project/tools/compare_engine_controllers.py": "5220a4d2df4a8fed6daa7cabd6a95053cd3770f379875cbda7af6b0d75f705d3",
+    "project/tools/speeduino_sim.cpp": "933b8ba6d7476d3f3957da0eb279a81f50b1e7bc297ec7952a222ac0ecef4de3",
+    "project/tools/speeduino_sim_hal.cpp": "0d28c0c73308f8ac1333b0e3eefa38d9b6bef4fe0e7ca31e6342c7a9e8074409",
+    "project/tools/speeduino_sim_native.hpp": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9",
+    "project/tools/speeduino_runtime.py": "c1471f74a3c22df32aa3265228a895142058d62a3e63fe9aede35398bc69b2cd",
+    "project/scripts/build_speeduino_sim.py": "1c8c53bc55cb15cdbfb6186fd7b7fb4ed42058a99c3a1a70d943497af7f43e4a"
+  },
+  "production_contract": [
+    {
+      "id": "selection",
+      "source": "reference/speeduino/secondaryTables.cpp:15-146",
+      "detail": "Fuel and spark use independent config10 modes, source, condition and digitalRead pins. Conditions use strict greater-than. Native input mode reads raw GPIO on every production main-loop secondary evaluation; no debounce, validity, acquisition timestamp or stale-input policy exists here."
+    },
+    {
+      "id": "units",
+      "source": "reference/speeduino/load_source.h:35-50; reference/speeduino/sensors.cpp:523-550; reference/speeduino/table3d_axes.h",
+      "detail": "TPS status is physical percent*2, TPS table lookup getLoad is status*2, and common load table domain factor is2. Map/ratio raw table axes=physical coordinate/2; TPS raw table axes=physical percent*2. Conditional TPS threshold=physical percent*2, not percent*4. RPM raw axis=RPM/100. Ratio coordinate=floor(100*MAP/EMAP) before upstream table interpolation."
+    },
+    {
+      "id": "spark_order",
+      "source": "reference/speeduino/speeduino.ino:95-102,361-368; reference/speeduino/secondaryTables.cpp:105-146; reference/speeduino/corrections.cpp:1319-1346",
+      "detail": "Primary advance is already correctionsIgn(primary lookup). Multiply/add compose that corrected advance. Switched production spark invokes correctionsIgn on the secondary lookup again; UNIT_TEST suppresses that second correction invocation and is unsuitable for acceptance."
+    },
+    {
+      "id": "spark_bounds",
+      "source": "reference/speeduino/units.h:150; reference/speeduino/secondaryTables.cpp:77-89,117-133",
+      "detail": "Secondary spark cells are byte raw=physical value+40, so representable multiplier interval is0..215%. Project216..255% multipliers have no raw reference equivalent. Reference final advance is int8 -128..127; project domain is -5..40. Spark multiplier diagnostic advance2 is percent-127 clipped to int8, not multiplier percent or a direct advance."
+    },
+    {
+      "id": "cranking",
+      "source": "reference/speeduino/speeduino.ino:361-387; reference/speeduino/secondaryTables.cpp:101-114",
+      "detail": "Fixed timing or rotationStatus Cranking bypasses secondary spark. Secondary evaluation occurs before loop refreshes rotationStatus from RPM, so crank/run transitions may carry the previous loop rotation state. Project hysteresis/order differs; compare stable crank/run states and characterize crossings."
+    },
+    {
+      "id": "fuel_rounding",
+      "source": "reference/speeduino/secondaryTables.cpp:46-75; reference/speeduino/maths.h:143-164,318-321",
+      "detail": "Reference VE is u8; multiply uses rounded integer percentage and clamps255, addition clamps255. Project F64 interpolation/composition is intentionally retained. Example actual loop VE85*150%=128 versus project127.5 is expected quantization, not failed parity."
+    },
+    {
+      "id": "zero_and_capacity",
+      "source": "reference/speeduino/fuel_calcs.cpp:124-159,161-169,247-261; project/firmware/include/ecu/engine.hpp:275-305",
+      "detail": "Reference includes opening time when VE=0 and corrections nonzero, and limits running pulse to configured PW duty cap. Project ordinary zero fuel suppresses openings; transient add_reference may separately deliver fuel. Project one-channel capacity excess inhibits all engine channels. These policies must be characterized independently rather than forced equal."
+    },
+    {
+      "id": "trims",
+      "source": "reference/speeduino/scheduler_fuel_controller.cpp:296-304; reference/speeduino/scheduler_ignition_controller.cpp:590-638; project/firmware/include/ecu/engine.hpp:284-302",
+      "detail": "Reference fuel trims apply to the full limited pulse including injector opening time. Project trims fuel mass before opening split/deadtime/capacity. Reference individual spark trims follow composed current.advance; project offsets precede base bounds/retard/multiply/add. Multiply+nonzero spark trim is not equivalent. Trim load continues to follow primary fuel source in both ECUs when representable."
+    },
+    {
+      "id": "native_pin_limit",
+      "source": "reference/speeduino/board_native.h:39-42; reference/speeduino/init.cpp:271-272; probe-results.json:unrepresentable_native_pins,input_independence",
+      "detail": "Actual native BOARD_MAX_IO_PINS is20 despite Mega GPIO mappings elsewhere. Raw secondary pins30/31 persist but fail production mapping and both resolve0; raw14/15 resolve distinctly in the pinned production setup. Exact raw/resolved/mode/polarity readback and pin uniqueness are mandatory."
+    },
+    {
+      "id": "reference_cadence",
+      "source": "project/tools/speeduino_sim.cpp:220-232,252; project/tools/compare_engine_controllers.py:151-175,189-209",
+      "detail": "sensors only writes virtual ADC; it does not run loop. Production loop runs every adaptive advance and tooth/input command. With250/125us plant steps, reference main-loop opportunities differ from project1ms sample/update cadence. A status queried immediately after writing sensors reflects prior production sensor processing. Report sampled stimulus and actual status separately."
+    }
+  ],
+  "asynchronous_acquisition_invariants": [
+    "Use actual portable Acquisition state machine with Synthetic provenance. No JSON or fixture setting may claim TargetProtected.",
+    "Split plant integration at operation issue/completion and independent GPIO-stimulus times. Expose a transaction only at ended_us; observed_us remains started_us and cannot be refreshed by write-only operations.",
+    "Do not call Acquisition.next while an operation is pending: that latches fatal Internal. Complete the owned token first, with monotonic same-epoch times.",
+    "Declare the GPIO sampling instant within each read. A sample may be latched at read start and conservatively timestamped there; do not silently label completion-time data with an earlier timestamp.",
+    "Drive reference GPIO from the independent physical-level schedule. Never feed project qualified/active/pending state into digitalRead.",
+    "ACK only the exact pending fault_id from the invalid snapshot passed to a completed core observation. Good recovery reads cannot clear a skipped fault; ACK invalidates readiness until a new guarded read.",
+    "Assert injected transport faults actually overlap issued operations and increment the expected fault counters. A fault window between operations is otherwise vacuous.",
+    "During producer pause the core must invalidate age>20ms independently of resumed acquisition. Resume must expose PollGap/retry/invalid-observation ACK/new read/debounce before control recovery.",
+    "Target app synchronously executes switch_service::tick then observe in its5ms task. An async producer with1ms core sampling is a synthetic timing fixture, not measured target task blocking/RTOS timing."
+  ],
+  "minimum_fresh_matrix": [
+    "Secondary Off replay with nondefault stored metadata/cells: identical project actuator sequence and plant state against baseline for both project dispatchers.",
+    "Neutral Multiply100 and Add0 with active flags checked, plus nonneutral perturbations that change delivered fuel/spark and external plant ledgers; do not accept flags alone.",
+    "Independent fuel and spark Off/Multiply/Add/Conditional/Input; at least one meaningful fuel-only, spark-only and simultaneous case; both native32 and native16 timer models.",
+    "Nonconstant independent secondary MAP/TPS/ratio maps and axes, with exact raw write/readback and represented physical axes. Include independent fuel-vs-spark source choices.",
+    "Conditional RPM/MAP/TPS threshold crossing both directions, plateau at representable threshold and selection status. Independent free-shaft trajectories may cross at different times; do not compare against a shared active-state timeline.",
+    "Input channels: all four raw GPIO pairs, independent fuel/spark timing, opposite polarity, shared channel with separate debounce, initial qualification, stable switch, bounce and slow transitions.",
+    "Acquisition unavailable/error, stale/producer pause, recovery, fault-ID skipped-observer protection, no source timestamp refresh on writes; all-output-low/cut and source age/reason observations.",
+    "Sequential trimmed cases with source-bound known fuel/spark ordering differences; primary trim-source preservation under secondary source changes.",
+    "Zero fuel, saturated VE, valid high-demand and capacity fault/recovery with explicit divergent reference/project policies and executed actuator-edge assertions.",
+    "Selected half-step250->125us runs preserve qualitative selection/fault behavior and show convergence in physical timing/plant metrics; disclose native loop-cadence change.",
+    "Negative controls: wrong represented units, polarity/channel, table perturbation, suppressed acquisition completion/ACK or direct commanded-fuel shortcut must fail targeted assertions."
+  ],
+  "unsupported_or_characterized": [
+    "Production-reference ethanol acquisition unless actual flex sensor GPIO interrupt and timer update path is implemented; direct currentStatus assignment is not producer validation.",
+    "Physical MCP23008/I2C accessory behavior, electrical protection, target CPU/IRQ/RTOS timing or real-engine calibration.",
+    "Exact cross-ECU plant trajectory equality under independent quantization, control cadence, scheduler phase acquisition, trim/capacity/fault policy differences.",
+    "Spark switch-transition error against last sampled production advance: current harness reference error is not event-latched demand. Treat those spikes as observer limitation or add a truthful schedule/event-latched observer.",
+    "TPS/ratio cylinder-trim mapping through existing wrapper unless it translates source units; current cylinder_trims maps raw load asMAP/2."
+  ],
+  "fair_acceptance": [
+    "Only executed actuator GPIO edges deliver plant fuel and sparks. Never use commanded VE, PW, advance or expected selection to drive the plant.",
+    "Each ECU owns its ResearchPlant, shaft/trigger/sensor history and control/scheduler state. Equal exogenous load/throttle/GPIO schedule is allowed; shared endogenous traces are not.",
+    "Use each ECU own reported production/core values to check its declared semantic bounds and selection; do not call copied secondary math as the passing oracle.",
+    "Require finite physical ledgers, channel bounds, no duplicate/misordered edges, no post-cut scheduled rises, explicit bounded trailing in-flight pulses where policy allows, and all outputs low after termination.",
+    "State whether an assertion proves equivalence, project safety policy, reference behavior, negative-control sensitivity or numerical convergence. Passing counts cannot combine historical isolated checks with fresh coupled scenarios.",
+    "Bind reports to project/source hashes, unchanged pinned upstream SHA, no UNIT_TEST, exact writer/readbacks, timer HAL details and immutable scenario/tune fixtures."
+  ],
+  "probe_summary": {
+    "scope": "Independent native32 actual production setup/loop diagnostics with fixed tooth input; not coupled plant evidence",
+    "results_file": "probe-results.json",
+    "build_file": "probe-build.json",
+    "runner": "run_contract_probes.py",
+    "results": [
+      "pins14/15 independent; pins30/31 collapse to0 because native max20",
+      "TPS raw20 equals threshold20: primary; TPS raw21: secondary",
+      "running1000rpm: VE85*150 ->128; spark10*150 ->15; advance2 diagnostic23",
+      "running1000rpm zeroVE: actual reference900us openings",
+      "cranking200rpm: secondary fuel active, secondary spark bypassed at5deg",
+      "running1000rpm fuel85+250 clamps255; spark10-40=-30 (wider than project domain)"
+    ]
+  }
+}

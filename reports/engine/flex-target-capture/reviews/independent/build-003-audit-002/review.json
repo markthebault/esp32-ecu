@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "checks": 56,
+  "build_summary_sha256": "525ff982e8ddc231e4732166d6a7d43a4412e98900cb98ea0f3d51c4945dff37",
+  "all_sources_and_artifacts_match": true,
+  "new_default_cache_retention_is_not_recovery_of_prior_lost_caches": true,
+  "environments": {
+    "compact_n16r8_flex_dev": {
+      "elf_sha256": "b59017e9aa7ce52d461b1dc3897ee45d898cbc8c31503fcc696b7b9c65aabe70",
+      "exact_UI_at_symbols": true,
+      "nm_command": [
+        "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-nm",
+        "-S",
+        "-n",
+        "-C",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/build-003-audit-002/compact_n16r8_flex_dev.elf"
+      ],
+      "policy_sha256": "4d4d9d2e956437d2734d37045c7a354e2c2057e650ffc833051d270676b67347",
+      "parent_ISR_root_count": 6
+    },
+    "compact_n16r8_web": {
+      "elf_sha256": "55c4d3bbd865a55b4c76323ea25b20cae64ad1b461aed55fd60498ce9af83d40",
+      "exact_UI_at_symbols": true,
+      "nm_command": [
+        "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-nm",
+        "-S",
+        "-n",
+        "-C",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/build-003-audit-002/compact_n16r8_web.elf"
+      ],
+      "policy_sha256": "9e3d7ec5b376f0e329f5460b1174ea67b2629f0cf06eb8fe3c8fa549f52eccfc",
+      "parent_ISR_root_count": 5
+    },
+    "compact_a3_web": {
+      "elf_sha256": "4363ffd833a295d86050a73690060071181ecaa780b2c13d10d35308a9fb1af7",
+      "exact_UI_at_symbols": true,
+      "nm_command": [
+        "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-nm",
+        "-S",
+        "-n",
+        "-C",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/build-003-audit-002/compact_a3_web.elf"
+      ],
+      "policy_sha256": "cddc07ca9f38a53791bd7a50eea495c47eea602c34e8ae6f9158526809b7d6ab",
+      "parent_ISR_root_count": 5
+    },
+    "compact_a3_timing_bench": {
+      "elf_sha256": "e65d198886cdca21f751e4c9414b1fe5c53b11e0ec253ddec18d11a203c9f4e8",
+      "exact_UI_at_symbols": false,
+      "nm_command": [
+        "/home/mark/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32s3-elf-nm",
+        "-S",
+        "-n",
+        "-C",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/build-003-audit-002/compact_a3_timing_bench.elf"
+      ],
+      "policy_sha256": "94e7f7c383dbc766655b7b11c94fde9fe3ad42f0f5b12ecb111f13f9471f501f",
+      "parent_ISR_root_count": 4
+    }
+  },
+  "tool_sha256": "d968578945d9f62c2769e03a786d8853eb0ba226cfff1e8ee6588550927941a3",
+  "scope": "Read-only actual final firmware ELF copies, sections/symbols, receipts and existing policy/placement bindings. No firmware ELF execution or physical qualification."
+}

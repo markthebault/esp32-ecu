@@ -1,0 +1,336 @@
+{
+  "passed": true,
+  "runs": 128,
+  "max_abs_fuel_residual_mg": 3.938112058676779e-09,
+  "failures": [],
+  "trim_runs": [
+    {
+      "label": "portable",
+      "passed": true,
+      "errors": [],
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "expected_source_order_demand_deg": 18,
+          "sparks": 47,
+          "mean_actual_deg": 17.992796683525235,
+          "actual_range_deg": [
+            17.970473893081362,
+            18.01474811557273
+          ],
+          "max_abs_difference_from_expected_deg": 0.029526106918638106,
+          "mean_delivered_pulse_us": 5001.085106382979,
+          "pulse_range_us": [
+            4846,
+            5418
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 15.278412744331506
+        },
+        {
+          "cylinder": 2,
+          "expected_source_order_demand_deg": 12,
+          "sparks": 47,
+          "mean_actual_deg": 11.991645123298246,
+          "actual_range_deg": [
+            11.975781963352347,
+            12.010474455579242
+          ],
+          "max_abs_difference_from_expected_deg": 0.024218036647653207,
+          "mean_delivered_pulse_us": 4257.851063829788,
+          "pulse_range_us": [
+            4129,
+            4606
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 12.509245492029702
+        },
+        {
+          "cylinder": 3,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.98825109881766,
+          "actual_range_deg": [
+            14.968443657286116,
+            15.003363114774402
+          ],
+          "max_abs_difference_from_expected_deg": 0.03155634271388408,
+          "mean_delivered_pulse_us": 4628,
+          "pulse_range_us": [
+            4489,
+            4993
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.9216407888727
+        },
+        {
+          "cylinder": 4,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.988802101806908,
+          "actual_range_deg": [
+            14.972127243643627,
+            15.006208447470271
+          ],
+          "max_abs_difference_from_expected_deg": 0.02787275635637343,
+          "mean_delivered_pulse_us": 4633.936170212766,
+          "pulse_range_us": [
+            4488,
+            5028
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.90999460664919
+        }
+      ],
+      "source_policy": "project trims before secondary multiplication and opening time; reference individual spark trims after composition and fuel trims on full pulse using percentageApprox",
+      "angle_acceptance": "Actual ranges and differences are reported, with no fitted angle tolerance; per-cylinder ordering and nonvacuous executed edges are asserted.",
+      "late_project_control_samples": 100
+    },
+    {
+      "label": "speeduino16",
+      "passed": true,
+      "errors": [],
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "expected_source_order_demand_deg": 17,
+          "sparks": 47,
+          "mean_actual_deg": 16.803153915740776,
+          "actual_range_deg": [
+            16.184948839749268,
+            17.48407303465501
+          ],
+          "max_abs_difference_from_expected_deg": 0.8150511602507322,
+          "mean_delivered_pulse_us": 5065.872340425532,
+          "pulse_range_us": [
+            4872,
+            5476
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 15.524177699709147
+        },
+        {
+          "cylinder": 2,
+          "expected_source_order_demand_deg": 13,
+          "sparks": 47,
+          "mean_actual_deg": 12.849801096341174,
+          "actual_range_deg": [
+            12.243269025275367,
+            13.41203764846432
+          ],
+          "max_abs_difference_from_expected_deg": 0.7567309747246327,
+          "mean_delivered_pulse_us": 4147.574468085107,
+          "pulse_range_us": [
+            3988,
+            4484
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 12.099262010887026
+        },
+        {
+          "cylinder": 3,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.885902791808668,
+          "actual_range_deg": [
+            14.296854450385581,
+            15.476135470191366
+          ],
+          "max_abs_difference_from_expected_deg": 0.703145549614419,
+          "mean_delivered_pulse_us": 4604.68085106383,
+          "pulse_range_us": [
+            4432,
+            4980
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.843563788601331
+        },
+        {
+          "cylinder": 4,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.926994198047977,
+          "actual_range_deg": [
+            14.04582348778058,
+            15.497440072867903
+          ],
+          "max_abs_difference_from_expected_deg": 0.9541765122194192,
+          "mean_delivered_pulse_us": 4613.106382978724,
+          "pulse_range_us": [
+            4432,
+            4980
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.832912784731052
+        }
+      ],
+      "source_policy": "project trims before secondary multiplication and opening time; reference individual spark trims after composition and fuel trims on full pulse using percentageApprox",
+      "angle_acceptance": "Actual ranges and differences are reported, with no fitted angle tolerance; per-cylinder ordering and nonvacuous executed edges are asserted.",
+      "late_project_control_samples": 0
+    },
+    {
+      "label": "speeduino32",
+      "passed": true,
+      "errors": [],
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "expected_source_order_demand_deg": 17,
+          "sparks": 47,
+          "mean_actual_deg": 16.803153915740776,
+          "actual_range_deg": [
+            16.184948839749268,
+            17.48407303465501
+          ],
+          "max_abs_difference_from_expected_deg": 0.8150511602507322,
+          "mean_delivered_pulse_us": 5065.872340425532,
+          "pulse_range_us": [
+            4872,
+            5476
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 15.524177699709147
+        },
+        {
+          "cylinder": 2,
+          "expected_source_order_demand_deg": 13,
+          "sparks": 47,
+          "mean_actual_deg": 12.849801096341174,
+          "actual_range_deg": [
+            12.243269025275367,
+            13.41203764846432
+          ],
+          "max_abs_difference_from_expected_deg": 0.7567309747246327,
+          "mean_delivered_pulse_us": 4147.574468085107,
+          "pulse_range_us": [
+            3988,
+            4484
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 12.099262010887026
+        },
+        {
+          "cylinder": 3,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.885902791808668,
+          "actual_range_deg": [
+            14.296854450385581,
+            15.476135470191366
+          ],
+          "max_abs_difference_from_expected_deg": 0.703145549614419,
+          "mean_delivered_pulse_us": 4604.68085106383,
+          "pulse_range_us": [
+            4432,
+            4980
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.843563788601331
+        },
+        {
+          "cylinder": 4,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.926994198047977,
+          "actual_range_deg": [
+            14.04582348778058,
+            15.497440072867903
+          ],
+          "max_abs_difference_from_expected_deg": 0.9541765122194192,
+          "mean_delivered_pulse_us": 4613.106382978724,
+          "pulse_range_us": [
+            4432,
+            4980
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.832912784731052
+        }
+      ],
+      "source_policy": "project trims before secondary multiplication and opening time; reference individual spark trims after composition and fuel trims on full pulse using percentageApprox",
+      "angle_acceptance": "Actual ranges and differences are reported, with no fitted angle tolerance; per-cylinder ordering and nonvacuous executed edges are asserted.",
+      "late_project_control_samples": 0
+    },
+    {
+      "label": "target",
+      "passed": true,
+      "errors": [],
+      "cylinders": [
+        {
+          "cylinder": 1,
+          "expected_source_order_demand_deg": 18,
+          "sparks": 47,
+          "mean_actual_deg": 17.992796683525235,
+          "actual_range_deg": [
+            17.970473893081362,
+            18.01474811557273
+          ],
+          "max_abs_difference_from_expected_deg": 0.029526106918638106,
+          "mean_delivered_pulse_us": 5001.085106382979,
+          "pulse_range_us": [
+            4846,
+            5418
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 15.278412744331506
+        },
+        {
+          "cylinder": 2,
+          "expected_source_order_demand_deg": 12,
+          "sparks": 47,
+          "mean_actual_deg": 11.991645123298246,
+          "actual_range_deg": [
+            11.975781963352347,
+            12.010474455579242
+          ],
+          "max_abs_difference_from_expected_deg": 0.024218036647653207,
+          "mean_delivered_pulse_us": 4257.851063829788,
+          "pulse_range_us": [
+            4129,
+            4606
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 12.509245492029702
+        },
+        {
+          "cylinder": 3,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.98825109881766,
+          "actual_range_deg": [
+            14.968443657286116,
+            15.003363114774402
+          ],
+          "max_abs_difference_from_expected_deg": 0.03155634271388408,
+          "mean_delivered_pulse_us": 4628,
+          "pulse_range_us": [
+            4489,
+            4993
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.9216407888727
+        },
+        {
+          "cylinder": 4,
+          "expected_source_order_demand_deg": 15,
+          "sparks": 47,
+          "mean_actual_deg": 14.988802101806908,
+          "actual_range_deg": [
+            14.972127243643627,
+            15.006208447470271
+          ],
+          "max_abs_difference_from_expected_deg": 0.02787275635637343,
+          "mean_delivered_pulse_us": 4633.936170212766,
+          "pulse_range_us": [
+            4488,
+            5028
+          ],
+          "combustions": 47,
+          "mean_charge_fuel_mg": 13.90999460664919
+        }
+      ],
+      "source_policy": "project trims before secondary multiplication and opening time; reference individual spark trims after composition and fuel trims on full pulse using percentageApprox",
+      "angle_acceptance": "Actual ranges and differences are reported, with no fitted angle tolerance; per-cylinder ordering and nonvacuous executed edges are asserted.",
+      "late_project_control_samples": 100
+    }
+  ]
+}

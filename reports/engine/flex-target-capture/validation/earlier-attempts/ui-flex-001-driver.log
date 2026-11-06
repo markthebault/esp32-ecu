@@ -1,0 +1,54 @@
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/test_flex_ui.py", line 64, in <module>
+    try:asyncio.run(check(f'http://127.0.0.1:{server.server_address[1]}',server.device,a.report_dir))
+        ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/mark/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/mark/persospace/esp32-ecu/tools/test_flex_ui.py", line 23, in check
+    await page.locator('#engine-flex-panel details').evaluate('e=>e.open=true')
+  File "/home/mark/.cache/uv/archive-v0/qPmj90TXE8GwewCz/lib/python3.13/site-packages/playwright/async_api/_generated.py", line 11478, in evaluate
+    await self._impl_obj.evaluate(
+    ...<3 lines>...
+    )
+  File "/home/mark/.cache/uv/archive-v0/qPmj90TXE8GwewCz/lib/python3.13/site-packages/playwright/_impl/_locator.py", line 204, in evaluate
+    return await self._with_element(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "/home/mark/.cache/uv/archive-v0/qPmj90TXE8GwewCz/lib/python3.13/site-packages/playwright/_impl/_locator.py", line 123, in _with_element
+    handle = await self.element_handle(timeout=timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mark/.cache/uv/archive-v0/qPmj90TXE8GwewCz/lib/python3.13/site-packages/playwright/_impl/_locator.py", line 334, in element_handle
+    handle = await self._frame.wait_for_selector(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self._selector, strict=True, state="attached", **params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/mark/.cache/uv/archive-v0/qPmj90TXE8GwewCz/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 395, in wait_for_selector
+    await self._channel.send(
+        "waitForSelector", self._timeout, locals_to_params(locals())
+    )
+  File "/home/mark/.cache/uv/archive-v0/qPmj90TXE8GwewCz/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 78, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/mark/.cache/uv/archive-v0/qPmj90TXE8GwewCz/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 636, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Locator.evaluate: Error: strict mode violation: locator("#engine-flex-panel details") resolved to 2 elements:
+    1) <details>…</details> aka get_by_text("Sensor calibration and acquisitionE0 frequency (Hz)E100 frequency (Hz)Sensor")
+    2) <details>…</details> aka get_by_text("Capture counters, context and producer provenance{ \"data_source\": \"")
+
+Call log:
+  - waiting for locator("#engine-flex-panel details")
+

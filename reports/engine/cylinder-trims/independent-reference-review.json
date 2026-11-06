@@ -1,0 +1,211 @@
+{
+  "reviewer": "Independent agent /root/per_tooth_timing_review",
+  "reviewed_at_utc": "2026-11-03T20:16:54.047514+00:00",
+  "scope": "Read-only implementation/reference review of per-cylinder trim core, scheduler and production Speeduino adapter. No source edits, subagents or build restarts. Temporary probes compiled outside the repository. Root continues asymmetric-plant validation separately.",
+  "verdict": "No unresolved blocking functional defect found in the reviewed core/scheduler/reference adapter. Applied-cylinder scheduling, reference mapping and enable behavior passed focused independent probes. This is not final acceptance of the unfinished asymmetric external-plant comparison, UI or physical hardware.",
+  "open_blocking_findings": [],
+  "resolved_findings": [
+    {
+      "severity": "low",
+      "location": "tools/speeduino_runtime.py:cylinder_trims",
+      "issue": "The initial wrapper quantized project axes without checking representability first. Project-valid RPM[100,101,102,103,104,105] became duplicate native bins[1,1,1,1,1,1], was sent, and would terminate the owned native child on trim RPM axis.",
+      "original_independent_probe": "An IPC spy showed accepted_and_sent for those axes.",
+      "correction": "Parent now validates finite/type/range/shape and original plus quantized ordering for all four tables before IPC.",
+      "independent_post_fix_probe": "ValueError raised before IPC; live child, clock, lookup values and spark state preserved, then valid production exercise succeeded."
+    }
+  ],
+  "known_adapter_fixes_verified": [
+    "Common disabled flag sends zero ignition offsets as well as disabling the fuel flag. A true production run with stored nonzero fuel/spark data restored neutral physical widths and10degree base sparks after settling.",
+    "Native trimconfig fields are initialized and extraction failure is checked before their values are used. Wrapper prevalidation prevents partial invalid benchmark documents being sent."
+  ],
+  "core_source_assessment": {
+    "mass_before_deadtime": "Controller computes applied PW from fuel mass times cylinder multiplier, then adds deadtime once per opening. Per-channel duty and capacity are checked on the actual applied values.",
+    "limits": "Nominal cylinder spark is clamped before mandatory soft retard; cranking retains15degree ceiling, running40degree ceiling, lower bound\u22125. Separate clamp/floor/capacity masks remain visible.",
+    "disabled_helpers": "pulse_for/advance_for use applied arrays only when both cylinder_data and cylinder_trims_enabled are true. Forged disabled arrays do not override scalar baseline demand.",
+    "scheduler": "The scheduler validates all actual channel pulses/advance and fresh tooth RPM against configured pulse/duty bounds. Enabled trims require Sequential and valid cylinder data. Physical channel indices feed pulse_for(ch) and advance_for(ch\u22124); open injectors retain low edges and coils retain latched final cylinder advance.",
+    "negative_trim_capacity": "An excessive base scalar can be legal after negative applied trims. Old scalar-only15ms rejection has been removed; actual array limits remain enforced."
+  },
+  "independent_core_tests": {
+    "native_unit": "Independently rebuilt/reran firmware/tests/engine_cylinder_test.cpp with ASAN+UBSAN, -Wall -Wextra -Werror. Passed dose/deadtime, physicalC2 adjustment, disabled-helper hardening, channel capacity mask, negative-trim rescue, spark/retard/crank limits and fresh-RPM duty checks.",
+    "python_suite": "PYTHONPATH=tools python3 -m unittest tools.test_engine_cylinder -v:7tests PASS with no skipped tests. Includes migration/storage preservation, near-limit legacy fixture, physicalC2 demands, JSON/MSL observability, own003 MSQ/protocol and transactional fifth-page burn.",
+    "independent_scheduler_probe": {
+      "fixture": "Sequential60-2at1000RPM, start104001us/shaft624degrees. Untrimmed scalarPW3.5ms/advance10; actual physicalC1..4 widths[5,7,3,4]ms and advance[11,7,14,8]degrees. All64 scheduled edges checked against fixed physical TDCs90/630/270/450 and actual high durations.",
+      "physical_widths_and720phases_correct": true,
+      "initial_full_shot": "C1EOI105001us was unreachable with its full5ms pulse. First full C1 injector close was225001us; skipped_initial==1.",
+      "open_injector_latch": "C1 requested width changed5\u21927ms at221001us while already open, then returned5ms. Its low stayed225001us and width stayed5ms.",
+      "coil_commit_and_latch": "At130001us C1 request changed11\u219240degrees after the new goal had passed; committed full-dwell event remained. At131001us request changed to\u22125 while charging. First C1 spark stayed133168us with11degree latched demand and2.8ms dwell; following cycles used\u22125. Other cylinders retained their independent demands.",
+      "capacity": "One actual channel15.001ms rejected and cleared pending schedule; scalar20ms with legal applied[10,11,12,13]ms accepted.",
+      "sanitizers": "ASAN+UBSAN passed."
+    }
+  },
+  "reference_adapter_assessment": {
+    "reference_sha": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+    "production_source_clean": true,
+    "unit_test": false,
+    "timer_counter_bits": 16,
+    "actual_process_binary_attestation": "The probe hashed /proc/<child_pid>/exe while the process was live and matched the current manifest. It did not merely hash the path after a possible concurrent replacement.",
+    "binary_sha256": "a6764176badcc7ef78ed86446ea36635bfcc6700ab94e2d8b1f639ab26bb7a06",
+    "adapter_sha256": "226be6f0bb9993b63c1a43053691244c48814199c611b91f0f09ae1ec99bbece",
+    "native_configuration": "Actual unchanged production sequential profile, reqFuel107, injLayout3/sparkMode3, EOI540,60-2 crank and single cam. Default main tables now use ascending runtime axes. New trim commands populate production trimTables/configPage13 and read actual get3DTableValue and fuelScheduleN.pw.",
+    "raw_offset": "Reference stores FUEL_TRIM.toRaw(relative_pct), so intended0percent is raw127. This deliberately follows actual pinned firmware conversion; its INI raw128 neutral mismatch is documented in reference-design.json.",
+    "mapping": "Wrapper physical arraysC1,C2,C3,C4 map to native channel order[0,2,3,1] and are mapped back on lookup/PW readout. The independent output-phase/width probe confirms physical assignment.",
+    "enable": "Common disable sends native fuelTrimEnabled0 and all zero spark offsets. Reading trimlookup while disabled still reports configured table contents; actual scheduling ignores disabled fuel trims and zero spark offsets.",
+    "cache": "Every populated trim table invalidates its production lookup cache. A same-coordinate C4 reconfiguration was independently verified."
+  },
+  "independent_production_reference_probe": {
+    "fixture": "Actual current native16 process. Four physical maps use ascending RPM[500,1000,2000,3000,4000,6000], load[10,30,50,70,90,110]. C1fuel100percent, C2=120percent, C3=85percent; C4cells80+4*y+2*x. Spark offsets physical[+1,\u22123,+4,\u22122]. Constant prescribed1000RPM wheel, actual cam at shaft540degrees/720, production loop every250us; sensors/production polling retained. Independent phase oracle uses fixed shaft angle=time_us*.006 and physical TDCs90/630/270/450, not returned event advance metadata.",
+    "results": {
+      "lookup_physical_pct": [
+        0,
+        20,
+        -15,
+        -11
+      ],
+      "configured_physical_spark_deg": [
+        1,
+        -3,
+        4,
+        -2
+      ],
+      "cache_invalidated_on_same_coordinate_reconfigure": true,
+      "unrepresentable_axes_rejected_before_ipc": true,
+      "invalid_config_preserved_live_child_clock_lookup_and_spark_state": true,
+      "enabled_channel_pulse_us": [
+        6297,
+        7551,
+        5350,
+        5731
+      ],
+      "actual_enabled_width_us": [
+        6296.0,
+        7548,
+        5348.0,
+        5728
+      ],
+      "enabled_spark_error_max_deg": [
+        0.20800000000008367,
+        0.7280000000000655,
+        0.20800000000008367,
+        0.20800000000008367
+      ],
+      "disabled_channel_pulse_us": [
+        6297,
+        6297,
+        6297,
+        6297
+      ],
+      "disabled_spark_error_max_deg": [
+        0.7280000000000655,
+        0.7280000000000655,
+        0.7280000000000655,
+        0.7280000000000655
+      ],
+      "enabled_status": {
+        "time_us": 700000,
+        "rpm": 1000,
+        "pulse_us": 6297,
+        "advance_deg": 10,
+        "map_kpa": 59,
+        "ve_pct": 85,
+        "correction_pct": 100,
+        "clt_c": 85,
+        "iat_c": 24,
+        "battery_01v": 139,
+        "sync": 2,
+        "fuel_channels": 15,
+        "ignition_channels": 15,
+        "soft_limit_active": 0,
+        "ignition_cycle_deg": 720,
+        "injection_cycle_deg": 720,
+        "squirts_per_cycle": 1,
+        "crank_synced": true,
+        "phase_synced": true
+      },
+      "disabled_status": {
+        "time_us": 1100000,
+        "rpm": 1000,
+        "pulse_us": 6297,
+        "advance_deg": 10,
+        "map_kpa": 59,
+        "ve_pct": 85,
+        "correction_pct": 100,
+        "clt_c": 85,
+        "iat_c": 24,
+        "battery_01v": 139,
+        "sync": 2,
+        "fuel_channels": 15,
+        "ignition_channels": 15,
+        "soft_limit_active": 0,
+        "ignition_cycle_deg": 720,
+        "injection_cycle_deg": 720,
+        "squirts_per_cycle": 1,
+        "crank_synced": true,
+        "phase_synced": true
+      },
+      "actual_process_binary_sha256": "a6764176badcc7ef78ed86446ea36635bfcc6700ab94e2d8b1f639ab26bb7a06",
+      "manifest_adapter_sha256": "226be6f0bb9993b63c1a43053691244c48814199c611b91f0f09ae1ec99bbece",
+      "current_adapter_sha256": "226be6f0bb9993b63c1a43053691244c48814199c611b91f0f09ae1ec99bbece"
+    },
+    "interpretation": "Decoded lookup1500RPM/40load is physical[0,+20,\u221215,\u221211]percent. At actual mapped59kPa, per-channel PWs and measured virtual GPIO widths are distinct and correctly ordered/mapped; high widths differ from production PW by less than4us timer quantization. All physical spark phases are within0.728degrees of known base+offset. Disabling restores neutral values without erasing stored map data.",
+    "sampling": "Enabled comparison uses400..680ms after full lock. Disabled comparison uses850..1080ms after the700ms disable, allowing existing production schedules to settle."
+  },
+  "remaining_limits_and_reference_differences": [
+    "Project fuel trim scales effective fuel mass before deadtime. Pinned Speeduino applyFuelTrim scales total primary PW including deadtime and uses percentageApprox. Exact nonzero-trim PW parity is not expected and should not be forced by replacing production calculations.",
+    "Speeduino fuel trim enable is based on configured Sequential and can remain active during runtime Partial fallback. Spark trim is gated by Full sync. This project strictly inhibits before phase lock. Compare effective modes explicitly.",
+    "Reference axis/cell/spark quantization is RPM/100, load/2, integer relative fuelpercent and integer sparkdegrees. The wrapper now rejects unrepresentable axis ordering before IPC; representable quantization differences remain declared.",
+    "Reference returned advance metadata is derived from last sampled production base plus configured trim, not an event-latched production schedule value. This review used a known independent physical phase oracle to avoid circular validation.",
+    "Native16 equality/modulo timing is a Mega-like timer-bound cross-check, not AVR CPU/peripheral emulation. No ISR jitter or physical capture/output timing is established.",
+    "The asymmetric empirical plant and controlled comparison are still parent work and are not accepted by this report. Per-cylinder synthetic lambda/work must remain labeled as plant oracle data, not new physical sensors.",
+    "No physical engine outputs are enabled. No real injector calibration, engine/vehicle, EMI/surge, thermal/splash/fit qualification or live TunerStudio acceptance is established."
+  ],
+  "nonblocking_followups": [
+    "Persist the unequal-channel full-shot/latch probe and current-source production lookup/enable/map probe as regression fixtures.",
+    "Complete asymmetric physics comparisons with independent fixed cylinder factors, intentionally swapped trims, per-cylinder dose/lambda/work and convergence checks; retain raw offsets and quantization in evidence.",
+    "Keep legacy scalar base demands labeled separately from applied channel proposals and retain source/binary fingerprints for final benchmark artifacts."
+  ],
+  "source_sha256": {
+    "tools/speeduino_sim.cpp": "226be6f0bb9993b63c1a43053691244c48814199c611b91f0f09ae1ec99bbece",
+    "tools/speeduino_runtime.py": "beff5bfab2389e213f0f984389cfd3effafe28a728f1cf90027e09d0ad125a2b",
+    "tools/speeduino_sim_hal.cpp": "0c6887b38f663cb76fbe451044b6e48dc4cc6849e110b44b3b9d67643bfd9224",
+    "tools/speeduino_sim_native.hpp": "37932355d8f6e7eecff89af208b322ac38cd72bca7eac8bb00a8080abab530b9",
+    "scripts/build_speeduino_sim.py": "e3b9a8b6795b0e818246584c930fe0949a947ed9a217886fa787eec41c466535",
+    "tools/engine_bridge.cpp": "b35a32f6ca4e0b26eeead46d97a7bd00ddfc0ab715d4641c5fd5c07598a81c7c",
+    "tools/target_timing_bridge.cpp": "0130d01725767f35d161351c8a51c9a4ce8bb559d807c6a2e9bb98012257f89b",
+    "tools/engine_runtime.py": "e9359ad4f2a0c27182400dbbca46f9025896b94c6b0015e4f50bc9ca18b3fc9b",
+    "tools/target_runtime.py": "02e1f2d5b63943633eabb259c95a8b7acc188e4b8f092dc0e8e36347ddff5a13",
+    "tools/engine_research_plant.py": "c4798943fff7dc7abcf5225a453c65aa925edcc5a3331e27881ff97625114fc8",
+    "tools/compare_engine_controllers.py": "5ea4f0e3b6d45ed7b84c3e5685781545c9dac99b817079938b9f3a18a8dfd429",
+    "firmware/tests/engine_cylinder_test.cpp": "235271912fed5605c68be892b4ba4f2d64843f7bdadc39a684afc61ae5460963",
+    "tools/test_engine_cylinder.py": "c623e62cd76ee2f11d7d5362f9f9bb3f085b0195054f8988c13005b7ec94ea36",
+    "config/engine/defaults.json": "9274e32ff7f0f0debe253f95304241a398b6b9c10fe04b868048fda4cf19d835",
+    "firmware/include/ecu/capture_clock.hpp": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+    "firmware/include/ecu/config.hpp": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39",
+    "firmware/include/ecu/control.hpp": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b",
+    "firmware/include/ecu/engine.hpp": "6a79cf871a54d264e461960a49e8702fd45f29cc3387bec8a001748c6f1bc44c",
+    "firmware/include/ecu/engine_binding.hpp": "f1e8d39d850b70e4f8de70bc61c89f161305aa48a4cec4258333710484a0aa92",
+    "firmware/include/ecu/engine_data.hpp": "10ab0f9d99100e6d2cc00334010a054e4bd0cb15e6e69bfdc90a8c2c6c30625c",
+    "firmware/include/ecu/engine_data_json.hpp": "ef7947dd545d372c197007c75992aaedbecc926d5c59893f1cf4d0e127c2ba03",
+    "firmware/include/ecu/engine_json.hpp": "cbea06329fb2c4ffcd461bd56c5d714162fcf06a420d32e605767ae832aa8c3d",
+    "firmware/include/ecu/engine_limits.hpp": "aaaa07e76744f92cbf03f7ba07b5a297d813ffdceb7d5d5a68a8d6328d2dce14",
+    "firmware/include/ecu/engine_log.hpp": "c2705fa3581f60cc5a67c7701fa3c382945a88febafea293b039a638f17a3e08",
+    "firmware/include/ecu/engine_log_json.hpp": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6",
+    "firmware/include/ecu/engine_log_msl.hpp": "cda7a1b9b4a53b19ea95f1b9a45cdc655453e5fd02758e940abb46c295d6fd91",
+    "firmware/include/ecu/engine_log_service.hpp": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f",
+    "firmware/include/ecu/engine_phase.hpp": "ed64cee63597e6d917d8d9b78cefbfc521de96f451da38fbeee309a052652b9c",
+    "firmware/include/ecu/engine_radio.hpp": "2f0751fb9253229eb31bc0464bf95f4f5797f0ae2f00913773052e9ccdba2b97",
+    "firmware/include/ecu/engine_scheduler.hpp": "468650e76030eca84d990e915b61a097d5d30d2ce75d195303c764ca523448b5",
+    "firmware/include/ecu/engine_service.hpp": "102e706e667dfea868152f393888e78359ed199c74d6cee21c04a7cc828b3efe",
+    "firmware/include/ecu/engine_storage.hpp": "c1b0fc6e756d4c1e08ddf76cc0338cf6f65c4eaf0dd37bae8ccd818fdba7b820",
+    "firmware/include/ecu/engine_target.hpp": "0cfcef7fa43cadaf105da094a4524aded50dcff0f88ddb6449799155e63b25b0",
+    "firmware/include/ecu/espnow.hpp": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc",
+    "firmware/include/ecu/espnow_protocol.hpp": "634bd5a99ddd8c682a20959720f5599a0e39f20c25d8cadf4b3e8024eca25b6a",
+    "firmware/include/ecu/heap_object.hpp": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51",
+    "firmware/include/ecu/json.hpp": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/include/ecu/timing_executor.hpp": "59d0b60133f6075135aabf3893fee7baecd6c8b2951e465f2dbdbb18fd8f6992",
+    "firmware/include/ecu/trigger_log.hpp": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451",
+    "firmware/include/ecu/trigger_log_json.hpp": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58",
+    "firmware/include/ecu/web_config.hpp": "8d954bf30d639daa06cbae6e6cc41a2a4c0b0579d3d9914aff44327085243ca1"
+  }
+}

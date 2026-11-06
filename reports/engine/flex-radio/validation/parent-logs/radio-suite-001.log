@@ -1,0 +1,59 @@
+ESP-NOW wire framing, endianness, MAC validation, pairing HMAC golden vectors and button timing passed
+test_approval_bound_to_candidate_and_window (__main__.RadioTests.test_approval_bound_to_candidate_and_window) ... ok
+test_capacity_and_unpair_reuse (__main__.RadioTests.test_capacity_and_unpair_reuse) ... ok
+test_codec_pair_and_confirmation (__main__.RadioTests.test_codec_pair_and_confirmation) ... ok
+test_codec_rejects_unknown_and_bad_inputs (__main__.RadioTests.test_codec_rejects_unknown_and_bad_inputs) ... ok
+test_failed_commit_preserves_runtime_peers (__main__.RadioTests.test_failed_commit_preserves_runtime_peers) ... ok
+test_open_cancel_expiry_and_new_key (__main__.RadioTests.test_open_cancel_expiry_and_new_key) ... ok
+test_pair_persist_unpair_and_restart (__main__.RadioTests.test_pair_persist_unpair_and_restart) ... ok
+test_storage_corruption_not_overwritten (__main__.RadioTests.test_storage_corruption_not_overwritten) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.002s
+
+OK
+test_clock_reversal_after_status_cannot_requalify (__main__.FlexRadioTests.test_clock_reversal_after_status_cannot_requalify) ... ok
+test_complete_fault_is_accepted_and_acknowledged (__main__.FlexRadioTests.test_complete_fault_is_accepted_and_acknowledged) ... ok
+test_completion_age_includes_wait_exactly_once (__main__.FlexRadioTests.test_completion_age_includes_wait_exactly_once) ... ok
+test_conflict_even_semantically_invalid_retires_sequence (__main__.FlexRadioTests.test_conflict_even_semantically_invalid_retires_sequence) ... ok
+test_each_half_is_not_a_sample_or_ack_in_either_order (__main__.FlexRadioTests.test_each_half_is_not_a_sample_or_ack_in_either_order) ... ok
+test_every_byte_tamper_rejects_without_partial_liveness (__main__.FlexRadioTests.test_every_byte_tamper_rejects_without_partial_liveness) ... ok
+test_expiry_duplicate_and_eviction_retire_without_ack (__main__.FlexRadioTests.test_expiry_duplicate_and_eviction_retire_without_ack) ... ok
+test_fresh_adc_and_new_control_cannot_refresh_old_capture (__main__.FlexRadioTests.test_fresh_adc_and_new_control_cannot_refresh_old_capture) ... ok
+test_full_base_mac_binds_all_fields (__main__.FlexRadioTests.test_full_base_mac_binds_all_fields) ... ok
+test_legacy_neutral_bytes_and_gating_are_preserved (__main__.FlexRadioTests.test_legacy_neutral_bytes_and_gating_are_preserved) ... ok
+test_native_matches_independent_full_bytes_and_hmac (__main__.FlexRadioTests.test_native_matches_independent_full_bytes_and_hmac) ... ok
+test_repeated_snapshot_immutability_and_unknown_age_survive_query (__main__.FlexRadioTests.test_repeated_snapshot_immutability_and_unknown_age_survive_query) ... ok
+test_retirement_cannot_ack_partial_after_previous_completion (__main__.FlexRadioTests.test_retirement_cannot_ack_partial_after_previous_completion) ... ok
+test_scalar_epoch_zero_and_unavailable_acquisition_age (__main__.FlexRadioTests.test_scalar_epoch_zero_and_unavailable_acquisition_age) ... ok
+test_source_flags_and_revision_and_stale_limit_signed_negatives (__main__.FlexRadioTests.test_source_flags_and_revision_and_stale_limit_signed_negatives) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.073s
+
+OK
+test_channel_identity_cannot_be_remapped (__main__.ConfigTests.test_channel_identity_cannot_be_remapped) ... ok
+test_corrupt_storage_blocks_overwrite (__main__.ConfigTests.test_corrupt_storage_blocks_overwrite) ... ok
+test_deep_json_rejected_before_recursive_parse (__main__.ConfigTests.test_deep_json_rejected_before_recursive_parse) ... ok
+test_instant_fault_does_not_depend_on_confirmation (__main__.ConfigTests.test_instant_fault_does_not_depend_on_confirmation) ... ok
+test_invalid_curve_and_geometry_rejected (__main__.ConfigTests.test_invalid_curve_and_geometry_rejected) ... ok
+test_linear_and_reverse_transfer (__main__.ConfigTests.test_linear_and_reverse_transfer) ... ok
+test_ntc_corrects_input_loading (__main__.ConfigTests.test_ntc_corrects_input_loading) ... ok
+test_ntc_requires_physical_pullup_and_correct_channel (__main__.ConfigTests.test_ntc_requires_physical_pullup_and_correct_channel) ... ok
+test_real_defaults_parse (__main__.ConfigTests.test_real_defaults_parse) ... ok
+test_save_failure_preserves_runtime_profile (__main__.ConfigTests.test_save_failure_preserves_runtime_profile) ... ok
+test_save_restart_and_stale_revision (__main__.ConfigTests.test_save_restart_and_stale_revision) ... ok
+test_table_interpolation_and_no_extrapolation (__main__.ConfigTests.test_table_interpolation_and_no_extrapolation) ... ok
+test_unknown_duplicate_and_nonfinite_fields_rejected (__main__.ConfigTests.test_unknown_duplicate_and_nonfinite_fields_rejected) ... ok
+test_voltage_quantization (__main__.ConfigTests.test_voltage_quantization) ... ok
+test_http_requires_boot_token_and_same_origin (__main__.HttpTests.test_http_requires_boot_token_and_same_origin) ... ok
+test_http_save_and_live_conversion (__main__.HttpTests.test_http_save_and_live_conversion) ... ok
+test_http_simulated_short_flags_fault (__main__.HttpTests.test_http_simulated_short_flags_fault) ... ok
+test_manual_reader_serves_the_pdf_text (__main__.HttpTests.test_manual_reader_serves_the_pdf_text) ... ok
+test_radio_authentication_and_pair_unpair (__main__.HttpTests.test_radio_authentication_and_pair_unpair) ... ok
+test_radio_rejects_malformed_commands (__main__.HttpTests.test_radio_rejects_malformed_commands) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 3.089s
+
+OK

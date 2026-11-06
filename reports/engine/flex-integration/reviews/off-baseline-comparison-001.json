@@ -1,0 +1,53 @@
+{
+  "rows": [
+    {
+      "name": "baseline",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/baseline-8c589a4/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/off-baseline-001.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/off-baseline-001"
+      ],
+      "output_sha256": "5825b992bb99148fc851c8656e164edde7a54b22cc98d8f8803258df4de6da92",
+      "bytes": 12271007,
+      "lines": 14400
+    },
+    {
+      "name": "candidate",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-DREVIEW_NEW",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/kernel-freeze-001/firmware/include",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/off-baseline-001.cpp",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/off-candidate-001"
+      ],
+      "output_sha256": "5825b992bb99148fc851c8656e164edde7a54b22cc98d8f8803258df4de6da92",
+      "bytes": 12271007,
+      "lines": 14400
+    }
+  ],
+  "bit_exact": true,
+  "source_sha256": "cfb89d3e8850b31a03744cd8b99c2f35855d170e320245567126bb8b0f2a7101",
+  "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/gcov",
+  "GCOV_PREFIX_STRIP": "0"
+}

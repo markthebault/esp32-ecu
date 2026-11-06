@@ -1,0 +1,140 @@
+{
+  "created_utc": "2026-11-04T21:18:04.054266+00:00",
+  "command": [
+    "pio",
+    "run",
+    "-d",
+    "/home/mark/persospace/esp32-ecu/firmware",
+    "-e",
+    "compact_n16r8_flex_dev",
+    "-e",
+    "compact_n16r8_web",
+    "-e",
+    "compact_a3_web",
+    "-e",
+    "compact_a3_timing_bench"
+  ],
+  "exit_code": 0,
+  "build_dir_override": "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-build-002/build",
+  "environments": [
+    "compact_n16r8_flex_dev",
+    "compact_n16r8_web",
+    "compact_a3_web",
+    "compact_a3_timing_bench"
+  ],
+  "default_cache_retained": true,
+  "default_cache_unchanged": true,
+  "source_inputs_unchanged": true,
+  "generated_sdkconfigs": [
+    {
+      "environment": "compact_n16r8_flex_dev",
+      "original_present": true,
+      "original_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_n16r8_flex_dev",
+      "after_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_n16r8_flex_dev"
+    },
+    {
+      "environment": "compact_n16r8_web",
+      "original_present": true,
+      "original_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_n16r8_web",
+      "after_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_n16r8_web"
+    },
+    {
+      "environment": "compact_a3_web",
+      "original_present": true,
+      "original_sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_a3_web",
+      "after_sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_a3_web"
+    },
+    {
+      "environment": "compact_a3_timing_bench",
+      "original_present": true,
+      "original_sha256": "b5cb80264f595019e6c879a6120e7ee9b8bc002c566d31fb1898bd48439af51d",
+      "retained": "retained-sdkconfigs/sdkconfig.compact_a3_timing_bench",
+      "after_sha256": "b5cb80264f595019e6c879a6120e7ee9b8bc002c566d31fb1898bd48439af51d",
+      "after_copy": "sdkconfigs-after/sdkconfig.compact_a3_timing_bench"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "build/compact_a3_timing_bench/firmware.bin",
+      "bytes": 680864,
+      "sha256": "c443f415103dcc31e4af1f8730aa0311c15cb33b9a578bdec828d8a63e89b5f5"
+    },
+    {
+      "path": "build/compact_a3_timing_bench/firmware.elf",
+      "bytes": 8407940,
+      "sha256": "4297cba79ee7f4ea84c8e0f160af40a13b86f84ad7492ed348836998b5f11a91"
+    },
+    {
+      "path": "build/compact_a3_web/firmware.bin",
+      "bytes": 1644496,
+      "sha256": "217cf7ccdaa176dbbdd9c51d371bd2d7c5420d126a42f7af95f09bb918c0b8ae"
+    },
+    {
+      "path": "build/compact_a3_web/firmware.elf",
+      "bytes": 13898144,
+      "sha256": "6ffe070c3249f498e34a32e2738c5d1e690fc894ed11a042863251e3697f5a92"
+    },
+    {
+      "path": "build/compact_n16r8_flex_dev/firmware.bin",
+      "bytes": 1644224,
+      "sha256": "7afb907964d9aa892fab617d767323cf50f55fb7ef1c04cbe1f2feeb90465bcb"
+    },
+    {
+      "path": "build/compact_n16r8_flex_dev/firmware.elf",
+      "bytes": 14022732,
+      "sha256": "61abee7d98989a7f37e4fe639d9110b14775561ef03a3d74155decbf46118b33"
+    },
+    {
+      "path": "build/compact_n16r8_web/firmware.bin",
+      "bytes": 1655424,
+      "sha256": "bcdb8ab466612e772d70a6d612ab63e6ffd9c37a92adf46d9c225e5a5ba35bc7"
+    },
+    {
+      "path": "build/compact_n16r8_web/firmware.elf",
+      "bytes": 14193972,
+      "sha256": "0a910593a4c268841ba8b4cb4fe0058b3489ad3ba62ff0ab3453573fe5b6d41b"
+    }
+  ],
+  "elf_archives": [
+    {
+      "environment": "compact_a3_timing_bench",
+      "path": "elf-archives/compact_a3_timing_bench.elf.gz",
+      "bytes": 2832241,
+      "sha256": "bbe4536c50a65962050143ce84567d46559666c0a44233ccdfb241396a37c87e",
+      "elf_bytes": 8407940,
+      "elf_sha256": "4297cba79ee7f4ea84c8e0f160af40a13b86f84ad7492ed348836998b5f11a91"
+    },
+    {
+      "environment": "compact_a3_web",
+      "path": "elf-archives/compact_a3_web.elf.gz",
+      "bytes": 4861531,
+      "sha256": "f15320c89809beecc281d69f9649eae0a8296b55872c9abc3ea949440c5256c1",
+      "elf_bytes": 13898144,
+      "elf_sha256": "6ffe070c3249f498e34a32e2738c5d1e690fc894ed11a042863251e3697f5a92"
+    },
+    {
+      "environment": "compact_n16r8_flex_dev",
+      "path": "elf-archives/compact_n16r8_flex_dev.elf.gz",
+      "bytes": 4840800,
+      "sha256": "f76948f0419c9a9320aab4305befa5f7594ddd079ca1733d64be755578b0f1c6",
+      "elf_bytes": 14022732,
+      "elf_sha256": "61abee7d98989a7f37e4fe639d9110b14775561ef03a3d74155decbf46118b33"
+    },
+    {
+      "environment": "compact_n16r8_web",
+      "path": "elf-archives/compact_n16r8_web.elf.gz",
+      "bytes": 4905870,
+      "sha256": "b868539d7c410f4678f3dd1ffcedb917e82286798b10701dd1aa1059cabc1f10",
+      "elf_bytes": 14193972,
+      "elf_sha256": "0a910593a4c268841ba8b4cb4fe0058b3489ad3ba62ff0ab3453573fe5b6d41b"
+    }
+  ],
+  "flashed": false,
+  "physical_qualification": false
+}

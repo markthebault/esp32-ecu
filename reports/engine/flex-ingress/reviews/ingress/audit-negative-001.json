@@ -1,0 +1,10 @@
+{
+  "command": [
+    "python3",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,struct,json,shutil\nO=Path(\".cache/engine/flex-ingress-review\").resolve()\np=O/\"unmapped-flash-negative\";p.mkdir()\nsrc=Path(\".cache/engine/flex-ingress/run-002/xtensa/probe.elf\")\ndata=bytearray(src.read_bytes());off=struct.unpack_from(\"<I\",data,32)[0];step,count,si=struct.unpack_from(\"<HHH\",data,46);hs=[struct.unpack_from(\"<IIIIIIIIII\",data,off+n*step)for n in range(count)]\nh=next(x for x in hs if x[3]<=0x40370000<x[3]+x[5]);where=h[4]+0x40370000-h[3]\nassert struct.unpack_from(\"<I\",data,where)[0]==0x3fc90000\nstruct.pack_into(\"<I\",data,where,0x3c100000);elf=p/\"probe.elf\";elf.write_bytes(data)\nf=O/\"contract-freeze-001/scripts/check_flex_ingress.py\";spec=importlib.util.spec_from_file_location(\"owned_audit\",f);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)\nr=m.audit(elf,p);print(json.dumps({\"passed_by_auditor\":r[\"passed\"],\"failures\":r[\"failures\"],\"literals\":r[\"literals\"],\"purpose\":\"OWNED ELF mutation only: first state-base literal changed from internal DRAM to0x3c100000, an unmapped flash-window address\"},indent=2))"
+  ],
+  "returncode": 0,
+  "stdout": "{\n  \"passed_by_auditor\": true,\n  \"failures\": [],\n  \"literals\": [\n    {\n      \"pc\": \"0x4037000f\",\n      \"literal\": \"0x40370000\",\n      \"value\": \"0x3c100000\",\n      \"value_section\": \"UNKNOWN\"\n    },\n    {\n      \"pc\": \"0x40370088\",\n      \"literal\": \"0x40370008\",\n      \"value\": \"0x3fc90018\",\n      \"value_section\": \".dram0.data\"\n    },\n    {\n      \"pc\": \"0x4037016a\",\n      \"literal\": \"0x40370004\",\n      \"value\": \"0x1388\",\n      \"value_section\": \"UNKNOWN\"\n    },\n    {\n      \"pc\": \"0x40370046\",\n      \"literal\": \"0x40370004\",\n      \"value\": \"0x1388\",\n      \"value_section\": \"UNKNOWN\"\n    }\n  ],\n  \"purpose\": \"OWNED ELF mutation only: first state-base literal changed from internal DRAM to0x3c100000, an unmapped flash-window address\"\n}\n",
+  "stderr": ""
+}

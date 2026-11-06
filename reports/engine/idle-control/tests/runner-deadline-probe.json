@@ -1,0 +1,85 @@
+{
+  "probe": "Synthetic executed events through the unmodified runner: rise0us, deadline cut150us. No controller-performance inference.",
+  "events": [
+    [
+      0,
+      8,
+      true,
+      "scheduled"
+    ],
+    [
+      150,
+      8,
+      false,
+      "cut:control_deadline"
+    ]
+  ],
+  "first_integrations": [
+    {
+      "start_s": 0.0,
+      "dt_s": 0.0,
+      "idle_high": false
+    },
+    {
+      "start_s": 0.0,
+      "dt_s": 0.00015,
+      "idle_high": true
+    },
+    {
+      "start_s": 0.00015,
+      "dt_s": 0.00010000000000000002,
+      "idle_high": false
+    },
+    {
+      "start_s": 0.00025,
+      "dt_s": 0.00025,
+      "idle_high": false
+    }
+  ],
+  "actual_valve": {
+    "mode": "normal",
+    "gpio_high": false,
+    "current_a": 0.0,
+    "opening_pct": 0.0,
+    "edges": 2,
+    "source_j": 0.00017273210451902607,
+    "copper_j": 9.74276594892682e-05,
+    "flyback_j": 7.53044450297588e-05,
+    "disconnect_j": 0.0,
+    "stored_j": 0.0,
+    "electrical_residual_j": -9.215718466126788e-19,
+    "energized_s": 0.00015,
+    "max_current_a": 0.1641554538879697,
+    "parameters": {
+      "resistance_ohm": 8.0,
+      "inductance_h": 0.012,
+      "diode_v": 0.7,
+      "mechanical_tau_s": 0.06,
+      "opening_current_a": 0.2,
+      "full_open_current_a": 1.1
+    }
+  },
+  "independent_150us_pulse": {
+    "mode": "normal",
+    "gpio_high": false,
+    "current_a": 0.0,
+    "opening_pct": 0.0,
+    "edges": 2,
+    "source_j": 0.00017273210451902607,
+    "copper_j": 9.742765948926821e-05,
+    "flyback_j": 7.530444502975881e-05,
+    "disconnect_j": 0.0,
+    "stored_j": 0.0,
+    "electrical_residual_j": -9.486769009248164e-19,
+    "energized_s": 0.00015,
+    "max_current_a": 0.1641554538879697,
+    "parameters": {
+      "resistance_ohm": 8.0,
+      "inductance_h": 0.012,
+      "diode_v": 0.7,
+      "mechanical_tau_s": 0.06,
+      "opening_current_a": 0.2,
+      "full_open_current_a": 1.1
+    }
+  }
+}

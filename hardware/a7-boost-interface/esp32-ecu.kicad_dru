@@ -1,0 +1,15 @@
+(version 1)
+
+# Geometry policy only; current/thermal/fuse acceptance is open.
+(rule "A6 supply minimum"
+  (condition "A.NetName == '+3V3' || A.NetName == '+5V' || A.NetName == 'FAN_LS' || A.NetName == 'FLEX_12V' || A.NetName == 'MAIN_LS' || A.NetName == 'PUMP_LS' || A.NetName == 'SENSOR_5V'")
+  (constraint track_width (min 0.5mm)))
+
+(rule "A6 power minimum"
+  (condition "A.NetName == 'GND' || A.NetName == 'INJ2_LS' || A.NetName == 'INJ3_LS' || A.NetName == 'INJ4_LS' || A.NetName == 'VBAT_FUSED' || A.NetName == 'VIN_FILTERED' || A.NetName == 'VIN_PROT'")
+  (constraint track_width (min 1.0mm)))
+
+# Exact three-segment INJ1 exception additionally bound by audit_a6_copper.py.
+(rule "A6 INJ1 lower floor with audited local neck"
+  (condition "A.NetName == 'INJ1_LS'")
+  (constraint track_width (min 0.8mm)))

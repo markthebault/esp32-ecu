@@ -1,0 +1,17 @@
+# Independent flex groundwork delta review, freeze002
+
+Header SHA256 ec34a4c56171990253c3d82e9d040e8f12139c8048654e2b0ff59a74361cce8a; parent test SHA256 f14554f6579e0da880243e40bb25ad966e80a30737ff283e27f17f491553661a. See core-freeze-002/manifest.json and core-test-results-002.json for exact source/command/binary bindings.
+
+The only core delta from freeze001 compares whole-us period uncertainty intervals with calibrated frequency limits. No new blocker found. Interval overlap correctly accepts49/151Hz endpoints when rounded periods alternate, retains explicit rejected periods outside the1us overlap, and preserves conservative sensor-fault classification for quantized170Hz periods. The ceil(period-at-fault-threshold) policy deliberately classifies a possibly threshold-crossing period as sensor_fault; it is not an exact floating-frequency comparison.
+
+Strict C++14 warnings, ASan and UBSan passed509 parent checks,2,101 existing independent checks and21,382 new boundary assertions. Boundary tests cover2/8/32-cycle windows, four quantization phases, zero tolerance, minimum/maximum legal calibration spans, positive and negative period-boundary neighbors, and169.8/170/170.2Hz fault classes. These are small portable component tests, not target/plant matrices or physical measurements.
+
+Parent startup capture was independently parsed and source reviewed. The input contains131 changed flex levels at50Hz with3ms LOW pulses,5,029 changed trigger levels /2,515 trigger rising callbacks,10 ordered observations and no status-injection commands. At100/160/500ms and999999us, captured production status reports2000RPM/sync2, fuel factor0, spark addition-40, advance-30 and pulse0; at1s/secl1 it reports fuel100, spark0, advance10 and5445us. Own core is ready at160ms with E0,42.5C and neutral100/0 corrections. This supports the production non-UNIT_TEST table-cache startup mechanism already found in source. It is native production code behavior under this fixture, not physical startup proof.
+
+Correction to the earlier source note: div100 uses DIV_ROUND_NEAREST, not truncation toward zero. The captured production3ms temperature is43C; own double arithmetic is42.5C. The original note is preserved in source-findings-before-rounding-correction.md and the current note is corrected. startup-capture-review-002.json binds/asserts the input and output hashes and all stated fields.
+
+An independent startup replay was intentionally deferred because the cached built fixture entry source changed from this freeze while the parent was completing its final runner. No production executable was started during this delta review. See startup-replay-deferred-002.json. Final production execution review still requires a matching final source/build/case freeze.
+
+The separate fixture JSON delta adds source/age/window origin and correction state, and ACK now advances virtual time and production loop before the simulated consumer observes/ACKs. This remains a serialized portable-consumer fixture, not engine integration. All target capture/ISR/queue, pin/protection/BOOT, Tune/schema/storage/UI/log/debug/radio and physical qualification remain open.
+
+The earlier16 generated external coverage-counter updates remain recorded in coverage-side-effect.json, with no reconstruction or reset. Every subsequent component executable used owned GCOV_PREFIX and GCOV_PREFIX_STRIP=0 before startup. Generated coverage is excluded from unchanged-cache claims.

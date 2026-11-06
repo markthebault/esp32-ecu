@@ -1,0 +1,48 @@
+{
+  "reference_source_differences_32": [
+    {
+      "file": "lib/ArduinoFake/SoftwareTimer.h",
+      "upstream_sha256": "8ceb73dd1b429cc5fd1c91176bb7fc53eb70ecb8d41de3afc93bc49d981d166a",
+      "adapted_sha256": "87e1e9e9bde6facf6cf0adb0371788df7bb1e260ed8f1622dbb7ca182f4b8917"
+    },
+    {
+      "file": "speeduino/board_native.cpp",
+      "upstream_sha256": "e3655fdbd8a2d762bc9e74f3e6135fbba5309c4e8be15f78da6ce3ad2f125a22",
+      "adapted_sha256": "9192b00704097f3c5714e740cfc2843f91c2a31bb7c3fb0226331c218374aac4"
+    }
+  ],
+  "reference_source_differences_16": [
+    {
+      "file": "lib/ArduinoFake/SoftwareTimer.h",
+      "upstream_sha256": "8ceb73dd1b429cc5fd1c91176bb7fc53eb70ecb8d41de3afc93bc49d981d166a",
+      "adapted_sha256": "2f561fc508a341bf5e8ee9cd79493c0c09afb8a877b42d8e36e71efb2770a472"
+    },
+    {
+      "file": "speeduino/board_native.cpp",
+      "upstream_sha256": "e3655fdbd8a2d762bc9e74f3e6135fbba5309c4e8be15f78da6ce3ad2f125a22",
+      "adapted_sha256": "d164d5a56267e74b48431293e333e3f0d81f946fb63348b47d2abc546faf5ed0"
+    }
+  ],
+  "half_step_ours": {
+    "common_trace_samples": 600,
+    "rpm_max_abs_delta": 0.5887251329035053,
+    "rpm_rms_delta": 0.1735710403069124,
+    "final_rpm_delta": 0.08165798109394018,
+    "mean_final_rpm_delta": 0.09815302414165217,
+    "duty_step_note": "Reference loop() is also called once per coupling advance, so this refines its zero-cost main-loop cadence as well as the plant."
+  },
+  "half_step_speeduino": {
+    "common_trace_samples": 600,
+    "rpm_max_abs_delta": 2.3700219819702397,
+    "rpm_rms_delta": 0.7663142988451747,
+    "final_rpm_delta": 0.5709613749799018,
+    "mean_final_rpm_delta": 0.11859668535964829,
+    "duty_step_note": "Reference loop() is also called once per coupling advance, so this refines its zero-cost main-loop cadence as well as the plant."
+  },
+  "live_files_changed_since_snapshot": {
+    "config/engine/defaults.json": {
+      "reviewed": "64d2a60d8225cc0cbfc96861ab9c7e6c1bd9cb7d109ce3a83c5fd504d9cf3f4b",
+      "current": "5c18c92edab479ddafa47e207928a0bd29aa68fcdf7e55708ff9514ab8cee01e"
+    }
+  }
+}

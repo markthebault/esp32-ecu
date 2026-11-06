@@ -1,0 +1,29 @@
+{
+  "application": "MegaLogViewer HD Lite4.6.14",
+  "scope": "Actual application read/plot of synthetic48-field SIL and91-field bounded recorder MSL; no physical observation claim",
+  "files": [
+    {
+      "path": ".cache/engine/idle/idle-sil.msl",
+      "sha256": "f40471cd38c721df91684713967cf8baef071e9d30f46aba195386fdcde6c31c",
+      "columns": 48
+    },
+    {
+      "path": ".cache/engine/idle/idle-observations.msl",
+      "sha256": "9b4ef5ffec5d921dbabff32328e3f49d2c3825f7a5993a6060f33b6379e51d9c",
+      "columns": 91
+    }
+  ],
+  "selected_sil_channels": [
+    "RPM",
+    "IdleDuty",
+    "ValveOpening",
+    "ValveCurrent"
+  ],
+  "selected_recorder_channels": [
+    "RPM",
+    "IdleDuty",
+    "IdleFeedforward",
+    "IdleI"
+  ],
+  "limits": "Spot-sampled model current can alias PWM; viewer floating-point representation of large IDs is not an exact audit format. Source file/JSON keep integer text."
+}

@@ -1,0 +1,83 @@
+[
+  {
+    "name": "compile-0",
+    "command": [
+      "cc",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-c",
+      "/home/mark/.platformio/packages/framework-espidf/components/json/cJSON/cJSON.c",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-target/service-007/cjson.o"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "compile-1",
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-pthread",
+      "-DECU_COMPACT_A3=1",
+      "-DECU_SELECTED_N16R8=1",
+      "-DECU_FLEX_G38_DRAFT=1",
+      "-I",
+      "/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/firmware/tests/target_fakes",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/firmware/include",
+      "/home/mark/persospace/esp32-ecu/firmware/tests/flex_target_service_test.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-target/service-007/cjson.o",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-target/service-007/test"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "run-0",
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-target/service-007/test",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-target/service-007/fixtures-0",
+      "0"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "run-1",
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-target/service-007/test",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-target/service-007/fixtures-1",
+      "1"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "run-2",
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-target/service-007/test",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-target/service-007/fixtures-2",
+      "2"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "run-3",
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-target/service-007/test",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-target/service-007/fixtures-3",
+      "3"
+    ],
+    "returncode": 0
+  }
+]

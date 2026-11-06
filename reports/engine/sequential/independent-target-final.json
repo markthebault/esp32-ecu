@@ -1,0 +1,218 @@
+{
+  "scope": "Independent final read-only review of four-cylinder sequential target implementation: phase decoder, scheduler/executor guards, ISR/task handoff, configuration/revision/phase epochs, raw-quiet stopped recovery, producer bindings, selected/generic/dummy linked images and static stack frames. No production source edits, child agents, flashing or connected hardware execution.",
+  "reviewed_at": "2026-11-03T17:45:40.689540+00:00",
+  "baseline_commit": "fa9627dbfd3d3ce0dac37b2c95d9d2e4f9d4bc71",
+  "result": "No remaining concrete blocker found in the reviewed final source and exact linked ELF hashes. Configuration handoff findings raised during this review are resolved and independently probed. This is source/native/static-image review, not hardware timing or engine qualification.",
+  "source_sha256": {
+    "firmware/include/ecu/engine_phase.hpp": "ed64cee63597e6d917d8d9b78cefbfc521de96f451da38fbeee309a052652b9c",
+    "firmware/include/ecu/engine_scheduler.hpp": "4b3a80b870025f354a331bf5b0334f076b568adf33df3608c782327a3068aec0",
+    "firmware/include/ecu/timing_executor.hpp": "477ba7cbf1e5db59d7bbe57b45eda819b60265ed9920a5911ac019594c8123fb",
+    "firmware/include/ecu/engine.hpp": "9b71f61fe63d1d87c6514a6a79540811f7e4affd87dd720266c52ad5cae07039",
+    "firmware/include/ecu/engine_json.hpp": "9a40e4b413a23be91f62d9cc9d0e811e2b574e6f41aa06a1c55eb47049ae43ac",
+    "firmware/include/ecu/engine_binding.hpp": "fa3affd9640309eb799c91070afe360bbc7d5bbcb3928b2eb2b92796f34ce849",
+    "firmware/include/ecu/engine_target.hpp": "220db816416237c55577684672a12725f2a70474b938d4b9c433d8ab1b8a2f13",
+    "firmware/include/ecu/web_config.hpp": "cf03c479e0482d32b730f7ac540ac4ed1834f3a606e06a5401b82a717d3350e9",
+    "firmware/include/ecu/capture_clock.hpp": "5f7b34fa019752c5c5d3a6c227b06e4ab7a2459cced920712f240b962e39ec9d",
+    "firmware/include/ecu/control.hpp": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/include/ecu/json.hpp": "3330c7a4fa23042c5c38332737b08843b111b39bf31f6a87bf2b16a8af88a5df",
+    "firmware/main/engine_target.cpp": "b82831810417fa53851ac7786850d2b0c68a8098ee60454357e05553fbc054af",
+    "firmware/main/engine_service.cpp": "317a9ca01b60719b526a05be0d58153a302f47f1a601f2ab915cbb14da273845",
+    "firmware/main/app.cpp": "9361765afe8d235500e9c20a8476854c582ec6da54880718b5a6e9bcd01672f3",
+    "firmware/main/web_config.cpp": "58353ab3296bcfd2b51842b6f1a5ccf7f07e0d3d80576806ae37853a9b991e17",
+    "firmware/main/CMakeLists.txt": "727fc7e89d4506975ff1d13929c64667e4c9eacf55a7b9106c169ad6f41ee918",
+    "firmware/platformio.ini": "a93018eb58131ff33e9b640873b544c4cc3e77b21f05adaa1f5c1ab5678f2338",
+    "firmware/tests/engine_phase_test.cpp": "1b9485b170ec1bedd8a73022d294e87bdc83c74be726da78de43ac0dea816d72",
+    "scripts/audit_target_isr.py": "550781826ea29b6fe55f802278422cda70bb80cb61aab76c717904b26dd83f4d",
+    "web/index.html": "0870dbce89809cd6171e8f10f20234a81075eaecd61815ecc76f05a128a958b8",
+    "web/trigger_logger.js": "d9997905115af0cbecca5382b04694a4bd71c220e19e84b0b02bd9cd27e85c07",
+    "config/interface-guide.json": "a35aeb300c897224b06d24dae300992810bb48b3f1a48b3273e05be16d6dbf8c",
+    "firmware/main/web_assets.hpp": "72752bfae3858df55592f467554060abf1512ef59f90b2d664e2b465d40c19e7"
+  },
+  "elfs": {
+    "selected": {
+      "environment": "compact_n16r8_web",
+      "path": "firmware/.pio/build/compact_n16r8_web/firmware.elf",
+      "sha256": "ebc00a008ab8154aea0c6b5c3e7849f0beea0e9fc99205fafe7116f12715962a",
+      "mtime_ns": 1793727662996186683
+    },
+    "generic": {
+      "environment": "compact_a3_web",
+      "path": "firmware/.pio/build/compact_a3_web/firmware.elf",
+      "sha256": "dc0f64b56520169c6a0df4b499f21f0bff28da0f2c82dcf2a6aa752c0654bc50",
+      "mtime_ns": 1793727658388361971
+    },
+    "dummy": {
+      "environment": "compact_a3_timing_bench",
+      "path": "firmware/.pio/build/compact_a3_timing_bench/firmware.elf",
+      "sha256": "8342afea3382b109d5fe289d55321dffcdcb83e0d9e300eefcc90fef5e499c38",
+      "mtime_ns": 1793727421784363802
+    }
+  },
+  "findings": [
+    {
+      "id": "TF1",
+      "severity": "high",
+      "status": "resolved",
+      "finding": "Tune/sensor revision checks alone did not invalidate a Sample copied before a configuration fence when persistence failed without changing either revision. An active command could carry old phase evidence into the new epoch and latch a false CamPhase fault.",
+      "final_review": "Measurement.phase_epoch propagates through app Sample and service Command. submit assigns configuration_epoch atomically from current external_epoch. Executor compares phase_epoch/configuration_epoch before activation and waits inactive with CamPhase control state rather than latching acquisition failure. Configuration epoch is also included in command change detection.",
+      "independent_probe": "Stale phase evidence under a new configuration epoch waits without a fault; fresh current-epoch evidence can subsequently activate. Same tune/sensor revisions are retained in the probe."
+    },
+    {
+      "id": "TF2",
+      "severity": "medium",
+      "status": "resolved",
+      "finding": "Invalid timebase callbacks returned before marking raw activity, allowing stopped recovery despite continuing invalid cam/crank interrupts.",
+      "final_review": "on_capture records fresh GPTimer callback time before CaptureClock.map and all early returns, for both channels. Valid captured time is additionally recorded but cannot move the monotonic activity time backward. Configuration hold and queue-overflow paths therefore retain raw activity too.",
+      "independent_probe": "A portable reproduction of this path recovers4 times in100ms when invalid callback activity is omitted, and0 times when each callback marks activity."
+    },
+    {
+      "id": "TF3",
+      "severity": "high",
+      "status": "resolved",
+      "finding": "Unlocked phase calculation could race a configuration hold; a stale worker result could rearm old phase after Configuration stop cleared it, then falsely latch on the next reset or old deadline.",
+      "final_review": "Both capture-branch and loop-tail phase publications revalidate have_command, accepted_epoch==external_epoch and !configuration_hold under the target lock. Capture branch additionally validates edge.epoch. Stale phase results are ignored.",
+      "independent_probe": "Real Executor interleaving reproduces cam_phase_lost after unguarded old-worker publication and subsequent unknown phase, while the epoch/hold-guarded publication leaves fault none."
+    },
+    {
+      "id": "TF4",
+      "severity": "medium",
+      "status": "resolved",
+      "finding": "CaptureAge trip and decoder-loss stop used a current_capture decision made before unlocked work; obsolete captures could create a false fault across a profile fence.",
+      "final_review": "Final source rechecks edge.epoch==external_epoch and !configuration_hold inside the mutation lock for both capture-age trip and decoder-loss stop. Candidate commit remains guarded by generation/epoch/command sequence."
+    }
+  ],
+  "verified_invariants": [
+    "Crank sync remains distinct from720 phase. Group0 still captures rising crank/cam events with SDK capture timestamps in the common GPTimer domain.",
+    "PhaseDecoder mapping/history/calculation executes in the timing task. ISR paths contain only fixed storage, integer guards and audited IRAM/ROM helpers.",
+    "Fresh processing time is supplied to phase.edge/cam; cam ingress age and pending-cam TTL are bounded. Old deadline is checked before accepting a projected extension or pending cam.",
+    "Only crank branch prepares scheduler candidates, pairing edge.time_us with the matching current phase_tooth/tooth. Cam branch updates phase guard without creating a mismatched time/angle candidate.",
+    "Independent cam deadline remains armed while sequential phase is known even when engine outputs are inactive. Late renewal cannot clear an expired CamPhase latch.",
+    "Phase acquisition/loss/guard updates advance executor generation. ISR trips, configuration fences and command changes prevent stale scheduler candidates from replacing newer state.",
+    "Both raw input channels prevent quiet recovery, including invalid mappings. Successful stopped recovery resets wrapper history/parity/pending state and requires fresh acquisition.",
+    "Selected N16R8 and generic web physical output writes remain compiled out. Dummy image retains its explicit output policy and has no diagnostic group1 callback/resource allocation.",
+    "All six cylinder1-first firing-order permutations preserve cylinder channel identity, one injection/spark per720, configured event angles and complete pulse widths in the independent probe."
+  ],
+  "independent_validation": {
+    "native_phase_tests": "Fresh final-source ASan/UBSan build of engine_phase_test.cpp passed162 combinations of wheel/RPM/start parity/cam delay/crank delay plus9 cam-boundary cases, missing-cam, pulse/mass and watchdog tests. Log: target-phase-native.log.",
+    "probe": {
+      "stale_phase_evidence_waits_without_latch": true,
+      "fresh_epoch_can_activate": true,
+      "unguarded_old_worker_phase": "cam_phase_lost",
+      "guarded_old_worker_phase": "none",
+      "invalid_noise_recoveries_without_activity_mark": 4,
+      "invalid_noise_recoveries_with_activity_mark": 0,
+      "firing_orders_checked": 6,
+      "720_counts_widths_and_angles_passed": true
+    },
+    "probe_source": "target-probe.cpp",
+    "probe_scope": "Uses actual portable Executor/AngleScheduler/PhaseDecoder headers and an explicit configuration interleaving model. It is not an execution of ESP-IDF tasks or physical GPIO.",
+    "pinned_object_compile": "Independently compiled engine_target.cpp, engine_service.cpp and app.cpp using pinned toolchain/compile database during review; all succeeded. Later epoch-fence source is additionally present in all successful final parent-linked builds.",
+    "build_logs": [
+      "target-builds.log",
+      "target-guide-builds.log"
+    ],
+    "audits": {
+      "selected": {
+        "reviewer_reran": true,
+        "passed": true,
+        "roots": [
+          "0x4037580c",
+          "0x40375a38",
+          "0x4037666c",
+          "0x4037eddc",
+          "0x4037f184"
+        ],
+        "function_count": 30,
+        "assertion_argument_only_count": 63,
+        "unclassified_flash_pointer_count": 0,
+        "literals_outside_iram": [],
+        "failures": [],
+        "diagnostic_callback_present": true,
+        "artifact": "target-selected-closure/closure.json"
+      },
+      "generic": {
+        "reviewer_reran": true,
+        "passed": true,
+        "roots": [
+          "0x403756bc",
+          "0x403758e8",
+          "0x4037651c",
+          "0x4037eb90",
+          "0x4037ef38"
+        ],
+        "function_count": 30,
+        "assertion_argument_only_count": 63,
+        "unclassified_flash_pointer_count": 0,
+        "literals_outside_iram": [],
+        "failures": [],
+        "diagnostic_callback_present": true,
+        "artifact": "target-generic-closure/closure.json"
+      },
+      "dummy": {
+        "reviewer_reran": true,
+        "passed": true,
+        "roots": [
+          "0x40375468",
+          "0x403761fc",
+          "0x4037d274",
+          "0x4037d61c"
+        ],
+        "function_count": 29,
+        "assertion_argument_only_count": 63,
+        "unclassified_flash_pointer_count": 0,
+        "literals_outside_iram": [],
+        "failures": [],
+        "diagnostic_callback_present": false,
+        "artifact": "target-dummy-closure/closure.json"
+      }
+    },
+    "guide_only_rebuild_equivalence": {
+      "selected": {
+        "previous_elf": "100322f73f847f750c1371c8336746e5f295e90aebc1347190f411d781ba9e20",
+        "final_elf": "ebc00a008ab8154aea0c6b5c3e7849f0beea0e9fc99205fafe7116f12715962a",
+        "reachable_instruction_count_previous": 6413,
+        "reachable_instruction_count_final": 6413,
+        "instruction_bytes_and_addresses_identical": true,
+        "changed_instruction_addresses": [],
+        "roots_identical": true
+      },
+      "generic": {
+        "previous_elf": "0e177df7fc827291e737067a013ce07c2fdca293cff240ba8a92ab1dcaf9b1ab",
+        "final_elf": "dc0f64b56520169c6a0df4b499f21f0bff28da0f2c82dcf2a6aa752c0654bc50",
+        "reachable_instruction_count_previous": 6385,
+        "reachable_instruction_count_final": 6385,
+        "instruction_bytes_and_addresses_identical": true,
+        "changed_instruction_addresses": [],
+        "roots_identical": true
+      }
+    },
+    "equivalence_scope": "Every audited reachable ISR instruction address and encoded instruction byte matches the pre-guide reviewed image for selected/generic. New image literal/data placement was separately re-audited; entire ELF equality is not claimed."
+  },
+  "stack_review": {
+    "configured_timing_stack_bytes": 16384,
+    "configured_main_stack_bytes": 16384,
+    "configured_isr_stack_bytes": 1536,
+    "observed_timing_run_entry_bytes": 3184,
+    "observed_service_command_helper_entry_bytes": 2160,
+    "timing_run_plus_helper_before_callees_bytes": 5344,
+    "observed_app_main_entry_bytes": 6112,
+    "observed_engine_service_observe_entry_bytes": 592,
+    "observed_callback_entry_bytes": {
+      "capture": 128,
+      "alarm": 112,
+      "diagnostic": 96
+    },
+    "artifact": "target-stack-prologues-final.json",
+    "assessment": "No obvious static task-stack capacity issue found. These prologue frames are not a complete dynamic call-tree bound or measured high-water mark. ISR nesting, ROM helpers and panic paths require runtime/hardware evidence; stack sufficiency under all physical conditions is not claimed."
+  },
+  "remaining_limits": [
+    "Cam deadline projection and bounded angular extrapolation can fault conservatively under abrupt speed variation, especially near a long missing-tooth gap. The draft explicitly documents this; no arbitrary-acceleration guarantee is claimed.",
+    "Two cam pulses verify repeatability/parity relative to configured cam_sync_deg, not the correctness of physical cylinder1 compression calibration. A360-degree calibration error remains undetectable from this single cam pattern.",
+    "Crank/phase status fields are worker-owned observations; live executor timing_fault and output gating remain authoritative if the worker stalls. No atomic cross-task UI snapshot claim is made.",
+    "MCPWM latch overwrite/coalescing, timestamp/polarity register races, input conditioning, ISR latency/duration, per-pin outputs and timer jitter are unmeasured on hardware.",
+    "Static audits classify63 reviewed pinned-SDK assertion argument-only pointers and no unclassified pointers. Physical fail-low behavior during SDK assertion/panic remains unqualified.",
+    "No hardware was connected or flashed. Native logical pulse counts and static placement do not qualify an engine, electrical system or vehicle."
+  ],
+  "related_design_review": "architecture.json"
+}

@@ -1,0 +1,2260 @@
+{
+  "schema_version": 1,
+  "source_base_commit": "c780c3ada8bc8c74415bbb04a86b0bc4ab9ea564",
+  "current_sources": {
+    "README.md": "3ea3407ae805e1280bead166efb569f3f8d2113b9185e88743f64396ae303d6c",
+    "docs/engine-feature-coverage.md": "8e73adb005639a1b39aaa51c303807336233fa887352980a708ce740db1211e9",
+    "docs/engine-boost-development.md": "d380e69f911b737f0a6417417b24e65cb31c3a3e1cd456ff174ba5691f2cf4ce",
+    "firmware/include/ecu/boost_control.hpp": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b",
+    "firmware/include/ecu/boost_pwm.hpp": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255",
+    "firmware/include/ecu/idle_pwm.hpp": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/tests/boost_control_test.cpp": "b032e3f6afec416ecf856ac146967097f206169e053aad17b1dddc488a4e897a",
+    "firmware/tests/idle_pwm_test.cpp": "6a19fbfcbb3d562fefd07941521666fbe16f62cad26da0638c2828941c647f5a",
+    "scripts/test_firmware.sh": "a60a10f031d5548da9df9ee3bc5d5d69bc2d9349e5890fa6c52c5a5d03eec2ee",
+    "scripts/build_speeduino_boost.py": "591ccffd2aea4b6121c9eb8b68597777db7217a9437c23442b91ffb10f6ac241",
+    "scripts/build_speeduino_flex.py": "6c4fa2b9a47d1f5d0b1efc0bd50cf9fd45fc3fc61380e318733aa64effe11dd7",
+    "tools/speeduino_boost_sim.cpp": "76f70883ed6f9a9f5e4c683ca8c5ee22604948ada84fea5a4c6a2329e4d63160",
+    "tools/boost_core_sim.cpp": "2bbe1e2fa8a4f70ae1ae17b7ea83f132d99d69c8641c015dd3378594b5372248",
+    "tools/run_boost_groundwork.py": "ae7bf978104c6de6da92e51dae824b1f5b8f5bdf110fe732739c56432c4b0ffc",
+    "tools/test_boost_architecture.py": "af85be643a053987143be54d18c5f5df22707d719f8f1039bc153b03d3dfd4a2",
+    "hardware/boost-control/architecture.json": "ee46cfe1639ca8fbfc7815aed2a4addcf18d29a4a71ab58f8727f882c893e374"
+  },
+  "archives": {
+    "sources.tar.xz": {
+      "bytes": 458936,
+      "sha256": "66899695a7ee89285e95d3d0ce787154ac78d6428184ad5f1fc80f614c009c09",
+      "members": {
+        "current/README.md": {
+          "bytes": 3130,
+          "sha256": "3ea3407ae805e1280bead166efb569f3f8d2113b9185e88743f64396ae303d6c"
+        },
+        "current/docs/engine-boost-development.md": {
+          "bytes": 10197,
+          "sha256": "d380e69f911b737f0a6417417b24e65cb31c3a3e1cd456ff174ba5691f2cf4ce"
+        },
+        "current/docs/engine-feature-coverage.md": {
+          "bytes": 17352,
+          "sha256": "8e73adb005639a1b39aaa51c303807336233fa887352980a708ce740db1211e9"
+        },
+        "current/firmware/include/ecu/boost_control.hpp": {
+          "bytes": 11161,
+          "sha256": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b"
+        },
+        "current/firmware/include/ecu/boost_pwm.hpp": {
+          "bytes": 375,
+          "sha256": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255"
+        },
+        "current/firmware/include/ecu/idle_pwm.hpp": {
+          "bytes": 6903,
+          "sha256": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20"
+        },
+        "current/firmware/include/ecu/realtime.hpp": {
+          "bytes": 387,
+          "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+        },
+        "current/firmware/tests/boost_control_test.cpp": {
+          "bytes": 6188,
+          "sha256": "b032e3f6afec416ecf856ac146967097f206169e053aad17b1dddc488a4e897a"
+        },
+        "current/firmware/tests/idle_pwm_test.cpp": {
+          "bytes": 2845,
+          "sha256": "6a19fbfcbb3d562fefd07941521666fbe16f62cad26da0638c2828941c647f5a"
+        },
+        "current/hardware/boost-control/architecture.json": {
+          "bytes": 2415,
+          "sha256": "ee46cfe1639ca8fbfc7815aed2a4addcf18d29a4a71ab58f8727f882c893e374"
+        },
+        "current/scripts/build_speeduino_boost.py": {
+          "bytes": 4518,
+          "sha256": "591ccffd2aea4b6121c9eb8b68597777db7217a9437c23442b91ffb10f6ac241"
+        },
+        "current/scripts/build_speeduino_flex.py": {
+          "bytes": 6401,
+          "sha256": "6c4fa2b9a47d1f5d0b1efc0bd50cf9fd45fc3fc61380e318733aa64effe11dd7"
+        },
+        "current/scripts/test_firmware.sh": {
+          "bytes": 6435,
+          "sha256": "a60a10f031d5548da9df9ee3bc5d5d69bc2d9349e5890fa6c52c5a5d03eec2ee"
+        },
+        "current/tools/boost_core_sim.cpp": {
+          "bytes": 4194,
+          "sha256": "2bbe1e2fa8a4f70ae1ae17b7ea83f132d99d69c8641c015dd3378594b5372248"
+        },
+        "current/tools/run_boost_groundwork.py": {
+          "bytes": 12089,
+          "sha256": "ae7bf978104c6de6da92e51dae824b1f5b8f5bdf110fe732739c56432c4b0ffc"
+        },
+        "current/tools/speeduino_boost_sim.cpp": {
+          "bytes": 7623,
+          "sha256": "76f70883ed6f9a9f5e4c683ca8c5ee22604948ada84fea5a4c6a2329e4d63160"
+        },
+        "current/tools/test_boost_architecture.py": {
+          "bytes": 2203,
+          "sha256": "af85be643a053987143be54d18c5f5df22707d719f8f1039bc153b03d3dfd4a2"
+        },
+        "firmware-build-inputs/config/defaults.json": {
+          "bytes": 4006,
+          "sha256": "e61fb310f60ddc801bbc2dec0dca288314ed124761b7fc35087aee10687ba617"
+        },
+        "firmware-build-inputs/config/engine-radio-v5.json": {
+          "bytes": 2252,
+          "sha256": "c23e5de6cee6d5dd88ceb44993e3fe3676fed9730ee8621704c501c6dba62c27"
+        },
+        "firmware-build-inputs/config/engine/defaults-v2.json": {
+          "bytes": 12213,
+          "sha256": "81195ce83acaafefc02ebe955c2d1d92656f41f015beb8c57bad6745139fd769"
+        },
+        "firmware-build-inputs/config/engine/defaults-v3.json": {
+          "bytes": 6301,
+          "sha256": "9274e32ff7f0f0debe253f95304241a398b6b9c10fe04b868048fda4cf19d835"
+        },
+        "firmware-build-inputs/config/engine/defaults-v4.json": {
+          "bytes": 7007,
+          "sha256": "5c18c92edab479ddafa47e207928a0bd29aa68fcdf7e55708ff9514ab8cee01e"
+        },
+        "firmware-build-inputs/config/engine/defaults-v5.json": {
+          "bytes": 16493,
+          "sha256": "e169b5e20eb15f18cf4e61a8eb385c9cded0a0fcf9ca6bb65ad1df6abf58dda9"
+        },
+        "firmware-build-inputs/config/engine/defaults-v6.json": {
+          "bytes": 17227,
+          "sha256": "c9007e8875392e436771cd64778d4ac1e17f8d85ff112d401d4293a6cfb46dba"
+        },
+        "firmware-build-inputs/config/engine/defaults-v7.json": {
+          "bytes": 17649,
+          "sha256": "34f6fde4104352d9fb181c1b15a52e228e398946b54f7eba6651f92eb394ae4c"
+        },
+        "firmware-build-inputs/config/engine/defaults-v8.json": {
+          "bytes": 26502,
+          "sha256": "98edc81ac7c840d5f83c337dcab06a84a1642bf2ddf82c998b09481f18d434f6"
+        },
+        "firmware-build-inputs/config/engine/defaults.json": {
+          "bytes": 27340,
+          "sha256": "abdd064e74ace0c55fa8b2060dcfe4a0f8f4f83b20cac346578bc4f245b1ab24"
+        },
+        "firmware-build-inputs/config/engine/fixtures/legacy-near-limit-v2.json": {
+          "bytes": 15843,
+          "sha256": "aae06cf5c684837cd533d957bac536a972ee053a0e626b2a7cebaceb297fcbc6"
+        },
+        "firmware-build-inputs/config/engine/fixtures/transient-legacy-v5.csv": {
+          "bytes": 1450,
+          "sha256": "082b36961bd194c65a093d92e27f97555675ceaf0fae18e8f8df56a700e98803"
+        },
+        "firmware-build-inputs/config/interface-guide-development.json": {
+          "bytes": 19173,
+          "sha256": "303df4820d7dd10aa0691e9ae701ed8ea67aa780a96c177966d60c5f21172549"
+        },
+        "firmware-build-inputs/config/interface-guide.json": {
+          "bytes": 42300,
+          "sha256": "5cd231774c77bdc9c6751686979a0e28efa5ca5e1c45413eec94caa2bcda25de"
+        },
+        "firmware-build-inputs/config/manual.json": {
+          "bytes": 45021,
+          "sha256": "24d9eb07660ecb40e9ab0ab5ea76ec2aeb8ea7fe704d0abe90d00f6efc10f142"
+        },
+        "firmware-build-inputs/firmware/CMakeLists.txt": {
+          "bytes": 106,
+          "sha256": "2299abd9933a68ed1adcf5c3ee6f583b50d6e48a4f95aa18cb00c111b62b8f53"
+        },
+        "firmware-build-inputs/firmware/boards/esp32-s3-44pin-n16r8.json": {
+          "bytes": 1162,
+          "sha256": "b1bbabedd526699167fd6531971ac5620776070712cfdaf6fbefc0ceb9962a2b"
+        },
+        "firmware-build-inputs/firmware/components/esp_driver_usb_serial_jtag/CMakeLists.txt": {
+          "bytes": 1317,
+          "sha256": "854d00de5fe0f3d271b4d7c86ea9920f6234e074b6386c3b7acc23d3ce580613"
+        },
+        "firmware-build-inputs/firmware/components/esp_driver_usb_serial_jtag/Kconfig": {
+          "bytes": 1743,
+          "sha256": "8ef250dc1ab81bb2646a21234a6184945a8a4baa024473a30198c4b237f128ea"
+        },
+        "firmware-build-inputs/firmware/components/esp_driver_usb_serial_jtag/LICENSE": {
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        "firmware-build-inputs/firmware/components/esp_driver_usb_serial_jtag/README.md": {
+          "bytes": 1130,
+          "sha256": "21d5d8f115c7fe61d24e682ba462d3e6e7d4b4f2feb1d1fff8b9547e7d9ed5bc"
+        },
+        "firmware-build-inputs/firmware/components/esp_driver_usb_serial_jtag/include/driver/esp_private/usb_serial_jtag_vfs.h": {
+          "bytes": 497,
+          "sha256": "6bd0d7bbd68bb0bcf854836afdbbf11c1ba7b34e1d71e2e041b8c618ea352577"
+        },
+        "firmware-build-inputs/firmware/components/esp_driver_usb_serial_jtag/include/driver/usb_serial_jtag.h": {
+          "bytes": 3986,
+          "sha256": "88e03e1650895708da6844ab0c1409bc717ac3c0e775cef2e3e3531e67558b50"
+        },
+        "firmware-build-inputs/firmware/components/esp_driver_usb_serial_jtag/include/driver/usb_serial_jtag_select.h": {
+          "bytes": 1085,
+          "sha256": "e633508e776ce690f7d4c758b5feaa3f71223b6add612138899e010ffa3853c8"
+        },
+        "firmware-build-inputs/firmware/components/esp_driver_usb_serial_jtag/include/driver/usb_serial_jtag_vfs.h": {
+          "bytes": 1931,
+          "sha256": "844aff0b95770b7a961ade36cadefaa1ad56714f4ef3fdf7580617875965ae1c"
+        },
+        "firmware-build-inputs/firmware/components/esp_driver_usb_serial_jtag/linker.lf": {
+          "bytes": 212,
+          "sha256": "962c75077a584c3fc31be99ee40680ca1f748f193e473737fb09e8d4989816fe"
+        },
+        "firmware-build-inputs/firmware/components/esp_driver_usb_serial_jtag/src/usb_serial_jtag.c": {
+          "bytes": 17275,
+          "sha256": "6316295b4776a662f0feea6117eab665877d7587f4bd5dce8d64ac1dd6cf0670"
+        },
+        "firmware-build-inputs/firmware/components/esp_driver_usb_serial_jtag/src/usb_serial_jtag_connection_monitor.c": {
+          "bytes": 3906,
+          "sha256": "58779a75668f9d253a7f0ea0c8a7bbb194204a41b8979b98b7261c1954c5d29d"
+        },
+        "firmware-build-inputs/firmware/components/esp_driver_usb_serial_jtag/src/usb_serial_jtag_vfs.c": {
+          "bytes": 22857,
+          "sha256": "0d333e9a6bf94cd58e1abdcfc63a34b14fb0c6696ce1772835f20f9411b968d7"
+        },
+        "firmware-build-inputs/firmware/components/esp_driver_usb_serial_jtag/upstream.json": {
+          "bytes": 1461,
+          "sha256": "31e4a36bef01106a7655e98710a9b7a10490c3ebd6bdb25a5cf1545379409971"
+        },
+        "firmware-build-inputs/firmware/include/ecu/board_status.hpp": {
+          "bytes": 305,
+          "sha256": "4ad055e17cdfc081db4cb6f17763bcd2ce299fecd8786a7b1220ff8e350d53d7"
+        },
+        "firmware-build-inputs/firmware/include/ecu/boost_control.hpp": {
+          "bytes": 11161,
+          "sha256": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b"
+        },
+        "firmware-build-inputs/firmware/include/ecu/boost_pwm.hpp": {
+          "bytes": 375,
+          "sha256": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255"
+        },
+        "firmware-build-inputs/firmware/include/ecu/capture_clock.hpp": {
+          "bytes": 3448,
+          "sha256": "5c0f88793019c236b3dc6eea7a39e9a9b1a080bf5adc3159b6651ba45bdc8511"
+        },
+        "firmware-build-inputs/firmware/include/ecu/config.hpp": {
+          "bytes": 5442,
+          "sha256": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739"
+        },
+        "firmware-build-inputs/firmware/include/ecu/config_storage.hpp": {
+          "bytes": 2363,
+          "sha256": "b7ec2f7029e00abb6440b3a9b1e1210d76ddf1f2309d19f7c52d81bc59990c45"
+        },
+        "firmware-build-inputs/firmware/include/ecu/control.hpp": {
+          "bytes": 10954,
+          "sha256": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine.hpp": {
+          "bytes": 29737,
+          "sha256": "18ceb68768c435139fa3917da435de6b8164bdeb28c46173dfead5a8c64cb4a9"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_binding.hpp": {
+          "bytes": 3197,
+          "sha256": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_data.hpp": {
+          "bytes": 6314,
+          "sha256": "1e9773a82c824839fa6d8fee2700840f993305424c7257a9b809cf070d11ada6"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_data_json.hpp": {
+          "bytes": 8484,
+          "sha256": "dee3074bf7a2ee996be6f0f0d55c0934987a692b4cbf2ee5dd35d5c93e78a05a"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_json.hpp": {
+          "bytes": 19796,
+          "sha256": "e2ce934844850c3096db7acd974300521ec414f6d24cce1936f7d526a65eca37"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_limits.hpp": {
+          "bytes": 107,
+          "sha256": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_log.hpp": {
+          "bytes": 5418,
+          "sha256": "c17b1d3435879e4ac0fcb1b4621b85f58d9975d044952fc0b083284e56e1a4fc"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_log_json.hpp": {
+          "bytes": 3996,
+          "sha256": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_log_msl.hpp": {
+          "bytes": 10165,
+          "sha256": "c44439aa9f3e863bb0c4468f8cfa10912d4f52a32f4a9d32714f483a5a17ef5c"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_log_service.hpp": {
+          "bytes": 754,
+          "sha256": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_phase.hpp": {
+          "bytes": 8547,
+          "sha256": "ce21ecf51cd36259c6f8ef232994931bc8a6ac15334c6658f534899ab70f5c27"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_radio.hpp": {
+          "bytes": 9133,
+          "sha256": "7e0b32a27405f2bcf5081864d7b62de9c680c291d06037343ab45d9f75bfbdc5"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_radio_flex.hpp": {
+          "bytes": 3885,
+          "sha256": "24580460d92e27c4223fe272b49ec7f099e54601d6f58fe9d9a27e65209894e5"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_radio_health.hpp": {
+          "bytes": 1009,
+          "sha256": "94919a86f184cf7bccdc767c67de753a10b0d1dba40478479ddd9341e311cc75"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_scheduler.hpp": {
+          "bytes": 10251,
+          "sha256": "9db0432501c8f8602c3f1140d277d1b6c200f503bd9d1de24b110e1647aa5f8a"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_service.hpp": {
+          "bytes": 976,
+          "sha256": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_storage.hpp": {
+          "bytes": 3104,
+          "sha256": "6949614d596b42ebc9fee48e4ad9f5bf940499b72a1b4fa901dab9992d4f2f0e"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_target.hpp": {
+          "bytes": 2451,
+          "sha256": "17bc0b1f7f709b8946674cdf956a7914798e741fd51b4c3c90614c14abfe6273"
+        },
+        "firmware-build-inputs/firmware/include/ecu/engine_tuning.hpp": {
+          "bytes": 120,
+          "sha256": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6"
+        },
+        "firmware-build-inputs/firmware/include/ecu/espnow.hpp": {
+          "bytes": 336,
+          "sha256": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc"
+        },
+        "firmware-build-inputs/firmware/include/ecu/espnow_protocol.hpp": {
+          "bytes": 2763,
+          "sha256": "02de39839f8367f46d7fb4cdb922a3de47e68c67280309f581a1f7eb05bfbbad"
+        },
+        "firmware-build-inputs/firmware/include/ecu/flex_capture_json.hpp": {
+          "bytes": 5288,
+          "sha256": "5721d4889b351bb9001a259801cb4ae465ddd8852a9d69553a6564684d0a85fb"
+        },
+        "firmware-build-inputs/firmware/include/ecu/flex_capture_owner.hpp": {
+          "bytes": 12562,
+          "sha256": "3f4f69618b9e7b376c2ea1a1717ffdd328d782d5e54416da9296a2a95d6efb84"
+        },
+        "firmware-build-inputs/firmware/include/ecu/flex_engine.hpp": {
+          "bytes": 5999,
+          "sha256": "b24c940bdee8e71e427f552d126efdba7d5ca29110aa70d7d4396fcef6eba468"
+        },
+        "firmware-build-inputs/firmware/include/ecu/flex_fuel.hpp": {
+          "bytes": 14382,
+          "sha256": "ce233744b7f8b938f2d2a4a491138b2ba115a62ec0a5270612a89261e1729c22"
+        },
+        "firmware-build-inputs/firmware/include/ecu/flex_hardware.hpp": {
+          "bytes": 493,
+          "sha256": "bd01b82d25c37f25169aead71d7df3fc4992923c52e941df4766943e290a6380"
+        },
+        "firmware-build-inputs/firmware/include/ecu/flex_ingress.hpp": {
+          "bytes": 9452,
+          "sha256": "29a7ab7040b9918f7dde65356c138b8b619b484588954230bbc8d8d43cff4216"
+        },
+        "firmware-build-inputs/firmware/include/ecu/flex_json.hpp": {
+          "bytes": 6399,
+          "sha256": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45"
+        },
+        "firmware-build-inputs/firmware/include/ecu/flex_runtime.hpp": {
+          "bytes": 8991,
+          "sha256": "74bffa63c8930ea35c123250c98e30b5c9f588eb6761a812881d1e1a0b981051"
+        },
+        "firmware-build-inputs/firmware/include/ecu/flex_runtime_json.hpp": {
+          "bytes": 4014,
+          "sha256": "4b1c0424f5ac2bd50f520d1d04badb4347bbe246cfb02070988175a50a45d6d7"
+        },
+        "firmware-build-inputs/firmware/include/ecu/heap_object.hpp": {
+          "bytes": 540,
+          "sha256": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51"
+        },
+        "firmware-build-inputs/firmware/include/ecu/idle_command.hpp": {
+          "bytes": 1489,
+          "sha256": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310"
+        },
+        "firmware-build-inputs/firmware/include/ecu/idle_control.hpp": {
+          "bytes": 10973,
+          "sha256": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd"
+        },
+        "firmware-build-inputs/firmware/include/ecu/idle_hardware.hpp": {
+          "bytes": 616,
+          "sha256": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+        },
+        "firmware-build-inputs/firmware/include/ecu/idle_pwm.hpp": {
+          "bytes": 6903,
+          "sha256": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20"
+        },
+        "firmware-build-inputs/firmware/include/ecu/idle_pwm_json.hpp": {
+          "bytes": 1434,
+          "sha256": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b"
+        },
+        "firmware-build-inputs/firmware/include/ecu/json.hpp": {
+          "bytes": 2130,
+          "sha256": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247"
+        },
+        "firmware-build-inputs/firmware/include/ecu/load_json.hpp": {
+          "bytes": 8013,
+          "sha256": "04048aac889a77b29beac77ba4d43b93694fe61a23a089bb2e09d87ec72de218"
+        },
+        "firmware-build-inputs/firmware/include/ecu/load_model.hpp": {
+          "bytes": 11563,
+          "sha256": "4ebcebe554ebf29f4dc7db29a8a51302d3ebbc8647ba9f73d5278ef85503074b"
+        },
+        "firmware-build-inputs/firmware/include/ecu/pins.hpp": {
+          "bytes": 1139,
+          "sha256": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad"
+        },
+        "firmware-build-inputs/firmware/include/ecu/realtime.hpp": {
+          "bytes": 387,
+          "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+        },
+        "firmware-build-inputs/firmware/include/ecu/secondary_json.hpp": {
+          "bytes": 11768,
+          "sha256": "54653a90fdbadeeebe926980bacbb25e54b6f61f93e83d4b97be5bf260a4c497"
+        },
+        "firmware-build-inputs/firmware/include/ecu/secondary_tables.hpp": {
+          "bytes": 16273,
+          "sha256": "08aa9b41b7c424b3168d34350a31477ef2e44a3439209bf9cb38e0e151ef3613"
+        },
+        "firmware-build-inputs/firmware/include/ecu/status_led.hpp": {
+          "bytes": 6608,
+          "sha256": "47dc3b311195c72348849e24521b47e743cfec90b751fcd1b9626b39ff034902"
+        },
+        "firmware-build-inputs/firmware/include/ecu/switch_acquisition.hpp": {
+          "bytes": 9371,
+          "sha256": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb"
+        },
+        "firmware-build-inputs/firmware/include/ecu/switch_service.hpp": {
+          "bytes": 416,
+          "sha256": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e"
+        },
+        "firmware-build-inputs/firmware/include/ecu/switch_transport.hpp": {
+          "bytes": 2438,
+          "sha256": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932"
+        },
+        "firmware-build-inputs/firmware/include/ecu/timing_executor.hpp": {
+          "bytes": 15308,
+          "sha256": "d052938df9ea824aec2f7397d24425007ab3cc144e7e931546c024a52a5d39db"
+        },
+        "firmware-build-inputs/firmware/include/ecu/transient_enrichment.hpp": {
+          "bytes": 11886,
+          "sha256": "75250d519305aa604ebefb4a177ec64cf2c38d14a3d31f60e99cc88322052911"
+        },
+        "firmware-build-inputs/firmware/include/ecu/transient_json.hpp": {
+          "bytes": 3294,
+          "sha256": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88"
+        },
+        "firmware-build-inputs/firmware/include/ecu/trigger_log.hpp": {
+          "bytes": 2952,
+          "sha256": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451"
+        },
+        "firmware-build-inputs/firmware/include/ecu/trigger_log_json.hpp": {
+          "bytes": 4155,
+          "sha256": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58"
+        },
+        "firmware-build-inputs/firmware/include/ecu/tuning_document.hpp": {
+          "bytes": 6714,
+          "sha256": "96e6e5bfde427f5f7d0e4ad8959b4b5db534f31079754cd0118279e17b9ce957"
+        },
+        "firmware-build-inputs/firmware/include/ecu/tuning_layout.hpp": {
+          "bytes": 27211,
+          "sha256": "2dffbc95204918efe2fde6d6ee98438978ddd91d4f49c65bcb7fde70854b62f5"
+        },
+        "firmware-build-inputs/firmware/include/ecu/tuning_live.hpp": {
+          "bytes": 5606,
+          "sha256": "6d9dc7b328631e20c1e99d513efdebec6b9448532baaab26361f7dc8b4f873e1"
+        },
+        "firmware-build-inputs/firmware/include/ecu/tuning_session.hpp": {
+          "bytes": 7958,
+          "sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e"
+        },
+        "firmware-build-inputs/firmware/include/ecu/tuning_stream.hpp": {
+          "bytes": 3028,
+          "sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042"
+        },
+        "firmware-build-inputs/firmware/include/ecu/web_config.hpp": {
+          "bytes": 1050,
+          "sha256": "984d5447a6f07e626987819d2338489aa25004a15b529c460c29bde497e7a019"
+        },
+        "firmware-build-inputs/firmware/main/CMakeLists.txt": {
+          "bytes": 495,
+          "sha256": "2b6bde9fd593ea127fd647020cd70915627d26074634d9e8e581b72ae00c8269"
+        },
+        "firmware-build-inputs/firmware/main/Kconfig.projbuild": {
+          "bytes": 760,
+          "sha256": "b5ddeaaea5721d444da8d48d92ff2dabf6545a70ab7a4fc353cdc6f8316d3164"
+        },
+        "firmware-build-inputs/firmware/main/app.cpp": {
+          "bytes": 12967,
+          "sha256": "487d5e03a964f686939dcb46a148a91c02e516678cfd6c7d342ec0ba269ce9e6"
+        },
+        "firmware-build-inputs/firmware/main/config_json.hpp": {
+          "bytes": 3373,
+          "sha256": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6"
+        },
+        "firmware-build-inputs/firmware/main/engine_log_service.cpp": {
+          "bytes": 2629,
+          "sha256": "05666d7be694be72719515709a083b0cf65701ebcd410fdb32fc0aa0e9fbbd53"
+        },
+        "firmware-build-inputs/firmware/main/engine_service.cpp": {
+          "bytes": 14530,
+          "sha256": "472329f649560449b17a888d6264e757da1d01568aa71d6dd5dcf3dc0b7bfb79"
+        },
+        "firmware-build-inputs/firmware/main/engine_target.cpp": {
+          "bytes": 38718,
+          "sha256": "0938acaa5699ec5ba120bb4826d22989c734155117622d5f20b96cf297d2a692"
+        },
+        "firmware-build-inputs/firmware/main/engine_tuning.cpp": {
+          "bytes": 7880,
+          "sha256": "24b846ed8cc4a03c7b323afd4b58eea7f411b243e71e569f5b9c08c9343d851a"
+        },
+        "firmware-build-inputs/firmware/main/espnow.cpp": {
+          "bytes": 29155,
+          "sha256": "fe1d07279fda987162e191812cd8b92eb5d9cc5374b246bdd5ed971decdb39c0"
+        },
+        "firmware-build-inputs/firmware/main/switch_service.cpp": {
+          "bytes": 11355,
+          "sha256": "60bdc96159ced2a79ee24e68e30179d804a6bc95b9173b27ac89a797f43e3826"
+        },
+        "firmware-build-inputs/firmware/main/web_assets.hpp": {
+          "bytes": 338317,
+          "sha256": "165223ec5aa870faa9f02c1f2e23155b1c27af7e4a424e699d870aafb4852a2d"
+        },
+        "firmware-build-inputs/firmware/main/web_config.cpp": {
+          "bytes": 28967,
+          "sha256": "482ae6da5c108491a57df4c688e95652a1f9ddd8029ceee8a0d0e7a0a23cd846"
+        },
+        "firmware-build-inputs/firmware/partitions.csv": {
+          "bytes": 175,
+          "sha256": "45ebebe19bda8746d5e187ab3a7f8b8962ad2db7cfecc7480440773c6dc03047"
+        },
+        "firmware-build-inputs/firmware/platformio.ini": {
+          "bytes": 2060,
+          "sha256": "1cd5facedd3e9fc9e3c7a7b0d6741b24b4a3871d2a6897ac36c740e09a8d8497"
+        },
+        "firmware-build-inputs/firmware/sdkconfig.defaults": {
+          "bytes": 647,
+          "sha256": "e6941fdfdd100c0e17806d94ad3d8d2af2bb56b76352f5eaeeda27e554570883"
+        },
+        "firmware-build-inputs/firmware/sdkconfig.n16r8.defaults": {
+          "bytes": 793,
+          "sha256": "37c991d9d77903dd35055cae02c765078ceb676234520f1a6db1800907932a48"
+        },
+        "firmware-build-inputs/firmware/tests/boost_control_test.cpp": {
+          "bytes": 5849,
+          "sha256": "f8c8511e066243f5c4e5e23883a00d1d4ac86fb1f37d0658dc87dcac5c55a9f8"
+        },
+        "firmware-build-inputs/firmware/tests/control_test.cpp": {
+          "bytes": 6497,
+          "sha256": "f70daa1f94eb5caf27a26467e2f93ca84788470c0286e743bdf273c159a3cecf"
+        },
+        "firmware-build-inputs/firmware/tests/engine_cylinder_test.cpp": {
+          "bytes": 6236,
+          "sha256": "a07acf0093afa510389dfa05b609c7d4c3e0f59814c11349bb51990d95d449d9"
+        },
+        "firmware-build-inputs/firmware/tests/engine_flex_test.cpp": {
+          "bytes": 9679,
+          "sha256": "b83af90088af9f934d392adcfbabc064aa7789ec8aad33c0b648ff231aebce7a"
+        },
+        "firmware-build-inputs/firmware/tests/engine_load_test.cpp": {
+          "bytes": 6984,
+          "sha256": "8ef3d6e0382b77c5eb0f81e9009294e6a141ff5f360cc7c89ef9f397bdcff5b6"
+        },
+        "firmware-build-inputs/firmware/tests/engine_log_service_test.cpp": {
+          "bytes": 2437,
+          "sha256": "adcce12f0b93a315d05894309c1e7df6c2df4592484ff41bee1cbfceb922e7d4"
+        },
+        "firmware-build-inputs/firmware/tests/engine_observability_test.cpp": {
+          "bytes": 9315,
+          "sha256": "c28e6e45190aabbfddf0ff6be39a6b8cdf9f35cad1f427257367e10a469691ca"
+        },
+        "firmware-build-inputs/firmware/tests/engine_phase_test.cpp": {
+          "bytes": 7909,
+          "sha256": "1b9485b170ec1bedd8a73022d294e87bdc83c74be726da78de43ac0dea816d72"
+        },
+        "firmware-build-inputs/firmware/tests/engine_radio_flex_test.cpp": {
+          "bytes": 5410,
+          "sha256": "03818eab8561d6bc154c84cf6538933538f594a3c7fbe3d9e4d0d063cddc2305"
+        },
+        "firmware-build-inputs/firmware/tests/engine_secondary_test.cpp": {
+          "bytes": 10884,
+          "sha256": "1126af2ecadb7eb7d16f3da2aaf253f6cedb6e4e576943ca971b6636a0cda89c"
+        },
+        "firmware-build-inputs/firmware/tests/engine_semi_test.cpp": {
+          "bytes": 4502,
+          "sha256": "728a90d92b9ba9320b6adeaf85d6791d960bc55d62ce3663e55594521b134fd4"
+        },
+        "firmware-build-inputs/firmware/tests/engine_storage_test.cpp": {
+          "bytes": 4783,
+          "sha256": "06e8c1149abd50f8bea41b22521517620345e4a66716b0446af15bc4fc9babe3"
+        },
+        "firmware-build-inputs/firmware/tests/engine_test.cpp": {
+          "bytes": 8721,
+          "sha256": "55f467d4f6e35ff9b018eabaf4cb938c9a1559ad5574e8e5c40236458120d93e"
+        },
+        "firmware-build-inputs/firmware/tests/engine_transient_test.cpp": {
+          "bytes": 3781,
+          "sha256": "f6c4e08aafc47ef6ab7c6bad87f21bc381d39255ace08329c87e1e3ac57077e6"
+        },
+        "firmware-build-inputs/firmware/tests/espnow_test.cpp": {
+          "bytes": 2454,
+          "sha256": "1f1ff8c1fcb50d16416d27e514c1eabf5c3cddb70814d0371089e5cc0d23bc26"
+        },
+        "firmware-build-inputs/firmware/tests/fakes/nvs.h": {
+          "bytes": 705,
+          "sha256": "8ae4111796b3175b79d5c4ae9537bd75c49cd4351269706d3ad705bb1c81611c"
+        },
+        "firmware-build-inputs/firmware/tests/fakes/nvs_flash.h": {
+          "bytes": 79,
+          "sha256": "e290e693131eaf64d035dccb6cfb1e0be527233a4ce3b7f2f04d6d54315888ff"
+        },
+        "firmware-build-inputs/firmware/tests/flex_capture_owner_test.cpp": {
+          "bytes": 13618,
+          "sha256": "618b4a7322b55c54ab314f03632885ce2b0bee06edca1e79ad2a46f8d1c8b4e8"
+        },
+        "firmware-build-inputs/firmware/tests/flex_fuel_test.cpp": {
+          "bytes": 10539,
+          "sha256": "f14554f6579e0da880243e40bb25ad966e80a30737ff283e27f17f491553661a"
+        },
+        "firmware-build-inputs/firmware/tests/flex_ingress_test.cpp": {
+          "bytes": 14052,
+          "sha256": "85f1ee955f99b848400f6ef237cf73acee33655c3b45f2a5c90b6da7d7e02a79"
+        },
+        "firmware-build-inputs/firmware/tests/flex_ingress_xtensa_probe.cpp": {
+          "bytes": 1616,
+          "sha256": "93ead0be76a50d8085458d6f8acdd7ea2299cf5b567efc060604a90dfde1b69f"
+        },
+        "firmware-build-inputs/firmware/tests/flex_target_service_test.cpp": {
+          "bytes": 12036,
+          "sha256": "728d06468b817c25b4a33f83afa780ed04e1f176df22658ccf36575dd61098f7"
+        },
+        "firmware-build-inputs/firmware/tests/idle_control_test.cpp": {
+          "bytes": 3473,
+          "sha256": "2a805518e3438cc1d99c20a62e10b63dbdab9073a3c462e004488999683f0fe6"
+        },
+        "firmware-build-inputs/firmware/tests/idle_pwm_test.cpp": {
+          "bytes": 2845,
+          "sha256": "6a19fbfcbb3d562fefd07941521666fbe16f62cad26da0638c2828941c647f5a"
+        },
+        "firmware-build-inputs/firmware/tests/load_model_test.cpp": {
+          "bytes": 4019,
+          "sha256": "9b3f549c91a6e1ba6d3af5e31ce3b1f74173f0819aeaaf00ad89e12da01ae295"
+        },
+        "firmware-build-inputs/firmware/tests/log_fakes/esp_random.h": {
+          "bytes": 194,
+          "sha256": "dcea98138360c20e84dd523c28427c819816263242e4176e38280437877fb91b"
+        },
+        "firmware-build-inputs/firmware/tests/log_fakes/freertos/FreeRTOS.h": {
+          "bytes": 162,
+          "sha256": "0f7428ac0dfd9288552b66794c75a6ff31c915bfade756962022d2804855eca3"
+        },
+        "firmware-build-inputs/firmware/tests/log_fakes/freertos/semphr.h": {
+          "bytes": 373,
+          "sha256": "abdd0fb8ea37d1fa8c04ce2ae0cb7ccabb462bd0177aeb24c8301e54f98df31f"
+        },
+        "firmware-build-inputs/firmware/tests/radio_fakes/driver/gpio.h": {
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        "firmware-build-inputs/firmware/tests/radio_fakes/esp_event.h": {
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        "firmware-build-inputs/firmware/tests/radio_fakes/esp_netif.h": {
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        "firmware-build-inputs/firmware/tests/radio_fakes/esp_now.h": {
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        "firmware-build-inputs/firmware/tests/radio_fakes/esp_random.h": {
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        "firmware-build-inputs/firmware/tests/radio_fakes/esp_timer.h": {
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        "firmware-build-inputs/firmware/tests/radio_fakes/esp_wifi.h": {
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        "firmware-build-inputs/firmware/tests/radio_fakes/fake_radio.hpp": {
+          "bytes": 3830,
+          "sha256": "eb93f553f4b59bd69932976ab13cd94b015f7a44a603fada5d5b88c1ed3b6f88"
+        },
+        "firmware-build-inputs/firmware/tests/radio_fakes/mbedtls/md.h": {
+          "bytes": 39,
+          "sha256": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed"
+        },
+        "firmware-build-inputs/firmware/tests/radio_fakes/nvs.h": {
+          "bytes": 611,
+          "sha256": "b1826fbb473fd55eefe9403218a6fff8fc503e1592436854aa5370f69d89370c"
+        },
+        "firmware-build-inputs/firmware/tests/radio_service_test.cpp": {
+          "bytes": 9313,
+          "sha256": "398cda60f84ef80702c7b1c4e909fd2e6713a16878887ce8987db4758ae066e0"
+        },
+        "firmware-build-inputs/firmware/tests/ratiometric_test.cpp": {
+          "bytes": 7590,
+          "sha256": "14ec489f02b6e86762789a54d43a544bfdbe003051724c0196227d35ca0f7b79"
+        },
+        "firmware-build-inputs/firmware/tests/secondary_tables_test.cpp": {
+          "bytes": 13537,
+          "sha256": "20a724186a917d68c79b4a97f14b7b8ce50b57d9fe64b9c5c85e8c1bb665d7ca"
+        },
+        "firmware-build-inputs/firmware/tests/shared_i2c_service_test.cpp": {
+          "bytes": 11754,
+          "sha256": "3d3711c9d55b7f75dfffd823cafe43bd0bdd5c1605d60e85b6233d1e9d8f9779"
+        },
+        "firmware-build-inputs/firmware/tests/status_led_test.cpp": {
+          "bytes": 7786,
+          "sha256": "441e9dca5e3e5897d3d89c1f887c87293ccd3add1909922ff4bf78d79d5db584"
+        },
+        "firmware-build-inputs/firmware/tests/switch_acquisition_test.cpp": {
+          "bytes": 9770,
+          "sha256": "ec3aeb8ad9fbf673c6a1ce65998db91a8727f745f8cc94a673a1c6f7ae76b569"
+        },
+        "firmware-build-inputs/firmware/tests/switch_fakes/driver/i2c_master.h": {
+          "bytes": 1366,
+          "sha256": "ece48ba8b9bc71c549be7819020b56622e21ab5da69a04d08ba159d4a20ec113"
+        },
+        "firmware-build-inputs/firmware/tests/switch_fakes/freertos/FreeRTOS.h": {
+          "bytes": 194,
+          "sha256": "cc12e0510e857a1d3b83546b7edf66afe4a3207b55fbf64edf055aa01587d530"
+        },
+        "firmware-build-inputs/firmware/tests/switch_service_test.cpp": {
+          "bytes": 9850,
+          "sha256": "822e38bc845d546ca2849705a696c2ed90ff4ec2f724825546a6cd5e92039845"
+        },
+        "firmware-build-inputs/firmware/tests/switch_transport_test.cpp": {
+          "bytes": 4291,
+          "sha256": "ea7699a7f95193113c007e5f7dbc779d279f9cb70d01150d422a0660416979fa"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/driver/gpio.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/driver/gptimer.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/driver/mcpwm_cap.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/driver/mcpwm_sync.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/esp_attr.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/esp_log.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/esp_partition.h": {
+          "bytes": 272,
+          "sha256": "ee4a29beeb359a2919b8893df65bde056019559a9f3d9c7960f526466ea2b995"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/esp_timer.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/fake_target.hpp": {
+          "bytes": 9713,
+          "sha256": "3fb1c00e1fd75cea8d082b38d82741105c5e904ee7ef41a6e7cb4130546dd3ee"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/freertos/FreeRTOS.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/freertos/queue.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/freertos/semphr.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/freertos/task.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/hal/gpio_ll.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/hal/mcpwm_ll.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/nvs.h": {
+          "bytes": 834,
+          "sha256": "435e7d8735725a73f4ae4e9462ebcac42c042dea02df3d018211deff351d422f"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/nvs_flash.h": {
+          "bytes": 101,
+          "sha256": "f00a3d74a36b621cf063e6e2bb6526f0c976519bc2720cb3bce85f24f1639fbb"
+        },
+        "firmware-build-inputs/firmware/tests/target_fakes/soc/gpio_struct.h": {
+          "bytes": 40,
+          "sha256": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5"
+        },
+        "firmware-build-inputs/firmware/tests/timing_executor_test.cpp": {
+          "bytes": 8121,
+          "sha256": "ff61dabaaeceb99f23b7f16d5238126fafa4dfb849471b15f40fae0e8cf339b8"
+        },
+        "firmware-build-inputs/firmware/tests/transient_enrichment_test.cpp": {
+          "bytes": 4670,
+          "sha256": "ef1b5ea7453d96cdcc602435470cda057efbd857d30ec721445227091b1c9c18"
+        },
+        "firmware-build-inputs/firmware/tests/trigger_log_json_test.cpp": {
+          "bytes": 3121,
+          "sha256": "cd6523ac035ad884ef52f7d98281a90fb5a32bf711bea90bcaaabd8f9114590b"
+        },
+        "firmware-build-inputs/firmware/tests/trigger_log_test.cpp": {
+          "bytes": 2489,
+          "sha256": "76dadab2610ad93b42508eb3019f009f92ebfbb6f8b0e4cebb7273b3d8e9e1db"
+        },
+        "firmware-build-inputs/firmware/tests/tuning_allocation_test.cpp": {
+          "bytes": 3841,
+          "sha256": "5db029149e14ea1738d3655619198db0fdc3e23a2722c370c8c4a81603530d3a"
+        },
+        "firmware-build-inputs/firmware/tests/tuning_test.cpp": {
+          "bytes": 8336,
+          "sha256": "0f1e6646c01866fbb554b72cffc447f8d1bc9533619dc88f10ae56d9ed776b3e"
+        },
+        "firmware-build-inputs/scripts/a2-seed.json": {
+          "bytes": 99033,
+          "sha256": "cb34216d619e506c7e4f1e075720c8b912ca0417b8fe65f6fc583b7596728aa1"
+        },
+        "firmware-build-inputs/scripts/add_a2_models.py": {
+          "bytes": 841,
+          "sha256": "7338667d83d9c79da66911d3c5aa73db7cd7e6830caab942abd39ce86e36368c"
+        },
+        "firmware-build-inputs/scripts/add_a2_shield.py": {
+          "bytes": 1691,
+          "sha256": "e2a520cf49a7da4786a146c65c59fd55e4eea3be6231c23448403c525146331a"
+        },
+        "firmware-build-inputs/scripts/add_a3_labels.py": {
+          "bytes": 991,
+          "sha256": "da2a343fcdbc1f861512c2b83b293f9b06149aea9c97b26ff9f48098ff4a1f78"
+        },
+        "firmware-build-inputs/scripts/add_a6_rgb_supply_guard.py": {
+          "bytes": 10156,
+          "sha256": "7089e49cb3ed459209cc4fe0de66f970ffdb96722a16496b7c16c95d30ba8bee"
+        },
+        "firmware-build-inputs/scripts/add_a6_width_rules.py": {
+          "bytes": 7547,
+          "sha256": "7d53ab4aca50c4539cecdcf254639e4177e3ba1f93f0867ea9f1245852ead5c8"
+        },
+        "firmware-build-inputs/scripts/apply_a6_analog_solution.py": {
+          "bytes": 7621,
+          "sha256": "cd0c8b9dd90f1e6280d7b8c3b36f2a71ce5f355be1514d1d3d6bff3c1fb19f67"
+        },
+        "firmware-build-inputs/scripts/audit_a6_copper.py": {
+          "bytes": 4660,
+          "sha256": "3c57a939fefd4357dc086dac6c1e8a0bd90ab5168005c07b9e5f004f0e4116db"
+        },
+        "firmware-build-inputs/scripts/audit_engine_build.py": {
+          "bytes": 4117,
+          "sha256": "9a3b58735cb083a69ae10f9c3d748d78f52051e302056ef8e31ff102ea3944ba"
+        },
+        "firmware-build-inputs/scripts/audit_target_isr.py": {
+          "bytes": 14155,
+          "sha256": "64b9f514de9282654922d9988703970c084bc530aefad2543de01677741b4ee8"
+        },
+        "firmware-build-inputs/scripts/audit_tuning_build.py": {
+          "bytes": 3592,
+          "sha256": "ae3f3d4c3488e72460ee0dfc7bc20d91f6aed611c8e50454a093243ea331a23d"
+        },
+        "firmware-build-inputs/scripts/build_a2_enclosure.py": {
+          "bytes": 10315,
+          "sha256": "81b8c6b1f883586a9fe16c8dab64ce5e674edf7f85030c01105949eeb958a786"
+        },
+        "firmware-build-inputs/scripts/build_a2_module_envelopes.py": {
+          "bytes": 1340,
+          "sha256": "2be0fce4abd86931924bf48ed384278a16b45fc8f7ed4704ebd4d1b80ea7084c"
+        },
+        "firmware-build-inputs/scripts/build_a3_connector_models.py": {
+          "bytes": 1485,
+          "sha256": "2d9067db1521822b13d12bef399e6118f227aa264c5991ac28ef6d63ecfcb32d"
+        },
+        "firmware-build-inputs/scripts/build_a3_enclosure.py": {
+          "bytes": 7576,
+          "sha256": "caef2d57073371988b90b6b5fb92e950c75680b6959b36c30e9d78bc07d1c528"
+        },
+        "firmware-build-inputs/scripts/build_a5_idle_interface.py": {
+          "bytes": 12322,
+          "sha256": "ff8f5bd0f04b872483a90dce6ab4e65d7e35135c1de1e8408913fa5023869683"
+        },
+        "firmware-build-inputs/scripts/build_a6_compact_frontend.py": {
+          "bytes": 12285,
+          "sha256": "06487c92c735be21e3df01dae33ccc0c5e012f784c9c4ab48aae026cc5cdb3c4"
+        },
+        "firmware-build-inputs/scripts/build_a6_flex_rgb.py": {
+          "bytes": 14263,
+          "sha256": "665bbfb3b08cc66fd8bb5742c91bb71c933adb05c0bdca42350f605487b510cf"
+        },
+        "firmware-build-inputs/scripts/build_bom.py": {
+          "bytes": 14260,
+          "sha256": "4f5435d3b47652abc9f27516e947a312d0f67caa27f51bea220463debcd0d176"
+        },
+        "firmware-build-inputs/scripts/build_compact.py": {
+          "bytes": 9859,
+          "sha256": "cb34480bf4c3a0a19eb88618e17b5286cbf1fc0502a3b4e584d7f95b06fb0786"
+        },
+        "firmware-build-inputs/scripts/build_connection_map.py": {
+          "bytes": 3031,
+          "sha256": "f9839509fe32155d0b66a0d219d72a6bc9e78f5374ce9dd0cf06e21d9034318e"
+        },
+        "firmware-build-inputs/scripts/build_enclosure.py": {
+          "bytes": 3057,
+          "sha256": "b0ce6f9b3c43874ed2e4907391b92932ea9731019da3b353e22e7f2d512dfa5a"
+        },
+        "firmware-build-inputs/scripts/build_engine_airpath.py": {
+          "bytes": 2968,
+          "sha256": "d63b2f9adc129ff23045440fb9e7455d319abe8f3e3acf7818b061897a7180cc"
+        },
+        "firmware-build-inputs/scripts/build_firmware_preserved.py": {
+          "bytes": 9216,
+          "sha256": "e9f1ecb60cb29c3f9d29f6f677b62b8b840f7a5932d64aa746c04a434bc2099a"
+        },
+        "firmware-build-inputs/scripts/build_hand_solder.py": {
+          "bytes": 10157,
+          "sha256": "747890a1613c5ba3dc5523ac9b62c15c0afaa2676d7c9a61a18cdc326646e81a"
+        },
+        "firmware-build-inputs/scripts/build_hardware.py": {
+          "bytes": 17550,
+          "sha256": "c2c14852dcb8c4bd1bddb68ded95c80c2432c0ecdfa60938cadd32c139c803cd"
+        },
+        "firmware-build-inputs/scripts/build_idle_accessory.py": {
+          "bytes": 10303,
+          "sha256": "b559532fe89e3a6612a053eaff0fa8b12657e2ab279575ba92211af60288a3fd"
+        },
+        "firmware-build-inputs/scripts/build_idle_isolated.py": {
+          "bytes": 20092,
+          "sha256": "eb2d3bede0c58167af3cd9f514ca119ae13f009d01f3fc4973ba1ada736acf56"
+        },
+        "firmware-build-inputs/scripts/build_instruction_pdf.py": {
+          "bytes": 28561,
+          "sha256": "7bbc2fc4bc4c983dec3bb3631b239ad2d1e092ae2eb3337a58329193be55f56a"
+        },
+        "firmware-build-inputs/scripts/build_shared_guides.py": {
+          "bytes": 20850,
+          "sha256": "bd0cdc53811202145b62b42d33040b87401df69877cbdab8b79ae29645a4d554"
+        },
+        "firmware-build-inputs/scripts/build_speeduino_boost.py": {
+          "bytes": 4518,
+          "sha256": "591ccffd2aea4b6121c9eb8b68597777db7217a9437c23442b91ffb10f6ac241"
+        },
+        "firmware-build-inputs/scripts/build_speeduino_flex.py": {
+          "bytes": 6401,
+          "sha256": "6c4fa2b9a47d1f5d0b1efc0bd50cf9fd45fc3fc61380e318733aa64effe11dd7"
+        },
+        "firmware-build-inputs/scripts/build_speeduino_reference.py": {
+          "bytes": 1823,
+          "sha256": "3bcb5c122ebf5e897a9bf0759a15782e8e0c4eb1438e7b065a50b7782ec3fd1b"
+        },
+        "firmware-build-inputs/scripts/build_speeduino_sensor.py": {
+          "bytes": 4467,
+          "sha256": "b90150da6d7a9343f2532f2230572a3e6bc54aa7b0d665ca2b7164c50f93f4f5"
+        },
+        "firmware-build-inputs/scripts/build_speeduino_serial.py": {
+          "bytes": 6561,
+          "sha256": "4286491a28090c935fb335c6a5dab837ef897d2ec8e62b5113c133a86027389b"
+        },
+        "firmware-build-inputs/scripts/build_speeduino_sim.py": {
+          "bytes": 10354,
+          "sha256": "1c8c53bc55cb15cdbfb6186fd7b7fb4ed42058a99c3a1a70d943497af7f43e4a"
+        },
+        "firmware-build-inputs/scripts/build_switch_inputs.py": {
+          "bytes": 14658,
+          "sha256": "c6f3d6f4ff79fb2c8e5a37dcfee8f0d49caa12ad6e3331a966b887a2bcaf0630"
+        },
+        "firmware-build-inputs/scripts/build_through_hole.py": {
+          "bytes": 18797,
+          "sha256": "0a5c8ff7be55ca634949a30a1b204cf7a124317f286ab510518c84619ef821a2"
+        },
+        "firmware-build-inputs/scripts/check_a2_enclosure.py": {
+          "bytes": 4007,
+          "sha256": "026786b6c9800ab3fc152dedcf3d9984d348ef169e5675a9d60f143a4dc24ea8"
+        },
+        "firmware-build-inputs/scripts/check_a3_enclosure.py": {
+          "bytes": 4180,
+          "sha256": "a32236004164974a0d8f7d2488902156df0cef1186f19ce1364d8196564cc3bd"
+        },
+        "firmware-build-inputs/scripts/check_flex_ingress.py": {
+          "bytes": 16477,
+          "sha256": "aaa7d55f8c4a27e511d67156700945cb95c8ffaa0d2d5139fd490f1863d2cc87"
+        },
+        "firmware-build-inputs/scripts/check_hardware.sh": {
+          "bytes": 525,
+          "sha256": "0e054d0970f760fd5858e2cafae6d2dbadb8e486a87bceca0edad937aeb50b91"
+        },
+        "firmware-build-inputs/scripts/check_n16r8_draft.py": {
+          "bytes": 1780,
+          "sha256": "4eb4325fe0dcc390e260da471828969018b1af393e0ca4d21f58201848623d51"
+        },
+        "firmware-build-inputs/scripts/clean_a3_routes.py": {
+          "bytes": 1403,
+          "sha256": "c1a5683d57113aa980cb277ab10853230b50b29b85b2dc5054aa63a0965768f5"
+        },
+        "firmware-build-inputs/scripts/cluster_a6_passives.py": {
+          "bytes": 10135,
+          "sha256": "b1d577c8e8f0b7e9e31cbc2cbe5ba7cb94b03f76bcbe8466edb561d67f31a164"
+        },
+        "firmware-build-inputs/scripts/debug_a3_paths.py": {
+          "bytes": 4203,
+          "sha256": "35cb03e3a4aab7dfdd97738d146f646013ea96782e9810bc2b00bf3539c212bb"
+        },
+        "firmware-build-inputs/scripts/design.py": {
+          "bytes": 20389,
+          "sha256": "ddcb00298bfc5edf79b5d61a904ca0686d38c7c963ae1bddeb53138c1a14f030"
+        },
+        "firmware-build-inputs/scripts/embed_web.py": {
+          "bytes": 1080,
+          "sha256": "2893e1b9423d066538b8dd9cbcbf4d7bdeccb249751e3da9296073a682b210dc"
+        },
+        "firmware-build-inputs/scripts/finalize_a3_stack.py": {
+          "bytes": 1969,
+          "sha256": "adf44f347e48c90b519115462e43fa8ae47fd717357d3e18afd0a874d2dad4da"
+        },
+        "firmware-build-inputs/scripts/finalize_a6_native.py": {
+          "bytes": 7039,
+          "sha256": "328e982027204eeb160f697ae45ae2aaf58cea45ece6810aa03dae77a7dca7dd"
+        },
+        "firmware-build-inputs/scripts/finish_a1_routes.py": {
+          "bytes": 3041,
+          "sha256": "93685687aab48351ee838488a0b103bb8ba135316fccbb4bb68af4189771cf2b"
+        },
+        "firmware-build-inputs/scripts/finish_a2_routes.py": {
+          "bytes": 1363,
+          "sha256": "20708ef989e54943f31236eb39219712579c9b2bf8bd7f79e17ef0657ba2d15d"
+        },
+        "firmware-build-inputs/scripts/finish_a3_fine_routes.py": {
+          "bytes": 6668,
+          "sha256": "310e0f9b05755d5176c5bb99672619a110ac23c67aa31f9a6ff7128ddacdf1a7"
+        },
+        "firmware-build-inputs/scripts/finish_a3_routes.py": {
+          "bytes": 6670,
+          "sha256": "39e614f347c8d72945b5ab176cb4d30b60e4226b7e20ff9d900c3da7418da679"
+        },
+        "firmware-build-inputs/scripts/finish_a3_six_routes.py": {
+          "bytes": 6729,
+          "sha256": "a127e00919fdcbb0194a743d31d598132879ac27ae7ad6355a4d59802d51803d"
+        },
+        "firmware-build-inputs/scripts/finish_a6_routes.py": {
+          "bytes": 20952,
+          "sha256": "560d25c3866f657a7d15607ff934d3546e12bbf4aa35a791f7cd8dddf96468cf"
+        },
+        "firmware-build-inputs/scripts/finish_routes.py": {
+          "bytes": 6646,
+          "sha256": "44d13dd3a48b4105e3a2d1f096c21b0fba7c8fd1f3ec4c9c3215314f5b1fe810"
+        },
+        "firmware-build-inputs/scripts/fix_a3_capacitor_labels.py": {
+          "bytes": 1542,
+          "sha256": "2fa68bbf30956e66e6aafe9510ad074d565d56362805d0fe1e0a98d3c1d34333"
+        },
+        "firmware-build-inputs/scripts/generate_flex_ui.py": {
+          "bytes": 711,
+          "sha256": "6266c257872bde6d9ceafd692500f2a8a6a8109dbedfcd268f8312c9ecaf87d0"
+        },
+        "firmware-build-inputs/scripts/generate_idle_ui.py": {
+          "bytes": 601,
+          "sha256": "99cb7d9166c53bcf5941dd501c1dbeaca9d2422a8283cac4f07c26c1fc80178c"
+        },
+        "firmware-build-inputs/scripts/generate_load_ui.py": {
+          "bytes": 671,
+          "sha256": "bac87fd020e2bbf0b2dac939deea50be436e6ab732d25e5cab44fd7f813e9ed5"
+        },
+        "firmware-build-inputs/scripts/generate_secondary_ui.py": {
+          "bytes": 903,
+          "sha256": "f92ad29b02a4a71d3d75a091bac4a6725fe297eb29dec331123cdf34e0c3cfde"
+        },
+        "firmware-build-inputs/scripts/generate_transient_ui.py": {
+          "bytes": 707,
+          "sha256": "0310f508b69aa1d3d3ca1815bc5fcbe5fc38526edc371e2d6aa1744c17a1f021"
+        },
+        "firmware-build-inputs/scripts/generate_tunerstudio_ini.py": {
+          "bytes": 23154,
+          "sha256": "5e90d1e55f0722909f3e12428c283e1e9008027018d472aa337b4bf62b2ba1c0"
+        },
+        "firmware-build-inputs/scripts/generate_tuning_wire.py": {
+          "bytes": 12152,
+          "sha256": "f3fd706d0c05cac53d670d7e80b5b9aef755a34633a3b275cb4120f94d28e9f7"
+        },
+        "firmware-build-inputs/scripts/kicad.sh": {
+          "bytes": 334,
+          "sha256": "7e82b9789788c6fff563516864885cfa9b96e4ad8a0d6443b38e8d208f7aa6b6"
+        },
+        "firmware-build-inputs/scripts/kicad9_carrier_copy.py": {
+          "bytes": 4314,
+          "sha256": "e1ab1db27be9ef9c491c96458fc515917a624bf83ff5a1fabac636d5865d3539"
+        },
+        "firmware-build-inputs/scripts/pack_a6.py": {
+          "bytes": 6864,
+          "sha256": "bd80b52b53a490e4adc8d85e075be1576c631c4e312fd060a5d5389f33ca8460"
+        },
+        "firmware-build-inputs/scripts/pack_a6_analog.py": {
+          "bytes": 12927,
+          "sha256": "4aa196616ed463101c9e172c0d1f25245c3950095abebf1b06b96c84f3c6e8a2"
+        },
+        "firmware-build-inputs/scripts/package_a1.py": {
+          "bytes": 2393,
+          "sha256": "66aa4fc90ecc479431446acad3eadba243c43fb49cf9449935fbf84f43962238"
+        },
+        "firmware-build-inputs/scripts/package_a2.py": {
+          "bytes": 4065,
+          "sha256": "43c109a60b4750dc4e9abcd3376eb301c25a20d716a112c74ed4c11c0ab842e5"
+        },
+        "firmware-build-inputs/scripts/package_a3.py": {
+          "bytes": 5101,
+          "sha256": "ff978b4de33de66d83e9dacc20f825b9bcff5fe86c1ba823f8854235dd731437"
+        },
+        "firmware-build-inputs/scripts/package_project.py": {
+          "bytes": 5424,
+          "sha256": "3a37c0ab5d778161b46fa7f905babd846658919159d538f81aa65e0a9ba74487"
+        },
+        "firmware-build-inputs/scripts/place_a6_back.py": {
+          "bytes": 5460,
+          "sha256": "27dd5c7c17bf30668b83769e36007b9b0def29715ed628c23a22d09605177238"
+        },
+        "firmware-build-inputs/scripts/place_a6_front.py": {
+          "bytes": 1876,
+          "sha256": "553fa0703b6fe5141d7ce1fd59e6332d3d72b4f8e9a1f02d036cc3dccbedfc42"
+        },
+        "firmware-build-inputs/scripts/prepare_a6_rf.py": {
+          "bytes": 3977,
+          "sha256": "90eb850d3319955102800ac466b011b53446f9b51372bba34b0e15044742d2cf"
+        },
+        "firmware-build-inputs/scripts/prepare_n16r8_carrier.py": {
+          "bytes": 6168,
+          "sha256": "0e97cc67ed27a23373ab115b4a742683db87dab670d71f5f9811614c96140fc0"
+        },
+        "firmware-build-inputs/scripts/probe_engine_modelica.py": {
+          "bytes": 5545,
+          "sha256": "9b125cff3605c4632cf3c2fd278f7f4c8fe0de0f7a355f48cce405b0e36f3a5a"
+        },
+        "firmware-build-inputs/scripts/prune_a6_stubs.py": {
+          "bytes": 4138,
+          "sha256": "9a5601de047571dc6cc47706756ba820ce4e214e6e2ce097cf6a0339fa693294"
+        },
+        "firmware-build-inputs/scripts/publish_load_evidence.py": {
+          "bytes": 12585,
+          "sha256": "d96a4cec55a39b47d30e30ad8a3d903f1863a5ec3f6c12d42543419d3ca50b31"
+        },
+        "firmware-build-inputs/scripts/publish_secondary_core_evidence.py": {
+          "bytes": 8610,
+          "sha256": "93030ea81710019534955f1fad4822d9308edf024854d9f1fbda7b00b4c791e7"
+        },
+        "firmware-build-inputs/scripts/publish_transient_evidence.py": {
+          "bytes": 9003,
+          "sha256": "06c000d350c19668bd844aac1c406796e27dcc2f6e39c01e0ceaf51d5c275cc8"
+        },
+        "firmware-build-inputs/scripts/remove_a2_dip_sockets.py": {
+          "bytes": 2573,
+          "sha256": "c34aa758e3b40beac0ce31192f297ef05fd3e1f6b1691c46c899143041549484"
+        },
+        "firmware-build-inputs/scripts/render_a2_enclosure.py": {
+          "bytes": 3173,
+          "sha256": "412fabfdfe41604aad48e4e63e26bbe8f72d511e1c8ffc55e04c6bb63374e1a0"
+        },
+        "firmware-build-inputs/scripts/render_a2_mounting_plan.py": {
+          "bytes": 2176,
+          "sha256": "98b4f605d172bdfded6a56bce2a48402bc4768b1f0081c81a0e99312bb69ae34"
+        },
+        "firmware-build-inputs/scripts/render_a3_enclosure.py": {
+          "bytes": 3168,
+          "sha256": "69a87d718098953a1d282f9e54b291a63f1ec17b962abff4fcb62eab07f7ac9f"
+        },
+        "firmware-build-inputs/scripts/render_a3_mounting_plan.py": {
+          "bytes": 2126,
+          "sha256": "8ac5ac17a324e75c1e2e98d4a7b0c009cecb9a49d595d7cdb5d7f588b119c2d7"
+        },
+        "firmware-build-inputs/scripts/render_enclosure.py": {
+          "bytes": 1935,
+          "sha256": "f96baf735c23002c1fc78139afb3a4c9bcbe8d03928a6950553565a36194cd66"
+        },
+        "firmware-build-inputs/scripts/repair_a3_metadata.py": {
+          "bytes": 1521,
+          "sha256": "f32b274dede25c9efc5780a7bf1821f1f0489b715255567870c81da08a70caa7"
+        },
+        "firmware-build-inputs/scripts/restore_a6_copper.py": {
+          "bytes": 7330,
+          "sha256": "aed022b2daab7e90913899df7eb01914197b6f48be6d04fbbf6caa316e1efe98"
+        },
+        "firmware-build-inputs/scripts/ripup_a6_rf_conflicts.py": {
+          "bytes": 3761,
+          "sha256": "2bf11be73993414dff81621523f5a54e2935ef6614b7efab1382d7120f0cb5de"
+        },
+        "firmware-build-inputs/scripts/route_a2_sensitive.py": {
+          "bytes": 4849,
+          "sha256": "d893c7dc323e1f9c020a64d58b6b5e5da4a9465535d61b1ffdfeb25b066cdaeb"
+        },
+        "firmware-build-inputs/scripts/route_a5_idle_interface.py": {
+          "bytes": 6233,
+          "sha256": "64b7de65485a7fd7f2b46df8d70b4551a1f345087cb7abd08a1c82403d49bea9"
+        },
+        "firmware-build-inputs/scripts/route_a6.py": {
+          "bytes": 6713,
+          "sha256": "91cbdce96a27a3c73a3abbdbbe839d3e29baefca8d49d2c6064b3df040c545f2"
+        },
+        "firmware-build-inputs/scripts/route_a6_local_analog.py": {
+          "bytes": 7359,
+          "sha256": "775bec20c2cdced6a3843bd3a1c28aa6ac377a2c0358a8c0c8995b816ff877df"
+        },
+        "firmware-build-inputs/scripts/route_board.py": {
+          "bytes": 5994,
+          "sha256": "7628d5aed649b501f728a17126801e15b268ad8a682a246540d68a68063a2dbd"
+        },
+        "firmware-build-inputs/scripts/route_idle_isolated.py": {
+          "bytes": 8067,
+          "sha256": "1b497964eddeeeb49967475dd95dd9040a12425705d3400c22bc35c600e452cd"
+        },
+        "firmware-build-inputs/scripts/route_switch_inputs.py": {
+          "bytes": 3845,
+          "sha256": "78caa8526dfdc1d216f26a8e82dc6b857abb683453eeefcbbaa662f1a765af8a"
+        },
+        "firmware-build-inputs/scripts/sync_a3_symbols.py": {
+          "bytes": 1347,
+          "sha256": "3abb2784bd6f1c7ac7d93fb1f9b3054aa3eba1e2bb02df61edc7dd7d036ffbda"
+        },
+        "firmware-build-inputs/scripts/test_firmware.sh": {
+          "bytes": 6435,
+          "sha256": "a60a10f031d5548da9df9ee3bc5d5d69bc2d9349e5890fa6c52c5a5d03eec2ee"
+        },
+        "firmware-build-inputs/scripts/test_flex_target_service.py": {
+          "bytes": 2155,
+          "sha256": "4aa896b04bdc3ad4b4a4c1b099b4cd216abbcd3f7a65ffc2aff3de106b35de55"
+        },
+        "firmware-build-inputs/scripts/test_radio.sh": {
+          "bytes": 424,
+          "sha256": "139a3d73a34edfa7de5d3f5094497f237c2fcec309acee03b84fc7a54e93efd7"
+        },
+        "firmware-build-inputs/scripts/test_radio_service.py": {
+          "bytes": 1941,
+          "sha256": "f75403ef39d0f80843c414f4483ae3aa6e91a5332f1b25042b4832972ed0eedf"
+        },
+        "firmware-build-inputs/scripts/tidy_a1_stubs.py": {
+          "bytes": 1399,
+          "sha256": "c570590f2fe80e7e391ff7d18abc125a78ffd01b7bf91c9421ce87c0c3d8f2d7"
+        },
+        "firmware-build-inputs/scripts/tuning_sdkconfig.py": {
+          "bytes": 1292,
+          "sha256": "201e8a1a535c719442f1de28f7fa69b9e05845199c5adc3a81b0f74186d227eb"
+        },
+        "firmware-build-inputs/scripts/update_a6_contracts.py": {
+          "bytes": 19192,
+          "sha256": "c15c02a2b613bf54a3333a5fce2b708cab40bf76df16392b396eb9affdfff935"
+        },
+        "firmware-build-inputs/scripts/update_n16r8_bom.py": {
+          "bytes": 2325,
+          "sha256": "b8fd38a4b44caac975366948691d4793f0a7412b50e1966d23b12afe6c3c09ad"
+        },
+        "firmware-build-inputs/scripts/update_n16r8_envelope.py": {
+          "bytes": 3218,
+          "sha256": "25221c0ed72101ab4a0fd354adb87d114f1373b16b08fd8d5409ceafa43b0a09"
+        },
+        "firmware-build-inputs/scripts/verify_a1.py": {
+          "bytes": 1692,
+          "sha256": "2198f8696debed3923a73319287e96b8f88b4fe059623768832464b67e4c7607"
+        },
+        "firmware-build-inputs/scripts/verify_a2.py": {
+          "bytes": 4501,
+          "sha256": "af9fcecf5a3b6752124399a1a7341089c8288afeffccba8c274fd7ec60f2220b"
+        },
+        "firmware-build-inputs/scripts/verify_a3.py": {
+          "bytes": 4890,
+          "sha256": "3668e05343097186ce76600f30a0e5aaec2895ea2f0946fc18303443c1dd3692"
+        },
+        "firmware-build-inputs/scripts/verify_contract.py": {
+          "bytes": 3847,
+          "sha256": "98ad5ce5fbfa2afe3767f99f55598e5056e4088e227e636312a29a28198e91f7"
+        },
+        "firmware-build-inputs/scripts/verify_modelica_sources.py": {
+          "bytes": 3635,
+          "sha256": "c56aed8fa5763e31dfe146eea5ad25b8df878f9b8ba53638eee0c4b9f48dde18"
+        },
+        "firmware-build-inputs/web/cylinder_tuning.js": {
+          "bytes": 5831,
+          "sha256": "4cdce733ebbe765f691fae50b2653650007a3ee83e0d30eb0d9c7270a4660bd3"
+        },
+        "firmware-build-inputs/web/engine_logger.js": {
+          "bytes": 20734,
+          "sha256": "05d6ebfa8c020a6c105b23d13b19f2546331506cfc9c6a11706efc9f2a9ce337"
+        },
+        "firmware-build-inputs/web/flex_fuel.js": {
+          "bytes": 21926,
+          "sha256": "264a9cca85ad712eb0ebad1bdfde8db5269118bc9ebce7ca9986e5ecabcb8801"
+        },
+        "firmware-build-inputs/web/flex_fuel_logic.js": {
+          "bytes": 16887,
+          "sha256": "fb466e547ee1c0631c04c2fd7214422fa873978212c51593612421e05a700ec3"
+        },
+        "firmware-build-inputs/web/idle_control.js": {
+          "bytes": 9835,
+          "sha256": "6527c03afb5e4ecd4d8a88907afb39bcee6ccd0a41d7d0c7cfce1d062b606f4b"
+        },
+        "firmware-build-inputs/web/idle_control_logic.js": {
+          "bytes": 7761,
+          "sha256": "7f69537f794a1ccedf504080101a8d88095c9068c31b5709a295fbcd73e8a054"
+        },
+        "firmware-build-inputs/web/index.html": {
+          "bytes": 95568,
+          "sha256": "70eb38c6dba702ec534a270cc6afe35bd68bba7c56bca6f1dbb2b57b30e2bb59"
+        },
+        "firmware-build-inputs/web/load_model.js": {
+          "bytes": 14063,
+          "sha256": "e5218b9caf3ed2068a983665e1e291d8582cecdd13d1bcf99f253006be5b87b2"
+        },
+        "firmware-build-inputs/web/load_model_logic.js": {
+          "bytes": 11640,
+          "sha256": "3d0e73cb89b03c34f3abc0ebc048b934249a53d582b1aa26f7483daa36ddd322"
+        },
+        "firmware-build-inputs/web/secondary_tables.js": {
+          "bytes": 22067,
+          "sha256": "825377a8eaa1fb1e53531f59c0316c920de66eac28a1eb0e6fc25f232ab6af84"
+        },
+        "firmware-build-inputs/web/secondary_tables_logic.js": {
+          "bytes": 17852,
+          "sha256": "6176eed17550bfbee4a51d36e4e63fd9e36e1e5817c2488e88424513e12fcf80"
+        },
+        "firmware-build-inputs/web/transient_enrichment.js": {
+          "bytes": 10605,
+          "sha256": "42b60c320c0d95a5535a8346e9b1bd7be0faef0d91007bc9468cf4f959566767"
+        },
+        "firmware-build-inputs/web/transient_enrichment_logic.js": {
+          "bytes": 8631,
+          "sha256": "6bea83d5cdb6e7922efe0be7a4f7da27b5fc1af464568b8c417b9c0a3a13d68b"
+        },
+        "firmware-build-inputs/web/trigger_logger.js": {
+          "bytes": 15198,
+          "sha256": "d9997905115af0cbecca5382b04694a4bd71c220e19e84b0b02bd9cd27e85c07"
+        },
+        "firmware-build-inputs/web/tuning_diagnostics.js": {
+          "bytes": 2883,
+          "sha256": "9c96152e9e9cae4f000fdc268f3512f9d915fe6dcdae4cef2ca37ac87651a1c8"
+        },
+        "reproduction/publish.py": {
+          "bytes": 7470,
+          "sha256": "dbf34108697c320c0b346be7af0cf9eccca1504912ffad6fc9eb9273fdbd35f5"
+        }
+      }
+    },
+    "paired-probes.tar.xz": {
+      "bytes": 73112,
+      "sha256": "c82510dd152b66c42ebd66c8477fd5b36a06615dbef04f1b397bb7b530d6fd4a",
+      "members": {
+        "architecture-tests.log": {
+          "bytes": 464,
+          "sha256": "783699d7a84d18d08f411a6ad1dac36be271d219279dde07a3def492d16e1767"
+        },
+        "build-command.json": {
+          "bytes": 374,
+          "sha256": "c34976923f8363e52772aa236ed4b073222e095e0ad0a84e73bd9e5a8598ee9e"
+        },
+        "build.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "closed-below-activation/own-input.txt": {
+          "bytes": 34922,
+          "sha256": "457cb587238591240853cb7c6f963689170c99cec376f54d24d9a8b0f63d369f"
+        },
+        "closed-below-activation/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "closed-below-activation/own.jsonl": {
+          "bytes": 320635,
+          "sha256": "2255684ddf86afcafdc031658084ce678dcf88cd89ab7783af24a27145d5cab8"
+        },
+        "closed-below-activation/reference-input.txt": {
+          "bytes": 323135,
+          "sha256": "21dcd4614f226abb8158ea9ed1a9360ee4d1d563eea1713302a3b38ea6a6b2d0"
+        },
+        "closed-below-activation/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "closed-below-activation/reference.jsonl": {
+          "bytes": 372571,
+          "sha256": "b33c43470741c4e0bca9786e24d45c0da4f862b8f61923a816f433dcb6535e32"
+        },
+        "closed-feedforward/own-input.txt": {
+          "bytes": 34922,
+          "sha256": "1b8fb72c94572db09168064b0090af7e4c1ce78a156d0210c644ae15cc9f6b08"
+        },
+        "closed-feedforward/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "closed-feedforward/own.jsonl": {
+          "bytes": 363422,
+          "sha256": "37eba15fe9ee0ea961e63e4f4fc580b2a75ea019039de08a5cd8078143f122b3"
+        },
+        "closed-feedforward/reference-input.txt": {
+          "bytes": 323135,
+          "sha256": "cc084d58decc45555299e50951c666c462878936dc30ae8d0c96d8b5ca24aa16"
+        },
+        "closed-feedforward/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "closed-feedforward/reference.jsonl": {
+          "bytes": 382516,
+          "sha256": "d7aedb9732cbfeb476d10a4db2c5c728d13a7a3db2aa42af628007cebbffa71c"
+        },
+        "disabled/own-input.txt": {
+          "bytes": 9182,
+          "sha256": "cc2c3110c30a119457ceb582991dd054eb91760d38f9fbe545f1441a46a26759"
+        },
+        "disabled/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "disabled/own.jsonl": {
+          "bytes": 87844,
+          "sha256": "6d7e9c1152170747b2cc0de055dafabb96709c473be6438e91decdcbd9642a78"
+        },
+        "disabled/reference-input.txt": {
+          "bytes": 82895,
+          "sha256": "ae8e0c2f4cd802fb5402d19bcf373f757e2d6f19fc67ce7cfc4c9b4bcd2426ad"
+        },
+        "disabled/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "disabled/reference.jsonl": {
+          "bytes": 99405,
+          "sha256": "19bada944a8c4fe4c4da23dbe36ce0b402788e52893505b8a1386c006137d4dc"
+        },
+        "open-zero/own-input.txt": {
+          "bytes": 9182,
+          "sha256": "cc2c3110c30a119457ceb582991dd054eb91760d38f9fbe545f1441a46a26759"
+        },
+        "open-zero/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "open-zero/own.jsonl": {
+          "bytes": 83265,
+          "sha256": "ebf9efaa8621d6bc66eab186a3ac634142ab34b8b245e6daa86a273f068c867f"
+        },
+        "open-zero/reference-input.txt": {
+          "bytes": 82895,
+          "sha256": "ae8e0c2f4cd802fb5402d19bcf373f757e2d6f19fc67ce7cfc4c9b4bcd2426ad"
+        },
+        "open-zero/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "open-zero/reference.jsonl": {
+          "bytes": 99406,
+          "sha256": "80b64b60eb7f633dbbe263f32bb47dda0654dcf7675aa5260cf6ca454bf86909"
+        },
+        "open100/own-input.txt": {
+          "bytes": 9182,
+          "sha256": "cc2c3110c30a119457ceb582991dd054eb91760d38f9fbe545f1441a46a26759"
+        },
+        "open100/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "open100/own.jsonl": {
+          "bytes": 84852,
+          "sha256": "9313e2976124dde458cd48abb397bab69ab3b96c06a7e368853a9ea8e74aff72"
+        },
+        "open100/reference-input.txt": {
+          "bytes": 82895,
+          "sha256": "ae8e0c2f4cd802fb5402d19bcf373f757e2d6f19fc67ce7cfc4c9b4bcd2426ad"
+        },
+        "open100/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "open100/reference.jsonl": {
+          "bytes": 99717,
+          "sha256": "e062b649ffab1493344e4b1344528e390b107b62d38fa353bbfd30a631a676a9"
+        },
+        "open20/own-input.txt": {
+          "bytes": 9182,
+          "sha256": "cc2c3110c30a119457ceb582991dd054eb91760d38f9fbe545f1441a46a26759"
+        },
+        "open20/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "open20/own.jsonl": {
+          "bytes": 88736,
+          "sha256": "62191744968d097276e8e31587ec31357238cae067bdc10aae823a0b129e9450"
+        },
+        "open20/reference-input.txt": {
+          "bytes": 82895,
+          "sha256": "ae8e0c2f4cd802fb5402d19bcf373f757e2d6f19fc67ce7cfc4c9b4bcd2426ad"
+        },
+        "open20/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "open20/reference.jsonl": {
+          "bytes": 105173,
+          "sha256": "a0dcfe40baf06e6182a00297207ce9494f59a9ffffd23cb5a02b87f1a7d4f49a"
+        },
+        "open60/own-input.txt": {
+          "bytes": 9182,
+          "sha256": "cc2c3110c30a119457ceb582991dd054eb91760d38f9fbe545f1441a46a26759"
+        },
+        "open60/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "open60/own.jsonl": {
+          "bytes": 88878,
+          "sha256": "85d5ed8e8746bbc76be4b61b929db94913e5c463da9b8b827b624c6d4067e48e"
+        },
+        "open60/reference-input.txt": {
+          "bytes": 82895,
+          "sha256": "ae8e0c2f4cd802fb5402d19bcf373f757e2d6f19fc67ce7cfc4c9b4bcd2426ad"
+        },
+        "open60/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "open60/reference.jsonl": {
+          "bytes": 105077,
+          "sha256": "c0e075cfeb45a2a7a5fbec92b6256fbb51dcc8e4892ce9e78193277a1916b3d4"
+        },
+        "overboost/own-input.txt": {
+          "bytes": 9182,
+          "sha256": "baeb08e7a8ce42e91ccaac22f45b55c55d60625a71c5cb9f9ae71a61c6eff097"
+        },
+        "overboost/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "overboost/own.jsonl": {
+          "bytes": 86743,
+          "sha256": "0be96f9f6a609bc214fc91a847521461685a857306ac0ae8409f89e2c6e98b66"
+        },
+        "overboost/reference-input.txt": {
+          "bytes": 82917,
+          "sha256": "80cfc4b2ff5d12709f508833d9232d7a4dd6c0be1fd903e8e244a4378e924cef"
+        },
+        "overboost/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "overboost/reference.jsonl": {
+          "bytes": 104956,
+          "sha256": "26899c6e5edc93fa095180a78d4cc3bb1135f365616ecac813c7c4ef06d8988c"
+        },
+        "reference-build-manifest.json": {
+          "bytes": 136670,
+          "sha256": "e87bb4e2cb00270d7f4d5c7e9872e38c304f82d312bea81ebf80cac0cfc2708c"
+        },
+        "reference-build.log": {
+          "bytes": 90,
+          "sha256": "5c3890d5227892a86b2e1d4aa61a430d091595f2fa6db7ef4e6935ca7be7c1c3"
+        },
+        "reference-build/command-1.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reference-build/command-2.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reference-build/command-3.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "results.json": {
+          "bytes": 31638,
+          "sha256": "538fa54c5888c18389c1a3bcf0829b6fa1d1606b4cc7e3cd0d17a272d636f5f0"
+        },
+        "tps-ramp-20/own-input.txt": {
+          "bytes": 9182,
+          "sha256": "c21e4536238f6c9f8feb264b38efed1667e1bd80efc0c7558208e0574eb81644"
+        },
+        "tps-ramp-20/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "tps-ramp-20/own.jsonl": {
+          "bytes": 88736,
+          "sha256": "19e679be3a3c714083894650012cc80611276959d288935ca9dcbaa2761cb540"
+        },
+        "tps-ramp-20/reference-input.txt": {
+          "bytes": 82895,
+          "sha256": "ed3ecc2c31eadacf2a0d84445140b66488ca5e053a62e3f3992080e1b516e05c"
+        },
+        "tps-ramp-20/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "tps-ramp-20/reference.jsonl": {
+          "bytes": 104470,
+          "sha256": "5069fe194135ff90872193a85fb73f6f5b133a1154a0cee0097bcf7fb7ec56f2"
+        },
+        "tps-ramp-40/own-input.txt": {
+          "bytes": 9182,
+          "sha256": "5b23792fec76992cc702c759ca04933afdf627f6b0024b6f02a4b369db08c489"
+        },
+        "tps-ramp-40/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "tps-ramp-40/own.jsonl": {
+          "bytes": 88923,
+          "sha256": "2f3bd4b66f3c6f43e25da054babd165cb7a8f0b75d98810ff3d4fa3a36373465"
+        },
+        "tps-ramp-40/reference-input.txt": {
+          "bytes": 82895,
+          "sha256": "7b53670996f336c82c155dd4d9bc9306f55663ba6a0cb83eeaa440ab4bd4ec80"
+        },
+        "tps-ramp-40/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "tps-ramp-40/reference.jsonl": {
+          "bytes": 105134,
+          "sha256": "fe45be6cee625255e37891bc49a701ddbe652f5c7837a670d7d52a0f0b0d594b"
+        },
+        "tps-ramp-60/own-input.txt": {
+          "bytes": 9182,
+          "sha256": "6f7f6f6922f19b7fae5d9d6ed724bfe692f7769b3ea26a0d81dc31c2a3d94cbb"
+        },
+        "tps-ramp-60/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "tps-ramp-60/own.jsonl": {
+          "bytes": 88878,
+          "sha256": "78e471d1b914a580da6bb911d3b3ee23ee6f8096b8f8337a9fb35280a061344e"
+        },
+        "tps-ramp-60/reference-input.txt": {
+          "bytes": 82895,
+          "sha256": "d868b2dd25896b1c2a2bff5a6bef944976af6c897934e63fc3db29167b35c43f"
+        },
+        "tps-ramp-60/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "tps-ramp-60/reference.jsonl": {
+          "bytes": 105554,
+          "sha256": "2953db209efbf1fcb7811701c10b5df8bbdbbbb181ffeb4d3c452332ff98ae41"
+        },
+        "tps-ramp-80/own-input.txt": {
+          "bytes": 9182,
+          "sha256": "72bc083e4db3d3cd71ef02b9bb5a87e1a64620bc228bf22d3b432341e8120169"
+        },
+        "tps-ramp-80/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "tps-ramp-80/own.jsonl": {
+          "bytes": 88754,
+          "sha256": "c4b26d266b2f0d23a96ec595d95e6364459a8eb86eab9e4868db5ea7e6e718f1"
+        },
+        "tps-ramp-80/reference-input.txt": {
+          "bytes": 82895,
+          "sha256": "363c5971da32a6f3c8bd33add30c4177730bd9d7a0fe4f69a40accec57d91716"
+        },
+        "tps-ramp-80/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "tps-ramp-80/reference.jsonl": {
+          "bytes": 105497,
+          "sha256": "9153f6e6054ce10a0b98163384b458e892194f2e613a3101e70c9da465c3c44d"
+        },
+        "trigger-stall/own-input.txt": {
+          "bytes": 13139,
+          "sha256": "adeb5fbf07885bd53a962b309b0cd44e89279049963552ccdd598a3a20aa6bd2"
+        },
+        "trigger-stall/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trigger-stall/own.jsonl": {
+          "bytes": 130550,
+          "sha256": "c1f1acf1cb3b4d887b4b2e70f74e910c2b3664609ad467e4dbe1d6704c7ae236"
+        },
+        "trigger-stall/reference-input.txt": {
+          "bytes": 44599,
+          "sha256": "f849933ff29902202a2fe37c70c77874b1b2e3f124fbd38ba315b3e94e839a7c"
+        },
+        "trigger-stall/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "trigger-stall/reference.jsonl": {
+          "bytes": 152535,
+          "sha256": "c88a9e9d9f7f6fe4130423628f54f33578a1f2e9742d18d7bd910276ea5c5f94"
+        },
+        "unarmed-native-timer/own-input.txt": {
+          "bytes": 9182,
+          "sha256": "cc2c3110c30a119457ceb582991dd054eb91760d38f9fbe545f1441a46a26759"
+        },
+        "unarmed-native-timer/own-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unarmed-native-timer/own.jsonl": {
+          "bytes": 88878,
+          "sha256": "85d5ed8e8746bbc76be4b61b929db94913e5c463da9b8b827b624c6d4067e48e"
+        },
+        "unarmed-native-timer/reference-input.txt": {
+          "bytes": 82895,
+          "sha256": "ae8e0c2f4cd802fb5402d19bcf373f757e2d6f19fc67ce7cfc4c9b4bcd2426ad"
+        },
+        "unarmed-native-timer/reference-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unarmed-native-timer/reference.jsonl": {
+          "bytes": 101818,
+          "sha256": "e5f21c7844e2818a24152510485c0f8ed5cac6cf8552f328618bf61520f60226"
+        }
+      }
+    },
+    "independent-review.tar.xz": {
+      "bytes": 59772,
+      "sha256": "1e34ed734f33a0b1b702ba2fa231eb1a99545d0ff0b8ccd6084a81649fa1cb02",
+      "members": {
+        "architecture-tests-results.json": {
+          "bytes": 713,
+          "sha256": "326b391bc382f9da2143571cb1f4df5c7fc959748ebc952ac8f8d048fe18fecf"
+        },
+        "architecture-tests-run.log": {
+          "bytes": 464,
+          "sha256": "011b8b94a276483147a4448c164473b84125f7dbd4908ccfc27c35d364cb8980"
+        },
+        "archive-whitelist.json": {
+          "bytes": 13772,
+          "sha256": "266c503f3bc533c40065fc169f2d5ac1c10b95b6585b4de9fcabc1da3bf4bec0"
+        },
+        "boost-kernel-final-results.json": {
+          "bytes": 781,
+          "sha256": "c560039ce8089eb97fa0182c5cf34da7e14145a29ceb8ca15eaf35391e705931"
+        },
+        "boost-kernel-final-run.log": {
+          "bytes": 78,
+          "sha256": "62939428255b1b29a461ded98de154b4ed90d0074b056b0393042e1e1f864e41"
+        },
+        "boost-kernel-run.log": {
+          "bytes": 78,
+          "sha256": "52997f437de1cd94ec5241b1df1977375a588ca70f6464f3dc49f15083fe114a"
+        },
+        "frozen/ecu/idle_pwm.hpp": {
+          "bytes": 6460,
+          "sha256": "392ef3640df5e3ea64c465df7a6815c2272ead28570626bc9540aab8b58a8c42"
+        },
+        "frozen_idle_namespace.hpp": {
+          "bytes": 6467,
+          "sha256": "bb90c433c5a1318733a95346afeb4b9826f03ba26d76aebe5b6fa98c57cdca2b"
+        },
+        "hardware-initial-finding.json": {
+          "bytes": 1857,
+          "sha256": "2278bd51237a1c7baa5025776ea89997e1176717b737adaf85271bd4aa352f03"
+        },
+        "idle-current-run.log": {
+          "bytes": 141,
+          "sha256": "0d34f4d6df45114fa38e12860f17ce8abed2a3eaadca9c90bce5ec884b4264dd"
+        },
+        "idle-differential-run.log": {
+          "bytes": 118,
+          "sha256": "539a8607e8cdbdaf092e4faeef99f51b704aaa37d32fd00b77927a44cc238e90"
+        },
+        "idle-frozen-run.log": {
+          "bytes": 141,
+          "sha256": "0d34f4d6df45114fa38e12860f17ce8abed2a3eaadca9c90bce5ec884b4264dd"
+        },
+        "idle_differential.cpp": {
+          "bytes": 5008,
+          "sha256": "aaf80000793c35cf7ac50346595bd297b640bab0f7206dc3ab2861e1c1498868"
+        },
+        "kernel-properties-results.json": {
+          "bytes": 724,
+          "sha256": "01a00f13a6b552c23b513a061ab49a590ee9a21c0892f3d86c0b3c2c0b162eee"
+        },
+        "kernel-properties-run.log": {
+          "bytes": 83,
+          "sha256": "c0d1257afcb3eb2e62ae0966ce9f53dbd3030cda131e2f1fbca80de31950ff6d"
+        },
+        "kernel_properties.cpp": {
+          "bytes": 4578,
+          "sha256": "8d2cccf380b1126ab4b8db4a03d1d8b4c37a588308ed64808c0086003fa4e070"
+        },
+        "paired-final-artifact-audit.json": {
+          "bytes": 16535,
+          "sha256": "d4a8b28187594c66e60f8470875c1a25ad1438ee63820698e0899b6d7069a16f"
+        },
+        "reference-probes/closed-below-activation-long/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reference-probes/closed-below-activation-long/stdout.jsonl": {
+          "bytes": 1594826,
+          "sha256": "701c33776b9af173fde7d2b4170d711e5d3ef56783d3771eed76319000cdbf8a"
+        },
+        "reference-probes/closed-below-activation-long/stimulus.txt": {
+          "bytes": 379850,
+          "sha256": "a9b020af75e02cb91bb1b59c97d62751ddc5d082c5ba283f922d764d4d0cd3e6"
+        },
+        "reference-probes/closed-cadence-results.json": {
+          "bytes": 3498,
+          "sha256": "ea09d853faa56a3ad23d256cf1c57f141aa7dc98ba8e59fe3249926ddaddd7f1"
+        },
+        "reference-probes/closed-feedforward-long/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reference-probes/closed-feedforward-long/stdout.jsonl": {
+          "bytes": 1626026,
+          "sha256": "ac809b94bc76aa23d454a86e66720cd60aea25e674aedf3b444cbaafa045d5ea"
+        },
+        "reference-probes/closed-feedforward-long/stimulus.txt": {
+          "bytes": 379850,
+          "sha256": "39a2030f0396b8d461f8b313eccd7f6ef7bdb11ff5daea4ee85be2a8dab74ee2"
+        },
+        "reference-probes/default-unarmed-open60/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reference-probes/default-unarmed-open60/stdout.jsonl": {
+          "bytes": 58518,
+          "sha256": "0c1495ce78e0b05a57344f6ee7e59484d6f65a292083b161bdfa6e1f104886dc"
+        },
+        "reference-probes/default-unarmed-open60/stimulus.txt": {
+          "bytes": 54630,
+          "sha256": "46238984cddf5bd6f40fb4bac1da3891346e69fe9c7ec4840ed953c9c4991dc0"
+        },
+        "reference-probes/initial-expectation-failure-and-resolution.json": {
+          "bytes": 1456,
+          "sha256": "ef1140eab454692a76fa1ff166f231296b99b35c36bd9cdc3a882cf05941d85b"
+        },
+        "reference-probes/results.json": {
+          "bytes": 3874,
+          "sha256": "16e8388f7a57d15c9cfe407dbbf51cfd9b452b26a9b062b73b412aa7c8b766dc"
+        },
+        "reference-probes/seeded-open60/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reference-probes/seeded-open60/stdout.jsonl": {
+          "bytes": 60564,
+          "sha256": "ca7c5f067774cb7b6b34faf7f8dcb6a09974872903fcb9d89d06158cbd0a8380"
+        },
+        "reference-probes/seeded-open60/stimulus.txt": {
+          "bytes": 54630,
+          "sha256": "46238984cddf5bd6f40fb4bac1da3891346e69fe9c7ec4840ed953c9c4991dc0"
+        },
+        "reference-probes/seeded-tps20/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reference-probes/seeded-tps20/stdout.jsonl": {
+          "bytes": 60246,
+          "sha256": "70e2cc3a7e3350816f35a3ddd460dcaf0bdf5bdd5790f89954396d0582f32289"
+        },
+        "reference-probes/seeded-tps20/stimulus.txt": {
+          "bytes": 54630,
+          "sha256": "afa035807afae4dac7792d609b8c9375d0bfe91a2264b48e185403a89852d580"
+        },
+        "reference003-attestation-review.json": {
+          "bytes": 1257,
+          "sha256": "ddca7af661c7ecd9a5267b94255e74cf9e61686a2bcdc6c3d94dfa23b24733c2"
+        },
+        "review-start.json": {
+          "bytes": 1271,
+          "sha256": "9cf4fb114a9c5b02ca9c1629f0c44ea5de7ebb816bdf56cbc910ba65140ca5f9"
+        },
+        "review.json": {
+          "bytes": 13634,
+          "sha256": "644bd4f6807b9286b0fc1bf6da3142f5eb7c83fd225408419cca87d43a18955e"
+        },
+        "target-iram-audit/closure.json": {
+          "bytes": 72023,
+          "sha256": "6997795292078bd9edba5c45346eaa1e4835d57612c730318b6282e383f84723"
+        },
+        "target-iram-audit/review-summary.json": {
+          "bytes": 957,
+          "sha256": "a0b1fc9c36b6f8dad7f23945d44ec84ed98661836ea0d4f4e04fb17bdcfad9a5"
+        },
+        "target-suite/commands.json": {
+          "bytes": 2556,
+          "sha256": "366eaa68e14d02126853c10a0cb7dfd413c02cc631732eb52e34fa85fadeb396"
+        },
+        "target-suite/run-0.log": {
+          "bytes": 40,
+          "sha256": "459736081e5a015e15646624564ec8683c5b25ca55efac03d12d33093d09c580"
+        },
+        "target-suite/run-1.log": {
+          "bytes": 37,
+          "sha256": "d1ec6e0ce08d7bc5df74d3aebba1ca3183330aa9acbc735b6e98c56356673232"
+        },
+        "target-suite/run-2.log": {
+          "bytes": 37,
+          "sha256": "0fb1158ef87eea5d65b91332d8bb19db565846b8ab281ff261b0afe55d4f434a"
+        },
+        "target-suite/run-3.log": {
+          "bytes": 37,
+          "sha256": "635d071d7b3283e370fac62111d0cafa0f049f1cf3883df9bf4b7a5357b4cc81"
+        },
+        "target-suite/summary.json": {
+          "bytes": 3019,
+          "sha256": "c61c367e999b7f00fa29a14fb036484d9782a36d8aeabf8b8f2a0ef312dd4d4a"
+        },
+        "test-results.json": {
+          "bytes": 3437,
+          "sha256": "bdfb21e96cf9b7c7146cd2f25715ce64b3fed9a59d5c4686b59fe741ebcf46ce"
+        }
+      }
+    },
+    "firmware.tar.xz": {
+      "bytes": 15755136,
+      "sha256": "af9d34b3fb18d2ed887e8648cd624e3511ea5fb4df5edbc65cdd48cbf7e39396",
+      "members": {
+        "firmware-a3-001/build/compact_a3_web/firmware.bin": {
+          "bytes": 1681456,
+          "sha256": "4a8e0bcfb1d7dec2852aac1539a8cdf5651a2da09ade4be060dce311a725050c"
+        },
+        "firmware-a3-001/default-cache-after.json": {
+          "bytes": 527816,
+          "sha256": "ba5596a9b5c226d1e1687b1e1b9712cc7436751cb77437dae5a66c6b027eecde"
+        },
+        "firmware-a3-001/default-cache-before.json": {
+          "bytes": 527816,
+          "sha256": "ba5596a9b5c226d1e1687b1e1b9712cc7436751cb77437dae5a66c6b027eecde"
+        },
+        "firmware-a3-001/elf-archives/compact_a3_web.elf.gz": {
+          "bytes": 4921750,
+          "sha256": "6ec4e0a11da5f48e0f96a5feb2a3b438e7162d04a1fb98cc07df2f0a7a313f47"
+        },
+        "firmware-a3-001/sources-after.json": {
+          "bytes": 33686,
+          "sha256": "4da27c31f753d5d70c4d31facb4e527435ce9b0205c040d0b820957d6c51baa5"
+        },
+        "firmware-a3-001/sources-before.json": {
+          "bytes": 33686,
+          "sha256": "4da27c31f753d5d70c4d31facb4e527435ce9b0205c040d0b820957d6c51baa5"
+        },
+        "firmware-a3-001/summary.json": {
+          "bytes": 2074,
+          "sha256": "dca23b88aaa572be3601089cfb8a77cb615cbe23f471d0626e3ea3510d1c6a8d"
+        },
+        "firmware-flex-dev-001/build/compact_n16r8_flex_dev/firmware.bin": {
+          "bytes": 1720416,
+          "sha256": "88b0612762d461cde8cdf4b247465441a46f928a4ba13ebbac24639498770cd1"
+        },
+        "firmware-flex-dev-001/default-cache-after.json": {
+          "bytes": 527816,
+          "sha256": "ba5596a9b5c226d1e1687b1e1b9712cc7436751cb77437dae5a66c6b027eecde"
+        },
+        "firmware-flex-dev-001/default-cache-before.json": {
+          "bytes": 527816,
+          "sha256": "ba5596a9b5c226d1e1687b1e1b9712cc7436751cb77437dae5a66c6b027eecde"
+        },
+        "firmware-flex-dev-001/elf-archives/compact_n16r8_flex_dev.elf.gz": {
+          "bytes": 4976201,
+          "sha256": "377a85497f80055bd44d83604e975fd3083dd28aff4990c377b5ce858e44846d"
+        },
+        "firmware-flex-dev-001/sources-after.json": {
+          "bytes": 33686,
+          "sha256": "4da27c31f753d5d70c4d31facb4e527435ce9b0205c040d0b820957d6c51baa5"
+        },
+        "firmware-flex-dev-001/sources-before.json": {
+          "bytes": 33686,
+          "sha256": "4da27c31f753d5d70c4d31facb4e527435ce9b0205c040d0b820957d6c51baa5"
+        },
+        "firmware-flex-dev-001/summary.json": {
+          "bytes": 2160,
+          "sha256": "d916dc7783c1667b17aba7933922455f360e56955103c9b9c809c4b903c546b2"
+        },
+        "firmware-n16-001/build/compact_n16r8_web/firmware.bin": {
+          "bytes": 1692304,
+          "sha256": "7320d1f46a8ef7ce13925c846a4848d6723afc1fbc8213492b5c4a10f7d1e75a"
+        },
+        "firmware-n16-001/default-cache-after.json": {
+          "bytes": 527816,
+          "sha256": "ba5596a9b5c226d1e1687b1e1b9712cc7436751cb77437dae5a66c6b027eecde"
+        },
+        "firmware-n16-001/default-cache-before.json": {
+          "bytes": 527816,
+          "sha256": "ba5596a9b5c226d1e1687b1e1b9712cc7436751cb77437dae5a66c6b027eecde"
+        },
+        "firmware-n16-001/elf-archives/compact_n16r8_web.elf.gz": {
+          "bytes": 4966020,
+          "sha256": "a6b7b2dfdd9b5f828bf4923da963e2a00613720f0d0416960a7bbeba33913f36"
+        },
+        "firmware-n16-001/sources-after.json": {
+          "bytes": 33686,
+          "sha256": "4da27c31f753d5d70c4d31facb4e527435ce9b0205c040d0b820957d6c51baa5"
+        },
+        "firmware-n16-001/sources-before.json": {
+          "bytes": 33686,
+          "sha256": "4da27c31f753d5d70c4d31facb4e527435ce9b0205c040d0b820957d6c51baa5"
+        },
+        "firmware-n16-001/summary.json": {
+          "bytes": 2105,
+          "sha256": "31be3b92f220b456f34f5ccaaf6290fa913c7b8e534e0fae0b46c06a59f6214b"
+        }
+      }
+    }
+  },
+  "firmware_builds": [
+    {
+      "path": "firmware-a3-001",
+      "summary": {
+        "created_utc": "2026-11-05T14:33:42.280838+00:00",
+        "command": [
+          "pio",
+          "run",
+          "-d",
+          "/home/mark/persospace/esp32-ecu/firmware",
+          "-e",
+          "compact_a3_web"
+        ],
+        "exit_code": 0,
+        "build_dir_override": "/home/mark/persospace/esp32-ecu/.cache/engine/boost-001/firmware-a3-001/build",
+        "environments": [
+          "compact_a3_web"
+        ],
+        "default_cache_retained": true,
+        "default_cache_unchanged": true,
+        "source_inputs_unchanged": true,
+        "generated_sdkconfigs": [
+          {
+            "environment": "compact_a3_web",
+            "original_present": true,
+            "original_sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c",
+            "retained": "retained-sdkconfigs/sdkconfig.compact_a3_web",
+            "after_sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c",
+            "after_copy": "sdkconfigs-after/sdkconfig.compact_a3_web"
+          }
+        ],
+        "artifacts": [
+          {
+            "path": "build/compact_a3_web/firmware.bin",
+            "bytes": 1681456,
+            "sha256": "4a8e0bcfb1d7dec2852aac1539a8cdf5651a2da09ade4be060dce311a725050c"
+          },
+          {
+            "path": "build/compact_a3_web/firmware.elf",
+            "bytes": 14067820,
+            "sha256": "8ab105ea5c5dea1d48da2aea1d3570058c47623e6271e41b35cde2f497145dcc"
+          }
+        ],
+        "elf_archives": [
+          {
+            "environment": "compact_a3_web",
+            "path": "elf-archives/compact_a3_web.elf.gz",
+            "bytes": 4921750,
+            "sha256": "6ec4e0a11da5f48e0f96a5feb2a3b438e7162d04a1fb98cc07df2f0a7a313f47",
+            "elf_bytes": 14067820,
+            "elf_sha256": "8ab105ea5c5dea1d48da2aea1d3570058c47623e6271e41b35cde2f497145dcc"
+          }
+        ],
+        "generated_assets_sha256": "165223ec5aa870faa9f02c1f2e23155b1c27af7e4a424e699d870aafb4852a2d",
+        "web_index_sha256": "70eb38c6dba702ec534a270cc6afe35bd68bba7c56bca6f1dbb2b57b30e2bb59",
+        "embedded_UI": [
+          {
+            "environment": "compact_a3_web",
+            "web_expected": true,
+            "current_index_in_flash_rodata": true
+          }
+        ],
+        "declared_generation_changes": [],
+        "generation_only_declared_output": true,
+        "flashed": false,
+        "physical_qualification": false
+      }
+    },
+    {
+      "path": "firmware-n16-001",
+      "summary": {
+        "created_utc": "2026-11-05T14:27:25.456884+00:00",
+        "command": [
+          "pio",
+          "run",
+          "-d",
+          "/home/mark/persospace/esp32-ecu/firmware",
+          "-e",
+          "compact_n16r8_web"
+        ],
+        "exit_code": 0,
+        "build_dir_override": "/home/mark/persospace/esp32-ecu/.cache/engine/boost-001/firmware-n16-001/build",
+        "environments": [
+          "compact_n16r8_web"
+        ],
+        "default_cache_retained": true,
+        "default_cache_unchanged": true,
+        "source_inputs_unchanged": true,
+        "generated_sdkconfigs": [
+          {
+            "environment": "compact_n16r8_web",
+            "original_present": true,
+            "original_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+            "retained": "retained-sdkconfigs/sdkconfig.compact_n16r8_web",
+            "after_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+            "after_copy": "sdkconfigs-after/sdkconfig.compact_n16r8_web"
+          }
+        ],
+        "artifacts": [
+          {
+            "path": "build/compact_n16r8_web/firmware.bin",
+            "bytes": 1692304,
+            "sha256": "7320d1f46a8ef7ce13925c846a4848d6723afc1fbc8213492b5c4a10f7d1e75a"
+          },
+          {
+            "path": "build/compact_n16r8_web/firmware.elf",
+            "bytes": 14359600,
+            "sha256": "1225105f92a3ef166d7a80229df1666379df92b21f49277af41971cf92b4501e"
+          }
+        ],
+        "elf_archives": [
+          {
+            "environment": "compact_n16r8_web",
+            "path": "elf-archives/compact_n16r8_web.elf.gz",
+            "bytes": 4966020,
+            "sha256": "a6b7b2dfdd9b5f828bf4923da963e2a00613720f0d0416960a7bbeba33913f36",
+            "elf_bytes": 14359600,
+            "elf_sha256": "1225105f92a3ef166d7a80229df1666379df92b21f49277af41971cf92b4501e"
+          }
+        ],
+        "generated_assets_sha256": "165223ec5aa870faa9f02c1f2e23155b1c27af7e4a424e699d870aafb4852a2d",
+        "web_index_sha256": "70eb38c6dba702ec534a270cc6afe35bd68bba7c56bca6f1dbb2b57b30e2bb59",
+        "embedded_UI": [
+          {
+            "environment": "compact_n16r8_web",
+            "web_expected": true,
+            "current_index_in_flash_rodata": true
+          }
+        ],
+        "declared_generation_changes": [],
+        "generation_only_declared_output": true,
+        "flashed": false,
+        "physical_qualification": false
+      }
+    },
+    {
+      "path": "firmware-flex-dev-001",
+      "summary": {
+        "created_utc": "2026-11-05T14:22:32.542917+00:00",
+        "command": [
+          "pio",
+          "run",
+          "-d",
+          "/home/mark/persospace/esp32-ecu/firmware",
+          "-e",
+          "compact_n16r8_flex_dev"
+        ],
+        "exit_code": 0,
+        "build_dir_override": "/home/mark/persospace/esp32-ecu/.cache/engine/boost-001/firmware-flex-dev-001/build",
+        "environments": [
+          "compact_n16r8_flex_dev"
+        ],
+        "default_cache_retained": true,
+        "default_cache_unchanged": true,
+        "source_inputs_unchanged": true,
+        "generated_sdkconfigs": [
+          {
+            "environment": "compact_n16r8_flex_dev",
+            "original_present": true,
+            "original_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+            "retained": "retained-sdkconfigs/sdkconfig.compact_n16r8_flex_dev",
+            "after_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+            "after_copy": "sdkconfigs-after/sdkconfig.compact_n16r8_flex_dev"
+          }
+        ],
+        "artifacts": [
+          {
+            "path": "build/compact_n16r8_flex_dev/firmware.bin",
+            "bytes": 1720416,
+            "sha256": "88b0612762d461cde8cdf4b247465441a46f928a4ba13ebbac24639498770cd1"
+          },
+          {
+            "path": "build/compact_n16r8_flex_dev/firmware.elf",
+            "bytes": 14450912,
+            "sha256": "2f63917bad76154b406a5494bdc3cfef805849d18019c705c5d610e8d1255db7"
+          }
+        ],
+        "elf_archives": [
+          {
+            "environment": "compact_n16r8_flex_dev",
+            "path": "elf-archives/compact_n16r8_flex_dev.elf.gz",
+            "bytes": 4976201,
+            "sha256": "377a85497f80055bd44d83604e975fd3083dd28aff4990c377b5ce858e44846d",
+            "elf_bytes": 14450912,
+            "elf_sha256": "2f63917bad76154b406a5494bdc3cfef805849d18019c705c5d610e8d1255db7"
+          }
+        ],
+        "generated_assets_sha256": "165223ec5aa870faa9f02c1f2e23155b1c27af7e4a424e699d870aafb4852a2d",
+        "web_index_sha256": "70eb38c6dba702ec534a270cc6afe35bd68bba7c56bca6f1dbb2b57b30e2bb59",
+        "embedded_UI": [
+          {
+            "environment": "compact_n16r8_flex_dev",
+            "web_expected": true,
+            "current_index_in_flash_rodata": true
+          }
+        ],
+        "declared_generation_changes": [],
+        "generation_only_declared_output": true,
+        "flashed": false,
+        "physical_qualification": false
+      }
+    }
+  ],
+  "firmware_source_followup": {
+    "path": "firmware/tests/boost_control_test.cpp",
+    "build_source_sha256": "f8c8511e066243f5c4e5e23883a00d1d4ac86fb1f37d0658dc87dcac5c55a9f8",
+    "current_sha256": "b032e3f6afec416ecf856ac146967097f206169e053aad17b1dddc488a4e897a",
+    "reason": "Only3 assertions added to a native test not compiled into the ESP images; exact earlier test bytes retained by their recorded hash."
+  },
+  "files": {
+    "README.md": {
+      "bytes": 4690,
+      "sha256": "66d0f98b60121432e753328c0b078f6656066fc08576270330aba9d5a847ca01"
+    },
+    "comparison.png": {
+      "bytes": 153326,
+      "sha256": "033cb49331b9a55b27bd8fb9829fdc0d3e815f8e201034e47ff7372b55a885d8"
+    },
+    "firmware.tar.xz": {
+      "bytes": 15755136,
+      "sha256": "af9d34b3fb18d2ed887e8648cd624e3511ea5fb4df5edbc65cdd48cbf7e39396"
+    },
+    "independent-review.json": {
+      "bytes": 13634,
+      "sha256": "644bd4f6807b9286b0fc1bf6da3142f5eb7c83fd225408419cca87d43a18955e"
+    },
+    "independent-review.tar.xz": {
+      "bytes": 59772,
+      "sha256": "1e34ed734f33a0b1b702ba2fa231eb1a99545d0ff0b8ccd6084a81649fa1cb02"
+    },
+    "paired-probes.tar.xz": {
+      "bytes": 73112,
+      "sha256": "c82510dd152b66c42ebd66c8477fd5b36a06615dbef04f1b397bb7b530d6fd4a"
+    },
+    "results.json": {
+      "bytes": 31638,
+      "sha256": "538fa54c5888c18389c1a3bcf0829b6fa1d1606b4cc7e3cd0d17a272d636f5f0"
+    },
+    "sources.tar.xz": {
+      "bytes": 458936,
+      "sha256": "66899695a7ee89285e95d3d0ce787154ac78d6428184ad5f1fc80f614c009c09"
+    }
+  },
+  "plot_matplotlib": "3.11.2",
+  "physical_outputs_inhibited": true,
+  "physical_qualification": false,
+  "scope": "Isolated portable boost kernel/PWM plus production-source fixtures; full ECU integration remains open",
+  "excluded": [
+    "Linked Speeduino executables/objects/upstream source",
+    "Full feature/engine/turbo plant/physical qualification"
+  ]
+}

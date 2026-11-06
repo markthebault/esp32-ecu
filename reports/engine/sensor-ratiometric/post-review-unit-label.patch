@@ -1,0 +1,20 @@
+--- reviewed/web/index.html
++++ current/web/index.html
+@@ -44 +44 @@
+-function bindSensorFields(){document.querySelectorAll('[data-key]').forEach(input=>input.oninput=()=>{const s=profile.sensors.find(x=>x.id===selected);s[input.dataset.key]=input.type==='number'?input.value===''?null:Number(input.value):input.value;if(input.dataset.key==='reference_supply_v'){s.confirmed=false;$('#confirmed').checked=false;}markDirty();updateLive()})}
++function bindSensorFields(){document.querySelectorAll('[data-key]').forEach(input=>input.oninput=()=>{const s=profile.sensors.find(x=>x.id===selected);s[input.dataset.key]=input.type==='number'?input.value===''?null:Number(input.value):input.value;if(['reference_supply_v','unit'].includes(input.dataset.key)){s.confirmed=false;$('#confirmed').checked=false;}markDirty();if(input.dataset.key==='unit')renderConversion();updateLive()})}
+--- reviewed/docs/sensor-ratiometric.md
++++ current/docs/sensor-ratiometric.md
+@@ -13 +13 @@
+-Changing the mode, ratio option or reference supply clears the editor's calibration confirmation. Verify the whole curve against independent references before confirming it again. **Use live V** follows the edited ratio/reference settings, even before saving; it rejects stale/failed ADC data and invalid conversion supply. The live converted value continues using the saved profile until a successful save.
++Changing the mode, unit, ratio option or reference supply clears the editor's calibration confirmation. Verify the whole curve against independent references before confirming it again. **Use live V** follows the edited ratio/reference settings, even before saving; it rejects stale/failed ADC data and invalid conversion supply. The live converted value continues using the saved profile until a successful save.
+--- reviewed/tools/test_sensor_ratiometric_ui.py
++++ current/tools/test_sensor_ratiometric_ui.py
+@@ -74,0 +75,2 @@
++            assert await page.locator('label[for="f-y0"]').inner_text()=='Point 1 / value (kPa)'
++            assert not await page.locator('#confirmed').is_checked()
+--- reviewed/firmware/main/web_assets.hpp
++++ current/firmware/main/web_assets.hpp
+@@ -2789 +2789 @@
+-function bindSensorFields(){document.querySelectorAll('[data-key]').forEach(input=>input.oninput=()=>{const s=profile.sensors.find(x=>x.id===selected);s[input.dataset.key]=input.type==='number'?input.value===''?null:Number(input.value):input.value;if(input.dataset.key==='reference_supply_v'){s.confirmed=false;$('#confirmed').checked=false;}markDirty();updateLive()})}
++function bindSensorFields(){document.querySelectorAll('[data-key]').forEach(input=>input.oninput=()=>{const s=profile.sensors.find(x=>x.id===selected);s[input.dataset.key]=input.type==='number'?input.value===''?null:Number(input.value):input.value;if(['reference_supply_v','unit'].includes(input.dataset.key)){s.confirmed=false;$('#confirmed').checked=false;}markDirty();if(input.dataset.key==='unit')renderConversion();updateLive()})}

@@ -1,0 +1,136 @@
+{
+  "status": "software_development_contract_not_RF_qualification",
+  "schema": 6,
+  "max_datagram_bytes": 250,
+  "complete_observation_parts": 3,
+  "base": {
+    "type": 9,
+    "bytes": 250,
+    "body_bytes": 218,
+    "layout": "schema5_with_schema_field_6_and_timing_causes_0_to_18"
+  },
+  "flex": {
+    "type": 11,
+    "bytes": 232,
+    "body_bytes": 200,
+    "layout": "engine-radio-v5.json_flex_with_schema_field_6"
+  },
+  "boost": {
+    "type": 12,
+    "bytes": 144,
+    "body_bytes": 112,
+    "fields": [
+      [
+        0,
+        8,
+        "ECN1_header"
+      ],
+      [
+        8,
+        4,
+        "session_u32"
+      ],
+      [
+        12,
+        8,
+        "packet_sequence_u64"
+      ],
+      [
+        20,
+        2,
+        "schema_u16_6"
+      ],
+      [
+        22,
+        2,
+        "reserved_zero"
+      ],
+      [
+        24,
+        32,
+        "full_base_HMAC_SHA256"
+      ],
+      [
+        56,
+        32,
+        "duty_demand_target_feedforward_error_P_I_D_8xf32"
+      ],
+      [
+        88,
+        8,
+        "pid_updates_u64"
+      ],
+      [
+        96,
+        8,
+        "overboost_events_u64"
+      ],
+      [
+        104,
+        4,
+        "boost_flags_u32_bits_0_to_10"
+      ],
+      [
+        108,
+        1,
+        "reason_u8_0_to_16"
+      ],
+      [
+        109,
+        1,
+        "mode_u8_0_to_2"
+      ],
+      [
+        110,
+        1,
+        "available_bit0_pressure_enabled_bit1_inhibit_engine_bit2_other_bits_zero"
+      ],
+      [
+        111,
+        1,
+        "reserved_zero"
+      ],
+      [
+        112,
+        32,
+        "full_extension_HMAC_SHA256"
+      ]
+    ]
+  },
+  "authentication": "existing_per_boot_per_peer_engine_key_full_SHA256_MAC_on_each_body_and_full_BASE_MAC_in_both_extensions",
+  "sender": {
+    "pending_observations_per_peer": 1,
+    "preparation_snapshot": "one_RuntimeSample_for_all_three_parts",
+    "observation_deadline_us": 250000,
+    "per_peer_storage_budget_bytes": 672,
+    "datagram_budget_unchanged": true,
+    "ack_window_submission": "only_after_all_three_SDK_submissions_accepted_using_original_preparation_time",
+    "capability_request_unpair_or_key_change_cancels_pending": true,
+    "new_snapshot_does_not_replace_pending_parts": true,
+    "reserved_slots": "type5_metadata_round_mod10_0_and_type4_sensor_round_mod10_1_before_pending_parts_when_sensor_publication_fresh",
+    "native_four_peer_15s_schedule": {
+      "complete_observations_per_peer": 80,
+      "all_six_metadata_channels": true,
+      "sensor_and_metadata_gap_us": 500000,
+      "maximum_BASE_to_BOOST_us": 200000,
+      "RF_or_RTOS_measured": false
+    }
+  },
+  "receiver": {
+    "pending_observations": 2,
+    "assembly_deadline_ms": 250,
+    "all_six_part_orders_supported": true,
+    "partial_data_is_observation": false,
+    "partial_data_refreshes_gap_or_ack": false,
+    "duplicate_part_refreshes_assembly_deadline": false,
+    "authenticated_conflict_quarantines_through_packet_sequence": true,
+    "query_update_or_boot_retires_partial_state": true,
+    "repeated_proposal_preserves_full_flex_and_boost_payload_and_age_floors": true,
+    "boost_ages": "original_BASE_sample_and_control_ages_plus_negotiated_transit_clock_allowance_and_local_elapsed",
+    "MAP_context": "valid_MAP_10_to_400_kPa_only_with_pressure_enabled_otherwise_10_to_110_source_validity_mask_retains_exact_configured_limit",
+    "pressure_inhibit_requires_parent": "faulted_nonzero_faults_fuel_and_spark_cut_no_pump_or_active_proposal_zero_pulse_dwell_and_duty",
+    "boost_status": "aged_diagnostic_observation_and_explicit_at_source_decision_never_current_actuation_permission"
+  },
+  "legacy_schemas_1_to_5": "unchanged_bytes_for_representable_samples_new_boost_pressure_profiles_and_timing_cause18_are_withheld_with_sensor_fallback_when_sensor_sample_is_fresh",
+  "scope": "read_only_telemetry_no_remote_control_no_screen_application_no_actual_RF_or_physical_qualification"
+}

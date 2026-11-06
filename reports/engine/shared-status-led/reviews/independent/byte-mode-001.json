@@ -1,0 +1,32 @@
+{
+  "compile": {
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-001/firmware/include",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/byte_mode_probe.cpp",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/byte-mode-001"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "probe_sha256": "c66c33e941c60cf251645b4061898a1a8d16377e86f7c360fccdb39becde5b69",
+  "run": {
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/byte-mode-001"
+    ],
+    "returncode": 0,
+    "stdout": "{\"physical_IOCON\":32,\"driver_expected_IOCON\":0,\"ready\":true,\"configured\":true,\"fresh\":true,\"fault\":\"none\",\"verifications\":2}\n",
+    "stderr": ""
+  }
+}

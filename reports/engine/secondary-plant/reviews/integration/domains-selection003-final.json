@@ -1,0 +1,697 @@
+{
+  "passed": true,
+  "matrix": ".cache/engine/secondary-plant-matrix-003",
+  "runs": 128,
+  "errors": [],
+  "scope": "Independent actual native lookup-domain bound, all raw GPIO pairs, shared-channel unequal-debounce transition chronology, opposite polarity, and exact-threshold equality before/after activation. Domain bound explicitly excludes wrapped uint8 lookup coordinates beyond255.",
+  "reference_domains": [
+    {
+      "label": "speeduino16",
+      "case": "add",
+      "max_rounded_rpm_axis_coordinate": 27,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "capacity",
+      "max_rounded_rpm_axis_coordinate": 11,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "conditional_map",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "conditional_near_quantization",
+      "max_rounded_rpm_axis_coordinate": 25,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "conditional_rpm",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "conditional_tps",
+      "max_rounded_rpm_axis_coordinate": 25,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "conditional_tps_plateau",
+      "max_rounded_rpm_axis_coordinate": 36,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "control_busy",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "fuel_only",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "input",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "input_bounce",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "input_inverted",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "input_opposite",
+      "max_rounded_rpm_axis_coordinate": 30,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "input_semi",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "input_sequential",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "input_shared",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "input_shared_debounce",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "mid_read_reset",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "multiply",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "nack",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "neutral_add",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "neutral_multiply",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "off",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "off_metadata",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 23
+    },
+    {
+      "label": "speeduino16",
+      "case": "producer_pause",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "ratio_mixed",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "spark_only",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "timeout",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "tps_mixed",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "trim_multiply",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "underfill",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino16",
+      "case": "zero_fuel",
+      "max_rounded_rpm_axis_coordinate": 2,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "add",
+      "max_rounded_rpm_axis_coordinate": 27,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "capacity",
+      "max_rounded_rpm_axis_coordinate": 11,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "conditional_map",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "conditional_near_quantization",
+      "max_rounded_rpm_axis_coordinate": 25,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "conditional_rpm",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "conditional_tps",
+      "max_rounded_rpm_axis_coordinate": 25,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "conditional_tps_plateau",
+      "max_rounded_rpm_axis_coordinate": 36,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "control_busy",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "fuel_only",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "input",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "input_bounce",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "input_inverted",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "input_opposite",
+      "max_rounded_rpm_axis_coordinate": 30,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "input_semi",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "input_sequential",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "input_shared",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "input_shared_debounce",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "mid_read_reset",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "multiply",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "nack",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "neutral_add",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "neutral_multiply",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "off",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "off_metadata",
+      "max_rounded_rpm_axis_coordinate": 28,
+      "max_rounded_load_axis_coordinate": 23
+    },
+    {
+      "label": "speeduino32",
+      "case": "producer_pause",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "ratio_mixed",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "spark_only",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "timeout",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "tps_mixed",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "trim_multiply",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "underfill",
+      "max_rounded_rpm_axis_coordinate": 29,
+      "max_rounded_load_axis_coordinate": 50
+    },
+    {
+      "label": "speeduino32",
+      "case": "zero_fuel",
+      "max_rounded_rpm_axis_coordinate": 2,
+      "max_rounded_load_axis_coordinate": 50
+    }
+  ],
+  "selection_witnesses": [
+    {
+      "label": "portable",
+      "case": "conditional_tps_plateau",
+      "sections": [
+        {
+          "name": "upward equality",
+          "count": 16,
+          "active": false
+        },
+        {
+          "name": "above",
+          "count": 26,
+          "active": true
+        },
+        {
+          "name": "downward equality",
+          "count": 26,
+          "active": false
+        }
+      ]
+    },
+    {
+      "label": "portable",
+      "case": "input",
+      "physical_gpio_pairs": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "portable",
+      "case": "input_opposite",
+      "distinct_selection_witness": true
+    },
+    {
+      "label": "portable",
+      "case": "input_shared_debounce",
+      "first_rise_us": {
+        "fuel": 3011800,
+        "spark": 3041800
+      },
+      "first_fall_us": {
+        "fuel": 4011800,
+        "spark": 4041800
+      }
+    },
+    {
+      "label": "speeduino16",
+      "case": "conditional_tps_plateau",
+      "sections": [
+        {
+          "name": "upward equality",
+          "count": 16,
+          "active": false
+        },
+        {
+          "name": "above",
+          "count": 26,
+          "active": true
+        },
+        {
+          "name": "downward equality",
+          "count": 26,
+          "active": false
+        }
+      ]
+    },
+    {
+      "label": "speeduino16",
+      "case": "input_opposite",
+      "distinct_selection_witness": true
+    },
+    {
+      "label": "speeduino32",
+      "case": "conditional_tps_plateau",
+      "sections": [
+        {
+          "name": "upward equality",
+          "count": 16,
+          "active": false
+        },
+        {
+          "name": "above",
+          "count": 26,
+          "active": true
+        },
+        {
+          "name": "downward equality",
+          "count": 26,
+          "active": false
+        }
+      ]
+    },
+    {
+      "label": "speeduino32",
+      "case": "input_opposite",
+      "distinct_selection_witness": true
+    },
+    {
+      "label": "target",
+      "case": "conditional_tps_plateau",
+      "sections": [
+        {
+          "name": "upward equality",
+          "count": 16,
+          "active": false
+        },
+        {
+          "name": "above",
+          "count": 26,
+          "active": true
+        },
+        {
+          "name": "downward equality",
+          "count": 26,
+          "active": false
+        }
+      ]
+    },
+    {
+      "label": "target",
+      "case": "input",
+      "physical_gpio_pairs": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "target",
+      "case": "input_opposite",
+      "distinct_selection_witness": true
+    },
+    {
+      "label": "target",
+      "case": "input_shared_debounce",
+      "first_rise_us": {
+        "fuel": 3011800,
+        "spark": 3041800
+      },
+      "first_fall_us": {
+        "fuel": 4011800,
+        "spark": 4041800
+      }
+    }
+  ],
+  "artifacts": {
+    "portable-add-250.json.gz": "bc1e8dc56c9fa76e61b713b945fd0333d94cc658a4baa7b0dd1049ef763d6234",
+    "portable-capacity-250.json.gz": "5127d524b1791a0a80bc7cdec8a406d2092e6c756241d9e137bd86026be38c48",
+    "portable-conditional_map-250.json.gz": "a0a440b5e817e7372a4d180c1e4c43636ea72f038246ac7aa0f51db777fa22df",
+    "portable-conditional_near_quantization-250.json.gz": "7474be8d3b63f698d658eca5a2790d3d2b0352365c395cb6743dbbb667ebcd73",
+    "portable-conditional_rpm-250.json.gz": "b227c1c687e06aa1682b78dded361c97770bc9c618ab2d609dcb3ec256208669",
+    "portable-conditional_tps-250.json.gz": "c89fe7c953c09f73eef91d916b15dd3635a7ba3299e3d153c6338d4ef9dd8c44",
+    "portable-conditional_tps_plateau-250.json.gz": "b3f7c576d768c6f23e6170f38d59c11497385592559220844e3e68b4886a0828",
+    "portable-control_busy-250.json.gz": "ba62fde179d9274fa67b6c2b7538e2a6cb7c89b4eb7fcb41a21d2dcf7fd5414c",
+    "portable-fuel_only-250.json.gz": "70b1803ebd606074624a2169cf174bcefe396f1b1d5b357410d6a2153183b409",
+    "portable-input-250.json.gz": "525254cf190be49e59d3032d119802b20667c02feff83a54772db6bf101b0c4d",
+    "portable-input_bounce-250.json.gz": "7641a36cb9001fbbc29eea3cd04709f29b4d2b1eb91329bb99b6e05c4d1ce870",
+    "portable-input_inverted-250.json.gz": "c07446a7fd4177182e5d4e554e7e616f57dc0ee434dfc707f3eaecdea7a9c57c",
+    "portable-input_opposite-250.json.gz": "6a76c1ae5f17c97fb3089e8a166e3a5d3886183c8e65df9b1b542145843365ac",
+    "portable-input_semi-250.json.gz": "854718fb2ee69d4f5133e4c2964e62f618a8537a0d224d4dfb7003bc3b24ee94",
+    "portable-input_sequential-250.json.gz": "5bfe23b0157833219a3105f4b9f783189a6b3006e000361cb44cfeb0aff27907",
+    "portable-input_shared-250.json.gz": "3d84e6dff0644ccaf4933f8ce7711a7e96c03aa2f34a7c59a2575b0454b9d944",
+    "portable-input_shared_debounce-250.json.gz": "d4a590711ad8cca5a25a660c902aa19878bc7c29cbb115c075689f7b47f7bc0b",
+    "portable-mid_read_reset-250.json.gz": "f0bcf25e6dccc720fde14e654f0966f7d6075fbcdb4231507ecb5783943084f8",
+    "portable-multiply-250.json.gz": "236fbcd059d4faffe6f9c014f1a922dbf2669e2444c9f886b9da3fab35bde6c8",
+    "portable-nack-250.json.gz": "56c8406e95f28db8b62379e17400c1f5b717c67211bffb8b1e1738800bc6c959",
+    "portable-neutral_add-250.json.gz": "0a4ebea8e3701c4594b365b77528b903c4f5f72cb0f2387071cc2bbffb9f961c",
+    "portable-neutral_multiply-250.json.gz": "c1ce408ec3fcebf5ac233f527e50bf50e0a5396dcc4a84c6aaf704d80ef990af",
+    "portable-off-250.json.gz": "74395f09a0858f72b6d7e05050105609d4df2011f4b5d97e2a9867f5394bd782",
+    "portable-off_metadata-250.json.gz": "2b684e1b9d3ce2fc2951d93dd95339f84169d77c5fb563c9ced7587aac11b205",
+    "portable-producer_pause-250.json.gz": "506f72a75bfdb85cbfe56e454544f58dfba44a28910849c48e284c0ee6eb6e3c",
+    "portable-ratio_mixed-250.json.gz": "b820b32f16fed55db814a0acd2aed1499f0f63235a39ab33aa4ab87b41ee2097",
+    "portable-spark_only-250.json.gz": "4adfa5b05bd9c9b398c13438fff995bf879207e2ace22881fe50929d07d36c87",
+    "portable-timeout-250.json.gz": "7f6eb0ed0f994fb73361bad854d7391380f8074242fcd4d5f95ac33abb0a741a",
+    "portable-tps_mixed-250.json.gz": "04c3e1773851623715646e64416bde1186abae271cd8612627bdbdf1a37a7fd4",
+    "portable-trim_multiply-250.json.gz": "d6742da1d76c600a0050b229591e90e9d189bd787768b7502785881930dab273",
+    "portable-underfill-250.json.gz": "05aea2b66ebfa1ec41499e932ef00b67488b0764966a724906c13fac171b8143",
+    "portable-zero_fuel-250.json.gz": "f6c1c35c9ca5a41f236a05ee3eaa2fc21cd05d5d9404c23db631160bf854f9e1",
+    "speeduino16-add-250.json.gz": "3679aec35ad89b5ba6cc170b204bff82f3c3f8ae8200b375ee155b33b946e538",
+    "speeduino16-capacity-250.json.gz": "5c06fd658f5d9fcc65b0f835384ca25745db36f647490f4fbfc94af1cf8c0d04",
+    "speeduino16-conditional_map-250.json.gz": "0094f4222299fb6008a528dbbd44fc807480c98dae1e58fb273d4f627412c4bc",
+    "speeduino16-conditional_near_quantization-250.json.gz": "54c5f9bd662055a67f67e1e8c98d8a393424682980914566f8ca9a3c29402e76",
+    "speeduino16-conditional_rpm-250.json.gz": "4f80efce631e43dbb857723c0919a7fb4f000069bad9bfb93bbb1f75d8e3cfe8",
+    "speeduino16-conditional_tps-250.json.gz": "cfceee6c4425c36b6392919899463801872e4218fc747232023e07dd5ec4f81c",
+    "speeduino16-conditional_tps_plateau-250.json.gz": "fdbb4cc19dff75ea90f720cbc8cbb9a42658d03edef30fc64b3fc2b48748f87e",
+    "speeduino16-control_busy-250.json.gz": "91ad94d0a7c830f581eb48bbcecafe88cb856d8a5ea1238ac077aba6a46f6463",
+    "speeduino16-fuel_only-250.json.gz": "981352651b9a9243d5691e2918545871dfa4b9656eeb7ff272a7ed3f3f947e53",
+    "speeduino16-input-250.json.gz": "c22ef7f2127b184159f467476c32f8b957ccd7c12a3b24de88d800eab92070d7",
+    "speeduino16-input_bounce-250.json.gz": "538537358fb659bd4878e1419b90f52af182b3ab894a3860031aac19c090dd78",
+    "speeduino16-input_inverted-250.json.gz": "51d21bc472ad02e5738fe5f67d97fa7eef5c6e716adb929dc2341d2c5c7d020e",
+    "speeduino16-input_opposite-250.json.gz": "93ca68486ea9f86a496dde1dedc7535368a8c6792fd9d3496253da623a5c7393",
+    "speeduino16-input_semi-250.json.gz": "1d2fa9809b972f665cca7eb0cfa75fb4d62018d06bd736e2cb5c6b351f97b137",
+    "speeduino16-input_sequential-250.json.gz": "946d5696a4336519720663c5af07d5feea1d951ffec68085da906c04f81fa620",
+    "speeduino16-input_shared-250.json.gz": "749657067ed8bc0b700c45038e4a2bd918d6b6b5879686cb859359affc03694c",
+    "speeduino16-input_shared_debounce-250.json.gz": "34de6ebb95930c3bd6176a02adf2aec7fe9ef1436856ce5231a08e13de7c6bbe",
+    "speeduino16-mid_read_reset-250.json.gz": "df8cfdd3c7981d945a80ee38b2ee48f203f1926b7be2af24af15f861c562292d",
+    "speeduino16-multiply-250.json.gz": "5cb2c62a5c9322dccef308691b8c43ac3e01b794ca0695b98515437faa00e944",
+    "speeduino16-nack-250.json.gz": "57768c6dedd8b5b3dced8611e1cfc50a672f525b60ae42323f98cd2fa12cab65",
+    "speeduino16-neutral_add-250.json.gz": "b365a307275d3b01ff70224d73f1ab1634bcd03964217f0b0bec89d5075a1ad4",
+    "speeduino16-neutral_multiply-250.json.gz": "bd2ee13f3758b46a027a707773993dce13e8da8165e57e16dc4dd6348189d5f1",
+    "speeduino16-off-250.json.gz": "45e7a5bb07d698716edc34edf2565a5d16fc7444b84361d1e75aecb487de15fd",
+    "speeduino16-off_metadata-250.json.gz": "0e8400218d1814793f39c0917739558ebb648ce213ee536d552e0b2106a23ab0",
+    "speeduino16-producer_pause-250.json.gz": "d268e46435fbb853189e75e5a46c9086f970d87fd83db529605a53c7d4f41a2d",
+    "speeduino16-ratio_mixed-250.json.gz": "a07692ffaa9caec32918b8b670a29f755f8f4e812688cfb0b3900dda9b2e26e1",
+    "speeduino16-spark_only-250.json.gz": "5cfb170acb6e95707b48586f5fddb34ab4744834700d2b88b8d7b0046debb3a9",
+    "speeduino16-timeout-250.json.gz": "41268f7509cb083a93f720f3ef34c37ead88788c4e81d72373b286ec1bac2d2b",
+    "speeduino16-tps_mixed-250.json.gz": "48a56b1a14491e68bd5f5e90a8177a55f63649fb3b3a484a8551fe5a14043292",
+    "speeduino16-trim_multiply-250.json.gz": "9b3bac6414672c1091a30fb912b3ef5ac32fb1e1460f59a5fb8b2db88749450a",
+    "speeduino16-underfill-250.json.gz": "67469a5b0036c9dfc18d5683389251fc1222e176f8a0ebd14dcf87c1345a6e78",
+    "speeduino16-zero_fuel-250.json.gz": "0a6a8307c8785c0f3644b59ba94fe18ab5a8a15ed8a2efda5db59fa7c7d81c54",
+    "speeduino32-add-250.json.gz": "32d12508ece0c97549ce34f24ddfaa233578fcd07359c2846f4bcd9d00c342a7",
+    "speeduino32-capacity-250.json.gz": "545f38e99690d6a2a479d8b0299e5163128fa46ad15597b434726bdf18ac44fe",
+    "speeduino32-conditional_map-250.json.gz": "19a7d49318c6e43cb5233b939d8058981cb670b545cbe5189534dedc33014bec",
+    "speeduino32-conditional_near_quantization-250.json.gz": "803d6f5ccaf6117fb3421b39da64ec8621799dfff040ad390328e42656932569",
+    "speeduino32-conditional_rpm-250.json.gz": "8af5cf64f57cbf255be7a8a072c5943955b7ab2b22084c20ac619c76306ca55f",
+    "speeduino32-conditional_tps-250.json.gz": "fb6d064c96ab3087369a724c7c40e8b6e9a7d20689fdd82ac94f165602569bc4",
+    "speeduino32-conditional_tps_plateau-250.json.gz": "9e761deb06b7406396bbde730fc67464a76cdb41239a87370bda12f0e07047c9",
+    "speeduino32-control_busy-250.json.gz": "9272fd9cb7bf45c5e38001707f53798413c8a6fab46ccaaf759099461f5dce80",
+    "speeduino32-fuel_only-250.json.gz": "dba1d835ed4b3db44a71154e8e1f498c61720697d6ff7c3f679b0ea789ea21d9",
+    "speeduino32-input-250.json.gz": "135d0640cf868cd629ed324b04057c02ee6c095bca6b3610875c8a9b0840f923",
+    "speeduino32-input_bounce-250.json.gz": "eb8d6a54fe5da0c1cef4aea654559e412f6f2e9f630ea4d8606175d50ff4a324",
+    "speeduino32-input_inverted-250.json.gz": "e7a5a4daee43419af5d495e34ffdffd67049341ca787d9a8d90b70e53d809c7e",
+    "speeduino32-input_opposite-250.json.gz": "a6212c8f2d56cc365e6f69f5d96c917e8c18cd531a0d791f2869af2327d23294",
+    "speeduino32-input_semi-250.json.gz": "4b1d4daacda4074bf1ff6f491b9bb43322b7adb6626d6bc0d0e41940149eab3e",
+    "speeduino32-input_sequential-250.json.gz": "03490b68745af018b3799092acc8e27cb3cdb01b05e3ee8e658b037834b1a0ca",
+    "speeduino32-input_shared-250.json.gz": "717744f2b5a4a00e655f1a5f0421456acdb4a5f9faf5ed750fa6d0c682c6b97c",
+    "speeduino32-input_shared_debounce-250.json.gz": "d2c516c687cf30e2966eae8bf6a87392e4887517cb42add7ba1c86bbeca52708",
+    "speeduino32-mid_read_reset-250.json.gz": "d4b0553afdbc1a626c948cb8b2ae137e52ffe787e359cd53d371f06bc148d7ac",
+    "speeduino32-multiply-250.json.gz": "a0d506ad20416e9c792eb3adffe5dd8bdbdec397d45694cf9014c1aa9f09cc26",
+    "speeduino32-nack-250.json.gz": "6279bbbd6f6ad8e4b6b045435b5c6a86ef2b3253e57d2d0e1c5443d182d21c47",
+    "speeduino32-neutral_add-250.json.gz": "25b30ddcfdf520d84c0ba26f808216e6491f3de121d38dcefa147a5d56c43664",
+    "speeduino32-neutral_multiply-250.json.gz": "ae96da5bc7ae474ec7d390376b5463c4771c2a6d63a18227c8c4219f10386a2e",
+    "speeduino32-off-250.json.gz": "cdf09553893f411d448335ea6002cd0fe06126950fa4cc3711c7a28c296f3db6",
+    "speeduino32-off_metadata-250.json.gz": "9e209894075b741d774261611c9113b220fe3d4d75c1104b9888de468207777a",
+    "speeduino32-producer_pause-250.json.gz": "e8881df2153f24fd19ed06c70503c95a89be9662ab638c1f5509ee644adce649",
+    "speeduino32-ratio_mixed-250.json.gz": "4f1eb3ccdae7fb3900648156e67da65035453a66e910feba6aad85942c7a3108",
+    "speeduino32-spark_only-250.json.gz": "b2e05c24ccf235dd708afe698f3a8897e0732662e73fcb2dd8982632bab4e3bc",
+    "speeduino32-timeout-250.json.gz": "679630fba6ce6b65a800494110c6d5efe676090f335f5826b6ec3886ba9879d0",
+    "speeduino32-tps_mixed-250.json.gz": "7990fccc5c001a19424f7fa8add62f4cdc9d82cd98dd81e0cff0fc9dae5e3494",
+    "speeduino32-trim_multiply-250.json.gz": "f6ffe03812db2e5f0458ecf46d5d45dc9a1492393d98276ff4fc0b84cf150809",
+    "speeduino32-underfill-250.json.gz": "f83195760968c94f4b59f56a693962fc3bd3f8d412f0b3fa30a432e6301af42d",
+    "speeduino32-zero_fuel-250.json.gz": "56a3cbbd3b72c953fd01b4f80e8558eaf8d694ea421cefb4f14ccbc51d99a13a",
+    "target-add-250.json.gz": "bcd8793b67d2122343073738963002c9e97e016b7ed20af374701a7c59a73c5f",
+    "target-capacity-250.json.gz": "5cae2f22e972fbe811751428f15bca5ad4d985a67c806264b31ee4aad7862af6",
+    "target-conditional_map-250.json.gz": "997919ca067a0e1d3196420c6121e7e8a6a0cb7c2703eda77e6982e633745bdd",
+    "target-conditional_near_quantization-250.json.gz": "8a7e07d93c110136815cfdb6fab40b2fee7987439b1b6d1430893c6745d1679f",
+    "target-conditional_rpm-250.json.gz": "d153db656d508911fd71db9671e7fe8e67e312aec470866c189a2e0ee4b7a67e",
+    "target-conditional_tps-250.json.gz": "0d53af0d716b8d05b8eaaf08e3b3f38638ae9c1fbb40f688bc17d150c74d0f4f",
+    "target-conditional_tps_plateau-250.json.gz": "7cc826f71294622acc90832cbfb29ab8e636750a327e3e91c196ddf217b87950",
+    "target-control_busy-250.json.gz": "9609e48e6bc0bac9ecfd76777600c7d127c8045a9849d5ce8bbb3b6e0e7c789b",
+    "target-fuel_only-250.json.gz": "c1b1de67b3a898941f28e91edbc20de37cb2d4be16463e8211b009d402e1125f",
+    "target-input-250.json.gz": "6701f78391ad41d02a8ffb38ae5e955b3523867106c4c41938f1b1ce29543208",
+    "target-input_bounce-250.json.gz": "8f24544b10a23e36c80006f350714bebdbef96e892ccbd7fc3cbd26889e972bc",
+    "target-input_inverted-250.json.gz": "943ea47d1c048609bfb7d8dc9597f260015a988e4ece7cfce3f0bdcf4f43c0fb",
+    "target-input_opposite-250.json.gz": "b1356c4bfa2c10cb0436ffb6ceae1e5028d44019118e70c5a89472c05d6af779",
+    "target-input_semi-250.json.gz": "4923f5fbb7b1ef354697623b408e722c06c5eae6d9f7a520f576e1293173c728",
+    "target-input_sequential-250.json.gz": "f8180537f1024375f31ab66a8ef965f99f3d0c0c5ba9f1808d518a49f040edbc",
+    "target-input_shared-250.json.gz": "254d5ddd593407844d1c9bc2980392ae983745ea1ecd9d21cbb3898758d978e7",
+    "target-input_shared_debounce-250.json.gz": "5a3c6601e6ac98527c0c2c6904eece096eaa2377103a94f83457776cdec46097",
+    "target-mid_read_reset-250.json.gz": "e2757de1b240936f29bed275ddb148d7846996e46db9037bff2dac6c9dd72cc7",
+    "target-multiply-250.json.gz": "8e97c85cd9dfe26600f7a11abbb2dbeb99a5b024849c55ddd3d8fa94ea902e04",
+    "target-nack-250.json.gz": "594fb2e4a06db6e94f806882596a7fee56d9731059ada0bf447fe0e3cc5174e9",
+    "target-neutral_add-250.json.gz": "e2b641e4dd3a734234637e3bc8dfba3e4b827b85262eb6162b42968953964dda",
+    "target-neutral_multiply-250.json.gz": "9c3c6b039643f6069d5cba622ead408b4892e9cb8e71cdc3ba32a710063ca879",
+    "target-off-250.json.gz": "c295f861cb0b6e480c42a3d993b75f7337423e2eb20e7db25cbff44bdc0e70bf",
+    "target-off_metadata-250.json.gz": "6fa4e27a5e8c084d4e278942c327f9d6a37c75002cf5051f3bb332c96ccbd5bc",
+    "target-producer_pause-250.json.gz": "0aca67f393f249ef09e24bf6f9472dce8a041583f913f6ae730ad28617d65d78",
+    "target-ratio_mixed-250.json.gz": "b6f381483b79838d6089185ab8c6a8bdcf840305623f67f57d597f7e75a54af1",
+    "target-spark_only-250.json.gz": "b22c78a044c49819235dfb30047450a86c9d4b67e3ceeb46c41e2e9f0f401903",
+    "target-timeout-250.json.gz": "257f6cc9869fd5cda1482f9850e4633ac9bbaa640982c162d5d221e9fdc4c44d",
+    "target-tps_mixed-250.json.gz": "312c4c072d449f00d769e0ab85da1a4db247316f0587fc3399430a8141eef14b",
+    "target-trim_multiply-250.json.gz": "22d85598482945730062e377306ff631ad4f80381312091856328cda02551e2d",
+    "target-underfill-250.json.gz": "2047716cd5d696e33e60f57474efc9d5d03eaa27bc380e1e5bca1ff59f1b146e",
+    "target-zero_fuel-250.json.gz": "12899763f6fefba182d7f243ee9d0bf5df902b07c90a86cc5a117e6d70b14301"
+  }
+}

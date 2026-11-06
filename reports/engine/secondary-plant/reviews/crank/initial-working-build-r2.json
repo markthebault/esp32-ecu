@@ -1,0 +1,28 @@
+{
+  "commands": [
+    [
+      "cc",
+      "-O2",
+      "-c",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/initial-working-sources/external/cJSON/cJSON.c",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/initial-working-cJSON.o"
+    ],
+    [
+      "c++",
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/initial-working-sources/firmware/include",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/initial-working-sources/external/cJSON",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/probe.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/initial-working-cJSON.o",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/secondary-crank-transition-review/initial-working-probe"
+    ]
+  ],
+  "returncode": 0,
+  "probe_sha256": "c79d3a99a4edff779a832b173bf912a213892c677838ed4e042030c46f499c54"
+}

@@ -1,0 +1,46 @@
+{
+  "reviewed_ecu_commit": "cbfbe4a",
+  "reference_commit": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+  "scope": "Read-only architecture and reference review; isolated cache-only probes; no finished idle implementation acceptance",
+  "reference_probe_columns": {
+    "registers": [
+      "timer_bits",
+      "algorithm",
+      "seeded",
+      "now_us",
+      "counter",
+      "old_compare",
+      "pin_high"
+    ],
+    "window": [
+      "algorithm",
+      "seeded",
+      "stage",
+      "reported_idleLoad_pct",
+      "actual_high_us_per_200ms_window",
+      "edges",
+      "last_pin_high",
+      "measured_period_us"
+    ]
+  },
+  "reference_profile": {
+    "tick_us": 4,
+    "unchanged_pwm_conversion_tick_us": 2,
+    "configured_hz": 50,
+    "observed_hz": 25,
+    "seeded_first_compare": "(counter+1) modulo counter width after initialiseIdle, before first idleControl",
+    "zero_cpu_cost": true,
+    "avr_emulation": false
+  },
+  "files": {
+    "review.md": "276016682adc5e65a90f9d75240f8956967a46c2faf2080dadeb92747f262e89",
+    "reference_probe.py": "8ea2d2c6ccfe0a7ab725c090c66238eacac3f6da9ad13cb7c27ce582217f5b0d",
+    "reference_probe.cpp": "3d9cb26ac4b6d6df3f248de686b807a56650ed961f77f176b304a0c1073f48ec",
+    "probe16": "96d9f4c6e380369e73a04fc43d81a1fbb5ece4e2b5e5dd08af595f25d3abb6ac",
+    "probe32": "a166dbfd57d1f390ba56dbc6826ad6b9851ac95ef051db0da16ec4837da93236",
+    "reference-probe-16.txt": "d4d6a198b66d51557d6b61a6d382636bd362151ca4c1e2695b4aedbfedd14f4e",
+    "reference-probe-32.txt": "857e5dfbb9b463d44cf53f0ce4e0e7cc2c0eadd73426b4b0f0cd86cbb048d442",
+    "airpath_probe.py": "f293323c57defafb045f5a1e8c1d90a0add3e16e32e0c9e534cfa9610d5e23c0",
+    "airpath-probe.json": "55ac3baabab696219047a198e6724678498e15da631a3baaa08c66f7b67aeb9e"
+  }
+}

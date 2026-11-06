@@ -1,0 +1,31 @@
+117 control scenarios passed
+Engine maps, mass/flow, correction states, virtual events, supervision, rev hysteresis, DFCO and lambda tests passed
+Cylinder maps, dose/deadtime, mapping, global capacity, negative trims, clamps and fresh-RPM duty passed
+Single-page typed tuning, stable origin/CAS, whole-tune burns, rejection, framing bounds, timeout and TX recovery tests passed
+{"passed":true,"allocation_failures":4,"session_bytes":8272,"temporary_tune_bytes":7360}
+Engine NVS API-model tests passed: large blobs, retained legacy migration, corrupt data, size/NUL checks and write/init/commit errors
+Capture timebase, transactional timing, independent expiry, output edges and fault tests passed
+720-degree phase, ordering, missing cam, sequential pulses, fuel mass and independent watchdog tests passed
+252 semi-sequential pair/phase/width cases and hot-mode fault retention passed
+Finite trigger frame, edge ordering, stale-frame, timeout, invalid timebase and capacity tests passed
+Idle configuration, crank/run taper, entry, closed-loop response, throttle, overrun, faults, stale clocks, thermostat and windup tests passed
+Idle PWM cycle latching, full duty, expiry-before-refresh, zero-demand recovery, lateness, clock reversal and malformed-command tests passed
+Acquisition-time rate windows, hold/expiry, retrigger/reversal, tapered/clamped demand and recovery history passed
+Transient full-cycle multiplier/adder, openings/deadtime/trims, decel0, EGO, fault/restart and whole-command capacity passed
+Load sources/units, independent pressure factors, shared-role rejection, optional-MAP guard and AFR readiness passed
+Engine load coordinates, optional MAP/NA guard, zero/reference fuel, strategy opening counts and AFR genuine-start epoch passed
+{"passed":true,"secondary_checks":790}
+{"passed":true,"engine_secondary_checks":172}
+{"passed":true,"switch_acquisition_checks":276,"physical_qualification":false}
+{"passed":true,"transport_checks":1656,"delay_combinations":216,"target_timing_qualified":false}
+status_led_checks 518
+flex_fuel_checks 509
+flex_ingress_checks 62297
+ingress_bytes 2808 edge_bytes 40
+engine_flex_checks 296
+Paged trigger JSON, final-row rearm, strict command/query and 2000 allocation-failure positions passed
+JSON allocation positions: 11096 rejected, 1 complete page; native cJSON peak=635561 bytes, output=101502 bytes (allocator overhead excluded)
+Engine observation, bounded log, ages, negotiation, ACK rollover and formatting tests passed
+Actual task logger: timeout accounting, contention, export lease and session races passed
+{"passed":true,"actual_service_checks":243,"status_allocation_cuts":69,"physical_i2c_test":false}
+{"passed":true,"shared_service_checks":2336,"status_allocation_cuts":74,"physical_i2c_or_LED_test":false}

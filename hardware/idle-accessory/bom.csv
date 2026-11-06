@@ -1,0 +1,20 @@
+Reference,Value,MPN candidate,Footprint,Qualification / procurement
+J1,CARRIER LOGIC ONLY,B4B-XH-A(LF)(SN),ECU:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical,Carrier take-offs require a reviewed harness; no native carrier connector exists
+J2,PROTECTED ACTUATOR SUPPLY,1715721,"ECU:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal","Fixed screw supply entry cannot accept J3 valve plug; 9–16V, externally fused <=2A load contract; reverse/transient protection is external; verify torque/strain relief"
+J3,NC PWM VALVE,B2P-VH(LF)(SN),ECU:JST_VH_B2P-VH_1x02_P3.96mm_Vertical,Two-wire continuous-duty NC energize-to-open only; verify polarity and R/L
+U1,UCC27524P,UCC27524P.B,ECU:DIP-8_W7.62mm_LongPads,"Direct solder PDIP8, no socket; input-independent VDD and UVLO; external EN pulldown mandatory"
+Q1,VNP35N07-E,VNP35N07-E,ECU:TO-220-3_Vertical,"TO220 metal tab is IAC_LS, insulate from case/mounting hardware; thermal/current tests pending"
+D1,SB5H100-E3,SB5H100-E3/54,ECU:D_DO-201AD_P15.24mm_Horizontal,"Axial DO201AD 100V 5A candidate; flyback cathode to valve positive, anode to low side"
+R1,1k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,GPIO input series; exact leaded part/power/height procurement pending
+R2,2k2,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,"GPIO-side reset pulldown, not after R1; exact leaded part/power/height procurement pending"
+R3,1k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Hardware enable series; exact leaded part/power/height procurement pending
+R4,4k7,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Mandatory ENA pulldown overrides driver internal pullup; exact leaded part/power/height procurement pending
+R5,10k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Local driver input pulldown; exact leaded part/power/height procurement pending
+R6,220R,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Smart-switch input series; exact leaded part/power/height procurement pending
+R7,10k,,ECU:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,Switch input pulldown; exact leaded part/power/height procurement pending
+C1,100nF,,ECU:C_Disc_D5.0mm_W2.5mm_P5.00mm,Local VDD decoupling; leaded ceramic 10V+; exact part/fit pending
+C2,1uF,,ECU:C_Rect_L7.2mm_W5.0mm_P5.00mm,Local VDD decoupling; leaded nonpolar film 10V+ candidate envelope; exact part/fit pending
+H1,M3 MOUNT,,ECU:MountingHole_3.2mm_M3,Screw mounted accessory; case location/stand-offs/clearance not finalized
+H2,M3 MOUNT,,ECU:MountingHole_3.2mm_M3,Screw mounted accessory; case location/stand-offs/clearance not finalized
+H3,M3 MOUNT,,ECU:MountingHole_3.2mm_M3,Screw mounted accessory; case location/stand-offs/clearance not finalized
+H4,M3 MOUNT,,ECU:MountingHole_3.2mm_M3,Screw mounted accessory; case location/stand-offs/clearance not finalized

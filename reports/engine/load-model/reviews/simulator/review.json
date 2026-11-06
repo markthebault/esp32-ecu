@@ -1,0 +1,144 @@
+{
+  "review": "Independent load-mode simulator/reference assessment",
+  "created_utc": "2026-11-04T07:34:08.296095+00:00",
+  "baseline_head": "1d6a9acb34838ea175f2dfa7ccd9786e96d2d11b",
+  "status": "review_complete_with_two_findings_closed",
+  "remaining_medium_high_findings": [],
+  "findings": [
+    {
+      "id": "SIM-1",
+      "severity": "low",
+      "title": "Virtual EMAP upper endpoint was a rejected ADC-rail stimulus, so the production filter held prior EMAP",
+      "status": "closed_on_frozen_closure_bytes",
+      "location": "tools/speeduino_sim.cpp loadconfig/pressure; tools/speeduino_runtime.py raw profile",
+      "evidence": [
+        "emap-endpoint-results.json",
+        "runtime_probes.py"
+      ],
+      "detail": "With the initial0..500kPa calibration, requested500 mapped toADC1024 and left observedEMAP at125; requested499 mapped toADC1022 and held498. This was the unchanged upstream valid-map filter2<ADC<1022 acting on a fixture without headroom. Candidate125kPa comparisons were unaffected.",
+      "fix": "Parent changed only the virtual transducer calibration to-20..620kPa with(raw pressure+20)/640*1024 and updated profile readback. No production algorithm or physical transducer choice changed.",
+      "closure": [
+        "closure-endpoint-results.json",
+        "closure_probe.py",
+        "closure/snapshot.json"
+      ],
+      "closure_result": "Both32/16 references freshly observe20/100/125/500 on each1kHz update, including repeated high-to-low transitions. ADC codes64/192/232/832 remain away from rails. Baro retains actual1Hz cadence after startup."
+    },
+    {
+      "id": "SIM-2",
+      "severity": "low",
+      "title": "Runner scope described the unchanged-coefficient Alpha-N control as generically non-running",
+      "status": "closed_on_frozen_closure_bytes",
+      "location": "tools/run_load_scenarios.py result scope",
+      "evidence": [
+        "controls-afr-results.json"
+      ],
+      "detail": "Project portable/target flat-coefficient Alpha-N stalls, but Speeduino32/16 remains running at about1734RPM in the retained candidate. Zero-fuel stalls both. Actual outcomes were retained in traces; only generic scope wording overstated uniformity.",
+      "fix": "Parent changed wording to calibration-failure controls with outcomes per controller.",
+      "closure": [
+        "closure/source/tools/run_load_scenarios.py"
+      ],
+      "closure_result": "Closure scope no longer assumes all controllers share the same non-running outcome. Negative cases still replay complete edge and conservation checks."
+    }
+  ],
+  "checks": [
+    {
+      "name": "Pinned production-source purity",
+      "result": "pass",
+      "evidence": "source-purity-results.json",
+      "detail": "Both binaries match their manifests, UNIT_TEST is absent, pinned archive hash matches Git9ff5aae. Production load/fuel/sensor sources match the archive; only declared board_native.cpp PWM/timer HAL and SoftwareTimer.h changes remain."
+    },
+    {
+      "name": "Independent non-flat table/source mapping",
+      "result": "pass",
+      "count": 9,
+      "evidence": [
+        "nonflat-table-results.json",
+        "runtime_probes.py",
+        "lookup_probe.cpp",
+        "lookup-probe-build.json"
+      ],
+      "detail": "Independent host probe links108 unchanged production/HAL objects and calls actual getLoad/get3DTableValue/calculateAfrTarget. Distinct affine table values prove physicalTPS*4 native coordinate and raw-axis/2 mapping, independent fuel/spark sources and lambda following primary fuel. These are controlled lookup fixtures, not whole-tune/engine acceptance."
+    },
+    {
+      "name": "Final candidate edge/conservation reconstruction",
+      "result": "pass",
+      "count": 64,
+      "evidence": [
+        "independent-final-evidence-results.json",
+        "evidence_final_probe.py",
+        "final-resimulation-comparison.json"
+      ],
+      "detail": "Every artifact hash, edge order/rise/fall/current high-time maximum/termination and fuel/chemical/shaft/air/air-energy residual independently reconstructed. Project zero fuel has no injector rise, no modeled fuel and cranking spark. Guard interval contains no starts after its observation. Final64 resimulation after the EMAP calibration closure was independently replayed again. Actual edges/triggers/cams/dwell/spark/injection/combustion arrays, conservation ledger and final RPM exactly match the initially reviewed64 for every case."
+    },
+    {
+      "name": "Selected coupling/main-loop refinement",
+      "result": "pass",
+      "count": 8,
+      "evidence": "matrix-final/summary.json",
+      "detail": "125us versus250us selected profiles stay below3%; largest difference0.008646937 is on reference Alpha-N. This changes polling cadence as well as coupling step, and is not isolated ODE convergence."
+    },
+    {
+      "name": "Legacy exact replay",
+      "result": "pass",
+      "count": 8,
+      "evidence": [
+        "independent-evidence-results.json",
+        "legacy/summary.json"
+      ],
+      "detail": "Actual edge/trigger/cam/dwell/spark/injection arrays, ledger and final RPM equal archived immutable baselines, recomputed from files rather than trusting the summary booleans."
+    },
+    {
+      "name": "Independent calibration provenance and corridor",
+      "result": "pass",
+      "count": 256,
+      "evidence": [
+        "calibration-independence-results.json",
+        "independent-final-evidence-results.json"
+      ],
+      "detail": "All coefficient formulas recomputed from independent FMU pumping flow and observed prescribed RPM.244 points satisfy declared steady residuals;12 pressure-corridor exits remain unqualified. Every weighted table corner in the candidate Alpha-N trace queries was steady, including boundary/fault runs. No ECU/coupled-run output was used in generating the map."
+    },
+    {
+      "name": "Ambient physical causality and motored conservation",
+      "result": "pass",
+      "count": 4,
+      "evidence": [
+        "ambient-results.json",
+        "ambient_probe.py"
+      ],
+      "detail": "Frozen plant source with existing FMU ambient parameter50/80/100/110kPa changes initial pressure/inventory as expected, and preserves air and air-energy ledgers with zero combustion/fuel. Default100 path is retained."
+    },
+    {
+      "name": "AFR and negative-control interpretation",
+      "result": "pass_with_explicit_policy_differences",
+      "evidence": "controls-afr-results.json",
+      "detail": "Project measured AFR activates around3.02s; reference integer runSecs>1 activates around2s in these runs. Startup readiness/restart policy, target versus measured incorporation, integer O2/AFR and reference900us zero-VE openings are not treated as equivalent. Simulated zero-VE reference delivered effectively0 fuel (rounding residual3.3e-12mg)."
+    },
+    {
+      "name": "Closure source/build consistency",
+      "result": "pass",
+      "evidence": [
+        "closure-source-consistency.json",
+        "closure-endpoint-results.json",
+        "closure/snapshot.json"
+      ],
+      "detail": "Both closure binaries match the separately frozen adapter and build manifests. All production/HAL source/header/dependency hashes apart from the host adapter match the initial same-width builds. A1us first-loop ratio probe confirms positive startup EMAP priming before the first periodic read."
+    },
+    {
+      "name": "Parent validation reconciliation",
+      "result": "observed_parent_report_not_independently_rerun_here",
+      "evidence": [
+        "closure-python-final.log"
+      ],
+      "detail": "Parent reports173 full Python tests, including54 profile combinations and fresh endpoint tests, plus three target builds/linked-policy audits. This review independently reran its own lookup/endpoint/ambient/edge/ledger probes instead of counting parent validation as fresh independent checks."
+    }
+  ],
+  "limitations": [
+    "No physical engine, vehicle, GPIO, ADC, RF, EMI/surge, thermal, splash or fit qualification. Native execution has zero CPU/IRQ execution cost;16bit model is timer-width/compare behavior only.",
+    "The external FMU supplies manifold thermodynamics/pumping, while local empirical wall film/combustion/free-shaft responses remain uncalibrated. No exhaust thermodynamic plant is added; EMAP125 is an exogenous sensor stimulus.",
+    "Manual80kPa fuel-coefficient scaling is a declared fixture calibration, not an implemented separate baro correction curve. No claim of ideal tuning follows from a passed scenario audit.",
+    "Combined idle-valve/Alpha-N or enabled cylinder-trim benchmark behavior is not covered by this matrix. Reference independent lambda/trim source and project wideband-ready/freshness/guard policies are explicitly unrepresented.",
+    "This independent review covers simulator/reference changes. Earlier core and integration reviews are separate and do not imply physical validation. Source snapshots include transitive imports for reproducibility, not a fresh review of all134 files."
+  ],
+  "remaining_low_findings": []
+}

@@ -1,0 +1,161 @@
+{
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "commands": [
+    {
+      "command": [
+        "cc",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-c",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/external/cJSON/cJSON.c",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/cjson.o"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "sender-001/0.log"
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-pthread",
+        "-DECU_COMPACT_A3=1",
+        "-DECU_SELECTED_N16R8=1",
+        "-DECU_FLEX_G38_DRAFT=1",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/external/cJSON",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/tests/radio_fakes",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/tests/target_fakes",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/tests",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/include",
+        "-MMD",
+        "-MF",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/parent-service.d",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/tests/radio_service_test.cpp",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/cjson.o",
+        "-lcrypto",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/parent-service"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "sender-001/1.log"
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/parent-service",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/fixtures"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "79a3d58bfb3b5cbccd81581e10d313405d688433850c128c68f9fd5ddc0b4163",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "sender-001/2.log"
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-pthread",
+        "-DECU_COMPACT_A3=1",
+        "-DECU_SELECTED_N16R8=1",
+        "-DECU_FLEX_G38_DRAFT=1",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/external/cJSON",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/tests/radio_fakes",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/tests/target_fakes",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/tests",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/include",
+        "-MMD",
+        "-MF",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/independent-service.d",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/probes/independent_sender.cpp",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/cjson.o",
+        "-lcrypto",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/independent-service"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "sender-001/3.log"
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/independent-service"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "d09af29bba581d402224ef1c946c0935bee4dd031ce85c435abcc2104376b30a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "sender-001/4.log"
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-pthread",
+        "-DECU_COMPACT_A3=1",
+        "-DECU_SELECTED_N16R8=1",
+        "-DECU_FLEX_G38_DRAFT=1",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/external/cJSON",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/tests/radio_fakes",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/tests/target_fakes",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/tests",
+        "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/include",
+        "-MMD",
+        "-MF",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/parent-pair.d",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/freeze-final-001/firmware/tests/engine_radio_flex_test.cpp",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/cjson.o",
+        "-lcrypto",
+        "-o",
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/parent-pair"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "sender-001/5.log"
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-review/sender-001/parent-pair"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "b41465c3142f2d0fde30b93848874a56c16a6011615502ef891fe97b314d5eab",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "sender-001/6.log"
+    }
+  ]
+}

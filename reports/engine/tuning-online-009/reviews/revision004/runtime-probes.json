@@ -1,0 +1,73 @@
+[
+  {
+    "name": "coalesced-fifo-and-no-echo",
+    "passed": true,
+    "detail": {
+      "stats": {
+        "loops": 7,
+        "received": 43,
+        "transmitted": 131
+      },
+      "reply_lengths": [
+        2,
+        21,
+        6,
+        65,
+        4
+      ],
+      "raw_F_inherited_print": true,
+      "no_TX_echo": true
+    },
+    "elapsed_s": 0.0991884539835155
+  },
+  {
+    "name": "all-single-byte-M-splits",
+    "passed": true,
+    "detail": {
+      "split_boundaries": 13,
+      "gap_s": 0.02
+    },
+    "elapsed_s": 0.9109811120433733
+  },
+  {
+    "name": "close-during-partial-length",
+    "passed": true,
+    "detail": {
+      "close_elapsed_s": 0.41457518993411213,
+      "returncode": 0
+    },
+    "elapsed_s": 0.4971064029959962
+  },
+  {
+    "name": "rx-capacity-controlled-failure",
+    "passed": true,
+    "detail": {
+      "controlled_rejection": true,
+      "returncode": 1,
+      "failure": "Native reference ended before closure",
+      "stderr": "serial fixture failed: serial fixture RX capacity\n"
+    },
+    "elapsed_s": 0.03595591394696385
+  },
+  {
+    "name": "callback-failure-cleanup",
+    "passed": true,
+    "detail": {
+      "failure": "owned callback rejection",
+      "returncode": -15,
+      "reader_joined": true
+    },
+    "elapsed_s": 0.03587785200215876
+  },
+  {
+    "name": "pty-open-close-churn",
+    "passed": true,
+    "detail": {
+      "cycles": 50,
+      "process_returncode": 0,
+      "reader_threads_joined": true,
+      "owned_link_removed": true
+    },
+    "elapsed_s": 0.20003952097613364
+  }
+]

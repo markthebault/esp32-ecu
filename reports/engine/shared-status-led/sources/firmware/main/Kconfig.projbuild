@@ -1,0 +1,23 @@
+menu "ECU bench trigger profile"
+    config ECU_TRIGGER_SLOTS
+        int "Total wheel slots, including missing teeth"
+        range 12 120
+        default 60
+        help
+            Incoming Hall test-wheel geometry. This does not enable engine outputs.
+
+    config ECU_TRIGGER_MISSING
+        int "Consecutive missing teeth"
+        range 1 3
+        default 2
+        help
+            Must also be less than one quarter of total slots. Invalid combinations
+            leave the decoder invalid and inhibit the bench supervisor.
+
+    config ECU_CAPTURE_MAX_RPM
+        int "Maximum accepted capture speed, RPM"
+        range 500 12000
+        default 8000
+        help
+            Decoder input filter ceiling, not an engine rev-limit calibration.
+endmenu

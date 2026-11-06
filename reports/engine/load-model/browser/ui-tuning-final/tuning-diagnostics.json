@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "transport": "native_host_development",
+  "identity": "ESP32ECU DEV 008 INHIBITED",
+  "serial_protocol": "002",
+  "enabled": true,
+  "available": true,
+  "boot_allowed": true,
+  "host_present": null,
+  "reason": "Host transport sessions observed",
+  "physical_outputs_inhibited": true,
+  "host_presence_meaning": "Host TCP/PTY session records; no target USB hardware is connected",
+  "observed_clock_domain": "host_monotonic",
+  "observed_us": "597032568317",
+  "active_revision": 1,
+  "application_support": "Tested TunerStudio 3.3.01 rejects our own controller identity; offline files supported, vendor integration unresolved",
+  "commit_behavior": "Any successful burn validates, persists and activates the whole tune, resets control and reacquires phase",
+  "qualification": "Native host development only; no target USB enumeration or physical timing measurements",
+  "driver_rx_drop_count": null,
+  "driver_rx_drop_count_meaning": "No target USB driver on this host endpoint",
+  "tx_fault": false,
+  "buffered_bytes": 0,
+  "session": {
+    "initialized": true,
+    "dirty": true,
+    "state": "staged",
+    "origin_revision": 1,
+    "base_revision": 1,
+    "observed_active_revision": 1,
+    "last_code": 0,
+    "commands": "1",
+    "reads": "0",
+    "writes": "1",
+    "burns": "0",
+    "rejected": "0",
+    "resets": "1"
+  },
+  "wire": {
+    "received": "24",
+    "transmitted": "14",
+    "frames": "1",
+    "crc_errors": "1",
+    "timeouts": "0",
+    "framing_errors": "0",
+    "tx_errors": "0"
+  },
+  "session_count": 1,
+  "sessions": [
+    {
+      "session": {
+        "initialized": true,
+        "dirty": true,
+        "state": "staged",
+        "origin_revision": 1,
+        "base_revision": 1,
+        "observed_active_revision": 1,
+        "last_code": 0,
+        "commands": "1",
+        "reads": "0",
+        "writes": "1",
+        "burns": "0",
+        "rejected": "0",
+        "resets": "1"
+      },
+      "wire": {
+        "received": "24",
+        "transmitted": "14",
+        "frames": "1",
+        "crc_errors": "1",
+        "timeouts": "0",
+        "framing_errors": "0",
+        "tx_errors": "0"
+      },
+      "tx_fault": false,
+      "callback_error": ""
+    }
+  ],
+  "sessions_truncated": false
+}

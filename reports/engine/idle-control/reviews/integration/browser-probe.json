@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "checks": [
+    "Real Chrome legacy MSQs reset enabled/custom editor idle fields; current export imports through native Python; extra/missing/unknown fields rejected",
+    "91-field Chrome/native MSL headers/units match; new PID counter and snapshot identity preserve full64-bit precision",
+    "Invalid availability0/null/missing/string is rejected atomically by both Chrome collector and native observation parser"
+  ],
+  "details": {
+    "availability_type_variants": {
+      "labels": [
+        "zero",
+        "null",
+        "missing",
+        "string_false"
+      ],
+      "browser_rejected": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "native_accepted": [
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "page_errors": []
+}

@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/mark/persospace/esp32-ecu/tools/verify_flex_target_evidence.py", line 127, in <module>
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--report',type=Path,default=REPORT);p.add_argument('--check-live-sources',action='store_true');p.add_argument('--replay',action='store_true');a=p.parse_args();verify(a.report,a.check_live_sources,a.replay)
+                                                                                                                                                                                                                                  ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mark/persospace/esp32-ecu/tools/verify_flex_target_evidence.py", line 36, in verify
+    p=report/safe(row['path']);require(p.stat().st_size==row['bytes'] and sha(p)==row['sha256'],'Changed artifact: '+row['path'])
+                               ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mark/persospace/esp32-ecu/tools/verify_flex_target_evidence.py", line 25, in require
+    if not ok:raise ValueError(message)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Changed artifact: native/fixtures-0/qualified.json

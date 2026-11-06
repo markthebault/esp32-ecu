@@ -1,0 +1,35 @@
+
+.cache/engine/telemetry-review/sdk-new-opnt.o:     file format elf32-xtensa-le
+
+
+Disassembly of section .literal._ZnwjRKSt9nothrow_t:
+
+00000000 <.literal._ZnwjRKSt9nothrow_t>:
+	...
+			0: R_XTENSA_32	operator new(unsigned int)
+			4: R_XTENSA_32	__cxa_begin_catch
+			8: R_XTENSA_32	__cxa_end_catch
+
+Disassembly of section .text._ZnwjRKSt9nothrow_t:
+
+00000000 <operator new(unsigned int, std::nothrow_t const&)>:
+   0:	004136        	entry	a1, 32
+   3:	20a220        	or	a10, a2, a2
+   6:	000081        	l32r	a8, fffc0008 <operator new(unsigned int, std::nothrow_t const&)+0xfffc0008>
+			6: R_XTENSA_SLOT0_OP	.literal._ZnwjRKSt9nothrow_t
+			6: R_XTENSA_ASM_EXPAND	operator new(unsigned int)
+   9:	0008e0        	callx8	a8
+   c:	0a2d      	mov.n	a2, a10
+   e:	0003c6        	j	21 <operator new(unsigned int, std::nothrow_t const&)+0x21>
+			e: R_XTENSA_SLOT0_OP	.text._ZnwjRKSt9nothrow_t+0x21
+  11:	02ad      	mov.n	a10, a2
+  13:	000081        	l32r	a8, fffc0014 <operator new(unsigned int, std::nothrow_t const&)+0xfffc0014>
+			13: R_XTENSA_SLOT0_OP	.literal._ZnwjRKSt9nothrow_t+0x4
+			13: R_XTENSA_ASM_EXPAND	__cxa_begin_catch
+  16:	0008e0        	callx8	a8
+  19:	000081        	l32r	a8, fffc001c <operator new(unsigned int, std::nothrow_t const&)+0xfffc001c>
+			19: R_XTENSA_SLOT0_OP	.literal._ZnwjRKSt9nothrow_t+0x8
+			19: R_XTENSA_ASM_EXPAND	__cxa_end_catch
+  1c:	0008e0        	callx8	a8
+  1f:	020c      	movi.n	a2, 0
+  21:	f01d      	retw.n

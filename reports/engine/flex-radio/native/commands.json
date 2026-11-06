@@ -1,0 +1,55 @@
+[
+  {
+    "command": [
+      "cc",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-c",
+      "/home/mark/.platformio/packages/framework-espidf/components/json/cJSON/cJSON.c",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-parent/service-004/cjson.o"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-pthread",
+      "-DECU_COMPACT_A3=1",
+      "-DECU_SELECTED_N16R8=1",
+      "-DECU_FLEX_G38_DRAFT=1",
+      "-I",
+      "/home/mark/.platformio/packages/framework-espidf/components/json/cJSON",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/firmware/tests/radio_fakes",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/firmware/tests/target_fakes",
+      "-I",
+      "/home/mark/persospace/esp32-ecu/firmware/include",
+      "/home/mark/persospace/esp32-ecu/firmware/tests/radio_service_test.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-parent/service-004/cjson.o",
+      "-lcrypto",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-parent/service-004/test"
+    ],
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-parent/service-004/test",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-radio-parent/service-004"
+    ],
+    "returncode": 0
+  }
+]

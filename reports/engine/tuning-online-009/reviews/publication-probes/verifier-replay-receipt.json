@@ -1,0 +1,21 @@
+{
+  "at_utc": "2026-11-04T16:40:17.057252+00:00",
+  "command": [
+    "python3",
+    "/home/mark/persospace/esp32-ecu/tools/verify_tuning_online_evidence.py",
+    "--report",
+    "/home/mark/persospace/esp32-ecu/.cache/engine/tuning-online-protocol-review/revision006/candidate-packet",
+    "--check-live-sources",
+    "--replay"
+  ],
+  "exit_code": 0,
+  "elapsed_s": 9.84447678399738,
+  "stdout": "Replayed both saved streams, page/MSQ/CRC audit, own sanitizer probe and four analyzer tests\nVerified 192 artifacts and 79 source snapshots; own online support and physical/full parity remain open\n",
+  "stderr": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.024s\n\nOK\n",
+  "packet_unchanged": true,
+  "before_file_count": 193,
+  "after_file_count": 193,
+  "changed_files": [],
+  "packet_artifact_manifest_before": "9fb9e04c42e4f4b87db7225f65e880222bc8f90e6fe84f29a83d3936e7e58659",
+  "packet_artifact_manifest_after": "9fb9e04c42e4f4b87db7225f65e880222bc8f90e6fe84f29a83d3936e7e58659"
+}

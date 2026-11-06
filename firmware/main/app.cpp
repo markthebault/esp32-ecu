@@ -2,6 +2,11 @@
 #include "ecu/pins.hpp"
 #include "ecu/web_config.hpp"
 #include "ecu/espnow.hpp"
+#include "ecu/engine_service.hpp"
+#include "ecu/engine_target.hpp"
+#include "ecu/engine_log_service.hpp"
+#include "ecu/engine_tuning.hpp"
+#include "ecu/switch_service.hpp"
 #include "driver/gpio.h"
 #include "driver/gptimer.h"
 #include "driver/mcpwm_cap.h"
@@ -17,8 +22,15 @@
 #include <array>
 #include <cstdint>
 
+#ifndef ECU_ENGINE_DUMMY_LOADS
+#define ECU_ENGINE_DUMMY_LOADS 0
+#endif
+
 #ifndef ECU_BENCH_PULSES
 #define ECU_BENCH_PULSES 0
+#endif
+#if defined(ECU_SELECTED_N16R8) && ECU_ENGINE_DUMMY_LOADS
+#error Selected supplier module remains output-inhibited pending its hardware pin/fit checks
 #endif
 
 namespace {
@@ -27,16 +39,10 @@ constexpr const char* tag = "ecu_a0";
 DRAM_ATTR std::array<int,8> outputs{ecu::pins::inj1_cmd,ecu::pins::inj2_cmd,
     ecu::pins::inj3_cmd,ecu::pins::inj4_cmd,ecu::pins::ign1_cmd,ecu::pins::ign2_cmd,
     ecu::pins::ign3_cmd,ecu::pins::ign4_cmd};
-struct Capture { std::uint32_t ticks; std::int64_t arrived_us; bool cam; };
-QueueHandle_t captures;
-volatile bool capture_overflow = false;
 spi_device_handle_t adc;
-mcpwm_cap_timer_handle_t capture_timer;
-std::uint32_t capture_hz = 0;
 gptimer_handle_t pulse_timer;
 volatile int bench_channel = -1;
 portMUX_TYPE pulse_lock = portMUX_INITIALIZER_UNLOCKED;
-DRAM_ATTR bool cam_context = true;
 
 void all_off() {
     // Inhibit first. Clearing dwell can create a spark on an actual coil;
@@ -45,14 +51,6 @@ void all_off() {
     for (int pin : outputs) gpio_set_level(static_cast<gpio_num_t>(pin),0);
     gpio_set_level(static_cast<gpio_num_t>(ecu::pins::pump_cmd),0);
     gpio_set_level(static_cast<gpio_num_t>(ecu::pins::fan_cmd),0);
-}
-
-bool IRAM_ATTR capture_cb(mcpwm_cap_channel_handle_t,
-                         const mcpwm_capture_event_data_t* event, void* context) {
-    Capture item{event->cap_value,esp_timer_get_time(),context != nullptr};
-    BaseType_t wake = pdFALSE;
-    if (xQueueSendFromISR(captures,&item,&wake) != pdTRUE) capture_overflow = true;
-    return wake == pdTRUE;
 }
 
 bool IRAM_ATTR pulse_done(gptimer_handle_t, const gptimer_alarm_event_data_t*, void*) {
@@ -116,31 +114,6 @@ bool sample(std::array<unsigned,8>& values) {
     return true;
 }
 
-void init_capture() {
-    captures = xQueueCreate(128,sizeof(Capture));
-    configASSERT(captures);
-    mcpwm_capture_timer_config_t timer{};
-    timer.group_id = 0;
-    timer.clk_src = MCPWM_CAPTURE_CLK_SRC_DEFAULT;
-    ESP_ERROR_CHECK(mcpwm_new_capture_timer(&timer,&capture_timer));
-    ESP_ERROR_CHECK(mcpwm_capture_timer_get_resolution(capture_timer,&capture_hz));
-    for (unsigned i=0; i<2; ++i) {
-        mcpwm_capture_channel_config_t cfg{};
-        cfg.gpio_num = i == 0 ? ecu::pins::crank : ecu::pins::cam;
-        cfg.prescale = 1;
-        cfg.flags.pos_edge = true;
-        mcpwm_cap_channel_handle_t channel;
-        ESP_ERROR_CHECK(mcpwm_new_capture_channel(capture_timer,&cfg,&channel));
-        mcpwm_capture_event_callbacks_t callbacks{};
-        callbacks.on_cap = capture_cb;
-        ESP_ERROR_CHECK(mcpwm_capture_channel_register_event_callbacks(channel,&callbacks,
-            i == 0 ? nullptr : &cam_context));
-        ESP_ERROR_CHECK(mcpwm_capture_channel_enable(channel));
-    }
-    ESP_ERROR_CHECK(mcpwm_capture_timer_enable(capture_timer));
-    ESP_ERROR_CHECK(mcpwm_capture_timer_start(capture_timer));
-}
-
 void init_bench_timer() {
     gptimer_config_t cfg{};
     cfg.clk_src = GPTIMER_CLK_SRC_DEFAULT;
@@ -167,71 +140,88 @@ void init_can() {
 
 extern "C" void app_main() {
     init_gpio();
+    const bool interlock_at_boot=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::interlock)) != 0;
+#if ECU_BENCH_PULSES
+    ecu::BenchGate bench_gate(interlock_at_boot);
+#endif
     ecu::web::init();
+    ecu::engine_service::init();
+    ecu::engine_log_service::init();
     init_adc();
-    init_capture();
     init_can();
     init_bench_timer();
-    ESP_LOGW(tag,"Configuration monitor. No vehicle calibration. Engine scheduling DISABLED.");
+    ESP_LOGW(tag,"Target timing enabled; physical policy=%s. No vehicle calibration.",ECU_ENGINE_DUMMY_LOADS?"DUMMY LOADS ONLY":"INHIBITED");
     ecu::config::Config profile;
     (void)ecu::web::try_config(profile);
-    ecu::MissingTooth decoder({profile.slots,profile.missing,profile.max_rpm});
+    ecu::engine_target::init({profile.slots,profile.missing,profile.max_rpm},interlock_at_boot);
+    ecu::switch_service::init();
+    ecu::engine_tuning::start(interlock_at_boot);
     ecu::web::start_service();
     ecu::radio::start();
     ESP_LOGI(tag,"Bench trigger profile: %u-%u, capture ceiling %u RPM",
              profile.slots,profile.missing,profile.max_rpm);
-    bool have_capture = false, watchdog_high = false;
-    std::uint32_t previous_ticks = 0;
-    std::uint64_t accumulated_ticks = 0, can_frames = 0, cam_edges = 0, crank_edges = 0;
-    std::int64_t last_capture_wall = 0, last_print = 0, last_heartbeat = 0, last_publish = 0;
+    bool watchdog_high = false;
+    std::uint64_t can_frames = 0;
+    std::int64_t last_print = 0, last_heartbeat = 0, last_publish = 0;
+    ecu::engine::RuntimeSample last_engine;
+    std::uint8_t switch_mask=0;
 #if ECU_BENCH_PULSES
     std::int64_t last_pulse = 0;
     unsigned next_channel = 0;
-    bool pulse_latched_fault = false;
 #endif
     TickType_t wake = xTaskGetTickCount();
     while (true) {
         const auto now = esp_timer_get_time();
         ecu::config::Config next;
         if (ecu::web::try_config(next) && next.revision != profile.revision) {
-            const bool trigger_changed = next.slots != profile.slots || next.missing != profile.missing || next.max_rpm != profile.max_rpm;
             profile = next;
-            if (trigger_changed) { decoder = ecu::MissingTooth({profile.slots,profile.missing,profile.max_rpm}); have_capture = false; }
         }
-        Capture event{};
-        while (xQueueReceive(captures,&event,0) == pdTRUE) {
-            if (event.cam) { ++cam_edges; continue; }
-            ++crank_edges;
-            if (!have_capture || event.arrived_us-last_capture_wall > 150000) {
-                decoder.reset();
-                accumulated_ticks = 0;
-                have_capture = true;
-            } else {
-                // Unsigned subtraction handles the hardware counter wrapping.
-                accumulated_ticks += static_cast<std::uint32_t>(event.ticks-previous_ticks);
-            }
-            previous_ticks = event.ticks;
-            last_capture_wall = event.arrived_us;
-            decoder.edge(accumulated_ticks*1000000ULL/capture_hz);
-        }
-        if (have_capture && now-last_capture_wall > static_cast<std::int64_t>(decoder.stall_timeout())) {
-            decoder.reset(); have_capture = false;
-        }
+        // A skipped tune-lock read retains ownership until a later successful
+        // read. Never turn a contention event into an Off rule or clear faults.
+        (void)ecu::engine_service::switch_requirements(switch_mask);
+        const auto switch_observation=ecu::switch_service::tick(switch_mask);
         std::array<unsigned,8> raw{};
+        const auto sampled_us=ecu::engine_target::clock_us();
         const bool adc_ok = sample(raw);
+        const auto edge_state=ecu::engine_target::measurement();
         const bool safe = gpio_get_level(static_cast<gpio_num_t>(ecu::pins::safe_n_mon)) != 0;
         const bool interlock = gpio_get_level(static_cast<gpio_num_t>(ecu::pins::interlock)) != 0;
         twai_message_t message{};
         // Bound background work so a busy bus cannot starve supervision.
         for (unsigned i=0; i<16 && twai_receive(&message,0) == ESP_OK; ++i) ++can_frames;
-        const bool monitor_healthy = adc_ok && !capture_overflow && esp_timer_get_time()-now < 10000;
-        const bool healthy = decoder.valid() && monitor_healthy;
+    ecu::web::Sample live;
+    live.raw=raw; live.adc_ok=adc_ok; live.safe=safe; live.interlock=interlock;
+    live.table_switches=switch_observation.samples;
+    live.overflow=edge_state.overflow; live.synced=edge_state.synced; live.rpm=edge_state.rpm; live.timing_fault=edge_state.timing_fault;
+    live.phase_synced=edge_state.phase_synced;
+    live.phase_tune_revision=edge_state.tune_revision;live.phase_sensor_revision=edge_state.sensor_revision;
+    live.phase_epoch=edge_state.phase_epoch;
+    live.phase_losses=static_cast<std::uint32_t>(std::min<std::uint64_t>(edge_state.phase_losses,UINT32_MAX));
+    live.cam_rejected=static_cast<std::uint32_t>(std::min<std::uint64_t>(edge_state.cam_rejected,UINT32_MAX));
+    live.phase_reason=static_cast<std::uint8_t>(edge_state.phase_reason);live.cam_error_deg=edge_state.cam_error_deg;
+    live.timing_cause=edge_state.timing_cause;live.last_timing_cause=edge_state.last_timing_cause;
+    live.worker_sequence=edge_state.worker_sequence;live.worker_observed_us=edge_state.worker_observed_us;live.worker_epoch=edge_state.worker_epoch;
+    live.worker_tune_revision=edge_state.worker_tune_revision;live.worker_sensor_revision=edge_state.worker_sensor_revision;
+    live.worker_cylinder_count=edge_state.worker_cylinder_count;live.virtual_high_mask=edge_state.virtual_high_mask;live.physical_command_mask=edge_state.physical_command_mask;
+    live.can_frames=can_frames; live.cam_edges=edge_state.cam_edges; live.crank_edges=edge_state.crank_edges;
+    live.crank_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::crank));
+    live.cam_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::cam));
+        const bool control_completed=ecu::engine_service::observe(live,profile,ecu::engine_target::clock_us(),sampled_us,last_engine);
+        ecu::switch_service::control_observed(switch_observation,control_completed);
+        live.engine=last_engine;
+        ecu::engine_log_service::observe(last_engine);
+        const bool monitor_healthy = adc_ok && !edge_state.overflow && esp_timer_get_time()-now < 10000;
+        [[maybe_unused]] const bool healthy = edge_state.synced && monitor_healthy;
+#if !ECU_ENGINE_DUMMY_LOADS
         if (!healthy || !safe || !interlock) all_off();
+#endif
         // The watchdog is fed by the supervised loop, not a free-running ISR.
         // An inhibited monitor must stay available without a crank source.
         // Pulse builds still require valid trigger decoding to feed supervision.
 #if ECU_BENCH_PULSES
-        const bool feed_watchdog = healthy;
+        const bool feed_watchdog = bench_gate.state()==ecu::BenchGate::State::Waiting ? monitor_healthy : healthy && bench_gate.state()==ecu::BenchGate::State::Armed;
+#elif ECU_ENGINE_DUMMY_LOADS
+        const bool feed_watchdog = monitor_healthy && !edge_state.timing_fault;
 #else
         const bool feed_watchdog = monitor_healthy;
 #endif
@@ -241,10 +231,10 @@ extern "C" void app_main() {
             last_heartbeat = now;
         }
 #if ECU_BENCH_PULSES
-        if (!healthy || !safe || !interlock) pulse_latched_fault = true;
-        // A power cycle with J3 closed is needed after a bench inhibit.
+        const bool bench_armed = bench_gate.update(healthy,safe,interlock);
+        // J3 must be closed at MCU boot; any inhibit after arming latches until reset.
         // MAIN_LS follows ARM, so NEVER connect actuator power in this mode.
-        if (!pulse_latched_fault && healthy && safe && interlock && now-last_pulse >= 1000000 && bench_channel < 0) {
+        if (bench_armed && healthy && safe && interlock && now-last_pulse >= 1000000 && bench_channel < 0) {
             all_off();
             ESP_ERROR_CHECK(gptimer_set_raw_count(pulse_timer,0));
             gptimer_alarm_config_t alarm{};
@@ -263,24 +253,18 @@ extern "C" void app_main() {
         }
         // GPTimer one-shot alarms do not stop the counter themselves.
         if (bench_channel < 0) (void)gptimer_stop(pulse_timer);
-#else
+#elif !ECU_ENGINE_DUMMY_LOADS
         all_off();
         (void)interlock;
 #endif
         if (now-last_publish >= 50000) {
-            ecu::web::Sample live;
-            live.raw=raw; live.adc_ok=adc_ok; live.safe=safe; live.interlock=interlock;
-            live.overflow=capture_overflow; live.synced=decoder.synced(); live.rpm=decoder.rpm();
-            live.can_frames=can_frames; live.cam_edges=cam_edges; live.crank_edges=crank_edges;
-            live.crank_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::crank));
-            live.cam_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::cam));
             ecu::web::publish(live); last_publish=now;
         }
         if (now-last_print >= 1000000) {
             ESP_LOGI(tag,"sync=%d rpm=%.0f ADC=[%u,%u,%u,%u,%u,%u,%u,%u] safe=%d lock=%d CAN=%llu cam=%llu overflow=%d ARM=%d",
-                decoder.synced(),decoder.rpm(),raw[0],raw[1],raw[2],raw[3],raw[4],raw[5],raw[6],raw[7],
+                edge_state.synced,edge_state.rpm,raw[0],raw[1],raw[2],raw[3],raw[4],raw[5],raw[6],raw[7],
                 safe,interlock,static_cast<unsigned long long>(can_frames),
-                static_cast<unsigned long long>(cam_edges),capture_overflow,
+                static_cast<unsigned long long>(edge_state.cam_edges),edge_state.overflow,
                 gpio_get_level(static_cast<gpio_num_t>(ecu::pins::arm)));
             last_print = now;
         }

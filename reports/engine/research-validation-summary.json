@@ -1,0 +1,76 @@
+{
+  "date": "2026-11-03",
+  "milestone": "External research engine benchmark; full feature parity remains incomplete",
+  "base_commit": "76cbd27",
+  "physical_outputs_enabled": false,
+  "pcb_or_enclosure_changed": false,
+  "test_counts": {
+    "external_plant_acceptance": 7,
+    "production_speeduino_runtime_integration": 4,
+    "controller_scenario_cases": 21,
+    "step_convergence_cases": 6
+  },
+  "passed": true,
+  "source_hashes": {
+    "tools/compare_engine_controllers.py": "0249094a4d7fc2b4a4ba4060995631355199886a544e9249c6a8a143a4e1f92c",
+    "tools/engine_research_plant.py": "29fdcdcc5d45459b9ea0ccba14b8bb50323b9bc0ed08404b0fa248c619dfbe10",
+    "tools/speeduino_runtime.py": "7fee614722b53d80e8af9c635fdc9d876ffe698c7eccc04ac294375731663a66",
+    "tools/speeduino_sim.cpp": "d887489c343a8e245d73e45766e089a41ffcf304d5c82240d534736ecdb1aba0",
+    "tools/speeduino_sim_hal.cpp": "155e13433b6568c22577bce9a9a7023c51ca27b14420ae703eeae1b4f31bedad",
+    "simulation/modelica/EngineAirPath.mo": "303df3396c660d1c4f8da48f19c698a6f63c46d1050c7964b92fba56be653c3c",
+    "tools/validate_engine_comparison.py": "15f3a44b6c499fc5c98540564b68ac33a8065f48945d421f05ef69a774caa07d",
+    "config/engine/defaults.json": "0c5ada5d5cce8ce812169ca3ce4e8bde92043a22abadecac7534342dc2eb0dac",
+    "tools/engine_runtime.py": "3daf42468fa5b4607eb8836e352aad88a102822f5c457b647d943fc625057836",
+    "tools/engine_bridge.cpp": "8c8b383769caa9ba16976412604d6bb55b07f73f09ecb2d63bc21048282d05be",
+    "firmware/main/config_json.hpp": "a7f656094be0d638c32193d01d051109c3ea09e32e1467603187f169d229132e",
+    "tools/test_research_plant.py": "9b26ceef5556faa2fdf66cf8ba1f4940d790aa3a8434b57707d79780b090e8c1",
+    "tools/test_speeduino_runtime.py": "8892c78a9394d974620b61c2d65858700e1dc23b9b644c8ffc70bca6160c328f",
+    "scripts/build_engine_airpath.py": "d63b2f9adc129ff23045440fb9e7455d319abe8f3e3acf7818b061897a7180cc",
+    "scripts/build_speeduino_sim.py": "19902d93d19f486f6817dde34ccd06abc37efa936856600df177e9ecf7a66fd0",
+    "scripts/verify_modelica_sources.py": "c56aed8fa5763e31dfe146eea5ad25b8df878f9b8ba53638eee0c4b9f48dde18",
+    "firmware/include/ecu/config.hpp": "99ba24126f58b2217ef9f4b9203c10465543fc266f568b2e3b31f989b817ab39",
+    "firmware/include/ecu/control.hpp": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b",
+    "firmware/include/ecu/engine.hpp": "1ebbc91dfc975b4f09ef81bc88453bd53a9ab930ab3f887c429f4328d2672768",
+    "firmware/include/ecu/engine_binding.hpp": "3f254ebd37519c6a1713f3a108d72c9986c2b4a6a77218db1529b074fe0bcf37",
+    "firmware/include/ecu/engine_json.hpp": "100ae79f328784d787bbd3b889f1899c1dbce34e1e9413176ea3a0c38f451f78",
+    "firmware/include/ecu/engine_scheduler.hpp": "811eaff9d55e5ab0025fe14eafd1dba3e588cdb79ac0fce819212fb709264336",
+    "firmware/include/ecu/engine_service.hpp": "c9a7c37e2152e6e79056124dc99b39e1d0e9a5c115fb51c08146d659b5ea0971",
+    "firmware/include/ecu/engine_storage.hpp": "1d9a6d15142a50428d33ff97e175f83a6d2f1e94c88f3328d6ca4d12f30e7a6c",
+    "firmware/include/ecu/espnow.hpp": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc",
+    "firmware/include/ecu/espnow_protocol.hpp": "a5b1053ce8552267b60af309ca8458c23c7a2d54797aed5553b348bdefeab011",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/web_config.hpp": "18db4bd51f4fe5cd1628594cbbdee7e858ed4cd43dd292724bad1d0aa08a6df7",
+    "tools/plot_research_benchmark.py": "47ae7dff6e0ba88b9820ebf36262be8c4ccf094bd870e5a6113117f8163c4e20"
+  },
+  "first_milestone_production_hashes_unchanged": true,
+  "evidence": {
+    "matrix": "full-controller-comparison.json",
+    "plant_acceptance": "research-acceptance-tests.txt",
+    "reference_runtime": "speeduino-runtime-tests.txt",
+    "build_guards": "reference-build-guards.json",
+    "scientific_review": "independent-research-plant-review.json",
+    "runtime_review": "independent-reference-runtime-review.md",
+    "review_follow_through": "research-review-resolution.md",
+    "charts": "research-benchmark-charts.html"
+  },
+  "visual_checks": [
+    {
+      "width_px": 728,
+      "height_px": 608,
+      "console_messages": 0
+    },
+    {
+      "width_px": 390,
+      "height_px": 1202,
+      "console_messages": 0
+    }
+  ],
+  "target_build": "No target source or partition changes in this increment; prior compact_n16r8_web build evidence retained",
+  "not_established": [
+    "Engine-specific plant or actuator calibration",
+    "Target ISR/GPIO timing or AVR emulation",
+    "Full Speeduino feature parity",
+    "Online TunerStudio acceptance of own controller identity",
+    "Physical engine/vehicle, electrical, EMI/surge, thermal, fit or splash qualification"
+  ]
+}

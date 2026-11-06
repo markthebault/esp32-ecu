@@ -1,0 +1,21 @@
+In file included from firmware/tests/flex_target_service_test.cpp:4:
+firmware/tests/../main/engine_target.cpp: In function ‘bool ecu::engine_target::flex_acknowledge(const ecu::flex::CaptureView&)’:
+firmware/tests/../main/engine_target.cpp:613:2: error: this ‘if’ clause does not guard... [-Werror=misleading-indentation]
+  613 |  if(!flex_port.armed())flex_irq_off();portEXIT_CRITICAL(&lock);return ok;
+      |  ^~
+In file included from firmware/tests/target_fakes/driver/gpio.h:2,
+                 from firmware/tests/../main/engine_target.cpp:11:
+firmware/tests/target_fakes/fake_target.hpp:26:30: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   26 | #define portEXIT_CRITICAL(p) (p)->unlock()
+      |                              ^
+firmware/tests/../main/engine_target.cpp:613:39: note: in expansion of macro ‘portEXIT_CRITICAL’
+  613 |  if(!flex_port.armed())flex_irq_off();portEXIT_CRITICAL(&lock);return ok;
+      |                                       ^~~~~~~~~~~~~~~~~
+firmware/tests/flex_target_service_test.cpp: In function ‘int main(int, char**)’:
+firmware/tests/flex_target_service_test.cpp:118:2: error: this ‘if’ clause does not guard... [-Werror=misleading-indentation]
+  118 |  if(argc>1)output_directory=argv[1];if(argc>2)fake_flex_error_stage=std::stoi(argv[2]);
+      |  ^~
+firmware/tests/flex_target_service_test.cpp:118:37: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  118 |  if(argc>1)output_directory=argv[1];if(argc>2)fake_flex_error_stage=std::stoi(argv[2]);
+      |                                     ^~
+cc1plus: all warnings being treated as errors

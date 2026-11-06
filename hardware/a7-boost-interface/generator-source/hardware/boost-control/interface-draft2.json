@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "contract": "BOOST-G45-INTERFACE-DRAFT2",
+  "status": "Native development candidate, pending route/circuit/fit acceptance",
+  "physical_outputs_enabled": false,
+  "parent": {
+    "path": "hardware/a6-flex-rgb/net_contract.json",
+    "sha256": "2d2d8883d8035c43bde5d7781e491ee5b8cb470fb0c87e3c80975175e99b80e2"
+  },
+  "module": {
+    "variant": "44-pin Type-C N16R8",
+    "gpio": 45,
+    "reference": "U3",
+    "pad": "37",
+    "parent_pad_net": null,
+    "candidate_net": "BOOST_CMD",
+    "permanent_carrier_pulldown_ohm": 2200,
+    "firmware_allocation_active": false,
+    "boot_condition": "No external pull-up or actuator-domain feedback. Confirm actual module flash-voltage/eFuse/strapping behavior without burning eFuses."
+  },
+  "logic_interface": {
+    "candidate_connector": "J21",
+    "family": "JST ZH five positions, keyed, through-hole,3.4mm solder length",
+    "pins": {
+      "1": "IDLE_CMD",
+      "2": "RUN_5V",
+      "3": "+5V",
+      "4": "GND",
+      "5": "BOOST_CMD"
+    },
+    "driver_input": "Dedicated insulated five-wire fanout to original isolated idle XH4 and BOOST-DRAFT1 ZH4; no double-wire crimp assumptions. Both carry only optical-input power/returns/control.",
+    "shared_run_load": "Includes inherited RUN/Q7 and old idle BJT input plus new boost filtered MOS input. Physical loaded levels and timing remain unqualified."
+  },
+  "actuator_interface": {
+    "architecture_reference": "hardware/boost-control/circuit-draft1.json",
+    "candidate": "Separate optical THT low-side accessory with hardware RUN, local supervisor, source return star and inductive flyback; UCC PDIP electrical guarantee remains an explicit hold",
+    "firmware_polarity": "Increasing energized duty is assumed to increase boost; deenergized plumbing must retain mechanical wastegate spring control",
+    "frequency_hz": [
+      10,
+      50
+    ],
+    "per_command_freshness_us": 20000,
+    "no_current_rating_assigned": true,
+    "no_pin_compatibility_or_interchangeability_claim": true
+  },
+  "carrier_outline_limit_mm": [
+    120,
+    120
+  ],
+  "holds": [
+    "Actual module identity, geometry, eFuse/strapping and reset/download behavior",
+    "Schematic, route, ERC/DRC, copper/return review and connector fit",
+    "Exact valve, deenergized plumbing, coil R/L, duty/frequency response and independent actuator cutoff",
+    "Input buffering, RUN loading, power/return opens, watchdog/interlock and supervisor timing",
+    "Flyback energy, thermal and electrical transient measurements",
+    "Assembly, enclosure/standoffs/sealing and RF clearance",
+    "Target scheduler integration, simultaneous idle/boost timing and physical HIL"
+  ],
+  "supersedes": "architecture.json remains the original unroutedPH4 candidate",
+  "new_footprints": [
+    "JST_ZH_B5B-ZR-3.4_1x05_P1.50mm_Vertical"
+  ],
+  "added_parts": [
+    {
+      "names": {},
+      "types": {},
+      "page": "core",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "",
+      "note": "Permanent GPIO45 carrier pulldown, even with accessory unplugged. Actual memory-voltage strapping/eFuses/boot/reset and leaded part fit unqualified. Compact ordinary leaded body;5mW nominal bias dissipation.",
+      "dnp": false,
+      "ref": "R180",
+      "value": "2k2 1%",
+      "footprint": "ECU:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical",
+      "pins": {
+        "1": "BOOST_CMD",
+        "2": "GND"
+      },
+      "preferred_xy_mm": [
+        44,
+        74
+      ]
+    }
+  ],
+  "replaced_parts": [
+    {
+      "names": {
+        "1": "IDLE GPIO3",
+        "2": "HARDWARE RUN",
+        "3": "OPTICAL INPUT5V",
+        "4": "CARRIER RETURN",
+        "5": "BOOST GPIO45"
+      },
+      "types": {},
+      "page": "core",
+      "xy": [
+        0,
+        0
+      ],
+      "angle": 0,
+      "mpn": "B5B-ZR-3.4(LF)(SN)",
+      "note": "A7 replaces PH4 with distinct ZH5 at the old J21 position. Pins1..4 keep original idle semantics;5adds GPIO45 boost. New insulated Y fanout required: no two wires in a ZH crimp; do not join actuator returns. Original A5/A6 PH4 harness does not mate. Actual crimp/fit/temperature/strain/sealing/clearance unqualified; physical engine writes remain inhibited.",
+      "dnp": false,
+      "ref": "J21",
+      "value": "ISOLATED IDLE BOOST ZH5",
+      "footprint": "ECU:JST_ZH_B5B-ZR-3.4_1x05_P1.50mm_Vertical",
+      "pins": {
+        "1": "IDLE_CMD",
+        "2": "RUN_5V",
+        "3": "+5V",
+        "4": "GND",
+        "5": "BOOST_CMD"
+      },
+      "placed_side": "front"
+    }
+  ],
+  "carrier_connector_strategy": "Reuse original J21 location with a smaller ZH5 body and equal6mm pin span. Old A6 is unchanged; new A7 uses a separate keyed fanout harness. J24 remains an unused historical proposal, not an A7 PCB connector."
+}

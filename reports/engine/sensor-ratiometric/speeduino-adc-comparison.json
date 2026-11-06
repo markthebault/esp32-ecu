@@ -1,0 +1,207 @@
+{
+  "passed": true,
+  "production_speeduino_sha": "9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20",
+  "binary_sha256": "0dadac4ae2b999d884773474095dcc8b092be20ffbd5158da42c0c7f03935a7d",
+  "build_manifest_sha256": "8bb970debbcec3e98699b71deaa12cae99229c6ca507d9c5410f8366f76df938",
+  "ecu_bridge_sha256": "aad51c6c3ef0296ce0a06cd0faaf4789b765749876bb3436052fa6d7fc60ac2e",
+  "source_sha256": {
+    "firmware/include/ecu/config.hpp": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739",
+    "firmware/main/config_json.hpp": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6",
+    "tools/config_bridge.cpp": "63abc51efe6d5331bfd528fa07fa5bae02cfea2e2bce9a20fcc9bc8394ba439e",
+    "tools/web_server.py": "bb02471c0cc7f887d2624f1c7c564c9a1f7cc391e9a469c8d8bab1e525fb31a3",
+    "config/defaults.json": "e61fb310f60ddc801bbc2dec0dca288314ed124761b7fc35087aee10687ba617",
+    "tools/compare_sensor_reference.py": "143425ffa16ae3e441b3c7d9c100c8ef255f74ee9b191ed19345414d35f65360"
+  },
+  "cases": [
+    {
+      "kind": "common_reference",
+      "sensor_supply_v": 4.8,
+      "speeduino_avcc_v": 4.8,
+      "signal_v": 2.016,
+      "true_map_kpa": 52.0,
+      "speeduino_raw_adc": 430,
+      "time_us": 10000000,
+      "production_speeduino_map_kpa": 51,
+      "ecu_raw_adc": [
+        1501,
+        1489,
+        1489,
+        1489,
+        1489,
+        1489,
+        1336,
+        3574
+      ],
+      "ecu_absolute_kpa": 50.319902319902326,
+      "ecu_ratiometric_kpa": 51.99776161163963
+    },
+    {
+      "kind": "common_reference",
+      "sensor_supply_v": 4.9,
+      "speeduino_avcc_v": 4.9,
+      "signal_v": 2.0580000000000003,
+      "true_map_kpa": 52.0,
+      "speeduino_raw_adc": 430,
+      "time_us": 10100000,
+      "production_speeduino_map_kpa": 51,
+      "ecu_raw_adc": [
+        1532,
+        1489,
+        1489,
+        1489,
+        1489,
+        1489,
+        1336,
+        3649
+      ],
+      "ecu_absolute_kpa": 51.15262515262516,
+      "ecu_ratiometric_kpa": 51.984105234310775
+    },
+    {
+      "kind": "common_reference",
+      "sensor_supply_v": 5.0,
+      "speeduino_avcc_v": 5.0,
+      "signal_v": 2.1,
+      "true_map_kpa": 52.0,
+      "speeduino_raw_adc": 430,
+      "time_us": 10200000,
+      "production_speeduino_map_kpa": 51,
+      "ecu_raw_adc": [
+        1563,
+        1489,
+        1489,
+        1489,
+        1489,
+        1489,
+        1336,
+        3723
+      ],
+      "ecu_absolute_kpa": 51.98534798534798,
+      "ecu_ratiometric_kpa": 51.98227236099918
+    },
+    {
+      "kind": "common_reference",
+      "sensor_supply_v": 5.1,
+      "speeduino_avcc_v": 5.1,
+      "signal_v": 2.142,
+      "true_map_kpa": 52.0,
+      "speeduino_raw_adc": 430,
+      "time_us": 10300000,
+      "production_speeduino_map_kpa": 51,
+      "ecu_raw_adc": [
+        1595,
+        1489,
+        1489,
+        1489,
+        1489,
+        1489,
+        1336,
+        3798
+      ],
+      "ecu_absolute_kpa": 52.84493284493285,
+      "ecu_ratiometric_kpa": 51.99578725645078
+    },
+    {
+      "kind": "common_reference",
+      "sensor_supply_v": 5.2,
+      "speeduino_avcc_v": 5.2,
+      "signal_v": 2.184,
+      "true_map_kpa": 52.0,
+      "speeduino_raw_adc": 430,
+      "time_us": 10400000,
+      "production_speeduino_map_kpa": 51,
+      "ecu_raw_adc": [
+        1626,
+        1489,
+        1489,
+        1489,
+        1489,
+        1489,
+        1336,
+        3872
+      ],
+      "ecu_absolute_kpa": 53.67765567765567,
+      "ecu_ratiometric_kpa": 51.99380165289257
+    },
+    {
+      "kind": "sensor_only_drop",
+      "sensor_supply_v": 4.8,
+      "speeduino_avcc_v": 5.0,
+      "signal_v": 2.016,
+      "true_map_kpa": 52.0,
+      "speeduino_raw_adc": 412,
+      "time_us": 10500000,
+      "production_speeduino_map_kpa": 50,
+      "ecu_raw_adc": [
+        1501,
+        1489,
+        1489,
+        1489,
+        1489,
+        1489,
+        1336,
+        3574
+      ],
+      "ecu_absolute_kpa": 50.319902319902326,
+      "ecu_ratiometric_kpa": 51.99776161163963
+    },
+    {
+      "kind": "sensor_only_drop",
+      "sensor_supply_v": 4.9,
+      "speeduino_avcc_v": 5.0,
+      "signal_v": 2.0580000000000003,
+      "true_map_kpa": 52.0,
+      "speeduino_raw_adc": 421,
+      "time_us": 10600000,
+      "production_speeduino_map_kpa": 51,
+      "ecu_raw_adc": [
+        1532,
+        1489,
+        1489,
+        1489,
+        1489,
+        1489,
+        1336,
+        3649
+      ],
+      "ecu_absolute_kpa": 51.15262515262516,
+      "ecu_ratiometric_kpa": 51.984105234310775
+    },
+    {
+      "kind": "sensor_only_drop",
+      "sensor_supply_v": 5.0,
+      "speeduino_avcc_v": 5.0,
+      "signal_v": 2.1,
+      "true_map_kpa": 52.0,
+      "speeduino_raw_adc": 430,
+      "time_us": 10700000,
+      "production_speeduino_map_kpa": 51,
+      "ecu_raw_adc": [
+        1563,
+        1489,
+        1489,
+        1489,
+        1489,
+        1489,
+        1336,
+        3723
+      ],
+      "ecu_absolute_kpa": 51.98534798534798,
+      "ecu_ratiometric_kpa": 51.98227236099918
+    }
+  ],
+  "assertions": [
+    "Production loop MAP stays constant for authored common-reference counts",
+    "A sensor-only supply drop is not cancelled by a separate unchanged AVCC",
+    "Shared ECU ratio conversion preserves the known52kPa fixture within12-bit quantization",
+    "Legacy absolute conversion retains its supply-dependent behavior"
+  ],
+  "source_context": "Pinned Speeduino sensors.cpp selects AVCC on AVR (ADMUX_DEFAULT_CONFIG0x40). Native analogRead receives authored10-bit counts; this fixture does not execute that ADC hardware.",
+  "limits": [
+    "MAP acquisition/conversion only, no engine or actuator comparison in this fixture",
+    "The common-reference case applies only when the signal and ADC reference share the declared supply relationship",
+    "It does not imply all Speeduino boards cancel a separate sensor fuse/wiring drop",
+    "No AVR/ESP32 timing, ADC electrical accuracy, supply or vehicle qualification"
+  ],
+  "physical_qualification": false
+}

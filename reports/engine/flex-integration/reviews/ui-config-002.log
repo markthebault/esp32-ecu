@@ -1,0 +1,25 @@
+{
+  "root": "/home/mark/persospace/esp32-ecu/.cache/engine/flex-integration-review/host-freeze-002",
+  "mutations": {
+    "temp_without_corrections": {
+      "accepted": false,
+      "error": "Fuel-temperature correction requires flex corrections enabled."
+    },
+    "boolean_frequency": {
+      "accepted": false,
+      "error": "Flex calibration requires numeric values."
+    },
+    "string_frequency": {
+      "accepted": false,
+      "error": "Flex calibration requires numeric values."
+    },
+    "null_curve": {
+      "accepted": false,
+      "error": "Flex Spark addition: six bounded values and increasing bins are required."
+    },
+    "fractional_cycles": {
+      "accepted": false,
+      "error": "Flex Complete cycles per window: value outside bounds."
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "physical_qualification": false,
+  "secondary_enabled_external_plant_accepted": false,
+  "new_root_native_checks": {
+    "acquisition": 276,
+    "transport": 1656,
+    "actual_service": 243,
+    "service_json_allocation_cuts": 69
+  },
+  "python_existing_tests": 189,
+  "python_circuit_binding_tests": 3,
+  "secondary_browser_workflows": 8,
+  "circuit_declared_cases": 95,
+  "circuit_manufacturer_models": false,
+  "independent_software_assertions": 12278,
+  "software_review_documentation_delta": [
+    {
+      "path": "docs/engine-secondary-tables.md",
+      "reviewed_sha256": "48fde6bd629c43f02a8c7a7c9919f2dcb861ec858943ca3be28b9df45a94ef24",
+      "published_sha256": "438114f2ec41766f6525d100acbaf323bacfcfcf6a9cb563f66b2dcc59404fba"
+    }
+  ],
+  "target_builds": [
+    "compact_n16r8_web",
+    "compact_a3_web",
+    "compact_a3_timing_bench"
+  ],
+  "physical_policy": "Selected/generic web engine outputs compile-time inhibited; separate gated dummy-load build only",
+  "cad": {
+    "erc": 0,
+    "drc": 0,
+    "unconnected": 0,
+    "schematic_parity": 0
+  },
+  "open_gates": [
+    "Physical protection/reset/backfeed/temperature/supply/harness/fit and actual scheduler/I2C/USB/RF measurements",
+    "Fresh secondary-enabled coupled plant comparison against pinned production Speeduino",
+    "Wider Speeduino feature gaps and vendor online acceptance"
+  ]
+}

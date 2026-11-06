@@ -1,0 +1,530 @@
+{
+  "compact_n16r8_web": {
+    "elf": "firmware/.pio/build/compact_n16r8_web/firmware.elf",
+    "elf_sha256": "de3b045c7bbbd6e8578c57498c32a8dc37a9b1ffe0f59771e0c7647e58259a9f",
+    "matches_parent_supplied_hash": true,
+    "elf_mtime_utc": "2026-11-03T19:12:26.094373+00:00",
+    "entry_frame_method": "ELF32 section extraction; Xtensa ENTRY instruction encoded immediate (bits 12..23)*8; 3-byte opcode checked before decoding. Frames are local compiler frames, not complete call-chain bounds.",
+    "frames": [
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_trigger_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "address": "0x4037580c",
+        "size": 554,
+        "section": ".iram0.text",
+        "entry_bytes": "36c100",
+        "entry_frame_bytes": 96
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "address": "0x40375a38",
+        "size": 3121,
+        "section": ".iram0.text",
+        "entry_bytes": "360101",
+        "entry_frame_bytes": 128
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+        "address": "0x4037666c",
+        "size": 9845,
+        "section": ".iram0.text",
+        "entry_bytes": "36e100",
+        "entry_frame_bytes": 112
+      },
+      {
+        "symbol": "app_main",
+        "address": "0x42003860",
+        "size": 2012,
+        "section": ".flash.text",
+        "entry_bytes": "368133",
+        "entry_frame_bytes": 6592
+      },
+      {
+        "symbol": "ecu::engine::data_json(ecu::engine::RuntimeSample const&, unsigned long long)",
+        "address": "0x42006174",
+        "size": 1666,
+        "section": ".flash.text",
+        "entry_bytes": "368100",
+        "entry_frame_bytes": 64
+      },
+      {
+        "symbol": "ecu::engine_log::msl_row(ecu::engine_log::Header const&, ecu::engine_log::Row const&, char*, unsigned int)::{lambda(unsigned long long)#1}::operator()(unsigned long long) const",
+        "address": "0x42006c54",
+        "size": 94,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      },
+      {
+        "symbol": "ecu::engine_log::msl_row(ecu::engine_log::Header const&, ecu::engine_log::Row const&, char*, unsigned int)",
+        "address": "0x42006cb4",
+        "size": 859,
+        "section": ".flash.text",
+        "entry_bytes": "36e100",
+        "entry_frame_bytes": 112
+      },
+      {
+        "symbol": "ecu::web::(anonymous namespace)::engine_data_log_msl_get(httpd_req*)",
+        "address": "0x42007010",
+        "size": 372,
+        "section": ".flash.text",
+        "entry_bytes": "368112",
+        "entry_frame_bytes": 2368
+      },
+      {
+        "symbol": "std::unique_ptr<ecu::engine_log::Page, ecu::HeapObjectDelete<ecu::engine_log::Page> > ecu::heap_object<ecu::engine_log::Page>()",
+        "address": "0x42007c94",
+        "size": 30,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      },
+      {
+        "symbol": "ecu::web::(anonymous namespace)::engine_data_log_get(httpd_req*)",
+        "address": "0x42007cb4",
+        "size": 688,
+        "section": ".flash.text",
+        "entry_bytes": "36e100",
+        "entry_frame_bytes": 112
+      },
+      {
+        "symbol": "std::unique_ptr<ecu::engine::Tune, ecu::HeapObjectDelete<ecu::engine::Tune> > ecu::heap_object<ecu::engine::Tune>()",
+        "address": "0x4200f550",
+        "size": 30,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      },
+      {
+        "symbol": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+        "address": "0x42010b24",
+        "size": 1008,
+        "section": ".flash.text",
+        "entry_bytes": "364106",
+        "entry_frame_bytes": 800
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+        "address": "0x4201447c",
+        "size": 75,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      },
+      {
+        "symbol": "ecu::engine_target::measurement()",
+        "address": "0x42015cc8",
+        "size": 144,
+        "section": ".flash.text",
+        "entry_bytes": "366100",
+        "entry_frame_bytes": 48
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+        "address": "0x420179b4",
+        "size": 1451,
+        "section": ".flash.text",
+        "entry_bytes": "36e110",
+        "entry_frame_bytes": 2160
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)",
+        "address": "0x42017f60",
+        "size": 10842,
+        "section": ".flash.text",
+        "entry_bytes": "36e118",
+        "entry_frame_bytes": 3184
+      },
+      {
+        "symbol": "ecu::engine_log::Recorder::page(unsigned long, unsigned long, ecu::engine_log::Page&) const",
+        "address": "0x4201aa48",
+        "size": 199,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      },
+      {
+        "symbol": "ecu::engine_log::Recorder::append(ecu::engine::RuntimeSample const&, unsigned long long)",
+        "address": "0x4201acbc",
+        "size": 400,
+        "section": ".flash.text",
+        "entry_bytes": "360102",
+        "entry_frame_bytes": 256
+      },
+      {
+        "symbol": "ecu::engine_log_service::observe(ecu::engine::RuntimeSample const&)",
+        "address": "0x4201aed8",
+        "size": 110,
+        "section": ".flash.text",
+        "entry_bytes": "366100",
+        "entry_frame_bytes": 48
+      },
+      {
+        "symbol": "ecu::engine_log_service::page(unsigned long, unsigned long, ecu::engine_log::Page&)",
+        "address": "0x4201b068",
+        "size": 50,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      }
+    ],
+    "recorder_symbols": [
+      {
+        "name": "ecu::engine_log_service::(anonymous namespace)::recorder",
+        "address": "0x3fcaffe0",
+        "size": 55384,
+        "section": ".dram0.bss"
+      }
+    ],
+    "linker_static_ram_data_bss_bytes": 125428,
+    "heap_object_disassembly": ".cache/engine/telemetry-review/final-selected-heap-objects.txt",
+    "isr_audit": {
+      "path": ".cache/engine/observability-audit-selected/closure.json",
+      "sha256": "5258d929c5846c8cc109df308ec62056f453fe276dac999414bc923c6dcd7a42",
+      "functions": 30,
+      "roots": 5,
+      "literals_outside_iram": 0,
+      "unclassified_flash_pointers": 0,
+      "assertion_argument_only": 63,
+      "passed_static_placement": true
+    },
+    "independently_rerun_isr_audit": {
+      "path": ".cache/engine/telemetry-review/final-isr-selected/closure.json",
+      "sha256": "5258d929c5846c8cc109df308ec62056f453fe276dac999414bc923c6dcd7a42",
+      "functions": 30,
+      "roots": 5,
+      "literals_outside_iram": 0,
+      "unclassified_flash_pointers": 0,
+      "assertion_argument_only": 63,
+      "passed_static_placement": true
+    },
+    "heap_object_path_review": "Every linked heap_object helper calls malloc, tests the returned pointer before running its fixed non-allocating constructor, and returns null on failure. Page helper is absent from dummy image because HTTP endpoints are not linked. No allocating operator new call occurs in these helpers."
+  },
+  "compact_a3_web": {
+    "elf": "firmware/.pio/build/compact_a3_web/firmware.elf",
+    "elf_sha256": "7852943d292cf799a33362bb0dc9c786c4a7f2366f82afcdb14003762fe86d67",
+    "matches_parent_supplied_hash": true,
+    "elf_mtime_utc": "2026-11-03T19:12:21.363553+00:00",
+    "entry_frame_method": "ELF32 section extraction; Xtensa ENTRY instruction encoded immediate (bits 12..23)*8; 3-byte opcode checked before decoding. Frames are local compiler frames, not complete call-chain bounds.",
+    "frames": [
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_trigger_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "address": "0x403756bc",
+        "size": 554,
+        "section": ".iram0.text",
+        "entry_bytes": "36c100",
+        "entry_frame_bytes": 96
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "address": "0x403758e8",
+        "size": 3121,
+        "section": ".iram0.text",
+        "entry_bytes": "360101",
+        "entry_frame_bytes": 128
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+        "address": "0x4037651c",
+        "size": 9845,
+        "section": ".iram0.text",
+        "entry_bytes": "36e100",
+        "entry_frame_bytes": 112
+      },
+      {
+        "symbol": "app_main",
+        "address": "0x420037cc",
+        "size": 2012,
+        "section": ".flash.text",
+        "entry_bytes": "368133",
+        "entry_frame_bytes": 6592
+      },
+      {
+        "symbol": "ecu::engine::data_json(ecu::engine::RuntimeSample const&, unsigned long long)",
+        "address": "0x420060e0",
+        "size": 1666,
+        "section": ".flash.text",
+        "entry_bytes": "368100",
+        "entry_frame_bytes": 64
+      },
+      {
+        "symbol": "ecu::engine_log::msl_row(ecu::engine_log::Header const&, ecu::engine_log::Row const&, char*, unsigned int)::{lambda(unsigned long long)#1}::operator()(unsigned long long) const",
+        "address": "0x42006bc0",
+        "size": 94,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      },
+      {
+        "symbol": "ecu::engine_log::msl_row(ecu::engine_log::Header const&, ecu::engine_log::Row const&, char*, unsigned int)",
+        "address": "0x42006c20",
+        "size": 859,
+        "section": ".flash.text",
+        "entry_bytes": "36e100",
+        "entry_frame_bytes": 112
+      },
+      {
+        "symbol": "ecu::web::(anonymous namespace)::engine_data_log_msl_get(httpd_req*)",
+        "address": "0x42006f7c",
+        "size": 372,
+        "section": ".flash.text",
+        "entry_bytes": "368112",
+        "entry_frame_bytes": 2368
+      },
+      {
+        "symbol": "std::unique_ptr<ecu::engine_log::Page, ecu::HeapObjectDelete<ecu::engine_log::Page> > ecu::heap_object<ecu::engine_log::Page>()",
+        "address": "0x42007c00",
+        "size": 30,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      },
+      {
+        "symbol": "ecu::web::(anonymous namespace)::engine_data_log_get(httpd_req*)",
+        "address": "0x42007c20",
+        "size": 688,
+        "section": ".flash.text",
+        "entry_bytes": "36e100",
+        "entry_frame_bytes": 112
+      },
+      {
+        "symbol": "std::unique_ptr<ecu::engine::Tune, ecu::HeapObjectDelete<ecu::engine::Tune> > ecu::heap_object<ecu::engine::Tune>()",
+        "address": "0x4200f530",
+        "size": 30,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      },
+      {
+        "symbol": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+        "address": "0x42010b04",
+        "size": 1008,
+        "section": ".flash.text",
+        "entry_bytes": "364106",
+        "entry_frame_bytes": 800
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+        "address": "0x4201445c",
+        "size": 75,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      },
+      {
+        "symbol": "ecu::engine_target::measurement()",
+        "address": "0x42015ca8",
+        "size": 144,
+        "section": ".flash.text",
+        "entry_bytes": "366100",
+        "entry_frame_bytes": 48
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+        "address": "0x42017994",
+        "size": 1451,
+        "section": ".flash.text",
+        "entry_bytes": "36e110",
+        "entry_frame_bytes": 2160
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)",
+        "address": "0x42017f40",
+        "size": 10842,
+        "section": ".flash.text",
+        "entry_bytes": "36e118",
+        "entry_frame_bytes": 3184
+      },
+      {
+        "symbol": "ecu::engine_log::Recorder::page(unsigned long, unsigned long, ecu::engine_log::Page&) const",
+        "address": "0x4201aa28",
+        "size": 199,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      },
+      {
+        "symbol": "ecu::engine_log::Recorder::append(ecu::engine::RuntimeSample const&, unsigned long long)",
+        "address": "0x4201ac9c",
+        "size": 400,
+        "section": ".flash.text",
+        "entry_bytes": "360102",
+        "entry_frame_bytes": 256
+      },
+      {
+        "symbol": "ecu::engine_log_service::observe(ecu::engine::RuntimeSample const&)",
+        "address": "0x4201aeb8",
+        "size": 104,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      },
+      {
+        "symbol": "ecu::engine_log_service::page(unsigned long, unsigned long, ecu::engine_log::Page&)",
+        "address": "0x4201b040",
+        "size": 50,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      }
+    ],
+    "recorder_symbols": [
+      {
+        "name": "ecu::engine_log_service::(anonymous namespace)::recorder",
+        "address": "0x3fcae378",
+        "size": 55384,
+        "section": ".dram0.bss"
+      }
+    ],
+    "linker_static_ram_data_bss_bytes": 124176,
+    "heap_object_disassembly": ".cache/engine/telemetry-review/final-generic-heap-objects.txt",
+    "isr_audit": {
+      "path": ".cache/engine/observability-audit-generic/closure.json",
+      "sha256": "aa3d96540d3708c5ded393051fc5b0e973197d96325c68ba5770130ac8ee4205",
+      "functions": 30,
+      "roots": 5,
+      "literals_outside_iram": 0,
+      "unclassified_flash_pointers": 0,
+      "assertion_argument_only": 63,
+      "passed_static_placement": true
+    },
+    "independently_rerun_isr_audit": {
+      "path": ".cache/engine/telemetry-review/final-isr-generic/closure.json",
+      "sha256": "aa3d96540d3708c5ded393051fc5b0e973197d96325c68ba5770130ac8ee4205",
+      "functions": 30,
+      "roots": 5,
+      "literals_outside_iram": 0,
+      "unclassified_flash_pointers": 0,
+      "assertion_argument_only": 63,
+      "passed_static_placement": true
+    },
+    "heap_object_path_review": "Every linked heap_object helper calls malloc, tests the returned pointer before running its fixed non-allocating constructor, and returns null on failure. Page helper is absent from dummy image because HTTP endpoints are not linked. No allocating operator new call occurs in these helpers."
+  },
+  "compact_a3_timing_bench": {
+    "elf": "firmware/.pio/build/compact_a3_timing_bench/firmware.elf",
+    "elf_sha256": "19f443fe56cb6c40e11adf949a42625aa6353d4f18b1caff6492a7907e1e5059",
+    "matches_parent_supplied_hash": true,
+    "elf_mtime_utc": "2026-11-03T19:12:29.353248+00:00",
+    "entry_frame_method": "ELF32 section extraction; Xtensa ENTRY instruction encoded immediate (bits 12..23)*8; 3-byte opcode checked before decoding. Frames are local compiler frames, not complete call-chain bounds.",
+    "frames": [
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_capture(mcpwm_cap_channel_t*, mcpwm_capture_event_data_t const*, void*)",
+        "address": "0x40375470",
+        "size": 3473,
+        "section": ".iram0.text",
+        "entry_bytes": "360101",
+        "entry_frame_bytes": 128
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::on_alarm(gptimer_t*, gptimer_alarm_event_data_t const*, void*)",
+        "address": "0x40376204",
+        "size": 12629,
+        "section": ".iram0.text",
+        "entry_bytes": "36e100",
+        "entry_frame_bytes": 112
+      },
+      {
+        "symbol": "app_main",
+        "address": "0x420027b0",
+        "size": 1904,
+        "section": ".flash.text",
+        "entry_bytes": "368133",
+        "entry_frame_bytes": 6592
+      },
+      {
+        "symbol": "std::unique_ptr<ecu::engine::Tune, ecu::HeapObjectDelete<ecu::engine::Tune> > ecu::heap_object<ecu::engine::Tune>()",
+        "address": "0x42007a80",
+        "size": 30,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      },
+      {
+        "symbol": "ecu::engine_service::observe(ecu::web::Sample const&, ecu::config::Config const&, unsigned long long, unsigned long long, ecu::engine::RuntimeSample&)",
+        "address": "0x42008f18",
+        "size": 1012,
+        "section": ".flash.text",
+        "entry_bytes": "364106",
+        "entry_frame_bytes": 800
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#1}::operator()() const",
+        "address": "0x4200c83c",
+        "size": 75,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      },
+      {
+        "symbol": "ecu::engine_target::measurement()",
+        "address": "0x4200d9b8",
+        "size": 144,
+        "section": ".flash.text",
+        "entry_bytes": "366100",
+        "entry_frame_bytes": 48
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)::{lambda()#2}::operator()() const",
+        "address": "0x4200ec90",
+        "size": 1539,
+        "section": ".flash.text",
+        "entry_bytes": "36e110",
+        "entry_frame_bytes": 2160
+      },
+      {
+        "symbol": "ecu::engine_target::(anonymous namespace)::run(void*)",
+        "address": "0x4200f294",
+        "size": 12066,
+        "section": ".flash.text",
+        "entry_bytes": "36e118",
+        "entry_frame_bytes": 3184
+      },
+      {
+        "symbol": "ecu::engine_log::Recorder::append(ecu::engine::RuntimeSample const&, unsigned long long)",
+        "address": "0x4201226c",
+        "size": 400,
+        "section": ".flash.text",
+        "entry_bytes": "360102",
+        "entry_frame_bytes": 256
+      },
+      {
+        "symbol": "ecu::engine_log_service::observe(ecu::engine::RuntimeSample const&)",
+        "address": "0x42012448",
+        "size": 104,
+        "section": ".flash.text",
+        "entry_bytes": "364100",
+        "entry_frame_bytes": 32
+      }
+    ],
+    "recorder_symbols": [
+      {
+        "name": "ecu::engine_log_service::(anonymous namespace)::recorder",
+        "address": "0x3fca3d38",
+        "size": 55384,
+        "section": ".dram0.bss"
+      }
+    ],
+    "linker_static_ram_data_bss_bytes": 99256,
+    "heap_object_disassembly": ".cache/engine/telemetry-review/final-dummy-heap-objects.txt",
+    "isr_audit": {
+      "path": ".cache/engine/observability-audit-dummy/closure.json",
+      "sha256": "aaf59feefce76ee7ae4fff595eb6b3c770d578fc329503fc285c9249d8227172",
+      "functions": 29,
+      "roots": 4,
+      "literals_outside_iram": 0,
+      "unclassified_flash_pointers": 0,
+      "assertion_argument_only": 63,
+      "passed_static_placement": true
+    },
+    "independently_rerun_isr_audit": {
+      "path": ".cache/engine/telemetry-review/final-isr-dummy/closure.json",
+      "sha256": "aaf59feefce76ee7ae4fff595eb6b3c770d578fc329503fc285c9249d8227172",
+      "functions": 29,
+      "roots": 4,
+      "literals_outside_iram": 0,
+      "unclassified_flash_pointers": 0,
+      "assertion_argument_only": 63,
+      "passed_static_placement": true
+    },
+    "heap_object_path_review": "Every linked heap_object helper calls malloc, tests the returned pointer before running its fixed non-allocating constructor, and returns null on failure. Page helper is absent from dummy image because HTTP endpoints are not linked. No allocating operator new call occurs in these helpers."
+  }
+}

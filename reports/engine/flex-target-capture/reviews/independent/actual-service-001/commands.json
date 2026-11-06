@@ -1,0 +1,92 @@
+[
+  {
+    "command": [
+      "cc",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-MMD",
+      "-MF",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/cjson.d",
+      "-c",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/dependencies/cjson/cJSON.c",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/cjson.o"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-pthread",
+      "-MMD",
+      "-MF",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/test.d",
+      "-DECU_COMPACT_A3=1",
+      "-DECU_SELECTED_N16R8=1",
+      "-DECU_FLEX_G38_DRAFT=1",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/dependencies/cjson",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/target_fakes",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/include",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/freeze-003/firmware/tests/flex_target_service_test.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/cjson.o",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/test"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/test",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/fixtures-0",
+      "0"
+    ],
+    "returncode": 0,
+    "stdout": "flex_target_service_checks 26969 mode 0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/test",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/fixtures-1",
+      "1"
+    ],
+    "returncode": 0,
+    "stdout": "flex_target_service_checks 14 mode 1\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/test",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/fixtures-2",
+      "2"
+    ],
+    "returncode": 0,
+    "stdout": "flex_target_service_checks 14 mode 2\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/test",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/flex-owner-review/actual-service-001/fixtures-3",
+      "3"
+    ],
+    "returncode": 0,
+    "stdout": "flex_target_service_checks 14 mode 3\n",
+    "stderr": ""
+  }
+]

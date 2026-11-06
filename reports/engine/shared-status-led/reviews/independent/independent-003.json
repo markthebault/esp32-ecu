@@ -1,0 +1,112 @@
+{
+  "compile": {
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-pthread",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-004/firmware/include",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-004/firmware/tests/switch_fakes",
+      "-I/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/cjson",
+      "-DECU_COMPACT_A3=1",
+      "-DECU_SELECTED_N16R8=1",
+      "-DECU_FLEX_G38_DRAFT=1",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/independent_shared_service.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/freeze-004/firmware/main/switch_service.cpp",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/cjson/cJSON.o",
+      "-o",
+      "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/independent-003"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "runs": [
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/independent-003",
+        "partial"
+      ],
+      "returncode": 0,
+      "stdout": "{\"passed\":true,\"case\":\"partial\",\"checks\":140,\"source\":\"independent SDK model around actual switch_service.cpp\",\"physical_test\":false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/independent-003",
+        "priority"
+      ],
+      "returncode": 0,
+      "stdout": "{\"passed\":true,\"case\":\"priority\",\"checks\":1097,\"source\":\"independent SDK model around actual switch_service.cpp\",\"physical_test\":false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/independent-003",
+        "cleanup"
+      ],
+      "returncode": 0,
+      "stdout": "{\"passed\":true,\"case\":\"cleanup\",\"checks\":164,\"source\":\"independent SDK model around actual switch_service.cpp\",\"physical_test\":false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/independent-003",
+        "local_failure"
+      ],
+      "returncode": 0,
+      "stdout": "{\"passed\":true,\"case\":\"local_failure\",\"checks\":356,\"source\":\"independent SDK model around actual switch_service.cpp\",\"physical_test\":false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/independent-003",
+        "reset"
+      ],
+      "returncode": 0,
+      "stdout": "{\"passed\":true,\"case\":\"reset\",\"checks\":218,\"source\":\"independent SDK model around actual switch_service.cpp\",\"physical_test\":false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/independent-003",
+        "stale_u64"
+      ],
+      "returncode": 0,
+      "stdout": "{\"passed\":true,\"case\":\"stale_u64\",\"checks\":74,\"source\":\"independent SDK model around actual switch_service.cpp\",\"physical_test\":false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/independent-003",
+        "requests"
+      ],
+      "returncode": 0,
+      "stdout": "{\"passed\":true,\"case\":\"requests\",\"checks\":84,\"source\":\"independent SDK model around actual switch_service.cpp\",\"physical_test\":false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/independent-003",
+        "byte_mode"
+      ],
+      "returncode": 0,
+      "stdout": "{\"passed\":true,\"case\":\"byte_mode\",\"checks\":55,\"source\":\"independent SDK model around actual switch_service.cpp\",\"physical_test\":false}\n",
+      "stderr": ""
+    }
+  ],
+  "freeze_manifest_sha256": "7d7a56b04372fd415c0a8f705712b10e19260c4b0a279e4f250be69522226b16",
+  "environment": {
+    "GCOV_PREFIX": "/home/mark/persospace/esp32-ecu/.cache/engine/shared-led-review/gcov",
+    "GCOV_PREFIX_STRIP": "0",
+    "ASAN_OPTIONS": "detect_leaks=1",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  }
+}
