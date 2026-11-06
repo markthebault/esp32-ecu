@@ -14,6 +14,7 @@
 #include <cstring>
 #include <limits>
 #include "ecu/engine_limits.hpp"
+#include "ecu/cylinder_channels.hpp"
 namespace ecu::engine {
 constexpr unsigned bins=16;
 struct Map {
@@ -52,12 +53,12 @@ inline double lookup(const TrimMap&m,double rpm,double load){
 enum class Strategy : std::uint8_t {BatchWasted,Sequential,SemiSequential};
 inline bool strategy_valid(Strategy s){return s==Strategy::BatchWasted||s==Strategy::Sequential||s==Strategy::SemiSequential;}
 inline const char* strategy_name(Strategy s){switch(s){case Strategy::BatchWasted:return "batch_wasted_4cyl";case Strategy::Sequential:return "sequential_4cyl";case Strategy::SemiSequential:return "semi_sequential_4cyl";default:return "unknown";}}
-inline bool firing_order_valid(const std::array<unsigned,4>& order){unsigned mask=0;for(auto c:order){if(c<1||c>4||(mask&(1U<<c)))return false;mask|=1U<<c;}return order[0]==1;}
-struct Tune {
+template<std::size_t CylinderCapacity>inline bool firing_order_valid(const std::array<unsigned,CylinderCapacity>&order,unsigned count=4){return channels::order_valid(order,count);}
+template<std::size_t CylinderCapacity>struct BasicTune {
  unsigned revision=1;
  Strategy strategy=Strategy::BatchWasted;
  // Four-stroke, even-fire only. The order starts at cylinder 1 compression TDC.
- std::array<unsigned,4> firing_order{1,3,4,2};
+ std::array<unsigned,CylinderCapacity> firing_order{1,3,4,2};
  float injection_end_deg=540,cam_sync_deg=450,cam_window_deg=20;
  unsigned cylinders=4;
  float displacement_cc=2000,injector_cc_min=300,fuel_density_g_cc=.745f,stoich_afr=14.7f;
@@ -81,24 +82,29 @@ struct Tune {
  flex::Config flex_fuel;
  boost::Config boost_control;
  bool cylinder_trims_enabled=false;
- std::array<TrimMap,4> cylinder_fuel{};
- std::array<float,4> cylinder_spark_deg{}; // Physical cylinders1..4, not order slots.
- Tune(){ve.cells.fill(85);spark.cells.fill(15);lambda.cells.fill(1);secondary_ve.cells.fill(85);secondary_spark.cells.fill(15);}
+ std::array<TrimMap,CylinderCapacity> cylinder_fuel{};
+ std::array<float,CylinderCapacity> cylinder_spark_deg{}; // Cylinder identifiers, not order slots or pins.
+ BasicTune(){ve.cells.fill(85);spark.cells.fill(15);lambda.cells.fill(1);secondary_ve.cells.fill(85);secondary_spark.cells.fill(15);}
 };
-inline void reset_secondary_tables(Tune&t){
+// Public schema1..10, own011, coherent data and the target executor still use
+// the four-cylinder type. The expanded type is an internal development path
+// until those interfaces and the board channel contract are migrated together.
+using Tune=BasicTune<4>;
+using ExpandedTune=BasicTune<8>;
+template<std::size_t CylinderCapacity>inline void reset_secondary_tables(BasicTune<CylinderCapacity>&t){
  t.secondary_tables={};t.secondary_ve={};t.secondary_spark={};
  t.secondary_ve.cells.fill(85);t.secondary_spark.cells.fill(15);
 }
-inline double maximum_map_kpa(const Tune&t){return t.boost_control.pressure_enabled?t.boost_control.maximum_map_kpa:110;}
-inline load::Requirements input_requirements(const Tune&t){
+template<std::size_t CylinderCapacity>inline double maximum_map_kpa(const BasicTune<CylinderCapacity>&t){return t.boost_control.pressure_enabled?t.boost_control.maximum_map_kpa:110;}
+template<std::size_t CylinderCapacity>inline load::Requirements input_requirements(const BasicTune<CylinderCapacity>&t){
  auto r=load::requirements(t.load_model,t.cylinder_trims_enabled,t.transient_enrichment.mode==transient::Mode::MapRate,t.ego_enabled);
  const auto extra=secondary::requirements(t.secondary_tables);r.map|=extra.map||t.boost_control.pressure_enabled;r.emap|=extra.emap;
  r.baro|=t.boost_control.mode==boost::Mode::ClosedLoop&&t.load_model.baro_source==load::BaroSource::Aux;return r;
 }
-inline const char* validate(const Tune&t){
- if(!t.revision||t.cylinders!=4)return "Only four-cylinder, four-stroke, even-fire profiles are implemented";
- if(!strategy_valid(t.strategy)||!firing_order_valid(t.firing_order)||!range(t.injection_end_deg,0,719)||!range(t.cam_sync_deg,0,719)||!range(t.cam_window_deg,5,45))return "Invalid strategy, firing order or cam/injection reference";
- if(t.cylinder_trims_enabled&&t.strategy!=Strategy::Sequential)return "Cylinder trims require the sequential four-cylinder strategy";
+template<std::size_t CylinderCapacity>inline const char* validate(const BasicTune<CylinderCapacity>&t){
+ if(!t.revision||!t.cylinders||t.cylinders>CylinderCapacity)return "Cylinder count exceeds the selected logical channel capacity";
+ if(!strategy_valid(t.strategy)||!firing_order_valid(t.firing_order,t.cylinders)||!range(t.injection_end_deg,0,719)||!range(t.cam_sync_deg,0,719)||!range(t.cam_window_deg,5,45))return "Invalid strategy, firing order or cam/injection reference";
+ if(t.cylinder_trims_enabled&&t.strategy!=Strategy::Sequential)return "Cylinder trims require the sequential strategy";
  if(!transient::valid(t.transient_enrichment))return "Invalid transient enrichment configuration";
  if(!boost::valid(t.boost_control))return "Invalid boost/pressure configuration";
  if(input_requirements(t).baro&&t.load_model.aux_role!=load::AuxRole::Baro)return "Closed-loop boost needs the selected barometric input";
@@ -112,7 +118,7 @@ inline const char* validate(const Tune&t){
   for(auto v:m.load)if(!range(v,load::axis_min(r.axis),load::axis_max(r.axis,maximum_map_kpa(t))))return "Secondary-table load axis disagrees with its declared basis";
   for(auto v:m.cells)if(!range(v,secondary::cell_min(static_cast<secondary::Kind>(k),r.cells),secondary::cell_max(static_cast<secondary::Kind>(k),r.cells)))return "Secondary-table cell disagrees with its declared meaning";
  }
- for(unsigned cylinder=0;cylinder<4;++cylinder){
+ for(unsigned cylinder=0;cylinder<CylinderCapacity;++cylinder){
   const auto&m=t.cylinder_fuel[cylinder];
   if(!range(t.cylinder_spark_deg[cylinder],-10,10)||!ascending(m.rpm)||!ascending(m.load))return "Invalid cylinder trim or axes";
   for(auto v:m.rpm)if(!range(v,50,10000))return "Cylinder trim RPM axis out of range";
@@ -151,7 +157,7 @@ struct Inputs {
  flex::Sample flex_sample{};
  bool flex_context_match=true;
 };
-struct Output {
+template<std::size_t CylinderCapacity>struct BasicOutput {
  State state=State::Stopped;std::uint32_t faults=0;
  idle::Output idle;
  boost::Output boost_control;
@@ -164,22 +170,36 @@ struct Output {
  bool fuel_cut=false,spark_cut=false,pump=false,fan=false;
  // Scalars retain the untrimmed base demand for compatible consumers. The
  // scheduler uses these physical-cylinder demands when cylinder_data is true.
- std::array<double,4> cylinder_pulse_ms{},cylinder_advance_deg{},cylinder_fuel_pct{100,100,100,100},cylinder_duty_pct{};
+ std::array<double,CylinderCapacity> cylinder_pulse_ms{},cylinder_advance_deg{},cylinder_duty_pct{};
+ std::array<double,CylinderCapacity> cylinder_fuel_pct=[]{std::array<double,CylinderCapacity> values{};values.fill(100);return values;}();
+ unsigned cylinder_count=4;
  bool cylinder_data=false,cylinder_trims_enabled=false;
  std::uint8_t cylinder_capacity_mask=0,cylinder_spark_clamp_mask=0,cylinder_retard_floor_mask=0;
- double pulse_for(unsigned cylinder)const{return cylinder_data&&cylinder_trims_enabled?cylinder_pulse_ms[cylinder]:pulse_ms;}
- double advance_for(unsigned cylinder)const{return cylinder_data&&cylinder_trims_enabled?cylinder_advance_deg[cylinder]:advance_deg;}
+ double pulse_for(unsigned cylinder)const{return cylinder<CylinderCapacity?(cylinder_data&&cylinder_trims_enabled?cylinder_pulse_ms[cylinder]:pulse_ms):NAN;}
+ double advance_for(unsigned cylinder)const{return cylinder<CylinderCapacity?(cylinder_data&&cylinder_trims_enabled?cylinder_advance_deg[cylinder]:advance_deg):NAN;}
  // Any proposed edge belongs to the virtual/shadow executor, never GPIO.
  bool proposed_enabled()const{return faults==0&&state!=State::Stopped;}
 };
+using Output=BasicOutput<4>;
+using ExpandedOutput=BasicOutput<8>;
+template<class Config,std::size_t CylinderCapacity>inline bool demand_valid(const Config&t,const BasicOutput<CylinderCapacity>&o,double rpm){
+ const bool sequential=t.strategy==Strategy::Sequential;
+ if(!strategy_valid(t.strategy)||!firing_order_valid(t.firing_order,t.cylinders)||o.cylinder_count!=t.cylinders||!range(t.max_injection_ms,1,15)||!range(t.max_duty,.1,double(.85f))||!range(t.max_dwell_ms,.5,3.5))return false;
+ if(!o.proposed_enabled())return true;
+ if(!range(rpm,50,8000)||!range(o.dwell_ms,.5,t.max_dwell_ms)||!finite(o.advance_deg)||
+    (o.cylinder_trims_enabled&&(!sequential||!o.cylinder_data)))return false;
+ const double interval_ms=60000/rpm*(sequential?2:1);
+ for(unsigned cylinder=0;cylinder<t.cylinders;++cylinder)if((!o.fuel_cut&&(!range(o.pulse_for(cylinder),.001,t.max_injection_ms)||o.pulse_for(cylinder)/interval_ms>std::min(double(t.max_duty),.85)))||!range(o.advance_for(cylinder),-5,40))return false;
+ return true;
+}
 class Controller {
  bool seen_=false,was_crank_=true,rev_cut_=false,dfco_=false,fan_=false,afr_running_=false;
  std::uint64_t last_=0,started_=0,dfco_since_=0,boot_=0,afr_started_=0;
  double previous_tps_=0,ae_=1,ego_i_=0;idle::Controller idle_control_;transient::Controller transient_control_;secondary::Controller secondary_control_;boost::Controller boost_control_;
 public:
  void reset(){*this=Controller{};}
- Output step(const Tune&t,const Inputs&s,std::uint64_t now){
-  Output o;o.rpm=s.rpm;o.cylinder_trims_enabled=t.cylinder_trims_enabled;bool transient_evaluated=false;
+ template<std::size_t CylinderCapacity>BasicOutput<CylinderCapacity> step(const BasicTune<CylinderCapacity>&t,const Inputs&s,std::uint64_t now){
+  BasicOutput<CylinderCapacity> o;o.rpm=s.rpm;o.cylinder_count=t.cylinders;o.cylinder_trims_enabled=t.cylinder_trims_enabled;bool transient_evaluated=false;
   auto finish=[&](){
    if(!(o.faults&BadTune)){
     boost::Input input;input.rpm=s.rpm;input.map_kpa=s.map_kpa;input.tps_pct=s.tps_pct;input.sampled_us=s.sampled_us;
@@ -324,7 +344,7 @@ public:
   const double rev_ms=60000/s.rpm,interval_ms=rev_ms*(t.strategy==Strategy::Sequential?2:1);o.duty_pct=o.pulse_ms/interval_ms*100;
   if(zero_fuel){o.fuel_cut=true;o.pulse_ms=o.duty_pct=0;}
   o.cylinder_data=true;o.cylinder_trims_enabled=t.cylinder_trims_enabled;
-  for(unsigned cylinder=0;cylinder<4;++cylinder){
+  for(unsigned cylinder=0;cylinder<t.cylinders;++cylinder){
    const double pct=t.cylinder_trims_enabled?lookup(t.cylinder_fuel[cylinder],s.rpm,model.coordinates[3]):100;
    const bool switched=second_spark.observation.active&&(t.secondary_tables.spark.mode==secondary::Mode::Conditional||t.secondary_tables.spark.mode==secondary::Mode::Input);
    double demand=(switched?secondary_spark:raw_advance)+(t.cylinder_trims_enabled?t.cylinder_spark_deg[cylinder]:0);
@@ -342,7 +362,7 @@ public:
    if(!finite(pulse)||pulse>t.max_injection_ms||duty>t.max_duty*100)o.cylinder_capacity_mask|=1U<<cylinder;
   }
   // Judge capacity on actual channel demand, so safe negative trims can reduce
-  // an otherwise excessive base demand. One failed channel inhibits all eight.
+  // an otherwise excessive base demand. One failed cylinder inhibits every channel.
   if(o.cylinder_capacity_mask||o.dwell_ms>t.max_dwell_ms||o.dwell_ms>=rev_ms){o.faults|=Capacity;o.state=State::Faulted;o.fuel_cut=o.spark_cut=true;o.pulse_ms=o.dwell_ms=0;o.cylinder_pulse_ms.fill(0);o.cylinder_duty_pct.fill(0);return finish();}
   if(dfco_){o.state=State::Overrun;o.fuel_cut=true;o.pulse_ms=0;o.duty_pct=0;o.cylinder_pulse_ms.fill(0);o.cylinder_duty_pct.fill(0);}
 
@@ -350,9 +370,11 @@ public:
  }
 };
 struct Edge {std::uint64_t time_us=0;unsigned channel=0;bool high=false;};
-struct Plan {std::array<Edge,16> edges{};unsigned count=0;bool valid=false;};
-inline Plan plan_revolution(const Tune&t,const Output&o,std::uint64_t gap_us){
- Plan p;if(t.strategy==Strategy::Sequential||!o.proposed_enabled()||!range(o.rpm,50,8000)||validate(t))return p;
+template<std::size_t CylinderCapacity>struct BasicPlan {std::array<Edge,4*CylinderCapacity> edges{};unsigned count=0;bool valid=false;};
+using Plan=BasicPlan<4>;
+using ExpandedPlan=BasicPlan<8>;
+template<std::size_t CylinderCapacity>inline BasicPlan<CylinderCapacity> plan_revolution(const BasicTune<CylinderCapacity>&t,const BasicOutput<CylinderCapacity>&o,std::uint64_t gap_us){
+ BasicPlan<CylinderCapacity> p;if(t.strategy==Strategy::Sequential||!o.proposed_enabled()||!demand_valid(t,o,o.rpm)||validate(t))return p;
  const double rev_us=60000000/o.rpm;
  auto add=[&](unsigned channel,double start_deg,double width_us){
   start_deg=std::fmod(start_deg,360.0);if(start_deg<0)start_deg+=360;
@@ -362,16 +384,17 @@ inline Plan plan_revolution(const Tune&t,const Output&o,std::uint64_t gap_us){
   const auto start=gap_us+offset;
   p.edges[p.count++]={start,channel,true};p.edges[p.count++]={start+width,channel,false};return true;
  };
- std::array<double,4> phase{};for(unsigned i=0;i<4;++i)phase[t.firing_order[i]-1]=180*i;
- for(unsigned ch=0;ch<4;++ch)if(!o.fuel_cut){
+ const auto phase=channels::compression_phases(t.firing_order,t.cylinders);
+ for(unsigned cylinder=0;cylinder<t.cylinders;++cylinder)if(!o.fuel_cut){
   // Semi-sequential pairs share a closing angle every crank revolution. The
   // full four-stroke mass is divided between two openings by Controller.
   const double start=t.strategy==Strategy::SemiSequential?
-    t.tooth1_btdc_deg+phase[ch]+t.injection_end_deg-o.pulse_for(ch)*1000/rev_us*360:t.tooth1_btdc_deg+180;
-  if(!add(ch,start,o.pulse_for(ch)*1000))return Plan{};
+    t.tooth1_btdc_deg+phase[cylinder]+t.injection_end_deg-o.pulse_for(cylinder)*1000/rev_us*360:t.tooth1_btdc_deg+180;
+  if(!add(channels::injector(cylinder),start,o.pulse_for(cylinder)*1000))return BasicPlan<CylinderCapacity>{};
  }
- // Four dedicated smart-coil commands, paired by firing order modulo360deg.
- for(unsigned ch=0;ch<4;++ch)if(!o.spark_cut&&!add(ch+4,t.tooth1_btdc_deg+phase[ch]-o.advance_for(ch)-o.dwell_ms*1000/rev_us*360,o.dwell_ms*1000))return Plan{};
+ // A dedicated coil command per cylinder. Even cylinder counts have opposing
+ // compression phases modulo360; odd counts have no opposing-cylinder pairs.
+ for(unsigned cylinder=0;cylinder<t.cylinders;++cylinder)if(!o.spark_cut&&!add(channels::coil(cylinder),t.tooth1_btdc_deg+phase[cylinder]-o.advance_for(cylinder)-o.dwell_ms*1000/rev_us*360,o.dwell_ms*1000))return BasicPlan<CylinderCapacity>{};
  std::sort(p.edges.begin(),p.edges.begin()+p.count,[](const Edge&a,const Edge&b){return a.time_us<b.time_us||(a.time_us==b.time_us&&a.high<b.high);});p.valid=true;return p;
 }
 }

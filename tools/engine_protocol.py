@@ -36,6 +36,7 @@ PAGE_OFFSETS={1:0,2:512,3:1664,4:2816,5:3968}
 def field_units(name):return {'idle_kp':'%/RPM','idle_ki':'%/(RPM*s)'}.get(name,legacy_field_units(name))
 
 def pages(tune):
+ if tune['engine']['cylinders']!=4:raise ValueError('Own011 represents exactly four cylinders; expanded profiles need a new definition')
  # Reuse the frozen prefix serializer, then write the new identity's enum.
  # The placeholder is private and never emitted or assigned to a live tune.
  compatible=tune if tune['strategy'] in legacy.STRATEGIES else dict(tune,strategy=legacy.STRATEGIES[0])

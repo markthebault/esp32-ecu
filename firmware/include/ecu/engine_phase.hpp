@@ -6,7 +6,7 @@ namespace ecu::engine {
 // One rising cam edge per four-stroke cycle. This deliberately does not infer
 // OEM patterns or recover a lost phase while the shaft is still turning.
 // Task context only: floating-point mapping never runs in the capture ISR.
-class PhaseDecoder {
+template<std::size_t CylinderCapacity>class BasicPhaseDecoder {
 public:
  enum class Reason : std::uint8_t {AwaitingCrank,AwaitingCam,Confirming,Locked,Window,Cycle,TimeOrder,Unmapped,Timeout,CrankLost};
  static const char* reason_name(Reason r){switch(r){
@@ -15,7 +15,7 @@ public:
   case Reason::Cycle:return "cam_cycle_mismatch";case Reason::TimeOrder:return "cam_time_order";
   case Reason::Unmapped:return "cam_timestamp_unmapped";case Reason::Timeout:return "cam_timeout";
   case Reason::CrankLost:return "crank_sync_lost";default:return "awaiting_crank";}}
- explicit PhaseDecoder(MissingTooth::Config wheel={60,2,8000},AngleConfig angle={}):wheel_(wheel),angle_(angle),crank_(wheel){}
+ explicit BasicPhaseDecoder(MissingTooth::Config wheel={60,2,8000},BasicAngleConfig<CylinderCapacity> angle={}):wheel_(wheel),angle_(angle),crank_(wheel){}
  bool valid()const{return crank_.valid()&&strategy_valid(angle_.strategy)&&range(angle_.tooth1_btdc_deg,0,359)&&range(angle_.cam_sync_deg,0,719)&&range(angle_.cam_window_deg,5,45);}
  bool required()const{return angle_.strategy==Strategy::Sequential;}
  bool crank_synced()const{return crank_.synced();}
@@ -141,7 +141,7 @@ private:
   if(!finite(delta)||delta<=0||delta>3000000||s.us>UINT64_MAX-std::uint64_t(std::ceil(delta))){invalidate(Reason::Timeout);return;}
   deadline_=s.us+std::uint64_t(std::ceil(delta));
  }
- MissingTooth::Config wheel_;AngleConfig angle_;MissingTooth crank_;
+ MissingTooth::Config wheel_;BasicAngleConfig<CylinderCapacity> angle_;MissingTooth crank_;
  std::array<Sample,64> history_{};unsigned history_next_=0,history_count_=0,previous_tooth_=0;
  std::int64_t revolution_=0,last_shift_=0;int parity_=0;
  bool candidate_=false,known_=false,faulted_=false,pending_=false;
@@ -149,4 +149,6 @@ private:
  std::uint64_t deadline_=UINT64_MAX,last_cam_=0,pending_us_=0,losses_=0,rejected_=0,accepted_=0;
  double cam_error_=0,next_center_=0;
 };
+using PhaseDecoder=BasicPhaseDecoder<4>;
+using ExpandedPhaseDecoder=BasicPhaseDecoder<8>;
 }

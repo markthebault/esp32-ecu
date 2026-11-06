@@ -16,7 +16,7 @@ inline float get_float(const std::uint8_t*p){auto u=get_u32(p);float v;std::memc
 inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||(n>=4756&&n<4768)||(n>=4940&&n<4992)||(n>=5116&&n<5120)||(n>=5176&&n<5376)||(n>=5448&&n<5504)||(n>=7968&&n<8192)||(n>=8280&&n<8320)||n>=9280;}
 inline bool revision_offset(std::size_t n){return n>=268&&n<272;}
 // own011 appends boost calibration without moving any own010 field.
-inline bool representable(const engine::Tune&t){return !engine::validate(t);}
+inline bool representable(const engine::Tune&t){return t.cylinders==4&&!engine::validate(t);}
 inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill(0);
  put_u32(p.data(),(std::uint32_t(t.ego_enabled)<<0)|(std::uint32_t(t.dfco_enabled)<<1)|(std::uint32_t(t.idle_enabled)<<2));
  put_float(p.data()+4,t.cylinders);

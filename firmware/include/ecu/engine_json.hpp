@@ -33,7 +33,7 @@ inline bool parse_tune(const cJSON*j,Tune&t){
  else if(schema>=5&&!std::strcmp(strategy,"semi_sequential_4cyl"))t.strategy=Strategy::SemiSequential;
  else return false;
  auto*e=cJSON_GetObjectItemCaseSensitive(j,"engine");
- if(!keys(e,"|cylinders||displacement_cc||injector_cc_min||fuel_density_g_cc||stoich_afr|")||!integer(e,"cylinders",t.cylinders))return false;
+ if(!keys(e,"|cylinders||displacement_cc||injector_cc_min||fuel_density_g_cc||stoich_afr|")||!integer(e,"cylinders",t.cylinders)||t.cylinders!=4)return false;
  auto number_float=[](const cJSON*o,const char*k,float&v){double n;if(!web::number(o,k,n)||std::abs(n)>1e6)return false;v=static_cast<float>(n);return true;};
  t.firing_order={1,3,4,2};t.injection_end_deg=540;t.cam_sync_deg=450;t.cam_window_deg=20;
  if(schema>=2){

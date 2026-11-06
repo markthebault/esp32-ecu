@@ -69,7 +69,7 @@ public:
   const auto expired=expiry(now);if(expired!=Cause::None)trip(now,expired,io);
   const bool changed=c.tune_revision!=command_.tune_revision||c.sensor_revision!=command_.sensor_revision||c.configuration_epoch!=command_.configuration_epoch||
    c.slots!=command_.slots||c.missing!=command_.missing||c.max_rpm!=command_.max_rpm||
-   c.angle.strategy!=command_.angle.strategy||c.angle.firing_order!=command_.angle.firing_order||
+   c.angle.strategy!=command_.angle.strategy||c.angle.cylinders!=command_.angle.cylinders||c.angle.firing_order!=command_.angle.firing_order||
    c.angle.tooth1_btdc_deg!=command_.angle.tooth1_btdc_deg||c.angle.cam_sync_deg!=command_.angle.cam_sync_deg||
    c.angle.cam_window_deg!=command_.angle.cam_window_deg||c.angle.injection_end_deg!=command_.angle.injection_end_deg||
    c.angle.max_duty!=command_.angle.max_duty||c.angle.max_injection_ms!=command_.angle.max_injection_ms||c.angle.max_dwell_ms!=command_.angle.max_dwell_ms||
@@ -79,7 +79,10 @@ public:
   if(!c.sequence||c.sequence<=command_.sequence||c.command_us>now||c.sampled_us>now||
      now-c.command_us>=20000||now-c.sampled_us>=20000){trip(now,Cause::CommandTimeout,io);return;}
   if(c.max_injector_high_us<1000||c.max_injector_high_us>15000||c.max_coil_high_us<500||c.max_coil_high_us>3500){trip(now,Cause::Plan,io);return;}
-  if(!engine::demand_valid(c.angle,c.output,c.output.rpm)){trip(now,Cause::Plan,io);return;}
+  // This executor and its IO, masks, published diagnostics and auxiliary
+  // arbitration still implement the four-cylinder target contract. Expanded
+  // logical profiles must not partially execute through this older boundary.
+  if(c.angle.cylinders!=4||c.output.cylinder_count!=4||!engine::demand_valid(c.angle,c.output,c.output.rpm)){trip(now,Cause::Plan,io);return;}
   if(c.output.proposed_enabled()){
    if(!c.output.spark_cut&&std::llround(c.output.dwell_ms*1000)>c.max_coil_high_us){trip(now,Cause::Plan,io);return;}
    for(unsigned cylinder=0;cylinder<4;++cylinder)if(!c.output.fuel_cut&&std::llround(c.output.pulse_for(cylinder)*1000)>c.max_injector_high_us){trip(now,Cause::Plan,io);return;}
