@@ -1,25 +1,23 @@
 # Tuning and log interoperability
 
-Use [esp32-ecu-boost.ini](esp32-ecu-boost.ini) for **own011 / tune schema10**. TunerStudio MS Lite3.3.01 now loads, edits and saves this definition offline. The [application-saved fixture](examples/tunerstudio-boost-roundtrip.msq) changes all three boost tables; Python/native and browser import/save/export retain every calibration field. Earlier own001..010 definitions and files remain historical.
+Use [esp32-ecu-profiles.ini](esp32-ecu-profiles.ini) for **own012 / tune schema11**, with1–8 virtual cylinders. TunerStudio MS Lite3.3.01 loads, edits and saves this definition offline. Actual cylinder8 fuel/spark edits reconstruct the complete12288-byte calibration page. Earlier own001..011 definitions and application fixtures remain historical.
 
-**Online support remains unresolved.** A fresh own011 trial reports unsupported firmware after valid discovery, with zero calibration/runtime reads, writes or burns. The same unmodified application previously completed those operations against a separate genuine production Speeduino reference. [Current application diagnosis](../docs/engine-tuning-application.md) records both scopes. No vendor identity is imitated.
+Current identity: `ESP32ECU DEV 012 INHIBITED`. Serial discovery returns `002`. The single12288-byte calibration page stages the entire tune; a successful burn validates, persists and activates it, resets control and reacquires phase. Live data is1152 bytes,1159 framed. These portable transport operations work in native tests; physical USB is unverified and engine outputs remain inhibited.
 
-Current identity: `ESP32ECU DEV 011 INHIBITED`. Serial discovery returns `002`. One12288-byte calibration page stages the entire tune; a successful burn validates/persists/activates it, resets control and reacquires phase. Live data is1152 bytes,1159 framed. Physical engine outputs remain inhibited. See [USB/host transport](../docs/engine-usb-tuning.md) before connecting any hardware.
+**Supported online TunerStudio integration remains unresolved.** The latest fresh application rejection used own011, after valid discovery but without calibration/runtime reads, writes or burns. Own012 online acceptance is unverified. A separate genuine production Speeduino reference provided the historical positive control. No vendor identity is imitated. See the [application evidence and limitations](../docs/engine-tuning-application.md) and [USB/host transport guide](../docs/engine-usb-tuning.md).
 
-[Editor limits](editor-limits.json) bind the current33 general scalars, six curves and three timing values to the native validator, including four-cylinder support and a5..45° cam window. Coupled fan/rev/axis/idle/boost rules still require whole-tune validation. These editor changes do not add cylinder or trigger support.
+[Editor limits](editor-limits.json) include the current1–8 cylinder domain. Cross-field, table-axis, timing, idle and boost rules still require whole-tune validation. Additional virtual cylinders have no fitted PCB drivers beyond the existing4+4 commands.
 
-Python and browser exports use unitless boost option fields. The earlier Python own011 exporter incorrectly labelled three bit fields as percent; that caused actual application warnings. Values and wire layout are unchanged. Re-exporting an older file corrects its metadata without rescaling calibration.
-
-Own004..011 origin revision is read-only metadata. TunerStudio omits it from saved MSQs. Browser import retains the loaded editor CAS; a competing writer still rejects. Python import accepts an explicit `base_revision`; without one,1 is only an offline placeholder. An application-saved file cannot discover a live backend revision.
+Origin revision is read-only metadata. TunerStudio omits it from saved MSQs; the browser retains the loaded editor CAS when importing. Python import accepts an explicit `base_revision`; without one,1 is an offline placeholder. An application-saved file cannot discover the live backend revision. Competing writers must reject stale commits.
 
 ```sh
 python3 scripts/generate_tunerstudio_ini.py
 python3 tools/engine_msq.py INPUT.json NEW_OUTPUT.msq
-python3 tools/web_server.py --tuner-port 29000 --tuner-pty .cache/engine/NEW-PTY
+python3 tools/web_server.py --port 8765 --state .cache/engine/NEW-PREVIEW/profile.json --tuner-port 29000 --tuner-pty .cache/engine/NEW-PTY
 ```
 
-Use fresh ports/paths and one owner per state file. The host endpoints share the synthetic simulator store and execute the target's portable C++ Session/Stream, without attaching to an ESP32.
+The generator updates the current own012 definition and layout manifest; archived definitions remain separate. Use fresh ports/paths and one owner per state file. Host endpoints share the synthetic simulator store and execute the portable C++ transport without attaching to an ESP32.
 
-MegaLogViewer HD Lite4.6.14 opens and plots current245-column engine MSL008 boost/protection data and202-column direct-SIL008 control-state data. The latter trial has300 rows from the existing unvalidated regression plant and plots BoostReason6..8; it adds file compatibility evidence, not a new engine benchmark. Source, age and validity flags remain authoritative. Vendor-derived AFR* can show misleading extrema for unavailable lambda; graph displays also cannot establish exact enormous counters. Preserve JSON and raw MSL for those audits. [Observability and viewer limitations](../docs/engine-observability.md).
+MegaLogViewer HD Lite4.6.14 opens and plots the current **265-column engine MSL009** and **245-column direct-SIL009** files, including cylinder8 and full output masks. These are file-compatibility checks. Vendor-derived AFR extrema can misrepresent unavailable lambda, and plotted huge counters may lose precision; preserve source/age/validity fields, JSON and raw MSL. See [observability](../docs/engine-observability.md) and the [current cylinder-profile evidence](../docs/engine-cylinder-profiles.md).
 
-[Reviewed current application evidence](../reports/engine/tuning-apps-011/README.md) preserves the initial unit warnings, corrected real-app files, raw online rejection, plots and independent checks. The [vendor request](vendor-integration-request.md) is updated locally and remains unsent. Supported online integration, target USB/load/timing, autotune and wider [ECU feature parity](../docs/engine-feature-coverage.md) remain open.
+The [own011 application packet](../reports/engine/tuning-apps-011/README.md) retains earlier boost-table edits, unit-warning corrections and online rejection. Its formats are historical. The [vendor request](vendor-integration-request.md) remains local and unsent. Online integration, physical USB/load/timing, autotune and wider [feature parity](../docs/engine-feature-coverage.md) remain unfinished.

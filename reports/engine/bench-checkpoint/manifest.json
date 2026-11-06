@@ -1,0 +1,1887 @@
+{
+  "status": "accepted_software_bench_checkpoint_feature_scope_frozen",
+  "runtime_baseline": "22b2df6d2e6da3a7c9db0473f1dce3303b43261b",
+  "goal_complete": false,
+  "feature_expansion_stopped_by_user": true,
+  "engine_outputs_inhibited": true,
+  "physical_engine_or_RF_or_vehicle_qualified": false,
+  "flashed": false,
+  "host_tests": 99,
+  "native_suite_passed": true,
+  "native_test_binary_sha256": {
+    ".cache/engine/checkpoint-native-001/boost_control-test": "57707800aa080436b680ebf23103a35bc0df25457cce9780bd92d73954652fd7",
+    ".cache/engine/checkpoint-native-001/control-test": "432192602c3847666990c1690d9752b07e352ec34e77561bc0ab5b61ab4ad768",
+    ".cache/engine/checkpoint-native-001/engine-boost-test": "0528964b0a77ea4a8623ebca2d44ae76a126ee3ae4f396e9c2f28fc20de56447",
+    ".cache/engine/checkpoint-native-001/engine-cylinder-test": "9efe6deaaf29758d878ed4f7b998a50ab403d1a91ee247e3c04b5d226d70bd14",
+    ".cache/engine/checkpoint-native-001/engine-log-service-test": "84b6c103b9644cfcc29f87a3a545ffb9f608203c741dd6b9ec8523bdd2a32ac2",
+    ".cache/engine/checkpoint-native-001/engine-observability-test": "2e0aa6828d25f97a421240872a97b60de008097c4445f88807034ef0d7c1fd58",
+    ".cache/engine/checkpoint-native-001/engine-phase-test": "d6df403f5c3cfc062dd8e638fb712e083a477f84baaa984fe1f14c88198da7d1",
+    ".cache/engine/checkpoint-native-001/engine-semi-test": "ed40ce27f2de43adae339a3af37cc170a1a0b920ef815c9c6b0fbacdc708725c",
+    ".cache/engine/checkpoint-native-001/engine-storage-test": "092b4c9b044ada56d7b97e7435588296d4e7adea26d5e0d83d6a8de073b7c219",
+    ".cache/engine/checkpoint-native-001/engine-test": "4241ea69150b73d1f42e6343a0d7e78ee89b8364118bf93c4c0793f57f4e07c6",
+    ".cache/engine/checkpoint-native-001/engine_flex-test": "bbe4729b05184e88367480d945c79254313800c573ca9b2475ff81cd470e5888",
+    ".cache/engine/checkpoint-native-001/engine_load-test": "8eebdf4c2657e973d82ba4c865fad4cc1ba96c820235e37a255cc0f86bb5a348",
+    ".cache/engine/checkpoint-native-001/engine_profile_executor-test": "bd1b678016d761842e4bbac2c8cfadb940316ffd6cc43fee69a92acd04a45722",
+    ".cache/engine/checkpoint-native-001/engine_profiles-test": "aed9691c2389aa6716e8462e1bfb8879e30f22b6c4a4ddb6fcc6d6d1a221decb",
+    ".cache/engine/checkpoint-native-001/engine_radio_boost-test": "8a8d1435ae10ad3c5d65ff2589b95becb75149aabfe3178153d0081ab9c11495",
+    ".cache/engine/checkpoint-native-001/engine_radio_flex-test": "9aad20c13dda4f7ff92a263fd0a6c87e70c956c60fc0fbd81ffb57b4b9a3412d",
+    ".cache/engine/checkpoint-native-001/engine_secondary-test": "0abc9e6aec3fa4ed631d7e61e9adfdfdfd55d59a47bb5c85412c3c0c15c13cfe",
+    ".cache/engine/checkpoint-native-001/engine_transient-test": "5a4c8a8b248e6753127b1f0b6b1724fe8afe5315d20386240815a07a00040795",
+    ".cache/engine/checkpoint-native-001/flex_capture_owner-test": "577aa26ae6da2273f5c6566caaffb1c990c3b55f3a0fd5e21bc637e53c362a38",
+    ".cache/engine/checkpoint-native-001/flex_fuel-test": "f11dd3c58102f9025b96be43963eaf73467ddc1d4768f195641f47b35ef8d226",
+    ".cache/engine/checkpoint-native-001/flex_ingress-test": "2562ed2050470e53a60785778aa6328f7ee25be4ca1e39ead7c3690041e8e4ff",
+    ".cache/engine/checkpoint-native-001/idle_control-test": "00a53242edb2045e6f450f7b38f5705fbf8d0ad7202834dd1d5b3d6b97780a7c",
+    ".cache/engine/checkpoint-native-001/idle_pwm-test": "3789d5adf6dfdcef5b70b3791f3f78c183766f7aaddb9d0319f8baeb704055fa",
+    ".cache/engine/checkpoint-native-001/load_model-test": "b1585c7e1b73ae0806d83a9005272892b50e78089396e325dc58f4c636e37bf6",
+    ".cache/engine/checkpoint-native-001/secondary_tables-test": "2e309eb3e1274a38a6a4b77c5411f54a588a05a28bdd3e8c29477f4b88b529ae",
+    ".cache/engine/checkpoint-native-001/shared-i2c-service-test": "ecbe9c0a5d1e0f03abd6d24529c4d04da6e5648d06191035ff85d63efe96826f",
+    ".cache/engine/checkpoint-native-001/status_led-test": "0cb97afbce4e732bc6fde33b927fa3ff08fbf14b195811f1407e092c46d2bdc0",
+    ".cache/engine/checkpoint-native-001/switch-service-test": "3ec4ad692742aea045fbf60caf7150eb9a6b47a1b169dc08bec3cc489794792e",
+    ".cache/engine/checkpoint-native-001/switch_acquisition-test": "1330cb605b4da1c5954e83471fd5282a0d51436279d623efa04ba70238aa0c62",
+    ".cache/engine/checkpoint-native-001/switch_transport-test": "17fdb66b3c8968d290cfe67260baab6b96812c25b714b466497441b33158243e",
+    ".cache/engine/checkpoint-native-001/timing-executor-test": "d1266cf17f130d8f94f97ae41a7461e1e08196c16820b47d0f5dbddd32c5c0b1",
+    ".cache/engine/checkpoint-native-001/transient_enrichment-test": "63be8a82b255785065c02a43860570310d682a63cb88560acab86ab5bd8a6760",
+    ".cache/engine/checkpoint-native-001/trigger-log-json-test": "52d72e436e0f2d09a2fab7be7dfdf77ca299ab8d65478ce3f79a771cd9846483",
+    ".cache/engine/checkpoint-native-001/trigger-log-test": "37d42c8228d87e1f3b7840ef62dc28d9dd72d375c75c28d38d6ce220a3cf9bb3",
+    ".cache/engine/checkpoint-native-001/tuning-allocation-test": "513842de72012935d138fa103ff6e0ee139fa6aec0b93199fa88d06d2a982b97",
+    ".cache/engine/checkpoint-native-001/tuning-test": "2724c08f9caeedfc7a5c604a99270b3931eab90a26ebeed3eccb233894eeab6c"
+  },
+  "native_service_runs": [
+    ".cache/engine/flex-target-suite-1793955926-2123167",
+    ".cache/engine/flex-radio-suite-1793955942-2123167"
+  ],
+  "browser": {
+    "profiles": {
+      "report_sha256": "c5f3fab4165e8f2a51c96cdaf4131d39227144eed5186b5e4c39f951318941c5",
+      "checks": [
+        "Actual count/order/trims editor saves8 cylinders and retains inactive C8 calibration across8\u21923\u21928",
+        "Browser own012 full MSQ preserves all223 constants and12288 native page bytes including C8",
+        "All eight count choices expose only active editors; malformed declared table dimensions are rejected",
+        "UI executes eight-cylinder native SIL and browser/native coherent exports agree across265 fields",
+        "Every preserved legacy JSON default migrates to the same native calibration bytes in Chrome and C++",
+        "Eight-cylinder editor and live/log controls fit320/390/768/1440px"
+      ]
+    },
+    "tuning": {
+      "report_sha256": "2cf42833697da2d46064f7e7ad4cd3f284a85d5d803e0994e848d21c0d4826aa",
+      "checks": [
+        "Host diagnostics never claim target USB or application presence",
+        "Actual native session staging and protocol errors are visible",
+        "Diagnostics export preserves counters, source and unknown driver drops",
+        "Own012 file origin is metadata, explicit Save uses loaded editor CAS",
+        "Browser own012 complete-page MSQ roundtrips through native validation with unitless boost choices",
+        "Concurrent writer is never silently rebased during file import",
+        "Historical own004 application file may omit its origin; missing metadata never rebases stale editor",
+        "Historical own001/002/003/010 application-authored MSQs migrate to schema11 with boost disabled",
+        "Actual own011 application-edited three-table file imports, saves with editor CAS and exports with every calibration field preserved",
+        "Diagnostics and own012/legacy import UI fit320/390/768/1440px"
+      ]
+    },
+    "pairing": {
+      "report_sha256": "65998b4df2ff768bd677d90cd08b0a7162b8d4973acadc36a671321b71afb5fe",
+      "checks": [
+        "Owned host starts with no peers and explicitly synthetic radio/LED status",
+        "UI opens/cancels pairing; requested blue blink and normal green agree with backend",
+        "Candidate confirmation stores one peer without claiming a physical connection",
+        "Reload retains the saved peer; UI unpair persists and desktop/mobile controls work"
+      ]
+    },
+    "led": {
+      "report_sha256": "6f2c2a6ac833f5ab9320658e22469f58e76ed7ff1e801c0d36d02e50b2984776",
+      "checks": [
+        "Host fixture explicitly has no measured LED/expander",
+        {
+          "fixture": "green_ready",
+          "text": "Requested steady green. Expander latch verified green, 5.0 ms old. Advisory only; light output and live CPU health are unproven."
+        },
+        {
+          "fixture": "led_timeout",
+          "text": "Requested steady green. Historical latch: green, 114.8 ms old. Current verification unavailable (i2c_timeout, SDK 263). Advisory only; light output and live CPU health are unproven."
+        },
+        {
+          "fixture": "led_recovered",
+          "text": "Requested steady green. Expander latch verified green, 4.8 ms old. Advisory only; light output and live CPU health are unproven."
+        },
+        {
+          "fixture": "shared_bus_fault",
+          "text": "Requested steady green. Historical latch: green, 115.0 ms old. Current verification unavailable (i2c_timeout, SDK 263). Advisory only; light output and live CPU health are unproven."
+        },
+        {
+          "fixture": "bus_recovered",
+          "text": "Requested steady green. Expander latch verified green, 9.8 ms old. Advisory only; light output and live CPU health are unproven."
+        },
+        {
+          "fixture": "stale_latch",
+          "text": "Requested steady green. Historical latch: green, 259.8 ms old. Current verification unavailable (none, SDK 0). Advisory only; light output and live CPU health are unproven."
+        },
+        {
+          "rejected_malformed_ready_payloads": [
+            {
+              "name": "ready_string",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "fresh_string",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "known_string",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "allocated_string",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "error_string",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "error_nan",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "error_range",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "fault_contradiction",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "prototype",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "constructor",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "object_pattern",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "wrong_pattern_color",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "bad_mask",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "string_mask",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "unverified_write",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "wrong_phase",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "numeric_time",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "leading_zero",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "u64_overflow",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "future_read",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "future_completion",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "reversed_completion",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "stale_ready",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "wrong_contract",
+              "text": "LED readback is unknown or inconsistent. The indicator is advisory; light output and live CPU health are unproven."
+            },
+            {
+              "name": "wrong_source",
+              "text": "Requested policy: steady green. Hardware readback is unavailable; the indicator is advisory."
+            }
+          ]
+        },
+        "U64 ages, unknown/legacy sources, literal fault markup, failed-poll clearing and mobile overflow passed"
+      ]
+    }
+  },
+  "build": {
+    "created_utc": "2026-11-06T08:59:20.767490+00:00",
+    "command": [
+      "pio",
+      "run",
+      "-d",
+      "/home/mark/persospace/esp32-ecu/firmware",
+      "-e",
+      "compact_n16r8_web",
+      "-e",
+      "compact_n16r8_flex_dev",
+      "-e",
+      "compact_a3_web"
+    ],
+    "exit_code": 0,
+    "build_dir_override": "/home/mark/persospace/esp32-ecu/.cache/engine/checkpoint-build-001/build",
+    "environments": [
+      "compact_n16r8_web",
+      "compact_n16r8_flex_dev",
+      "compact_a3_web"
+    ],
+    "default_cache_retained": true,
+    "default_cache_unchanged": true,
+    "source_inputs_unchanged": true,
+    "generated_sdkconfigs": [
+      {
+        "environment": "compact_n16r8_web",
+        "original_present": true,
+        "original_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+        "retained": "retained-sdkconfigs/sdkconfig.compact_n16r8_web",
+        "after_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+        "after_copy": "sdkconfigs-after/sdkconfig.compact_n16r8_web"
+      },
+      {
+        "environment": "compact_n16r8_flex_dev",
+        "original_present": true,
+        "original_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+        "retained": "retained-sdkconfigs/sdkconfig.compact_n16r8_flex_dev",
+        "after_sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33",
+        "after_copy": "sdkconfigs-after/sdkconfig.compact_n16r8_flex_dev"
+      },
+      {
+        "environment": "compact_a3_web",
+        "original_present": true,
+        "original_sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c",
+        "retained": "retained-sdkconfigs/sdkconfig.compact_a3_web",
+        "after_sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c",
+        "after_copy": "sdkconfigs-after/sdkconfig.compact_a3_web"
+      }
+    ],
+    "artifacts": [
+      {
+        "path": "build/compact_a3_web/firmware.bin",
+        "bytes": 1791968,
+        "sha256": "2b69c7a27e705a68745965929e366822571080e9443f5c82aad17cf612a1952f"
+      },
+      {
+        "path": "build/compact_a3_web/firmware.elf",
+        "bytes": 14590980,
+        "sha256": "5602ff1d019a8ca6422db611103f45cd6ec04df0f3f2381cac512493f0b26439"
+      },
+      {
+        "path": "build/compact_n16r8_flex_dev/firmware.bin",
+        "bytes": 1834560,
+        "sha256": "5d32e2b48eed2335729a21598cd22c2795a66aef67bc4c14672eb4a481e781fa"
+      },
+      {
+        "path": "build/compact_n16r8_flex_dev/firmware.elf",
+        "bytes": 14856228,
+        "sha256": "87c58dce6f0d66624ec4c63fdfd4ebc545d4f4b93d4d62baa0c38de6c495b880"
+      },
+      {
+        "path": "build/compact_n16r8_web/firmware.bin",
+        "bytes": 1802832,
+        "sha256": "f2d2d02dba16b312e1938e53f8e337b4c930b80026d931174c2108a22c3bdcdc"
+      },
+      {
+        "path": "build/compact_n16r8_web/firmware.elf",
+        "bytes": 14632892,
+        "sha256": "30ff3197d2c08b21b43e3707f427327c75b7d3d6c0c719748996adb65073d468"
+      }
+    ],
+    "elf_archives": [
+      {
+        "environment": "compact_a3_web",
+        "path": "elf-archives/compact_a3_web.elf.gz",
+        "bytes": 5031375,
+        "sha256": "f3723131d7481941b3d4043d5832c64fefdca19baf3a41ba7483533fa6d008ab",
+        "elf_bytes": 14590980,
+        "elf_sha256": "5602ff1d019a8ca6422db611103f45cd6ec04df0f3f2381cac512493f0b26439"
+      },
+      {
+        "environment": "compact_n16r8_flex_dev",
+        "path": "elf-archives/compact_n16r8_flex_dev.elf.gz",
+        "bytes": 5089119,
+        "sha256": "bfe27c89b1084c4ad02d547bc281741ec546c6edc9a6bcf641c182bf0321f466",
+        "elf_bytes": 14856228,
+        "elf_sha256": "87c58dce6f0d66624ec4c63fdfd4ebc545d4f4b93d4d62baa0c38de6c495b880"
+      },
+      {
+        "environment": "compact_n16r8_web",
+        "path": "elf-archives/compact_n16r8_web.elf.gz",
+        "bytes": 5076385,
+        "sha256": "acf6005584caecbc57c51231ef7ad0b163bc72e080c9009b9b9c8124aa4881bc",
+        "elf_bytes": 14632892,
+        "elf_sha256": "30ff3197d2c08b21b43e3707f427327c75b7d3d6c0c719748996adb65073d468"
+      }
+    ],
+    "generated_assets_sha256": "edbfca6df9d529b262c6698f9a5ed96b3ba5ccb4f5b5dbfbc4f9bb1c7589aadd",
+    "web_index_sha256": "88f7dcab0099f7adf715bb10ad64786b9510ef7cdb4c36ac9879b278570b89f1",
+    "embedded_UI": [
+      {
+        "environment": "compact_n16r8_web",
+        "web_expected": true,
+        "current_index_in_flash_rodata": true
+      },
+      {
+        "environment": "compact_n16r8_flex_dev",
+        "web_expected": true,
+        "current_index_in_flash_rodata": true
+      },
+      {
+        "environment": "compact_a3_web",
+        "web_expected": true,
+        "current_index_in_flash_rodata": true
+      }
+    ],
+    "declared_generation_changes": [],
+    "generation_only_declared_output": true,
+    "flashed": false,
+    "physical_qualification": false
+  },
+  "local_build_artifacts": [
+    {
+      "path": "build/compact_a3_web/firmware.bin",
+      "bytes": 1791968,
+      "sha256": "2b69c7a27e705a68745965929e366822571080e9443f5c82aad17cf612a1952f",
+      "local_path": ".cache/engine/checkpoint-build-001/build/compact_a3_web/firmware.bin"
+    },
+    {
+      "path": "build/compact_a3_web/firmware.elf",
+      "bytes": 14590980,
+      "sha256": "5602ff1d019a8ca6422db611103f45cd6ec04df0f3f2381cac512493f0b26439",
+      "local_path": ".cache/engine/checkpoint-build-001/build/compact_a3_web/firmware.elf"
+    },
+    {
+      "path": "build/compact_n16r8_flex_dev/firmware.bin",
+      "bytes": 1834560,
+      "sha256": "5d32e2b48eed2335729a21598cd22c2795a66aef67bc4c14672eb4a481e781fa",
+      "local_path": ".cache/engine/checkpoint-build-001/build/compact_n16r8_flex_dev/firmware.bin"
+    },
+    {
+      "path": "build/compact_n16r8_flex_dev/firmware.elf",
+      "bytes": 14856228,
+      "sha256": "87c58dce6f0d66624ec4c63fdfd4ebc545d4f4b93d4d62baa0c38de6c495b880",
+      "local_path": ".cache/engine/checkpoint-build-001/build/compact_n16r8_flex_dev/firmware.elf"
+    },
+    {
+      "path": "build/compact_n16r8_web/firmware.bin",
+      "bytes": 1802832,
+      "sha256": "f2d2d02dba16b312e1938e53f8e337b4c930b80026d931174c2108a22c3bdcdc",
+      "local_path": ".cache/engine/checkpoint-build-001/build/compact_n16r8_web/firmware.bin"
+    },
+    {
+      "path": "build/compact_n16r8_web/firmware.elf",
+      "bytes": 14632892,
+      "sha256": "30ff3197d2c08b21b43e3707f427327c75b7d3d6c0c719748996adb65073d468",
+      "local_path": ".cache/engine/checkpoint-build-001/build/compact_n16r8_web/firmware.elf"
+    }
+  ],
+  "build_artifacts_rechecked_after_review": true,
+  "build_source_sha256": {
+    "config/defaults.json": "e61fb310f60ddc801bbc2dec0dca288314ed124761b7fc35087aee10687ba617",
+    "config/engine-profile.json": "d8e2e028f8e30b1a7caeb718b149f98bdff412be42bb0212b15edbc4741b31dc",
+    "config/engine-radio-v5.json": "c23e5de6cee6d5dd88ceb44993e3fe3676fed9730ee8621704c501c6dba62c27",
+    "config/engine-radio-v6.json": "9356e292ac103667768a80842253cedff19e44823d63dea58ea5a653f8c622d1",
+    "config/engine-radio-v7.json": "e277a9afa375293990ae44c840cb51d6ac23763b88d153bfa8c2ca52037ce02e",
+    "config/engine/defaults-v10.json": "f43aff000bf2c398c5bea7a2a3873b32d6997b217496a0bc3182625b7aaf356d",
+    "config/engine/defaults-v2.json": "81195ce83acaafefc02ebe955c2d1d92656f41f015beb8c57bad6745139fd769",
+    "config/engine/defaults-v3.json": "9274e32ff7f0f0debe253f95304241a398b6b9c10fe04b868048fda4cf19d835",
+    "config/engine/defaults-v4.json": "5c18c92edab479ddafa47e207928a0bd29aa68fcdf7e55708ff9514ab8cee01e",
+    "config/engine/defaults-v5.json": "e169b5e20eb15f18cf4e61a8eb385c9cded0a0fcf9ca6bb65ad1df6abf58dda9",
+    "config/engine/defaults-v6.json": "c9007e8875392e436771cd64778d4ac1e17f8d85ff112d401d4293a6cfb46dba",
+    "config/engine/defaults-v7.json": "34f6fde4104352d9fb181c1b15a52e228e398946b54f7eba6651f92eb394ae4c",
+    "config/engine/defaults-v8.json": "98edc81ac7c840d5f83c337dcab06a84a1642bf2ddf82c998b09481f18d434f6",
+    "config/engine/defaults-v9.json": "abdd064e74ace0c55fa8b2060dcfe4a0f8f4f83b20cac346578bc4f245b1ab24",
+    "config/engine/defaults.json": "b24680872f36721591b10c15f643cd10c985e30f5bd860b96591b203a00d3f2e",
+    "config/engine/fixtures/legacy-near-limit-v2.json": "aae06cf5c684837cd533d957bac536a972ee053a0e626b2a7cebaceb297fcbc6",
+    "config/engine/fixtures/transient-legacy-v5.csv": "082b36961bd194c65a093d92e27f97555675ceaf0fae18e8f8df56a700e98803",
+    "config/interface-guide-development.json": "2ab538d085124556c36f4ec1acf8d2b0b3aaac74767d7972802583a38a4b7bf9",
+    "config/interface-guide.json": "49e04d0d7e31a2297ca0a70925ac49bdbdc70e97cd00e6f4784bf5937b446ebf",
+    "config/manual.json": "24d9eb07660ecb40e9ab0ab5ea76ec2aeb8ea7fe704d0abe90d00f6efc10f142",
+    "firmware/CMakeLists.txt": "2299abd9933a68ed1adcf5c3ee6f583b50d6e48a4f95aa18cb00c111b62b8f53",
+    "firmware/boards/esp32-s3-44pin-n16r8.json": "b1bbabedd526699167fd6531971ac5620776070712cfdaf6fbefc0ceb9962a2b",
+    "firmware/components/esp_driver_usb_serial_jtag/CMakeLists.txt": "854d00de5fe0f3d271b4d7c86ea9920f6234e074b6386c3b7acc23d3ce580613",
+    "firmware/components/esp_driver_usb_serial_jtag/Kconfig": "8ef250dc1ab81bb2646a21234a6184945a8a4baa024473a30198c4b237f128ea",
+    "firmware/components/esp_driver_usb_serial_jtag/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "firmware/components/esp_driver_usb_serial_jtag/README.md": "21d5d8f115c7fe61d24e682ba462d3e6e7d4b4f2feb1d1fff8b9547e7d9ed5bc",
+    "firmware/components/esp_driver_usb_serial_jtag/include/driver/esp_private/usb_serial_jtag_vfs.h": "6bd0d7bbd68bb0bcf854836afdbbf11c1ba7b34e1d71e2e041b8c618ea352577",
+    "firmware/components/esp_driver_usb_serial_jtag/include/driver/usb_serial_jtag.h": "88e03e1650895708da6844ab0c1409bc717ac3c0e775cef2e3e3531e67558b50",
+    "firmware/components/esp_driver_usb_serial_jtag/include/driver/usb_serial_jtag_select.h": "e633508e776ce690f7d4c758b5feaa3f71223b6add612138899e010ffa3853c8",
+    "firmware/components/esp_driver_usb_serial_jtag/include/driver/usb_serial_jtag_vfs.h": "844aff0b95770b7a961ade36cadefaa1ad56714f4ef3fdf7580617875965ae1c",
+    "firmware/components/esp_driver_usb_serial_jtag/linker.lf": "962c75077a584c3fc31be99ee40680ca1f748f193e473737fb09e8d4989816fe",
+    "firmware/components/esp_driver_usb_serial_jtag/src/usb_serial_jtag.c": "6316295b4776a662f0feea6117eab665877d7587f4bd5dce8d64ac1dd6cf0670",
+    "firmware/components/esp_driver_usb_serial_jtag/src/usb_serial_jtag_connection_monitor.c": "58779a75668f9d253a7f0ea0c8a7bbb194204a41b8979b98b7261c1954c5d29d",
+    "firmware/components/esp_driver_usb_serial_jtag/src/usb_serial_jtag_vfs.c": "0d333e9a6bf94cd58e1abdcfc63a34b14fb0c6696ce1772835f20f9411b968d7",
+    "firmware/components/esp_driver_usb_serial_jtag/upstream.json": "31e4a36bef01106a7655e98710a9b7a10490c3ebd6bdb25a5cf1545379409971",
+    "firmware/components/nvs_flash/.build-test-rules.yml": "6adac5c72c7b4157d7546eb657c091e029e61f92f920b05eb3d09ff6d938d6b5",
+    "firmware/components/nvs_flash/.gitignore": "3a4dff6136f4a4e8d1cc4c7b4b68a477ad5adacfb07488dd09f7ec28254985ee",
+    "firmware/components/nvs_flash/CMakeLists.txt": "5c9c64cdec8d94313a95fa186ba9d689e930b6d8c71e1935e17115aec2fab320",
+    "firmware/components/nvs_flash/Kconfig": "d9bcf22c47c6837abd4059c717513f01e6de6f78519caef10853610276cfa531",
+    "firmware/components/nvs_flash/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "firmware/components/nvs_flash/README.ecu.md": "d325afcec8fbbc34fc29b5c5496853d76b4b13c7ae6a93a619df9306fb946f76",
+    "firmware/components/nvs_flash/ecu-chunk-identity.patch": "d49f9e6e15ac485286be0bddcc34359767ae90485ee202ea6576e0cafa67b3a4",
+    "firmware/components/nvs_flash/ecu-source-manifest.json": "8b9228bc74e26763c7089fc055b8689c6b680701956041d966de79d874beb4b2",
+    "firmware/components/nvs_flash/include/nvs.h": "d961b401c3fa771c8cabdcf1ed19008b8044281b964990648d012c2ac81e0883",
+    "firmware/components/nvs_flash/include/nvs_bootloader.h": "01a7ecc50c11957c99f68e2b7153c3caa9c07eed4748896d301f79c6fc5f026b",
+    "firmware/components/nvs_flash/include/nvs_flash.h": "5a88848045df9a98ab8aaa21cfb7fac20e2501bb72f638a079cdbba505426235",
+    "firmware/components/nvs_flash/include/nvs_handle.hpp": "e57cd9e1d142f58ab54f63490eec3471374d7c987440be5b69ef8107625d9299",
+    "firmware/components/nvs_flash/private_include/nvs_bootloader_aes.h": "3118d5ba074773f90e920c0dd8a5abf2ffd355c1ac3d55d8dcf08c9822a4abb9",
+    "firmware/components/nvs_flash/private_include/nvs_bootloader_private.h": "50ab38e47dcf917d014eda1951bd1495edf630fa84d681a7ed088a7f9a5d880a",
+    "firmware/components/nvs_flash/private_include/nvs_bootloader_xts_aes.h": "727f887c972354bc264970ea98887412b16f2f7e5f734f3109c282a707866d3d",
+    "firmware/components/nvs_flash/private_include/nvs_constants.h": "e025890b9206bd02177b8dc5a0a3983935fae53981a865cb51ff0f12de8e1491",
+    "firmware/components/nvs_flash/private_include/nvs_internal.h": "35bb059de16051719264201ada61359298b8ad65b9a7a2312963786e35ea0e4f",
+    "firmware/components/nvs_flash/project_include.cmake": "30f6e6f8a565be2655c7be9e0a48ff543738486773c04cd7964d30a2175434e9",
+    "firmware/components/nvs_flash/src/compressed_enum_table.hpp": "d58581136460d226d339a52d1370eaf0094ca03d4beb758fed6c4e19cf155119",
+    "firmware/components/nvs_flash/src/intrusive_list.h": "8160b3e8f398779b0d96e06f17a86bc84e75dbd12ec680b33dc4a091aa83679a",
+    "firmware/components/nvs_flash/src/nvs.hpp": "7ed78d8cc4fd33b9f58a61333bfae14f1b7bcc0e04e86a5dc231f6002c2b719b",
+    "firmware/components/nvs_flash/src/nvs_api.cpp": "9e2c748145c2a1d9a0798062316382ee24c2eeb18e17c9c43676a3c8bc323e4f",
+    "firmware/components/nvs_flash/src/nvs_bootloader.c": "4ac4be068f3be71e6f2a67e8a656cff807cd7cc2a006a494719b40bcc3f0f2a4",
+    "firmware/components/nvs_flash/src/nvs_bootloader_aes.c": "2b3e8474662d47222e7bff4e31e06cbf844e1041b343d2f1b6c98590e28aaacc",
+    "firmware/components/nvs_flash/src/nvs_bootloader_xts_aes.c": "da31eb4ac95c8ee4f57d7008c964b15c49c3a16018da1a32dacd51b5a216822b",
+    "firmware/components/nvs_flash/src/nvs_cxx_api.cpp": "d87690718a1da92d24caf6a79991e3504cc6a63fb35b4f461993321959bbdfdc",
+    "firmware/components/nvs_flash/src/nvs_encrypted_partition.cpp": "b72ba854b4be61e057634472a819b681417b6b4a6924e7dbc52d591fe506116a",
+    "firmware/components/nvs_flash/src/nvs_encrypted_partition.hpp": "89fd7219664b374c0c59d1eeee2486b3007a5e2768cb0241a7bc59eed79b14af",
+    "firmware/components/nvs_flash/src/nvs_handle_locked.cpp": "981e68df64c75096a618c8094f0e70ed9154d532accb91eba1629a98e96b8cfc",
+    "firmware/components/nvs_flash/src/nvs_handle_locked.hpp": "597e0ad62da4edd2c04f0ac663c5a7298b51bae4a52577b155d0c071fa30580c",
+    "firmware/components/nvs_flash/src/nvs_handle_simple.cpp": "ff65228c44ee4945f54bdb073251ff2e0e39b3b9de7db4caa1e576606e172b91",
+    "firmware/components/nvs_flash/src/nvs_handle_simple.hpp": "2b3de0241aaf18eb2546c43c05c7f1395156982ef6650b60867f6cb38c719c11",
+    "firmware/components/nvs_flash/src/nvs_item_hash_list.cpp": "12e56f57671fb1b205cb27f07bf8b4c3cb4609c387c1bc7b60894925084d3d54",
+    "firmware/components/nvs_flash/src/nvs_item_hash_list.hpp": "cf0cee7c9cbbf1c3a9663586e57d48bf3621bd365c2c0027ba764f2c660538f0",
+    "firmware/components/nvs_flash/src/nvs_memory_management.hpp": "287b3ab799a2fc376e5a33356b57167a363278785c6a8eb2c04b664792b879aa",
+    "firmware/components/nvs_flash/src/nvs_page.cpp": "027dd96a2f0152e1651df0bc522ab7311e075353a2dd29bff90b8b7f5b1b4a38",
+    "firmware/components/nvs_flash/src/nvs_page.hpp": "4b4843f8f489b05a75372d9a0848e07273262d4fe97f17eef0b7f38d95020b2c",
+    "firmware/components/nvs_flash/src/nvs_pagemanager.cpp": "8a9e43a3cce72809d11d53fdff5c5ae8fc2ccbd4e567a95afccfc1361737f50f",
+    "firmware/components/nvs_flash/src/nvs_pagemanager.hpp": "a3a7084b3b93937832df7d5acca4858ab47150beaf40fcafe8bd9ddfbd91da1e",
+    "firmware/components/nvs_flash/src/nvs_partition.cpp": "84ebf8ce5f76de96e839f3d43b1b5a75704617c9050598ee1c10f19ed45a42f3",
+    "firmware/components/nvs_flash/src/nvs_partition.hpp": "4cb6ee7d507828aea3c42c2e943e43c35aa342637bba79fda067f2efda6bcc15",
+    "firmware/components/nvs_flash/src/nvs_partition_lookup.cpp": "53ec037cc100c6d316b2444fcc1316bfe5252a95cecebf282732defd61347057",
+    "firmware/components/nvs_flash/src/nvs_partition_lookup.hpp": "0518236f459daca6c1501e66cb06772f4d842eacd6c45dca1c96ee12a43d08ad",
+    "firmware/components/nvs_flash/src/nvs_partition_manager.cpp": "7f5d5f90b89b9a633e0c3a872b0bd9252e604e057ede8d2d5dccf0983757de1a",
+    "firmware/components/nvs_flash/src/nvs_partition_manager.hpp": "ace92968090c98bda373c70349db38cbdb2104edddb820fa8e6467d911ba2881",
+    "firmware/components/nvs_flash/src/nvs_platform.cpp": "34867e196e9e96ab2b740f37adc995d734918d185c921968786135fee54396ed",
+    "firmware/components/nvs_flash/src/nvs_platform.hpp": "62c7d950c157bbc06bf8dac809203b254763413f17815492c07f888f9c2f653a",
+    "firmware/components/nvs_flash/src/nvs_storage.cpp": "dca1f03cc99e25b31b7b425c1fbc2fd27711b1d500b613a1a8c87fdd10162242",
+    "firmware/components/nvs_flash/src/nvs_storage.hpp": "904df2f442969d354cf432490e44154c68e654714d75efdc506eba205ca7a991",
+    "firmware/components/nvs_flash/src/nvs_test_api.h": "e156a18fbdd0620ce3eaf7b816792d011089bbe7b067ed78b4c9e2ab89edcf7d",
+    "firmware/components/nvs_flash/src/nvs_types.cpp": "517a18b2799c8bee8f33be5207097c43679025d78de31623f2ab4129f5734b43",
+    "firmware/components/nvs_flash/src/nvs_types.hpp": "3f6b4407aba55ccffb343d9c1b62177c774e1dd85119cc8d797dc3714286c489",
+    "firmware/components/nvs_flash/src/partition.hpp": "eef9a93d22d4ba486301b45128124a320e6b2562d74d2f64d85f7d4b61f91fe9",
+    "firmware/include/ecu/board_status.hpp": "4ad055e17cdfc081db4cb6f17763bcd2ce299fecd8786a7b1220ff8e350d53d7",
+    "firmware/include/ecu/boost_command.hpp": "34c9871c2addc9054b95688dca63c0270dc84da422ae50c4361da658631a870d",
+    "firmware/include/ecu/boost_control.hpp": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b",
+    "firmware/include/ecu/boost_json.hpp": "93db1549ffb1491af8eee73e02e4044ab7d1151f9f510844f1f243e1c9f9d0e9",
+    "firmware/include/ecu/boost_pwm.hpp": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255",
+    "firmware/include/ecu/boost_pwm_json.hpp": "6891cdb627ae14043717fcf644bba2a2a76f931ec30e76c2b5a5de240f7053c6",
+    "firmware/include/ecu/boost_runtime.hpp": "2bd7df42100f065228a34023c85421b5f62bd09b610892eb5404faea21793102",
+    "firmware/include/ecu/boost_runtime_json.hpp": "732d52aa667e42c4c9d93f8ab84dd96565ea91f600251eeda1e3721f2b2e0f1d",
+    "firmware/include/ecu/capture_clock.hpp": "5c0f88793019c236b3dc6eea7a39e9a9b1a080bf5adc3159b6651ba45bdc8511",
+    "firmware/include/ecu/config.hpp": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739",
+    "firmware/include/ecu/config_storage.hpp": "b7ec2f7029e00abb6440b3a9b1e1210d76ddf1f2309d19f7c52d81bc59990c45",
+    "firmware/include/ecu/control.hpp": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b",
+    "firmware/include/ecu/cylinder_channels.hpp": "1dd9c57f10ed3544283750ed560ac7039df261035075c0e11d95b34114ab70e8",
+    "firmware/include/ecu/engine.hpp": "4181ff9b8ff361a2035f129e2e22c929d276124b782870f7c50fb0ff90cb8d9f",
+    "firmware/include/ecu/engine_binding.hpp": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9",
+    "firmware/include/ecu/engine_data.hpp": "4670fb0abb643a0957b2f679290e40ce7423df15219222896ad2a99d3d6ec4d7",
+    "firmware/include/ecu/engine_data_json.hpp": "c663a76867496d5a05eecb7c84a19be75f79258066198569a39f4acb7919f491",
+    "firmware/include/ecu/engine_json.hpp": "130c84c5bdd49cce6336c3481c537fec571eb10b2181279d465597e1c2663288",
+    "firmware/include/ecu/engine_limits.hpp": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d",
+    "firmware/include/ecu/engine_log.hpp": "eadcf8344a14791649c6a434f5be73cb179f061605fd7d0fb5c7e77072613a84",
+    "firmware/include/ecu/engine_log_json.hpp": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6",
+    "firmware/include/ecu/engine_log_msl.hpp": "f63cc50ef8c6ca953c1a31d663bb2abcb30b4376d0492dbbfe1e26ec3f60dcbb",
+    "firmware/include/ecu/engine_log_service.hpp": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f",
+    "firmware/include/ecu/engine_phase.hpp": "227748fd088563ef15be4056c8102f768a10a4f279676d02961169e1f0c2d671",
+    "firmware/include/ecu/engine_radio.hpp": "d3380ce44a5b97cd915234548a3e16d6ac07d128f16e77047c05e5afd36cfab4",
+    "firmware/include/ecu/engine_radio_boost.hpp": "cac1c58a9492d435f08ab77e83da58bc922cc445ccfc5cd775edd36df1d9ab6d",
+    "firmware/include/ecu/engine_radio_cylinders.hpp": "4dfd45793996e1e2d1af89e2b97169d7df75e9a76d425dd93a94967661c76e91",
+    "firmware/include/ecu/engine_radio_flex.hpp": "7f93304fdfd3cdcc571e0956aa58edcd23bfbc7a8113d35d8a8873d1a67bc258",
+    "firmware/include/ecu/engine_radio_health.hpp": "94919a86f184cf7bccdc767c67de753a10b0d1dba40478479ddd9341e311cc75",
+    "firmware/include/ecu/engine_scheduler.hpp": "af03a89e6d541b1915ff6e696dac38761363e53b9d4a8ed0a51ab01d0a3a943d",
+    "firmware/include/ecu/engine_service.hpp": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0",
+    "firmware/include/ecu/engine_storage.hpp": "0e794be42d9a643e055d6f2e86b497ff6bd21ad2446b2b09b51a297819d02e4c",
+    "firmware/include/ecu/engine_target.hpp": "7ae0c12c272f620bdf23afa45a5d3f34f8142045a76ae3de144b2bd907e5b8bd",
+    "firmware/include/ecu/engine_tuning.hpp": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6",
+    "firmware/include/ecu/espnow.hpp": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc",
+    "firmware/include/ecu/espnow_protocol.hpp": "aff9fd75b7489f20cac497aaa2486d2579616b2d7c64a764ce59f862b30ee77a",
+    "firmware/include/ecu/flex_capture_json.hpp": "5721d4889b351bb9001a259801cb4ae465ddd8852a9d69553a6564684d0a85fb",
+    "firmware/include/ecu/flex_capture_owner.hpp": "3f4f69618b9e7b376c2ea1a1717ffdd328d782d5e54416da9296a2a95d6efb84",
+    "firmware/include/ecu/flex_engine.hpp": "b24c940bdee8e71e427f552d126efdba7d5ca29110aa70d7d4396fcef6eba468",
+    "firmware/include/ecu/flex_fuel.hpp": "ce233744b7f8b938f2d2a4a491138b2ba115a62ec0a5270612a89261e1729c22",
+    "firmware/include/ecu/flex_hardware.hpp": "bd01b82d25c37f25169aead71d7df3fc4992923c52e941df4766943e290a6380",
+    "firmware/include/ecu/flex_ingress.hpp": "29a7ab7040b9918f7dde65356c138b8b619b484588954230bbc8d8d43cff4216",
+    "firmware/include/ecu/flex_json.hpp": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45",
+    "firmware/include/ecu/flex_runtime.hpp": "74bffa63c8930ea35c123250c98e30b5c9f588eb6761a812881d1e1a0b981051",
+    "firmware/include/ecu/flex_runtime_json.hpp": "4b1c0424f5ac2bd50f520d1d04badb4347bbe246cfb02070988175a50a45d6d7",
+    "firmware/include/ecu/heap_object.hpp": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51",
+    "firmware/include/ecu/idle_command.hpp": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310",
+    "firmware/include/ecu/idle_control.hpp": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+    "firmware/include/ecu/idle_pwm.hpp": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20",
+    "firmware/include/ecu/idle_pwm_json.hpp": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b",
+    "firmware/include/ecu/json.hpp": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+    "firmware/include/ecu/load_json.hpp": "75a0b2fb5939e671c44c0ae0e49e380db187bcc3c413fc20375f6ede6abfb931",
+    "firmware/include/ecu/load_model.hpp": "5d25340d26a20b58f29501491357e2264e30f91284bc0691bf0f06f34ec26361",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/include/ecu/secondary_json.hpp": "25037e11278fac1bb2f4e0a394b9e992e25336f497147f849e6109af9d00eed1",
+    "firmware/include/ecu/secondary_tables.hpp": "4ea26b399ae6cb29bb82823572698a11d65bc51ac570097ab6b22803119d02f2",
+    "firmware/include/ecu/status_led.hpp": "47dc3b311195c72348849e24521b47e743cfec90b751fcd1b9626b39ff034902",
+    "firmware/include/ecu/switch_acquisition.hpp": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb",
+    "firmware/include/ecu/switch_service.hpp": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e",
+    "firmware/include/ecu/switch_transport.hpp": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932",
+    "firmware/include/ecu/timing_executor.hpp": "4b692a218335b2288f5da983e1347f54e2110a9cb24ea65ccabc6296a6d9de87",
+    "firmware/include/ecu/transient_enrichment.hpp": "cb29b19871a4b900008e46356bd5d43c89313a271dd5b84996f9dbb4a6fb3403",
+    "firmware/include/ecu/transient_json.hpp": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88",
+    "firmware/include/ecu/trigger_log.hpp": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451",
+    "firmware/include/ecu/trigger_log_json.hpp": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58",
+    "firmware/include/ecu/tuning_document.hpp": "e7f8729cfae8d510332d25a4f22678415a2ce625dbeac1f57f3c084d56d63183",
+    "firmware/include/ecu/tuning_layout.hpp": "9690e6d9e72699f7f54029a76e19bf2e89b04894d1faa552b86fec6d77d4f700",
+    "firmware/include/ecu/tuning_live.hpp": "9949836f290ffff9e4b1b0af276abffe02596abb065a3daba6c7e6183e9601f6",
+    "firmware/include/ecu/tuning_session.hpp": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e",
+    "firmware/include/ecu/tuning_stream.hpp": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042",
+    "firmware/include/ecu/web_config.hpp": "d1277da304e7e84fec29a0b6bcbddd9730fb068135d6f14ffc3c7369d79c8e47",
+    "firmware/main/CMakeLists.txt": "2b6bde9fd593ea127fd647020cd70915627d26074634d9e8e581b72ae00c8269",
+    "firmware/main/Kconfig.projbuild": "b5ddeaaea5721d444da8d48d92ff2dabf6545a70ab7a4fc353cdc6f8316d3164",
+    "firmware/main/app.cpp": "0f99750a72853da14d10907ad81a5cac714f02cd520b8b764a8f265c57da5df5",
+    "firmware/main/config_json.hpp": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6",
+    "firmware/main/engine_log_service.cpp": "05666d7be694be72719515709a083b0cf65701ebcd410fdb32fc0aa0e9fbbd53",
+    "firmware/main/engine_service.cpp": "1f573e70175ce65a49f72615454162b3a3ebee6dfeef434f6a7f6a4bed4ff757",
+    "firmware/main/engine_target.cpp": "7a88213e0b5ecee3bb2e385607b18cecec50e2e53fbb9adefbabb7a25e936622",
+    "firmware/main/engine_tuning.cpp": "24b846ed8cc4a03c7b323afd4b58eea7f411b243e71e569f5b9c08c9343d851a",
+    "firmware/main/espnow.cpp": "ce002e2cdd6f5d08d2634ec76eb9adf11391dc0fdc309bb7a39d1244fe8826ac",
+    "firmware/main/switch_service.cpp": "60bdc96159ced2a79ee24e68e30179d804a6bc95b9173b27ac89a797f43e3826",
+    "firmware/main/web_assets.hpp": "edbfca6df9d529b262c6698f9a5ed96b3ba5ccb4f5b5dbfbc4f9bb1c7589aadd",
+    "firmware/main/web_config.cpp": "d6c9c4da17cd0e0df62caa83276d478d699e27a99b1dae4ffd57d275b52fa8a9",
+    "firmware/partitions.csv": "45ebebe19bda8746d5e187ab3a7f8b8962ad2db7cfecc7480440773c6dc03047",
+    "firmware/platformio.ini": "1cd5facedd3e9fc9e3c7a7b0d6741b24b4a3871d2a6897ac36c740e09a8d8497",
+    "firmware/sdkconfig.defaults": "e6941fdfdd100c0e17806d94ad3d8d2af2bb56b76352f5eaeeda27e554570883",
+    "firmware/sdkconfig.n16r8.defaults": "37c991d9d77903dd35055cae02c765078ceb676234520f1a6db1800907932a48",
+    "firmware/tests/boost_control_test.cpp": "b032e3f6afec416ecf856ac146967097f206169e053aad17b1dddc488a4e897a",
+    "firmware/tests/control_test.cpp": "f70daa1f94eb5caf27a26467e2f93ca84788470c0286e743bdf273c159a3cecf",
+    "firmware/tests/engine_boost_test.cpp": "2f89c69d5a15bde3a124ffc658184aeabcca681043d223edba26435bd6095374",
+    "firmware/tests/engine_cylinder_test.cpp": "a07acf0093afa510389dfa05b609c7d4c3e0f59814c11349bb51990d95d449d9",
+    "firmware/tests/engine_flex_test.cpp": "41ae1a26819d1ecc0a764422b6979f91a64503f418ef02ba5b15886015ce4ab8",
+    "firmware/tests/engine_load_test.cpp": "8ef3d6e0382b77c5eb0f81e9009294e6a141ff5f360cc7c89ef9f397bdcff5b6",
+    "firmware/tests/engine_log_service_test.cpp": "adcce12f0b93a315d05894309c1e7df6c2df4592484ff41bee1cbfceb922e7d4",
+    "firmware/tests/engine_observability_test.cpp": "e23f507dc737cbab591177f2b9e280230e4c8e17f7adcf21ba29d6925e8c361d",
+    "firmware/tests/engine_phase_test.cpp": "1b9485b170ec1bedd8a73022d294e87bdc83c74be726da78de43ac0dea816d72",
+    "firmware/tests/engine_profile_executor_test.cpp": "400a9ec4149ba275a2e22a5079ceb74e5ea120fd71ca497e423704ccaab74c62",
+    "firmware/tests/engine_profiles_test.cpp": "233e0aae9fab68a2e5e6cb66e6dd1eb5069b49154378b9318f4e7328c34805f7",
+    "firmware/tests/engine_radio_boost_test.cpp": "5344254133ae610eea0d76fe96a43f8eceaa36e393e1f41473666733ba05a259",
+    "firmware/tests/engine_radio_flex_test.cpp": "a2556038bf41e0121f0ebe03bb39d893040fc65b0992da53f4434f989790516e",
+    "firmware/tests/engine_secondary_test.cpp": "6a661546d538dd1d7ef0f834527481043cd377983ae4a232588af682d7c52603",
+    "firmware/tests/engine_semi_test.cpp": "ecccef6608930daca202443265adcc1450cb38c2f5e3b4c6a4d3164252af278b",
+    "firmware/tests/engine_storage_test.cpp": "06e8c1149abd50f8bea41b22521517620345e4a66716b0446af15bc4fc9babe3",
+    "firmware/tests/engine_test.cpp": "55f467d4f6e35ff9b018eabaf4cb938c9a1559ad5574e8e5c40236458120d93e",
+    "firmware/tests/engine_transient_test.cpp": "f6c4e08aafc47ef6ab7c6bad87f21bc381d39255ace08329c87e1e3ac57077e6",
+    "firmware/tests/espnow_test.cpp": "1f1ff8c1fcb50d16416d27e514c1eabf5c3cddb70814d0371089e5cc0d23bc26",
+    "firmware/tests/fakes/nvs.h": "8ae4111796b3175b79d5c4ae9537bd75c49cd4351269706d3ad705bb1c81611c",
+    "firmware/tests/fakes/nvs_flash.h": "e290e693131eaf64d035dccb6cfb1e0be527233a4ce3b7f2f04d6d54315888ff",
+    "firmware/tests/flex_capture_owner_test.cpp": "618b4a7322b55c54ab314f03632885ce2b0bee06edca1e79ad2a46f8d1c8b4e8",
+    "firmware/tests/flex_fuel_test.cpp": "f14554f6579e0da880243e40bb25ad966e80a30737ff283e27f17f491553661a",
+    "firmware/tests/flex_ingress_test.cpp": "85f1ee955f99b848400f6ef237cf73acee33655c3b45f2a5c90b6da7d7e02a79",
+    "firmware/tests/flex_ingress_xtensa_probe.cpp": "93ead0be76a50d8085458d6f8acdd7ea2299cf5b567efc060604a90dfde1b69f",
+    "firmware/tests/flex_target_service_test.cpp": "728d06468b817c25b4a33f83afa780ed04e1f176df22658ccf36575dd61098f7",
+    "firmware/tests/idle_control_test.cpp": "2a805518e3438cc1d99c20a62e10b63dbdab9073a3c462e004488999683f0fe6",
+    "firmware/tests/idle_pwm_test.cpp": "6a19fbfcbb3d562fefd07941521666fbe16f62cad26da0638c2828941c647f5a",
+    "firmware/tests/load_model_test.cpp": "9b3f549c91a6e1ba6d3af5e31ce3b1f74173f0819aeaaf00ad89e12da01ae295",
+    "firmware/tests/log_fakes/esp_random.h": "dcea98138360c20e84dd523c28427c819816263242e4176e38280437877fb91b",
+    "firmware/tests/log_fakes/freertos/FreeRTOS.h": "0f7428ac0dfd9288552b66794c75a6ff31c915bfade756962022d2804855eca3",
+    "firmware/tests/log_fakes/freertos/semphr.h": "abdd0fb8ea37d1fa8c04ce2ae0cb7ccabb462bd0177aeb24c8301e54f98df31f",
+    "firmware/tests/radio_fakes/driver/gpio.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+    "firmware/tests/radio_fakes/esp_event.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+    "firmware/tests/radio_fakes/esp_netif.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+    "firmware/tests/radio_fakes/esp_now.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+    "firmware/tests/radio_fakes/esp_random.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+    "firmware/tests/radio_fakes/esp_timer.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+    "firmware/tests/radio_fakes/esp_wifi.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+    "firmware/tests/radio_fakes/fake_radio.hpp": "eb93f553f4b59bd69932976ab13cd94b015f7a44a603fada5d5b88c1ed3b6f88",
+    "firmware/tests/radio_fakes/mbedtls/md.h": "fafec6cb051ab8cf0f5bfb3482c9292e6df91212acc060cf00635022a2d9aeed",
+    "firmware/tests/radio_fakes/nvs.h": "b1826fbb473fd55eefe9403218a6fff8fc503e1592436854aa5370f69d89370c",
+    "firmware/tests/radio_service_test.cpp": "1c6bf8bb7dbbf96d11e6e7281722a88a4579cbbc0a2e45f50c940291ef3f9b0f",
+    "firmware/tests/ratiometric_test.cpp": "14ec489f02b6e86762789a54d43a544bfdbe003051724c0196227d35ca0f7b79",
+    "firmware/tests/secondary_tables_test.cpp": "20a724186a917d68c79b4a97f14b7b8ce50b57d9fe64b9c5c85e8c1bb665d7ca",
+    "firmware/tests/shared_i2c_service_test.cpp": "3d3711c9d55b7f75dfffd823cafe43bd0bdd5c1605d60e85b6233d1e9d8f9779",
+    "firmware/tests/status_led_test.cpp": "441e9dca5e3e5897d3d89c1f887c87293ccd3add1909922ff4bf78d79d5db584",
+    "firmware/tests/switch_acquisition_test.cpp": "ec3aeb8ad9fbf673c6a1ce65998db91a8727f745f8cc94a673a1c6f7ae76b569",
+    "firmware/tests/switch_fakes/driver/i2c_master.h": "ece48ba8b9bc71c549be7819020b56622e21ab5da69a04d08ba159d4a20ec113",
+    "firmware/tests/switch_fakes/freertos/FreeRTOS.h": "cc12e0510e857a1d3b83546b7edf66afe4a3207b55fbf64edf055aa01587d530",
+    "firmware/tests/switch_service_test.cpp": "822e38bc845d546ca2849705a696c2ed90ff4ec2f724825546a6cd5e92039845",
+    "firmware/tests/switch_transport_test.cpp": "ea7699a7f95193113c007e5f7dbc779d279f9cb70d01150d422a0660416979fa",
+    "firmware/tests/target_fakes/driver/gpio.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/target_fakes/driver/gptimer.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/target_fakes/driver/mcpwm_cap.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/target_fakes/driver/mcpwm_sync.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/target_fakes/esp_attr.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/target_fakes/esp_log.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/target_fakes/esp_partition.h": "ee4a29beeb359a2919b8893df65bde056019559a9f3d9c7960f526466ea2b995",
+    "firmware/tests/target_fakes/esp_timer.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/target_fakes/fake_target.hpp": "3fb1c00e1fd75cea8d082b38d82741105c5e904ee7ef41a6e7cb4130546dd3ee",
+    "firmware/tests/target_fakes/freertos/FreeRTOS.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/target_fakes/freertos/queue.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/target_fakes/freertos/semphr.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/target_fakes/freertos/task.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/target_fakes/hal/gpio_ll.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/target_fakes/hal/mcpwm_ll.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/target_fakes/nvs.h": "435e7d8735725a73f4ae4e9462ebcac42c042dea02df3d018211deff351d422f",
+    "firmware/tests/target_fakes/nvs_flash.h": "f00a3d74a36b621cf063e6e2bb6526f0c976519bc2720cb3bce85f24f1639fbb",
+    "firmware/tests/target_fakes/soc/gpio_struct.h": "f4c591f9343567354a2e7a670e5dc874abd3b294f57250b6429806b6809147f5",
+    "firmware/tests/timing_executor_test.cpp": "ff61dabaaeceb99f23b7f16d5238126fafa4dfb849471b15f40fae0e8cf339b8",
+    "firmware/tests/transient_enrichment_test.cpp": "ef1b5ea7453d96cdcc602435470cda057efbd857d30ec721445227091b1c9c18",
+    "firmware/tests/trigger_log_json_test.cpp": "cd6523ac035ad884ef52f7d98281a90fb5a32bf711bea90bcaaabd8f9114590b",
+    "firmware/tests/trigger_log_test.cpp": "76dadab2610ad93b42508eb3019f009f92ebfbb6f8b0e4cebb7273b3d8e9e1db",
+    "firmware/tests/tuning_allocation_test.cpp": "acc8eebe0a02e6cfc9c7c2778c1a61cb9ce7d52c71aa8a05893c9a6968aa8271",
+    "firmware/tests/tuning_test.cpp": "ae913c5ffcc3bddfa958478f9a7af764fba28be91000b17b3a4d4e7a15bf4c83",
+    "scripts/a2-seed.json": "cb34216d619e506c7e4f1e075720c8b912ca0417b8fe65f6fc583b7596728aa1",
+    "scripts/add_a2_models.py": "7338667d83d9c79da66911d3c5aa73db7cd7e6830caab942abd39ce86e36368c",
+    "scripts/add_a2_shield.py": "e2a520cf49a7da4786a146c65c59fd55e4eea3be6231c23448403c525146331a",
+    "scripts/add_a3_labels.py": "da2a343fcdbc1f861512c2b83b293f9b06149aea9c97b26ff9f48098ff4a1f78",
+    "scripts/add_a6_rgb_supply_guard.py": "7089e49cb3ed459209cc4fe0de66f970ffdb96722a16496b7c16c95d30ba8bee",
+    "scripts/add_a6_width_rules.py": "7d53ab4aca50c4539cecdcf254639e4177e3ba1f93f0867ea9f1245852ead5c8",
+    "scripts/apply_a6_analog_solution.py": "cd0c8b9dd90f1e6280d7b8c3b36f2a71ce5f355be1514d1d3d6bff3c1fb19f67",
+    "scripts/audit_a6_copper.py": "3c57a939fefd4357dc086dac6c1e8a0bd90ab5168005c07b9e5f004f0e4116db",
+    "scripts/audit_engine_build.py": "b3570d93767dcf69051a0d3fbc23c689661c274c38d58d7e58ac3238d9cf455e",
+    "scripts/audit_target_isr.py": "32fd4bf0dad2168f4abfbab2063a031c8360658554a907dd2d8ed9c9253e8f71",
+    "scripts/audit_tuning_build.py": "dd6aa6fca5bb9ec4f536876a381f2c614128e72440eb84c3691185d7a78d6de1",
+    "scripts/build_a2_enclosure.py": "81b8c6b1f883586a9fe16c8dab64ce5e674edf7f85030c01105949eeb958a786",
+    "scripts/build_a2_module_envelopes.py": "2be0fce4abd86931924bf48ed384278a16b45fc8f7ed4704ebd4d1b80ea7084c",
+    "scripts/build_a3_connector_models.py": "2d9067db1521822b13d12bef399e6118f227aa264c5991ac28ef6d63ecfcb32d",
+    "scripts/build_a3_enclosure.py": "caef2d57073371988b90b6b5fb92e950c75680b6959b36c30e9d78bc07d1c528",
+    "scripts/build_a5_idle_interface.py": "ff8f5bd0f04b872483a90dce6ab4e65d7e35135c1de1e8408913fa5023869683",
+    "scripts/build_a6_compact_frontend.py": "06487c92c735be21e3df01dae33ccc0c5e012f784c9c4ab48aae026cc5cdb3c4",
+    "scripts/build_a6_flex_rgb.py": "665bbfb3b08cc66fd8bb5742c91bb71c933adb05c0bdca42350f605487b510cf",
+    "scripts/build_bom.py": "4f5435d3b47652abc9f27516e947a312d0f67caa27f51bea220463debcd0d176",
+    "scripts/build_boost_hardware.py": "d49abf0c4f4651b47866baf611b7ae9f5f0632c20e24220ad7230ed5b7044619",
+    "scripts/build_compact.py": "cb34480bf4c3a0a19eb88618e17b5286cbf1fc0502a3b4e584d7f95b06fb0786",
+    "scripts/build_connection_map.py": "f9839509fe32155d0b66a0d219d72a6bc9e78f5374ce9dd0cf06e21d9034318e",
+    "scripts/build_enclosure.py": "b0ce6f9b3c43874ed2e4907391b92932ea9731019da3b353e22e7f2d512dfa5a",
+    "scripts/build_engine_airpath.py": "cabf970d676a66c1fd589748bfb964b7a62b8a718f938c72454215129e2c7461",
+    "scripts/build_firmware_preserved.py": "e9f1ecb60cb29c3f9d29f6f677b62b8b840f7a5932d64aa746c04a434bc2099a",
+    "scripts/build_hand_solder.py": "747890a1613c5ba3dc5523ac9b62c15c0afaa2676d7c9a61a18cdc326646e81a",
+    "scripts/build_hardware.py": "c2c14852dcb8c4bd1bddb68ded95c80c2432c0ecdfa60938cadd32c139c803cd",
+    "scripts/build_idle_accessory.py": "b559532fe89e3a6612a053eaff0fa8b12657e2ab279575ba92211af60288a3fd",
+    "scripts/build_idle_isolated.py": "eb2d3bede0c58167af3cd9f514ca119ae13f009d01f3fc4973ba1ada736acf56",
+    "scripts/build_instruction_pdf.py": "7bbc2fc4bc4c983dec3bb3631b239ad2d1e092ae2eb3337a58329193be55f56a",
+    "scripts/build_shared_guides.py": "bd0cdc53811202145b62b42d33040b87401df69877cbdab8b79ae29645a4d554",
+    "scripts/build_speeduino_boost.py": "591ccffd2aea4b6121c9eb8b68597777db7217a9437c23442b91ffb10f6ac241",
+    "scripts/build_speeduino_cylinder_geometry.py": "9c3e0f48bed71b1abb966571abf45f89cd892ae8210b27ae3c511e632aa0aa91",
+    "scripts/build_speeduino_flex.py": "6c4fa2b9a47d1f5d0b1efc0bd50cf9fd45fc3fc61380e318733aa64effe11dd7",
+    "scripts/build_speeduino_profiles.py": "6c4d897a68e718cdb1db14b8b18293ca06e3d9f0319aba58f6ff4521fbcc6e59",
+    "scripts/build_speeduino_profiles_turbo.py": "399293bb5dad50f87cf33731e65267527db8e5db8e14db112e98ee9f6f1206df",
+    "scripts/build_speeduino_reference.py": "3bcb5c122ebf5e897a9bf0759a15782e8e0c4eb1438e7b065a50b7782ec3fd1b",
+    "scripts/build_speeduino_sensor.py": "b90150da6d7a9343f2532f2230572a3e6bc54aa7b0d665ca2b7164c50f93f4f5",
+    "scripts/build_speeduino_serial.py": "4286491a28090c935fb335c6a5dab837ef897d2ec8e62b5113c133a86027389b",
+    "scripts/build_speeduino_sim.py": "1c8c53bc55cb15cdbfb6186fd7b7fb4ed42058a99c3a1a70d943497af7f43e4a",
+    "scripts/build_speeduino_turbo.py": "11476321809bd878afea5a166f7996286d78349a6a4a894de30f59ef4048f3fa",
+    "scripts/build_switch_inputs.py": "c6f3d6f4ff79fb2c8e5a37dcfee8f0d49caa12ad6e3331a966b887a2bcaf0630",
+    "scripts/build_through_hole.py": "0a5c8ff7be55ca634949a30a1b204cf7a124317f286ab510518c84619ef821a2",
+    "scripts/check_a2_enclosure.py": "026786b6c9800ab3fc152dedcf3d9984d348ef169e5675a9d60f143a4dc24ea8",
+    "scripts/check_a3_enclosure.py": "a32236004164974a0d8f7d2488902156df0cef1186f19ce1364d8196564cc3bd",
+    "scripts/check_flex_ingress.py": "aaa7d55f8c4a27e511d67156700945cb95c8ffaa0d2d5139fd490f1863d2cc87",
+    "scripts/check_hardware.sh": "0e054d0970f760fd5858e2cafae6d2dbadb8e486a87bceca0edad937aeb50b91",
+    "scripts/check_n16r8_draft.py": "4eb4325fe0dcc390e260da471828969018b1af393e0ca4d21f58201848623d51",
+    "scripts/clean_a3_routes.py": "c1a5683d57113aa980cb277ab10853230b50b29b85b2dc5054aa63a0965768f5",
+    "scripts/cluster_a6_passives.py": "b1d577c8e8f0b7e9e31cbc2cbe5ba7cb94b03f76bcbe8466edb561d67f31a164",
+    "scripts/debug_a3_paths.py": "35cb03e3a4aab7dfdd97738d146f646013ea96782e9810bc2b00bf3539c212bb",
+    "scripts/design.py": "ddcb00298bfc5edf79b5d61a904ca0686d38c7c963ae1bddeb53138c1a14f030",
+    "scripts/embed_web.py": "8767c221b605afb58ff0ca49f485f696b7a3faccb04c2e91a00ec03124deaa9e",
+    "scripts/finalize_a3_stack.py": "adf44f347e48c90b519115462e43fa8ae47fd717357d3e18afd0a874d2dad4da",
+    "scripts/finalize_a6_native.py": "328e982027204eeb160f697ae45ae2aaf58cea45ece6810aa03dae77a7dca7dd",
+    "scripts/finish_a1_routes.py": "93685687aab48351ee838488a0b103bb8ba135316fccbb4bb68af4189771cf2b",
+    "scripts/finish_a2_routes.py": "20708ef989e54943f31236eb39219712579c9b2bf8bd7f79e17ef0657ba2d15d",
+    "scripts/finish_a3_fine_routes.py": "310e0f9b05755d5176c5bb99672619a110ac23c67aa31f9a6ff7128ddacdf1a7",
+    "scripts/finish_a3_routes.py": "39e614f347c8d72945b5ab176cb4d30b60e4226b7e20ff9d900c3da7418da679",
+    "scripts/finish_a3_six_routes.py": "a127e00919fdcbb0194a743d31d598132879ac27ae7ad6355a4d59802d51803d",
+    "scripts/finish_a6_routes.py": "560d25c3866f657a7d15607ff934d3546e12bbf4aa35a791f7cd8dddf96468cf",
+    "scripts/finish_routes.py": "44d13dd3a48b4105e3a2d1f096c21b0fba7c8fd1f3ec4c9c3215314f5b1fe810",
+    "scripts/fix_a3_capacitor_labels.py": "2fa68bbf30956e66e6aafe9510ad074d565d56362805d0fe1e0a98d3c1d34333",
+    "scripts/generate_boost_ui.py": "51266ddde2b08d3395158d340a3eddba998afbf766353985fa97ca1fbcc02f6d",
+    "scripts/generate_flex_ui.py": "6266c257872bde6d9ceafd692500f2a8a6a8109dbedfcd268f8312c9ecaf87d0",
+    "scripts/generate_idle_ui.py": "99cb7d9166c53bcf5941dd501c1dbeaca9d2422a8283cac4f07c26c1fc80178c",
+    "scripts/generate_load_ui.py": "bac87fd020e2bbf0b2dac939deea50be436e6ab732d25e5cab44fd7f813e9ed5",
+    "scripts/generate_secondary_ui.py": "f92ad29b02a4a71d3d75a091bac4a6725fe297eb29dec331123cdf34e0c3cfde",
+    "scripts/generate_transient_ui.py": "0310f508b69aa1d3d3ca1815bc5fcbe5fc38526edc371e2d6aa1744c17a1f021",
+    "scripts/generate_tunerstudio_ini.py": "358282f4b2e418e3496e7a58caaef4626cf547e23432bccb52b85a3aa5eeb578",
+    "scripts/generate_tuning_wire.py": "5e7df5a47f9a51e40f52e1e56f1e1d8bf599cd32f4b83611b5c726b0286ee915",
+    "scripts/kicad.sh": "7e82b9789788c6fff563516864885cfa9b96e4ad8a0d6443b38e8d208f7aa6b6",
+    "scripts/kicad9_carrier_copy.py": "e1ab1db27be9ef9c491c96458fc515917a624bf83ff5a1fabac636d5865d3539",
+    "scripts/pack_a6.py": "bd80b52b53a490e4adc8d85e075be1576c631c4e312fd060a5d5389f33ca8460",
+    "scripts/pack_a6_analog.py": "4aa196616ed463101c9e172c0d1f25245c3950095abebf1b06b96c84f3c6e8a2",
+    "scripts/package_a1.py": "66aa4fc90ecc479431446acad3eadba243c43fb49cf9449935fbf84f43962238",
+    "scripts/package_a2.py": "43c109a60b4750dc4e9abcd3376eb301c25a20d716a112c74ed4c11c0ab842e5",
+    "scripts/package_a3.py": "ff978b4de33de66d83e9dacc20f825b9bcff5fe86c1ba823f8854235dd731437",
+    "scripts/package_project.py": "3a37c0ab5d778161b46fa7f905babd846658919159d538f81aa65e0a9ba74487",
+    "scripts/place_a6_back.py": "27dd5c7c17bf30668b83769e36007b9b0def29715ed628c23a22d09605177238",
+    "scripts/place_a6_front.py": "553fa0703b6fe5141d7ce1fd59e6332d3d72b4f8e9a1f02d036cc3dccbedfc42",
+    "scripts/prepare_a6_rf.py": "90eb850d3319955102800ac466b011b53446f9b51372bba34b0e15044742d2cf",
+    "scripts/prepare_n16r8_carrier.py": "0e97cc67ed27a23373ab115b4a742683db87dab670d71f5f9811614c96140fc0",
+    "scripts/prepare_tcsi_source.py": "6b7da2763123bbe8d7996a6fc4121518c10195b50c7295afcf089b3c9b8b4cdf",
+    "scripts/probe_engine_modelica.py": "9b125cff3605c4632cf3c2fd278f7f4c8fe0de0f7a355f48cce405b0e36f3a5a",
+    "scripts/prune_a6_stubs.py": "9a5601de047571dc6cc47706756ba820ce4e214e6e2ce097cf6a0339fa693294",
+    "scripts/publish_load_evidence.py": "d96a4cec55a39b47d30e30ad8a3d903f1863a5ec3f6c12d42543419d3ca50b31",
+    "scripts/publish_secondary_core_evidence.py": "93030ea81710019534955f1fad4822d9308edf024854d9f1fbda7b00b4c791e7",
+    "scripts/publish_transient_evidence.py": "06c000d350c19668bd844aac1c406796e27dcc2f6e39c01e0ceaf51d5c275cc8",
+    "scripts/remove_a2_dip_sockets.py": "c34aa758e3b40beac0ce31192f297ef05fd3e1f6b1691c46c899143041549484",
+    "scripts/render_a2_enclosure.py": "412fabfdfe41604aad48e4e63e26bbe8f72d511e1c8ffc55e04c6bb63374e1a0",
+    "scripts/render_a2_mounting_plan.py": "98b4f605d172bdfded6a56bce2a48402bc4768b1f0081c81a0e99312bb69ae34",
+    "scripts/render_a3_enclosure.py": "69a87d718098953a1d282f9e54b291a63f1ec17b962abff4fcb62eab07f7ac9f",
+    "scripts/render_a3_mounting_plan.py": "8ac5ac17a324e75c1e2e98d4a7b0c009cecb9a49d595d7cdb5d7f588b119c2d7",
+    "scripts/render_enclosure.py": "f96baf735c23002c1fc78139afb3a4c9bcbe8d03928a6950553565a36194cd66",
+    "scripts/repair_a3_metadata.py": "f32b274dede25c9efc5780a7bf1821f1f0489b715255567870c81da08a70caa7",
+    "scripts/restore_a6_copper.py": "aed022b2daab7e90913899df7eb01914197b6f48be6d04fbbf6caa316e1efe98",
+    "scripts/ripup_a6_rf_conflicts.py": "2bf11be73993414dff81621523f5a54e2935ef6614b7efab1382d7120f0cb5de",
+    "scripts/route_a2_sensitive.py": "d893c7dc323e1f9c020a64d58b6b5e5da4a9465535d61b1ffdfeb25b066cdaeb",
+    "scripts/route_a5_idle_interface.py": "64b7de65485a7fd7f2b46df8d70b4551a1f345087cb7abd08a1c82403d49bea9",
+    "scripts/route_a6.py": "91cbdce96a27a3c73a3abbdbbe839d3e29baefca8d49d2c6064b3df040c545f2",
+    "scripts/route_a6_local_analog.py": "775bec20c2cdced6a3843bd3a1c28aa6ac377a2c0358a8c0c8995b816ff877df",
+    "scripts/route_board.py": "7628d5aed649b501f728a17126801e15b268ad8a682a246540d68a68063a2dbd",
+    "scripts/route_boost_hardware.py": "45b4bf9d839dcfbfe6bc45e10b44238aab1fba4e992d155069e252e13c1a09ce",
+    "scripts/route_idle_isolated.py": "1b497964eddeeeb49967475dd95dd9040a12425705d3400c22bc35c600e452cd",
+    "scripts/route_switch_inputs.py": "78caa8526dfdc1d216f26a8e82dc6b857abb683453eeefcbbaa662f1a765af8a",
+    "scripts/sync_a3_symbols.py": "3abb2784bd6f1c7ac7d93fb1f9b3054aa3eba1e2bb02df61edc7dd7d036ffbda",
+    "scripts/test_firmware.sh": "ef8ed88f18bed8694b50c3fa5c6eaff92baed0b44d5f42301380dd86733fa5c1",
+    "scripts/test_flex_target_service.py": "4aa896b04bdc3ad4b4a4c1b099b4cd216abbcd3f7a65ffc2aff3de106b35de55",
+    "scripts/test_radio.sh": "fe5fd37e406dbcb6a4f3e6a20dce90e000c8a824af81795085ec1cabeb20d57c",
+    "scripts/test_radio_service.py": "f75403ef39d0f80843c414f4483ae3aa6e91a5332f1b25042b4832972ed0eedf",
+    "scripts/tidy_a1_stubs.py": "c570590f2fe80e7e391ff7d18abc125a78ffd01b7bf91c9421ce87c0c3d8f2d7",
+    "scripts/tuning_sdkconfig.py": "201e8a1a535c719442f1de28f7fa69b9e05845199c5adc3a81b0f74186d227eb",
+    "scripts/update_a6_contracts.py": "c15c02a2b613bf54a3333a5fce2b708cab40bf76df16392b396eb9affdfff935",
+    "scripts/update_n16r8_bom.py": "b8fd38a4b44caac975366948691d4793f0a7412b50e1966d23b12afe6c3c09ad",
+    "scripts/update_n16r8_envelope.py": "25221c0ed72101ab4a0fd354adb87d114f1373b16b08fd8d5409ceafa43b0a09",
+    "scripts/verify_a1.py": "2198f8696debed3923a73319287e96b8f88b4fe059623768832464b67e4c7607",
+    "scripts/verify_a2.py": "af9fcecf5a3b6752124399a1a7341089c8288afeffccba8c274fd7ec60f2220b",
+    "scripts/verify_a3.py": "3668e05343097186ce76600f30a0e5aaec2895ea2f0946fc18303443c1dd3692",
+    "scripts/verify_contract.py": "98ad5ce5fbfa2afe3767f99f55598e5056e4088e227e636312a29a28198e91f7",
+    "scripts/verify_modelica_sources.py": "c56aed8fa5763e31dfe146eea5ad25b8df878f9b8ba53638eee0c4b9f48dde18",
+    "web/boost_control.js": "8b55318d276b37015cb47218c426fcdd26b291ad73ff83f7839e359a348a60e6",
+    "web/boost_control_logic.js": "ba47d461eb95f8f56974da51a474cba737e0c36e3eaae4f42d6d800114b80d16",
+    "web/cylinder_tuning.js": "8211da474d6ff87628db34333ee017d50976f7057e03cd286066096c10c21b71",
+    "web/engine_logger.js": "11c05f9f08cd23b54bdaed17ccb594196da2ac7de78513ca778aa53a3792354e",
+    "web/flex_fuel.js": "264a9cca85ad712eb0ebad1bdfde8db5269118bc9ebce7ca9986e5ecabcb8801",
+    "web/flex_fuel_logic.js": "fb466e547ee1c0631c04c2fd7214422fa873978212c51593612421e05a700ec3",
+    "web/idle_control.js": "bfa7fdb537fffb932f831c38e93d293218408867d2959d9a0d3313c1a35f7587",
+    "web/idle_control_logic.js": "05e04affa7997c98a1b1d055e73452d00bacd187bae65e924cb2d73ef58cbba9",
+    "web/index.html": "88f7dcab0099f7adf715bb10ad64786b9510ef7cdb4c36ac9879b278570b89f1",
+    "web/load_model.js": "d5ccc9cbf60041eb1900b6f47ae12d0e62bce560c962f3017bd8587c9a64892d",
+    "web/load_model_logic.js": "af88cd7960c234fc3d59f2531e48ad3c18bf3122a9eb1e354ee15d193bfe832e",
+    "web/profile_metadata.js": "9a22781823342bdb29dabb83fc351c847aac639091812665f09b3b14f877ef53",
+    "web/secondary_tables.js": "edcc8a98c5676111399b97b375159f6414fe273c77a87315aec69d695b4927bc",
+    "web/secondary_tables_logic.js": "3d0bf79276f86ed60775e9b961f5114c88d34848e34a4b403f92ba32145a54b2",
+    "web/transient_enrichment.js": "42b60c320c0d95a5535a8346e9b1bd7be0faef0d91007bc9468cf4f959566767",
+    "web/transient_enrichment_logic.js": "6bea83d5cdb6e7922efe0be7a4f7da27b5fc1af464568b8c417b9c0a3a13d68b",
+    "web/trigger_logger.js": "d9997905115af0cbecca5382b04694a4bd71c220e19e84b0b02bd9cd27e85c07",
+    "web/tuning_diagnostics.js": "9c96152e9e9cae4f000fdc268f3512f9d915fe6dcdae4cef2ca37ac87651a1c8"
+  },
+  "reviewed_source_sha256": {
+    "README.md": "8b82a7eec0e1de5a6a8ee975bf03de8ee4755357d6055857be4a98cf3be12f7f",
+    "config/defaults.json": "e61fb310f60ddc801bbc2dec0dca288314ed124761b7fc35087aee10687ba617",
+    "config/engine-profile.json": "d8e2e028f8e30b1a7caeb718b149f98bdff412be42bb0212b15edbc4741b31dc",
+    "config/engine/defaults.json": "b24680872f36721591b10c15f643cd10c985e30f5bd860b96591b203a00d3f2e",
+    "docs/engine-cylinder-profiles.md": "5491d325e8a697ded3a317d2d3f634d5ef98fc7ca6e2d6dc16ab4faa795ec115",
+    "docs/engine-development.md": "bc53d18e5cd6f533d16ce94ea76e454520b444a7547aef2d29ce37b668f34cbc",
+    "docs/engine-expanded-boost-reference.md": "4e1f9e63f0512e00836de29d0bf7c6e360f85e4a100a28e47485ef632a9c869d",
+    "docs/engine-feature-coverage.md": "c171895b7207734f54828ae46cb2b134308d3c0d7c9f1064b9b45eebc423496a",
+    "docs/engine-shaft-integration.md": "6d9b249b7383366265d98537d38d04494aa0908b335f32badc90a612c85d8900",
+    "docs/engine-tuning-application.md": "b2ab32333f14297d190d5ec68e9497da76742613930d555a689ffeaa9b7cb757",
+    "docs/espnow-engine.md": "af60daf7b434760a139f00712834e241de557c93608cbac88cdd376a2a319949",
+    "docs/espnow.md": "776ac275d672a0bb27272c2af23ec938a07a4b97b12ab79f9e1cff5792f35400",
+    "docs/web-configuration.md": "ff25a161464029a337094b6486a8a2f1f9d359d963391c6abd5a14d629e68ebb",
+    "firmware/include/ecu/board_status.hpp": "4ad055e17cdfc081db4cb6f17763bcd2ce299fecd8786a7b1220ff8e350d53d7",
+    "firmware/include/ecu/boost_command.hpp": "34c9871c2addc9054b95688dca63c0270dc84da422ae50c4361da658631a870d",
+    "firmware/include/ecu/boost_control.hpp": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b",
+    "firmware/include/ecu/boost_json.hpp": "93db1549ffb1491af8eee73e02e4044ab7d1151f9f510844f1f243e1c9f9d0e9",
+    "firmware/include/ecu/boost_pwm.hpp": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255",
+    "firmware/include/ecu/boost_pwm_json.hpp": "6891cdb627ae14043717fcf644bba2a2a76f931ec30e76c2b5a5de240f7053c6",
+    "firmware/include/ecu/boost_runtime.hpp": "2bd7df42100f065228a34023c85421b5f62bd09b610892eb5404faea21793102",
+    "firmware/include/ecu/boost_runtime_json.hpp": "732d52aa667e42c4c9d93f8ab84dd96565ea91f600251eeda1e3721f2b2e0f1d",
+    "firmware/include/ecu/capture_clock.hpp": "5c0f88793019c236b3dc6eea7a39e9a9b1a080bf5adc3159b6651ba45bdc8511",
+    "firmware/include/ecu/config.hpp": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739",
+    "firmware/include/ecu/config_storage.hpp": "b7ec2f7029e00abb6440b3a9b1e1210d76ddf1f2309d19f7c52d81bc59990c45",
+    "firmware/include/ecu/control.hpp": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b",
+    "firmware/include/ecu/cylinder_channels.hpp": "1dd9c57f10ed3544283750ed560ac7039df261035075c0e11d95b34114ab70e8",
+    "firmware/include/ecu/engine.hpp": "4181ff9b8ff361a2035f129e2e22c929d276124b782870f7c50fb0ff90cb8d9f",
+    "firmware/include/ecu/engine_binding.hpp": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9",
+    "firmware/include/ecu/engine_data.hpp": "4670fb0abb643a0957b2f679290e40ce7423df15219222896ad2a99d3d6ec4d7",
+    "firmware/include/ecu/engine_data_json.hpp": "c663a76867496d5a05eecb7c84a19be75f79258066198569a39f4acb7919f491",
+    "firmware/include/ecu/engine_json.hpp": "130c84c5bdd49cce6336c3481c537fec571eb10b2181279d465597e1c2663288",
+    "firmware/include/ecu/engine_limits.hpp": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d",
+    "firmware/include/ecu/engine_log.hpp": "eadcf8344a14791649c6a434f5be73cb179f061605fd7d0fb5c7e77072613a84",
+    "firmware/include/ecu/engine_log_json.hpp": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6",
+    "firmware/include/ecu/engine_log_msl.hpp": "f63cc50ef8c6ca953c1a31d663bb2abcb30b4376d0492dbbfe1e26ec3f60dcbb",
+    "firmware/include/ecu/engine_log_service.hpp": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f",
+    "firmware/include/ecu/engine_phase.hpp": "227748fd088563ef15be4056c8102f768a10a4f279676d02961169e1f0c2d671",
+    "firmware/include/ecu/engine_radio.hpp": "d3380ce44a5b97cd915234548a3e16d6ac07d128f16e77047c05e5afd36cfab4",
+    "firmware/include/ecu/engine_radio_boost.hpp": "cac1c58a9492d435f08ab77e83da58bc922cc445ccfc5cd775edd36df1d9ab6d",
+    "firmware/include/ecu/engine_radio_cylinders.hpp": "4dfd45793996e1e2d1af89e2b97169d7df75e9a76d425dd93a94967661c76e91",
+    "firmware/include/ecu/engine_radio_flex.hpp": "7f93304fdfd3cdcc571e0956aa58edcd23bfbc7a8113d35d8a8873d1a67bc258",
+    "firmware/include/ecu/engine_radio_health.hpp": "94919a86f184cf7bccdc767c67de753a10b0d1dba40478479ddd9341e311cc75",
+    "firmware/include/ecu/engine_scheduler.hpp": "af03a89e6d541b1915ff6e696dac38761363e53b9d4a8ed0a51ab01d0a3a943d",
+    "firmware/include/ecu/engine_service.hpp": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0",
+    "firmware/include/ecu/engine_storage.hpp": "0e794be42d9a643e055d6f2e86b497ff6bd21ad2446b2b09b51a297819d02e4c",
+    "firmware/include/ecu/engine_target.hpp": "7ae0c12c272f620bdf23afa45a5d3f34f8142045a76ae3de144b2bd907e5b8bd",
+    "firmware/include/ecu/engine_tuning.hpp": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6",
+    "firmware/include/ecu/espnow.hpp": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc",
+    "firmware/include/ecu/espnow_protocol.hpp": "aff9fd75b7489f20cac497aaa2486d2579616b2d7c64a764ce59f862b30ee77a",
+    "firmware/include/ecu/flex_capture_json.hpp": "5721d4889b351bb9001a259801cb4ae465ddd8852a9d69553a6564684d0a85fb",
+    "firmware/include/ecu/flex_capture_owner.hpp": "3f4f69618b9e7b376c2ea1a1717ffdd328d782d5e54416da9296a2a95d6efb84",
+    "firmware/include/ecu/flex_engine.hpp": "b24c940bdee8e71e427f552d126efdba7d5ca29110aa70d7d4396fcef6eba468",
+    "firmware/include/ecu/flex_fuel.hpp": "ce233744b7f8b938f2d2a4a491138b2ba115a62ec0a5270612a89261e1729c22",
+    "firmware/include/ecu/flex_hardware.hpp": "bd01b82d25c37f25169aead71d7df3fc4992923c52e941df4766943e290a6380",
+    "firmware/include/ecu/flex_ingress.hpp": "29a7ab7040b9918f7dde65356c138b8b619b484588954230bbc8d8d43cff4216",
+    "firmware/include/ecu/flex_json.hpp": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45",
+    "firmware/include/ecu/flex_runtime.hpp": "74bffa63c8930ea35c123250c98e30b5c9f588eb6761a812881d1e1a0b981051",
+    "firmware/include/ecu/flex_runtime_json.hpp": "4b1c0424f5ac2bd50f520d1d04badb4347bbe246cfb02070988175a50a45d6d7",
+    "firmware/include/ecu/heap_object.hpp": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51",
+    "firmware/include/ecu/idle_command.hpp": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310",
+    "firmware/include/ecu/idle_control.hpp": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd",
+    "firmware/include/ecu/idle_hardware.hpp": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23",
+    "firmware/include/ecu/idle_pwm.hpp": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20",
+    "firmware/include/ecu/idle_pwm_json.hpp": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b",
+    "firmware/include/ecu/json.hpp": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247",
+    "firmware/include/ecu/load_json.hpp": "75a0b2fb5939e671c44c0ae0e49e380db187bcc3c413fc20375f6ede6abfb931",
+    "firmware/include/ecu/load_model.hpp": "5d25340d26a20b58f29501491357e2264e30f91284bc0691bf0f06f34ec26361",
+    "firmware/include/ecu/pins.hpp": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad",
+    "firmware/include/ecu/realtime.hpp": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5",
+    "firmware/include/ecu/secondary_json.hpp": "25037e11278fac1bb2f4e0a394b9e992e25336f497147f849e6109af9d00eed1",
+    "firmware/include/ecu/secondary_tables.hpp": "4ea26b399ae6cb29bb82823572698a11d65bc51ac570097ab6b22803119d02f2",
+    "firmware/include/ecu/status_led.hpp": "47dc3b311195c72348849e24521b47e743cfec90b751fcd1b9626b39ff034902",
+    "firmware/include/ecu/switch_acquisition.hpp": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb",
+    "firmware/include/ecu/switch_service.hpp": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e",
+    "firmware/include/ecu/switch_transport.hpp": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932",
+    "firmware/include/ecu/timing_executor.hpp": "4b692a218335b2288f5da983e1347f54e2110a9cb24ea65ccabc6296a6d9de87",
+    "firmware/include/ecu/transient_enrichment.hpp": "cb29b19871a4b900008e46356bd5d43c89313a271dd5b84996f9dbb4a6fb3403",
+    "firmware/include/ecu/transient_json.hpp": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88",
+    "firmware/include/ecu/trigger_log.hpp": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451",
+    "firmware/include/ecu/trigger_log_json.hpp": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58",
+    "firmware/include/ecu/tuning_document.hpp": "e7f8729cfae8d510332d25a4f22678415a2ce625dbeac1f57f3c084d56d63183",
+    "firmware/include/ecu/tuning_layout.hpp": "9690e6d9e72699f7f54029a76e19bf2e89b04894d1faa552b86fec6d77d4f700",
+    "firmware/include/ecu/tuning_live.hpp": "9949836f290ffff9e4b1b0af276abffe02596abb065a3daba6c7e6183e9601f6",
+    "firmware/include/ecu/tuning_session.hpp": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e",
+    "firmware/include/ecu/tuning_stream.hpp": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042",
+    "firmware/include/ecu/web_config.hpp": "d1277da304e7e84fec29a0b6bcbddd9730fb068135d6f14ffc3c7369d79c8e47",
+    "firmware/main/app.cpp": "0f99750a72853da14d10907ad81a5cac714f02cd520b8b764a8f265c57da5df5",
+    "firmware/main/config_json.hpp": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6",
+    "firmware/main/engine_service.cpp": "1f573e70175ce65a49f72615454162b3a3ebee6dfeef434f6a7f6a4bed4ff757",
+    "firmware/main/engine_target.cpp": "7a88213e0b5ecee3bb2e385607b18cecec50e2e53fbb9adefbabb7a25e936622",
+    "firmware/main/engine_tuning.cpp": "24b846ed8cc4a03c7b323afd4b58eea7f411b243e71e569f5b9c08c9343d851a",
+    "firmware/main/web_config.cpp": "d6c9c4da17cd0e0df62caa83276d478d699e27a99b1dae4ffd57d275b52fa8a9",
+    "firmware/platformio.ini": "1cd5facedd3e9fc9e3c7a7b0d6741b24b4a3871d2a6897ac36c740e09a8d8497",
+    "hardware/a6-flex-rgb/README.md": "0536ea37551bf77aa7852b73a6d6045ce565d5a3e61ea3a0e40a3219c486a3b8",
+    "hardware/a6-flex-rgb/net_contract.json": "2d2d8883d8035c43bde5d7781e491ee5b8cb470fb0c87e3c80975175e99b80e2",
+    "hardware/a7-boost-interface/README.md": "949592db93bd0c6256aca54f008a8fe1e3ed0231e9afc1ab306710e497a7b2d2",
+    "hardware/a7-boost-interface/net_contract.json": "a84a5ce3ee7ddd675c0c7708f3fca8aa2cbfba7f8e5dfa15bdd2e6f5c1e42bcf",
+    "scripts/audit_engine_build.py": "b3570d93767dcf69051a0d3fbc23c689661c274c38d58d7e58ac3238d9cf455e",
+    "scripts/build_firmware_preserved.py": "e9f1ecb60cb29c3f9d29f6f677b62b8b840f7a5932d64aa746c04a434bc2099a",
+    "scripts/test_firmware.sh": "ef8ed88f18bed8694b50c3fa5c6eaff92baed0b44d5f42301380dd86733fa5c1",
+    "tools/cylinder_radio.py": "346c7a95987e6c33a19d3643709dc7d7ddca9542a3714883a5bad160e50639e2",
+    "tools/engine_msq.py": "3aa5084ee8275b88256ea12f71833abbd4d5e821d6702041be74bf0d17430eb8",
+    "tools/engine_protocol.py": "9a9816665cfce13684c0b3f5c2f0280f58f4221f4ea587edce86e72fed587101",
+    "tools/engine_receiver.py": "c88856edfa2c64497ce77f11dfdf47c2299d1a57db44ec2efa609abdb3c5a5e6",
+    "tools/engine_runtime.py": "db48c8b51a3c8fd5864a316512d7acda8327092bf6050cd505224da37a1bb19a",
+    "tools/radio_simulator.py": "e02c069a5e97186939c87b3e5f12f3c5f4b44eb82566089f71c2ea47dd4258ea",
+    "tools/test_pairing_ui.py": "dc832c5bee51f1a3dfbb8a22e836bf6778c96b646ae082e1753b2d59346bbd59",
+    "tools/web_server.py": "01024852d47ea8dde6c87fae21b42f5124a04a7f1c10745fc98b6cd388923d7e",
+    "tuning/README.md": "734d500372864acd8c940b97c08516baf2ef77ef499700fa35aa0cdb2a2dfd57",
+    "tuning/esp32-ecu-profiles.ini": "1506aa993f7374c6d0dac37a9664e31c339b8125f0bcde2b0d72f5804d98a9af",
+    "tuning/protocol-layout.json": "228d1656d6d0bfbceeb1fc9f402a0e4a76cf6b6d769bc14fa36a207b1f865dc8",
+    "web/index.html": "88f7dcab0099f7adf715bb10ad64786b9510ef7cdb4c36ac9879b278570b89f1"
+  },
+  "independent_review": {
+    "assessment_sha256": "02ec4a2af4196c04082b18ba1a8a3b8a7c8e863dc2cbc6b71fefe8a62be28b87",
+    "open_findings": 0,
+    "processes_terminal": true
+  },
+  "existing_simulation_packet": {
+    "manifest_sha256": "ab40b5b78283ffd9dc003dad801b7691b3360cdcddd9b9dbde49706b7bcf6328",
+    "finite_reference_refinement_passed": false
+  },
+  "limitations": [
+    "Normal engine outputs inhibited; no device/RF/physical fit/electrical/environmental qualification",
+    "Own012 offline TunerStudio/MSQ and MSL009 file workflows; supported online TunerStudio remains unresolved",
+    "Experimental reference convergence remains failed; no calibrated engine or controller equivalence claim",
+    "A3 artifacts are historical; A6/A7/accessories and module/case fit remain development drafts",
+    "Missing decoder/control/hardware features were not implemented in this early-stop checkpoint"
+  ],
+  "validation": {
+    "file": "validation.zip",
+    "bytes": 1833878,
+    "sha256": "7ccf37efb251ac8338a2b845131e805c4311d0ce2dab1f6422d3c5ae5ec64b5c",
+    "payloads": {
+      "browser/led.log": {
+        "bytes": 103,
+        "sha256": "85fd6c81d26427e3eb2f3428afa49024362335ae93e0b9f0608e149919571504"
+      },
+      "browser/led/led-desktop.png": {
+        "bytes": 165201,
+        "sha256": "c24aafc55fa02afa33614e857006733d163fbdea91147abaa2469da3c84e1fae"
+      },
+      "browser/led/led-mobile.png": {
+        "bytes": 137857,
+        "sha256": "cc8ffc3368f238f4553eaf6c4d03f0820d019d6869963f94e7ea6ca975effbb4"
+      },
+      "browser/led/results.json": {
+        "bytes": 6404,
+        "sha256": "6f2c2a6ac833f5ab9320658e22469f58e76ed7ff1e801c0d36d02e50b2984776"
+      },
+      "browser/pairing.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "browser/pairing/paired-desktop.png": {
+        "bytes": 158998,
+        "sha256": "4cbf8c6db98db76f380522fe2b17187aaf7e8b1e484f4333863bbbdce4bfceaa"
+      },
+      "browser/pairing/paired-mobile.png": {
+        "bytes": 128580,
+        "sha256": "0025a53465b99f64ee1d9dd0ade8de3394d769ec97fe5a17cd351a340014bc6d"
+      },
+      "browser/pairing/results.json": {
+        "bytes": 594,
+        "sha256": "65998b4df2ff768bd677d90cd08b0a7162b8d4973acadc36a671321b71afb5fe"
+      },
+      "browser/profiles.log": {
+        "bytes": 749,
+        "sha256": "c5f3fab4165e8f2a51c96cdaf4131d39227144eed5186b5e4c39f951318941c5"
+      },
+      "browser/profiles/eight-collected.json": {
+        "bytes": 1698802,
+        "sha256": "2bdff05e4a0048496c9fd5d7ee21e075f4b6a9a072889d33c1aae82b3120f5f8"
+      },
+      "browser/profiles/eight-profile.msq": {
+        "bytes": 21466,
+        "sha256": "367d275f73ca2cf54f0ac77a06da6f411ba68fd873fbe6cef1ad446ded3966e0"
+      },
+      "browser/profiles/profiles-desktop.png": {
+        "bytes": 165979,
+        "sha256": "dfe3173e24875228fc6c5c2aa68cff5709bd445e1dc63666e0ab9b0e1b5128ba"
+      },
+      "browser/profiles/profiles-mobile.png": {
+        "bytes": 72816,
+        "sha256": "e8f2af5ca1fd66a3018fdfb8b7bfbf83a9cb8f7e4317d183e193df90e5639476"
+      },
+      "browser/profiles/ui-tests.json": {
+        "bytes": 749,
+        "sha256": "c5f3fab4165e8f2a51c96cdaf4131d39227144eed5186b5e4c39f951318941c5"
+      },
+      "browser/tuning.log": {
+        "bytes": 995,
+        "sha256": "2cf42833697da2d46064f7e7ad4cd3f284a85d5d803e0994e848d21c0d4826aa"
+      },
+      "browser/tuning/browser-actual-app011.msq": {
+        "bytes": 21863,
+        "sha256": "d854ab699fcf867003e01b3b7d70e7529479b6544a4fb70e8e97978864082a61"
+      },
+      "browser/tuning/browser012.msq": {
+        "bytes": 21469,
+        "sha256": "76e07370616e749a902332e5705140d6b61ad0e3810a96dc0d772dbe6eaae5ec"
+      },
+      "browser/tuning/tuning-desktop.png": {
+        "bytes": 125624,
+        "sha256": "5ab776ed2c531d30189f7b5341cd59e2d3b84de2f66facf6a02e1de590ad7631"
+      },
+      "browser/tuning/tuning-diagnostics.json": {
+        "bytes": 2282,
+        "sha256": "4ebf2b66d0df2ae19e87b20af3d1020cfaa4b72ef222b12b7833232a990129d0"
+      },
+      "browser/tuning/ui-tests.json": {
+        "bytes": 995,
+        "sha256": "2cf42833697da2d46064f7e7ad4cd3f284a85d5d803e0994e848d21c0d4826aa"
+      },
+      "build/build.log": {
+        "bytes": 680894,
+        "sha256": "c253c635b26a6ec9609da48a0eea83908ead2edc967e0711f20470712a3c9068"
+      },
+      "build/embed-web.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "build/sdkconfigs-after/sdkconfig.compact_a3_web": {
+        "bytes": 72348,
+        "sha256": "0fafb4dcb33833b1777bcd95912e20edce4e9fa41dfe89e39c96a2f7a26e037c"
+      },
+      "build/sdkconfigs-after/sdkconfig.compact_n16r8_flex_dev": {
+        "bytes": 73609,
+        "sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33"
+      },
+      "build/sdkconfigs-after/sdkconfig.compact_n16r8_web": {
+        "bytes": 73609,
+        "sha256": "585c2325b68e517a7a2382f02c4ba320b377d5098c9ac31ac402eb6a37c25a33"
+      },
+      "build/sources-after.json": {
+        "bytes": 43427,
+        "sha256": "380b076560f30de43a1d060095551da6e7d7c3c324b7c88b89dfdc523090df2a"
+      },
+      "build/sources-before.json": {
+        "bytes": 43427,
+        "sha256": "380b076560f30de43a1d060095551da6e7d7c3c324b7c88b89dfdc523090df2a"
+      },
+      "build/summary.json": {
+        "bytes": 4671,
+        "sha256": "2f79cde77a9cf1381735f1d943a4011cb0785f265a0b11e1790b88ae8d5add64"
+      },
+      "checkpoint-sources/docs/bench-checkpoint.md": {
+        "bytes": 3547,
+        "sha256": "4432e9705768f5645a707f65851f8f6da408c697b9eb570dd5fc71006ed71f9a"
+      },
+      "checkpoint-sources/docs/web-configuration.md": {
+        "bytes": 7384,
+        "sha256": "ff25a161464029a337094b6486a8a2f1f9d359d963391c6abd5a14d629e68ebb"
+      },
+      "checkpoint-sources/tools/test_pairing_ui.py": {
+        "bytes": 4329,
+        "sha256": "dc832c5bee51f1a3dfbb8a22e836bf6778c96b646ae082e1753b2d59346bbd59"
+      },
+      "checkpoint-sources/tuning/README.md": {
+        "bytes": 3331,
+        "sha256": "734d500372864acd8c940b97c08516baf2ef77ef499700fa35aa0cdb2a2dfd57"
+      },
+      "harness-history/CSP-wait-expression.log": {
+        "bytes": 2715,
+        "sha256": "fea8b5f4a84c89bad98aeb9cedabce6f37e088024a97e3ed6974b0c24bc3c609"
+      },
+      "host/api-config-protocol-tests.log": {
+        "bytes": 15288,
+        "sha256": "0a585a07c13050a272ef7d7d50f1b4c0610646ba795600e7cd498bd0f8ca9de7"
+      },
+      "independent/after.json": {
+        "bytes": 930,
+        "sha256": "add1e0cb4922e0340bcb00bfebe3cd8bc5ef23b360ee7de7a298be8e70c10bdd"
+      },
+      "independent/assessment.json": {
+        "bytes": 4876,
+        "sha256": "02ec4a2af4196c04082b18ba1a8a3b8a7c8e863dc2cbc6b71fefe8a62be28b87"
+      },
+      "independent/before.json": {
+        "bytes": 12276,
+        "sha256": "f303342471d8b116e0c5b0adac17f2cf0adf2072c795a9303182c4123215d3d1"
+      },
+      "independent/image-probe-recovery.json": {
+        "bytes": 1511,
+        "sha256": "1506ba5a5aade9f43cf1bf152bf8ede7a165aa38b723bb35fb1937e14bfcef01"
+      },
+      "independent/image-probe.log": {
+        "bytes": 70,
+        "sha256": "aa5cfa5b23590644e708a65614b57b31b256d84aa55f8e4390a96f042274a026"
+      },
+      "independent/image-probe.log.initial": {
+        "bytes": 70,
+        "sha256": "aa5cfa5b23590644e708a65614b57b31b256d84aa55f8e4390a96f042274a026"
+      },
+      "independent/image-results.json": {
+        "bytes": 4410,
+        "sha256": "4b8d6b6ffc22a0b4bb73a7326b55f0736a8df01b7ce81475ee100929cc48238c"
+      },
+      "independent/image-results.json.initial": {
+        "bytes": 4410,
+        "sha256": "c09ee0e189bad63bb0330d0e93d5c54fc10c04967006f38d1cffde28081de87f"
+      },
+      "independent/image_probe.py": {
+        "bytes": 3365,
+        "sha256": "bcac40c1ff288d3caea523b24b64414fccbc6900d096d113c56bec03e1e8d482"
+      },
+      "independent/image_probe.py.initial": {
+        "bytes": 3162,
+        "sha256": "19c9e49ec024612e4678665f8dbbabce05c9db74ede5bc3a7b37b01501d0c552"
+      },
+      "independent/images/compact_a3_web/on-alarm.txt": {
+        "bytes": 457499,
+        "sha256": "3f9ab40216313d4870c81e6183e797e9411ef7dc6a7fcc52b013b4a2606c142d"
+      },
+      "independent/images/compact_a3_web/policy-symbol.txt": {
+        "bytes": 126,
+        "sha256": "30f36f8d33186d365e60b2bd20f50b38760ff2aade959582df79bddd2e79aef2"
+      },
+      "independent/images/compact_n16r8_flex_dev/on-alarm.txt": {
+        "bytes": 595339,
+        "sha256": "eaaed6ce36039939422c4baa07b4617bede1e22c7a707b03acdd8d30bd4a3d88"
+      },
+      "independent/images/compact_n16r8_flex_dev/policy-symbol.txt": {
+        "bytes": 126,
+        "sha256": "1b1bbd68bb4ac804e75cf632f9ae10979e10ee72bbe590ff4b0580b7d957ce66"
+      },
+      "independent/images/compact_n16r8_web/on-alarm.txt": {
+        "bytes": 455361,
+        "sha256": "3c23427360d8744ed818f4c110305761f82216cc8fb3f7cf5956b50d4c04d5b8"
+      },
+      "independent/images/compact_n16r8_web/policy-symbol.txt": {
+        "bytes": 126,
+        "sha256": "7e7d70587809d4faa6ba9ce77cac65a65b5e507ba42e680d3786278333818f7a"
+      },
+      "independent/parent-evidence/build-sources-after.json": {
+        "bytes": 43427,
+        "sha256": "380b076560f30de43a1d060095551da6e7d7c3c324b7c88b89dfdc523090df2a"
+      },
+      "independent/parent-evidence/build-sources-before.json": {
+        "bytes": 43427,
+        "sha256": "380b076560f30de43a1d060095551da6e7d7c3c324b7c88b89dfdc523090df2a"
+      },
+      "independent/parent-evidence/build-summary.json": {
+        "bytes": 4671,
+        "sha256": "2f79cde77a9cf1381735f1d943a4011cb0785f265a0b11e1790b88ae8d5add64"
+      },
+      "independent/parent-evidence/host.log": {
+        "bytes": 15288,
+        "sha256": "0a585a07c13050a272ef7d7d50f1b4c0610646ba795600e7cd498bd0f8ca9de7"
+      },
+      "independent/parent-evidence/native.log": {
+        "bytes": 6682,
+        "sha256": "745ac4244cf092bee7b475536aae32cf693d729489aeaf0ebcaf2c7284d9f1fa"
+      },
+      "independent/parent-evidence/pairing-ui-initial-failed.log": {
+        "bytes": 2715,
+        "sha256": "fea8b5f4a84c89bad98aeb9cedabce6f37e088024a97e3ed6974b0c24bc3c609"
+      },
+      "independent/parent-evidence/pairing-ui-results.json": {
+        "bytes": 594,
+        "sha256": "65998b4df2ff768bd677d90cd08b0a7162b8d4973acadc36a671321b71afb5fe"
+      },
+      "independent/parent-evidence/pairing-ui.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "independent/parent-evidence/profiles-ui.log": {
+        "bytes": 749,
+        "sha256": "c5f3fab4165e8f2a51c96cdaf4131d39227144eed5186b5e4c39f951318941c5"
+      },
+      "independent/parent-evidence/storage.log": {
+        "bytes": 70,
+        "sha256": "72a166ab92c1aa479273dab70fcca632210f17d82306690db6982f9edf818e0a"
+      },
+      "independent/parent-evidence/tuning-ui.log": {
+        "bytes": 995,
+        "sha256": "2cf42833697da2d46064f7e7ad4cd3f284a85d5d803e0994e848d21c0d4826aa"
+      },
+      "independent/probe-results.json": {
+        "bytes": 487,
+        "sha256": "56402d4d5fac260222331e9b46ae85b1777dd19cf4ef355d87c94c61cbabe5fc"
+      },
+      "independent/probe.log": {
+        "bytes": 298,
+        "sha256": "569da62eca25628716a44d51f927ecf650a9d91226ee0e80fcba08e161948496"
+      },
+      "independent/source-final/docs/engine-feature-coverage.md": {
+        "bytes": 19805,
+        "sha256": "c171895b7207734f54828ae46cb2b134308d3c0d7c9f1064b9b45eebc423496a"
+      },
+      "independent/source-final/docs/espnow.md": {
+        "bytes": 14785,
+        "sha256": "776ac275d672a0bb27272c2af23ec938a07a4b97b12ab79f9e1cff5792f35400"
+      },
+      "independent/source-final/docs/web-configuration.md": {
+        "bytes": 7384,
+        "sha256": "ff25a161464029a337094b6486a8a2f1f9d359d963391c6abd5a14d629e68ebb"
+      },
+      "independent/source-final/scripts/test_firmware.sh": {
+        "bytes": 6711,
+        "sha256": "ef8ed88f18bed8694b50c3fa5c6eaff92baed0b44d5f42301380dd86733fa5c1"
+      },
+      "independent/source-final/tools/test_pairing_ui.py": {
+        "bytes": 4329,
+        "sha256": "dc832c5bee51f1a3dfbb8a22e836bf6778c96b646ae082e1753b2d59346bbd59"
+      },
+      "independent/source-final/tuning/README.md": {
+        "bytes": 3331,
+        "sha256": "734d500372864acd8c940b97c08516baf2ef77ef499700fa35aa0cdb2a2dfd57"
+      },
+      "independent/source-final/web/index.html": {
+        "bytes": 100701,
+        "sha256": "88f7dcab0099f7adf715bb10ad64786b9510ef7cdb4c36ac9879b278570b89f1"
+      },
+      "independent/source-freeze/README.md": {
+        "bytes": 3178,
+        "sha256": "8b82a7eec0e1de5a6a8ee975bf03de8ee4755357d6055857be4a98cf3be12f7f"
+      },
+      "independent/source-freeze/config/defaults.json": {
+        "bytes": 4006,
+        "sha256": "e61fb310f60ddc801bbc2dec0dca288314ed124761b7fc35087aee10687ba617"
+      },
+      "independent/source-freeze/config/engine-profile.json": {
+        "bytes": 798,
+        "sha256": "d8e2e028f8e30b1a7caeb718b149f98bdff412be42bb0212b15edbc4741b31dc"
+      },
+      "independent/source-freeze/config/engine/defaults.json": {
+        "bytes": 34399,
+        "sha256": "b24680872f36721591b10c15f643cd10c985e30f5bd860b96591b203a00d3f2e"
+      },
+      "independent/source-freeze/docs/engine-cylinder-profiles.md": {
+        "bytes": 14021,
+        "sha256": "5491d325e8a697ded3a317d2d3f634d5ef98fc7ca6e2d6dc16ab4faa795ec115"
+      },
+      "independent/source-freeze/docs/engine-development.md": {
+        "bytes": 12629,
+        "sha256": "bc53d18e5cd6f533d16ce94ea76e454520b444a7547aef2d29ce37b668f34cbc"
+      },
+      "independent/source-freeze/docs/engine-expanded-boost-reference.md": {
+        "bytes": 8230,
+        "sha256": "4e1f9e63f0512e00836de29d0bf7c6e360f85e4a100a28e47485ef632a9c869d"
+      },
+      "independent/source-freeze/docs/engine-feature-coverage.md": {
+        "bytes": 19805,
+        "sha256": "c171895b7207734f54828ae46cb2b134308d3c0d7c9f1064b9b45eebc423496a"
+      },
+      "independent/source-freeze/docs/engine-shaft-integration.md": {
+        "bytes": 5790,
+        "sha256": "6d9b249b7383366265d98537d38d04494aa0908b335f32badc90a612c85d8900"
+      },
+      "independent/source-freeze/docs/engine-tuning-application.md": {
+        "bytes": 6349,
+        "sha256": "b2ab32333f14297d190d5ec68e9497da76742613930d555a689ffeaa9b7cb757"
+      },
+      "independent/source-freeze/docs/espnow-engine.md": {
+        "bytes": 30226,
+        "sha256": "af60daf7b434760a139f00712834e241de557c93608cbac88cdd376a2a319949"
+      },
+      "independent/source-freeze/docs/espnow.md": {
+        "bytes": 14785,
+        "sha256": "776ac275d672a0bb27272c2af23ec938a07a4b97b12ab79f9e1cff5792f35400"
+      },
+      "independent/source-freeze/docs/web-configuration.md": {
+        "bytes": 5824,
+        "sha256": "2cb17974fe959c468772b2d2aa9b38062af05ab431c932329729e644fadbeff8"
+      },
+      "independent/source-freeze/firmware/include/ecu/board_status.hpp": {
+        "bytes": 305,
+        "sha256": "4ad055e17cdfc081db4cb6f17763bcd2ce299fecd8786a7b1220ff8e350d53d7"
+      },
+      "independent/source-freeze/firmware/include/ecu/boost_command.hpp": {
+        "bytes": 1615,
+        "sha256": "34c9871c2addc9054b95688dca63c0270dc84da422ae50c4361da658631a870d"
+      },
+      "independent/source-freeze/firmware/include/ecu/boost_control.hpp": {
+        "bytes": 11161,
+        "sha256": "2fa5b865903438e15356e82a68205d50cac897687ba77d558837852e2f4c9c6b"
+      },
+      "independent/source-freeze/firmware/include/ecu/boost_json.hpp": {
+        "bytes": 4920,
+        "sha256": "93db1549ffb1491af8eee73e02e4044ab7d1151f9f510844f1f243e1c9f9d0e9"
+      },
+      "independent/source-freeze/firmware/include/ecu/boost_pwm.hpp": {
+        "bytes": 375,
+        "sha256": "a462c59d0e1516dee798dcd2e7fae93da343cb92702ec0cd39827df9ad194255"
+      },
+      "independent/source-freeze/firmware/include/ecu/boost_pwm_json.hpp": {
+        "bytes": 549,
+        "sha256": "6891cdb627ae14043717fcf644bba2a2a76f931ec30e76c2b5a5de240f7053c6"
+      },
+      "independent/source-freeze/firmware/include/ecu/boost_runtime.hpp": {
+        "bytes": 2310,
+        "sha256": "2bd7df42100f065228a34023c85421b5f62bd09b610892eb5404faea21793102"
+      },
+      "independent/source-freeze/firmware/include/ecu/boost_runtime_json.hpp": {
+        "bytes": 3203,
+        "sha256": "732d52aa667e42c4c9d93f8ab84dd96565ea91f600251eeda1e3721f2b2e0f1d"
+      },
+      "independent/source-freeze/firmware/include/ecu/capture_clock.hpp": {
+        "bytes": 3448,
+        "sha256": "5c0f88793019c236b3dc6eea7a39e9a9b1a080bf5adc3159b6651ba45bdc8511"
+      },
+      "independent/source-freeze/firmware/include/ecu/config.hpp": {
+        "bytes": 5442,
+        "sha256": "a3cc78e7660e4266d44577eaab9d67f96cdeac0e08aa0ae3291880315935f739"
+      },
+      "independent/source-freeze/firmware/include/ecu/config_storage.hpp": {
+        "bytes": 2363,
+        "sha256": "b7ec2f7029e00abb6440b3a9b1e1210d76ddf1f2309d19f7c52d81bc59990c45"
+      },
+      "independent/source-freeze/firmware/include/ecu/control.hpp": {
+        "bytes": 10954,
+        "sha256": "6fd20f36bdfaff0fc7b80b876218e9b07730f177bc1aeea0b5c19516ecc2e69b"
+      },
+      "independent/source-freeze/firmware/include/ecu/cylinder_channels.hpp": {
+        "bytes": 2530,
+        "sha256": "1dd9c57f10ed3544283750ed560ac7039df261035075c0e11d95b34114ab70e8"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine.hpp": {
+        "bytes": 34516,
+        "sha256": "4181ff9b8ff361a2035f129e2e22c929d276124b782870f7c50fb0ff90cb8d9f"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_binding.hpp": {
+        "bytes": 3197,
+        "sha256": "c1f176b8fe404201278d24da9e31b15a02e77d9e20284ceea8c344e75d3ee7b9"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_data.hpp": {
+        "bytes": 6729,
+        "sha256": "4670fb0abb643a0957b2f679290e40ce7423df15219222896ad2a99d3d6ec4d7"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_data_json.hpp": {
+        "bytes": 9328,
+        "sha256": "c663a76867496d5a05eecb7c84a19be75f79258066198569a39f4acb7919f491"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_json.hpp": {
+        "bytes": 23169,
+        "sha256": "130c84c5bdd49cce6336c3481c537fec571eb10b2181279d465597e1c2663288"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_limits.hpp": {
+        "bytes": 107,
+        "sha256": "0943a298965fcdd2065b9fd742c5e7c9697aa03439a997fae5e021bfc1296b8d"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_log.hpp": {
+        "bytes": 5418,
+        "sha256": "eadcf8344a14791649c6a434f5be73cb179f061605fd7d0fb5c7e77072613a84"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_log_json.hpp": {
+        "bytes": 3996,
+        "sha256": "e487435dd07ed5fd5290089a55b8893e0f38d6a268dbcf2529335a8b39d3a3e6"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_log_msl.hpp": {
+        "bytes": 11692,
+        "sha256": "f63cc50ef8c6ca953c1a31d663bb2abcb30b4376d0492dbbfe1e26ec3f60dcbb"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_log_service.hpp": {
+        "bytes": 754,
+        "sha256": "e5e9093e6737b2eea2ac9d2beebecf4a5e79d56929edeff29d046311298f841f"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_phase.hpp": {
+        "bytes": 8778,
+        "sha256": "227748fd088563ef15be4056c8102f768a10a4f279676d02961169e1f0c2d671"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_radio.hpp": {
+        "bytes": 11066,
+        "sha256": "d3380ce44a5b97cd915234548a3e16d6ac07d128f16e77047c05e5afd36cfab4"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_radio_boost.hpp": {
+        "bytes": 1235,
+        "sha256": "cac1c58a9492d435f08ab77e83da58bc922cc445ccfc5cd775edd36df1d9ab6d"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_radio_cylinders.hpp": {
+        "bytes": 1557,
+        "sha256": "4dfd45793996e1e2d1af89e2b97169d7df75e9a76d425dd93a94967661c76e91"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_radio_flex.hpp": {
+        "bytes": 4793,
+        "sha256": "7f93304fdfd3cdcc571e0956aa58edcd23bfbc7a8113d35d8a8873d1a67bc258"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_radio_health.hpp": {
+        "bytes": 1009,
+        "sha256": "94919a86f184cf7bccdc767c67de753a10b0d1dba40478479ddd9341e311cc75"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_scheduler.hpp": {
+        "bytes": 11208,
+        "sha256": "af03a89e6d541b1915ff6e696dac38761363e53b9d4a8ed0a51ab01d0a3a943d"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_service.hpp": {
+        "bytes": 976,
+        "sha256": "9b01a25926de5157213fad65bbfdd189fa66fe140f075b5685919c2c8aec0dc0"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_storage.hpp": {
+        "bytes": 3105,
+        "sha256": "0e794be42d9a643e055d6f2e86b497ff6bd21ad2446b2b09b51a297819d02e4c"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_target.hpp": {
+        "bytes": 2491,
+        "sha256": "7ae0c12c272f620bdf23afa45a5d3f34f8142045a76ae3de144b2bd907e5b8bd"
+      },
+      "independent/source-freeze/firmware/include/ecu/engine_tuning.hpp": {
+        "bytes": 120,
+        "sha256": "e9272e0c1cb6af4c565eda2b91efc1abdf1fab16188786b507ed4fd4a333f4a6"
+      },
+      "independent/source-freeze/firmware/include/ecu/espnow.hpp": {
+        "bytes": 336,
+        "sha256": "46e9a9d5ed5218127739f475971459eb8413d944dbe13b0b765f52566e29a9cc"
+      },
+      "independent/source-freeze/firmware/include/ecu/espnow_protocol.hpp": {
+        "bytes": 2797,
+        "sha256": "aff9fd75b7489f20cac497aaa2486d2579616b2d7c64a764ce59f862b30ee77a"
+      },
+      "independent/source-freeze/firmware/include/ecu/flex_capture_json.hpp": {
+        "bytes": 5288,
+        "sha256": "5721d4889b351bb9001a259801cb4ae465ddd8852a9d69553a6564684d0a85fb"
+      },
+      "independent/source-freeze/firmware/include/ecu/flex_capture_owner.hpp": {
+        "bytes": 12562,
+        "sha256": "3f4f69618b9e7b376c2ea1a1717ffdd328d782d5e54416da9296a2a95d6efb84"
+      },
+      "independent/source-freeze/firmware/include/ecu/flex_engine.hpp": {
+        "bytes": 5999,
+        "sha256": "b24c940bdee8e71e427f552d126efdba7d5ca29110aa70d7d4396fcef6eba468"
+      },
+      "independent/source-freeze/firmware/include/ecu/flex_fuel.hpp": {
+        "bytes": 14382,
+        "sha256": "ce233744b7f8b938f2d2a4a491138b2ba115a62ec0a5270612a89261e1729c22"
+      },
+      "independent/source-freeze/firmware/include/ecu/flex_hardware.hpp": {
+        "bytes": 493,
+        "sha256": "bd01b82d25c37f25169aead71d7df3fc4992923c52e941df4766943e290a6380"
+      },
+      "independent/source-freeze/firmware/include/ecu/flex_ingress.hpp": {
+        "bytes": 9452,
+        "sha256": "29a7ab7040b9918f7dde65356c138b8b619b484588954230bbc8d8d43cff4216"
+      },
+      "independent/source-freeze/firmware/include/ecu/flex_json.hpp": {
+        "bytes": 6399,
+        "sha256": "0a1aed292e92b2a08b00ac8a759402a89c5449458787d72a9395103d991dac45"
+      },
+      "independent/source-freeze/firmware/include/ecu/flex_runtime.hpp": {
+        "bytes": 8991,
+        "sha256": "74bffa63c8930ea35c123250c98e30b5c9f588eb6761a812881d1e1a0b981051"
+      },
+      "independent/source-freeze/firmware/include/ecu/flex_runtime_json.hpp": {
+        "bytes": 4014,
+        "sha256": "4b1c0424f5ac2bd50f520d1d04badb4347bbe246cfb02070988175a50a45d6d7"
+      },
+      "independent/source-freeze/firmware/include/ecu/heap_object.hpp": {
+        "bytes": 540,
+        "sha256": "7579430f6514dfca4dcb718766511e13bae07a50f5e905a28145d11142d54e51"
+      },
+      "independent/source-freeze/firmware/include/ecu/idle_command.hpp": {
+        "bytes": 1489,
+        "sha256": "d8ce3acc575e595e505ef962a21f9947886cef2e8fa3996a067a8dab90af5310"
+      },
+      "independent/source-freeze/firmware/include/ecu/idle_control.hpp": {
+        "bytes": 10973,
+        "sha256": "ba077c903a4061cc6934be5a90b7cfbe26a82ebe798c33fa80a75cea458f23bd"
+      },
+      "independent/source-freeze/firmware/include/ecu/idle_hardware.hpp": {
+        "bytes": 616,
+        "sha256": "d5991404fa63c76b1f851942ffbf0e5540bf003f796ff1ce653d5674df017d23"
+      },
+      "independent/source-freeze/firmware/include/ecu/idle_pwm.hpp": {
+        "bytes": 6903,
+        "sha256": "04639fbceed4723be98f4853eb48fed7c78e6ff722b027343f86839482bf6f20"
+      },
+      "independent/source-freeze/firmware/include/ecu/idle_pwm_json.hpp": {
+        "bytes": 1434,
+        "sha256": "32c21a09549c02e114489658f883225465edf91366096a648dc4a45a5b7b953b"
+      },
+      "independent/source-freeze/firmware/include/ecu/json.hpp": {
+        "bytes": 2130,
+        "sha256": "3f2de7ca0477ac2e235f22f4fec959159336f9a7117b18cf1bbc09d4e71e8247"
+      },
+      "independent/source-freeze/firmware/include/ecu/load_json.hpp": {
+        "bytes": 8013,
+        "sha256": "75a0b2fb5939e671c44c0ae0e49e380db187bcc3c413fc20375f6ede6abfb931"
+      },
+      "independent/source-freeze/firmware/include/ecu/load_model.hpp": {
+        "bytes": 11873,
+        "sha256": "5d25340d26a20b58f29501491357e2264e30f91284bc0691bf0f06f34ec26361"
+      },
+      "independent/source-freeze/firmware/include/ecu/pins.hpp": {
+        "bytes": 1139,
+        "sha256": "9b55497179973aaa6b37d0bb53587228dedf864111fecd330a5379e024d6bcad"
+      },
+      "independent/source-freeze/firmware/include/ecu/realtime.hpp": {
+        "bytes": 387,
+        "sha256": "dfd98b4842f9ea13a4edcb473c93a9bd74c1863fd9b2e1949b2cdc77e55c3bc5"
+      },
+      "independent/source-freeze/firmware/include/ecu/secondary_json.hpp": {
+        "bytes": 11890,
+        "sha256": "25037e11278fac1bb2f4e0a394b9e992e25336f497147f849e6109af9d00eed1"
+      },
+      "independent/source-freeze/firmware/include/ecu/secondary_tables.hpp": {
+        "bytes": 16600,
+        "sha256": "4ea26b399ae6cb29bb82823572698a11d65bc51ac570097ab6b22803119d02f2"
+      },
+      "independent/source-freeze/firmware/include/ecu/status_led.hpp": {
+        "bytes": 6608,
+        "sha256": "47dc3b311195c72348849e24521b47e743cfec90b751fcd1b9626b39ff034902"
+      },
+      "independent/source-freeze/firmware/include/ecu/switch_acquisition.hpp": {
+        "bytes": 9371,
+        "sha256": "b53a2867112eb46262d58797d24ec6b10a430940eff21d5d0f5f3d919ce6caeb"
+      },
+      "independent/source-freeze/firmware/include/ecu/switch_service.hpp": {
+        "bytes": 416,
+        "sha256": "cbd2ead52ffa7e06b5082564cbb648fd5885f4c690da2a4bfa22421ce0b2490e"
+      },
+      "independent/source-freeze/firmware/include/ecu/switch_transport.hpp": {
+        "bytes": 2438,
+        "sha256": "8d14f1d5ff10a8678ca84d5642b52f459c1d39ae3d0bb991e6fef33696d79932"
+      },
+      "independent/source-freeze/firmware/include/ecu/timing_executor.hpp": {
+        "bytes": 16260,
+        "sha256": "4b692a218335b2288f5da983e1347f54e2110a9cb24ea65ccabc6296a6d9de87"
+      },
+      "independent/source-freeze/firmware/include/ecu/transient_enrichment.hpp": {
+        "bytes": 12008,
+        "sha256": "cb29b19871a4b900008e46356bd5d43c89313a271dd5b84996f9dbb4a6fb3403"
+      },
+      "independent/source-freeze/firmware/include/ecu/transient_json.hpp": {
+        "bytes": 3294,
+        "sha256": "0c69df46a44b3c87384ef4336bd8ec03f6ec15db8d213de9ef6c89e0af28ca88"
+      },
+      "independent/source-freeze/firmware/include/ecu/trigger_log.hpp": {
+        "bytes": 2952,
+        "sha256": "e395b2a5393e5f818bb07d8009f5899a27871976fd5d319fd69d78039aeb2451"
+      },
+      "independent/source-freeze/firmware/include/ecu/trigger_log_json.hpp": {
+        "bytes": 4155,
+        "sha256": "72513c84adde1c6bfbcc568821b40e4fa6305e2747ae1f4e1152a2d699eefd58"
+      },
+      "independent/source-freeze/firmware/include/ecu/tuning_document.hpp": {
+        "bytes": 7415,
+        "sha256": "e7f8729cfae8d510332d25a4f22678415a2ce625dbeac1f57f3c084d56d63183"
+      },
+      "independent/source-freeze/firmware/include/ecu/tuning_layout.hpp": {
+        "bytes": 32726,
+        "sha256": "9690e6d9e72699f7f54029a76e19bf2e89b04894d1faa552b86fec6d77d4f700"
+      },
+      "independent/source-freeze/firmware/include/ecu/tuning_live.hpp": {
+        "bytes": 6899,
+        "sha256": "9949836f290ffff9e4b1b0af276abffe02596abb065a3daba6c7e6183e9601f6"
+      },
+      "independent/source-freeze/firmware/include/ecu/tuning_session.hpp": {
+        "bytes": 7958,
+        "sha256": "6a1bbfe616f28d12440d86912b3e23028db354ff76179682ace890a09ee0b21e"
+      },
+      "independent/source-freeze/firmware/include/ecu/tuning_stream.hpp": {
+        "bytes": 3028,
+        "sha256": "d973ac1f4e576ffe1dae4454835f72b702a7c4ef49cd986224cbba47ea312042"
+      },
+      "independent/source-freeze/firmware/include/ecu/web_config.hpp": {
+        "bytes": 1088,
+        "sha256": "d1277da304e7e84fec29a0b6bcbddd9730fb068135d6f14ffc3c7369d79c8e47"
+      },
+      "independent/source-freeze/firmware/main/app.cpp": {
+        "bytes": 13027,
+        "sha256": "0f99750a72853da14d10907ad81a5cac714f02cd520b8b764a8f265c57da5df5"
+      },
+      "independent/source-freeze/firmware/main/config_json.hpp": {
+        "bytes": 3373,
+        "sha256": "40c444b5d69776f8824f81bcdb310cc386d93bfb9686caf3086a8956b9c528f6"
+      },
+      "independent/source-freeze/firmware/main/engine_service.cpp": {
+        "bytes": 15376,
+        "sha256": "1f573e70175ce65a49f72615454162b3a3ebee6dfeef434f6a7f6a4bed4ff757"
+      },
+      "independent/source-freeze/firmware/main/engine_target.cpp": {
+        "bytes": 40823,
+        "sha256": "7a88213e0b5ecee3bb2e385607b18cecec50e2e53fbb9adefbabb7a25e936622"
+      },
+      "independent/source-freeze/firmware/main/engine_tuning.cpp": {
+        "bytes": 7880,
+        "sha256": "24b846ed8cc4a03c7b323afd4b58eea7f411b243e71e569f5b9c08c9343d851a"
+      },
+      "independent/source-freeze/firmware/main/web_config.cpp": {
+        "bytes": 29402,
+        "sha256": "d6c9c4da17cd0e0df62caa83276d478d699e27a99b1dae4ffd57d275b52fa8a9"
+      },
+      "independent/source-freeze/firmware/platformio.ini": {
+        "bytes": 2060,
+        "sha256": "1cd5facedd3e9fc9e3c7a7b0d6741b24b4a3871d2a6897ac36c740e09a8d8497"
+      },
+      "independent/source-freeze/hardware/a6-flex-rgb/README.md": {
+        "bytes": 2708,
+        "sha256": "0536ea37551bf77aa7852b73a6d6045ce565d5a3e61ea3a0e40a3219c486a3b8"
+      },
+      "independent/source-freeze/hardware/a6-flex-rgb/net_contract.json": {
+        "bytes": 167974,
+        "sha256": "2d2d8883d8035c43bde5d7781e491ee5b8cb470fb0c87e3c80975175e99b80e2"
+      },
+      "independent/source-freeze/hardware/a7-boost-interface/README.md": {
+        "bytes": 2808,
+        "sha256": "949592db93bd0c6256aca54f008a8fe1e3ed0231e9afc1ab306710e497a7b2d2"
+      },
+      "independent/source-freeze/hardware/a7-boost-interface/net_contract.json": {
+        "bytes": 170043,
+        "sha256": "a84a5ce3ee7ddd675c0c7708f3fca8aa2cbfba7f8e5dfa15bdd2e6f5c1e42bcf"
+      },
+      "independent/source-freeze/scripts/audit_engine_build.py": {
+        "bytes": 4228,
+        "sha256": "b3570d93767dcf69051a0d3fbc23c689661c274c38d58d7e58ac3238d9cf455e"
+      },
+      "independent/source-freeze/scripts/build_firmware_preserved.py": {
+        "bytes": 9216,
+        "sha256": "e9f1ecb60cb29c3f9d29f6f677b62b8b840f7a5932d64aa746c04a434bc2099a"
+      },
+      "independent/source-freeze/tools/cylinder_radio.py": {
+        "bytes": 2553,
+        "sha256": "346c7a95987e6c33a19d3643709dc7d7ddca9542a3714883a5bad160e50639e2"
+      },
+      "independent/source-freeze/tools/engine_msq.py": {
+        "bytes": 17529,
+        "sha256": "3aa5084ee8275b88256ea12f71833abbd4d5e821d6702041be74bf0d17430eb8"
+      },
+      "independent/source-freeze/tools/engine_protocol.py": {
+        "bytes": 16336,
+        "sha256": "9a9816665cfce13684c0b3f5c2f0280f58f4221f4ea587edce86e72fed587101"
+      },
+      "independent/source-freeze/tools/engine_receiver.py": {
+        "bytes": 29246,
+        "sha256": "c88856edfa2c64497ce77f11dfdf47c2299d1a57db44ec2efa609abdb3c5a5e6"
+      },
+      "independent/source-freeze/tools/engine_runtime.py": {
+        "bytes": 19208,
+        "sha256": "db48c8b51a3c8fd5864a316512d7acda8327092bf6050cd505224da37a1bb19a"
+      },
+      "independent/source-freeze/tools/radio_simulator.py": {
+        "bytes": 5769,
+        "sha256": "e02c069a5e97186939c87b3e5f12f3c5f4b44eb82566089f71c2ea47dd4258ea"
+      },
+      "independent/source-freeze/tools/web_server.py": {
+        "bytes": 16659,
+        "sha256": "01024852d47ea8dde6c87fae21b42f5124a04a7f1c10745fc98b6cd388923d7e"
+      },
+      "independent/source-freeze/tuning/README.md": {
+        "bytes": 3647,
+        "sha256": "9681df2649bae61d1282a565addb5db1a9c7d94aa3fdc6517d12ff35dd98088e"
+      },
+      "independent/source-freeze/tuning/esp32-ecu-profiles.ini": {
+        "bytes": 63333,
+        "sha256": "1506aa993f7374c6d0dac37a9664e31c339b8125f0bcde2b0d72f5804d98a9af"
+      },
+      "independent/source-freeze/tuning/protocol-layout.json": {
+        "bytes": 10671,
+        "sha256": "228d1656d6d0bfbceeb1fc9f402a0e4a76cf6b6d769bc14fa36a207b1f865dc8"
+      },
+      "independent/source-hashes.json": {
+        "bytes": 13238,
+        "sha256": "da633235977ac320e01d82411f8c46dbaaa603a3035999449400f41fb28967c9"
+      },
+      "independent/supported_path_probe.py": {
+        "bytes": 6512,
+        "sha256": "5ad97b32d9ca61a3794c3b4facbd531cbd9570f498519ce04b34ec07b8f222a5"
+      },
+      "independent/whitelist.json": {
+        "bytes": 32023,
+        "sha256": "a1df0580c2b587203c181f3d74452147b88134b1e0a7a20b81ad72a01fcdd42e"
+      },
+      "native/flex-radio-suite-1793955942-2123167/0.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native/flex-radio-suite-1793955942-2123167/1.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native/flex-radio-suite-1793955942-2123167/2.log": {
+        "bytes": 27,
+        "sha256": "4e9458315b846b93a15c4b2abbea982025fe36a4ce6bf7a1e6dd7ef4448c6fe6"
+      },
+      "native/flex-radio-suite-1793955942-2123167/boost-profile-blocked.json": {
+        "bytes": 1791,
+        "sha256": "02ab4b9fafca735b6c2317bda1a9450988b60b84ff44b797bd59e144fbd35f62"
+      },
+      "native/flex-radio-suite-1793955942-2123167/commands.json": {
+        "bytes": 1599,
+        "sha256": "6e46e2cf6af21523d8a9d9be8bf8e43a4c267fc24b57a5317d59f8bcb0bd3dcb"
+      },
+      "native/flex-radio-suite-1793955942-2123167/complete.json": {
+        "bytes": 1737,
+        "sha256": "8888f02d5f00c5fcc020753fe665a42c638d31253f5ca08620d841c6b240ec8c"
+      },
+      "native/flex-radio-suite-1793955942-2123167/engine-ack-missing.json": {
+        "bytes": 1743,
+        "sha256": "61ffd03de8821f426f0de5df3048da6a5efa5d38f4a6cbd3a5b7a42a035f5623"
+      },
+      "native/flex-radio-suite-1793955942-2123167/held-expired.json": {
+        "bytes": 1746,
+        "sha256": "c7cdbd8a4b6985d5f44afe8a17fa55ec03c15bbd20b1986449009c848faea9da"
+      },
+      "native/flex-radio-suite-1793955942-2123167/partial.json": {
+        "bytes": 1738,
+        "sha256": "fcf8f0afd22e5e42236f069660f43346ac0ddaac3062915ac93aa3796a019d2f"
+      },
+      "native/flex-radio-suite-1793955942-2123167/schema6-complete.json": {
+        "bytes": 1732,
+        "sha256": "4893b313c8ac219912de644659316c7dc3074d635e63e759e726b8351b3cd668"
+      },
+      "native/flex-radio-suite-1793955942-2123167/schema6-downgraded.json": {
+        "bytes": 1804,
+        "sha256": "23a3bb9cc5525ee853dd4f7c390e69d0b05e03e930ac3942905f19c9001fa320"
+      },
+      "native/flex-radio-suite-1793955942-2123167/schema6-fairness.json": {
+        "bytes": 255,
+        "sha256": "141edf208bb82c5f25113dd97f57a522e0e3a073ceecc3d0dc8630797f59cfa9"
+      },
+      "native/flex-radio-suite-1793955942-2123167/schema6-four-peers.json": {
+        "bytes": 118,
+        "sha256": "83d7df78e41972fd81afffde7593bbd596e580bbf4aa2e9d67156c6b57ef2ae9"
+      },
+      "native/flex-radio-suite-1793955942-2123167/schema6-partial-base.json": {
+        "bytes": 1729,
+        "sha256": "5e93268d91db933e6a694476bfcfb5cd2b3115897fd2bc7f06189f032a527a94"
+      },
+      "native/flex-radio-suite-1793955942-2123167/schema6-partial-flex.json": {
+        "bytes": 1734,
+        "sha256": "6337c9352a7a5177fabf841f624a3ff6bb72af57e6b5ed1882a928b6af4aa283"
+      },
+      "native/flex-radio-suite-1793955942-2123167/schema7-complete.json": {
+        "bytes": 1741,
+        "sha256": "ba2de8632a560eebac417546f01ab204c7f453ad67729e3b5e05ddb67d4dcfe3"
+      },
+      "native/flex-radio-suite-1793955942-2123167/schema7-downgraded.json": {
+        "bytes": 1824,
+        "sha256": "5d6fb967a4f13f205af59e1068152caae1bd726b6cb9126e9d77ff28ac9e7c5b"
+      },
+      "native/flex-radio-suite-1793955942-2123167/schema7-fairness.json": {
+        "bytes": 255,
+        "sha256": "8a13f564497f0acb7cf5385389d8db4df516f0351d1b5dd4d3b44c5f9ffac321"
+      },
+      "native/flex-radio-suite-1793955942-2123167/schema7-partial-base.json": {
+        "bytes": 1742,
+        "sha256": "9a69a891db7b39a14261e66b9f55e583d5158bd34b5b459cd3a2bf9e2c48983a"
+      },
+      "native/flex-radio-suite-1793955942-2123167/schema7-partial-boost.json": {
+        "bytes": 1748,
+        "sha256": "15e54f2f5c16e01adccfa2c569eaaafb49e73b6cd0fda30dd1396e1bbc5f41db"
+      },
+      "native/flex-radio-suite-1793955942-2123167/schema7-partial-flex.json": {
+        "bytes": 1743,
+        "sha256": "2de0db1bb5e1dd2b71acfd06d3ba7c15e3bb668c9575115b7cb99d04b54bd357"
+      },
+      "native/flex-radio-suite-1793955942-2123167/summary.json": {
+        "bytes": 1997,
+        "sha256": "f2651f24af29c478f143dab1ddaab949feca5af7a471962970488dffe514b230"
+      },
+      "native/flex-target-suite-1793955926-2123167/commands.json": {
+        "bytes": 2457,
+        "sha256": "3e18196abeb2240fb89121dd00528f4ff6e7e202dfcaa77eb174997cb07e76b2"
+      },
+      "native/flex-target-suite-1793955926-2123167/compile-0.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native/flex-target-suite-1793955926-2123167/compile-1.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-0/acquiring.json": {
+        "bytes": 12818,
+        "sha256": "83a7ea20e6646187c156c7bcd2781216932a9f890f56052059732e5212e3df16"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-0/capture-fault-recovered.json": {
+        "bytes": 13108,
+        "sha256": "4586183f958970d1be81d6da4c9fff9531153807527b6d080bffeb8b2a083dab"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-0/capture-fault-unconsumed.json": {
+        "bytes": 13164,
+        "sha256": "2a0eaf5eed7a0b01124bf028828cc4e5a1b02d6249d6abd6bdb680e7d4653065"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-0/deadline.json": {
+        "bytes": 12851,
+        "sha256": "26075a198ef1e67e5f96ebbb0834372d19b568dd5c2fcd5cadb1304f90532a89"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-0/disabled.json": {
+        "bytes": 13142,
+        "sha256": "d2ae051109cdf77c5e1e847c228ca59d0e3e5a484d3f0edcf381120b29d0f5d3"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-0/ethanol-only.json": {
+        "bytes": 13122,
+        "sha256": "1e13cfd7e20fb05f92f8cffca53ddc639c92a08b190a1d26697426189a91f915"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-0/overflow.json": {
+        "bytes": 12931,
+        "sha256": "7219f0b0a4d30bcadc7f8c3e9deb8e7d9a0da21b70edee97ff5b2dad86ccfd45"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-0/qualified.json": {
+        "bytes": 13011,
+        "sha256": "d0dcdd9f401474ef15b75defce0b4c61eb6a03069851c3f1b0cd345bb719f0f4"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-0/reconfigured.json": {
+        "bytes": 12965,
+        "sha256": "e3a3199f914050c973920ab689f9d144df93d336e34be2f62c3b919e2b496e94"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-0/recovered.json": {
+        "bytes": 13080,
+        "sha256": "b71745892a01b24b43942f30d7a6ef6c53dfa421cf4f47f39d3e833bc444de22"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-0/unconfirmed.json": {
+        "bytes": 13028,
+        "sha256": "48fe5bba0b0fb45e1e9ca9a87cd3accbb6c736d9d1c6bf21d9adbca97d2ad059"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-1/unavailable.json": {
+        "bytes": 12823,
+        "sha256": "8894d63efddb706b349bbfda2e85645f6a64529e1f5d04ff41a4b057f570c0e3"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-2/unavailable.json": {
+        "bytes": 12830,
+        "sha256": "bc6ef5d701781878a03ff93121a82e6185beca8a4937dfbfd9898f007b934002"
+      },
+      "native/flex-target-suite-1793955926-2123167/fixtures-3/unavailable.json": {
+        "bytes": 12830,
+        "sha256": "bc6ef5d701781878a03ff93121a82e6185beca8a4937dfbfd9898f007b934002"
+      },
+      "native/flex-target-suite-1793955926-2123167/run-0.log": {
+        "bytes": 40,
+        "sha256": "459736081e5a015e15646624564ec8683c5b25ca55efac03d12d33093d09c580"
+      },
+      "native/flex-target-suite-1793955926-2123167/run-1.log": {
+        "bytes": 37,
+        "sha256": "d1ec6e0ce08d7bc5df74d3aebba1ca3183330aa9acbc735b6e98c56356673232"
+      },
+      "native/flex-target-suite-1793955926-2123167/run-2.log": {
+        "bytes": 37,
+        "sha256": "0fb1158ef87eea5d65b91332d8bb19db565846b8ab281ff261b0afe55d4f434a"
+      },
+      "native/flex-target-suite-1793955926-2123167/run-3.log": {
+        "bytes": 37,
+        "sha256": "635d071d7b3283e370fac62111d0cafa0f049f1cf3883df9bf4b7a5357b4cc81"
+      },
+      "native/flex-target-suite-1793955926-2123167/summary.json": {
+        "bytes": 2920,
+        "sha256": "b93f79acef5eaf71dccc8a7c7b52357b35b51df06aea48093a625f6f18131b3d"
+      },
+      "native/led-fixtures/bus_recovered.json": {
+        "bytes": 731,
+        "sha256": "ce6f81c26154bbcf4fc4429ec5c7fd5075a42db755477ff39cedd8951e49bfc6"
+      },
+      "native/led-fixtures/green_ready.json": {
+        "bytes": 716,
+        "sha256": "93bd8ce6652c0604f1f3ab21740be7555302fa5b83ce7091c7fcc529625cb08b"
+      },
+      "native/led-fixtures/led_recovered.json": {
+        "bytes": 742,
+        "sha256": "f61bf5e535df95fc89435831460b07c4b423fb9e384f9d0ba1454ea420554b7d"
+      },
+      "native/led-fixtures/led_timeout.json": {
+        "bytes": 733,
+        "sha256": "eeff7b18f313e11cfd925085894d62b7ed0690faa801c296c21816ab35a15038"
+      },
+      "native/led-fixtures/native.log": {
+        "bytes": 106,
+        "sha256": "fc6cd428b277c161c1234bee5dabb7d0f47aa5055eb5c01e6b2ae29ddb119e30"
+      },
+      "native/led-fixtures/shared_bus_fault.json": {
+        "bytes": 736,
+        "sha256": "89c236441c9622d34333faf1b9e69548ab9004ce4f8963daa9dd64e861468d0a"
+      },
+      "native/led-fixtures/stale_latch.json": {
+        "bytes": 737,
+        "sha256": "4826f515f748f7c4ff3194fe93860f28a4f94bb1fb52fdab169cfb9629f1a930"
+      },
+      "native/suite.log": {
+        "bytes": 6682,
+        "sha256": "745ac4244cf092bee7b475536aae32cf693d729489aeaf0ebcaf2c7284d9f1fa"
+      },
+      "publish-checkpoint.py": {
+        "bytes": 9562,
+        "sha256": "86d7cf165b23ff9ed012f54c3472b9e5d1624e9305e41fd592d0ae8c56c7524b"
+      },
+      "storage/0.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "storage/1.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "storage/2.log": {
+        "bytes": 69,
+        "sha256": "6cd10b2badf9f28f7ad6dda010df0f3860f6856e1879287b1c4f5899c70cf330"
+      },
+      "storage/result.json": {
+        "bytes": 2397,
+        "sha256": "0c42f0588bf0ff9d07bc8ae42d4eadb3696522e3c3adf61f888551cfcbcb4df1"
+      },
+      "storage/sources/tools/fixtures/sensor-profile1-nvs-boundary.json": {
+        "bytes": 3775,
+        "sha256": "c8bcf8d42674f56301bdba8632fde480fb234af3e56d12cc2a07ffc111582a39"
+      }
+    }
+  }
+}
