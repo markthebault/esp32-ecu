@@ -126,7 +126,7 @@ if __name__=='__main__':
  if args.output is not None:OUTPUT=args.output.resolve();OUTPUT.mkdir(parents=True,exist_ok=False)
  suite=unittest.main(argv=[__file__,*rest],exit=False,verbosity=2)
  if OUTPUT is not None:
-  sources=['tools/test_engine_profile_plants.py','tools/engine_geometry.py','tools/engine_sil.py','tools/engine_research_plant.py','tools/compare_engine_controllers.py','tools/engine_log.py','simulation/modelica/EngineProfileAirPath.mo','simulation/modelica/EngineAirPath.mo','scripts/build_engine_airpath.py']
+  sources=['tools/test_engine_profile_plants.py','tools/engine_geometry.py','tools/engine_sil.py','tools/engine_research_plant.py','tools/shaft_dynamics.py','tools/compare_engine_controllers.py','tools/engine_log.py','simulation/modelica/EngineProfileAirPath.mo','simulation/modelica/EngineAirPath.mo','scripts/build_engine_airpath.py']
   manifests={name:json.loads((ROOT/path).read_text()) for name,path in (('profile_airpath','.cache/engine/modelica-mvem/airpath-profiles/manifest.json'),('legacy_airpath','.cache/engine/modelica-mvem/airpath/manifest.json'))}
   (OUTPUT/'summary.json').write_text(json.dumps(dict(passed=suite.result.wasSuccessful(),tests=suite.result.testsRun,failures=len(suite.result.failures),errors=len(suite.result.errors),results=RESULTS,source_sha256={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in sources},plant_manifests=manifests,scope='Uncalibrated synthetic engines driven by executed native project controller/dispatcher edges; expanded Speeduino comparison remains open; no physical qualification'),indent=2)+'\n')
  raise SystemExit(not suite.result.wasSuccessful())

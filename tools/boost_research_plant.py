@@ -69,6 +69,7 @@ class BoostResearchPlant(ResearchPlant):
   for name in ('injector_on','coil_on','charge_mg','port_mg','wall_mg','air_charge_mg','cylinder_fuel_mg','cylinder_burned_mg','cylinder_scheduled_work_j','cylinder_shaft_j'):
    setattr(candidate,name,list(getattr(self,name)))
   candidate.combustions=[dict(p) for p in self.combustions];candidate.heat_pulses=[dict(p) for p in self.heat_pulses]
+  candidate.intake_events=list(self.intake_events)
   candidate._integrate_candidate(t,dt,starter,load,idle_pct)
   self.__dict__=candidate.__dict__
  def _integrate_candidate(self,t,dt,starter,load,idle_pct):

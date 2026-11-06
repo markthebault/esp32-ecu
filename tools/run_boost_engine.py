@@ -4,7 +4,7 @@
 Each invocation owns its own plant history. Full comparison acceptance and
 calibrated physics remain separate; native execution is not physical hardware.
 """
-import argparse,json,math,time
+import argparse,hashlib,json,math,time
 from pathlib import Path
 from boost_research_plant import BoostResearchPlant
 from boost_valve_plant import BoostValve
@@ -56,6 +56,7 @@ def run(output,duration=6.,step_us=250,mode='off',actuator='normal',controller='
  profile=tune(mode,duty,target,cut_kpa,geometry,strategy);(output/'tune.json').write_text(json.dumps(profile,indent=2)+'\n')
  provenance.record['requested_tune_sha256']=provenance.track(output/'tune.json')
  plant=BoostResearchPlant(actuator_mode=actuator,geometry=geometry)
+ provenance.record['physical_event_contract']=dict(schema=1,fuel_transport=plant.fuel_parameters())
  ecu=None
  try:
   if controller=='ours':ecu=OurController(profile,target_dispatcher=True)
@@ -168,12 +169,17 @@ def run(output,duration=6.,step_us=250,mode='off',actuator='normal',controller='
     basis='Same physical boundary after explicit global command-low, with coil discharge and pending heat/fuel/work retained; no instantaneous magnetic-current quench')
    if any(high)or any(start is not None for start in plant.injector_on+plant.coil_on)or plant.boost_valve.coil.high:
     raise RuntimeError('Simulation halt left an actuator command high')
+  physical_event_files={}
+  for name,rows in (('intake-events.jsonl',plant.intake_events),('combustion-events.jsonl',plant.cylinder_combustions)):
+   with(output/name).open('x')as stream:
+    for row in rows:stream.write(json.dumps(row,allow_nan=False)+'\n')
+   physical_event_files[name]=dict(events=len(rows),sha256=hashlib.sha256((output/name).read_bytes()).hexdigest())
   provenance.verify()
   result=dict(qualification=__doc__.strip(),controller=controller,mode=mode,actuator=actuator,step_us=step_us,duration_s=duration,
    strategy=strategy,plant_geometry=physical.summary(),plant_air_parameters=plant.air.parameters,cam_edges=cams,
    expanded_reference=expanded_reference,reference_geometry_diagnostic=reference_geometry_diagnostic,
    stimulus=dict(scenario=scenario,throttle_pct_after_3s=throttle_pct,load_nm_after_4s=load_nm,starter_until_s=2.5,throttle_blip_s=[6,6.4] if scenario=='throttle_blip' else None,crank_capture_dropout_s=[6,6.3] if scenario=='trigger_dropout' else None,map_sensor_override_kpa=400 if scenario in ('map_high_rail','charged_map_rail') else None,map_sensor_override_s=[6,6.25] if scenario=='map_high_rail' else ([charged_start/1e6,(charged_start+250000)/1e6] if charged_start is not None else None),charged_fault_start_us=charged_start,charged_channels_at_start=charged_channels,minimum_charged_dwell_us=1500 if scenario=='charged_map_rail' else None,cut_kpa=cut_kpa,reference_protection_rpm=reference_protection_rpm),reference_profile=ecu.profile if controller=='speeduino' else None,
-   source_hashes=hashes,provenance_manifest_sha256=provenance_sha256,component_provenance=plant.air.components.provenance,completed=True,
+   source_hashes=hashes,provenance_manifest_sha256=provenance_sha256,component_provenance=plant.air.components.provenance,completed=True,physical_event_files=physical_event_files,
    before_halt=before_halt,after_halt=after_halt,observed_project_fault_mask=faults,maximum_tooth_quantization_deg=max_tooth_error,
    edges=edges,boost_edges=boost_edges,trigger_edges=teeth,suppressed_teeth=suppressed_teeth,production_speeduino_executed=controller=='speeduino',paired_comparison_accepted=False,physical_execution=False)
   (output/'result.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\n');progress('complete');print(json.dumps(dict(output=str(output),complete=True,wall_s=time.monotonic()-started)))

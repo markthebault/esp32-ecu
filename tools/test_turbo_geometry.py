@@ -48,7 +48,9 @@ class TurboGeometryTests(unittest.TestCase):
    p=BoostResearchPlant(geometry=geometry(n));self.addCleanup(p.close)
    p.rpm=1000;p.angle=629.99;omega=p.rpm*math.pi/30
    p.integrate(0,.0001)
-   expected=p.air_state['cylinder_air_kg_s']*4*math.pi/omega/n*1e6
+   event=next(row for row in p.intake_events if row['cylinder']==1)
+   self.assertLess(event['time_s'],.0001)
+   expected=event['cylinder_air_kg_s']*4*math.pi/event['airflow_sample_omega_rad_s']/n*1e6
    self.assertGreater(expected,0);self.assertAlmostEqual(p.air_charge_mg[0],expected,delta=1e-12)
    frozen=p.air_charge_mg[0];p.tps=80;p.integrate(.0001,.0001)
    self.assertEqual(p.air_charge_mg[0],frozen)
@@ -108,7 +110,7 @@ class TurboGeometryTests(unittest.TestCase):
 if __name__=='__main__':
  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--output',type=Path,required=True)
  args,rest=parser.parse_known_args();out=args.output.resolve();out.mkdir(parents=True,exist_ok=False)
- names=('tools/test_turbo_geometry.py','tools/turbo_components.py','tools/turbo_gas_path.py','tools/boost_research_plant.py','tools/engine_research_plant.py','tools/engine_geometry.py','tools/tcsi_graph.py')
+ names=('tools/test_turbo_geometry.py','tools/turbo_components.py','tools/turbo_gas_path.py','tools/boost_research_plant.py','tools/engine_research_plant.py','tools/shaft_dynamics.py','tools/engine_geometry.py','tools/tcsi_graph.py')
  sources={name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest()for name in names}
  result=unittest.main(argv=[__file__,*rest],exit=False,verbosity=2).result
  unchanged=all(hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==value for name,value in sources.items())

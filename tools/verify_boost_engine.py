@@ -6,6 +6,7 @@ not accept an ECU feature, an engine calibration, a controller match or hardware
 import argparse
 import json
 import math
+from collections import Counter
 from pathlib import Path
 from boost_engine_provenance import digest
 from engine_geometry import EngineGeometry,CHANNEL_EXTENT
@@ -37,6 +38,50 @@ def recompute_balances(ledger):
     assert abs(l('load_j')-l('pumping_work_j')-l('external_load_j'))<1e-7,'External/pumping load partition'
     assert abs(l('pumping_work_j')-gas('pumping')-l('pending_pumping_exchange_j'))<1e-7,'Pending pumping exchange'
     return residuals
+
+
+def replay_physical_fuel(parameters,geometry,edges,files,after,stop):
+    flows=parameters['flow_mg_s'];dead=parameters['dead_time_s']
+    fraction,tau=parameters['wall_fraction'],parameters['wall_tau_s']
+    assert len(flows)==geometry.cylinders and all(type(x)in(int,float)and math.isfinite(x)and x>0 for x in flows),'Declared injector flows'
+    assert type(dead)in(int,float)and math.isfinite(dead)and dead>=0 and 0<=fraction<=1 and tau>0,'Declared fuel transport'
+    total_stored=total_unburned=total_in=0.
+    for index,channel in enumerate(geometry.injector_channels):
+        events=[(row['time_us']/1e6,1,row)for row in edges if row['ch']==channel]
+        for kind,name in ((0,'intake-events.jsonl'),(2,'combustion-events.jsonl')):
+            events.extend((row['time_s'],kind,row)for row in files[name]if row['cylinder']==index+1)
+        events.sort(key=lambda entry:(entry[0],entry[1]))
+        cursor=wall=port=charge=air=fuel_in=unburned=0.;on=None
+        def transport(end):
+            nonlocal cursor,wall,port,fuel_in
+            assert end>=cursor,'Ordered physical fuel chain'
+            lengths=[]
+            if on is None or end<=on+dead:lengths.append((end-cursor,0.))
+            else:
+                opening=max(cursor,on+dead)
+                lengths.extend(((opening-cursor,0.),(end-opening,flows[index])))
+            for duration,flow in lengths:
+                decay=-math.expm1(-duration/tau)
+                changed=wall*(1-decay)+fraction*flow*tau*decay
+                port+=flow*duration+wall-changed;wall=changed;fuel_in+=flow*duration
+            cursor=end
+        for stamp,kind,row in events:
+            transport(stamp)
+            if kind==1:on=stamp if row['high']else None
+            elif kind==0:
+                assert abs(row['trapped_fuel_mg']-port)<1e-6,'Intake/actual injector transport'
+                assert abs(row['discarded_unburned_mg']-charge)<1e-6,'Discarded frozen fuel'
+                unburned+=charge;charge=port;port=0.;air=row['trapped_air_mg']
+            else:
+                assert abs(row['fuel_mg']-charge)<1e-6 and abs(row['air_mg']-air)<1e-6,'Combustion/frozen intake chain'
+                burned=min(charge,air/14.7)if row['scheduled_work_j']>0 else 0.
+                unburned+=charge-burned;charge=air=0.
+        transport(stop/1e6)
+        assert abs(fuel_in-after['cylinder_fuel_mg'][index])<1e-6,'Replayed per-cylinder delivered fuel'
+        total_in+=fuel_in;total_stored+=wall+port+charge;total_unburned+=unburned
+    ledger=after['ledger']
+    for actual,key in ((total_in,'fuel_in_mg'),(total_stored,'stored_mg'),(total_unburned,'unburned_mg')):
+        assert abs(actual-ledger[key])<1e-6,('Physical fuel replay/ledger',key,actual,ledger[key])
 
 
 def verify(folder, current_inputs=False):
@@ -215,12 +260,70 @@ def verify(folder, current_inputs=False):
             last_cam=angle;cams+=row['delivered']
         last_capture=stamp
     assert cranks==result['trigger_edges']and missed==result['suppressed_teeth']and cams==result.get('cam_edges',0),'Capture counts'
+    physical_files=result.get('physical_event_files',{})
+    event_contract=manifest.get('physical_event_contract')
+    attested_plant=(folder/'provenance/sources/tools/engine_research_plant.py').read_text()
+    if event_contract or 'resolved_intake_and_pulse_boundaries_v1'in attested_plant:
+        assert set(physical_files)=={'intake-events.jsonl','combustion-events.jsonl'},'Resolved physical event inventory'
+    physical_counts={};physical_rows={}
+    coil_falls=Counter((row['time_us'],row['ch'])for row in edges if not row['high']and row['ch']in geometry.coil_channels)
+    for name,identity in physical_files.items():
+        assert name in ('intake-events.jsonl','combustion-events.jsonl'),'Unexpected physical event file'
+        assert digest(folder/name)==identity['sha256'],'Physical event identity'
+        rows=[json.loads(line)for line in(folder/name).read_text().splitlines()]
+        assert type(identity['events'])is int and len(rows)==identity['events'],'Physical event count'
+        previous=-1.;phases={};burned=scheduled=0.
+        for row in rows:
+            stamp=row['time_s'];cylinder=row['cylinder']
+            assert type(stamp)in(int,float)and math.isfinite(stamp)and previous<=stamp<=stop/1e6+1e-9 and stamp>=0,'Physical event clock'
+            assert type(cylinder)is int and 1<=cylinder<=count,'Physical event cylinder'
+            previous=stamp
+            keys=('shaft_angle_deg','airflow_sample_omega_rad_s','cylinder_air_kg_s','trapped_air_mg','trapped_fuel_mg','discarded_unburned_mg')if name=='intake-events.jsonl'else('air_mg','fuel_mg','advance_deg','scheduled_work_j')
+            assert all(type(row[key])in(int,float)and math.isfinite(row[key])for key in keys),'Finite physical event values'
+            if name=='intake-events.jsonl':
+                assert all(row[key]>=0 for key in keys),'Nonnegative physical intake values'
+                angle=row['shaft_angle_deg'];phase=geometry.compression_tdc_deg[cylinder-1]-180
+                error=(angle-phase)%720
+                assert min(error,720-error)<1e-6,'Resolved intake closing angle'
+                assert cylinder not in phases or angle>phases[cylinder]+719.,'Unique ordered intake closing'
+                phases[cylinder]=angle
+                omega=row['airflow_sample_omega_rad_s']
+                expected=row['cylinder_air_kg_s']*4*math.pi/omega/count*1e6 if omega>1e-9 else 0.
+                assert abs(row['trapped_air_mg']-expected)<1e-8,'Trapped intake air basis'
+            else:
+                assert row['air_mg']>=0 and row['fuel_mg']>=0 and row['scheduled_work_j']>=0 and abs(row['advance_deg'])<=90,'Bounded physical combustion values'
+                fall=(round(stamp*1e6),geometry.coil_channels[cylinder-1])
+                assert coil_falls[fall]>0,'Combustion requires distinct actual coil fall'
+                coil_falls[fall]-=1
+                expected=row['air_mg']/(14.7*row['fuel_mg'])if row['air_mg']>1e-9 and row['fuel_mg']>1e-9 else None
+                actual=row['lambda_value']
+                assert (actual is None if expected is None else type(actual)in(int,float)and math.isfinite(actual)and abs(actual-expected)<1e-9),'Physical mixture basis'
+                if row['scheduled_work_j']>0:
+                    assert actual is not None and .55<actual<1.65,'Declared physical mixture gate'
+                    burned+=min(row['fuel_mg'],row['air_mg']/14.7)
+                assert row['scheduled_work_j']<=min(row['fuel_mg'],row['air_mg']/14.7)*44*.27+1e-8,'Scheduled work/available chemical energy'
+                scheduled+=row['scheduled_work_j']
+        if name=='combustion-events.jsonl':
+            assert abs(burned-after['ledger']['burned_mg'])<1e-6,'Combustion records/burned inventory'
+            if 'scheduled_combustion_work_j'in after['ledger']:
+                assert abs(scheduled-after['ledger']['scheduled_combustion_work_j'])<1e-5,'Scheduled work records/ledger'
+        physical_counts[name]=len(rows)
+        physical_rows[name]=rows
+    if event_contract:
+        assert event_contract['schema']==1,'Physical event contract schema'
+        replay_physical_fuel(event_contract['fuel_transport'],geometry,edges,physical_rows,after,stop)
+        for inventory in (ledger,after['ledger']):
+            scheduled=inventory['scheduled_combustion_work_j'];loss=inventory['shaft_conversion_heat_j']
+            assert scheduled>=0 and loss>=-1e-9,'Nonnegative scheduled-work conversion'
+            assert abs(scheduled-inventory['combustion_shaft_j']-inventory['pending_work_j']-loss)<1e-5,'Scheduled/released/pending/conversion work'
+            assert abs(inventory['burned_chemical_j']-scheduled+loss-inventory['heat_j'])<1e-5,'Combustion/conversion heat partition'
     return dict(controller=result['controller'], audit_passed=True, snapshots=len(traces),
                 edges=len(edges), dispatcher_boost_edges=boost, source_files=len(result['source_hashes']),
                 final_rpm=before['rpm'], final_map_kpa=before['map_kpa'],
                 cylinders=count,strategy=result.get('strategy','batch_wasted'),loaded_layout_attested=layout is not None,
                 generated_adapter_snapshots=len(manifest.get('reference_runtime',{}).get('generated_inputs',{})),post_halt_audited=after is not None,
                 reference_geometry_diagnostic=result.get('reference_geometry_diagnostic',False),
+                physical_event_counts=physical_counts,
                 coupled_energy_residual_j=ledger['coupled_energy_residual_j'],
                 post_halt_coupled_energy_residual_j=after['ledger']['coupled_energy_residual_j']if after is not None else None,
                 qualification='Consumed-edge/provenance/ledger invariants only; no comparison or physical acceptance')

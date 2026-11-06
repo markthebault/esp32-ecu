@@ -10,8 +10,20 @@ import math
 import tempfile
 from pathlib import Path
 from engine_geometry import EngineGeometry
+from shaft_dynamics import advance_shaft,INTEGRATOR as SHAFT_INTEGRATOR
 
 ROOT=Path(__file__).resolve().parents[1]
+
+
+def next_intake_closing(angle,phase):
+    # The quotient may round either side of an integer. Start at that cycle's
+    # canonical boundary, then recompute until strictly ahead of the shaft.
+    cycle=math.floor((angle-phase)/720)
+    for _ in range(3):
+        candidate=phase+720*cycle
+        if candidate>angle:return candidate
+        cycle+=1
+    raise RuntimeError('Intake angle exceeds representable research precision')
 
 
 class AirPath:
@@ -108,8 +120,9 @@ class ResearchPlant:
         self.fuel_mg=0.;self.burned_mg=0.;self.unburned_mg=0.
         self.combustions=[];self.sparks=0;self.dwell_events=[];self.spark_errors=[]
         self.burned_chemical_j=0.;self.combustion_shaft_j=0.;self.heat_j=0.
+        self.shaft_conversion_heat_j=0.
         self.starter_j=0.;self.friction_j=0.;self.load_j=0.
-        self.cylinder_fuel_mg=[0.]*n;self.cylinder_burned_mg=[0.]*n;self.cylinder_scheduled_work_j=[0.]*n;self.cylinder_shaft_j=[0.]*n;self.cylinder_combustions=[]
+        self.cylinder_fuel_mg=[0.]*n;self.cylinder_burned_mg=[0.]*n;self.cylinder_scheduled_work_j=[0.]*n;self.cylinder_shaft_j=[0.]*n;self.cylinder_combustions=[];self.intake_events=[]
 
     def edge(self,ch,high,t,commanded_advance=10,latest_demand=10,requested_dwell_us=2800):
         if ch==8 and self.idle_valve is not None:self.idle_valve.edge(high);return
@@ -166,8 +179,61 @@ class ResearchPlant:
                     battery_v=self.battery,sensor_v=5.,sensors_valid=True,
                     lambda_ready=t>3 and self.lambda_valid,**{'lambda':min(1.5,max(.65,self.lambda_sensor))})
 
+    def fuel_parameters(self):
+        return dict(flow_mg_s=[self.injector_flow_cc_min*.745/60*1000*f for f in self.injector_flow_factors],
+                    dead_time_s=.9e-3,wall_fraction=.45 if self.clt<30 else .05,
+                    wall_tau_s=1.5 if self.clt<30 else .05)
+
     def integrate(self,t,dt,starter=False,load=5,idle_pct=0):
         if dt<=0:return
+        begin=t;elapsed=0.
+        while elapsed<dt:
+            t=begin+elapsed;interval=dt-elapsed
+            # Constant-power and constant-injection segments have physical
+            # endpoints independent of the caller's communication partition.
+            for pulse in self.combustions:
+                for boundary in (pulse['start'],pulse['end']):
+                    if t<boundary<t+interval:interval=boundary-t
+            for start in self.injector_on:
+                if start is not None and t<start+.9e-3<t+interval:interval=start+.9e-3-t
+            shaft=self._shaft_interval(t,interval,starter,load)
+            closings=[next_intake_closing(self.angle,tdc-180)
+                      for tdc in self.geometry.compression_tdc_deg]
+            next_angle=min(closings);distance=next_angle-self.angle
+            closes=[]
+            if shaft['rotation_rad']*180/math.pi>=distance:
+                lo,hi=0.,interval
+                for _ in range(48):
+                    middle=(lo+hi)/2
+                    trial=self._shaft_interval(t,middle,starter,load)
+                    if trial['rotation_rad']*180/math.pi<distance:lo=middle
+                    else:hi=middle
+                interval=min(interval,max(hi,math.nextafter(elapsed,math.inf)-elapsed))
+                shaft=self._shaft_interval(t,interval,starter,load)
+                closes=[i for i,angle in enumerate(closings)if angle==next_angle]
+            self._integrate_interval(t,interval,starter,load,idle_pct,shaft,closes)
+            # Partition the original duration, not (absolute end)-start.
+            # Otherwise sub-microsecond events at large absolute times change
+            # the energy consumed from the outer pending-exchange inventory.
+            elapsed=min(dt,elapsed+interval)
+
+    def _released_work(self,t,dt):
+        result=[0.]*self.geometry.cylinders
+        for pulse in self.combustions:
+            released=self._pulse_release(pulse,t,dt)
+            result[pulse['cylinder']]+=released
+        return result
+
+    @staticmethod
+    def _pulse_release(pulse,t,dt):
+        return (pulse['remaining'] if dt>=pulse['end']-t else
+                min(pulse['remaining'],pulse['rate']*max(0,min(dt,pulse['end']-t)-max(0,pulse['start']-t))))
+
+    def _shaft_interval(self,t,dt,starter,load):
+        return advance_shaft(self.rpm*math.pi/30,dt,self.rotor_inertia,
+                             sum(self._released_work(t,dt)),starter,load)
+
+    def _integrate_interval(self,t,dt,starter,load,idle_pct,shaft,closes):
         if self.idle_valve is not None:
             if idle_pct!=0:raise ValueError('Controller-duty shortcut is forbidden with the executed-edge valve model')
             idle_pct=self.idle_valve.step(dt,self.battery)
@@ -176,45 +242,43 @@ class ResearchPlant:
         self.map_kpa=self.air_state['map_kpa']
         flow=self.injector_flow_cc_min*.745/60*1000
         dead_s=.9e-3  # fixed benchmark actuator; not a real injector calibration
-        for cylinder,start in enumerate(self.injector_on):
-            if start is not None:
-                mass=flow*self.injector_flow_factors[cylinder]*max(0,t+dt-max(t,start+dead_s));self.fuel_mg+=mass;self.cylinder_fuel_mg[cylinder]+=mass
-                fraction=.45 if self.clt<30 else .05
-                self.wall_mg[cylinder]+=mass*fraction;self.port_mg[cylinder]+=mass*(1-fraction)
         tau=1.5 if self.clt<30 else .05
-        for cylinder in range(self.geometry.cylinders):
-            evaporated=self.wall_mg[cylinder]*(1-math.exp(-dt/tau))
-            self.wall_mg[cylinder]-=evaporated;self.port_mg[cylinder]+=evaporated
-        available=0.
+        decay=-math.expm1(-dt/tau)
+        for cylinder,start in enumerate(self.injector_on):
+            mass=0.
+            if start is not None:
+                mass=flow*self.injector_flow_factors[cylinder]*max(0,dt-max(0,start+dead_s-t));self.fuel_mg+=mass;self.cylinder_fuel_mg[cylinder]+=mass
+            fraction=.45 if self.clt<30 else .05
+            before=self.wall_mg[cylinder]
+            # Exact constant-source wall-film solution. Depositing the entire
+            # interval's fuel before evaporation would advance future fuel.
+            self.wall_mg[cylinder]=before*(1-decay)+fraction*(mass/dt)*tau*decay
+            self.port_mg[cylinder]+=mass+before-self.wall_mg[cylinder]
+        available=0.;released_by_cylinder=[0.]*self.geometry.cylinders
         for pulse in self.combustions:
-            released=(pulse['remaining'] if t+dt>=pulse['end'] else
-                      min(pulse['remaining'],pulse['rate']*max(0,min(t+dt,pulse['end'])-max(t,pulse['start']))))
-            pulse['remaining']-=released;available+=released;self.cylinder_shaft_j[pulse['cylinder']]+=released*min(1,omega/20)
+            released=self._pulse_release(pulse,t,dt)
+            pulse['remaining']-=released;available+=released;released_by_cylinder[pulse['cylinder']]+=released
         self.combustions=[p for p in self.combustions if p['remaining']>1e-12]
-        work=available*min(1,omega/20)
-        self.heat_j+=available-work;self.combustion_shaft_j+=work
-        starter_torque=55*max(0,1-self.rpm/350) if starter else 0.
-        friction=12+.006*self.rpm
-        torque=starter_torque-friction-load
-        b=torque*dt/self.rotor_inertia
-        next_omega=max(0,.5*b+math.sqrt((omega+.5*b)**2+2*work/self.rotor_inertia))
-        if work==0 and torque<0 and omega+b<=0:
-            rotation=omega*omega/(2*(-torque/self.rotor_inertia))
-            next_omega=0.
-        else:rotation=(omega+next_omega)*.5*dt
-        self.starter_j+=starter_torque*rotation;self.friction_j+=friction*rotation;self.load_j+=load*rotation
-        before_angle=self.angle
-        self.angle+=rotation*180/math.pi;self.rpm=next_omega*30/math.pi
+        available=sum(released_by_cylinder)
+        work=shaft['combustion_work_j']
+        self.heat_j+=shaft['heat_j'];self.combustion_shaft_j+=work
+        self.shaft_conversion_heat_j+=shaft['heat_j']
+        if available:
+            for cylinder,released in enumerate(released_by_cylinder):self.cylinder_shaft_j[cylinder]+=released*work/available
+        self.starter_j+=shaft['starter_j'];self.friction_j+=shaft['friction_j'];self.load_j+=shaft['load_j']
+        self.angle+=shaft['rotation_rad']*180/math.pi;self.rpm=shaft['omega_rad_s']*30/math.pi
         # Mean-value intake closing180degrees before firing TDC. Delivered
         # port fuel becomes a cylinder charge here; unfired previous charge
         # exits unburned. Ignition cuts cannot accumulate fuel indefinitely in
         # a closed cylinder and then burn several missed cycles on recovery.
-        for cylinder,tdc in enumerate(self.geometry.compression_tdc_deg):
-            phase=tdc-180
-            if math.floor((self.angle-phase)/720)>math.floor((before_angle-phase)/720):
-                self.unburned_mg+=self.charge_mg[cylinder]
-                self.charge_mg[cylinder]=self.port_mg[cylinder];self.port_mg[cylinder]=0.
-                self.air_charge_mg[cylinder]=self.air_state['cylinder_air_kg_s']*math.pi/omega*(4/self.geometry.cylinders)*1e6 if omega>1e-9 else 0.
+        for cylinder in closes:
+            discarded=self.charge_mg[cylinder];self.unburned_mg+=discarded
+            self.charge_mg[cylinder]=self.port_mg[cylinder];self.port_mg[cylinder]=0.
+            self.air_charge_mg[cylinder]=self.air_state['cylinder_air_kg_s']*math.pi/omega*(4/self.geometry.cylinders)*1e6 if omega>1e-9 else 0.
+            self.intake_events.append(dict(time_s=t+dt,cylinder=cylinder+1,shaft_angle_deg=self.angle,
+                airflow_sample_omega_rad_s=omega,cylinder_air_kg_s=self.air_state['cylinder_air_kg_s'],
+                trapped_air_mg=self.air_charge_mg[cylinder],trapped_fuel_mg=self.charge_mg[cylinder],
+                discarded_unburned_mg=discarded))
         self.lambda_sensor+=(self.exhaust_lambda-self.lambda_sensor)*(1-math.exp(-dt/.12))
         self.lambda_valid=(self.lambda_valid and t+dt-self.last_exhaust_t<=.3
                            and self.rpm>40 and self.air_state['cylinder_air_kg_s']>1e-6)
@@ -225,7 +289,9 @@ class ResearchPlant:
         pending=sum(p['remaining'] for p in self.combustions)
         kinetic=.5*self.rotor_inertia*(self.rpm*math.pi/30)**2
         a=self.air_state;initial=self.air.initial
-        return dict(fuel_in_mg=self.fuel_mg,burned_mg=self.burned_mg,unburned_mg=self.unburned_mg,
+        return dict(shaft_integrator=SHAFT_INTEGRATOR,intake_integration='resolved_intake_and_pulse_boundaries_v1',
+                    scheduled_combustion_work_j=sum(self.cylinder_scheduled_work_j),shaft_conversion_heat_j=self.shaft_conversion_heat_j,
+                    fuel_in_mg=self.fuel_mg,burned_mg=self.burned_mg,unburned_mg=self.unburned_mg,
                     stored_mg=sum(self.charge_mg)+sum(self.wall_mg)+sum(self.port_mg),
                     fuel_residual_mg=self.fuel_mg-self.burned_mg-self.unburned_mg-sum(self.charge_mg)-sum(self.wall_mg)-sum(self.port_mg),
                     burned_chemical_j=self.burned_chemical_j,combustion_shaft_j=self.combustion_shaft_j,

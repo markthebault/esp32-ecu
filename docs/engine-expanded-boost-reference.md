@@ -38,6 +38,8 @@ The [development packet](../reports/engine/expanded-boost-reference/README.md) r
 
 The400kPa sensor-rail input becomes ADC1023 in the reference. Production MAP validation rejects that rail and retains47kPa in these runs, with `boost_cut=0`; setting the reference protection cap to0 gives the same result. Continued output therefore does not establish a correctly detected overpressure or an effect of the6500RPM cap. The project receives the declared physical-unit fault and cuts. Raw ADC, held MAP and native cut status stay separate in the evidence.
 
+The numerical values above belong to this retained historical packet. The later [shaft and intake integration correction](engine-shaft-integration.md) adds causal physical-event records and new comparisons without relabelling these earlier results.
+
 ## Reproduce
 
 Use new output directories in the pinned Linux workspace:

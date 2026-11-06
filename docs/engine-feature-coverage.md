@@ -65,6 +65,8 @@ DBW/OEM integration remain outside the current bench scope.
 
 [External benchmark scope, configuration and reproduction](engine-research-benchmark.md) keeps simulator coverage separate from missing physical and control features.
 
+[Research shaft and intake correction](engine-shaft-integration.md) records causal fuel capture, physical event replay, fractional-angle fixes and the remaining failed reference refinements. Those numerical improvements do not close the missing feature, hardware, online tuning or physical-test items above.
+
 [Target timing implementation and evidence](engine-target-timing.md) describes the selected build's inhibited policy, native dispatcher comparison and outstanding physical tests.
 
 [Trigger debugging](engine-trigger-debug.md) covers raw capture, the Speeduino logger comparison and the source-labelled MegaLogViewer workflow.
