@@ -9,6 +9,7 @@ from pathlib import Path
 from statistics import mean
 from boost_engine_provenance import digest
 from verify_boost_engine import verify
+from engine_geometry import channel_kind
 
 
 def drive_duty(edges, begin, end):
@@ -36,9 +37,13 @@ def summarize(folder):
     audit = verify(folder)
     traces = [json.loads(line) for line in (folder / 'trace.jsonl').read_text().splitlines()]
     edges = [json.loads(line) for line in (folder / 'edges.jsonl').read_text().splitlines()]
-    triggers = [json.loads(line) for line in (folder / 'trigger-stimuli.jsonl').read_text().splitlines()]
+    captures = [json.loads(line) for line in (folder / 'trigger-stimuli.jsonl').read_text().splitlines()]
+    triggers=[row for row in captures if row.get('kind','crank')=='crank']
+    cams=[row for row in captures if row.get('kind')=='cam']
     assert sum(row['delivered'] for row in triggers) == result['trigger_edges']
     assert sum(not row['delivered'] for row in triggers) == result['suppressed_teeth']
+    assert sum(row['delivered']for row in cams)==result.get('cam_edges',0)
+    for row in cams:assert (row['cam_angle_deg']-540)%720==0 and type(row['delivered'])is bool
     last = -1
     for row in triggers:
         assert last <= row['time_us'] <= round(result['duration_s']*1e6)
@@ -49,6 +54,7 @@ def summarize(folder):
     ledger = result['before_halt']['ledger']
     profile = json.loads((folder / 'tune.json').read_text())
     own = result['controller'] == 'ours'
+    reference_fixture_sources=[]if own else list(json.loads((folder/'provenance/reference-build-manifest.json').read_text())['fixture_sources'])
     first_fault=next((row['time_us'] for row in traces if
         (row['control'].get('faults',0) if own else row['control']['boost_control']['boost_cut'])),None)
     interval=next((result['stimulus'].get(name) for name in
@@ -59,10 +65,12 @@ def summarize(folder):
         fault_window=[first_fault,round(result['duration_s']*1e6)]
     record = dict(
         path=str(folder.resolve()), controller=result['controller'], mode=result['mode'],
+        cylinders=audit['cylinders'],strategy=audit['strategy'],plant_geometry=result.get('plant_geometry'),
         scenario=result['stimulus']['scenario'], actuator=result['actuator'], step_us=result['step_us'],
         duration_s=result['duration_s'], requested_duty_pct=profile['boost_control']['open_duty']['cells'][0],
         requested_target_kpa=profile['boost_control']['target']['cells'][0],
         cut_kpa=profile['boost_control']['cut_kpa'],
+        reference_protection_rpm=result['stimulus']['reference_protection_rpm'],
         audit=audit, maximum_rpm=progress['maximum_crank_rpm'],
         maximum_physical_map_kpa=progress['maximum_map_kpa'], maximum_turbo_rad_s=progress['maximum_turbo_rad_s'],
         final_rpm=result['before_halt']['rpm'], final_map_kpa=result['before_halt']['map_kpa'],
@@ -79,10 +87,11 @@ def summarize(folder):
         suppressed_teeth=result['suppressed_teeth'],
         maximum_sensor_input_map_kpa=max(row['sensor_input']['map_kpa'] for row in traces),
         declared_fault_window_us=fault_window,
-        fault_window_engine_rises=sum(row['high'] and row['ch'] < 8 and fault_window[0]+20000 <= row['time_us'] < fault_window[1] for row in edges) if fault_window else None,
+        fault_window_engine_rises=sum(row['high'] and channel_kind(row['ch'])is not None and fault_window[0]+20000 <= row['time_us'] < fault_window[1] for row in edges) if fault_window else None,
         fault_window_boost_gpio_duty_pct=drive_duty(edges,fault_window[0]+20000,fault_window[1]) if fault_window else None,
         first_fault_snapshot_us=first_fault,
         source_hashes=result['source_hashes'],
+        reference_fixture_sources=reference_fixture_sources,
         raw_sha256={name:digest(folder / name) for name in
                     ('result.json','progress.json','trace.jsonl','edges.jsonl','trigger-stimuli.jsonl','provenance/manifest.json')})
     return record
@@ -91,7 +100,7 @@ def summarize(folder):
 def compare_refinement(records):
     groups = {}
     for record in records:
-        key = tuple(record[name] for name in ('controller','mode','scenario','actuator','requested_duty_pct','requested_target_kpa','duration_s','cut_kpa'))
+        key = tuple(record[name] for name in ('controller','mode','scenario','actuator','requested_duty_pct','requested_target_kpa','duration_s','cut_kpa'))+(record.get('cylinders',4),record.get('strategy','batch_wasted'),json.dumps(record.get('plant_geometry'),sort_keys=True),record.get('reference_protection_rpm',6500))
         group = groups.setdefault(key, {})
         if record['step_us'] in group:
             raise ValueError('Duplicate experiment profile/step in comparison')
@@ -105,6 +114,8 @@ def compare_refinement(records):
             a, b = group[coarse], group[fine]
             relative = {name:abs(a[name]-b[name])/max(abs(b[name]),1) for name in keys}
             output.append(dict(controller=key[0],mode=key[1],scenario=key[2],actuator=key[3],
+                               cylinders=key[8],strategy=key[9],plant_geometry=json.loads(key[10]),
+                               reference_protection_rpm=key[11],
                                coarse_us=coarse,fine_us=fine,relative_difference=relative,
                                within_declared_two_percent=all(value < .02 for value in relative.values()),
                                qualification='Finite profile check, not uniform order or calibration'))
@@ -114,8 +125,18 @@ def compare_refinement(records):
 def run(folders, output):
     output.mkdir(parents=True, exist_ok=False)
     records = [summarize(folder) for folder in folders]
-    assert all(record['source_hashes'] == records[0]['source_hashes'] for record in records), 'Mixed executing project sources'
+    # Runtime-specific C++ fixture/build sources are present only on genuine
+    # reference runs. Every shared executing project source must still match;
+    # omitted files must be explicitly declared reference-only fixture inputs.
+    common=set.intersection(*(set(record['source_hashes'])for record in records))
+    union=set.union(*(set(record['source_hashes'])for record in records))
+    for name in union:
+        values={record['source_hashes'][name]for record in records if name in record['source_hashes']}
+        assert len(values)==1,('Mixed executing source identity',name)
+        if name not in common:
+            assert all(record['controller']=='speeduino'and name in record['reference_fixture_sources']for record in records if name in record['source_hashes']),('Unannounced controller-specific source',name)
     report = dict(records=records,refinement=compare_refinement(records),
+                  common_source_hashes={name:records[0]['source_hashes'][name]for name in sorted(common)},
                   analysis_source_sha256=digest(Path(__file__)),physical_execution=False,
                   qualification=__doc__.strip())
     (output / 'comparison.json').write_text(json.dumps(report, indent=2, allow_nan=False)+'\n')

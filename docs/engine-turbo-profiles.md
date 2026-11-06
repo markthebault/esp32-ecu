@@ -41,7 +41,7 @@ The8-second,20%-throttle4L open-loop experiment records234 actual boost PWM edge
 
 A separate4L/80%-throttle/35Nm run fails at4.730343s when the source turbo exceeds its declared0..24000rad/s map domain. The last trace at4.72s records23861.4rad/s,146.766kPa charge pressure and102.084kPa manifold pressure. The failed experiment is preserved and excluded from passing evidence. A matched turbo/map/hardware hypothesis is required before wider high-load comparisons. This does not identify a physical engine or controller defect.
 
-The current genuine turbo reference remains the historical4-cylinder/1800cc batch fixture. Requests for expanded reference geometry/strategies fail before creating an output directory. The separate16-output naturally aspirated fixture is not silently substituted for boost execution. Next work is explicit matched turbo parameters, a16-output production boost fixture, paired normal/fault/refinement comparisons and wider configuration/control/PCB integration. Dynamic cam-dropout and expanded closed-loop boost behavior are not established by this packet.
+This packet's genuine turbo reference remains the historical4-cylinder/1800cc batch fixture. The later [expanded production boost fixture](engine-expanded-boost-reference.md) explicitly combines sixteen engine GPIOs and boost PWM; it is selected by its own manifest, rather than silently substituting the naturally aspirated fixture. Its finite-step reference sensitivity failure remains open. Next work includes matched turbo parameters, wider normal/fault/refinement coverage and control/PCB integration. Dynamic cam-dropout and expanded closed-loop boost behavior are not established by this packet.
 
 ## Reproduce
 

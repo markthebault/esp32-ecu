@@ -180,10 +180,20 @@ class RunProvenance:
         for name, expected in reference['fixture_sources'].items():
             if self.track(ROOT / name) != expected:
                 raise RuntimeError('Changed reference fixture source: ' + name)
+            if name not in self.source_hashes:
+                self.source_hashes[name] = expected
+                self.copy(ROOT / name, self.output / 'sources' / name)
+        generated = {}
+        for name, expected in reference.get('generated_sources', {}).items():
+            if self.track(name) != expected:
+                raise RuntimeError('Changed generated reference adapter: ' + name)
+            snapshot = Path('reference-generated') / Path(name).name
+            self.copy(Path(name), self.output / snapshot)
+            generated[name] = dict(sha256=expected, snapshot=str(snapshot))
         self.copy(manifest, self.output / 'reference-build-manifest.json')
         self.record['reference_runtime'] = dict(executable=str(executable), binary_sha256=binary_hash,
                                                manifest_sha256=self.track(manifest),
-                                               source_pin=reference['speeduino_sha'])
+                                               source_pin=reference['speeduino_sha'],generated_inputs=generated)
 
     def verify(self):
         for name, expected in self.files.items():
