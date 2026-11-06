@@ -2,7 +2,7 @@
 
 The development branch now carries one to eight even-fire, four-stroke cylinders through the shared controller, virtual target executor, configuration, browser, own012 tuning files, coherent logs and authenticated screen schema7. **The PCB still has four injector and four coil commands.** Cylinders5–8 have no allocated physical outputs. All normal firmware builds inhibit engine outputs; the separate dummy-load policy rejects profiles above its fitted four-cylinder capacity.
 
-This is a software integration checkpoint toward the wider Speeduino goal. A [separate sixteen-output production-reference fixture](engine-reference-profiles.md) now supports generalized executed-event comparisons. An expanded turbo plant, matching hardware, further feature gaps and physical qualification remain unfinished.
+This is a software integration checkpoint toward the wider Speeduino goal. A [separate sixteen-output production-reference fixture](engine-reference-profiles.md) supports generalized naturally aspirated comparisons. [Turbo geometry and native project coupling](engine-turbo-profiles.md) now accept1..8 cylinders; matched turbo hardware/maps, expanded genuine boost comparisons, further feature gaps and physical qualification remain unfinished.
 
 Public `Tune`, `Output`, `AngleConfig`, `AngleScheduler` and `PhaseDecoder` now select capacity eight. Explicit `Legacy...` aliases preserve the capacity-four types. A capacity fault on any cylinder inhibits every engine channel and retains that cylinder's identifying bit.
 
@@ -25,7 +25,7 @@ The later [production-reference comparison](engine-reference-profiles.md) observ
 
 Both the quick regression plant and separately built MVEM air path executed1..8 cylinders in all three modes. Declared physical geometry controls TDCs, intake-close events, actuator arrays, total/per-cylinder volume and trapped air. Geometry remains fixed in wrong-order/reference tests. A30-degree reference error outside the configured cam window produces no phase lock, sparks or combustion work; no recorded spark error in that case is an unavailable measurement. These are empirical, uncalibrated research plants. The profile FMU preserves the older adapter/FMU and verifies actual initialized cylinder/displacement parameters.
 
-The exact historical quick-plant state replay and78,001 external four-cylinder state/ledger comparisons remain unchanged. Independent checks also cover actual FMI cylinder/per-cylinder displacement, airflow invariance at fixed total displacement,1/7/8-cylinder step refinement, cylinder8 alongside the idle channel and conservation ledgers. Expanded turbo operation is explicitly rejected when its air path has no matching declared geometry.
+The exact historical quick-plant state replay and78,001 external four-cylinder state/ledger comparisons remain unchanged. Independent checks also cover actual FMI cylinder/per-cylinder displacement, airflow invariance at fixed total displacement,1/7/8-cylinder step refinement, cylinder8 alongside the idle channel and conservation ledgers. Earlier expanded-turbo guards rejected an air path without declared matching geometry. The later turbo composition now binds that geometry and retains explicit source-map/hardware limits.
 
 Unmodified TunerStudio3.3.01 opened own012 offline and saved actual C8 fuel/spark edits. Its222 saved constants plus the explicit caller origin reconstruct all223 constants and the entire12288-byte expected page. MegaLogViewerHD4.6.14 plotted C8 values/counts/capacities and mask131072 from both009 log formats. This does not establish supported online onboarding. The latest observed online rejection remains own011; own012 online acceptance is unverified. The known calculated-AFR/unknown-lambda caveat remains.
 
@@ -78,7 +78,7 @@ The old native v0.4 fixture aliases injector6 and coil4 at pin50 and does not de
 ## Remaining integration
 
 1. Extend the declared production-reference comparison beyond its fixed500cc/cylinder,60-2/Hall, neutral-correction research fixture. Keep unsupported2/7-cylinder non-sequential fallback geometry explicit; additional configurations need their own evidence.
-2. Generalize the turbo gas path and complete its matching geometry, actuator, ledgers and controller comparisons. Do not relabel the existing four-cylinder turbo benchmark as eight-cylinder evidence.
+2. Complete matched turbo/map hypotheses and expanded genuine-reference normal/fault/refinement comparisons. The generalized gas path and project1/7/8-cylinder evidence do not relabel the historical four-cylinder Speeduino turbo benchmark as eight-cylinder evidence.
 3. Measure target heap/stack, timing, capture/flash/USB/RF load and fault response on actual inhibited hardware and dummy loads. No source or CAD check supplies these measurements.
 4. Define and route a matching protected driver/input allocation within the120mm/THT/pluggable-module constraints. Extra cylinders need reviewed channels or an explicit banking/coil topology, connector/current/thermal/protection work and enclosure updates. Bridging existing outputs or doubling driver loads is not authorized by this logical model.
 5. Complete supported TunerStudio online integration and the wider trigger, VR, VVT, knock, staging and debugging/configuration/UI gaps in the [feature ledger](engine-feature-coverage.md).

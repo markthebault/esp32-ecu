@@ -15,15 +15,18 @@ class TurboGasPath:
   ('exhaust','Exhaust\nManifold\nControl Volume','exh'),('tail','Turbine\nControl\nVolume','exh'))
  COUNTERS=('boundary_mass','fuel_mass','boundary_h','heat','pumping','cooler_heat','bearing',
   'compressor_work','turbine_work','source_power_defect','intake_in_mass','intake_out_mass','intake_in_h','intake_out_h')
- def __init__(self,ambient_kpa=100.,ambient_k=298.15,initial_turbo_rad_s=0.,profile='conservative'):
-  if not 50<=ambient_kpa<=110 or not 250<=ambient_k<=330:raise ValueError('Ambient outside research domain')
-  self.components=TurboComponents(profile);self.components.speed(initial_turbo_rad_s);self.ambient_pa=ambient_kpa*1000;self.ambient_k=ambient_k
+ def __init__(self,ambient_kpa=100.,ambient_k=298.15,initial_turbo_rad_s=0.,profile='conservative',geometry=None):
+  if any(type(v)not in (int,float)or not math.isfinite(v)for v in (ambient_kpa,ambient_k))or not 50<=ambient_kpa<=110 or not 250<=ambient_k<=330:raise ValueError('Ambient outside research domain')
+  self.components=TurboComponents(profile,geometry=geometry);self.geometry=self.components.geometry
+  self.components.speed(initial_turbo_rad_s);self.ambient_pa=ambient_kpa*1000;self.ambient_k=ambient_k
   self.graphs={};self.index={};self.medium={};self.state=[];self.time=0.
   model=self.components.model
   for n,(name,suffix,medium) in enumerate(self.VOLUMES):
    graph=model.graph(next(p for p in model.systems if p[-1]==suffix));self.graphs[name]=graph;self.index[name]=n;self.medium[name]=medium
    if graph.integrators!={'Receiver\nMass','Receiver\nTemperature'}:raise ValueError('Source volume states changed')
    r=graph.env['R'];volume=graph.env['V'];self.state.extend((self.ambient_pa*volume/r/ambient_k,ambient_k))
+  self.parameters=dict(self.components.geometry_binding,
+   fixed_volume_m3={name:self.graphs[name].env['V']for name,_,_ in self.VOLUMES})
   self.state.append(initial_turbo_rad_s);self.state.extend([0.]*len(self.COUNTERS));self.offset={k:13+n for n,k in enumerate(self.COUNTERS)}
   template=model.graph(next(p for p in model.systems if p[-1]=='Intercooler Flow'))
   self.restrictions={}
@@ -103,7 +106,8 @@ class TurboGasPath:
    charge_kpa=self.thermo(self.state,'charge')[2]/1000,exhaust_kpa=self.thermo(self.state,'exhaust')[2]/1000,
    turbo_rad_s=self.state[12],turbo_rpm=self.state[12]*30/math.pi,source=self.components.provenance,integration=self.INTEGRATION)
  def step(self,t,dt,omega,tps,idle=0.):
-  if abs(t-self.time)>1e-8 or type(dt) not in (int,float) or not math.isfinite(dt) or not 0<=dt<=.001 or not math.isfinite(omega) or not 0<=omega<=1100 or not 0<=tps<=100 or not 0<=idle<=100:raise ValueError('Invalid turbo coupling time or inputs')
+  if (any(type(v)not in (int,float)or not math.isfinite(v)for v in (t,dt,omega,tps,idle))or
+      t<0 or abs(t-self.time)>1e-8 or not 0<=dt<=.001 or not 0<=omega<=1100 or not 0<=tps<=100 or not 0<=idle<=100):raise ValueError('Invalid turbo coupling time or inputs')
   if not dt:return self.read()
   state=self.state;working=list(state);properties=[]
   for n,(name,_,_) in enumerate(self.VOLUMES):

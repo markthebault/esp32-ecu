@@ -37,8 +37,21 @@ class RunProvenance:
             'tools/speeduino_sim.cpp', 'tools/speeduino_sim_hal.cpp',
             'tools/speeduino_sim_native.hpp', 'firmware/main/config_json.hpp',
             'config/engine/defaults.json', 'scripts/build_speeduino_turbo.py',
-            'scripts/build_speeduino_flex.py',
+            'scripts/build_speeduino_flex.py', 'config/engine-profile.json',
         }
+        # These imported constants determine physical cylinder/channel
+        # associations. Bind both their actual loaded value and their data
+        # source, so an old module cannot masquerade as the current file.
+        from profile_config import LAYOUT
+        from engine_geometry import INJECTOR_CHANNELS,COIL_CHANNELS,CHANNEL_EXTENT
+        layout_path=ROOT/'config/engine-profile.json'
+        self.track(layout_path)
+        layout=json.loads(layout_path.read_text())
+        if (layout!=LAYOUT or tuple(layout['injector_channels'])!=INJECTOR_CHANNELS or
+                tuple(layout['coil_channels'])!=COIL_CHANNELS or
+                CHANNEL_EXTENT!=max(INJECTOR_CHANNELS+COIL_CHANNELS)+1):
+            raise RuntimeError('Loaded engine profile layout differs from its attested data')
+        self.track(layout_path)
         # Includes imported plant/adaptor modules and imported helper modules,
         # rather than maintaining another incomplete hand-written import list.
         for module in tuple(sys.modules.values()):
@@ -58,7 +71,7 @@ class RunProvenance:
                 name = str(path.relative_to(CACHE))
                 self.model_inputs[name] = self.track(path)
                 self.copy(path, self.output / 'model-inputs' / name)
-        self.record = dict(schema=1, source_hashes=self.source_hashes,
+        self.record = dict(schema=1, source_hashes=self.source_hashes,loaded_engine_profile_layout=layout,
                            model_inputs=self.model_inputs, physical_execution=False,
                            python=dict(version=sys.version, executable=str(Path(sys.executable).resolve()),
                                        sha256=self.track(Path(sys.executable).resolve())),

@@ -78,7 +78,11 @@ class ProfilePlantTests(unittest.TestCase):
    with self.assertRaises(ValueError):ResearchPlant(air_path=air,geometry=EngineGeometry())
   finally:air.close()
   from boost_research_plant import BoostResearchPlant
-  with self.assertRaises(ValueError):BoostResearchPlant(geometry=g)
+  turbo=BoostResearchPlant(geometry=g)
+  try:
+   self.assertEqual(turbo.geometry,g);self.assertEqual(turbo.air.geometry,g)
+   self.assertEqual(turbo.air.parameters['cylinders'],8);self.assertAlmostEqual(turbo.air.parameters['graph_displacement_m3'],.004)
+  finally:turbo.close()
  def test_external_plant_all24_profiles_drive_free_shaft_and_close_ledgers(self):
   for n in range(1,9):
    for mode in ('batch_wasted','semi_sequential','sequential'):

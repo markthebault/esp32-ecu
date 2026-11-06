@@ -8,13 +8,15 @@ import copy,math
 from engine_research_plant import ResearchPlant
 from turbo_gas_path import TurboGasPath
 from boost_valve_plant import BoostValve
+from engine_geometry import channel_kind
 
 class BoostResearchPlant(ResearchPlant):
  EXHAUST_HEAT_FRACTION=.55
  FUEL_TRANSPORT_TAU_S=.02
- def __init__(self,actuator_mode='normal',ambient_kpa=100.,initial_turbo_rad_s=0.,**kwargs):
-  air=TurboGasPath(ambient_kpa=ambient_kpa,initial_turbo_rad_s=initial_turbo_rad_s)
-  super().__init__(ambient_kpa=ambient_kpa,air_path=air,**kwargs)
+ def __init__(self,actuator_mode='normal',ambient_kpa=100.,initial_turbo_rad_s=0.,geometry=None,**kwargs):
+  if 'air_path'in kwargs:raise ValueError('Turbo composition owns its declared gas path')
+  air=TurboGasPath(ambient_kpa=ambient_kpa,initial_turbo_rad_s=initial_turbo_rad_s,geometry=geometry)
+  super().__init__(ambient_kpa=ambient_kpa,air_path=air,geometry=air.geometry,**kwargs)
   self.boost_valve=BoostValve(actuator_mode,ambient_kpa);self.heat_pulses=[];self.heat_seen=0.;self.wall_heat_j=0.
   self.fuel_seen_mg=0.;self.pending_fuel_kg=0.;self.pending_pumping_j=0.;self.pumping_work_j=0.
   self.heat_delivered_j=0.;self.maximum_exchange_delay_s=0.;self.iat=self.air_state['temperature_k']-273.15
@@ -27,6 +29,16 @@ class BoostResearchPlant(ResearchPlant):
    self.heat_pulses.append(dict(start=t,end=t+duration,rate=exhaust/duration,remaining=exhaust))
   self.heat_seen=self.heat_j
  def edge(self,ch,high,t,commanded_advance=10,latest_demand=10,requested_dwell_us=2800):
+  if (type(ch)is not int or type(high)is not bool or
+      any(type(v)not in (int,float)or not math.isfinite(v)for v in (t,commanded_advance,latest_demand,requested_dwell_us))or
+      t<0 or abs(t-self.air.time)>1e-8 or requested_dwell_us<0):raise ValueError('Invalid bounded turbo actuator edge')
+  # Coupling arithmetic can differ by a floating-point ulp. Every accepted
+  # within-tolerance timestamp denotes this one physical boundary. In
+  # particular, an accepted future rise must not make global-low fail later.
+  t=self.air.time
+  if ch!=9 and not(ch==8 and self.idle_valve is not None):
+   kind,index=self.geometry.actuator(ch);start=(self.injector_on if kind=='injector'else self.coil_on)[index]
+   if not high and start is not None and t<start:raise ValueError('Actuator falling edge precedes its rise')
   if ch==9:self.boost_valve.edge(high);return
   before=len(self.combustions)
   super().edge(ch,high,t,commanded_advance,latest_demand,requested_dwell_us)
@@ -37,15 +49,16 @@ class BoostResearchPlant(ResearchPlant):
   # falling edges. In particular, an already charged smart-coil command can
   # discharge even though the controller has just requested an ignition cut.
   # This models command removal, not a separate ideal coil-power quench.
-  for ch in range(8):
-   active=self.injector_on if ch<4 else self.coil_on
-   if active[ch%4] is not None:
+  for ch in self.geometry.injector_channels+self.geometry.coil_channels:
+   kind,index=channel_kind(ch);active=self.injector_on if kind=='injector'else self.coil_on
+   if active[index] is not None:
     chemical=self.burned_chemical_j
     self.edge(ch,False,self.air.time)
-    if ch>=4:self.cut_discharges.append(dict(self.dwell_events[-1],channel=ch,chemical_delta_j=self.burned_chemical_j-chemical))
+    if kind=='coil':self.cut_discharges.append(dict(self.dwell_events[-1],channel=ch,chemical_delta_j=self.burned_chemical_j-chemical))
   super().cut();self.boost_valve.cut()
  def integrate(self,t,dt,starter=False,load=5,idle_pct=0):
-  if type(dt) not in (int,float) or not math.isfinite(dt) or not 0<=dt<=.001 or not math.isfinite(t) or abs(t-self.air.time)>1e-8 or type(starter) is not bool or not math.isfinite(load) or not math.isfinite(idle_pct) or not 0<=idle_pct<=100:raise ValueError('Invalid complete-plant integration request')
+  if (any(type(v)not in (int,float)or not math.isfinite(v)for v in (t,dt,load,idle_pct))or
+      t<0 or not 0<=dt<=.001 or abs(t-self.air.time)>1e-8 or type(starter)is not bool or not 0<=idle_pct<=100):raise ValueError('Invalid complete-plant integration request')
   if not dt:return
   # Candidate ownership is deliberately narrow: graph definitions and
   # append-only spark diagnostic history are read-only during integration.

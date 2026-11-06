@@ -4,16 +4,31 @@ The raw source remains available as a reference. This component adapter is not
 yet a complete engine plant or calibrated turbo. Original coefficient mismatch,
 zero-speed singularities and model-domain extensions are exposed explicitly.
 """
-import math
+import copy,math
 from tcsi_graph import Model
+from engine_geometry import EngineGeometry
 
 def positive(*values):
  if any(type(v) not in (int,float) or not math.isfinite(v) or v<=0 for v in values):raise ValueError('Positive finite gas inputs required')
 
 class TurboComponents:
- def __init__(self,profile='conservative',model=None):
+ def __init__(self,profile='conservative',model=None,geometry=None):
   if profile not in ('source','conservative'):raise ValueError('Unknown turbo component profile')
+  if geometry is not None and not isinstance(geometry,EngineGeometry):raise ValueError('Explicit physical EngineGeometry required')
   self.profile=profile;self.model=model or Model(parameter_inputs={'toggle_vol':0})
+  if geometry is not None:
+   # Graph environments and caches are built from a private parameter set.
+   # Neither a caller's shared Model nor the attested source files are changed.
+   self.model=copy.copy(self.model);self.model.parameters=dict(self.model.parameters)
+   self.model.provenance=copy.deepcopy(self.model.provenance)
+   overrides={'TC_ENGINE.geometry.V_d':geometry.displacement_m3,
+              'TC_ENGINE.geometry.n_cyl':geometry.cylinders,'V_D':geometry.displacement_m3}
+   self.model.parameters.update(overrides)
+   self.model.provenance['authored_geometry_overrides']=overrides
+   self.geometry=geometry
+  else:
+   if self.model.parameters['TC_ENGINE.geometry.n_cyl']!=4:raise ValueError('Non-source cylinder count requires explicit EngineGeometry')
+   self.geometry=EngineGeometry(4,(1,3,4,2),self.model.parameters['TC_ENGINE.geometry.V_d']*1e6)
   def graph(name):
    paths=[p for p in self.model.systems if p[-1]==name]
    if len(paths)!=1:raise ValueError('Ambiguous source component '+name)
@@ -22,6 +37,15 @@ class TurboComponents:
   self.air_restriction=graph('Throttle  Compressible\nRestriction')
   self.engine_graph=graph('Engine flow')
   parameters=self.model.parameters
+  self.geometry_binding=dict(cylinders=parameters['TC_ENGINE.geometry.n_cyl'],
+   displacement_m3=parameters['TC_ENGINE.geometry.V_d'],graph_displacement_m3=self.engine_graph.env['V_d'],
+   per_cylinder_displacement_m3=self.geometry.displacement_m3/self.geometry.cylinders,
+   volume_assumption='Six source control volumes stay fixed; no inferred displacement/count scaling',
+   overrides=dict(self.model.provenance.get('authored_geometry_overrides',{})))
+  if (self.geometry_binding['cylinders']!=self.geometry.cylinders or
+      self.geometry_binding['displacement_m3']!=self.geometry.displacement_m3 or
+      self.geometry_binding['graph_displacement_m3']!=self.geometry.displacement_m3):
+   raise ValueError('Source engine-flow graph did not bind the declared total displacement')
   self.gases={}
   for medium in ('air','exh'):
    r=parameters['TC_ENGINE.gasProp.'+medium+'.R'];gamma=parameters['TC_ENGINE.gasProp.'+medium+'.kappa'];cv=r/(gamma-1)
@@ -36,7 +60,7 @@ class TurboComponents:
    # when compressor downstream is below inlet pressure. No bypass boost.
    passive_compressor_area_m2=1e-4)
   if comp_cp!=1100 or turb_cp!=1200:raise ValueError('Source coefficient interpretation changed')
-  self.provenance=dict(profile=profile,source=self.model.provenance,gases=self.gases,parameters=self.parameters,
+  self.provenance=dict(profile=profile,source=self.model.provenance,gases=self.gases,parameters=self.parameters,geometry=self.geometry_binding,
    differences=[] if profile=='source' else ['Shaft powers use Cp=gamma*R/(gamma-1), replacing1100/1200 torque coefficients',
     'Below2000rad/s turbine torque is bounded by source gas-power potential/2000; actual gas power and temperature drop use omega*torque',
     'Below300Pa turbine pressure drop, flow is linearized against the unchanged300Pa source-map boundary',
@@ -87,5 +111,5 @@ class TurboComponents:
   return dict(mass_kg_s=raw[1],temperature_k=raw[2],effective_area_m2=area)
  def engine_flow(self,p_im,t_im,omega_engine,p_em,time_s):
   positive(p_im,t_im,p_em)
-  if not math.isfinite(omega_engine) or omega_engine<0:raise ValueError('Nonnegative engine speed required')
+  if any(type(v)not in (int,float)or not math.isfinite(v)or v<0 for v in (omega_engine,time_s)):raise ValueError('Finite nonnegative engine speed/time required')
   return self.engine_graph.run((p_im,t_im,omega_engine,p_em),time_s=time_s)[1]
