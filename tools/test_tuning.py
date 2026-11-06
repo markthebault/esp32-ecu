@@ -22,18 +22,24 @@ class TuningTests(unittest.TestCase):
   self.path=Path(self.directory.name)/'tune.json';self.store=EngineStore(self.path)
  def session(self):
   s=Session(self.store);self.addCleanup(s.close);return s
- def test_msq_map_units_survive_one_page_mapping(self):
+ def test_current_msq_units_match_ini_storage_constants(self):
   from engine_msq import export_msq,tag
   import xml.etree.ElementTree as ET
   fields={e.get('name'):e.get('units') for e in ET.fromstring(export_msq(self.store.tune)).iter(tag('constant'))}
   import csv
   expected={}
-  for line in (R/'tuning/esp32-ecu-load.ini').read_text().split('[OutputChannels]')[0].splitlines():
+  constants=(R/'tuning/esp32-ecu-boost.ini').read_text().split('[Constants]',1)[1].split('\n[',1)[0]
+  for line in constants.splitlines():
    if '=' not in line:continue
    name,definition=line.split('=',1);parts=next(csv.reader([definition],skipinitialspace=True))
    if parts[0] in ('scalar','array'):expected[name.strip()]=parts[3 if parts[0]=='scalar' else 4]
-  self.assertGreater(len(expected),60)
-  for name,unit in expected.items():self.assertEqual(fields[name],unit,name)
+   elif parts[0]=='bits':expected[name.strip()]=''
+  self.assertGreater(len(expected),200)
+  dynamic=dict(secondary_fuel_threshold='RPM',secondary_spark_threshold='RPM',
+   secondary_fuel_mapLoad='kPa',secondary_spark_mapLoad='kPa',
+   secondary_fuel_mapTable='% coefficient',secondary_spark_mapTable='deg BTDC')
+  self.assertEqual(set(fields),set(expected))
+  for name,unit in expected.items():self.assertEqual(fields[name],dynamic[name] if unit.startswith('{') else unit,name)
 
  def test_actual_app_omits_readonly_origin_without_omitting_tune(self):
   from engine_msq import import_msq,SIGNATURE,LEGACY_SIGNATURE

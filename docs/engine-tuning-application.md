@@ -1,60 +1,39 @@
-# TunerStudio online diagnosis
+# TunerStudio application interoperability
 
-The unmodified TunerStudio MS Lite 3.3.01 application rejects the current `ESP32ECU DEV 009 INHIBITED` identity after valid discovery, before reading calibration or runtime. The same application completes online reads, a VE-cell edit, burn acknowledgement and MSQ export against a separate genuine production Speeduino reference. This establishes a reproducible application-integration gate. It does not make our own controller supported online.
+The unmodified **TunerStudio MS Lite3.3.01** now loads, edits and saves the current own011 definition offline. A fresh own011 online trial still reports `Unsupported Controller Firmware` after correct discovery, before reading calibration or runtime. The current [source-bound packet](../reports/engine/tuning-apps-011/README.md) preserves both results. Physical engine outputs remain inhibited.
 
-EFI's [current stable download](https://www.efianalytics.com/TunerStudio/download/) lists 3.3.01 for Linux. Its [additional-controller support FAQ](https://tunerstudio.com/index.php?Itemid=38&id=24&option=com_content&view=article) describes coordination through the hardware vendor. The [prepared integration request](../tuning/vendor-integration-request.md) remains local and unsent. The next support step is to establish the supported process for our own identity and verify the resulting integration in the application.
+## Current application evidence
 
-## Application evidence
+The latest INI has one12288-byte page and1152-byte runtime. Actual GUI edits change open-duty cell0 to13.25%, target cell9 to149.75kPa absolute and feedforward cell18 to31.125%. Both the original application save and a fresh reload/save with the latest editor bounds reconstruct every expected page byte using an explicit known origin7. The202 application-saved constants omit the read-only origin; reconstructed zero/reserved bytes and caller-supplied origin are not additional values saved by the application.
 
-[The source-bound packet](../reports/engine/tuning-online-009/README.md) preserves the actual application logs, raw captures, INIs, screenshots, reference MSQ, independent probes and hashes. No application executable or proprietary definition PDF is redistributed.
+The browser imports the actual edited MSQ, retains its loaded CAS, saves it and re-exports every calibration field through the native validator. Ten Chrome checks also cover competing writers, absent origins and historical migrations. The three bit/enum boost fields now export blank units. The first actual Python-exported file used percent, causing three application warnings; that original failure remains preserved. Binary field values/offsets and identity are unchanged.
 
-Verify the archived evidence with `python3 tools/verify_tuning_online_evidence.py --replay`. This rechecks both saved streams, reconstructs the changed page and saved MSQ, and reruns the frozen own-controller sanitizer probe and capture-analysis tests. It does not relaunch the proprietary application or establish physical behavior. Add `--check-live-sources` only when the live files still match this checkpoint.
+The fresh online capture contains1685 complete exchanges:337 rawF,337 I,674 capability and337 signature queries. All lengths/CRCs validate, protocol2/256-byte chunks and the exact own011 signature are observed. The app logs337 matching unsupported-firmware warnings and sends zero page, runtime, write, CRC-page or burn requests. The endpoint and both owned application/display processes close cleanly. Neither a parsed INI nor a correct frame proves supported online operation.
 
-For own009, the capture contains 1,640 complete request/reply exchanges: 328 raw F, 328 I, 656 capability queries and 328 signature queries. All framed lengths and CRCs validate. The application reports 328 unsupported-firmware warnings and sends zero page, runtime, write, CRC-page or burn requests. This is a current own009 trial, distinct from the historical own003/004 rejection records. Offline own009 editing/import behavior remains independently tested.
+MegaLogViewer HD Lite4.6.14 opens the120-row,245-column MSL008 synthetic control fixture and plots raw BoostDuty/MAP plus BoostTarget and BoostInhibitEngine. The CSV boost values match the corresponding native source observations. This is an authored shared-controller stimulus, without an engine plant or physical output measurement.
 
-The final public reference bridge captures 10,838 complete exchanges: discovery/version queries, 18 page CRCs, 22 page reads, 10,790 runtime reads, one write and one burn. The source is the unchanged pinned Speeduino production parser, loop and definition. Its active identity is `speeduino 202504-dev`; it is a separate reference ECU process. The application displays the synthetic MAP 100 kPa, IAT 24°C and CLT 85°C with RPM 0. An actual application edit changes page 2 offset 240 from 85 to 86. Write returns 00, burn returns 04 and the next controller CRC is `be04ef33`. Independently reconstructed page bytes and the application-saved 256-cell VE array match that result.
+A separate actual-app trial opens the300-row,202-column direct-SIL008 file and plots BoostReason with observed extrema6 and8, matching its raw rows. That file comes from the existing unvalidated warm-start regression plant. This trial checks file/field rendering and adds no engine-physics or target acceptance.
 
-The native fake EEPROM is process-local. The burn result demonstrates production API behavior and acknowledgement, not physical flash persistence or a tested power cycle. The reference calibration is a software fixture, not an engine tune to install.
+**Viewer limitation:** the unmodified app's calculated AFR* summary displays a14,700,000 maximum when the raw file contains ten unavailable Lambda values, even though those tokens areNaN and the validity bit is clear. The raw source values are correct. Treat source/input-valid/feature-available fields and JSON as authoritative; vendor-derived extrema and floating-point counter plots do not establish measurements. Other application releases are unverified.
 
-## Reference serial fixture
+## Version, identity and the reference control
 
-`scripts/build_speeduino_serial.py` uses the existing pinned 32-bit numerical build. It holds the numerical build lock, relinks all 109 original objects with their original archives and requires a byte-identical original executable. It checks 565 original source/header/library/object inputs before and after compilation. The serial fixture then reuses 107 production objects and compiles its own entry point and bounded 600 s clock copy. Source/binary hashes, exact relink proof and compiler flags remain available in its manifest. The numerical benchmark binaries, manifests and source adapter stay unchanged.
+The inspected EFI download pages list [TunerStudio3.3.01](https://www.efianalytics.com/TunerStudio/download/) and [MegaLogViewer HD4.6.14](https://www.efianalytics.com/MegaLogViewerHD/download/). Those are the installed unmodified versions in this trial, bound by JAR hashes. MLV also offered an update inside its own test profile; that prompt was deferred. No global installation or personal project was changed, and no proprietary executable/PDF is redistributed.
 
-The serial-only executable uses distinct bounded 16 KiB RX/TX queues. A reader can supply later byte slices while the production parser waits for a length or CRC. Inherited `Print` output, including raw F, enters the same captured TX queue. Wall-clock `micros`/`millis` let production 400 ms receive deadlines expire; virtual timer callbacks catch up between loops. These are stopped-engine serial semantics, not a CPU-cost, engine-plant, UART-bandwidth or interrupt-latency model.
+The earlier [own009/reference packet](../reports/engine/tuning-online-009/README.md) remains historical. The same TunerStudio JAR completed actual online page/runtime reads, a VE-cell85→86 edit, burn acknowledgement, matching CRC and saved MSQ against a separate genuine production Speeduino process. Its pin is `9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20`. The native fixture executes the original parser/loop and static synthetic ADC values at stopped-engine RPM0. Its process-local EEPROM does not prove physical persistence or engine timing.
 
-The public PTY bridge relays raw bytes, uses bounded nonblocking writes and closes only its owned processes, descriptors and symlink. Concurrent API senders record RX in actual pipe order. Source controls and the exact original benchmark hash prevent stale production objects from silently entering a new build. Reference quirks remain visible, including extra unspecified bytes in the pinned I reply. They are not copied into our own protocol as requirements.
+That control establishes that the application can perform the workflow for the genuine reference identity. It does not authorize us to use that identity. Our own signature remains `ESP32ECU DEV 011 INHIBITED`; supported vendor integration is unresolved. The [reviewable request](../tuning/vendor-integration-request.md) and [email draft](../tuning/vendor-integration-email.txt) are local and unsent.
 
-The 16 KiB queues bound fixture storage. They do not repair the reference parser's unchecked payload-length path. This positive control uses owned, valid application traffic and specific small CRC/timeout probes. It is not a general malformed-packet safety claim. Our separate Session/Stream has its own bounded frame validation and sanitizer evidence.
+## Reproduce and inspect
 
-## Capture and reproduce
+Use fresh app copies, fresh Java user profiles, copied test projects and an owned Xvfb display. The archived launch/action scripts, INIs, input/edited files, logs, screenshots, endpoint sources and hashes reproduce this Linux workflow. They never open a physical serial port or restart another display/service. Install the vendor applications separately under their normal terms.
 
-Use fresh paths and a copied application/project profile. Keep the actual controller identities and matching definitions.
-
-```sh
-python3 scripts/build_speeduino_sim.py --source ../speeduino --timer-bits 32
-python3 scripts/build_speeduino_serial.py --source ../speeduino
-PYTHONPATH=tools python3 -m unittest tools.test_speeduino_serial tools.test_tuning_wire_analysis
-```
-
-The reference PTY API is deliberately separate from the project endpoint:
-
-```python
-from pathlib import Path
-from speeduino_serial_runtime import SpeeduinoPtyEndpoint
-
-with SpeeduinoPtyEndpoint(Path(".cache/engine/new-reference-pty")) as endpoint:
-    print(endpoint.link)  # Configure the isolated application to use this PTY.
-    input("Press Enter after closing the test application: ")
-```
-
-Run that snippet with `PYTHONPATH=tools`, use the pinned reference INI, and close the test within the 600 s native fixture bound. It opens a Linux PTY, never a physical serial port. The project's separate endpoint is `tools/tuning_server.py`; [USB tuning](engine-usb-tuning.md) documents its whole-tune semantics and physical wiring limits.
-
-`on_wire(direction, bytes)` can record the raw RX/TX slices. Keep captures bounded and preserve their original bytes. Audit a capture with:
+The host `PtyEndpoint` executes the shared native Session/Stream. Its optional `on_wire(direction, bytes)` observer records actual read/write slices, including long replies. Record complete data rather than the128-byte diagnostic preview. Analyze a saved capture with:
 
 ```sh
 python3 tools/analyze_tuning_wire.py NEW_WIRE.log NEW_ANALYSIS.json --require-complete
 ```
 
-The analyzer reassembles split/coalesced envelopes, validates lengths/CRCs, reports command counts and capabilities, and rejects response bytes that precede any queued request. Incomplete requests, unmatched replies and shutdown tails remain explicit. These are host-observed byte records, not proof of physical delivery or application consumption. Native closure `stats` is the last explicitly requested diagnostic snapshot; use the complete wire record for final byte accounting.
+The analyzer validates split/coalesced envelopes, lengths, CRCs, order and unmatched tails. Captured host bytes do not prove physical delivery or application consumption. The current own011 rejection has a complete captured tail, not an assumed quiet shutdown.
 
-Independent review covers the own009 rejection, original object binding, unchanged numerical reference, concurrent trace ordering, queue/closure behavior, full-page CRC, source-derived runtime values, actual application edit/burn/MSQ and capture-analysis negative controls. The firmware/INI contract remains schema 8/own009 with outputs inhibited. Supported own-controller online acceptance, physical USB/runtime measurements and wider ECU feature parity remain open.
+Use [the USB/host guide](engine-usb-tuning.md) for current layout, staging/CAS and module power restrictions. The old own009 verifier continues to verify its frozen historical packet. Current formats, app acceptance and their limits are separate from [engine simulation](engine-research-benchmark.md), target/HIL and the wider [feature goal](engine-feature-coverage.md).

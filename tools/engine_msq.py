@@ -85,7 +85,8 @@ def export_msq(tune):
  for page,name,values,shape in constants(tune):
   units=LOAD_UNITS.get(name[5:],'') if name.startswith('load_') else AE_UNITS.get(name[3:],'') if name.startswith('ae_') else UNITS.get(name[4:],'') if name.startswith('iac_') else field_units(name) if name in ({k for _,k in NUMBERS}|{k for k,_ in TIMING_FIELDS}) else 'RPM' if name.endswith('Rpm') else 'source_units' if name.endswith('Load') else {'veTable':'%','sparkTable':'deg','lambdaTable':'lambda'}.get(name,'deg' if name.endswith('SparkTrim') else '%' if name.endswith('FuelTable') else '')
   if name.startswith('flex_'):units=FLEX_UNITS.get(name[5:],'')
-  if name.startswith('boost_'):units=BOOST_UNITS.get(name[6:],'RPM' if name.endswith('_rpm') else 'kPa absolute' if name=='boost_feedforward_axis' or name=='boost_target_cells' else '% TPS' if name.endswith('_axis') else '%')
+  if name.startswith('boost_'):
+   units='' if name in ('boost_pressure_enabled','boost_mode','boost_activation') else BOOST_UNITS.get(name[6:],'RPM' if name.endswith('_rpm') else 'kPa absolute' if name=='boost_feedforward_axis' or name=='boost_target_cells' else '% TPS' if name.endswith('_axis') else '%')
   if name.startswith('secondary_'):
    _,kind,key=name.split('_',2);rule=tune['secondary_tables'][kind]
    units=constant_unit(kind,key,rule)

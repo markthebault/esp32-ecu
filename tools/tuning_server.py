@@ -58,7 +58,8 @@ class TcpEndpoint(AbstractContextManager):
 
 
 class PtyEndpoint(AbstractContextManager):
- def __init__(self,store,path,debug=False):
+ """Owned host PTY; optional observer receives bytes actually read/written."""
+ def __init__(self,store,path,debug=False,on_wire=None):
   self.store=store
   self.link=Path(path).absolute()
   if self.link.exists() or self.link.is_symlink():raise ValueError('PTY link already exists; choose a new path')
@@ -74,6 +75,7 @@ class PtyEndpoint(AbstractContextManager):
    os.close(self.master)
    raise
   self.debug=debug
+  self.on_wire=on_wire
   self.stop=threading.Event()
   self.failure=''
   self.thread=threading.Thread(target=self.serve,daemon=True,name='ECU tuning PTY')
@@ -83,7 +85,10 @@ class PtyEndpoint(AbstractContextManager):
   while response and not self.stop.is_set():
    if time.monotonic()>deadline:raise TimeoutError('Tuning PTY client stopped reading')
    if not select.select([],[self.master],[],.1)[1]:continue
-   try:response=response[os.write(self.master,response):]
+   try:
+    count=os.write(self.master,response)
+    if self.on_wire:self.on_wire('TX',response[:count])
+    response=response[count:]
    except BlockingIOError:continue
  def serve(self):
   stream=Stream(self.store)
@@ -98,6 +103,7 @@ class PtyEndpoint(AbstractContextManager):
      data=os.read(self.master,4096)
      if data:
       connected=True
+      if self.on_wire:self.on_wire('RX',data)
       if self.debug:print('RX',len(data),data[:128].hex(),flush=True)
       for response in stream.feed(data):
        if self.debug:print('TX',len(response),response[:128].hex(),flush=True)

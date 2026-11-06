@@ -1,0 +1,307 @@
+{
+  "offline_accepted": true,
+  "online_accepted": false,
+  "msl008_engine_app_accepted": true,
+  "direct_sil_202_app_tested": true,
+  "physical_operation_verified": false,
+  "goal_complete": false,
+  "base_commit": "7e0fc44ec59ea3c691dfd17e1745b66677eb1b7a",
+  "source_hashes": {
+    ".gitattributes": "a3728ab9a63f37259e35fa5a0d18cf68ac238160ef247cacccc61b91f40aa5ba",
+    "tuning/README.md": "9681df2649bae61d1282a565addb5db1a9c7d94aa3fdc6517d12ff35dd98088e",
+    "tuning/esp32-ecu-boost.ini": "4c731ce8d9a5fed40900b9e53dabfd313a69263af1dcbabfe618eb5f6ff2ae0e",
+    "tuning/protocol-layout.json": "9686de4179aed4a1ef81c0b68bd619289f587c8cb8f63f0da9ec15d86ef08734",
+    "tuning/editor-limits.json": "c24520368374cfbe15992d3ae3f6edc5cbcca4e0e8091e6904511266cbc42ba0",
+    "tuning/examples/tunerstudio-boost-roundtrip.msq": "b71161483da0e36acfd9eb9d9647e1808dee8b204eeff5c48d364cb260dfb04e",
+    "tuning/vendor-integration-request.md": "8d155c85f977cdede098f85213d3515f8e91fb81fe114bbdff36544a747bb9e9",
+    "tuning/vendor-integration-email.txt": "57a774ff55efef5926c3bd002afaf64af5d3602d0eeca3a6a4d0cc3f68edf9a1",
+    "docs/engine-usb-tuning.md": "0e241cc1ef96aee6315e5405f0a3ee196e5af0c62897b23df28404a7bcd24880",
+    "docs/engine-tuning-application.md": "0de08dc5ad3abb86bdc67bdb494cbe2ff952d83eb510cd6ad13507849fcae7cb",
+    "docs/engine-feature-coverage.md": "759ebf47f8d76aa361adcddded5af3995a526ffa9d598c72b4fb38a8b3426100",
+    "docs/engine-observability.md": "02eadf36f96d215c682dae65778d75bd214866d7e834ccdca6473236adaf28bf",
+    "docs/engine-boost-development.md": "ff344e76169dbed28918523bb0add867e75782e00a9e1dbd5c22400ec784969b",
+    "scripts/generate_tunerstudio_ini.py": "302cd4a3402d52fc7e07ef44329950a7d8e359befe38b725c37aada81e8cf815",
+    "tools/engine_msq.py": "a5580fe5988c1f1c817024200749d6267e06893488909aa3a70d92eeafd488e1",
+    "tools/engine_protocol.py": "f43594e4bf3750d660c8aef3deb4762f9320ae19eaff29f23a065b3143fb1b8f",
+    "tools/engine_runtime.py": "cbaf804bc4927026e2384cae712f12ce098a43732258b7e9bdfcdaf66df7b16e",
+    "tools/engine_sil.py": "344b7182710dd80857b1e8e3080f7c20afb409d09b4d68dbbc2303a6ebc07991",
+    "tools/tuning_runtime.py": "efce5f60e5f65d7acffa1bd6f528ffc3c1e14ee35b72b59fc05ab98240148f02",
+    "tools/tuning_server.py": "e808fb53107f22ef6f6effc774a6842ea85cfcbbe23bc668663910a48529f1a8",
+    "tools/analyze_tuning_wire.py": "b84f24f08e54c3077045ccafe3b71ef325c14665ca118e90bff08b3fbdceb7ce",
+    "tools/test_tuning.py": "b5e668dac17d40cc4c816b65d79d61dd38547a517f7108ccca0133b92bb18e7c",
+    "tools/test_tuning_transport.py": "3cebe8c0fec8c1e4fdaeffbe62827a2beb446b1c60e87de836027257e763dea3",
+    "tools/test_tuning_ui.py": "b5b684e27eb39b5ea96894b21fdf38611bb998289ed0c8c2eaad0e06a54eaedc",
+    "tools/package_tuning_applications.py": "92943e151ace841dd3dfe2fd71b076df3aff4d6ed7404ab3b482023a5bb50534",
+    "web/index.html": "ac069d1b2e91c5bbc95e2bb1498023006537a345e4a3c7a156a47a0d6792a197",
+    "web/boost_control_logic.js": "ba47d461eb95f8f56974da51a474cba737e0c36e3eaae4f42d6d800114b80d16",
+    "web/boost_control.js": "8b55318d276b37015cb47218c426fcdd26b291ad73ff83f7839e359a348a60e6"
+  },
+  "latest_roundtrip": {
+    "passed": true,
+    "page_bytes": 12288,
+    "ini_sha256": "4c731ce8d9a5fed40900b9e53dabfd313a69263af1dcbabfe618eb5f6ff2ae0e",
+    "msq_sha256": "26cd0ce347d35147ada1ad5e057892b4850cd0ea3d681a4166ba8afc12740133",
+    "no_unit_warnings": true,
+    "explicit_import_base": 7
+  },
+  "edited_roundtrip": {
+    "passed": true,
+    "page_bytes": 12288,
+    "unexpected_byte_offsets": [],
+    "values": {
+      "open_duty": 13.25,
+      "target": 149.75,
+      "feedforward": 31.125
+    },
+    "application_msq_sha256": "b71161483da0e36acfd9eb9d9647e1808dee8b204eeff5c48d364cb260dfb04e"
+  },
+  "wire": {
+    "scope": "host_observed_rawF_and_framed_capture",
+    "wire_sha256": "c84c87fe85b617a44ed5956f4f40de99074f87a84574e0121b2956b244231b70",
+    "bytes": {
+      "RX": 10447,
+      "TX": 22916
+    },
+    "command_counts": {
+      "F": 337,
+      "I": 337,
+      "f": 674,
+      "Q": 337
+    },
+    "complete_transactions": 1685,
+    "invalid_frames": [],
+    "unanswered_requests": [],
+    "partial_request_hex": "",
+    "unmatched_response_hex": "",
+    "capture_complete": true,
+    "signatures": [
+      "ESP32ECU DEV 011 INHIBITED"
+    ],
+    "capabilities": [
+      {
+        "protocol": 2,
+        "read_chunk_bytes": 256,
+        "write_chunk_bytes": 256
+      },
+      {
+        "protocol": 2,
+        "read_chunk_bytes": 256,
+        "write_chunk_bytes": 256
+      },
+      {
+        "protocol": 2,
+        "read_chunk_bytes": 256,
+        "write_chunk_bytes": 256
+      },
+      {
+        "protocol": 2,
+        "read_chunk_bytes": 256,
+        "write_chunk_bytes": 256
+      }
+    ],
+    "reset_prefixes": 0
+  },
+  "chrome": {
+    "passed": true,
+    "browser": "Installed Chrome via Playwright",
+    "checks": [
+      "Host diagnostics never claim target USB or application presence",
+      "Actual native session staging and protocol errors are visible",
+      "Diagnostics export preserves counters, source and unknown driver drops",
+      "Own011 file origin is metadata, explicit Save uses loaded editor CAS",
+      "Browser own011 complete-page MSQ roundtrips through native validation with unitless boost choices",
+      "Concurrent writer is never silently rebased during file import",
+      "Historical own004 application file may omit its origin; missing metadata never rebases stale editor",
+      "Historical own001/002/003/010 application-authored MSQs migrate to schema10 with boost disabled",
+      "Actual own011 application-edited three-table file imports, saves with editor CAS and exports with every calibration field preserved",
+      "Diagnostics and own011/legacy import UI fit320/390/768/1440px"
+    ],
+    "page_errors": []
+  },
+  "independent_assessment": {
+    "accepted_for_current_offline_native_and_raw_log_scope": true,
+    "open_findings": [],
+    "online_supported": false,
+    "physical_qualification": false,
+    "full_ecu_goal_complete": false,
+    "scope": "Current own011/schema10 offline file exchange and definition constraints, native full-page/runtime transport and declared245-column MSL008 application/record artifact checks. No supported own-controller online session, target USB throughput, engine calibration/operation or full ECU parity acceptance.",
+    "native": {
+      "constants": 203,
+      "page_bytes": 12288,
+      "live_bytes": 1152,
+      "full_reply_framed_bytes": 1159,
+      "chunk_bytes": 256,
+      "fresh_independent_tuning_library_built": true,
+      "nondegenerate_boost_tables": 3,
+      "invalid_msq_controls": 5,
+      "states_with_unavailable_msl_values": 3
+    },
+    "editor": {
+      "scalars": 33,
+      "curves": 6,
+      "timing": 3,
+      "source": "Native validator limits independently read and mapped",
+      "dynamic_dwell_ceiling": true,
+      "full_tune_cross_constraints_still_required": true
+    },
+    "actual_tunerstudio_offline": {
+      "version": "MS Lite3.3.01",
+      "unmodified_vendor_jars": true,
+      "latest_ini_sha256": "4c731ce8d9a5fed40900b9e53dabfd313a69263af1dcbabfe618eb5f6ff2ae0e",
+      "saved_msq_files": [
+        "application-saved011.msq",
+        "application-edited011.msq",
+        "application-latest-definition011.msq"
+      ],
+      "all12288_bytes_equal_intended_calibration": true,
+      "app_saved_constants": 202,
+      "readonly_origin_omitted": true,
+      "explicit_import_base": 7,
+      "latest_definition_reloaded_and_saved": true,
+      "unit_mismatch_warnings_after_fix": 0,
+      "intended_edits": {
+        "open_duty.cells[0]": 13.25,
+        "target.cells[9]": 149.75,
+        "feedforward.cells[18]": 31.125
+      }
+    },
+    "actual_tunerstudio_online": {
+      "version": "MS Lite3.3.01",
+      "supported": false,
+      "identity": "ESP32ECU DEV 011 INHIBITED",
+      "serial_protocol": "002",
+      "complete_crc_valid_exchanges": 1685,
+      "unsupported_warnings": 337,
+      "page_runtime_write_burn_commands": 0,
+      "terminal_cleanly": true,
+      "interpretation": "Fresh own011 rejection after valid discovery; no counterfeit identity or proprietary application patch."
+    },
+    "actual_megalogviewer": {
+      "version": "HD Lite4.6.14",
+      "unmodified_vendor_jars": true,
+      "format": "bounded engine MSL008",
+      "columns": 245,
+      "rows": 120,
+      "all16_boost_columns_match_source": true,
+      "raw_lambda_unknown_rows": 10,
+      "raw_lambda_validity_matches": true,
+      "scope": "Authored shared-controller stimulus; no engine plant or electrical execution",
+      "vendor_derived_afr_max_display": 14700000,
+      "vendor_derived_afr_accepted": false,
+      "direct_sil202_application_trial_reviewed": false
+    },
+    "host_pty": {
+      "coalesced_requests_and_capture_passed": true,
+      "observer_io_failure_cleanup_passed": true,
+      "physical_usb_delivery_or_application_consumption_proven": false
+    },
+    "closed_findings": [
+      {
+        "id": "TA11-1",
+        "finding": "Python exporter assigned percent units to three unitless boost selections, producing actual app warnings.",
+        "resolution": "Current exporter uses blank units. Independent203-field comparison, fresh app reload/save and original negative control verify closure."
+      },
+      {
+        "id": "TA11-2",
+        "finding": "General editor constraints admitted unsupported cylinder, scalar, curve and cam-window values.",
+        "resolution": "Current INI consumes independently matched33/6/3 native limits, including4..4 cylinders,5..45 camwindow and dynamic dwell ceiling; whole-tune cross-validation remains required."
+      },
+      {
+        "id": "TA11-3",
+        "finding": "Debug-only PTY logging truncated large replies and could not be used as a complete current wire record.",
+        "resolution": "Optional observer now records successfully read/written bytes; full1159-byte partial-write and independent coalesced/failure controls pass."
+      }
+    ],
+    "limitations": [
+      "The unmodified application still rejects own011 online; supported vendor integration remains unresolved. The historical genuine Speeduino positive control is separate.",
+      "Native full1159-byte replies exceed each1024-byte target USB ring. Host PTY success and source budgets do not establish physical USB flow or timing.",
+      "MLV vendor-calculated AFR* gives a misleading14,700,000 maximum around the ten correctly exported unknown Lambda rows. Raw fields, validity and JSON remain authoritative; calibration/autotune and vendor-derived summaries are not accepted.",
+      "Only the current245-column MSL008 format was application-tested here. The202-column direct-SIL latest app workflow is outside this review.",
+      "U64 raw text and low/high halves are exact; Java graphical arithmetic/large-counter precision is not established.",
+      "The wider engine features, target/HIL, physical outputs, electrical/thermal/RF, assembly/enclosure and full ECU goal remain open."
+    ],
+    "evidence_sha256": {
+      "format-probe-current-results.json": "93d8c0709d1ac4c2a9837e7b77ecd025b5f8217493f716f27a633de923e586a9",
+      "unit-metadata-results.json": "356b5d7562c2d637aa15c0883541c381c5bdad8c414e479a452d7190e608ec0d",
+      "application-artifact-final-results.json": "5344228a6ce0fbe15d4696fbb0e42d9e11789f38869a0ef0306e8e7f878e1913",
+      "final-app-closure.json": "2344b749349e7001f3e5652122c86aac3f1821af2c791c6d2bd88aaf477e5a3f",
+      "pty-controls.json": "e61b32e1b5515df42988ff3be703877488be7065a8d97cb5f43510d38c594982",
+      "fresh-build-manifest.json": "1a9e8acb56b0df27b50d4ec93599ee25e19c73cfbd878300723eec3f92f5031e",
+      "app-binary-provenance-current.json": "33142bf1d88482c196e07fdc4ebf9700b9ebae90775224d7aef862dd623bcedf",
+      "reviewed-inputs.json": "5230cb2a48249fab3524ea6d1e06755a687e8abd22c5a8b806d20f87682118d1"
+    }
+  },
+  "direct_sil_assessment": {
+    "accepted": true,
+    "open_findings": [],
+    "accepted_for_current_202_column_file_and_selected_plot_scope": true,
+    "scope": "Independent addendum for existing unvalidated direct-SIL MSL008 loading and selected BoostReason plot in actual unmodified MegaLogViewer HD Lite 4.6.14. No new engine or physics acceptance.",
+    "reviewer": "independent direct_sil_viewer_review agent",
+    "reviewed_at_utc": "2026-11-06T02:16:03.870109+00:00",
+    "file": {
+      "path": "direct-sil008.msl",
+      "sha256": "980f80c7ec7448204215b54df7cc672ea80ae35a50241a879a3438beab2d7219",
+      "rows": 300,
+      "columns": 202,
+      "current_header_and_units_match": true,
+      "current_boost_fields": 16,
+      "all_rows_have_expected_width": true,
+      "time_first_seconds": 0,
+      "time_last_seconds": 5.98,
+      "time_step_seconds": 0.02
+    },
+    "actual_application": {
+      "version": "MegaLogViewer HD Lite 4.6.14",
+      "main_jar_sha256": "18205c30686de499d722a3244d4e8dab01a64dce868c986bfc54a05d0f2afc4c",
+      "copied_vendor_binary_hashes_match_factory": true,
+      "vendor_binary_count": 10,
+      "session_input_hash_matches_file": true
+    },
+    "selected_plot": {
+      "field": "BoostReason",
+      "raw_minimum": 6,
+      "raw_maximum": 8,
+      "raw_final": 6,
+      "screenshot_minimum": 6,
+      "screenshot_maximum": 8,
+      "screenshot_current": 6,
+      "screenshot_independently_viewed": true,
+      "evidence": "direct-sil-boost-reason.png"
+    },
+    "lifecycle": {
+      "recorded_java_returncode": 143,
+      "recorded_xvfb_returncode": 0,
+      "all_owned_processes_terminal": true,
+      "independently_checked_pids_absent": [
+        2021339,
+        2021336
+      ]
+    },
+    "limits": [
+      "Only the selected BoostReason plot was independently checked visually; this does not establish graphical accuracy of every channel or large integer arithmetic.",
+      "The fixture uses the existing unvalidated reduced-order warm-start regression. Boost duty remains zero in this case; no active boost-plant performance conclusion is supported.",
+      "The main review and its calculated-AFR caveat remain authoritative and unchanged.",
+      "Own011 online TunerStudio operation remains rejected. Target timing, physical hardware, RF, engine operation and full Speeduino feature parity remain open."
+    ],
+    "documentation_review": {
+      "source_hashes": {
+        "docs/engine-tuning-application.md": "0de08dc5ad3abb86bdc67bdb494cbe2ff952d83eb510cd6ad13507849fcae7cb",
+        "docs/engine-observability.md": "02eadf36f96d215c682dae65778d75bd214866d7e834ccdca6473236adaf28bf",
+        "tools/package_tuning_applications.py": "92943e151ace841dd3dfe2fd71b076df3aff4d6ed7404ab3b482023a5bb50534"
+      },
+      "result": "Current application/observability documentation and publisher text limit this direct-SIL addition to file and field rendering, explicitly disclaim new engine-physics or target acceptance, and preserve the wider incomplete goal. The generated published packet is for the parent to rebuild."
+    },
+    "immutable_main_review": {
+      ".cache/engine/tuning-app-review-011-001/assessment.json": "3c81609e87a352e2b7125876754c2eb764c606179dc7942955799d90418baab7",
+      ".cache/engine/tuning-app-review-011-001/whitelist.json": "a15d86eb4e4c5991a4368e1595ee0bfad6e1d0950a24cab0d40861a1127f1a98"
+    },
+    "project_source_edits": false,
+    "physical_connection": false,
+    "physical_operation_verified": false,
+    "physics_accepted": false,
+    "online_accepted": false,
+    "full_goal_complete": false
+  },
+  "vendor_message_sent": false,
+  "qualification": "Real unmodified offline application and host/native format evidence only. Own011 online rejected; MLV calculated-AFR caveat, target USB throughput/physical operation and wider ECU goal remain open."
+}
