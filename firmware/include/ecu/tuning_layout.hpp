@@ -6,17 +6,25 @@
 #include <limits>
 namespace ecu::tuning {
 inline constexpr std::size_t page_bytes=12288,live_bytes=1152,chunk_bytes=256;
-inline constexpr const char signature[]="ESP32ECU DEV 011 INHIBITED";
+inline constexpr const char signature[]="ESP32ECU DEV 012 INHIBITED";
 inline constexpr const char serial_protocol[]="002";
+inline constexpr unsigned profile_live_cylinder_count=896;
+inline constexpr unsigned profile_live_worker_cylinder_count=900;
+inline constexpr unsigned profile_live_board_injector_commands=904;
+inline constexpr unsigned profile_live_board_coil_commands=908;
+inline constexpr unsigned profile_live_virtual_high_mask=912;
+inline constexpr unsigned profile_live_physical_command_mask=916;
+inline constexpr unsigned profile_live_extra_cylinders=920;
+inline constexpr unsigned profile_live_used_end=984;
 using Page=std::array<std::uint8_t,page_bytes>;
 inline void put_u32(std::uint8_t*p,std::uint32_t v){for(unsigned i=0;i<4;++i)p[i]=std::uint8_t(v>>(8*i));}
 inline std::uint32_t get_u32(const std::uint8_t*p){std::uint32_t v=0;for(unsigned i=0;i<4;++i)v|=std::uint32_t(p[i])<<(8*i);return v;}
 inline void put_float(std::uint8_t*p,float v){static_assert(sizeof(float)==4&&std::numeric_limits<float>::is_iec559);std::uint32_t u;std::memcpy(&u,&v,4);put_u32(p,u);}
 inline float get_float(const std::uint8_t*p){auto u=get_u32(p);float v;std::memcpy(&v,&u,4);return v;}
-inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||(n>=4756&&n<4768)||(n>=4940&&n<4992)||(n>=5116&&n<5120)||(n>=5176&&n<5376)||(n>=5448&&n<5504)||(n>=7968&&n<8192)||(n>=8280&&n<8320)||n>=9280;}
+inline bool reserved_offset(std::size_t n){return (n>=292&&n<512)||(n>=4756&&n<4768)||(n>=4940&&n<4992)||(n>=5116&&n<5120)||(n>=5176&&n<5376)||(n>=5448&&n<5504)||(n>=7968&&n<8192)||(n>=8280&&n<8320)||n>=10068;}
 inline bool revision_offset(std::size_t n){return n>=268&&n<272;}
-// own011 appends boost calibration without moving any own010 field.
-inline bool representable(const engine::Tune&t){return t.cylinders==4&&!engine::validate(t);}
+// own012 appends cylinder slots without moving any own011 field.
+inline bool representable(const engine::Tune&t){return !engine::validate(t);}
 inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill(0);
  put_u32(p.data(),(std::uint32_t(t.ego_enabled)<<0)|(std::uint32_t(t.dfco_enabled)<<1)|(std::uint32_t(t.idle_enabled)<<2));
  put_float(p.data()+4,t.cylinders);
@@ -192,6 +200,9 @@ inline void encode_page(const engine::Tune&t,std::uint32_t origin,Page&p){p.fill
  for(unsigned i=0;i<64;++i)put_float(p.data()+8704+i*4,t.boost_control.target.cells[i]);
  for(unsigned i=0;i<8;++i){put_float(p.data()+8960+i*4,t.boost_control.feedforward.rpm[i]);put_float(p.data()+8992+i*4,t.boost_control.feedforward.axis[i]);}
  for(unsigned i=0;i<64;++i)put_float(p.data()+9024+i*4,t.boost_control.feedforward.cells[i]);
+ for(unsigned c=4;c<8;++c){p[9280+c-4]=t.firing_order[c];const auto&m=t.cylinder_fuel[c];const unsigned o=9284+(c-4)*192;
+  for(unsigned i=0;i<6;++i){put_float(p.data()+o+i*4,m.rpm[i]);put_float(p.data()+o+24+i*4,m.load[i]);}
+  for(unsigned i=0;i<36;++i){put_float(p.data()+o+48+i*4,m.cells[i]);}put_float(p.data()+10052+(c-4)*4,t.cylinder_spark_deg[c]);}
 }
 inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  if(!origin||get_u32(p.data()+268)!=origin)return false;
@@ -200,7 +211,7 @@ inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  t.ego_enabled=flags&(1U<<0);
  t.dfco_enabled=flags&(1U<<1);
  t.idle_enabled=flags&(1U<<2);
- if(get_float(p.data()+4)!=4){return false;}t.cylinders=4;
+ const float cylinders=get_float(p.data()+4);if(!engine::range(cylinders,1,8)||cylinders!=std::floor(cylinders))return false;t.cylinders=static_cast<unsigned>(cylinders);
  t.displacement_cc=get_float(p.data()+8);
  t.injector_cc_min=get_float(p.data()+12);
  t.fuel_density_g_cc=get_float(p.data()+16);
@@ -372,9 +383,12 @@ inline bool decode_page(const Page&p,std::uint32_t origin,engine::Tune&t){
  for(unsigned i=0;i<64;++i)t.boost_control.target.cells[i]=get_float(p.data()+8704+i*4);
  for(unsigned i=0;i<8;++i){t.boost_control.feedforward.rpm[i]=get_float(p.data()+8960+i*4);t.boost_control.feedforward.axis[i]=get_float(p.data()+8992+i*4);}
  for(unsigned i=0;i<64;++i)t.boost_control.feedforward.cells[i]=get_float(p.data()+9024+i*4);
+ for(unsigned c=4;c<8;++c){t.firing_order[c]=p[9280+c-4];auto&m=t.cylinder_fuel[c];const unsigned o=9284+(c-4)*192;
+  for(unsigned i=0;i<6;++i){m.rpm[i]=get_float(p.data()+o+i*4);m.load[i]=get_float(p.data()+o+24+i*4);}
+  for(unsigned i=0;i<36;++i){m.cells[i]=get_float(p.data()+o+48+i*4);}t.cylinder_spark_deg[c]=get_float(p.data()+10052+(c-4)*4);}
  return !engine::validate(t);
 }
-// Update only an owned, already canonical schema10 tree. No global data mutates.
+// Update only an owned, already canonical schema11 tree. No global data mutates.
 template<class Json> bool update_document(Json&j,const engine::Tune&t){
  if(!j.header(t.revision,engine::strategy_name(t.strategy)))return false;
  if(!j.number("engine","cylinders",t.cylinders))return false;
@@ -426,7 +440,7 @@ template<class Json> bool update_document(Json&j,const engine::Tune&t){
  if(!j.number("timing","cam_sync_deg",t.cam_sync_deg))return false;
  if(!j.number("timing","cam_window_deg",t.cam_window_deg))return false;
  if(!j.array("timing","firing_order",t.firing_order)||!j.boolean("cylinder_trims","enabled",t.cylinder_trims_enabled)||!j.array("cylinder_trims","spark_deg",t.cylinder_spark_deg))return false;
- for(unsigned i=0;i<4;++i)if(!j.trim(i,t.cylinder_fuel[i]))return false;
+ for(unsigned i=0;i<8;++i)if(!j.trim(i,t.cylinder_fuel[i]))return false;
  if(!j.idle(t.idle_control)||!j.transient_enrichment(t.transient_enrichment)||!j.load_model(t.load_model)||!j.secondary_tables(t.secondary_tables,t.secondary_ve,t.secondary_spark)||!j.flex_fuel(t.flex_fuel)||!j.boost_control(t.boost_control))return false;
  return true;
 }

@@ -29,26 +29,28 @@ struct RuntimeSample {
  secondary::Observation secondary_fuel,secondary_spark;
  flex::Record flex_fuel;
  boost::Record boost_control;
- std::array<float,4> cylinder_pulse_ms{},cylinder_advance_deg{},cylinder_fuel_pct{},cylinder_duty_pct{};
+ std::array<float,8> cylinder_pulse_ms{},cylinder_advance_deg{},cylinder_fuel_pct{},cylinder_duty_pct{};
  float cam_error_deg=0;
  std::array<std::uint16_t,8> raw_adc{};
  std::uint16_t flags=0;
+ std::uint32_t virtual_high_mask=0,physical_command_mask=0;
  std::uint8_t input_valid=0,state=0,strategy=0,phase_reason=0,timing_fault=0,last_timing_fault=0,
-  virtual_high_mask=0,physical_command_mask=0,board_flags=0; // ADC/SAFE/interlock/overflow, bits0..3.
+  board_flags=0,cylinder_count=0,worker_cylinder_count=0; // ADC/SAFE/interlock/overflow, bits0..3.
  DataSource source=DataSource::None;
  std::uint8_t cylinder_valid=0,cylinder_enabled=0,cylinder_capacity_mask=0,cylinder_spark_clamp_mask=0,cylinder_retard_floor_mask=0;
  bool has(DataFlag flag)const{return (flags&flag)!=0;}
 };
-static_assert(sizeof(RuntimeSample)<=744,"Runtime/log sample exceeds its explicit boost diagnostic budget");
+static_assert(sizeof(RuntimeSample)<=816,"Runtime/log sample exceeds its explicit eight-cylinder diagnostic budget");
 inline float data_float(double value){return finite(value)&&std::abs(value)<=FLT_MAX?static_cast<float>(value):NAN;}
 inline void data_values(RuntimeSample& r,const Inputs& in,const Output& out,const Tune&t){
  const double inputs[]={in.rpm,in.map_kpa,in.tps_pct,in.clt_c,in.iat_c,in.lambda,in.battery_v,in.sensor_v};
  const double proposals[]={out.rpm,out.ve_pct,out.target_lambda,out.advance_deg,out.pulse_ms,out.dwell_ms,out.deadtime_ms,out.air_mg,out.warmup,out.afterstart,out.accel,out.ego,out.duty_pct,out.idle_pct};
  for(unsigned i=0;i<input_count;++i)r.inputs[i]=data_float(inputs[i]);
  for(unsigned i=0;i<proposal_count;++i)r.proposals[i]=data_float(proposals[i]);
- r.cylinder_valid=out.cylinder_data?15:0;r.cylinder_enabled=out.cylinder_trims_enabled;
+ r.cylinder_count=t.cylinders>=1&&t.cylinders<=8?t.cylinders:0;
+ r.cylinder_valid=out.cylinder_data&&r.cylinder_count?static_cast<std::uint8_t>((1U<<r.cylinder_count)-1):0;r.cylinder_enabled=out.cylinder_trims_enabled;
  r.cylinder_capacity_mask=out.cylinder_capacity_mask;r.cylinder_spark_clamp_mask=out.cylinder_spark_clamp_mask;r.cylinder_retard_floor_mask=out.cylinder_retard_floor_mask;
- for(unsigned i=0;i<4;++i){r.cylinder_pulse_ms[i]=data_float(out.cylinder_pulse_ms[i]);r.cylinder_advance_deg[i]=data_float(out.cylinder_advance_deg[i]);r.cylinder_fuel_pct[i]=data_float(out.cylinder_fuel_pct[i]);r.cylinder_duty_pct[i]=data_float(out.cylinder_duty_pct[i]);}
+ for(unsigned i=0;i<8;++i){r.cylinder_pulse_ms[i]=data_float(out.cylinder_pulse_ms[i]);r.cylinder_advance_deg[i]=data_float(out.cylinder_advance_deg[i]);r.cylinder_fuel_pct[i]=data_float(out.cylinder_fuel_pct[i]);r.cylinder_duty_pct[i]=data_float(out.cylinder_duty_pct[i]);}
  const double idle_values[]={out.idle.target_rpm,out.idle.duty_pct,out.idle.feedforward_pct,out.idle.p_term,out.idle.i_term,out.idle.d_term};
  for(unsigned i=0;i<6;++i){r.idle_proposals[i]=data_float(idle_values[i]);}r.idle_available=true;r.idle_pid_updates=out.idle.pid_updates;r.idle_flags=out.idle.flags;r.idle_state=static_cast<std::uint8_t>(out.idle.state);r.idle_reason=static_cast<std::uint8_t>(out.idle.reason);
  r.controller_faults=out.faults;r.state=static_cast<std::uint8_t>(out.state);

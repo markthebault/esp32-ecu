@@ -59,12 +59,13 @@ class EngineRuntime:
   sample['lambda']=sample.pop('lambda_');sample.update(inputs)
   out=json.loads(self.bridge.engine_step(self.handle,json.dumps(sample,allow_nan=False).encode(),int(time_us),int(time_us if sampled_us is None else sampled_us)))
   if 'error' in out:raise ValueError(out['error'])
+  if out.get('native_event_capture_overflows',0):raise RuntimeError('Native event capture overflow; engine simulation is invalid')
   return out
  def data(self):
   body=self.bridge.engine_data_json(self.handle)
   if not body:raise MemoryError('Engine observation allocation failed')
   data=json.loads(body)
-  if data.get('schema_version') not in (1,2):raise MemoryError('Engine observation serialization failed')
+  if data.get('schema_version') not in (1,2,3):raise MemoryError('Engine observation serialization failed')
   return data
  def cut(self):self.bridge.engine_cut(self.handle)
  def timing_reason(self):return self.bridge.engine_timing_reason(self.handle).decode()
@@ -129,7 +130,7 @@ class EngineStore:
  def status(self):
   with self.lock:
    result=dict(self.latest or dict(state='stopped',faults=0,execution='SIL not yet run',physical_outputs_enabled=False))
-   result.update(simulator=True,revision=self.tune['revision'],active_strategy=self.tune['strategy'],storage_ok=self.storage_ok,binding='Native C++ core; independent reduced-order SIL plant, unvalidated',error=self.error)
+   result.update(simulator=True,revision=self.tune['revision'],active_strategy=self.tune['strategy'],active_cylinders=self.tune['engine']['cylinders'],fitted_injector_commands=4,fitted_coil_commands=4,storage_ok=self.storage_ok,binding='Native C++ core; independent reduced-order SIL plant, unvalidated',error=self.error)
    result['data_source']='completed_sil_snapshot' if self.last_run else 'no_sil_result'
    result['sample_age_ms']=int(max(0,time.monotonic()-self.completed_monotonic)*1000) if self.last_run else None
    result['fresh']=False
@@ -202,7 +203,7 @@ class EngineStore:
    with self.lock:
     if self.tune['revision']!=revision:return 409,{'error':'Tune changed during simulation; result not published'}
     result['summary']['tune_revision']=revision;self.last_run=result;self.completed_monotonic=time.monotonic();self.latest=dict(result['final']);return 200,result
-  except (ValueError,TypeError) as e:return 422,{'error':str(e)}
+  except (ValueError,TypeError,RuntimeError) as e:return 422,{'error':str(e)}
   finally:
    with self.lock:self.running=False
  def msl(self):

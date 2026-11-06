@@ -14,7 +14,8 @@ struct Measurement {
  std::uint32_t tune_revision=0,sensor_revision=0,phase_epoch=0;
  std::uint64_t worker_sequence=0,worker_observed_us=0;
  std::uint32_t worker_epoch=0,worker_tune_revision=0,worker_sensor_revision=0;
- std::uint8_t timing_cause=0,last_timing_cause=0,virtual_high_mask=0,physical_command_mask=0;
+ std::uint8_t timing_cause=0,last_timing_cause=0,worker_cylinder_count=0;
+ std::uint32_t virtual_high_mask=0,physical_command_mask=0;
  std::uint64_t crank_edges=0,cam_edges=0;
 };
 void init(Wheel wheel,bool interlock_at_boot);

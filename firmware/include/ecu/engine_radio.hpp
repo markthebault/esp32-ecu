@@ -5,8 +5,8 @@
 
 namespace ecu::radio::wire {
 constexpr unsigned capability_size=76,capability_reply_size=108,engine_size=250,engine_body_size=218,engine_ack_size=56;
-constexpr std::uint32_t engine_feature=1,engine_schema=6;
-inline bool engine_schema_valid(std::uint32_t schema){return schema>=1&&schema<=6;}
+constexpr std::uint32_t engine_feature=1,engine_schema=7;
+inline bool engine_schema_valid(std::uint32_t schema){return schema>=1&&schema<=7;}
 inline unsigned engine_frame_size(std::uint32_t schema){return engine_schema_valid(schema)?(schema<3?232:250):0;}
 inline unsigned engine_frame_body_size(std::uint32_t schema){return engine_schema_valid(schema)?engine_frame_size(schema)-32:0;}
 inline bool legacy_load_model(const engine::RuntimeSample&r){
@@ -14,6 +14,19 @@ inline bool legacy_load_model(const engine::RuntimeSample&r){
  return !o.available||(o.fuel==load::Source::Map&&o.spark==load::Source::Map&&o.lambda==load::Source::Map&&o.trim==load::Source::Map&&o.pressure==load::Pressure::MapReference&&o.afr==load::Afr::Target&&o.aux_role==load::AuxRole::PostcatMonitor);
 }
 inline bool engine_schema_supports(std::uint32_t schema,const engine::RuntimeSample&r){
+ if(schema==7){
+  const auto count=r.cylinder_count,worker=r.worker_cylinder_count;
+  if(count>8||(r.has(engine::Present)&&!count)||worker>8||r.cylinder_enabled>1)return false;
+  const unsigned active=count?(1U<<count)-1U:0;
+  if((r.cylinder_valid|r.cylinder_capacity_mask|r.cylinder_spark_clamp_mask|r.cylinder_retard_floor_mask)&~active)return false;
+  if(r.virtual_high_mask&~engine::channels::mask(worker))return false;
+  const unsigned fitted=worker<4?worker:4;
+  if(r.physical_command_mask&~engine::channels::mask(fitted))return false;
+  for(unsigned i=0;i<8;++i)if(r.cylinder_valid&(1U<<i))for(float v:{r.cylinder_pulse_ms[i],r.cylinder_advance_deg[i],r.cylinder_fuel_pct[i],r.cylinder_duty_pct[i]})if(!engine::finite(v))return false;
+ }
+ // Every published legacy engine schema assumes four cylinders and byte-wide
+ // worker masks. Never truncate an expanded or earlier wider worker context.
+ if(schema<=6&&((r.has(engine::Present)&&r.cylinder_count!=4)||r.worker_cylinder_count>4||r.virtual_high_mask>255||r.physical_command_mask>255))return false;
  // Historical schemas have no boost pressure/valve decision block.
  if(schema<6&&r.boost_control.pressure_enabled)return false;
  if(schema>=6){

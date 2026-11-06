@@ -90,6 +90,7 @@ class Handler(BaseHTTPRequestHandler):
   d=self.server.device
   if self.path in ('/','/index.html'):return self.reply(200,(R/'web/index.html').read_bytes(),'text/html; charset=utf-8')
   if self.path=='/trigger_logger.js':return self.reply(200,(R/'web/trigger_logger.js').read_bytes(),'application/javascript; charset=utf-8')
+  if self.path=='/profile_metadata.js':return self.reply(200,(R/'web/profile_metadata.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/cylinder_tuning.js':return self.reply(200,(R/'web/cylinder_tuning.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/boost_control.js':return self.reply(200,(R/'web/boost_control.js').read_bytes(),'application/javascript; charset=utf-8')
   if self.path=='/flex_fuel.js':return self.reply(200,(R/'web/flex_fuel.js').read_bytes(),'application/javascript; charset=utf-8')

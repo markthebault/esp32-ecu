@@ -44,5 +44,5 @@ static void context_and_faults(){
  r=observation();r.boost_control=boost::record(boost::Output{},boost::Config{});check(!engine_schema_supports(6,r));r.input_valid&=~(1U<<engine::MapKpa);check(engine_schema_supports(6,r));r.inputs[engine::MapKpa]=110;r.input_valid|=1U<<engine::MapKpa;check(engine_schema_supports(6,r));
  r.inputs[engine::MapKpa]=400;r.boost_control=observation().boost_control;check(engine_schema_supports(6,r));r.inputs[engine::MapKpa]=401;check(!engine_schema_supports(6,r));
 }
-static_assert(sizeof(EnginePair)<=672,"Per-peer immutable observation RAM budget");
+static_assert(sizeof(EnginePair)<=912,"Per-peer immutable observation RAM budget");
 int main(){multipart();context_and_faults();std::cout<<"engine_radio_boost_checks "<<checks<<"\n";}

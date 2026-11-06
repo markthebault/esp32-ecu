@@ -80,7 +80,7 @@ static void spark(){
   auto s=input(t);s.rpm=200;Controller crank;o=crank.step(t,s,1000000);check(!o.faults&&o.flex_fuel.spark_bypassed);near(o.advance_deg,5);
  }
  auto t=tune(Strategy::Sequential);t.cylinder_trims_enabled=true;t.spark.cells.fill(40);t.flex_fuel.correction.enabled=true;t.flex_fuel.correction.spark_deg.fill(5);t.cylinder_spark_deg.fill(-10);
- Controller trim;auto o=trim.step(t,input(t),1000000);check(!o.faults);near(o.advance_deg,40);for(auto advance:o.cylinder_advance_deg)near(advance,35);
+ Controller trim;auto o=trim.step(t,input(t),1000000);check(!o.faults);near(o.advance_deg,40);for(unsigned cylinder=0;cylinder<o.cylinder_count;++cylinder)near(o.cylinder_advance_deg[cylinder],35);for(unsigned cylinder=o.cylinder_count;cylinder<o.cylinder_advance_deg.size();++cylinder)near(o.cylinder_advance_deg[cylinder],0);
  t.cylinder_spark_deg.fill(0);t.flex_fuel.correction.spark_deg.fill(40);Controller limit;o=limit.step(t,input(t),1000000);check(!o.faults);near(o.advance_deg,40);check(o.flex_fuel.spark_clamped);
 }
 int main(){quality();contexts();fuel();spark();std::cout<<"engine_flex_checks "<<checks<<"\n";}

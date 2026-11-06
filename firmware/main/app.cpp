@@ -202,7 +202,7 @@ extern "C" void app_main() {
     live.timing_cause=edge_state.timing_cause;live.last_timing_cause=edge_state.last_timing_cause;
     live.worker_sequence=edge_state.worker_sequence;live.worker_observed_us=edge_state.worker_observed_us;live.worker_epoch=edge_state.worker_epoch;
     live.worker_tune_revision=edge_state.worker_tune_revision;live.worker_sensor_revision=edge_state.worker_sensor_revision;
-    live.virtual_high_mask=edge_state.virtual_high_mask;live.physical_command_mask=edge_state.physical_command_mask;
+    live.worker_cylinder_count=edge_state.worker_cylinder_count;live.virtual_high_mask=edge_state.virtual_high_mask;live.physical_command_mask=edge_state.physical_command_mask;
     live.can_frames=can_frames; live.cam_edges=edge_state.cam_edges; live.crank_edges=edge_state.crank_edges;
     live.crank_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::crank));
     live.cam_level=gpio_get_level(static_cast<gpio_num_t>(ecu::pins::cam));

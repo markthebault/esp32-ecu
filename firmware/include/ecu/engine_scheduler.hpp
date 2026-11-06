@@ -10,8 +10,9 @@ template<std::size_t CylinderCapacity>struct BasicAngleConfig {
  double max_duty=.8,max_injection_ms=15;
  unsigned cylinders=4;
 };
-using AngleConfig=BasicAngleConfig<4>;
+using LegacyAngleConfig=BasicAngleConfig<4>;
 using ExpandedAngleConfig=BasicAngleConfig<8>;
+using AngleConfig=ExpandedAngleConfig;
 template<std::size_t CylinderCapacity>inline bool same_angle_config(const BasicAngleConfig<CylinderCapacity>&a,const BasicAngleConfig<CylinderCapacity>&b){
  return a.cylinders==b.cylinders&&a.strategy==b.strategy&&a.firing_order==b.firing_order&&
   a.tooth1_btdc_deg==b.tooth1_btdc_deg&&a.max_dwell_ms==b.max_dwell_ms&&
@@ -31,7 +32,7 @@ public:
 private:
  struct Slot {bool high=false,pending=false,phase_known=false,fired=false,inhibited=false;std::uint64_t start=0,end=0;std::int64_t cycle=0;double advance=0,previous_phase=0;std::uint64_t requested_dwell_us=0;};
  static constexpr unsigned channel_extent=channels::extent<CylinderCapacity>;
- std::array<Slot,channel_extent> slots_{};
+ Slot slots_[channel_extent]{};
  BasicAngleConfig<CylinderCapacity> configured_{};
  bool initialized_=false;unsigned previous_tooth_=0,configured_slots_=0;std::int64_t revolution_=0;
  std::uint64_t previous_time_=0;double angle_=0,us_per_degree_=0;
@@ -161,6 +162,7 @@ public:
   previous_tooth_=index;previous_time_=now;initialized_=true;return true;
  }
 };
-using AngleScheduler=BasicAngleScheduler<4>;
+using LegacyAngleScheduler=BasicAngleScheduler<4>;
 using ExpandedAngleScheduler=BasicAngleScheduler<8>;
+using AngleScheduler=ExpandedAngleScheduler;
 }

@@ -7,9 +7,10 @@ import copy,hmac,math,secrets,struct
 from espnow_protocol import header,check,mac_bytes
 from flex_radio import engine_flex_fragment
 from boost_radio import engine_boost_fragment
+from cylinder_radio import engine_cylinder_fragment
 
 CAP_SIZE=76;REPLY_SIZE=108;ENGINE_SIZE=250;ENGINE_BODY=218;ACK_SIZE=56
-FEATURE_ENGINE=1;SCHEMA=6;SUPPORTED_SCHEMAS=(1,2,3,4,5,6);UINT32_MAX=2**32-1;UINT64_MAX=2**64-1
+FEATURE_ENGINE=1;SCHEMA=7;SUPPORTED_SCHEMAS=(1,2,3,4,5,6,7);UINT32_MAX=2**32-1;UINT64_MAX=2**64-1
 INPUT_NAMES=('rpm','map_kpa','tps_pct','clt_c','iat_c','lambda','battery_v','sensor_v')
 PROPOSAL_NAMES=('rpm','ve_pct','target_lambda','advance_deg','pulse_ms','dwell_ms','deadtime_ms','air_mg','warmup','afterstart','accel','ego','duty_pct','idle_pct')
 PRESENT=1;INPUTS_FRESH=2;STORAGE_OK=4;CRANK_SYNC=8;PHASE_SYNC=16;PHASE_REQUIRED=32;SUBMITTED=64;DUMMY_POLICY=128;PHASE_CONTEXT_MATCH=256;PROPOSED_ACTIVE=512;FUEL_CUT=1024;SPARK_CUT=2048;PUMP=4096;FAN=8192;INPUTS_QUALIFIED=16384;DISPLAY_FRESH=32768
@@ -52,12 +53,12 @@ def _engine_base(packet,data_key,expected_schema=None):
     state,strategy,source,phase_reason,valid,timing,last_timing,virtual,physical,board=struct.unpack_from('<10B',packet,80)
     sent,worker_tune,worker_sensors,worker_age=struct.unpack_from('<QIII',packet,92)
     inputs=struct.unpack_from('<8f',packet,112);proposals=struct.unpack_from('<14f',packet,144)
-    timing_limit=16 if schema==1 else 18 if schema==6 else 17
+    timing_limit=16 if schema==1 else 18 if schema>=6 else 17
     if schema not in SUPPORTED_SCHEMAS or len(packet)!=(232 if schema<3 else 250) or expected_schema is not None and schema!=expected_schema or not session or not packet_sequence or not proposal_sequence or not flags&PRESENT or source not in (1,2) or state>5 or strategy>(1 if schema==1 else 2) or phase_reason>9 or timing>timing_limit or last_timing>timing_limit or board&~15 or schema<4 and packet[90:92]!=b'\0\0':raise ValueError('Invalid engine schema or enum')
     if bool(flags&DISPLAY_FRESH)!=(sample_age<=1000 and control_age<=1000):raise ValueError('Inconsistent source display freshness')
     # Schema6 MAP remains provisional until the authenticated BOOST context
     # is available. Completion restores the110kPa NA bound when disabled.
-    limits=((0,12000),(10,400 if schema==6 else 110),(0,100),(-40,140),(-40,110),(.65,1.5),(7,18),(4.75,5.25))
+    limits=((0,12000),(10,400 if schema>=6 else 110),(0,100),(-40,140),(-40,110),(.65,1.5),(7,18),(4.75,5.25))
     for i,value in enumerate(inputs):
         if valid&(1<<i):
             # Wire floats are float32, so permit only their rounding at limits.
@@ -100,7 +101,7 @@ def _engine_base(packet,data_key,expected_schema=None):
                 source='target_control_observation' if source==1 else 'synthetic_control_observation',source_code=source,scalar_proposal_basis='untrimmed_base_demand',per_cylinder_available=False,
                 sample_age_ms=age(sample_age),control_age_ms=age(control_age),source_display_fresh=bool(flags&DISPLAY_FRESH),
                 tune_revision=tune,sensor_revision=sensors,proposal_sequence=proposal_sequence,phase_epoch=phase_epoch,phase_epoch_domain='external_configuration_context',
-                state_code=state,strategy_code=strategy,strategy=('batch_wasted_4cyl','sequential_4cyl','semi_sequential_4cyl')[strategy],phase_reason_code=phase_reason,input_valid_mask=valid,
+                state_code=state,strategy_code=strategy,strategy=(('batch_wasted','sequential','semi_sequential') if schema>=7 else ('batch_wasted_4cyl','sequential_4cyl','semi_sequential_4cyl'))[strategy],phase_reason_code=phase_reason,input_valid_mask=valid,
                 controller_faults=faults,phase_losses=losses,cam_rejected=rejected,cam_error_deg=cam_error if math.isfinite(cam_error) else None,
                 inputs={k:v if valid&(1<<i) else None for i,(k,v) in enumerate(zip(INPUT_NAMES,inputs))},
                 proposals={k:v if math.isfinite(v) else None for k,v in zip(PROPOSAL_NAMES,proposals)},board_flags=board,
@@ -201,7 +202,8 @@ class EngineReceiver:
         self._expire_pairs(now_ms)
         if self.assembly_clock_fault:raise ValueError('Receiver clock reversed; fresh query required')
         schema=self.reply['schema'];parts={9:('base',250),11:('flex',232)}
-        if schema==6:parts[12]=('boost',144)
+        if schema>=6:parts[12]=('boost',144)
+        if schema>=7:parts[13]=('cylinders',236)
         if len(packet)<6 or packet[5] not in parts:raise ValueError('Expected negotiated engine observation datagram')
         kind,size=parts[packet[5]];check(packet,packet[5],size)
         if not hmac.compare_digest(packet[-32:],hmac.digest(self.data_key,packet[:-32],'sha256')):raise ValueError('Fragment authentication failed')
@@ -212,7 +214,7 @@ class EngineReceiver:
         if existing is not None and existing[kind] is not None:
             if existing[kind][0]!=packet:self.conflicting_pairs+=1;self._retire(seq);raise ValueError('Conflicting authenticated fragment')
             return None
-        try:data=_engine_base(packet,self.data_key,schema) if kind=='base' else engine_flex_fragment(packet,self.data_key,schema) if kind=='flex' else engine_boost_fragment(packet,self.data_key)
+        try:data=_engine_base(packet,self.data_key,schema) if kind=='base' else engine_flex_fragment(packet,self.data_key,schema) if kind=='flex' else engine_boost_fragment(packet,self.data_key,schema) if kind=='boost' else engine_cylinder_fragment(packet,self.data_key)
         except (ValueError,TypeError):self._retire(seq);raise
         if seq not in self.partials:
             if len(self.partials)>=self.maximum_pending_pairs:
@@ -237,7 +239,7 @@ class EngineReceiver:
             if raw is not None and a is not None and a>=0:
                 observation['flex_age_floor_ms']=math.ceil(a+max(.001,abs(a)*2**-23)+(control or 0))
             boost_immutable=()
-            if schema==6:
+            if schema>=6:
                 _,boost_part=slot['boost']
                 if not hmac.compare_digest(base[218:],boost_part['base_mac']):raise ValueError('Boost fragment binds a different base')
                 b=boost_part['boost_control'];value=observation['inputs']['map_kpa']
@@ -245,8 +247,18 @@ class EngineReceiver:
                 p=observation['proposals'];flags=observation['flags']
                 if b['available'] and b['inhibit_engine'] and (not observation['controller_faults'] or observation['state_code']!=5 or not flags&FUEL_CUT or not flags&SPARK_CUT or flags&(PROPOSED_ACTIVE|PUMP) or any(p[k]!=0 for k in ('pulse_ms','dwell_ms','duty_pct'))):raise ValueError('Boost inhibit disagrees with parent control decision')
                 observation['boost_control']=b;boost_immutable=(boost_part['immutable'],)
+            cylinder_immutable=()
+            if schema>=7:
+                _,cylinder_part=slot['cylinders']
+                if not hmac.compare_digest(base[218:],cylinder_part['base_mac']):raise ValueError('Cylinder part binds a different base')
+                worker=observation['worker_observation']
+                if worker['virtual_high_mask']!=(cylinder_part['virtual_high_mask']&255) or worker['physical_command_mask']!=(cylinder_part['physical_command_mask']&255):raise ValueError('Cylinder full masks disagree with BASE prefix')
+                observation['cylinders']=cylinder_part['cylinders'];observation['per_cylinder_available']=bool(cylinder_part['cylinders']['valid_mask'])
+                observation['board_capacity']=cylinder_part['board_capacity']
+                worker.update(cylinder_count=cylinder_part['worker_cylinder_count'],virtual_high_mask=cylinder_part['virtual_high_mask'],physical_command_mask=cylinder_part['physical_command_mask'])
+                cylinder_immutable=(cylinder_part['immutable'],)
             observation['complete_observation']=True;observation['datagrams_per_observation']=len(parts)
-            immutable=(base[20:22],observation['flags']&~DISPLAY_FRESH,base[32:92],base[100:108],base[112:218],part['immutable'])+boost_immutable
+            immutable=(base[20:22],observation['flags']&~DISPLAY_FRESH,base[32:92],base[100:108],base[112:218],part['immutable'])+boost_immutable+cylinder_immutable
             completed=self._complete(observation,immutable,now_ms)
         except (ValueError,TypeError):self._retire(seq);raise
         self._retire(seq);return completed
@@ -292,7 +304,7 @@ class EngineReceiver:
             f=self.latest['flex_fuel'];bound=self.latest['bounded_flex_sample_age_ms'];age=None if not active or bound is None else bound+elapsed
             sample_fresh=fresh and age is not None and age*1000<=self.latest['flex_stale_limit_us']
             result.update(flex_sample_age_ms=age,flex_sample_fresh=sample_fresh,flex_value_qualified=sample_fresh and f['value_qualified'],flex_raw_capture_qualified=sample_fresh and f['raw_capture_qualified'],flex_control_ok_at_source=f['control_ok'],flex_control_allowed=None if not f['available'] else fresh and (not f['required'] or sample_fresh and f['control_ok']),flex_current_reason='source_unqualified' if not f['value_qualified'] else 'unknown_sample_age' if age is None else 'current' if sample_fresh else 'receiver_sample_stale')
-        if self.latest is not None and self.latest['schema_version']==6:
+        if self.latest is not None and self.latest['schema_version']>=6:
             b=self.latest['boost_control'];available=b['available']
             result.update(boost_available=available,boost_pressure_enabled=b['pressure_enabled'],boost_control_age_ms=ages['control_age_ms'],boost_observation_fresh=bool(fresh and available),boost_pressure_valid_at_source=b['pressure_valid'] if available else None,boost_valve_allowed_at_source=b['valve_allowed'] if available else None,boost_engine_inhibited_at_source=b['inhibit_engine'] if available else None,boost_source_reason=b['reason'] if available else None,boost_current_reason='source_unavailable' if not available else 'unknown_control_age' if ages['control_age_ms'] is None else b['reason'] if fresh else 'receiver_observation_stale')
         return result

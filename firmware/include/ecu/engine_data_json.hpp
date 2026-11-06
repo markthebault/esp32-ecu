@@ -25,7 +25,7 @@ inline cJSON* data_json(const RuntimeSample&r,std::uint64_t observed_us){
  const bool present=r.has(Present)&&r.sequence;
  const auto sample_age=data_age_us(r,r.sampled_us,observed_us),control_age=data_age_us(r,r.control_us,observed_us);
  const auto worker_age=(r.worker_sequence||r.worker_observed_us)&&observed_us>=r.worker_observed_us?observed_us-r.worker_observed_us:UINT64_MAX;
- bool ok=cJSON_AddNumberToObject(j,"schema_version",2)&&cJSON_AddBoolToObject(j,"available",present)&&
+ bool ok=cJSON_AddNumberToObject(j,"schema_version",3)&&cJSON_AddBoolToObject(j,"available",present)&&
   cJSON_AddStringToObject(j,"data_source",source_name(r.source))&&cJSON_AddNumberToObject(j,"source_code",static_cast<unsigned>(r.source))&&
   json_u64(j,"sequence",r.sequence)&&json_u64(j,"control_us",r.control_us)&&json_u64(j,"sampled_us",r.sampled_us)&&
   json_age(j,"sample_age_ms",sample_age)&&json_age(j,"control_age_ms",control_age)&&
@@ -46,13 +46,13 @@ inline cJSON* data_json(const RuntimeSample&r,std::uint64_t observed_us){
  for(unsigned i=0;ok&&i<proposal_count;++i)ok=json_value(proposals,proposal_names[i],present?r.proposals[i]:NAN);
  if(ok)ok=cJSON_AddStringToObject(j,"scalar_proposal_basis","untrimmed_base_demand");
  auto*cyl=ok?cJSON_AddObjectToObject(j,"cylinders"):nullptr;if(!cyl)ok=false;
- if(ok)ok=cJSON_AddNumberToObject(cyl,"valid_mask",r.cylinder_valid)&&cJSON_AddBoolToObject(cyl,"enabled",r.cylinder_enabled)&&
+ if(ok)ok=cJSON_AddNumberToObject(cyl,"count",r.cylinder_count)&&cJSON_AddNumberToObject(cyl,"valid_mask",r.cylinder_valid)&&cJSON_AddBoolToObject(cyl,"enabled",r.cylinder_enabled)&&
   cJSON_AddNumberToObject(cyl,"capacity_mask",r.cylinder_capacity_mask)&&cJSON_AddNumberToObject(cyl,"spark_clamp_mask",r.cylinder_spark_clamp_mask)&&cJSON_AddNumberToObject(cyl,"retard_floor_mask",r.cylinder_retard_floor_mask);
- auto*channels=ok?cJSON_AddArrayToObject(cyl,"proposals"):nullptr;if(!channels)ok=false;
- for(unsigned i=0;ok&&i<4;++i){
+ auto*rows=ok?cJSON_AddArrayToObject(cyl,"proposals"):nullptr;if(!rows)ok=false;
+ for(unsigned i=0;ok&&i<8;++i){
   auto*row=cJSON_CreateObject();if(!row){ok=false;break;}
   const bool known=present&&(r.cylinder_valid&(1U<<i));
-  ok=cJSON_AddNumberToObject(row,"cylinder",i+1)&&json_value(row,"pulse_ms",known?r.cylinder_pulse_ms[i]:NAN)&&json_value(row,"advance_deg",known?r.cylinder_advance_deg[i]:NAN)&&json_value(row,"fuel_pct",known?r.cylinder_fuel_pct[i]:NAN)&&json_value(row,"duty_pct",known?r.cylinder_duty_pct[i]:NAN)&&cJSON_AddItemToArray(channels,row);
+  ok=cJSON_AddNumberToObject(row,"cylinder",i+1)&&cJSON_AddBoolToObject(row,"active",i<r.cylinder_count)&&cJSON_AddNumberToObject(row,"injector_logical_channel",channels::injector(i))&&cJSON_AddNumberToObject(row,"coil_logical_channel",channels::coil(i))&&json_value(row,"pulse_ms",known?r.cylinder_pulse_ms[i]:NAN)&&json_value(row,"advance_deg",known?r.cylinder_advance_deg[i]:NAN)&&json_value(row,"fuel_pct",known?r.cylinder_fuel_pct[i]:NAN)&&json_value(row,"duty_pct",known?r.cylinder_duty_pct[i]:NAN)&&cJSON_AddItemToArray(rows,row);
   if(!ok)cJSON_Delete(row);
  }
  auto*idle=ok?cJSON_AddObjectToObject(j,"idle"):nullptr;if(!idle)ok=false;
@@ -70,8 +70,10 @@ inline cJSON* data_json(const RuntimeSample&r,std::uint64_t observed_us){
   cJSON_AddNumberToObject(worker,"epoch",r.worker_epoch)&&cJSON_AddNumberToObject(worker,"tune_revision",r.worker_tune_revision)&&cJSON_AddNumberToObject(worker,"sensor_revision",r.worker_sensor_revision)&&
   cJSON_AddStringToObject(worker,"epoch_domain","executor_generation")&&
   cJSON_AddNumberToObject(worker,"timing_fault_code",r.timing_fault)&&cJSON_AddStringToObject(worker,"timing_fault",timing::cause_name(static_cast<timing::Cause>(r.timing_fault)))&&
-  cJSON_AddNumberToObject(worker,"last_timing_fault_code",r.last_timing_fault)&&cJSON_AddNumberToObject(worker,"virtual_high_mask",r.virtual_high_mask)&&cJSON_AddNumberToObject(worker,"physical_command_mask",r.physical_command_mask)&&
+  cJSON_AddNumberToObject(worker,"last_timing_fault_code",r.last_timing_fault)&&cJSON_AddNumberToObject(worker,"cylinder_count",r.worker_cylinder_count)&&cJSON_AddNumberToObject(worker,"virtual_high_mask",r.virtual_high_mask)&&cJSON_AddNumberToObject(worker,"physical_command_mask",r.physical_command_mask)&&
   cJSON_AddStringToObject(worker,"meaning","Earlier worker-current command and software command masks; not proof this proposal executed or an electrical measurement");
+ auto*board=ok?cJSON_AddObjectToObject(j,"board_capacity"):nullptr;if(!board)ok=false;
+ if(ok)ok=cJSON_AddNumberToObject(board,"injector_commands",channels::board_injector_commands)&&cJSON_AddNumberToObject(board,"coil_commands",channels::board_coil_commands)&&cJSON_AddBoolToObject(board,"additional_outputs_allocated",false);
  if(!ok){cJSON_Delete(j);return nullptr;}return j;
 }
 }

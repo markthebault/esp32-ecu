@@ -5,51 +5,55 @@ The model is for software/fault regressions, not tuning/emissions predictions.
 """
 import copy, json, math, random
 from engine_runtime import EngineRuntime
+from engine_geometry import EngineGeometry, CHANNEL_EXTENT
 
 SCENARIOS=('warm_start','cold_start','throttle_step','load_step','trigger_dropout','sensor_short','overrev','stall_restart','load_stall_restart')
 class Plant:
- def __init__(self,cold=False,seed=1,idle_valve=False):
+ def __init__(self,cold=False,seed=1,idle_valve=False,geometry=None):
   from idle_valve_plant import IdleValve
   self.idle_valve=IdleValve() if idle_valve else None
+  self.geometry=geometry or EngineGeometry();n=self.geometry.cylinders
   rng=random.Random(seed);self.injector_flow_cc_min=300*rng.uniform(.98,1.02);self.rotor_inertia=.18*rng.uniform(.97,1.03)
   self.rpm=0.;self.angle=0.;self.map_kpa=99.;self.tps=2.;self.clt=0. if cold else 85.;self.iat=25.;self.battery=13.8
   self.fuel_rate=0.;self.air_rate=0.;self.lambda_sensor=1.;self.last_spark=-1e9;self.advance=15.;self.started=False
-  self.injector_on=[None]*4;self.fuel_mg=0.;self.sparks=0;self.spk_errors=[]
-  self.coil_on=[None]*4;self.coil_requests=[0]*4;self.dwell_events=[];self.spark_errors=[];self.charge_mg=[0.]*4;self.wall_mg=[0.]*4;self.combustions=[];self.exhaust_lambda=1.;self.burned_work_j=0.
+  self.injector_on=[None]*n;self.fuel_mg=0.;self.sparks=0;self.spk_errors=[]
+  self.coil_on=[None]*n;self.coil_requests=[0]*n;self.dwell_events=[];self.spark_errors=[];self.charge_mg=[0.]*n;self.wall_mg=[0.]*n;self.combustions=[];self.exhaust_lambda=1.;self.burned_work_j=0.
+  self.cylinder_fuel_mg=[0.]*n;self.cylinder_sparks=[0]*n;self.cylinder_work_j=[0.]*n
  def edge(self,ch,high,time_s,commanded_advance=0,latest_demand=0,requested_dwell_us=0):
   if ch==8 and self.idle_valve is not None:self.idle_valve.edge(high);return
-  if ch<4:self.injector_on[ch]=time_s if high else None
+  kind,cyl=self.geometry.actuator(ch)
+  if kind=='injector':self.injector_on[cyl]=time_s if high else None
   elif high:
-   self.coil_on[ch-4]=time_s;self.coil_requests[ch-4]=requested_dwell_us
+   self.coil_on[cyl]=time_s;self.coil_requests[cyl]=requested_dwell_us
   else:
-   started=self.coil_on[ch-4]
+   started=self.coil_on[cyl]
    if started is None:raise RuntimeError('Coil fall without a preceding charge event')
-   dwell=max(0,time_s-started);self.coil_on[ch-4]=None
+   dwell=max(0,time_s-started);self.coil_on[cyl]=None
    # Illustrative independent RL/current-limited coil proxy, not a real coil calibration.
    current=min(6.,max(0,self.battery-1.5)/.7*(1-math.exp(-.7*dwell/.003)))
    energy=.5*.003*current*current
-   self.dwell_events.append(dict(time_s=time_s,channel=ch,dwell_us=dwell*1e6,requested_us=self.coil_requests[ch-4],energy_j=energy))
-   self.sparks+=1
-   tdc_mod=(90,270,270,90)[ch-4];actual=(tdc_mod-self.angle%360+180)%360-180
+   self.dwell_events.append(dict(time_s=time_s,channel=ch,dwell_us=dwell*1e6,requested_us=self.coil_requests[cyl],energy_j=energy))
+   self.sparks+=1;self.cylinder_sparks[cyl]+=1
+   tdc=self.geometry.compression_tdc_deg[cyl];tdc_mod=tdc%360;actual=(tdc_mod-self.angle%360+180)%360-180
    error=(actual-commanded_advance+180)%360-180
-   phase_advance=((90,630,270,450)[ch-4]-self.angle%720+360)%720-360
+   phase_advance=(tdc-self.angle%720+360)%720-360
    phase_error=(phase_advance-commanded_advance+360)%720-360
    self.spark_errors.append(dict(time_s=time_s,channel=ch,requested_deg=commanded_advance,actual_deg=actual,error_deg=error,phase_error_deg=phase_error,shaft_angle_deg=self.angle,latest_demand_deg=latest_demand,demand_error_deg=(actual-latest_demand+180)%360-180,rpm=self.rpm))
-   cyl=ch-4;tdc=(90,630,270,450)[cyl];advance=(tdc-self.angle%720+360)%720-360
+   advance=(tdc-self.angle%720+360)%720-360
    if abs(advance)>90:return # wasted spark on exhaust stroke
    self.advance=advance;self.spk_errors.append(advance)
    fuel=self.charge_mg[cyl];self.charge_mg[cyl]=0.
    ve=.76+.10*math.exp(-((self.rpm-3500)/2500)**2)+.02*(self.map_kpa/100)
-   air=self.map_kpa*1000*.0005*ve/(287.05*(self.iat+273.15))*1e6
+   air=self.map_kpa*1000*(self.geometry.displacement_m3/self.geometry.cylinders)*ve/(287.05*(self.iat+273.15))*1e6
    lam=air/(14.7*fuel) if fuel>.001 else 3.
    self.exhaust_lambda=max(.2,min(3.,lam))
    if not .55<lam<1.65:return
    optimum=12+min(20,self.rpm/250)-5*(self.map_kpa/100)
    efficiency=.27*math.exp(-((advance-optimum)/30)**2)*max(0,1-1.3*(lam-.95)**2)*(.75 if self.clt<30 else 1)
    work=fuel*44*efficiency*min(1,energy/.04);duration=max(.005,30/max(self.rpm,80))
-   self.combustions.append((time_s,time_s+duration,work/duration));self.burned_work_j+=work
+   self.combustions.append((time_s,time_s+duration,work/duration));self.burned_work_j+=work;self.cylinder_work_j[cyl]+=work
  def cut(self):
-  self.injector_on=[None]*4;self.coil_on=[None]*4
+  self.injector_on=[None]*self.geometry.cylinders;self.coil_on=[None]*self.geometry.cylinders
   if self.idle_valve is not None:self.idle_valve.cut()
  def sample(self,t):return dict(map_kpa=self.map_kpa,tps_pct=self.tps,clt_c=self.clt,iat_c=self.iat,**{'lambda':min(1.5,max(.65,self.lambda_sensor))},battery_v=self.battery,sensor_v=5,sensors_valid=True,lambda_ready=t>3)
  def integrate(self,t,dt,starter=False,load=5,idle_pct=0):
@@ -62,7 +66,7 @@ class Plant:
   if ratio<(2/(gamma+1))**(gamma/(gamma-1)):flow=.72*area*ambient*math.sqrt(gamma/(r*temp))*(2/(gamma+1))**((gamma+1)/(2*(gamma-1)))
   else:flow=.72*area*ambient*math.sqrt(2*gamma/(r*temp*(gamma-1))*(ratio**(2/gamma)-ratio**((gamma+1)/gamma)))
   actual_ve=.76+.10*math.exp(-((self.rpm-3500)/2500)**2)+.02*(self.map_kpa/100)
-  out=self.map_kpa*1000/(r*temp)*.002*self.rpm/120*actual_ve
+  out=self.map_kpa*1000/(r*temp)*self.geometry.displacement_m3*self.rpm/120*actual_ve
   self.map_kpa=max(10,min(100,self.map_kpa+r*temp/.003*(flow-out)*dt/1000))
   # Fuel comes only from the scheduled electrical high intervals, after the
   # plant's own battery dead time, not directly from ECU pulse-width numbers.
@@ -73,9 +77,9 @@ class Plant:
    if start is not None:
     effective=max(0,t+dt-max(t,start+dead_ms/1000));fuel=flow_mg_s*effective
     film_fraction=.45 if self.clt<30 else .05
-    self.wall_mg[cyl]+=fuel*film_fraction;self.charge_mg[cyl]+=fuel*(1-film_fraction);self.fuel_mg+=fuel
+    self.wall_mg[cyl]+=fuel*film_fraction;self.charge_mg[cyl]+=fuel*(1-film_fraction);self.fuel_mg+=fuel;self.cylinder_fuel_mg[cyl]+=fuel
   tau=1.5 if self.clt<30 else .05
-  for cyl in range(4):
+  for cyl in range(self.geometry.cylinders):
    evaporated=self.wall_mg[cyl]*(1-math.exp(-dt/tau));self.wall_mg[cyl]-=evaporated;self.charge_mg[cyl]+=evaporated
   self.lambda_sensor+=(self.exhaust_lambda-self.lambda_sensor)*min(1,dt/.12)
   self.combustions=[c for c in self.combustions if c[1]>t]
@@ -91,18 +95,22 @@ class Plant:
   return self.exhaust_lambda
 
 class Simulation:
- def __init__(self,tune,scenario='warm_start',duration_s=10,seed=1,flex_stimulus=None):
+ def __init__(self,tune,scenario='warm_start',duration_s=10,seed=1,flex_stimulus=None,plant_geometry=None):
   if scenario not in SCENARIOS:raise ValueError('Unknown engine scenario')
   if isinstance(duration_s,bool) or not isinstance(duration_s,(int,float)) or not 1<=duration_s<=30:raise ValueError('Duration must be 1-30 virtual seconds')
   if isinstance(seed,bool) or not isinstance(seed,int) or not 0<=seed<=4294967295:raise ValueError('Seed must be a uint32 integer')
   from flex_stimulus import FlexStimulus
   self.flex_stimulus=FlexStimulus(flex_stimulus)
   self.tune=copy.deepcopy(tune);self.scenario=scenario;self.duration=duration_s;self.seed=seed
+  if plant_geometry is not None and not isinstance(plant_geometry,EngineGeometry):raise ValueError('Expected explicit physical EngineGeometry')
+  self.plant_geometry=plant_geometry
  def run(self):
   idle=bool(self.tune['settings']['idle_enabled'])
   from target_runtime import TargetRuntime
-  runtime=(TargetRuntime if idle else EngineRuntime)(self.tune);runtime.wheel();plant=Plant(self.scenario=='cold_start',self.seed,idle)
-  channels=9 if idle else 8
+  runtime=(TargetRuntime if idle else EngineRuntime)(self.tune);self.tune=copy.deepcopy(runtime.tune);runtime.wheel()
+  geometry=self.plant_geometry or EngineGeometry.from_tune(self.tune)
+  plant=Plant(self.scenario=='cold_start',self.seed,idle,geometry)
+  channels=CHANNEL_EXTENT
   states=[False]*channels;trace=[];edge_trace=[];trigger_trace=[];cam_trace=[];timing_stops=[];failure_recorded=False;fault_or=0;sync_seen=False;late=0;max_high=[0]*channels;rise=[0]*channels
   def cut_outputs(time_us,cause):
    nonlocal states
@@ -111,7 +119,7 @@ class Simulation:
      max_high[ch]=max(max_high[ch],max(0,time_us-rise[ch]))
      edge_trace.append([time_us,ch,False,'cut:'+cause])
    runtime.cut();plant.cut();states=[False]*channels
-  sequential=self.tune['strategy']=='sequential_4cyl';cam_angle=540.
+  sequential=self.tune['strategy']=='sequential';cam_angle=geometry.cam_edge_deg
   dt=.00025;t=0.;next_sample=0.;tooth_index=1;proposals=0;sample={};result={};latest_lambda=1.
   try:
    while t<self.duration-1e-10:
@@ -170,7 +178,7 @@ class Simulation:
      if cam_result in (2,3):cut_outputs(cam_us,'cam_inhibit')
    before_stop=sum(states);cut_outputs(round(t*1e6),'simulation_end')
    errors=sorted(abs(e['error_deg']) for e in plant.spark_errors);warm_errors=[abs(e['error_deg']) for e in plant.spark_errors if e['time_s']>=3]
-   summary=dict(flex_stimulus=self.flex_stimulus.summary(),strategy=self.tune['strategy'],wrong_stroke_sparks=sum(abs(e['phase_error_deg'])>180 for e in plant.spark_errors) if sequential else None,max_spark_720_error_deg=max((abs(e['phase_error_deg']) for e in plant.spark_errors),default=0) if sequential else None,scenario=self.scenario,duration_s=self.duration,seed=self.seed,model='unvalidated reduced-order SI plant v1',ecu='native production engine.hpp + MissingTooth decoder',physical_outputs_enabled=False,plant_parameters=dict(injector_flow_cc_min=plant.injector_flow_cc_min,rotor_inertia_kg_m2=plant.rotor_inertia),sync_acquired=sync_seen,max_rpm=max((p['plant_rpm'] for p in trace),default=0),final_rpm=plant.rpm,fuel_mg=plant.fuel_mg,sparks=plant.sparks,planned_revolutions=proposals,rejected_plans=late,max_injector_high_us=max(max_high[:4]),max_dwell_high_us=max(max_high[4:]),min_completed_dwell_us=min((d['dwell_us'] for d in plant.dwell_events),default=0),max_dwell_shortfall_us=max((d['requested_us']-d['dwell_us'] for d in plant.dwell_events),default=0),max_spark_error_deg=max(errors,default=0),max_spark_error_to_latest_demand_deg=max((abs(e['demand_error_deg']) for e in plant.spark_errors),default=0),p95_spark_error_deg=errors[int(.95*(len(errors)-1))] if errors else 0,max_spark_error_after_3s_deg=max(warm_errors,default=0),fault_mask_seen=fault_or,final_state=result.get('state'),final_faults=result.get('faults'),outputs_high_before_stop=before_stop,executor_stopped=True,final_outputs_high=sum(states),timing_recoveries=result.get('timing_recoveries',0),timing_protection_stops=result.get('timing_stops',0))
-   if idle:summary.update(idle_pwm=runtime.idle_status(),idle_valve=plant.idle_valve.snapshot());summary['max_dwell_high_us']=max(max_high[4:8])
+   summary=dict(flex_stimulus=self.flex_stimulus.summary(),strategy=self.tune['strategy'],wrong_stroke_sparks=sum(abs(e['phase_error_deg'])>180 for e in plant.spark_errors) if sequential else None,max_spark_720_error_deg=max((abs(e['phase_error_deg']) for e in plant.spark_errors),default=0) if sequential else None,scenario=self.scenario,duration_s=self.duration,seed=self.seed,model='unvalidated reduced-order SI plant v2',ecu='native production engine.hpp + MissingTooth decoder',physical_outputs_enabled=False,plant_parameters=dict(injector_flow_cc_min=plant.injector_flow_cc_min,rotor_inertia_kg_m2=plant.rotor_inertia,geometry=geometry.summary(),geometry_source='explicit_fixed_fixture' if self.plant_geometry else 'declared_tune_geometry_assumed_physical',boost_air_path_modeled=False),cylinder_fuel_mg=plant.cylinder_fuel_mg,cylinder_sparks=plant.cylinder_sparks,cylinder_work_j=plant.cylinder_work_j,sync_acquired=sync_seen,max_rpm=max((p['plant_rpm'] for p in trace),default=0),final_rpm=plant.rpm,fuel_mg=plant.fuel_mg,sparks=plant.sparks,planned_revolutions=proposals,rejected_plans=late,max_injector_high_us=max(max_high[ch] for ch in geometry.injector_channels),max_dwell_high_us=max(max_high[ch] for ch in geometry.coil_channels),min_completed_dwell_us=min((d['dwell_us'] for d in plant.dwell_events),default=0),max_dwell_shortfall_us=max((d['requested_us']-d['dwell_us'] for d in plant.dwell_events),default=0),max_spark_error_deg=max(errors,default=0),max_spark_error_to_latest_demand_deg=max((abs(e['demand_error_deg']) for e in plant.spark_errors),default=0),p95_spark_error_deg=errors[int(.95*(len(errors)-1))] if errors else 0,max_spark_error_after_3s_deg=max(warm_errors,default=0),fault_mask_seen=fault_or,final_state=result.get('state'),final_faults=result.get('faults'),outputs_high_before_stop=before_stop,executor_stopped=True,final_outputs_high=sum(states),timing_recoveries=result.get('timing_recoveries',0),timing_protection_stops=result.get('timing_stops',0))
+   if idle:summary.update(idle_pwm=runtime.idle_status(),idle_valve=plant.idle_valve.snapshot())
    return dict(summary=summary,trace=trace,edges=edge_trace,trigger_edges=trigger_trace,cam_edges=cam_trace,timing_stops=timing_stops,spark_timing=plant.spark_errors,dwell_events=plant.dwell_events,final=result)
   finally:runtime.close()

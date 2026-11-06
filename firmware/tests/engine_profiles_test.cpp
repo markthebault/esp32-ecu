@@ -8,10 +8,14 @@
 
 using namespace ecu::engine;
 bool emit_cases=false;
-static_assert(!std::is_same<Tune,ExpandedTune>::value);
-static_assert(!std::is_same<Output,ExpandedOutput>::value);
-static_assert(!std::is_same<AngleConfig,ExpandedAngleConfig>::value);
-static_assert(!std::is_same<AngleScheduler,ExpandedAngleScheduler>::value);
+static_assert(std::is_same<Tune,ExpandedTune>::value);
+static_assert(!std::is_same<LegacyTune,ExpandedTune>::value);
+static_assert(std::is_same<Output,ExpandedOutput>::value);
+static_assert(!std::is_same<LegacyOutput,ExpandedOutput>::value);
+static_assert(std::is_same<AngleConfig,ExpandedAngleConfig>::value);
+static_assert(!std::is_same<LegacyAngleConfig,ExpandedAngleConfig>::value);
+static_assert(std::is_same<AngleScheduler,ExpandedAngleScheduler>::value);
+static_assert(!std::is_same<LegacyAngleScheduler,ExpandedAngleScheduler>::value);
 
 ExpandedTune profile(unsigned count,Strategy strategy,bool reversed=false){
  ExpandedTune t;t.cylinders=count;t.strategy=strategy;t.firing_order.fill(0);
@@ -135,17 +139,20 @@ void bounds_and_faults(){
  assert(out.faults&OverRev);assert(out.fuel_cut&&out.spark_cut);
 }
 struct IO {unsigned writes=0;void all_low(){}bool write(unsigned,bool){++writes;return true;}};
-void old_boundary_guards(){
- for(unsigned count:{1U,2U,3U,5U,8U}){
-  ecu::timing::Executor executor;IO io;ecu::timing::Command cmd;
-  cmd.angle.cylinders=count;cmd.output.cylinder_count=count;cmd.sequence=1;
-  cmd.command_us=cmd.sampled_us=1;executor.progress(1,io);executor.command(cmd,1,io);
-  assert(executor.stats().fault==ecu::timing::Cause::Plan&&io.writes==0);
+void public_boundary_guards(){
+ for(unsigned count=1;count<=8;++count){
+  auto t=profile(count,Strategy::Sequential);ecu::tuning::Page page;
+  assert(ecu::tuning::representable(t));ecu::tuning::encode_page(t,1,page);Tune decoded;
+  assert(ecu::tuning::decode_page(page,1,decoded)&&decoded.cylinders==count&&decoded.firing_order==t.firing_order);
+  for(unsigned policy:{4U,8U}){
+   ecu::timing::Executor executor(policy);IO io;ecu::timing::Command cmd;
+   cmd.angle=angle_config(t);cmd.output=demand(t,1000);cmd.sequence=1;
+   cmd.command_us=cmd.sampled_us=1000000;executor.progress(1000000,io);executor.command(cmd,1000000,io);
+   assert((executor.stats().fault==ecu::timing::Cause::Plan)==(count>policy));assert(io.writes==0);
+  }
  }
- Tune t;t.cylinders=2;t.firing_order={1,2,0,0};assert(!validate(t));
- assert(!ecu::tuning::representable(t));ecu::tuning::Page page;
- ecu::tuning::encode_page(t,1,page);Tune decoded;assert(!ecu::tuning::decode_page(page,1,decoded));
- t.cylinders=8;assert(validate(t));
+ // The fixed-capacity aliases are preserved for explicit legacy consumers.
+ LegacyTune old;old.cylinders=8;assert(validate(old));
 }
 void configuration_fence(){
  for(unsigned change=0;change<5;++change){
@@ -181,7 +188,7 @@ int main(int argc,char**argv){
    for(double closing:{0.,540.,719.})for(bool reversed:{false,true}){
     motored(count,strategy,rpm,teeth,closing,reversed);++cases;
    }
- bounds_and_faults();old_boundary_guards();configuration_fence();conserved_cycle_dose();
+ bounds_and_faults();public_boundary_guards();configuration_fence();conserved_cycle_dose();
  if(emit_cases)std::cout<<"{\"kind\":\"summary\",\"motored_cases\":"<<cases<<",\"passed\":true,\"physical_operation_verified\":false}\n";
  else std::cout<<cases<<" expanded1..8 motored timing cases, dose conservation, capacity, deadlines and boundary guards passed\n";
 }

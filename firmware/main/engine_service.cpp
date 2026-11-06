@@ -32,9 +32,17 @@ const char* document_text(){return document?document.get():web::assets::engine_d
 bool storage_ok=false;std::uint64_t stamp=0;const char* binding="waiting for sensor sample";
 const char*storage_reason="Engine NVS unavailable or invalid; saved tune retained, defaults shadow-only";
 std::uint64_t command_sequence=0;std::uint32_t sensor_revision=0;
-bool parse_text(const char*s,engine::Tune&t){if(!web::safe_json(s,std::strlen(s),engine::tune_maximum))return false;auto*j=cJSON_ParseWithOpts(s,nullptr,true);bool ok=j&&engine::parse_tune(j,t);cJSON_Delete(j);return ok;}
+bool profile_supported(const engine::Tune&t){
+#if defined(ECU_ENGINE_DUMMY_LOADS) && ECU_ENGINE_DUMMY_LOADS
+ return t.cylinders<=4;
+#else
+ (void)t;return true;
+#endif
+}
+bool parse_text(const char*s,engine::Tune&t){if(!web::safe_json(s,std::strlen(s),engine::tune_maximum))return false;auto*j=cJSON_ParseWithOpts(s,nullptr,true);bool ok=j&&engine::parse_tune(j,t)&&profile_supported(t);cJSON_Delete(j);return ok;}
 }
 void init(){
+ latest.cylinder_count=0;
  mutex=xSemaphoreCreateMutex();configASSERT(mutex);
  configASSERT(parse_text(document_text(),active));esp_err_t error=ESP_OK;std::string saved;
  const auto*partition=esp_partition_find_first(ESP_PARTITION_TYPE_DATA,ESP_PARTITION_SUBTYPE_DATA_NVS,"engine_nvs");
@@ -106,7 +114,7 @@ bool observe(const web::Sample&s,const config::Config&c,std::uint64_t now,std::u
  data.worker_sequence=s.worker_sequence;data.worker_observed_us=s.worker_observed_us;data.worker_epoch=s.worker_epoch;
  data.worker_tune_revision=s.worker_tune_revision;data.worker_sensor_revision=s.worker_sensor_revision;
  data.phase_reason=s.phase_reason;data.phase_losses=s.phase_losses;data.cam_rejected=s.cam_rejected;data.cam_error_deg=s.cam_error_deg;
- data.timing_fault=s.timing_cause;data.last_timing_fault=s.last_timing_cause;data.virtual_high_mask=s.virtual_high_mask;data.physical_command_mask=s.physical_command_mask;
+ data.worker_cylinder_count=s.worker_cylinder_count;data.timing_fault=s.timing_cause;data.last_timing_fault=s.last_timing_cause;data.virtual_high_mask=s.virtual_high_mask;data.physical_command_mask=s.physical_command_mask;
  data.board_flags=(s.adc_ok?1:0)|(s.safe?2:0)|(s.interlock?4:0)|(s.overflow?8:0);
  for(unsigned i=0;i<8;++i)data.raw_adc[i]=static_cast<std::uint16_t>(s.raw[i]);
  latest_data=data;published=data;
@@ -127,7 +135,7 @@ int persist_prepared(const engine::Tune&candidate,std::uint32_t expected,Documen
  engine_target::begin_configuration();
  const auto err=engine_storage::save(prepared.get(),std::strlen(prepared.get()));
  if(err!=ESP_OK){storage_ok=false;storage_reason="Engine persistence failed; runtime retained, saves blocked until restart and inspection";reason=storage_reason;engine_target::finish_configuration(active.revision,0);xSemaphoreGive(mutex);return 507;}
- active=candidate;active.revision=expected+1;document.swap(prepared);controller.reset();stamp=0;latest=engine::Output{};latest_data=engine::RuntimeSample{};
+ active=candidate;active.revision=expected+1;document.swap(prepared);controller.reset();stamp=0;latest=engine::Output{};latest.cylinder_count=0;latest_data=engine::RuntimeSample{};
  engine_target::finish_configuration(active.revision,0);xSemaphoreGive(mutex);return 200;
 }
 int prepare_and_save(const char*text,const char*&reason){
@@ -135,6 +143,7 @@ int prepare_and_save(const char*text,const char*&reason){
  if(!web::safe_json(text,std::strlen(text),engine::tune_maximum)){reason="Invalid engine tune JSON";return 422;}
  auto*j=cJSON_ParseWithOpts(text,nullptr,true);if(!j){reason="Invalid engine tune JSON";return 422;}
  if(!engine::parse_tune(j,*candidate)){cJSON_Delete(j);reason="Invalid engine tune: schema, table axes, physical units or hardware pulse limits";return 422;}
+ if(!profile_supported(*candidate)){cJSON_Delete(j);reason="This dummy-load output policy supports at most four cylinders";return 422;}
  if(!engine::upgrade_tune_document(j)){cJSON_Delete(j);reason="Allocation failed";return 500;}
  if(candidate->revision==UINT32_MAX){cJSON_Delete(j);reason="Engine tune revision exhausted";return 409;}
  cJSON_SetNumberValue(cJSON_GetObjectItemCaseSensitive(j,"revision"),candidate->revision+1);
@@ -161,7 +170,7 @@ bool tuning_sample(engine::RuntimeSample&out){
  out=latest_data;xSemaphoreGive(mutex);return true;
 }
 tuning::Result tuning_commit(const engine::Tune&candidate,std::uint32_t&saved_revision){
- if(engine::validate(candidate))return tuning::Result::Invalid;
+ if(engine::validate(candidate)||!profile_supported(candidate))return tuning::Result::Invalid;
  struct Text{std::array<char,engine::tune_maximum+1> bytes{};};
  auto copy=heap_object<Text>();if(!copy)return tuning::Result::NoMemory;
  if(!mutex||xSemaphoreTake(mutex,0)!=pdTRUE)return tuning::Result::Busy;
@@ -181,11 +190,12 @@ tuning::Result tuning_commit(const engine::Tune&candidate,std::uint32_t&saved_re
  return tuning::Result::Invalid;
 }
 cJSON* snapshot(){
- xSemaphoreTake(mutex,portMAX_DELAY);const auto output=latest;const auto revision=active.revision;const auto strategy=active.strategy;const bool stored=storage_ok;const auto sample_stamp=stamp;const auto* reason=binding;const auto* storage_message=storage_reason;xSemaphoreGive(mutex);
+ xSemaphoreTake(mutex,portMAX_DELAY);const auto output=latest;const auto revision=active.revision;const auto strategy=active.strategy;const auto cylinders=active.cylinders;const bool stored=storage_ok;const auto sample_stamp=stamp;const auto* reason=binding;const auto* storage_message=storage_reason;xSemaphoreGive(mutex);
  auto*j=engine::output_json(output);if(!j)return nullptr;if(!cJSON_AddStringToObject(j,"error",stored?"":storage_message)){cJSON_Delete(j);return nullptr;}const auto now=engine_target::clock_us();cJSON_AddNumberToObject(j,"revision",revision);cJSON_AddBoolToObject(j,"storage_ok",stored);cJSON_AddStringToObject(j,"binding",reason);cJSON_AddNumberToObject(j,"sample_age_ms",sample_stamp&&now>=sample_stamp?(now-sample_stamp)/1000.0:-1);cJSON_AddBoolToObject(j,"simulator",false);cJSON_AddBoolToObject(j,"fresh",sample_stamp&&now>=sample_stamp&&now-sample_stamp<50000);auto*timing=engine_target::snapshot();if(!timing||!cJSON_AddItemToObject(j,"timing",timing)){cJSON_Delete(timing);cJSON_Delete(j);return nullptr;}
  auto*switches=switch_service::snapshot();if(!switches||!cJSON_AddItemToObject(j,"switch_accessory",switches)){cJSON_Delete(switches);cJSON_Delete(j);return nullptr;}
  auto*flex=engine_target::flex_snapshot();if(!flex||!cJSON_AddItemToObject(j,"flex_capture",flex)){cJSON_Delete(flex);cJSON_Delete(j);return nullptr;}
  cJSON_AddStringToObject(j,"active_strategy",engine::strategy_name(strategy));
+ cJSON_AddNumberToObject(j,"active_cylinders",cylinders);cJSON_AddNumberToObject(j,"fitted_injector_commands",engine::channels::board_injector_commands);cJSON_AddNumberToObject(j,"fitted_coil_commands",engine::channels::board_coil_commands);
  const auto phase=engine_target::measurement();cJSON_AddBoolToObject(j,"crank_synced",phase.synced);cJSON_AddBoolToObject(j,"phase_synced",phase.phase_synced);cJSON_AddBoolToObject(j,"phase_required",phase.phase_required);
  cJSON_AddStringToObject(j,"phase_reason",engine::PhaseDecoder::reason_name(phase.phase_reason));cJSON_AddNumberToObject(j,"phase_losses",phase.phase_losses);cJSON_AddNumberToObject(j,"cam_rejected",phase.cam_rejected);cJSON_AddNumberToObject(j,"cam_error_deg",phase.cam_error_deg);return j;
 }

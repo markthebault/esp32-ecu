@@ -16,7 +16,7 @@ class IdleTests(unittest.TestCase):
    with tempfile.TemporaryDirectory() as d:
     path=Path(d)/'old.json';body=json.dumps(old).encode();path.write_bytes(body);store=EngineStore(path)
     self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['revision'],71)
-    self.assertEqual(store.tune['schema_version'],10);self.assertFalse(store.tune['settings']['idle_enabled']);self.assertEqual(store.tune['idle_control']['algorithm'],DEFAULT['idle_control']['algorithm']);self.assertAlmostEqual(store.tune['idle_control']['derivative_filter_s'],DEFAULT['idle_control']['derivative_filter_s'])
+    self.assertEqual(store.tune['schema_version'],11);self.assertFalse(store.tune['settings']['idle_enabled']);self.assertEqual(store.tune['idle_control']['algorithm'],DEFAULT['idle_control']['algorithm']);self.assertAlmostEqual(store.tune['idle_control']['derivative_filter_s'],DEFAULT['idle_control']['derivative_filter_s'])
  def test_all_historical_msqs_disable_new_output_without_resetting_supported_trims(self):
   for filename in ('tunerstudio-roundtrip.msq','tunerstudio-sequential-roundtrip.msq','tunerstudio-cylinder-roundtrip.msq','tunerstudio-development-roundtrip.msq'):
    path=R/'tuning/examples'/filename
@@ -39,7 +39,7 @@ class IdleTests(unittest.TestCase):
   from engine_observability import EngineRecorder
   r=EngineRuntime();r.step(dict(rpm=900,synced=True,tps_pct=0),1000,use_decoder=False);sample=r.data();self.assertTrue(sample['idle']['available']);self.assertEqual(sample['idle']['state'],'disabled')
   rec=EngineRecorder();rec.command(dict(action='start',period_ms=20,duration_s=1),1000);self.assertTrue(rec.append(sample,1000));rec.command(dict(action='stop',log_id=1),2000)
-  rows=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));self.assertEqual([len(x) for x in rows[2:]],[245,245,245]);self.assertEqual(dict(zip(rows[2],rows[4]))['IdleAvailable'],'1');rec.close();r.close()
+  rows=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));self.assertEqual([len(x) for x in rows[2:]],[265,265,265]);self.assertEqual(dict(zip(rows[2],rows[4]))['IdleAvailable'],'1');rec.close();r.close()
  def test_full_duty_boundary_is_progress_and_not_a_fabricated_gpio_edge(self):
   t=copy.deepcopy(DEFAULT);t['settings']['idle_enabled']=True;t['idle_control']['algorithm']='on_off'
   r=TargetRuntime(t)
@@ -71,7 +71,7 @@ class IdleTests(unittest.TestCase):
   from unittest.mock import patch
   from engine_sil import Simulation
   class EventReplay:
-   def __init__(self,tune):self.events=[(0,8,True,0,0),(150,None,False,0,0)]
+   def __init__(self,tune):self.tune=copy.deepcopy(tune);self.events=[(0,8,True,0,0),(150,None,False,0,0)]
    def wheel(self):pass
    def step(self,*a,**k):return dict(faults=0,state='running',synced=True,advance_deg=10)
    def next_event_us(self):return self.events[0][0] if self.events else 2**64-1
@@ -97,7 +97,7 @@ class IdleTests(unittest.TestCase):
   from engine_sil import Simulation
   from engine_log import export_msl
   t=copy.deepcopy(DEFAULT);t['settings']['idle_enabled']=True;run=Simulation(t,duration_s=1).run()
-  rows=list(csv.reader(io.StringIO(export_msl(run['trace'],'warm_start')),delimiter='\t'));self.assertEqual(len(rows[2]),202);self.assertTrue(all(len(r)==202 for r in rows[3:]))
+  rows=list(csv.reader(io.StringIO(export_msl(run['trace'],'warm_start')),delimiter='\t'));self.assertEqual(len(rows[2]),245);self.assertTrue(all(len(r)==245 for r in rows[3:]))
   last=dict(zip(rows[2],rows[-1]));source=run['trace'][-1]
   self.assertEqual(last['IdleAvailable'],'1');self.assertEqual(last['IdlePwmAvailable'],'1');self.assertEqual(last['ValveModelAvailable'],'1')
   self.assertAlmostEqual(float(last['ValveCurrent']),source['idle_valve']['current_a'],places=7)

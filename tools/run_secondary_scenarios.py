@@ -51,8 +51,8 @@ def configuration(case):
  if case in('neutral_multiply','neutral_add'):
   for r in t['secondary_tables'].values():r['map']['cells']=[100 if mode=='multiply'else 0]*256
  if case in('fuel_only','spark_only'):t['secondary_tables']['spark'if case=='fuel_only'else'fuel']['mode']='off'
- if case=='input_semi':t['strategy']='semi_sequential_4cyl'
- if case=='input_sequential':t['strategy']='sequential_4cyl'
+ if case=='input_semi':t['strategy']='semi_sequential'
+ if case=='input_sequential':t['strategy']='sequential'
  if case.startswith('conditional'):
   condition='rpm'if case=='conditional_rpm'else'map_kpa'if case=='conditional_map'else'tps_pct';threshold=1500 if condition=='rpm'else 60 if condition=='map_kpa'else 11.75 if case=='conditional_near_quantization'else 20 if case=='conditional_tps_plateau'else 5
   for r in t['secondary_tables'].values():r.update(condition=condition,threshold=threshold)
@@ -77,10 +77,10 @@ def configuration(case):
  if case=='zero_fuel':
   t['secondary_tables']['fuel']['map']['cells']=[0]*256;t['secondary_tables']['spark']['mode']='off';spec.update(initial=[True,True],edges=[])
  if case=='capacity':
-  t['strategy']='sequential_4cyl'
+  t['strategy']='sequential'
   t['secondary_tables']['fuel']['map']['cells']=[255]*256;t['secondary_tables']['spark']['mode']='off'
  if case=='trim_multiply':
-  t['strategy']='sequential_4cyl';t['secondary_tables']['spark']['map']['cells']=[150]*256;t['cylinder_trims']['enabled']=True;t['cylinder_trims']['spark_deg']=[2,-2,0,0]
+  t['strategy']='sequential';t['secondary_tables']['spark']['map']['cells']=[150]*256;t['cylinder_trims']['enabled']=True;t['cylinder_trims']['spark_deg']=[2,-2,0,0,0,0,0,0]
   for m,pct in zip(t['cylinder_trims']['fuel_maps'],(110,90,100,100)):m['cells']=[pct]*36
  return dict(tune=t,stimulus=spec)
 
@@ -103,12 +103,12 @@ def audit(result,case,ours):
   require(s['max_spark_error_deg']<.2,'project event-latched spark angle bound')
   history=result['secondary_monitor'];require(history and all(h['control_attempt_us']>=h['monitor_begin_us']for h in history),'monitor completion chronology')
   allowed=(64|128)if case=='capacity'else(4|8|128)if case=='control_busy'else 4 if any(r['mode']=='input'for r in configuration(case)['tune']['secondary_tables'].values())else 0
-  if s['strategy']=='sequential_4cyl':allowed|=256
+  if s['strategy']=='sequential':allowed|=256
   require(not(s['project_fault_mask_seen']&~allowed),'unexpected project fault bit')
   late=[h['control']for h in history if h['control']and h['control_attempt_us']>=500000]
   if case not in('nack','timeout','underfill','mid_read_reset','producer_pause','control_busy','capacity'):
    first_sync_us=round(s['first_sync_s']*1e6)if s['first_sync_s']is not None else 2**64-1
-   require(all(not c['faults']or s['strategy']=='sequential_4cyl'and c['faults']==256 and c['time_us']<first_sync_us for c in late),'unexpected late control fault')
+   require(all(not c['faults']or s['strategy']=='sequential'and c['faults']==256 and c['time_us']<first_sync_us for c in late),'unexpected late control fault')
   completed=[h for h in history if h['control']]
   for index,h in enumerate(completed):
    control=h['control'];end=completed[index+1]['edge_cursor']if index+1<len(completed)else len(result['edges'])
@@ -142,7 +142,7 @@ def audit(result,case,ours):
   require(all(d['last_loop_us']<=d['time_us']for d in snapshots),'reference future loop timestamp')
   if case=='zero_fuel':require(any(ch<4 and high for _,ch,high,_ in result['edges']),'reference zero-fuel deadtime policy was not exercised')
   if case=='capacity':require(s['max_injector_high_us']>15000,'reference did not exercise its different pulse-capacity policy')
- if s['strategy']=='sequential_4cyl':
+ if s['strategy']=='sequential':
   if ours or case!='capacity':require(not s['wrong_stroke_sparks'],'sequential wrong-stroke discharge')
   if ours or case!='capacity':require(not s['unsynced_720_discharges'],'sequential unsynced discharge')
  arithmetic=arithmetic_audit(result,case,ours);errors.extend(arithmetic['errors']);delivery=delivery_audit(result,case)if ours else None

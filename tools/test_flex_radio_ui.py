@@ -58,6 +58,21 @@ async def run(url,fixtures,out):
     return {count:cases.length,passed:cases.every(Boolean)};
    }''',json.loads((fixtures/'schema6-complete.json').read_text())['peers'][0]);assert negative['passed'],negative
    results.append(str(negative['count'])+' malformed schema6 next-part states stay unknown')
+   if (fixtures/'schema7-complete.json').exists():
+    for name in ('schema7-partial-base','schema7-partial-flex','schema7-partial-boost','schema7-complete','schema7-downgraded'):
+     current=json.loads((fixtures/(name+'.json')).read_text());await page.evaluate('refreshRadio()');text=await page.locator('#radio-peers').inner_text()
+     if name.endswith('downgraded'):assert 'needs screen schema7' in text and 'sensor stream fallback' in text
+     else:
+      assert 'engine schema7 / 4 datagrams per observation' in text
+      if name.endswith('complete'):assert 'complete engine observation ACK ' in text
+      else:assert 'no complete engine observation acknowledged' in text and 'cylinders submission pending' in text
+     results.append(name+': all four parts required before complete-observation ACK')
+    negative=await page.evaluate('''p=>{
+     const cases=[];
+     for(const patch of [{engine_next_part:'cylinders'},{engine_next_part:null},{engine_parts_per_observation:3},{engine_schema:6},{engine_pair_pending:true},{engine_pair_pending:true,engine_base_submitted:true,engine_next_part:'base'},{engine_pair_pending:true,engine_base_submitted:false,engine_next_part:'cylinders'}])cases.push(radioEnginePeerText({...p,...patch}).includes('unknown'));
+     return {count:cases.length,passed:cases.every(Boolean)};
+    }''',json.loads((fixtures/'schema7-complete.json').read_text())['peers'][0]);assert negative['passed'],negative
+    results.append(str(negative['count'])+' malformed schema7 next-part states stay unknown')
    current=json.loads((fixtures/'complete.json').read_text());current['peers'][0]['name']='<img src=x onerror="window.radioMarkup=true">';await page.evaluate('refreshRadio()');assert not await page.locator('#radio-peers img').count();assert not await page.evaluate('window.radioMarkup||false');results.append('Peer text remains escaped')
    current=json.loads((fixtures/'schema6-partial-flex.json').read_text());await page.evaluate('refreshRadio()');await page.locator('#page').screenshot(path=out/'radio-desktop.png')
    for width in (320,390,768,1440):

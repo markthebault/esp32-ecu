@@ -14,7 +14,7 @@ class Document {
  template<class Map>static bool grid(cJSON*j,const Map&m){return j&&values(item(j,"rpm"),m.rpm)&&values(item(j,"load"),m.load)&&values(item(j,"cells"),m.cells);}
 public:
  explicit Document(cJSON*j):root_(j){}
- bool header(std::uint32_t revision,const char*strategy){return set(item(root_,"schema_version"),10)&&set(item(root_,"revision"),revision)&&cJSON_SetValuestring(item(root_,"strategy"),strategy);}
+ bool header(std::uint32_t revision,const char*strategy){return set(item(root_,"schema_version"),11)&&set(item(root_,"revision"),revision)&&cJSON_SetValuestring(item(root_,"strategy"),strategy);}
  bool number(const char*group,const char*key,double v){return set(item(item(root_,group),key),v);}
  bool boolean(const char*group,const char*key,bool v){auto*j=item(item(root_,group),key);if(!cJSON_IsBool(j))return false;j->type=(j->type&~0xff)|(v?cJSON_True:cJSON_False);return true;}
  template<class Values>bool array(const char*group,const char*key,const Values&v){return values(item(item(root_,group),key),v);}

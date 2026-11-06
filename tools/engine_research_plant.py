@@ -9,22 +9,27 @@ import json
 import math
 import tempfile
 from pathlib import Path
+from engine_geometry import EngineGeometry
 
 ROOT=Path(__file__).resolve().parents[1]
 
 
 class AirPath:
-    def __init__(self,ambient_kpa=100):
+    def __init__(self,ambient_kpa=100,geometry=None):
         if type(ambient_kpa) not in (int,float) or not math.isfinite(ambient_kpa) or not 50<=ambient_kpa<=110:raise ValueError('Research ambient pressure outside50..110kPa absolute')
         from fmpy import extract, read_model_description
         from fmpy.fmi2 import FMU2Slave
-        base=ROOT/'.cache/engine/modelica-mvem/airpath'
-        fmu=base/'EngineAirPath.fmu'
+        if geometry is not None and not isinstance(geometry,EngineGeometry):raise ValueError('Expected physical EngineGeometry')
+        base=ROOT/('.cache/engine/modelica-mvem/airpath-profiles' if geometry else '.cache/engine/modelica-mvem/airpath')
+        name='EngineProfileAirPath' if geometry else 'EngineAirPath'
+        fmu=base/(name+'.fmu')
         manifest=json.loads((base/'manifest.json').read_text())
         if hashlib.sha256(fmu.read_bytes()).hexdigest()!=manifest['fmu_sha256']:
             raise RuntimeError('Research FMU hash differs from build manifest')
-        if hashlib.sha256((ROOT/'simulation/modelica/EngineAirPath.mo').read_bytes()).hexdigest()!=manifest['adapter_sha256']:
+        if hashlib.sha256((ROOT/('simulation/modelica/'+name+'.mo')).read_bytes()).hexdigest()!=manifest['adapter_sha256']:
             raise RuntimeError('Rebuild research FMU after Modelica adapter changes')
+        if geometry and hashlib.sha256((ROOT/'simulation/modelica/EngineAirPath.mo').read_bytes()).hexdigest()!=manifest['base_adapter_sha256']:
+            raise RuntimeError('Rebuild profile FMU after its base adapter changes')
         description=read_model_description(str(fmu))
         self.vr={v.name:v.valueReference for v in description.modelVariables}
         self.temp=tempfile.TemporaryDirectory(prefix='ecu-airpath-',dir=base)
@@ -35,8 +40,18 @@ class AirPath:
             self.model.instantiate()
             self.model.setupExperiment(startTime=0,tolerance=1e-8)
             if ambient_kpa!=100:self.model.setReal([self.vr['ambient_pa']],[ambient_kpa*1000])
+            if geometry:
+                self.model.setInteger([self.vr['cylinders']],[geometry.cylinders])
+                self.model.setReal([self.vr['displacement_m3']],[geometry.displacement_m3])
             self.model.setReal([self.vr[k] for k in ('shaft_rad_s','throttle_pct','idle_pct')],[0,0,0])
             self.model.enterInitializationMode();self.model.exitInitializationMode()
+            self.geometry=geometry or EngineGeometry()
+            actual_displacement=self.model.getReal([self.vr['displacement_m3']])[0]
+            actual_cylinders=self.model.getInteger([self.vr['cylinders']])[0] if geometry else 4
+            if actual_cylinders!=self.geometry.cylinders or not math.isclose(actual_displacement,self.geometry.displacement_m3,rel_tol=1e-12,abs_tol=1e-15):
+                raise RuntimeError('FMU physical geometry did not survive initialization')
+            self.parameters=dict(cylinders=actual_cylinders,displacement_m3=actual_displacement,
+                                 manifold_m3=self.model.getReal([self.vr['manifold_m3']])[0])
             self.time=0.;self.initial=self.read()
         except Exception:
             self.model.freeInstance();self.temp.cleanup();raise
@@ -64,51 +79,55 @@ class AirPath:
 
 
 class ResearchPlant:
-    """2L gasoline four cylinder, 1-3-4-2 physical cylinder order.
+    """Declared1..8 cylinder gasoline research profile; default2L1-3-4-2.
 
     One positive shaft direction; no compression ripple, knock, emissions or
     exhaust gas dynamics. Spark timing response and cold behavior are empirical.
     """
-    def __init__(self,cold=False,injector_flow_factors=None,optimum_spark_offsets=None,idle_valve=None,ambient_kpa=100,air_path=None):
+    def __init__(self,cold=False,injector_flow_factors=None,optimum_spark_offsets=None,idle_valve=None,ambient_kpa=100,air_path=None,geometry=None):
         from idle_valve_plant import IdleValve
         self.idle_valve=IdleValve(idle_valve) if idle_valve is not None else None
-        self.injector_flow_factors=list(injector_flow_factors or [1]*4)
-        self.optimum_spark_offsets=list(optimum_spark_offsets or [0]*4)
-        if len(self.injector_flow_factors)!=4 or any(not math.isfinite(v) or not .5<=v<=1.5 for v in self.injector_flow_factors):raise ValueError('Four bounded independent injector flow factors required')
-        if len(self.optimum_spark_offsets)!=4 or any(not math.isfinite(v) or not -10<=v<=10 for v in self.optimum_spark_offsets):raise ValueError('Four bounded independent spark optimum offsets required')
-        self.air=(AirPath() if ambient_kpa==100 else AirPath(ambient_kpa)) if air_path is None else air_path;self.air_state=self.air.initial
+        self.geometry=geometry or getattr(air_path,'geometry',None) or EngineGeometry()
+        if not isinstance(self.geometry,EngineGeometry):raise ValueError('Expected physical EngineGeometry')
+        n=self.geometry.cylinders
+        self.injector_flow_factors=list(injector_flow_factors if injector_flow_factors is not None else [1]*n)
+        self.optimum_spark_offsets=list(optimum_spark_offsets if optimum_spark_offsets is not None else [0]*n)
+        if len(self.injector_flow_factors)!=n or any(type(v) not in (int,float) or not math.isfinite(v) or not .5<=v<=1.5 for v in self.injector_flow_factors):raise ValueError('One bounded independent injector flow factor per physical cylinder required')
+        if len(self.optimum_spark_offsets)!=n or any(type(v) not in (int,float) or not math.isfinite(v) or not -10<=v<=10 for v in self.optimum_spark_offsets):raise ValueError('One bounded independent spark optimum offset per physical cylinder required')
+        air_geometry=getattr(air_path,'geometry',None)
+        if air_path is not None and (geometry is not None and air_geometry is None or air_geometry is not None and air_geometry!=self.geometry):raise ValueError('Provided air path must declare the same physical engine geometry')
+        self.air=AirPath(ambient_kpa,geometry) if air_path is None else air_path;self.air_state=self.air.initial
         self.rpm=0.;self.angle=0.;self.tps=0.;self.clt=0. if cold else 85.
         self.iat=25.;self.battery=14.;self.map_kpa=100. if ambient_kpa==100 and air_path is None else self.air_state['map_kpa'];self.lambda_sensor=1.
         self.exhaust_lambda=1.;self.lambda_valid=False
         self.last_exhaust_t=-math.inf
         self.injector_flow_cc_min=300.;self.rotor_inertia=.18
-        self.injector_on=[None]*4;self.coil_on=[None]*4
-        self.charge_mg=[0.]*4;self.port_mg=[0.]*4;self.wall_mg=[0.]*4
-        self.air_charge_mg=[0.]*4
+        self.injector_on=[None]*n;self.coil_on=[None]*n
+        self.charge_mg=[0.]*n;self.port_mg=[0.]*n;self.wall_mg=[0.]*n
+        self.air_charge_mg=[0.]*n
         self.fuel_mg=0.;self.burned_mg=0.;self.unburned_mg=0.
         self.combustions=[];self.sparks=0;self.dwell_events=[];self.spark_errors=[]
         self.burned_chemical_j=0.;self.combustion_shaft_j=0.;self.heat_j=0.
         self.starter_j=0.;self.friction_j=0.;self.load_j=0.
-        self.cylinder_fuel_mg=[0.]*4;self.cylinder_burned_mg=[0.]*4;self.cylinder_scheduled_work_j=[0.]*4;self.cylinder_shaft_j=[0.]*4;self.cylinder_combustions=[]
+        self.cylinder_fuel_mg=[0.]*n;self.cylinder_burned_mg=[0.]*n;self.cylinder_scheduled_work_j=[0.]*n;self.cylinder_shaft_j=[0.]*n;self.cylinder_combustions=[]
 
     def edge(self,ch,high,t,commanded_advance=10,latest_demand=10,requested_dwell_us=2800):
         if ch==8 and self.idle_valve is not None:self.idle_valve.edge(high);return
-        if not 0<=ch<8:raise ValueError('Virtual channel outside0..7')
-        events=self.injector_on if ch<4 else self.coil_on
-        index=ch%4
+        kind,index=self.geometry.actuator(ch)
+        events=self.injector_on if kind=='injector' else self.coil_on
         if high:
             if events[index] is not None:raise RuntimeError('Duplicate actuator rise')
             events[index]=t;return
         start=events[index]
         if start is None:raise RuntimeError('Actuator fall without rise')
         events[index]=None
-        if ch<4:return
+        if kind=='injector':return
         dwell=t-start
         current=min(6.,max(0,self.battery-1.5)/.7*(1-math.exp(-.7*dwell/.003)))
         energy=.5*.003*current*current
         self.dwell_events.append(dict(time_s=t,channel=ch,dwell_us=dwell*1e6,energy_j=energy))
         self.sparks+=1
-        tdc=(90,630,270,450)[index]
+        tdc=self.geometry.compression_tdc_deg[index]
         advance=(tdc-self.angle%720+360)%720-360
         error=((tdc%360-self.angle%360+180)%360-180-commanded_advance+180)%360-180
         self.spark_errors.append(dict(time_s=t,channel=ch,actual_deg=(tdc%360-self.angle%360+180)%360-180,
@@ -139,7 +158,7 @@ class ResearchPlant:
     def cut(self):
         # External removal of electrical drive is an inhibit, no fabricated
         # normal coil discharge/spark is added to the combustion model.
-        self.injector_on=[None]*4;self.coil_on=[None]*4
+        self.injector_on=[None]*self.geometry.cylinders;self.coil_on=[None]*self.geometry.cylinders
         if self.idle_valve is not None:self.idle_valve.cut()
 
     def sample(self,t):
@@ -163,7 +182,7 @@ class ResearchPlant:
                 fraction=.45 if self.clt<30 else .05
                 self.wall_mg[cylinder]+=mass*fraction;self.port_mg[cylinder]+=mass*(1-fraction)
         tau=1.5 if self.clt<30 else .05
-        for cylinder in range(4):
+        for cylinder in range(self.geometry.cylinders):
             evaporated=self.wall_mg[cylinder]*(1-math.exp(-dt/tau))
             self.wall_mg[cylinder]-=evaporated;self.port_mg[cylinder]+=evaporated
         available=0.
@@ -190,12 +209,12 @@ class ResearchPlant:
         # port fuel becomes a cylinder charge here; unfired previous charge
         # exits unburned. Ignition cuts cannot accumulate fuel indefinitely in
         # a closed cylinder and then burn several missed cycles on recovery.
-        for cylinder,tdc in enumerate((90,630,270,450)):
+        for cylinder,tdc in enumerate(self.geometry.compression_tdc_deg):
             phase=tdc-180
             if math.floor((self.angle-phase)/720)>math.floor((before_angle-phase)/720):
                 self.unburned_mg+=self.charge_mg[cylinder]
                 self.charge_mg[cylinder]=self.port_mg[cylinder];self.port_mg[cylinder]=0.
-                self.air_charge_mg[cylinder]=self.air_state['cylinder_air_kg_s']*math.pi/omega*1e6 if omega>1e-9 else 0.
+                self.air_charge_mg[cylinder]=self.air_state['cylinder_air_kg_s']*math.pi/omega*(4/self.geometry.cylinders)*1e6 if omega>1e-9 else 0.
         self.lambda_sensor+=(self.exhaust_lambda-self.lambda_sensor)*(1-math.exp(-dt/.12))
         self.lambda_valid=(self.lambda_valid and t+dt-self.last_exhaust_t<=.3
                            and self.rpm>40 and self.air_state['cylinder_air_kg_s']>1e-6)

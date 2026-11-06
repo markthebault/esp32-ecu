@@ -8,7 +8,7 @@ using namespace ecu::engine;
 // Prescribed constant shaft, independently calculated phases. This checks
 // logical scheduling and integer timestamp rounding, not physical jitter.
 void steady_pairs(unsigned slots,unsigned rpm,double end,std::array<unsigned,4> order){
- Tune tune;tune.strategy=Strategy::SemiSequential;tune.injection_end_deg=end;tune.firing_order=order;
+ Tune tune;tune.strategy=Strategy::SemiSequential;tune.injection_end_deg=end;tune.firing_order.fill(0);std::copy(order.begin(),order.end(),tune.firing_order.begin());
  Output output;output.state=State::Running;output.rpm=rpm;output.advance_deg=10;output.pulse_ms=output.dwell_ms=1;
  AngleScheduler scheduler;std::array<std::vector<std::pair<std::uint64_t,bool>>,8> edges;
  std::array<std::uint64_t,8> rise{};std::array<unsigned,4> counts{};

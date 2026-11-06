@@ -28,7 +28,7 @@ class TuningTests(unittest.TestCase):
   fields={e.get('name'):e.get('units') for e in ET.fromstring(export_msq(self.store.tune)).iter(tag('constant'))}
   import csv
   expected={}
-  constants=(R/'tuning/esp32-ecu-boost.ini').read_text().split('[Constants]',1)[1].split('\n[',1)[0]
+  constants=(R/'tuning/esp32-ecu-profiles.ini').read_text().split('[Constants]',1)[1].split('\n[',1)[0]
   for line in constants.splitlines():
    if '=' not in line:continue
    name,definition=line.split('=',1);parts=next(csv.reader([definition],skipinitialspace=True))
@@ -45,7 +45,7 @@ class TuningTests(unittest.TestCase):
   from engine_msq import import_msq,SIGNATURE,LEGACY_SIGNATURE
   body=(R/'tuning/examples/tunerstudio-development-roundtrip.msq').read_text()
   self.assertNotIn('name="baseRevision"',body)
-  tune=import_msq(body);self.assertEqual(tune['revision'],1);self.assertEqual(tune['cylinder_trims']['spark_deg'],[0,-2.5,0,0]);self.assertEqual(tune['cylinder_trims']['fuel_maps'][1]['cells'],[120]*36)
+  tune=import_msq(body);self.assertEqual(tune['revision'],1);self.assertEqual(tune['cylinder_trims']['spark_deg'],[0,-2.5,0,0,0,0,0,0]);self.assertEqual(tune['cylinder_trims']['fuel_maps'][1]['cells'],[120]*36)
   self.assertEqual(import_msq(body,base_revision=17)['revision'],17)
   for revision in (True,0,4294967296,float('nan')):
    with self.assertRaises(ValueError):import_msq(body,base_revision=revision)
@@ -55,8 +55,8 @@ class TuningTests(unittest.TestCase):
   old=re.sub(r'<constant[^>]*name="baseRevision"[^>]*>.*?</constant>','',old,flags=re.S)
   with self.assertRaises(ValueError):import_msq(old)
  def test_native_golden_whole_tune_and_historical_layout(self):
-  tune=copy.deepcopy(self.store.tune);tune['strategy']='sequential_4cyl';tune['cylinder_trims']['enabled']=True
-  tune['maps']['ve']['cells'][17]=93.25;tune['cylinder_trims']['fuel_maps'][1]['cells'][14]=117.25;tune['cylinder_trims']['spark_deg']=[-1,2,-3,4]
+  tune=copy.deepcopy(self.store.tune);tune['strategy']='sequential';tune['cylinder_trims']['enabled']=True
+  tune['maps']['ve']['cells'][17]=93.25;tune['cylinder_trims']['fuel_maps'][1]['cells'][14]=117.25;tune['cylinder_trims']['spark_deg']=[-1,2,-3,4,0,0,0,0]
   self.assertEqual(self.store.save(json.dumps(tune).encode())[0],200)
   s=self.session();expected=pages(self.store.tune)[1]
   self.assertEqual(s.buffers[1],expected);self.assertEqual(pages(decode_pages({1:expected},self.store.tune))[1],expected)
@@ -75,9 +75,9 @@ class TuningTests(unittest.TestCase):
   self.assertEqual(b.feed(b'\xf0F',100000),[b'002']);self.assertEqual(b.diagnostics()['origin_revision'],2)
   b.command(request(b'M',644,struct.pack('<f',87)));self.assertEqual(b.command(b'b\0\1'),b'\4');self.assertEqual(self.store.tune['revision'],3)
  def test_strategy_and_trim_disable_are_one_transaction(self):
-  tune=copy.deepcopy(self.store.tune);tune['strategy']='sequential_4cyl';tune['cylinder_trims']['enabled']=True;self.store.save(json.dumps(tune).encode());s=self.session()
-  s.command(request(b'M',272,bytes(4)));self.assertEqual(s.command(b'b\0\1'),b'\x84');self.assertEqual(self.store.tune['strategy'],'sequential_4cyl')
-  s.command(request(b'M',4752,bytes(4)));self.assertEqual(s.command(b'b\0\1'),b'\4');self.assertFalse(self.store.tune['cylinder_trims']['enabled']);self.assertEqual(self.store.tune['strategy'],'batch_wasted_4cyl')
+  tune=copy.deepcopy(self.store.tune);tune['strategy']='sequential';tune['cylinder_trims']['enabled']=True;self.assertEqual(self.store.save(json.dumps(tune).encode())[0],200);s=self.session()
+  s.command(request(b'M',272,bytes(4)));self.assertEqual(s.command(b'b\0\1'),b'\x84');self.assertEqual(self.store.tune['strategy'],'sequential')
+  s.command(request(b'M',4752,bytes(4)));self.assertEqual(s.command(b'b\0\1'),b'\4');self.assertFalse(self.store.tune['cylinder_trims']['enabled']);self.assertEqual(self.store.tune['strategy'],'batch_wasted')
  def test_readonly_and_reserved_violations_reject_entire_chunk(self):
   s=self.session();original=s.buffers[1]
   for offset,body in [(268,struct.pack('<I',2)),(288,bytes([1,3,4,2,1])),(4752,bytes([1,0,0,0,1]))]:

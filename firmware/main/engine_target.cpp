@@ -33,7 +33,7 @@
 #endif
 namespace ecu::engine_target {
 namespace {
-DRAM_ATTR timing::Executor executor;
+DRAM_ATTR timing::Executor executor{ECU_ENGINE_DUMMY_LOADS?4U:8U};
 DRAM_ATTR idle::PwmExecutor idle_executor;
 DRAM_ATTR boost::PwmExecutor boost_executor;
 // Virtual execution only. The unrouted GPIO45 driver candidate is not allocated.
@@ -61,7 +61,7 @@ DRAM_ATTR const unsigned output_pins[8]={pins::inj1_cmd,pins::inj2_cmd,pins::inj
 #endif
 struct OutputIO {
  bool boot_allowed=false,armed=false,failed=false;
- std::uint8_t physical_mask=0;
+ std::uint32_t physical_mask=0;
  ECU_ISR_CODE void all_low(){
 #if ECU_ENGINE_DUMMY_LOADS
   gpio_ll_set_level(&GPIO,pins::arm,0);
@@ -73,10 +73,12 @@ struct OutputIO {
   boost_engine_stop();
  }
  ECU_ISR_CODE bool write(unsigned ch,bool high){
+  const auto kind=engine::channels::kind(ch);if(kind!=engine::channels::Kind::Injector&&kind!=engine::channels::Kind::Coil)return false;
 #if ECU_ENGINE_DUMMY_LOADS
+  if(ch>=8)return false;
   if(high&&(!armed||failed||!gpio_ll_get_level(&GPIO,pins::safe_n_mon)||!gpio_ll_get_level(&GPIO,pins::interlock)))return false;
   if(high){gpio_ll_set_level(&GPIO,pins::arm,1);gpio_ll_set_level(&GPIO,output_pins[ch],1);physical_mask|=1U<<ch;}
-  else{gpio_ll_set_level(&GPIO,output_pins[ch],0);physical_mask&=static_cast<std::uint8_t>(~(1U<<ch));}
+  else{gpio_ll_set_level(&GPIO,output_pins[ch],0);physical_mask&=~(1U<<ch);}
 #else
   (void)ch;(void)high;
 #endif
@@ -514,7 +516,7 @@ std::uint64_t clock_us(){return now_locked();}
 Measurement measurement(){
  portENTER_CRITICAL(&lock);auto copy=measured;const auto&stats=executor.stats();const auto&cmd=executor.current_command();
  copy.timing_fault=stats.fault!=timing::Cause::None;copy.timing_cause=static_cast<std::uint8_t>(stats.fault);copy.last_timing_cause=static_cast<std::uint8_t>(stats.last_fault);
- copy.worker_sequence=cmd.sequence;copy.worker_tune_revision=cmd.tune_revision;copy.worker_sensor_revision=cmd.sensor_revision;copy.worker_epoch=stats.epoch;
+ copy.worker_cylinder_count=cmd.sequence?cmd.angle.cylinders:0;copy.worker_sequence=cmd.sequence;copy.worker_tune_revision=cmd.tune_revision;copy.worker_sensor_revision=cmd.sensor_revision;copy.worker_epoch=stats.epoch;
  copy.worker_observed_us=now_locked();copy.virtual_high_mask=stats.high_mask;copy.physical_command_mask=output.physical_mask;
  portEXIT_CRITICAL(&lock);return copy;
 }
@@ -644,7 +646,7 @@ cJSON* flex_snapshot(){
 #endif
 }
 cJSON* snapshot(){
- timing::TimingStats stats;timing::Command command;std::uint8_t physical;bool armed,failed,ready,held;std::uint32_t uncertainty;std::uint64_t now,sequence,superseded,rejected,configuration_skipped;
+ timing::TimingStats stats;timing::Command command;std::uint32_t physical;bool armed,failed,ready,held;std::uint32_t uncertainty;std::uint64_t now,sequence,superseded,rejected,configuration_skipped;
  portENTER_CRITICAL(&lock);stats=executor.stats();command=executor.current_command();physical=output.physical_mask;
  armed=output.armed;failed=output.failed;now=now_locked();sequence=executor.trace_sequence();
  ready=measured.ready;uncertainty=capture_clock.uncertainty_us();held=configuration_hold;
@@ -652,6 +654,7 @@ cJSON* snapshot(){
  auto* j=cJSON_CreateObject();cJSON_AddStringToObject(j,"mode",ECU_ENGINE_DUMMY_LOADS?"hardware_timer_dummy_loads":"hardware_timer_virtual_outputs");
  cJSON_AddBoolToObject(j,"available",ready);cJSON_AddBoolToObject(j,"physical_policy_enabled",ECU_ENGINE_DUMMY_LOADS);
  cJSON_AddBoolToObject(j,"bench_armed",armed);cJSON_AddBoolToObject(j,"bench_gate_fault",failed);
+ cJSON_AddNumberToObject(j,"logical_cylinders",command.sequence?command.angle.cylinders:0);cJSON_AddNumberToObject(j,"maximum_logical_cylinders",executor.maximum_cylinders());cJSON_AddNumberToObject(j,"fitted_injector_commands",engine::channels::board_injector_commands);cJSON_AddNumberToObject(j,"fitted_coil_commands",engine::channels::board_coil_commands);
  cJSON_AddNumberToObject(j,"virtual_high_mask",stats.high_mask);cJSON_AddNumberToObject(j,"physical_high_mask",physical);
  cJSON_AddNumberToObject(j,"clock_uncertainty_us",uncertainty);
  cJSON_AddBoolToObject(j,"configuration_hold",held);cJSON_AddNumberToObject(j,"superseded_captures",superseded);cJSON_AddNumberToObject(j,"rejected_commands",rejected);

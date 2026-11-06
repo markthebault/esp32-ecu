@@ -55,7 +55,7 @@ class FlexIntegration(unittest.TestCase):
    body=json.dumps(old,indent=1).encode()
    with tempfile.TemporaryDirectory() as directory:
     path=Path(directory)/'tune.json';path.write_bytes(body);store=EngineStore(path)
-    try:self.assertTrue(store.storage_ok);self.assertEqual(store.tune['schema_version'],10);self.assertEqual(store.tune['flex_fuel'],FLEX_DEFAULT);self.assertEqual(store.tune['revision'],81);self.assertEqual(path.read_bytes(),body)
+    try:self.assertTrue(store.storage_ok);self.assertEqual(store.tune['schema_version'],11);self.assertEqual(store.tune['flex_fuel'],FLEX_DEFAULT);self.assertEqual(store.tune['revision'],81);self.assertEqual(path.read_bytes(),body)
     finally:store.runtime.close();store.data_recorder.close()
     if schema==8:self.assertEqual(store.tune['secondary_tables'],old['secondary_tables'])
  def test_schema9_requires_complete_strict_flex_config(self):
@@ -82,15 +82,16 @@ class FlexIntegration(unittest.TestCase):
   t=tune();text=export_msq(t);self.assertIn(SIGNATURE.decode(),text);self.assertEqual(pages(import_msq(text)),pages(t));self.assertEqual(import_msq(text)['flex_fuel'],t['flex_fuel'])
   for path in (R/'tuning/examples').glob('*.msq'):
    if SIGNATURE in path.read_bytes():continue
-   migrated=import_msq(path.read_bytes());self.assertEqual(migrated['schema_version'],10)
+   migrated=import_msq(path.read_bytes());self.assertEqual(migrated['schema_version'],11)
    if b'ESP32ECU DEV 010 INHIBITED' in path.read_bytes():self.assertEqual(migrated['flex_fuel']['capture']['filter_ms'],130.5)
    else:self.assertEqual(migrated['flex_fuel'],FLEX_DEFAULT)
-   self.assertFalse(migrated['boost_control']['pressure_enabled'])
+   if 'DEV 011' not in path.read_text():self.assertFalse(migrated['boost_control']['pressure_enabled'])
+   else:self.assertTrue(migrated['boost_control']['pressure_enabled'])
  def test_runtime_json_log_preserves_flags_and_exact_u64(self):
   r=self.runtime();edges(r);step(r);s=r.data();f=s['flex_fuel'];f['raw_edges']='9007199254740993'
   d=self.recorder();self.assertEqual(d.bridge.data_validate(encoded(s)),1);self.assertEqual(d.command(dict(action='start',period_ms=20,duration_s=1),1000000),200);self.assertTrue(d.append(s,1000000));d.command(dict(action='stop',log_id=1),1000001)
   q=d.page(1,0)['records'][0]['sample']['flex_fuel'];self.assertEqual(q['raw_edges'],'9007199254740993');self.assertEqual(q['sample_us'],f['sample_us']);self.assertEqual(q['raw_capture_qualified'],True)
-  rows=list(csv.reader(io.StringIO(d.msl(1)),delimiter='\t'));self.assertEqual([len(x) for x in rows[2:]],[245]*3);log=dict(zip(rows[2],rows[4]));self.assertEqual(log['FlexRawEdges'],'9007199254740993');self.assertEqual(log['FlexRawCaptureQualified'],'1');self.assertEqual(log['FlexAvailable'],'1')
+  rows=list(csv.reader(io.StringIO(d.msl(1)),delimiter='\t'));self.assertEqual([len(x) for x in rows[2:]],[265]*3);log=dict(zip(rows[2],rows[4]));self.assertEqual(log['FlexRawEdges'],'9007199254740993');self.assertEqual(log['FlexRawCaptureQualified'],'1');self.assertEqual(log['FlexAvailable'],'1')
   cases=[('source_code',4),('source','target_capture'),('reason_code',23),('pending_fault',True),('capture_valid',False),('raw_edges','01'),('sample_us','18446744073709551616'),('fuel_pct',None),('unexpected',0)]
   for key,value in cases:
    bad=copy.deepcopy(s);bad['flex_fuel'][key]=value;self.assertFalse(d.bridge.data_validate(encoded(bad)),key)

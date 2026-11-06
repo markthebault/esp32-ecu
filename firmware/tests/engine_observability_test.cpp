@@ -64,7 +64,7 @@ void framing_and_msl_tests(){
  assert(radio::wire::read32(bytes+112+4*engine::Lambda)==0x7fc00000);assert(radio::wire::read32(bytes+24)==30);
  assert((bytes[23]&128)!=0);assert(radio::wire::engine_body(bytes,r,123,457,1001,1001,1002,6000000));assert((bytes[23]&128)==0);
  engine_log::Header h;h.source=engine::DataSource::Synthetic;h.total=h.retained=1;engine_log::Row row{r,20000,1,1};char text[engine_log::text_capacity];assert(engine_log::msl_header(h,text,sizeof(text)));
- std::string header=text;const auto start=header.find('\n',header.find('\n')+1)+1;const auto end=header.find('\n',start);const auto count=fields(header.substr(start,end-start));assert(count==245);
+ std::string header=text;const auto start=header.find('\n',header.find('\n')+1)+1;const auto end=header.find('\n',start);const auto count=fields(header.substr(start,end-start));assert(count==265);
  assert(engine_log::msl_row(h,row,text,sizeof(text)));assert(fields(text)==count);assert(std::string(text).find("NaN")!=std::string::npos);assert(!engine_log::msl_row(h,row,text,10));
  engine_log::Request q;assert(engine_log::parse_request("{\"action\":\"start\",\"period_ms\":20,\"duration_s\":1}",49,q)==false); // Explicit lengths must match the actual envelope.
  std::string body="{\"action\":\"start\",\"period_ms\":20,\"duration_s\":1}";assert(engine_log::parse_request(body.c_str(),body.size(),q));

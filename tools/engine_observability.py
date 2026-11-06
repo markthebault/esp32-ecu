@@ -6,7 +6,7 @@ R=Path(__file__).resolve().parents[1]
 _lock=threading.Lock()
 def load_bridge():
  with _lock:
-  out=R/'.cache/engine/observability-v3';out.mkdir(parents=True,exist_ok=True)
+  out=R/'.cache/engine/observability-v4';out.mkdir(parents=True,exist_ok=True)
   cjson=Path.home()/'.platformio/packages/framework-espidf/components/json/cJSON'
   source=R/'tools/engine_observability_bridge.cpp';lib=out/'libobservability.so'
   deps=[Path(__file__),source,R/'firmware/main/config_json.hpp',cjson/'cJSON.c',*sorted((R/'firmware/include/ecu').glob('*.hpp'))]
@@ -23,7 +23,8 @@ def load_bridge():
    'data_capability_reset':([P],None),'data_capability_reply':([P,S,U,S,U,S,T,T,P],I),
    'data_radio_frame':([S,S,S,U,T,U,U,U,T,U,P],I),
    'data_radio_pair':([S,S,S,U,T,U,U,U,U,T,P],I),
-   'data_radio_triple':([S,S,S,U,T,U,U,U,U,T,P],I)}
+   'data_radio_triple':([S,S,S,U,T,U,U,U,U,T,P],I),
+   'data_radio_profile':([S,S,S,U,T,U,U,U,U,T,P],I)}
   for name,(args,result) in signatures.items():fn=getattr(b,name);fn.argtypes=args;fn.restype=result
   return b
 
@@ -63,6 +64,10 @@ class EngineRecorder:
   if not self.bridge.data_radio_triple(encoded(sample),lmk,nonce,session,sequence,sample_age,control_age,worker_age,raw_age,sent,out):raise ValueError('Invalid schema6 engine/flex/boost observation')
   return out.raw[:250],out.raw[250:482],out.raw[482:]
  def reset_capabilities(self):self.bridge.data_capability_reset(self.handle)
+ def frame_profile(self,sample,lmk,nonce,session,sequence,sample_age=0,control_age=0,worker_age=4294967295,raw_age=4294967295,sent=0):
+  out=ctypes.create_string_buffer(862)
+  if not self.bridge.data_radio_profile(encoded(sample),lmk,nonce,session,sequence,sample_age,control_age,worker_age,raw_age,sent,out):raise ValueError('Invalid schema7 engine/flex/boost/cylinder observation')
+  return out.raw[:250],out.raw[250:482],out.raw[482:626],out.raw[626:]
  def frame(self,sample,lmk,nonce,session,sequence,sample_age=0,control_age=0,worker_age=4294967295,sent=0,schema=4):
   if type(schema) is not int or schema not in (1,2,3,4):raise ValueError('Unsupported engine schema')
   out=ctypes.create_string_buffer(232 if schema<3 else 250)

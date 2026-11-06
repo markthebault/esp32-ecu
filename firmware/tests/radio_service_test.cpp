@@ -18,8 +18,9 @@ static void at(std::int64_t t){fake_radio_now=t;fake_now=21000+t-5000000;}
 static void finish(){r::sent(nullptr,ESP_NOW_SEND_SUCCESS);}
 static void binary(const char*name,const std::vector<std::uint8_t>&bytes){if(!output_directory.empty()){std::ofstream f(output_directory+"/"+name,std::ios::binary);check(f.good());f.write(reinterpret_cast<const char*>(bytes.data()),bytes.size());}}
 static void fixture(const char*name){r::update_view(r::radio_fault(5000000));auto*j=r::status();check(j);char*text=cJSON_Print(j);check(text);cJSON_Delete(j);if(!output_directory.empty()){std::ofstream f(output_directory+"/"+name+".json");check(f.good());f<<text<<'\n';}cJSON_free(text);}
-static ecu::engine::RuntimeSample captured(bool boosted=false,double map=50,double rpm=0,std::uint64_t sampled=21000){
+static ecu::engine::RuntimeSample captured(bool boosted=false,double map=50,double rpm=0,std::uint64_t sampled=21000,unsigned count=4){
  using namespace ecu;engine::Tune t;t.flex_fuel.input_confirmed=true;t.flex_fuel.correction.enabled=true;t.flex_fuel.capture.cycles=2;
+ if(count!=4){t.cylinders=count;t.firing_order.fill(0);for(unsigned n=0;n<count;++n)t.firing_order[n]=n+1;}
  if(boosted){t.injector_cc_min=600;t.dfco_enabled=false;t.boost_control.pressure_enabled=true;t.boost_control.mode=boost::Mode::OpenLoop;t.boost_control.open_duty.cells.fill(40);}
  flex::Capture c(t.flex_fuel.capture);const auto start=sampled-20000;c.edge(start,true,flex::Source::TargetCapture);
  for(unsigned n=1;n<=2;++n){c.edge(start+n*10000-3000,false,flex::Source::TargetCapture);c.edge(start+n*10000,true,flex::Source::TargetCapture);}
@@ -103,6 +104,47 @@ static void boost_service(){
   check(!r::occupied(r::saved.peers[0])&&!r::streams[0].pair.pending()&&!r::streams[0].key_ready&&!r::streams[0].engine_ack_seen);attempts=fake_datagrams.size();slot(2);check(fake_datagrams.size()==attempts&&fake_peer_blob.size()==204);
  }
 }
+static void cylinder_service(){
+ at(5000000);r::saved=r::Store{};for(unsigned i=0;i<4;++i){r::streams[i]=r::StreamPeer{};r::ack_seen[i]=false;r::acks[i]=0;}r::fault_until=0;r::last_error="";
+ auto&peer=r::saved.peers[0];const std::uint8_t screen[]={2,170,187,204,221,238};std::memcpy(peer.mac,screen,6);std::strcpy(peer.name,"Schema7 native fixture");for(unsigned n=0;n<16;++n)peer.key[n]=n;
+ r::engine_sequence=(UINT64_C(1)<<53)+91;check(r::prepare_stream(0));auto good=captured(true,150,2000,21000,8);good.worker_cylinder_count=8;good.virtual_high_mask=1U<<17;publish(good);
+ auto query=capability(0,0,1);binary("schema7-query-request.bin",query);input(query);slot(2);binary("schema7-query-reply.bin",fake_datagrams.back().bytes);finish();
+ at(5010000);auto update=capability(1,7,2);binary("schema7-update-request.bin",update);input(update);r::streams[0].last_reply=0;slot(2);binary("schema7-update-reply.bin",fake_datagrams.back().bytes);finish();
+ const auto observations=r::engine_packets,datagrams=r::engine_datagrams,cylinders=r::cylinder_datagrams;
+ std::array<std::uint8_t,32> base_mac{};std::uint64_t sequence=0;
+ const char*names[]={"schema7-base.bin","schema7-flex.bin","schema7-boost.bin","schema7-cylinders.bin"};const unsigned types[]={9,11,12,13};
+ for(unsigned part=0;part<4;++part){at(5030000+50000*part);slot(2+part);const auto&data=fake_datagrams.back().bytes;binary(names[part],data);check(data[5]==types[part]&&data[20]==7);if(!part){std::memcpy(base_mac.data(),data.data()+218,32);sequence=r::streams[0].pair.sequence();}else check(w::same(base_mac.data(),data.data()+24,32));finish();
+  auto ack=acknowledgement(sequence);check(r::streams[0].engine_ack_seen==(part==3));
+  fixture(part==0?"schema7-partial-base":part==1?"schema7-partial-flex":part==2?"schema7-partial-boost":"schema7-complete");
+  if(part==3){binary("schema7-engine-ack.bin",ack);check(data.size()==236&&data[56]==8&&data[57]==8&&w::read32(data.data()+68)==(1U<<17));}
+ }
+ check(r::engine_packets==observations+1&&r::engine_datagrams==datagrams+4&&r::cylinder_datagrams==cylinders+1);
+ // Failed fourth submission cannot create a complete ACK entry. Retry the
+ // exact saved bytes, and keep the original preparation timestamp.
+ at(6000000);for(unsigned part=0;part<3;++part){slot(2+part);finish();at(r::now()+50000);}const auto retry=r::streams[0].pair.sequence();fake_send_error=ESP_FAIL;slot(5);const auto failed=fake_datagrams.back().bytes;check(r::streams[0].pair.pending()&&r::streams[0].pair.part_index()==3&&!r::streams[0].engine_sent.acknowledge(retry,r::now()));
+ fake_send_error=ESP_OK;at(6200000);slot(6);check(fake_datagrams.back().bytes==failed&&!r::streams[0].pair.pending());finish();check(r::streams[0].engine_sent.acknowledge(retry,r::now()));
+ at(7000000);for(unsigned part=0;part<3;++part){slot(2+part);finish();at(r::now()+50000);}const auto expired=r::streams[0].pair.sequence();const auto attempts=fake_datagrams.size();at(7250001);slot(5,7150000);check(fake_datagrams.size()==attempts&&!r::streams[0].pair.pending()&&!r::streams[0].engine_sent.acknowledge(expired,r::now()));
+ // A current four-cylinder proposal may still carry an earlier8-cylinder
+ // worker context. Both that case and a current8-cylinder proposal suppress
+ // legacy engine frames; the original sensor stream remains independent.
+ at(8000000);input(capability(2,6,3));r::streams[0].last_reply=0;slot(2);finish();publish(good);slot(3);check(fake_datagrams.back().bytes[5]==4);finish();fixture("schema7-downgraded");
+ auto lag=captured(true,150,2000,fake_now);lag.worker_cylinder_count=8;lag.virtual_high_mask=1U<<17;publish(lag);slot(4);check(fake_datagrams.back().bytes[5]==4);finish();
+ // Full15s native sender replay on the task's four-peer slot grid. This
+ // measures neither RF nor RTOS latency and does not execute the task loop.
+ for(unsigned i=0;i<4;++i){if(i){r::saved.peers[i]=peer;r::saved.peers[i].mac[5]-=i;check(r::prepare_stream(i));}input(capability(i?1:3,7,10+i,i),i);r::streams[i].last_reply=0;slot(2,-1,i);finish();}
+ at(20000000);const auto begin=fake_datagrams.size();
+ for(unsigned n=0;n<1200;++n){at(20000000+12500*n);auto fresh=captured(true,150,2000,fake_now,8);fresh.sequence=100+n;publish(fresh);slot(22+n/4,-1,n%4);check(r::sending);finish();}
+ std::array<unsigned,4> metas{},sensors{},complete{},channels{};std::array<std::int64_t,4> meta_time{},sensor_time{};std::map<std::uint64_t,FakeDatagram>bases;std::int64_t maximum_latency=0;
+ for(unsigned n=begin;n<fake_datagrams.size();++n){const auto&d=fake_datagrams[n];unsigned i=0;while(i<4&&!w::same(d.mac.data(),r::saved.peers[i].mac,6))++i;check(i<4&&d.result==ESP_OK&&d.bytes.size()<=250);
+  if(d.bytes[5]==5){++metas[i];channels[i]|=1U<<d.bytes[12];if(meta_time[i])check(d.stamp-meta_time[i]==500000);meta_time[i]=d.stamp;}
+  else if(d.bytes[5]==4){++sensors[i];if(sensor_time[i])check(d.stamp-sensor_time[i]==500000);sensor_time[i]=d.stamp;}
+  else if(d.bytes[5]==9)bases.emplace(w::read64(d.bytes.data()+12),d);
+  else {check(d.bytes[5]>=11&&d.bytes[5]<=13);const auto&base=bases.at(w::read64(d.bytes.data()+12));check(w::same(d.bytes.data()+24,base.bytes.data()+218,32));if(d.bytes[5]==13){++complete[i];maximum_latency=std::max(maximum_latency,d.stamp-base.stamp);}}
+ }
+ for(unsigned i=0;i<4;++i)check(metas[i]==30&&sensors[i]==30&&complete[i]==60&&channels[i]==63);
+ check(maximum_latency==150000&&fake_datagrams.size()-begin==1200);
+ if(!output_directory.empty()){std::ofstream f(output_directory+"/schema7-fairness.json");f<<"{\"passed\":true,\"seconds\":15,\"slots\":1200,\"peers\":4,\"metadata_per_peer\":30,\"sensors_per_peer\":30,\"all_six_metadata_channels\":true,\"complete_observations_per_peer\":60,\"maximum_assembly_us\":150000,\"reserved_stream_gap_us\":500000,\"RF_or_RTOS_measured\":false}\n";}
+}
 int main(int argc,char**argv){
  if(argc>1)output_directory=argv[1];
  r::start();at(5000000);r::radio_ok=r::storage_ok=true;r::saved=r::Store{};
@@ -147,5 +189,5 @@ int main(int argc,char**argv){
  at(9050000);slot(6);finish();check(r::streams[0].pair.pending());input(capability(0,0,4));at(9100000);slot(7);finish();check(r::streams[0].pair.pending());at(9260000);slot(8);check(fake_datagrams.back().bytes[5]==8&&!r::streams[0].pair.pending());finish();
  // Unpair resets pending bytes, stream keys and ACK history, then stops slots.
  at(9300000);slot(9);finish();check(r::streams[0].pair.pending());r::Command command{};std::strcpy(command.action,"unpair");std::strcpy(command.mac,"02:AA:BB:CC:DD:EE");r::command_run(command);check(!r::occupied(r::saved.peers[0])&&!r::streams[0].pair.pending()&&!r::streams[0].key_ready&&fake_deleted_peers==1);attempts=fake_datagrams.size();slot(2);check(fake_datagrams.size()==attempts&&fake_peer_blob.size()==204);
- boost_service();cJSON_Delete(r::view);r::view=nullptr;std::cout<<"radio_service_checks "<<checks<<"\n";
+ boost_service();cylinder_service();cJSON_Delete(r::view);r::view=nullptr;std::cout<<"radio_service_checks "<<checks<<"\n";
 }

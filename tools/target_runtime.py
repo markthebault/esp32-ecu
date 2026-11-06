@@ -12,7 +12,7 @@ _build_lock=threading.Lock()
 
 def load_target_bridge():
     with _build_lock:
-        cache=R/'.cache/engine/target-native-v11';cache.mkdir(parents=True,exist_ok=True)
+        cache=R/'.cache/engine/target-native-v12';cache.mkdir(parents=True,exist_ok=True)
         cjson=Path.home()/'.platformio/packages/framework-espidf/components/json/cJSON'
         source=R/'tools/target_timing_bridge.cpp'
         dependencies=[Path(__file__),source,R/'firmware/main/config_json.hpp',cjson/'cJSON.c',cjson/'cJSON.h',
@@ -32,7 +32,7 @@ def load_target_bridge():
                     'engine_canonicalize':([S],S),'engine_configure':([P,S],ctypes.c_int),'engine_wheel':([P,I,I,I],ctypes.c_int),
                     'engine_flex_edge':([P,U,ctypes.c_uint],ctypes.c_int),'engine_cam':([P,U],ctypes.c_int),'engine_trigger':([P,U],ctypes.c_int),'engine_step':([P,S,U,U],S),
                     'engine_cut':([P],None),'engine_timing_reason':([P],S),'engine_next_time':([P],U),
-                    'engine_progress':([P,U],None),
+                    'engine_progress':([P,U],None),'engine_event_capture_overflows':([P],I),
                     'engine_crank_timeout':([P],U),
                     'engine_pop':([P],I),'engine_event_dwell':([P],U),'engine_event_advance':([P],ctypes.c_double),
                     'engine_data_json':([P],S),'engine_idle_json':([P],S),'engine_boost_json':([P],S),'engine_plan':([P],S)}
@@ -43,7 +43,14 @@ def load_target_bridge():
 
 class TargetRuntime(EngineRuntime):
     def __init__(self,tune=None):super().__init__(tune,load_target_bridge())
-    def progress(self,time_us):self.bridge.engine_progress(self.handle,time_us)
+    def _capture_check(self):
+        if self.bridge.engine_event_capture_overflows(self.handle):raise RuntimeError('Native event capture overflow; engine simulation is invalid')
+    def progress(self,time_us):
+        self.bridge.engine_progress(self.handle,time_us);self._capture_check()
+    def next_event_us(self):
+        self._capture_check();return super().next_event_us()
+    def pop_event(self):
+        value=super().pop_event();self._capture_check();return value
     def idle_status(self):
         import json
         return json.loads(self.bridge.engine_idle_json(self.handle))

@@ -1,0 +1,245 @@
+{
+  "status": "software_development_contract_not_RF_qualification",
+  "schema": 7,
+  "max_datagram_bytes": 250,
+  "complete_observation_parts": 4,
+  "base": {
+    "type": 9,
+    "bytes": 250,
+    "body_bytes": 218,
+    "layout": "schema6_with_schema_field_7_worker_masks_low_byte_only_full_masks_in_CYLINDERS"
+  },
+  "flex": {
+    "type": 11,
+    "bytes": 232,
+    "body_bytes": 200,
+    "layout": "engine-radio-v5.json_flex_with_schema_field_7"
+  },
+  "boost": {
+    "type": 12,
+    "bytes": 144,
+    "body_bytes": 112,
+    "fields": [
+      [
+        0,
+        8,
+        "ECN1_header"
+      ],
+      [
+        8,
+        4,
+        "session_u32"
+      ],
+      [
+        12,
+        8,
+        "packet_sequence_u64"
+      ],
+      [
+        20,
+        2,
+        "schema_u16_7"
+      ],
+      [
+        22,
+        2,
+        "reserved_zero"
+      ],
+      [
+        24,
+        32,
+        "full_base_HMAC_SHA256"
+      ],
+      [
+        56,
+        32,
+        "duty_demand_target_feedforward_error_P_I_D_8xf32"
+      ],
+      [
+        88,
+        8,
+        "pid_updates_u64"
+      ],
+      [
+        96,
+        8,
+        "overboost_events_u64"
+      ],
+      [
+        104,
+        4,
+        "boost_flags_u32_bits_0_to_10"
+      ],
+      [
+        108,
+        1,
+        "reason_u8_0_to_16"
+      ],
+      [
+        109,
+        1,
+        "mode_u8_0_to_2"
+      ],
+      [
+        110,
+        1,
+        "available_bit0_pressure_enabled_bit1_inhibit_engine_bit2_other_bits_zero"
+      ],
+      [
+        111,
+        1,
+        "reserved_zero"
+      ],
+      [
+        112,
+        32,
+        "full_extension_HMAC_SHA256"
+      ]
+    ]
+  },
+  "authentication": "existing_per_boot_per_peer_engine_key_full_SHA256_MAC_on_each_body_and_full_BASE_MAC_in_all_three_extensions",
+  "sender": {
+    "pending_observations_per_peer": 1,
+    "preparation_snapshot": "one_RuntimeSample_for_all_four_parts",
+    "observation_deadline_us": 250000,
+    "per_peer_storage_budget_bytes": 912,
+    "datagram_budget_unchanged": true,
+    "ack_window_submission": "only_after_all_four_SDK_submissions_accepted_using_original_preparation_time",
+    "capability_request_unpair_or_key_change_cancels_pending": true,
+    "new_snapshot_does_not_replace_pending_parts": true,
+    "reserved_slots": "type5_metadata_round_mod10_0_and_type4_sensor_round_mod10_1_before_pending_parts_when_sensor_publication_fresh",
+    "native_four_peer_15s_schedule": {
+      "complete_observations_per_peer": 60,
+      "all_six_metadata_channels": true,
+      "sensor_and_metadata_gap_us": 500000,
+      "maximum_BASE_to_CYLINDERS_us": 150000,
+      "RF_or_RTOS_measured": false
+    }
+  },
+  "receiver": {
+    "pending_observations": 2,
+    "assembly_deadline_ms": 250,
+    "partial_data_is_observation": false,
+    "partial_data_refreshes_gap_or_ack": false,
+    "duplicate_part_refreshes_assembly_deadline": false,
+    "authenticated_conflict_quarantines_through_packet_sequence": true,
+    "query_update_or_boot_retires_partial_state": true,
+    "boost_ages": "original_BASE_sample_and_control_ages_plus_negotiated_transit_clock_allowance_and_local_elapsed",
+    "MAP_context": "valid_MAP_10_to_400_kPa_only_with_pressure_enabled_otherwise_10_to_110_source_validity_mask_retains_exact_configured_limit",
+    "pressure_inhibit_requires_parent": "faulted_nonzero_faults_fuel_and_spark_cut_no_pump_or_active_proposal_zero_pulse_dwell_and_duty",
+    "boost_status": "aged_diagnostic_observation_and_explicit_at_source_decision_never_current_actuation_permission",
+    "all24_part_orders_supported": true,
+    "repeated_proposal_preserves_full_flex_boost_cylinder_payload_and_age_floors": true,
+    "worker_count": "Never inferred from current proposal count; worker_masks_validated_against_worker_count_and_fitted_capacity; BASE_low_byte_must_match_full_mask",
+    "proposal_count": "Each_valid_and_clamp_mask_within_proposal_count; all_eight_rows_carried_with_inactive_unknowns"
+  },
+  "scope": "read_only_telemetry_no_remote_control_no_screen_application_no_actual_RF_or_physical_qualification",
+  "cylinders": {
+    "type": 13,
+    "bytes": 236,
+    "body_bytes": 204,
+    "fields": [
+      [
+        0,
+        8,
+        "ECN1_header"
+      ],
+      [
+        8,
+        4,
+        "session_u32"
+      ],
+      [
+        12,
+        8,
+        "packet_sequence_u64"
+      ],
+      [
+        20,
+        2,
+        "schema_u16_7"
+      ],
+      [
+        22,
+        2,
+        "reserved_zero"
+      ],
+      [
+        24,
+        32,
+        "full_BASE_HMAC_SHA256"
+      ],
+      [
+        56,
+        1,
+        "proposal_cylinder_count_u8_1_to_8"
+      ],
+      [
+        57,
+        1,
+        "earlier_worker_cylinder_count_u8_0_unknown_or_1_to_8"
+      ],
+      [
+        58,
+        1,
+        "fitted_injector_commands_u8_4"
+      ],
+      [
+        59,
+        1,
+        "fitted_coil_commands_u8_4"
+      ],
+      [
+        60,
+        1,
+        "cylinder_valid_mask_u8"
+      ],
+      [
+        61,
+        1,
+        "cylinder_trims_enabled_u8_bool"
+      ],
+      [
+        62,
+        1,
+        "cylinder_capacity_mask_u8"
+      ],
+      [
+        63,
+        1,
+        "cylinder_spark_clamp_mask_u8"
+      ],
+      [
+        64,
+        1,
+        "cylinder_retard_floor_mask_u8"
+      ],
+      [
+        65,
+        3,
+        "reserved_zero"
+      ],
+      [
+        68,
+        4,
+        "worker_virtual_high_mask_u32_sparse_logical_IDs"
+      ],
+      [
+        72,
+        4,
+        "worker_physical_command_mask_u32_fitted_IDs_only"
+      ],
+      [
+        76,
+        128,
+        "eight_rows_of_pulse_ms_advance_deg_fuel_pct_duty_pct_F32; unknown_rows_canonical_0x7fc00000"
+      ],
+      [
+        204,
+        32,
+        "full_CYLINDERS_HMAC_SHA256"
+      ]
+    ]
+  },
+  "legacy_schemas_1_to_6": "Unchanged_bytes_for_compatible_four_cylinder_records; suppress_engine_for_current_count_other_than4_OR_earlier_worker_count_above4_OR_masks_wider_than8bits. Sensor_fallback_independent."
+}

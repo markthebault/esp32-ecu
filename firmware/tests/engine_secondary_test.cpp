@@ -33,7 +33,8 @@ static void spark_order_and_cylinders(){
   s.table_switches[1]={s.sampled_us,sec::InputSource::Synthetic,true,true};auto o=step(t,s);
   const double expected=m==1?22.5:m==2?25:20;
   check(!o.faults&&near(o.advance_deg,expected));check(o.secondary_spark.primary==20&&o.secondary_spark.primary_corrected==15);
-  for(auto advance:o.cylinder_advance_deg)check(near(advance,expected));
+  for(unsigned cylinder=0;cylinder<o.cylinder_count;++cylinder)check(near(o.cylinder_advance_deg[cylinder],expected));
+  for(unsigned cylinder=o.cylinder_count;cylinder<o.cylinder_advance_deg.size();++cylinder)check(o.cylinder_advance_deg[cylinder]==0);
   t.strategy=Strategy::Sequential;t.cylinder_trims_enabled=true;t.cylinder_spark_deg={-10,-5,5,10};o=step(t,s);check(!o.faults);
   const double mul[]={7.5,15,30,37.5},add[]={15,20,30,35},switched[]={10,15,25,30};
   for(unsigned c=0;c<4;++c)check(near(o.cylinder_advance_deg[c],m==1?mul[c]:m==2?add[c]:switched[c]));

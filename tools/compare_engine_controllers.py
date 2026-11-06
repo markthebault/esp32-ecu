@@ -13,6 +13,7 @@ from engine_runtime import EngineRuntime
 from engine_research_plant import ResearchPlant
 from speeduino_runtime import SpeeduinoRuntime
 from sequential_metrics import sequential_metrics
+from engine_geometry import EngineGeometry, CHANNEL_EXTENT, channel_kind
 
 ROOT=Path(__file__).resolve().parents[1]
 CAM_SCENARIOS=('cam_dropout','cam_extra','cam_wrong_phase','cam_missing_start')
@@ -39,7 +40,7 @@ class OurController:
         boost=tune.get('boost_control',{}).get('pressure_enabled',False)
         self.target_dispatcher=target_dispatcher or tune['settings']['idle_enabled'] or boost
         self.runtime=(TargetRuntime if self.target_dispatcher else EngineRuntime)(tune);self.runtime.wheel()
-        self.channels=10 if boost else 9 if tune['settings']['idle_enabled'] else 8
+        self.channels=CHANNEL_EXTENT
         self.worker_us=1000 if self.target_dispatcher else None
         self.status={};self.high=[False]*self.channels;self.stops=[]
 
@@ -79,7 +80,7 @@ class OurController:
     def close(self):self.runtime.close()
 
 
-def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32,idle_options=None,semi_sequential=False,target_dispatcher=False,transient_options=None,load_options=None,secondary_options=None):
+def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32,idle_options=None,semi_sequential=False,target_dispatcher=False,transient_options=None,load_options=None,secondary_options=None,plant_geometry=None):
     secondary_tune=None;secondary_program=None;secondary_monitor=None
     if secondary_options is not None:
         from secondary_stimulus import ContactProgram
@@ -87,7 +88,7 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
         if set(secondary_options)-{'tune','stimulus'} or 'tune'not in secondary_options:raise ValueError('Secondary comparison requires one explicit complete tune and contact program')
         if control_period_us!=5000:raise ValueError('Synthetic synchronous secondary monitor uses a nominal5ms cycle')
         secondary_tune=secondary_options['tune'];secondary_program=ContactProgram(secondary_options.get('stimulus'))
-        wanted=secondary_tune['strategy'];want_seq=wanted=='sequential_4cyl';want_semi=wanted=='semi_sequential_4cyl'
+        wanted=secondary_tune['strategy'];want_seq=wanted in ('sequential','sequential_4cyl');want_semi=wanted in ('semi_sequential','semi_sequential_4cyl')
         if sequential and not want_seq or semi_sequential and not want_semi:raise ValueError('Conflicting secondary/cycle profile')
         sequential=want_seq;semi_sequential=want_semi
         if tune is not None and tune!=secondary_tune:raise ValueError('Conflicting complete secondary tune')
@@ -103,7 +104,7 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
     if sequential and semi_sequential:raise ValueError('Conflicting cycle profiles')
     if target_dispatcher and controller!='ours':raise ValueError('Target dispatcher applies only to the project')
     if tune is not None and not sequential and not semi_sequential:
-        sequential=tune['strategy']=='sequential_4cyl';semi_sequential=tune['strategy']=='semi_sequential_4cyl'
+        sequential=tune['strategy'] in ('sequential','sequential_4cyl');semi_sequential=tune['strategy'] in ('semi_sequential','semi_sequential_4cyl')
     if controller not in ('ours','speeduino','speeduino_per_tooth') or scenario not in (SCENARIOS+(CAM_SCENARIOS if sequential else ())+ (IDLE_SCENARIOS if idle_options is not None else ())+(TRANSIENT_SCENARIOS if transient_options is not None else ())+(('secondary_cycle','secondary_plateau')if secondary_tune is not None else ())):raise ValueError('Unknown benchmark case')
     if step_us not in (100,125,250,500) or not 1<=duration<=30:raise ValueError('Invalid benchmark duration/step')
     if control_period_us not in (1000,5000):raise ValueError('Unsupported control sampling period')
@@ -119,14 +120,26 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
     if load_options is not None:
         load_options=copy.deepcopy(load_options);load_tune=load_options['tune']
         if controller=='ours':tune=copy.deepcopy(load_tune)
-    plant=ResearchPlant(cold=scenario=='idle_cold_start' or bool(transient_options and transient_options.get('cold')),idle_valve=idle_options.get('valve_mode','normal') if idle else None,**(dict(ambient_kpa=load_options.get('ambient_kpa',100)) if load_options is not None else {}))
     if (sequential or semi_sequential) and controller=='ours':
-        tune=copy.deepcopy(tune or benchmark_tune());tune['strategy']='sequential_4cyl' if sequential else 'semi_sequential_4cyl'
+        tune=copy.deepcopy(tune or benchmark_tune());tune['strategy']=('sequential' if sequential else 'semi_sequential')+('_4cyl' if tune['schema_version']<11 else '')
+    if controller=='ours':
+        # Geometry must use the same validated/migrated document that the
+        # controller consumes. Accepted integral JSON floats and schema1's
+        # implicit timing must not reach Python slicing as raw input.
+        prepared=EngineRuntime(tune or benchmark_tune())
+        try:tune=copy.deepcopy(prepared.tune)
+        finally:prepared.close()
+    geometry=plant_geometry or (EngineGeometry.from_tune(tune or benchmark_tune()) if controller=='ours' else EngineGeometry())
+    if not isinstance(geometry,EngineGeometry):raise ValueError('Expected explicit physical EngineGeometry')
+    if controller!='ours' and geometry!=EngineGeometry():raise ValueError('Existing production-reference adapter is a four-cylinder2L fixture; expanded fixture required')
+    # Keep the historical default FMU available for exactly matching4-cylinder
+    # regressions. Other declared geometry uses the separately attested model.
+    plant=ResearchPlant(cold=scenario=='idle_cold_start' or bool(transient_options and transient_options.get('cold')),idle_valve=idle_options.get('valve_mode','normal') if idle else None,geometry=geometry if geometry!=EngineGeometry() else None,**(dict(ambient_kpa=load_options.get('ambient_kpa',100)) if load_options is not None else {}))
     secondary_channels=tuple(secondary_tune['secondary_tables'][k]['input_channel']for k in('fuel','spark'))if secondary_tune is not None else None
     try:ecu=(OurController(tune,target_dispatcher=True) if target_dispatcher else OurController(tune)) if controller=='ours' else SpeeduinoRuntime(per_tooth=controller=='speeduino_per_tooth',sequential=sequential,timer_bits=reference_timer_bits,semi_sequential=semi_sequential,secondary_channels=secondary_channels)
     except Exception:plant.close();raise
-    trace=[];edges_all=[];injection_timing=[];accepted_crank=[];trigger_edges=[];cam_edges=[];cam_angles=[900. if scenario=='cam_wrong_phase' else 540.,900.];now=0;next_sample=0;tooth_index=1
-    channels=9 if idle else 8
+    trace=[];edges_all=[];injection_timing=[];accepted_crank=[];trigger_edges=[];cam_edges=[];cam_angles=[geometry.cam_edge_deg+360 if scenario=='cam_wrong_phase' else geometry.cam_edge_deg,geometry.cam_edge_deg+360];now=0;next_sample=0;tooth_index=1
+    channels=CHANNEL_EXTENT
     state={};high=[False]*channels;rise=[0]*channels;max_high=[0]*channels;inhibits=[];hard_cut_samples=0;fault_mask=0
     monitor_started=False;monitor_begin_us=0;last_control_us=None;last_contact_levels=None;next_secondary_trace_us=0
     if idle and controller!='ours':
@@ -141,15 +154,15 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
         high[:]=[False]*channels;plant.cut();inhibits.append([us,cause])
     def plant_edge(ch,value,us,advance,latest,dwell):
         plant.edge(ch,value,us/1e6,advance,latest,dwell)
-        if semi_sequential and ch<4 and not value:
+        actuator=channel_kind(ch)
+        if semi_sequential and actuator and actuator[0]=='injector' and not value:
             # Record the plant's actual shaft angle after integrating up to
             # the executed closing edge. The plant geometry stays independent
             # of the controller's configured order/reference.
             end_angle=tune['timing']['injection_end_deg'] if controller=='ours' and tune else 540 if controller=='ours' else 180
-            order=tune['timing']['firing_order'] if controller=='ours' and tune else [1,3,4,2]
-            goal=(90+180*order.index(ch+1)+end_angle)%360
+            goal=(geometry.compression_tdc_deg[actuator[1]]+end_angle)%360
             injection_timing.append(dict(time_us=us,channel=ch,shaft_angle_deg=plant.angle,closing_error_deg=math.remainder(plant.angle-goal,360),width_us=us-rise[ch]))
-        if 4<=ch<8 and not value:
+        if actuator and actuator[0]=='coil' and not value:
             if controller=='ours':mode=dict(sync_status=2 if state.get('phase_synced') else 1 if state.get('crank_synced',state.get('synced')) else 0,ignition_cycle_deg=720 if sequential else 360,effective_sequential=sequential and bool(state.get('phase_synced')))
             else:
                 mode=ecu.edge_modes.get((us,ch,value),{})
@@ -308,7 +321,7 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
                 if not high[ch]:raise RuntimeError('Duplicate native termination fall')
                 max_high[ch]=max(max_high[ch],us-rise[ch]);high[ch]=False
                 edges_all.append([us,ch,False,'cut:production_halt'])
-            if any(high[:8]):raise RuntimeError('Native production halt left an engine output high')
+            if any(high[ch] for ch in geometry.injector_channels+geometry.coil_channels):raise RuntimeError('Native production halt left an engine output high')
         else:ecu.runtime.cut()
         idle_halt_high=bool(high[8]) if idle and controller!='ours' else False
         idle_post_halt=[]
@@ -318,13 +331,15 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
             idle_post_halt=ecu._edges(ecu.command('idleclock '+str(now+50000)))
             if any(ch!=8 for _,ch,_,_,_ in idle_post_halt):raise RuntimeError('Engine output restarted after production halt')
         inhibit(now,'simulation_end')
-        summary=dict(strategy='sequential_4cyl' if sequential else 'semi_sequential_4cyl' if semi_sequential else 'batch_wasted_4cyl',project_runtime=('target_dispatcher' if getattr(ecu,'target_dispatcher',False) else 'portable_core') if controller=='ours' else None,reference_profile=ecu.profile if controller!='ours' else None,cam_profile=('one rising edge at90deg ATDC C1 compression TDC (deliberately wrong by360)' if scenario=='cam_wrong_phase' else 'one rising edge at450deg ATDC C1 compression TDC') if sequential else None,reference_timer_bits=reference_timer_bits if controller!='ours' else None,controller=controller,scenario=scenario,duration_s=duration,step_us=step_us,
+        summary=dict(strategy='sequential' if sequential else 'semi_sequential' if semi_sequential else 'batch_wasted',project_runtime=('target_dispatcher' if getattr(ecu,'target_dispatcher',False) else 'portable_core') if controller=='ours' else None,reference_profile=ecu.profile if controller!='ours' else None,cam_profile=('one rising edge at90deg ATDC C1 compression TDC (deliberately wrong by360)' if scenario=='cam_wrong_phase' else 'one rising edge at450deg ATDC C1 compression TDC') if sequential else None,reference_timer_bits=reference_timer_bits if controller!='ours' else None,controller=controller,scenario=scenario,duration_s=duration,step_us=step_us,
                      control_period_us=control_period_us,
                      plant='MVEMLib air path + local empirical combustion/free shaft, uncalibrated',
+                     plant_geometry=geometry.summary(),plant_air_parameters=plant.air.parameters,geometry_source='explicit_fixed_fixture' if plant_geometry else 'declared_tune_geometry_assumed_physical' if controller=='ours' else 'historical_four_cylinder_reference_fixture',
+                     cylinder_fuel_mg=plant.cylinder_fuel_mg,cylinder_burned_mg=plant.cylinder_burned_mg,cylinder_scheduled_work_j=plant.cylinder_scheduled_work_j,cylinder_shaft_j=plant.cylinder_shaft_j,
                      physical_outputs_enabled=False,final_rpm=final_rpm,max_rpm=max((r['plant_rpm'] for r in trace),default=0),
                      sparks=plant.sparks,edges=len(edges_all),trigger_edges=len(trigger_edges),
                      max_trigger_quantization_deg=max((r[2] for r in trigger_edges),default=0),
-                     max_injector_high_us=max(max_high[:4]),max_dwell_high_us=max(max_high[4:8]),
+                     max_injector_high_us=max(max_high[ch] for ch in geometry.injector_channels),max_dwell_high_us=max(max_high[ch] for ch in geometry.coil_channels),
                      max_spark_error_deg=max((abs(r['error_deg']) for r in plant.spark_errors),default=0),
                      max_spark_error_after_3s_deg=max((abs(r['error_deg']) for r in plant.spark_errors if r['time_s']>=3),default=0),
                      spark_error_reference='latched dwell-start demand' if controller=='ours' else 'last sampled production demand; not event-latched',

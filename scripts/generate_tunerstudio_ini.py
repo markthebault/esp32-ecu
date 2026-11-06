@@ -10,6 +10,7 @@ from load_config import ENUM_FIELDS as LOAD_ENUM_FIELDS,SCALARS as LOAD_SCALARS,
 from secondary_config import KINDS,ENUM_FIELDS as SEC_ENUM_FIELDS,SCALARS as SEC_SCALARS,ENUMS as SEC_ENUMS,LABELS as SEC_LABELS,MAP_OFFSETS as SEC_MAP_OFFSETS,VALUE_LABELS as SEC_VALUE_LABELS,VALUE_NAMES as SEC_VALUE_NAMES,CODE_FIELDS as SEC_CODE_FIELDS,LIVE_OFFSET as SEC_LIVE_OFFSET,LIVE_STRIDE as SEC_LIVE_STRIDE,BOOLEAN_FIELDS as SEC_BOOL_FIELDS,name as sec_name,live_prefix,rule_offset,enum_offset,scalar_offset
 from flex_config import OFFSETS as FLEX_OFFSETS,BOOLEANS as FLEX_BOOLS,CAPTURE_FLOATS as FLEX_FLOATS,ARRAYS as FLEX_ARRAYS,UNITS as FLEX_UNITS,LIMITS as FLEX_LIMITS,LABELS as FLEX_LABELS,constant as flex_name,VALUES as FLEX_VALUES,VALUE_UNITS as FLEX_VALUE_UNITS,FLAGS as FLEX_FLAGS,CODES as FLEX_CODES,TIMES as FLEX_TIMES,LIVE_OFFSET as FLEX_LIVE_OFFSET
 from boost_config import SCALARS as BOOST_SCALARS,SCALAR_OFFSETS as BOOST_SCALAR_OFFSETS,TABLES as BOOST_TABLES,TABLE_OFFSETS as BOOST_TABLE_OFFSETS,LIMITS as BOOST_LIMITS,UNITS as BOOST_UNITS,MODES as BOOST_MODES,ACTIVATIONS as BOOST_ACTIVATIONS,constant as boost_name,VALUES as BOOST_VALUES
+from profile_config import LAYOUT as PROFILE_LAYOUT,order_offset,fuel_offset,spark_offset,live_offset,LIVE as PROFILE_LIVE
 editor_limits=json.loads((R/'tuning/editor-limits.json').read_text())
 assert set(editor_limits['scalar_limits'])=={name for _,name in NUMBERS}
 assert set(editor_limits['curve_limits'])=={name for name,_ in CURVES}
@@ -32,18 +33,18 @@ s.append(' engineStrategy = bits, U32, 272, [0:1], "Batch / wasted", "Sequential
 for name,offset in TIMING_FIELDS:
  lo,hi=editor_limits['timing_limits'][name]
  s.append(f' {name} = scalar, F32, {offset}, "deg", 1, 0, {lo}, {hi}, 2')
-for i in range(4):s.append(f' fireOrder{i+1} = scalar, U08, {288+i}, "", 1, 0, 1, {1 if i==0 else 4}, 0')
+for i in range(8):s.append(f' fireOrder{i+1} = scalar, U08, {order_offset(i)}, "", 1, 0, {1 if i==0 else 0}, {1 if i==0 else 8}, 0')
 for page,key,units,lo,hi in [(2,'ve','%',0,255),(3,'spark','deg',-5,40),(4,'lambda','lambda',.75,1.2)]:
  offset={2:512,3:1664,4:2816}[page]
  s += [f' {key}Rpm = array, F32, {offset}, [16], "RPM", 1, 0, 50, 10000, 0',f' {key}Load = array, F32, {offset+64}, [16], "source_units", 1, 0, 0, 600, 2',f' {key}Table = array, F32, {offset+128}, [16x16], "{units}", 1, 0, {lo}, {hi}, 2']
 s += ['; Complete-tune staging. Any successful burn activates and resets control.']
 s.append(' cylinderTrimsEnabled = bits, U32, 4752, [0:0], "Off", "On"')
-for cylinder in range(4):
+for cylinder in range(8):
  prefix=f'c{cylinder+1}'
- s += [f' {prefix}SparkTrim = scalar, F32, {4736+cylinder*4}, "deg", 1, 0, -10, 10, 2',
-       f' {prefix}FuelRpm = array, F32, {3968+192*cylinder}, [6], "RPM", 1, 0, 50, 10000, 0',
-       f' {prefix}FuelLoad = array, F32, {3992+192*cylinder}, [6], "source_units", 1, 0, 0, 600, 2',
-       f' {prefix}FuelTable = array, F32, {4016+192*cylinder}, [6x6], "%", 1, 0, 50, 150, 2']
+ s += [f' {prefix}SparkTrim = scalar, F32, {spark_offset(cylinder)}, "deg", 1, 0, -10, 10, 2',
+       f' {prefix}FuelRpm = array, F32, {fuel_offset(cylinder)}, [6], "RPM", 1, 0, 50, 10000, 0',
+       f' {prefix}FuelLoad = array, F32, {fuel_offset(cylinder)+24}, [6], "source_units", 1, 0, 0, 600, 2',
+       f' {prefix}FuelTable = array, F32, {fuel_offset(cylinder)+48}, [6x6], "%", 1, 0, 50, 150, 2']
 s.append(f' iac_algorithm = bits, U32, {OFFSET}, [0:1], '+', '.join('"'+a+'"' for a in ALGORITHMS))
 for name in SCALARS:
  lo,hi=LIMITS[name];s.append(f' {idle_name(name)} = scalar, F32, {SCALAR_OFFSETS[name]}, "{UNITS[name]}", 1, 0, {lo}, {hi}, 3')
@@ -88,8 +89,8 @@ for name in BOOST_TABLES:
 s+=['[ConstantsExtensions]',' readOnly = baseRevision',' defaultValue = baseRevision, 1','[OutputChannels]',' ochGetCommand = "r\\$tsCanId\\x30%2o%2c"',f' ochBlockSize = {LIVE_BYTES}']
 for i,k in enumerate(LIVE_FIELDS):s.append(f' {k} = scalar, F32, {i*4}, "", 1, 0')
 for offset,k in [(44,'faults'),(48,'sync'),(52,'physicalInhibited'),(56,'revision'),(60,'dataSource'),(64,'snapshotAgeMs'),(68,'simulationComplete'),(72,'hasResult'),(76,'crankSynced'),(80,'phaseSynced'),(84,'phaseRequired'),(88,'phaseLosses'),(92,'strategy'),(96,'camRejected')]:s.append(f' {k} = scalar, U32, {offset}, "", 1, 0')
-for cylinder in range(4):
- for field,unit,part in [('PW','ms',0),('Advance','deg',1),('FuelTrim','%',2),('Duty','%',3)]:s.append(f' c{cylinder+1}{field} = scalar, F32, {100+cylinder*16+part*4}, "{unit}", 1, 0')
+for cylinder in range(8):
+ for field,unit,part in [('PW','ms',0),('Advance','deg',1),('FuelTrim','%',2),('Duty','%',3)]:s.append(f' c{cylinder+1}{field} = scalar, F32, {live_offset(cylinder)+part*4}, "{unit}", 1, 0')
 for index,name in enumerate(['cylinderValidMask','cylinderTrimsActive','cylinderCapacityMask','cylinderSparkClampMask','cylinderRetardFloorMask']):s.append(f' {name} = scalar, U32, {164+index*4}, "", 1, 0')
 for index,name in enumerate(['activeRevision','sessionOriginRevision','sessionBaseRevision','stagedDirty','tuningWriteState','tuningLastCode','inputValidMask','observationFlags']):s.append(f' {name} = scalar, U32, {184+index*4}, "", 1, 0')
 for index,name in enumerate(['iacTarget','iacFeedforward','iacP','iacI','iacD','iacDuty']):s.append(f' {name} = scalar, F32, {216+index*4}, "{ "RPM" if index==0 else "%"}", 1, 0')
@@ -130,10 +131,14 @@ for bit,key in ((16,'Available'),(17,'PressureEnabled'),(18,'InhibitEngine')):
 for n,key in enumerate(('PidUpdates','OverboostEvents')):
  for high in range(2):
   label='boost'+key+('High' if high else 'Low');boost_live.append(label);s.append(f' {label} = scalar, U32, {880+n*8+high*4}, "u64_{"high" if high else "low"}32", 1, 0')
+for name,offset in PROFILE_LIVE.items():
+ if name in ('extra_cylinders','used_end'):continue
+ label={'cylinder_count':'sampleCylinderCount','worker_cylinder_count':'workerCylinderCount','board_injector_commands':'boardInjectorCommands','board_coil_commands':'boardCoilCommands','virtual_high_mask':'virtualHighMask','physical_command_mask':'physicalCommandMask'}[name]
+ s.append(f' {label} = scalar, U32, {offset}, "", 1, 0')
 groups={
  'engineLoad':('Load sources, table bases, pressure and AFR',[load_name(k) for k in LOAD_ENUM_FIELDS+LOAD_SCALARS]),
- 'cylinderTrims':('Physical cylinder trims',['cylinderTrimsEnabled']+[f'c{i}SparkTrim' for i in range(1,5)]),
- 'engineTiming':('Cycle and cam phase',['engineStrategy','cylinderTrimsEnabled','fireOrder1','fireOrder2','fireOrder3','fireOrder4','injection_end_deg','cam_sync_deg','cam_window_deg']),
+ 'cylinderTrims':('Physical cylinder trims',['cylinderTrimsEnabled']+[f'c{i}SparkTrim' for i in range(1,9)]),
+ 'engineTiming':('Cycle and cam phase',['engineStrategy','cylinderTrimsEnabled',*[f'fireOrder{i}' for i in range(1,9)],'injection_end_deg','cam_sync_deg','cam_window_deg']),
  'engineSettings':('Engine and output limits',[k for group,k in NUMBERS if group=='engine']+['cranking_rpm','tooth1_btdc_deg','max_injection_ms','max_dwell_ms']),
  'engineEnrichment':('Starting and fuel corrections',['crank_advance_deg','afterstart_pct','afterstart_s','accel_threshold_pct_s','accel_gain','accel_decay_s','ego_enabled','ego_kp','ego_ki','ego_limit','ego_min_clt']),
  'engineTransient':('TPS or MAP transient enrichment',['ae_mode','ae_apply']+[ae_name(k) for k in AE_SCALARS]),
@@ -151,7 +156,7 @@ for kind in KINDS:s.append(f' subMenu = secondary{kind.title()}Editor, "Secondar
 for key,label in [('warmup','Warmup enrichment'),('crank','Cranking enrichment'),('deadtime','Injector dead time'),('dwell','Coil dwell')]:s.append(f' subMenu = {key}Curve, "{label}"')
 for key,label in [('run_pct','Idle running feedforward'),('crank_pct','Idle cranking duty'),('target_add_rpm','Idle target addition')]:s.append(f' subMenu = iac_{key}Curve, "{label}"')
 for key in ('tps','map'):s.append(f' subMenu = ae_{key}Curve, "{key.upper()} rate enrichment"')
-for i in range(1,5):s.append(f' subMenu = c{i}FuelEditor, \"Cylinder {i} fuel trim %\"')
+for i in range(1,9):s.append(f' subMenu = c{i}FuelEditor, \"Cylinder {i} fuel trim %\"')
 for key in ('fuel_pct','spark_deg','temperature_pct'):s.append(f' subMenu = flex_{key}Curve, "Flex {FLEX_LABELS[key]}"')
 for key in BOOST_TABLES:s.append(f' subMenu = boost_{key}Editor, "Boost {key.replace("_"," ")} / development"')
 s+=['[UiDialogs]']
@@ -170,7 +175,7 @@ for key,axis in [('fuel_pct','ethanol_bins'),('spark_deg','ethanol_bins'),('temp
 s+=['[TableEditor]']
 for k,label,channel in [('ve','Fuel coefficient','loadFuel'),('spark','Spark advance','loadSpark'),('lambda','Lambda target','loadLambda')]:
  s += [f' table = {k}Editor, {k}Map, "{label} / declared table basis", 1',f' xBins = {k}Rpm, rpm',f' yBins = {k}Load, {channel}',f' zBins = {k}Table',f' upDownLabel = "{label}"',f' gridHeight = 2.0',f' gridOrient = 250, 0, 340']
-for i in range(1,5):
+for i in range(1,9):
  s += [f' table = c{i}FuelEditor, c{i}FuelMap, \"Cylinder {i} fuel trim / declared basis / sequential only\", 1',f' xBins = c{i}FuelRpm, rpm',f' yBins = c{i}FuelLoad, loadTrim',f' zBins = c{i}FuelTable',f' upDownLabel = \"Fuel percent, 100 neutral\"', ' gridHeight = 2.0',' gridOrient = 250, 0, 340']
 for kind in KINDS:
  prefix=live_prefix(kind)
@@ -179,7 +184,7 @@ for key in BOOST_TABLES:
  s += [f' table = boost_{key}Editor, boost_{key}Map, "Boost {key.replace("_"," ")} / INHIBITED", 1',f' xBins = {boost_name(key+"_rpm")}, rpm',f' yBins = {boost_name(key+"_axis")}, {"boostTargetKpa" if key=="feedforward" else "tps"}',f' zBins = {boost_name(key+"_cells")}', ' gridHeight = 2.0',' gridOrient = 250, 0, 340']
 s+=['[GaugeConfigurations]' ,' rpmGauge = rpm, "Engine speed", "RPM", 0, 8000, 0, 0, 6500, 8000, 0, 0',' mapGauge = map_kpa, "Manifold pressure", "kPa", 0, 400, 0, 10, 220, 400, 1, 1',' pwGauge = pulse_ms, "Proposed injection", "ms", 0, 15, 0, 0, 14, 15, 2, 2',' advanceGauge = advance_deg, "Proposed advance", "deg", -5, 40, -5, 0, 35, 40, 1, 1','[FrontPage]',' gauge1 = rpmGauge',' gauge2 = mapGauge',' gauge3 = pwGauge',' gauge4 = advanceGauge',' indicator = { physicalInhibited }, "INHIBITED; BURN RESTARTS CONTROL", "INHIBITED; BURN RESTARTS CONTROL", yellow, black, yellow, black',' indicator = { hasResult }, "NO CONTROL SAMPLE", "SAMPLE: CHECK SOURCE AND AGE", gray, black, yellow, black','[Datalog]']
 for k in LIVE_FIELDS:s.append(f' entry = {k}, "{k}", float, "%.4f"')
-for cylinder in range(1,5):
+for cylinder in range(1,9):
  for field in ('PW','Advance','FuelTrim','Duty'):s.append(f' entry = c{cylinder}{field}, "C{cylinder}{field}", float, "%.4f"')
 for name in ('cylinderValidMask','cylinderTrimsActive','cylinderCapacityMask','cylinderSparkClampMask','cylinderRetardFloorMask'):s.append(f' entry = {name}, "{name}", int, "%d"')
 s+=[' entry = faults, "Faults", int, "%d"',' entry = physicalInhibited, "PhysicalInhibited", int, "%d"']
@@ -190,7 +195,9 @@ for name in (*LOAD_LIVE_NAMES,'loadFlags','loadFuelSource','loadSparkSource','lo
 for kind in KINDS:
  prefix=live_prefix(kind)
  for suffix in (*SEC_VALUE_LABELS,'Flags',*(key.title().replace('_','') for key in SEC_CODE_FIELDS),*(key.title().replace('_','') for key in SEC_BOOL_FIELDS),'InputChannel','Axis','ObservedLow','ObservedHigh'):s.append(f' entry = {prefix}{suffix}, "{prefix}{suffix}", float, "%.4f"')
+for name in ('sampleCylinderCount','workerCylinderCount','boardInjectorCommands','boardCoilCommands','virtualHighMask','physicalCommandMask'):
+ s.append(f' entry = {name}, "{name}", int, "%d"')
 for name in flex_live+boost_live:s.append(f' entry = {name}, "{name}", float, "%.4f"')
-(R/'tuning/esp32-ecu-boost.ini').write_text('\n'.join(s)+'\n')
-(R/'tuning/protocol-layout.json').write_text(json.dumps(dict(signature=SIGNATURE.decode(),pages=PAGE_SIZES,boost_scalar_offsets=BOOST_SCALAR_OFFSETS,boost_table_offsets=BOOST_TABLE_OFFSETS,boost_live_offset=832,boost_values=BOOST_VALUES,flex_config_offsets=FLEX_OFFSETS,flex_live_offset=FLEX_LIVE_OFFSET,flex_values=FLEX_VALUES,flex_flags=FLEX_FLAGS,flex_codes=FLEX_CODES,flex_times=FLEX_TIMES,secondary_rule_offsets={k:rule_offset(k) for k in KINDS},secondary_map_offsets=SEC_MAP_OFFSETS,secondary_live_offset=SEC_LIVE_OFFSET,secondary_live_stride=SEC_LIVE_STRIDE,secondary_values=SEC_VALUE_NAMES,secondary_enums=SEC_ENUMS,numeric_fields=NUMBERS,flags=FLAGS,curves=CURVES,idle_scalars=SCALAR_OFFSETS,idle_arrays=ARRAY_OFFSETS,transient_scalars=AE_SCALAR_OFFSETS,transient_arrays=AE_ARRAY_OFFSETS,transient_offset=AE_OFFSET,transient_live_fields=AE_LIVE_NAMES,load_enum_offsets=LOAD_ENUM_OFFSETS,load_scalar_offsets=LOAD_SCALAR_OFFSETS,load_enums=LOAD_ENUMS,load_live_offset=320,load_live_values=LOAD_VALUE_NAMES,load_live_fields=LOAD_LIVE_NAMES,load_afr_states=LOAD_AFR_STATES,load_flag_available_bit=16,load_flag_afr_available_bit=17,load_reason_shift=24,live_fields=LIVE_FIELDS,live_block_bytes=LIVE_BYTES,timing_fields=TIMING_FIELDS,strategy_offset=272,firing_order_offset=288,revision_offset=REVISION_OFFSET,serial_protocol='002',page_offsets=dict(header=0,ve=512,spark=1664,lambda_target=2816,cylinder=3968,idle=OFFSET),origin_revision_read_only=True,commit_behavior='whole-tune stage; burn persists/activates and resets control; stable session origin',scope='shared native and inhibited target USB Serial/JTAG; UART0 diagnostics separate; physical USB unmeasured; TunerStudio own-identity online gate unresolved'),indent=2)+'\n')
+(R/'tuning/esp32-ecu-profiles.ini').write_text('\n'.join(s)+'\n')
+(R/'tuning/protocol-layout.json').write_text(json.dumps(dict(signature=SIGNATURE.decode(),profiles=PROFILE_LAYOUT,pages=PAGE_SIZES,boost_scalar_offsets=BOOST_SCALAR_OFFSETS,boost_table_offsets=BOOST_TABLE_OFFSETS,boost_live_offset=832,boost_values=BOOST_VALUES,flex_config_offsets=FLEX_OFFSETS,flex_live_offset=FLEX_LIVE_OFFSET,flex_values=FLEX_VALUES,flex_flags=FLEX_FLAGS,flex_codes=FLEX_CODES,flex_times=FLEX_TIMES,secondary_rule_offsets={k:rule_offset(k) for k in KINDS},secondary_map_offsets=SEC_MAP_OFFSETS,secondary_live_offset=SEC_LIVE_OFFSET,secondary_live_stride=SEC_LIVE_STRIDE,secondary_values=SEC_VALUE_NAMES,secondary_enums=SEC_ENUMS,numeric_fields=NUMBERS,flags=FLAGS,curves=CURVES,idle_scalars=SCALAR_OFFSETS,idle_arrays=ARRAY_OFFSETS,transient_scalars=AE_SCALAR_OFFSETS,transient_arrays=AE_ARRAY_OFFSETS,transient_offset=AE_OFFSET,transient_live_fields=AE_LIVE_NAMES,load_enum_offsets=LOAD_ENUM_OFFSETS,load_scalar_offsets=LOAD_SCALAR_OFFSETS,load_enums=LOAD_ENUMS,load_live_offset=320,load_live_values=LOAD_VALUE_NAMES,load_live_fields=LOAD_LIVE_NAMES,load_afr_states=LOAD_AFR_STATES,load_flag_available_bit=16,load_flag_afr_available_bit=17,load_reason_shift=24,live_fields=LIVE_FIELDS,live_block_bytes=LIVE_BYTES,timing_fields=TIMING_FIELDS,strategy_offset=272,firing_order_offset=288,revision_offset=REVISION_OFFSET,serial_protocol='002',page_offsets=dict(header=0,ve=512,spark=1664,lambda_target=2816,cylinder=3968,idle=OFFSET),origin_revision_read_only=True,commit_behavior='whole-tune stage; burn persists/activates and resets control; stable session origin',scope='shared native and inhibited target USB Serial/JTAG; UART0 diagnostics separate; physical USB unmeasured; TunerStudio own-identity online gate unresolved'),indent=2)+'\n')
 print('Generated own TunerStudio INI and wire-layout manifest')

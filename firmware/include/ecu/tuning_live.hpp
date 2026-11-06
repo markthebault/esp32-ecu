@@ -7,6 +7,8 @@ namespace ecu::tuning {
 inline void live_block(const engine::RuntimeSample&s,std::uint64_t now,std::array<std::uint8_t,live_bytes>&b){
  b.fill(0);const bool present=s.has(engine::Present)&&s.sequence;
  put_u32(b.data()+52,!s.has(engine::DummyPolicy));
+ put_u32(b.data()+profile_live_board_injector_commands,engine::channels::board_injector_commands);
+ put_u32(b.data()+profile_live_board_coil_commands,engine::channels::board_coil_commands);
  if(!present){put_u32(b.data()+64,UINT32_MAX);return;}
  auto value=[&](unsigned offset,float v){put_float(b.data()+offset,engine::finite(v)?v:0);};
  auto input=[&](unsigned offset,unsigned index){value(offset,(s.input_valid&(1U<<index))?s.inputs[index]:0);};
@@ -57,5 +59,10 @@ inline void live_block(const engine::RuntimeSample&s,std::uint64_t now,std::arra
  put_u32(b.data()+864,boost.flags|(boost.available?65536U:0U)|(boost.pressure_enabled?131072U:0U)|(boost.inhibit_engine?262144U:0U));
  put_u32(b.data()+868,boost.reason);put_u32(b.data()+872,boost.mode);
  for(unsigned n=0;n<2;++n){put_u32(b.data()+880+n*8,static_cast<std::uint32_t>(boost.counters[n]));put_u32(b.data()+884+n*8,static_cast<std::uint32_t>(boost.counters[n]>>32));}
+ put_u32(b.data()+profile_live_cylinder_count,s.cylinder_count);put_u32(b.data()+profile_live_worker_cylinder_count,s.worker_cylinder_count);
+ put_u32(b.data()+profile_live_virtual_high_mask,s.virtual_high_mask);put_u32(b.data()+profile_live_physical_command_mask,s.physical_command_mask);
+ for(unsigned c=4;c<8;++c){const bool known=s.cylinder_valid&(1U<<c);const unsigned offset=profile_live_extra_cylinders+(c-4)*16;
+  value(offset,known?s.cylinder_pulse_ms[c]:0);value(offset+4,known?s.cylinder_advance_deg[c]:0);value(offset+8,known?s.cylinder_fuel_pct[c]:0);value(offset+12,known?s.cylinder_duty_pct[c]:0);
+ }
 }
 } // namespace ecu::tuning

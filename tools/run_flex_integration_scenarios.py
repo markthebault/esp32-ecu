@@ -14,7 +14,7 @@ def run(out):
  frozen={str(p.relative_to(R)):digest(p)for p in sources};base=json.loads((R/'config/engine/defaults.json').read_text());cases=[];failures=[]
  def check(ok,label):
   if not ok:failures.append(label)
- for strategy in ('batch_wasted_4cyl','semi_sequential_4cyl','sequential_4cyl'):
+ for strategy in ('batch_wasted','semi_sequential','sequential'):
   baseline=None
   for case in ('off','neutral','neutral50','neutral150','corrected','filtered','zero','missing','dropout'):
    tune=copy.deepcopy(base);tune['strategy']=strategy;f=tune['flex_fuel'];f['correction']['enabled']=case!='off'

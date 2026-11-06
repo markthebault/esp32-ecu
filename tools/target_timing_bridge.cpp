@@ -14,7 +14,7 @@ namespace {
 struct Context;
 struct Event {std::uint64_t time=0,dwell=0;unsigned ch=0;bool high=false,cut=false;double advance=0;};
 struct IO {
- Context* owner=nullptr;std::uint8_t mask=0;bool dispatching=false;
+ Context* owner=nullptr;std::uint32_t mask=0;bool dispatching=false;
  void all_low();bool write(unsigned ch,bool high);
 };
 struct IdleIO {Context*owner=nullptr;bool high=false;void all_low();bool write(bool value);};
@@ -23,20 +23,27 @@ struct Context {
  ecu::engine::RuntimeSample data;std::uint64_t data_sequence=0;
  ecu::engine::Tune tune;ecu::flex::Capture flex_capture;std::uint32_t flex_revision=0;ecu::engine::Controller controller;ecu::engine::PhaseDecoder decoder{{60,2,8000}};
  ecu::timing::Executor core;ecu::idle::PwmExecutor pwm;ecu::boost::PwmExecutor boost_pwm;BoostIO boost_io;ecu::engine::Output last;IO io;IdleIO idle_io;
- std::array<Event,32> events{};unsigned event_begin=0,event_count=0;
+ std::array<Event,32> events{};unsigned event_begin=0,event_count=0,event_overflows=0;
  Event popped;std::uint64_t now=0,command_us=0,sampled_us=0,gap=0,sequence=0;
  unsigned slots=60,missing=2,max_rpm=8000;bool have_control=false;
  Context(){io.owner=this;idle_io.owner=this;boost_io.owner=this;}
- void enqueue(Event e){if(event_count<events.size()){events[(event_begin+event_count)%events.size()]=e;++event_count;}}
+ bool enqueue(Event e){
+  if(event_overflows)return false;
+  if(event_count==events.size()){
+   ++event_overflows;event_begin=0;event_count=1;events[0]={now,0,0,false,true,0};return false;
+  }
+  events[(event_begin+event_count)%events.size()]=e;++event_count;return true;
+ }
 };
 void BoostIO::all_low(){if(high)write(false);}
-bool BoostIO::write(bool value){if(high==value)return true;high=value;owner->enqueue({owner->now,0,9,value,false,0});return true;}
+bool BoostIO::write(bool value){if(high==value)return true;high=value;return owner->enqueue({owner->now,0,9,value,false,0});}
 void IdleIO::all_low(){if(high)write(false);}
-bool IdleIO::write(bool value){if(high==value)return true;high=value;owner->enqueue({owner->now,0,8,value,false,0});return true;}
-void IO::all_low(){mask=0;if(owner->pwm.stats().active||owner->pwm.stats().high)owner->pwm.stop(owner->now,ecu::idle::PwmCause::EngineFault,owner->idle_io);else owner->idle_io.all_low();if(owner->boost_pwm.stats().active||owner->boost_pwm.stats().high)owner->boost_pwm.stop(owner->now,ecu::boost::PwmCause::EngineFault,owner->boost_io);else owner->boost_io.all_low();if(dispatching)owner->enqueue({owner->now,0,0,false,true,0});}
+bool IdleIO::write(bool value){if(high==value)return true;high=value;return owner->enqueue({owner->now,0,8,value,false,0});}
+void IO::all_low(){const bool was_high=mask||owner->idle_io.high||owner->boost_io.high;mask=0;if(owner->pwm.stats().active||owner->pwm.stats().high)owner->pwm.stop(owner->now,ecu::idle::PwmCause::EngineFault,owner->idle_io);else owner->idle_io.all_low();if(owner->boost_pwm.stats().active||owner->boost_pwm.stats().high)owner->boost_pwm.stop(owner->now,ecu::boost::PwmCause::EngineFault,owner->boost_io);else owner->boost_io.all_low();if(dispatching||was_high)owner->enqueue({owner->now,0,0,false,true,0});}
 bool IO::write(unsigned ch,bool high){
+ const auto kind=ecu::engine::channels::kind(ch);if(kind!=ecu::engine::channels::Kind::Injector&&kind!=ecu::engine::channels::Kind::Coil)return false;
  if(high)mask|=1U<<ch;else mask&=~(1U<<ch);
- owner->enqueue({owner->now,owner->core.event_requested_dwell_us(),ch,high,false,owner->core.event_advance()});return true;
+ return owner->enqueue({owner->now,owner->core.event_requested_dwell_us(),ch,high,false,owner->core.event_advance()});
 }
 thread_local std::string reply;
 const char* encode(cJSON*j){char*s=cJSON_PrintUnformatted(j);cJSON_Delete(j);reply=s?s:"{}";cJSON_free(s);return reply.c_str();}
@@ -63,7 +70,7 @@ extern "C" int engine_configure(void*p,const char* text){
  auto*j=cJSON_ParseWithOpts(text,nullptr,true);ecu::engine::Tune candidate;
  const bool ok=j&&ecu::engine::parse_tune(j,candidate);cJSON_Delete(j);if(!ok)return 0;
  auto&c=*static_cast<Context*>(p);c.tune=candidate;if(!c.flex_revision)c.flex_capture=ecu::flex::Capture(candidate.flex_fuel.capture);else if(!c.flex_capture.configure(candidate.flex_fuel.capture))c.flex_capture.context_changed();c.flex_revision=candidate.revision;c.controller.reset();c.core=ecu::timing::Executor{};c.pwm=ecu::idle::PwmExecutor{};c.idle_io.high=false;c.boost_pwm=ecu::boost::PwmExecutor{};c.boost_io.high=false;
- c.decoder=ecu::engine::PhaseDecoder({c.slots,c.missing,c.max_rpm},ecu::engine::angle_config(c.tune));c.last={};c.data={};c.data_sequence=0;c.io.mask=0;c.event_count=0;c.event_begin=0;c.now=c.command_us=c.sampled_us=c.sequence=0;c.have_control=false;return 1;
+ c.decoder=ecu::engine::PhaseDecoder({c.slots,c.missing,c.max_rpm},ecu::engine::angle_config(c.tune));c.last={};c.last.cylinder_count=0;c.data={};c.data_sequence=0;c.io.mask=0;c.event_count=0;c.event_begin=0;c.event_overflows=0;c.now=c.command_us=c.sampled_us=c.sequence=0;c.have_control=false;return 1;
 }
 extern "C" int engine_wheel(void*p,unsigned slots,unsigned missing,unsigned max_rpm){
  auto&c=*static_cast<Context*>(p);ecu::engine::PhaseDecoder decoder({slots,missing,max_rpm},ecu::engine::angle_config(c.tune));if(!decoder.valid())return 0;
@@ -133,10 +140,10 @@ extern "C" const char* engine_step(void*p,const char*text,std::uint64_t now,std:
  if(stats.fault!=ecu::timing::Cause::None){c.last.faults|=ecu::engine::Timing;c.last.state=ecu::engine::State::Faulted;c.last.fuel_cut=c.last.spark_cut=true;}
  c.data=ecu::engine::synthetic_data(c.tune,in,c.last,++c.data_sequence,now);if(raw_flex&&c.last.flex_fuel.required&&c.last.flex_fuel.configuration_match&&in.flex_sample.observation.pending_fault)c.flex_capture.acknowledge(in.flex_sample.observation.fault_generation);
  c.data.phase_reason=static_cast<std::uint8_t>(c.decoder.reason());c.data.phase_losses=c.decoder.losses();c.data.cam_rejected=c.decoder.rejected();c.data.cam_error_deg=c.decoder.cam_error_deg();c.data.virtual_high_mask=c.io.mask;
- c.data.worker_sequence=c.core.current_command().sequence;c.data.worker_observed_us=now;c.data.worker_epoch=stats.epoch;c.data.worker_tune_revision=c.core.current_command().tune_revision;c.data.worker_sensor_revision=c.core.current_command().sensor_revision;c.data.timing_fault=static_cast<std::uint8_t>(stats.fault);c.data.last_timing_fault=static_cast<std::uint8_t>(stats.last_fault);
+ c.data.worker_sequence=c.core.current_command().sequence;c.data.worker_cylinder_count=c.data.worker_sequence?c.core.current_command().angle.cylinders:0;c.data.worker_observed_us=now;c.data.worker_epoch=stats.epoch;c.data.worker_tune_revision=c.core.current_command().tune_revision;c.data.worker_sensor_revision=c.core.current_command().sensor_revision;c.data.timing_fault=static_cast<std::uint8_t>(stats.fault);c.data.last_timing_fault=static_cast<std::uint8_t>(stats.last_fault);
  j=ecu::engine::output_json(c.last);cJSON_AddStringToObject(j,"angle_stop_reason",ecu::engine::AngleScheduler::reason_name(stats.angle_reason));cJSON_AddBoolToObject(j,"synced",in.synced&&(!c.decoder.required()||in.phase_synced));cJSON_AddBoolToObject(j,"crank_synced",in.synced);cJSON_AddBoolToObject(j,"phase_synced",in.phase_synced);cJSON_AddBoolToObject(j,"phase_required",c.decoder.required());cJSON_AddStringToObject(j,"phase_reason",ecu::engine::PhaseDecoder::reason_name(c.decoder.reason()));cJSON_AddNumberToObject(j,"phase_losses",c.decoder.losses());cJSON_AddNumberToObject(j,"cam_rejected",c.decoder.rejected());cJSON_AddNumberToObject(j,"cam_error_deg",c.decoder.cam_error_deg());cJSON_AddNumberToObject(j,"time_us",now);cJSON_AddNumberToObject(j,"gap_us",c.gap);
  cJSON_AddNumberToObject(j,"timing_stops",stats.faults);cJSON_AddNumberToObject(j,"timing_recoveries",stats.recoveries);
- cJSON_AddNumberToObject(j,"executor_high_mask",c.io.mask);cJSON_AddStringToObject(j,"timing_stop_reason",ecu::timing::cause_name(stats.last_fault));return encode(j);
+ cJSON_AddNumberToObject(j,"native_event_capture_overflows",c.event_overflows);cJSON_AddNumberToObject(j,"executor_high_mask",c.io.mask);cJSON_AddStringToObject(j,"timing_stop_reason",ecu::timing::cause_name(stats.last_fault));return encode(j);
 }
 extern "C" const char* engine_plan(void*){return "{\"valid\":false,\"edges\":[]}";}
 
@@ -144,3 +151,4 @@ extern "C" const char* engine_data_json(void*p){auto&c=*static_cast<Context*>(p)
 extern "C" const char* engine_idle_json(void*p){return encode(ecu::idle::pwm_json(static_cast<Context*>(p)->pwm.stats(),false,false));}
 
 extern "C" const char* engine_boost_json(void*p){return encode(ecu::boost::pwm_json(static_cast<Context*>(p)->boost_pwm.stats()));}
+extern "C" unsigned engine_event_capture_overflows(void*p){return static_cast<Context*>(p)->event_overflows;}

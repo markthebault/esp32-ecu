@@ -149,6 +149,7 @@ private:
  std::uint64_t deadline_=UINT64_MAX,last_cam_=0,pending_us_=0,losses_=0,rejected_=0,accepted_=0;
  double cam_error_=0,next_center_=0;
 };
-using PhaseDecoder=BasicPhaseDecoder<4>;
+using LegacyPhaseDecoder=BasicPhaseDecoder<4>;
 using ExpandedPhaseDecoder=BasicPhaseDecoder<8>;
+using PhaseDecoder=ExpandedPhaseDecoder;
 }

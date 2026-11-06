@@ -53,7 +53,7 @@ mkdir -p "$task_build"
     -I "$task_root/firmware/include" "$task_root/firmware/tests/trigger_log_test.cpp" \
     -o "$task_build/trigger-log-test"
 "$task_build/trigger-log-test"
-for task_idle_name in engine_profiles idle_control idle_pwm boost_control transient_enrichment engine_transient load_model engine_load secondary_tables engine_secondary switch_acquisition switch_transport status_led flex_fuel flex_ingress engine_flex flex_capture_owner engine_radio_flex engine_radio_boost; do
+for task_idle_name in engine_profiles engine_profile_executor idle_control idle_pwm boost_control transient_enrichment engine_transient load_model engine_load secondary_tables engine_secondary switch_acquisition switch_transport status_led flex_fuel flex_ingress engine_flex flex_capture_owner engine_radio_flex engine_radio_boost; do
     "${CXX:-g++}" -std=c++17 -O1 -g -Wall -Wextra -Werror -pedantic \
         -fsanitize=address,undefined -fno-omit-frame-pointer \
         -I "$task_root/firmware/include" "$task_root/firmware/tests/${task_idle_name}_test.cpp" \

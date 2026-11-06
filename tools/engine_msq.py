@@ -7,7 +7,7 @@ import struct
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-from engine_protocol import DEFAULT,NUMBERS,FLAGS,CURVES,SIGNATURE,FLEX_SIGNATURE,SECONDARY_SIGNATURE,LOAD_SIGNATURE,TRANSIENT_SIGNATURE,SEMI_SIGNATURE,IDLE_SIGNATURE,WHOLE_SIGNATURE,LEGACY_SIGNATURE,SEQUENTIAL_SIGNATURE,CYLINDER_SIGNATURE,TIMING_FIELDS,STRATEGIES,STRATEGY_LABELS,PAGE_SIZES,field_units
+from engine_protocol import DEFAULT,NUMBERS,FLAGS,CURVES,SIGNATURE,FLEX_SIGNATURE,SECONDARY_SIGNATURE,LOAD_SIGNATURE,TRANSIENT_SIGNATURE,SEMI_SIGNATURE,IDLE_SIGNATURE,WHOLE_SIGNATURE,LEGACY_SIGNATURE,SEQUENTIAL_SIGNATURE,CYLINDER_SIGNATURE,TIMING_FIELDS,STRATEGIES,STRATEGY_LABELS,PAGE_SIZES,field_units,BOOST_SIGNATURE
 from idle_config import ALGORITHMS,SCALARS,ARRAYS,UNITS,name as idle_name
 from transient_config import MODES,MODE_LABELS,APPLIES,APPLY_LABELS,SCALARS as AE_SCALARS,ARRAYS as AE_ARRAYS,UNITS as AE_UNITS,name as ae_name
 from load_config import ENUM_FIELDS as LOAD_ENUM_FIELDS,SCALARS as LOAD_SCALARS,ENUMS as LOAD_ENUMS,LABELS as LOAD_LABELS,UNITS as LOAD_UNITS,name as load_name
@@ -17,6 +17,8 @@ from flex_config import BOOLEANS as FLEX_BOOLS,CAPTURE_FLOATS as FLEX_FLOATS,ARR
 
 from boost_config import SCALARS as BOOST_SCALARS,TABLES as BOOST_TABLES,MODES as BOOST_MODES,ACTIVATIONS as BOOST_ACTIVATIONS,UNITS as BOOST_UNITS,constant as boost_name
 
+from profile_config import MSQ_MAXIMUM
+
 NS='http://www.msefi.com/:msq'
 ET.register_namespace('',NS)
 def tag(name):return '{'+NS+'}'+name
@@ -24,7 +26,7 @@ def tag(name):return '{'+NS+'}'+name
 def valid_revision(value):
  return type(value) in (int,float) and 1<=value<=4294967295 and math.isfinite(value) and int(value)==value
 
-def constants(tune,legacy=False,sequential=False,whole=True,idle=True,transient=True,model=True,secondary=True,flex=True,boost=True):
+def constants(tune,legacy=False,sequential=False,whole=True,idle=True,transient=True,model=True,secondary=True,flex=True,boost=True,profiles=True):
  revision=tune['revision']
  if not valid_revision(revision):raise ValueError('Invalid MSQ base revision')
  result=[(0,'baseRevision',[int(revision)],None)]
@@ -34,12 +36,12 @@ def constants(tune,legacy=False,sequential=False,whole=True,idle=True,transient=
  if not legacy:
   result += [(0,'engineStrategy',['"'+STRATEGY_LABELS[STRATEGIES.index(tune['strategy'])]+'"'],None)]
   result += [(0,k,[tune['timing'][k]],None) for k,_ in TIMING_FIELDS]
-  result += [(0,f'fireOrder{i+1}',[v],None) for i,v in enumerate(tune['timing']['firing_order'])]
+  result += [(0,f'fireOrder{i+1}',[v],None) for i,v in enumerate(tune['timing']['firing_order'][:8 if profiles else 4])]
  for page,name in enumerate(('ve','spark','lambda'),1):
   result += [(page,name+'Rpm',tune['maps'][name]['rpm'],(16,1)),(page,name+'Load',tune['maps'][name]['load'],(16,1)),(page,name+'Table',tune['maps'][name]['cells'],(16,16))]
  if not legacy and not sequential:
   result += [(4,'cylinderTrimsEnabled',['\"On\"' if tune['cylinder_trims']['enabled'] else '\"Off\"'],None)]
-  for i in range(4):
+  for i in range(8 if profiles else 4):
    result += [(4,f'c{i+1}SparkTrim',[tune['cylinder_trims']['spark_deg'][i]],None)]
    m=tune['cylinder_trims']['fuel_maps'][i]
    result += [(4,f'c{i+1}FuelRpm',m['rpm'],(6,1)),(4,f'c{i+1}FuelLoad',m['load'],(6,1)),(4,f'c{i+1}FuelTable',m['cells'],(6,6))]
@@ -101,14 +103,17 @@ def import_msq(body,base_revision=None):
  # Own004/005/006/007 apps can omit readOnly origin. A caller may supply its already-loaded
  # CAS base; otherwise 1 is an offline placeholder, never a discovered revision.
  if isinstance(body,str):body=body.encode()
- if len(body)>65536 or b'\0' in body or b'<!DOCTYPE' in body.upper() or b'<!ENTITY' in body.upper():raise ValueError('MSQ size or XML declarations rejected')
+ if len(body)>MSQ_MAXIMUM or b'\0' in body or b'<!DOCTYPE' in body.upper() or b'<!ENTITY' in body.upper():raise ValueError('MSQ size or XML declarations rejected')
  try:root=ET.fromstring(body)
  except ET.ParseError as error:raise ValueError('Malformed MSQ XML') from error
  info=root.find(tag('versionInfo'))
- if root.tag!=tag('msq') or info is None or info.get('signature') not in (SIGNATURE.decode(),FLEX_SIGNATURE.decode(),SECONDARY_SIGNATURE.decode(),LOAD_SIGNATURE.decode(),TRANSIENT_SIGNATURE.decode(),SEMI_SIGNATURE.decode(),IDLE_SIGNATURE.decode(),WHOLE_SIGNATURE.decode(),LEGACY_SIGNATURE.decode(),SEQUENTIAL_SIGNATURE.decode(),CYLINDER_SIGNATURE.decode()) or info.get('nPages')!=('1' if info.get('signature') in (SIGNATURE.decode(),FLEX_SIGNATURE.decode(),SECONDARY_SIGNATURE.decode(),LOAD_SIGNATURE.decode(),TRANSIENT_SIGNATURE.decode(),SEMI_SIGNATURE.decode(),IDLE_SIGNATURE.decode(),WHOLE_SIGNATURE.decode()) else '5' if info.get('signature')==CYLINDER_SIGNATURE.decode() else '4'):raise ValueError('MSQ must match this ESP32ECU definition; other ECU tunes are incompatible')
- legacy=info.get('signature')==LEGACY_SIGNATURE.decode();sequential=info.get('signature')==SEQUENTIAL_SIGNATURE.decode()
- current=info.get('signature')==SIGNATURE.decode();has_flex=info.get('signature') in (SIGNATURE.decode(),FLEX_SIGNATURE.decode());has_secondary=info.get('signature') in (SIGNATURE.decode(),FLEX_SIGNATURE.decode(),SECONDARY_SIGNATURE.decode());has_load=info.get('signature') in (SIGNATURE.decode(),FLEX_SIGNATURE.decode(),SECONDARY_SIGNATURE.decode(),LOAD_SIGNATURE.decode());has_transient=info.get('signature') in (SIGNATURE.decode(),FLEX_SIGNATURE.decode(),SECONDARY_SIGNATURE.decode(),LOAD_SIGNATURE.decode(),TRANSIENT_SIGNATURE.decode());has_semi=info.get('signature') in (SIGNATURE.decode(),FLEX_SIGNATURE.decode(),SECONDARY_SIGNATURE.decode(),LOAD_SIGNATURE.decode(),TRANSIENT_SIGNATURE.decode(),SEMI_SIGNATURE.decode());has_idle=info.get('signature') in (SIGNATURE.decode(),FLEX_SIGNATURE.decode(),SECONDARY_SIGNATURE.decode(),LOAD_SIGNATURE.decode(),TRANSIENT_SIGNATURE.decode(),SEMI_SIGNATURE.decode(),IDLE_SIGNATURE.decode());whole=info.get('signature') in (SIGNATURE.decode(),FLEX_SIGNATURE.decode(),SECONDARY_SIGNATURE.decode(),LOAD_SIGNATURE.decode(),TRANSIENT_SIGNATURE.decode(),SEMI_SIGNATURE.decode(),IDLE_SIGNATURE.decode(),WHOLE_SIGNATURE.decode())
- expected={name:(page,len(values),shape) for page,name,values,shape in constants(DEFAULT,legacy=legacy,sequential=sequential,whole=whole,idle=has_idle,transient=has_transient,model=has_load,secondary=has_secondary,flex=has_flex,boost=current)}
+ signatures=(LEGACY_SIGNATURE,SEQUENTIAL_SIGNATURE,CYLINDER_SIGNATURE,WHOLE_SIGNATURE,IDLE_SIGNATURE,SEMI_SIGNATURE,TRANSIENT_SIGNATURE,LOAD_SIGNATURE,SECONDARY_SIGNATURE,FLEX_SIGNATURE,BOOST_SIGNATURE,SIGNATURE)
+ try:index=tuple(value.decode() for value in signatures).index(info.get('signature')) if info is not None else -1
+ except ValueError:index=-1
+ page_count='4' if index<2 else '5' if index==2 else '1'
+ if root.tag!=tag('msq') or info is None or index<0 or info.get('nPages')!=page_count:raise ValueError('MSQ must match this ESP32ECU definition; other ECU tunes are incompatible')
+ legacy=index==0;sequential=index==1;whole=index>=3;has_idle=index>=4;has_semi=index>=5;has_transient=index>=6;has_load=index>=7;has_secondary=index>=8;has_flex=index>=9;has_boost=index>=10;profiles=index>=11
+ expected={name:(page,len(values),shape) for page,name,values,shape in constants(DEFAULT,legacy=legacy,sequential=sequential,whole=whole,idle=has_idle,transient=has_transient,model=has_load,secondary=has_secondary,flex=has_flex,boost=has_boost,profiles=profiles)}
  values={}
  for page in root.findall(tag('page')):
   for element in page.findall(tag('constant')):
@@ -116,6 +121,8 @@ def import_msq(body,base_revision=None):
    if name not in expected or name in values:raise ValueError('Unknown or duplicate MSQ constant')
    page_number,count,shape=expected[name]
    if page.get('number')!=str(page_number):raise ValueError('MSQ constant on wrong page')
+   dimensions=(element.get('rows'),element.get('cols'))
+   if dimensions!=(None,None) and dimensions!=tuple(str(v) for v in (shape or (1,1))):raise ValueError('MSQ declared dimensions disagree with its constant definition')
    text=(element.text or '').strip()
    if name.startswith('secondary_'):
     _,kind,key=name.split('_',2)
@@ -174,14 +181,14 @@ def import_msq(body,base_revision=None):
   if whole:revision=base_revision
  tune=copy.deepcopy(DEFAULT);tune['revision']=int(revision)
  if legacy:
-  tune['strategy']='batch_wasted_4cyl';tune['timing']=dict(firing_order=[1,3,4,2],injection_end_deg=540,cam_sync_deg=450,cam_window_deg=20)
+  tune['strategy']='batch_wasted';tune['timing']=dict(firing_order=[1,3,4,2,0,0,0,0],injection_end_deg=540,cam_sync_deg=450,cam_window_deg=20)
  if not legacy:
   tune['strategy']=STRATEGIES[values['engineStrategy']]
   for name,_ in TIMING_FIELDS:tune['timing'][name]=values[name]
-  tune['timing']['firing_order']=[values[f'fireOrder{i+1}'] for i in range(4)]
+  tune['timing']['firing_order']=[values[f'fireOrder{i+1}'] for i in range(8 if profiles else 4)]+([] if profiles else [0]*4)
  if not legacy and not sequential:
   tune['cylinder_trims']['enabled']=values['cylinderTrimsEnabled']
-  for i in range(4):
+  for i in range(8 if profiles else 4):
    tune['cylinder_trims']['spark_deg'][i]=values[f'c{i+1}SparkTrim']
    tune['cylinder_trims']['fuel_maps'][i]=dict(rpm=values[f'c{i+1}FuelRpm'],load=values[f'c{i+1}FuelLoad'],cells=values[f'c{i+1}FuelTable'])
  for group,name in NUMBERS:tune[group][name]=values[name]
@@ -205,12 +212,18 @@ def import_msq(body,base_revision=None):
    rule['map']=dict(rpm=values[sec_name(kind,'mapRpm')],load=values[sec_name(kind,'mapLoad')],cells=values[sec_name(kind,'mapTable')])
  if has_flex:
   for name in FLEX_BOOLS+FLEX_FLOATS+('cycles',)+FLEX_ARRAYS:flex_set(tune['flex_fuel'],name,values[flex_name(name)])
- if current:
+ if has_boost:
   c=tune['boost_control']
   for name in ('pressure_enabled','mode','activation')+BOOST_SCALARS:c[name]=values[boost_name(name)]
   for name in BOOST_TABLES:c[name]={key:values[boost_name(name+'_'+key)] for key in ('rpm','axis','cells')}
  for name,n in CURVES:tune['curves'][name]=values[name]
  for name in ('ve','spark','lambda'):tune['maps'][name]=dict(rpm=values[name+'Rpm'],load=values[name+'Load'],cells=values[name+'Table'])
+ if not profiles:
+  if tune['engine']['cylinders']!=4 or not 500<=tune['engine']['displacement_cc']<=4000 or not 100<=tune['engine']['injector_cc_min']<=1500:raise ValueError('Historical MSQ identity retains its four-cylinder engine-specification bounds')
+  first=tune['cylinder_trims']['fuel_maps'][0]
+  for index in range(4,8):
+   tune['cylinder_trims']['spark_deg'][index]=0
+   tune['cylinder_trims']['fuel_maps'][index]=dict(rpm=list(first['rpm']),load=list(first['load']),cells=[100]*36)
  if not has_load and any(abs(v)>1e6 or not 20<=struct.unpack('<f',struct.pack('<f',v))[0]<=120 for v in tune['maps']['ve']['cells']):raise ValueError('Historical identity retains20..120 F32 fuel-coefficient bounds')
  from engine_runtime import EngineRuntime
  runtime=EngineRuntime(tune);tune=runtime.tune;runtime.close()

@@ -10,12 +10,12 @@ from boost_config import VALUES,REASONS,MODES
 BOOST_SIZE=144;BOOST_BODY=112
 FLAGS=('enabled','pressure_valid','valve_allowed','pid_updated','low_limited','high_limited','slew_limited','integral_held','overboost_latched','recovery_waiting','no_new_sample')
 
-def engine_boost_fragment(packet,key):
+def engine_boost_fragment(packet,key,expected_schema=None):
  if len(key)!=32:raise ValueError('Engine key must be32 bytes')
  check(packet,12,BOOST_SIZE)
  if not hmac.compare_digest(packet[BOOST_BODY:],hmac.digest(key,packet[:BOOST_BODY],'sha256')):raise ValueError('Boost authentication failed')
  session,sequence,schema,reserved=struct.unpack_from('<IQHH',packet,8)
- if not session or not sequence or schema!=6 or reserved or packet[111]:raise ValueError('Invalid boost fragment header')
+ if not session or not sequence or schema not in (6,7) or expected_schema is not None and schema!=expected_schema or reserved or packet[111]:raise ValueError('Invalid boost fragment header')
  values=struct.unpack_from('<8f',packet,56);updates,events,flags,reason,mode,bits=struct.unpack_from('<QQIBBB',packet,88)
  if flags>2047 or reason>16 or mode>2 or bits&~7:raise ValueError('Invalid boost enums/flags')
  available,pressure,inhibit=[bool(bits&(1<<n)) for n in range(3)]
@@ -32,4 +32,4 @@ def engine_boost_fragment(packet,key):
  b=dict(zip(VALUES,(v if math.isfinite(v) else None for v in values)))
  b.update((name,bool(flags&(1<<n))) for n,name in enumerate(FLAGS))
  b.update(available=available,pressure_enabled=pressure,inhibit_engine=inhibit,flags=flags,reason_code=reason,reason=REASONS[reason],mode_code=mode,mode=MODES[mode],pid_updates=str(updates),overboost_events=str(events),meaning='Original controller proposal; no valve or physical output measurement')
- return dict(complete=False,session=session,packet_sequence=sequence,schema_version=6,base_mac=packet[24:56],boost_control=b,immutable=packet[56:112])
+ return dict(complete=False,session=session,packet_sequence=sequence,schema_version=schema,base_mac=packet[24:56],boost_control=b,immutable=packet[56:112])

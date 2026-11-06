@@ -17,6 +17,7 @@ from engine_protocol_legacy import (NUMBERS,FLAGS,CURVES,REVISION_OFFSET,
  TIMING_FIELDS,LIVE_FIELDS,field_units as legacy_field_units,envelope,LEGACY_SIGNATURE,
  SEQUENTIAL_SIGNATURE,SERIAL_PROTOCOL)
 from tuning_runtime import Session,Stream
+from profile_config import STRATEGIES,SIGNATURE,PAGE as PROFILE_PAGE,LIVE as PROFILE_LIVE,fuel_offset,spark_offset,order_offset
 
 DEFAULT=json.loads((R/'config/engine/defaults.json').read_text())
 WHOLE_SIGNATURE=b'ESP32ECU DEV 004 INHIBITED'
@@ -27,8 +28,7 @@ TRANSIENT_SIGNATURE=b'ESP32ECU DEV 007 INHIBITED'
 LOAD_SIGNATURE=b'ESP32ECU DEV 008 INHIBITED'
 SECONDARY_SIGNATURE=b'ESP32ECU DEV 009 INHIBITED'
 FLEX_SIGNATURE=b'ESP32ECU DEV 010 INHIBITED'
-SIGNATURE=b'ESP32ECU DEV 011 INHIBITED'
-STRATEGIES=legacy.STRATEGIES+('semi_sequential_4cyl',)
+BOOST_SIGNATURE=b'ESP32ECU DEV 011 INHIBITED'
 STRATEGY_LABELS=('Batch / wasted','Sequential','Semi-sequential')
 VERSION=b'ESP32ECU development; staged whole-tune burn; outputs inhibited'
 PAGE_SIZES={1:PAGE_BYTES}
@@ -36,13 +36,22 @@ PAGE_OFFSETS={1:0,2:512,3:1664,4:2816,5:3968}
 def field_units(name):return {'idle_kp':'%/RPM','idle_ki':'%/(RPM*s)'}.get(name,legacy_field_units(name))
 
 def pages(tune):
- if tune['engine']['cylinders']!=4:raise ValueError('Own011 represents exactly four cylinders; expanded profiles need a new definition')
  # Reuse the frozen prefix serializer, then write the new identity's enum.
  # The placeholder is private and never emitted or assigned to a live tune.
- compatible=tune if tune['strategy'] in legacy.STRATEGIES else dict(tune,strategy=legacy.STRATEGIES[0])
+ compatible=copy.deepcopy(tune)
+ compatible['strategy']=legacy.STRATEGIES[0];compatible['engine']['cylinders']=4
+ compatible['timing']['firing_order']=[1,3,4,2]
+ compatible['cylinder_trims']['spark_deg']=compatible['cylinder_trims']['spark_deg'][:4]
+ compatible['cylinder_trims']['fuel_maps']=compatible['cylinder_trims']['fuel_maps'][:4]
  old=legacy.pages(compatible)
  page=bytearray(b''.join(old[i] for i in range(1,6))+bytes(PAGE_BYTES-4768));control=tune['idle_control']
  struct.pack_into('<I',page,272,STRATEGIES.index(tune['strategy']))
+ struct.pack_into('<f',page,4,tune['engine']['cylinders'])
+ for index,value in enumerate(tune['timing']['firing_order']):struct.pack_into('<B',page,order_offset(index),value)
+ for index in range(4,8):
+  grid=tune['cylinder_trims']['fuel_maps'][index]
+  struct.pack_into('<48f',page,fuel_offset(index),*grid['rpm'],*grid['load'],*grid['cells'])
+  struct.pack_into('<f',page,spark_offset(index),tune['cylinder_trims']['spark_deg'][index])
  struct.pack_into('<I',page,4768,ALGORITHMS.index(control['algorithm']))
  for name in SCALARS:struct.pack_into('<f',page,SCALAR_OFFSETS[name],control[name])
  for name,n in ARRAYS:struct.pack_into('<'+str(n)+'f',page,ARRAY_OFFSETS[name],*control[name])
@@ -72,14 +81,28 @@ def pages(tune):
  return {1:page}
 
 def decode_pages(buffers,base):
- if set(buffers)!={1} or len(buffers[1])!=PAGE_BYTES:raise ValueError('Own011 requires one complete 12288-byte page')
+ if set(buffers)!={1} or len(buffers[1])!=PAGE_BYTES:raise ValueError('Own012 requires one complete 12288-byte page')
  p=buffers[1]
- if any(p[292:512]) or any(p[4756:4768]) or any(p[IDLE_USED_END:AE_OFFSET]) or any(p[AE_USED_END:LOAD_OFFSET]) or any(p[LOAD_USED_END:SEC_OFFSET]) or any(p[SEC_CONTROL_END:SEC_MAP_OFFSETS['fuel']]) or any(p[SEC_USED_END:FLEX_OFFSET]) or any(p[FLEX_END:BOOST_OFFSET]) or any(p[BOOST_SCALAR_OFFSETS[BOOST_SCALARS[-1]]+4:BOOST_TABLE_OFFSETS['open_duty']]) or any(p[BOOST_END:]):raise ValueError('Reserved tune bytes must be zero')
+ if any(p[292:512]) or any(p[4756:4768]) or any(p[IDLE_USED_END:AE_OFFSET]) or any(p[AE_USED_END:LOAD_OFFSET]) or any(p[LOAD_USED_END:SEC_OFFSET]) or any(p[SEC_CONTROL_END:SEC_MAP_OFFSETS['fuel']]) or any(p[SEC_USED_END:FLEX_OFFSET]) or any(p[FLEX_END:BOOST_OFFSET]) or any(p[BOOST_SCALAR_OFFSETS[BOOST_SCALARS[-1]]+4:BOOST_TABLE_OFFSETS['open_duty']]) or any(p[PROFILE_PAGE['used_end']:]):raise ValueError('Reserved tune bytes must be zero')
+ count=struct.unpack_from('<f',p,4)[0]
+ if not math.isfinite(count) or not 1<=count<=8 or count!=int(count):raise ValueError('Cylinder count must be an integer1..8')
  strategy=struct.unpack_from('<I',p,272)[0]
  if strategy>=len(STRATEGIES):raise ValueError('Unknown engine strategy')
  old={i:bytearray(p[offset:offset+legacy.PAGE_SIZES[i]]) for i,offset in PAGE_OFFSETS.items()}
  struct.pack_into('<I',old[1],272,strategy if strategy<len(legacy.STRATEGIES) else 0)
- candidate=legacy.decode_pages(old,base);candidate['schema_version']=10;candidate['strategy']=STRATEGIES[strategy];candidate['idle_control']=copy.deepcopy(DEFAULT['idle_control'])
+ struct.pack_into('<f',old[1],4,4);struct.pack_into('<4B',old[1],288,1,3,4,2)
+ legacy_base=copy.deepcopy(base);legacy_base['engine']['cylinders']=4
+ candidate=legacy.decode_pages(old,legacy_base);candidate['schema_version']=11;candidate['strategy']=STRATEGIES[strategy];candidate['idle_control']=copy.deepcopy(DEFAULT['idle_control'])
+ candidate['engine']['cylinders']=int(count)
+ candidate['timing']['firing_order']=[p[order_offset(i)] for i in range(8)]
+ # The frozen prefix decoder updates its first four slots. Preserve those and
+ # append complete extension slots, without truncating or mutating the caller.
+ candidate['cylinder_trims']['spark_deg']=candidate['cylinder_trims']['spark_deg'][:4]
+ candidate['cylinder_trims']['fuel_maps']=candidate['cylinder_trims']['fuel_maps'][:4]
+ for index in range(4,8):
+  data=struct.unpack_from('<48f',p,fuel_offset(index))
+  candidate['cylinder_trims']['fuel_maps'].append(dict(rpm=list(data[:6]),load=list(data[6:12]),cells=list(data[12:])))
+  candidate['cylinder_trims']['spark_deg'].append(struct.unpack_from('<f',p,spark_offset(index))[0])
  algorithm=struct.unpack_from('<I',p,4768)[0]
  if algorithm>=len(ALGORITHMS):raise ValueError('Unknown idle algorithm')
  candidate['idle_control']['algorithm']=ALGORITHMS[algorithm]
@@ -167,4 +190,10 @@ def live_block(store):
   values=[float(boost[k]) if boost.get(k) is not None else float('nan') for k in BOOST_VALUES] if known else [float('nan')]*8
   flags=int(boost.get('flags',0))|(65536 if known else 0)|(131072 if boost.get('pressure_enabled',False) else 0)|(262144 if boost.get('inhibit_engine',False) else 0)
   prefix+=struct.pack('<8f4I2Q',*values,flags,int(boost.get('reason_code',0)),int(boost.get('mode_code',0)),0,int(boost.get('pid_updates',0)),int(boost.get('overboost_events',0)))
+  cylinders=sample.get('cylinders',{});worker=sample.get('worker_observation',{})
+  prefix+=struct.pack('<6I',int(cylinders.get('count',0)),int(worker.get('cylinder_count',0)),4,4,int(worker.get('virtual_high_mask',0)),int(worker.get('physical_command_mask',0)))
+  proposals=cylinders.get('proposals',[]);valid=int(cylinders.get('valid_mask',0))
+  for index in range(4,8):
+   row=proposals[index] if index<len(proposals) else {}
+   prefix+=struct.pack('<4f',*[float(row.get(key,0)or 0) if valid&(1<<index) else 0. for key in ('pulse_ms','advance_deg','fuel_pct','duty_pct')])
   return prefix+bytes(LIVE_BYTES-len(prefix))

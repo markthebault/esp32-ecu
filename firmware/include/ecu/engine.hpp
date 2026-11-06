@@ -52,7 +52,7 @@ inline double lookup(const TrimMap&m,double rpm,double load){
 }
 enum class Strategy : std::uint8_t {BatchWasted,Sequential,SemiSequential};
 inline bool strategy_valid(Strategy s){return s==Strategy::BatchWasted||s==Strategy::Sequential||s==Strategy::SemiSequential;}
-inline const char* strategy_name(Strategy s){switch(s){case Strategy::BatchWasted:return "batch_wasted_4cyl";case Strategy::Sequential:return "sequential_4cyl";case Strategy::SemiSequential:return "semi_sequential_4cyl";default:return "unknown";}}
+inline const char* strategy_name(Strategy s){switch(s){case Strategy::BatchWasted:return "batch_wasted";case Strategy::Sequential:return "sequential";case Strategy::SemiSequential:return "semi_sequential";default:return "unknown";}}
 template<std::size_t CylinderCapacity>inline bool firing_order_valid(const std::array<unsigned,CylinderCapacity>&order,unsigned count=4){return channels::order_valid(order,count);}
 template<std::size_t CylinderCapacity>struct BasicTune {
  unsigned revision=1;
@@ -86,11 +86,11 @@ template<std::size_t CylinderCapacity>struct BasicTune {
  std::array<float,CylinderCapacity> cylinder_spark_deg{}; // Cylinder identifiers, not order slots or pins.
  BasicTune(){ve.cells.fill(85);spark.cells.fill(15);lambda.cells.fill(1);secondary_ve.cells.fill(85);secondary_spark.cells.fill(15);}
 };
-// Public schema1..10, own011, coherent data and the target executor still use
-// the four-cylinder type. The expanded type is an internal development path
-// until those interfaces and the board channel contract are migrated together.
-using Tune=BasicTune<4>;
+// Historical types remain distinct for legacy probes. Public schema11 uses
+// eight logical cylinder slots; this does not allocate extra physical drivers.
+using LegacyTune=BasicTune<4>;
 using ExpandedTune=BasicTune<8>;
+using Tune=ExpandedTune;
 template<std::size_t CylinderCapacity>inline void reset_secondary_tables(BasicTune<CylinderCapacity>&t){
  t.secondary_tables={};t.secondary_ve={};t.secondary_spark={};
  t.secondary_ve.cells.fill(85);t.secondary_spark.cells.fill(15);
@@ -125,7 +125,7 @@ template<std::size_t CylinderCapacity>inline const char* validate(const BasicTun
   for(auto v:m.load)if(!range(v,load::axis_min(t.load_model.trim_axis),load::axis_max(t.load_model.trim_axis,maximum_map_kpa(t))))return "Cylinder trim load axis disagrees with its declared basis";
   for(auto v:m.cells)if(!range(v,50,150))return "Cylinder fuel trim must be50-150percent";
  }
- if(!range(t.displacement_cc,500,4000)||!range(t.injector_cc_min,100,1500)||!range(t.fuel_density_g_cc,.6,.9)||!range(t.stoich_afr,9,16))return "Invalid engine or injector specification";
+ if(!range(t.displacement_cc,25,12000)||!range(t.injector_cc_min,25,5000)||!range(t.fuel_density_g_cc,.6,.9)||!range(t.stoich_afr,9,16))return "Invalid engine or injector specification";
  if(!range(t.cranking_rpm,100,800)||!range(t.crank_advance_deg,-5,15)||!range(t.rpm_limit,1500,8000)||!range(t.rpm_hysteresis,50,500)||!range(t.soft_limit_band,0,500)||t.cranking_rpm>=t.rpm_limit-t.rpm_hysteresis)return "Invalid starting/rev limit settings";
  if(!range(t.max_duty,.1,.85)||!range(t.max_injection_ms,1,15)||!range(t.max_dwell_ms,.5,3.5)||!range(t.tooth1_btdc_deg,0,359))return "Pulse limits exceed the current carrier contract";
  if(!range(t.afterstart_pct,0,100)||!range(t.afterstart_s,0,120)||!range(t.accel_threshold_pct_s,1,1000)||!range(t.accel_gain,0,.02)||!range(t.accel_decay_s,.05,2))return "Invalid enrichment settings";
@@ -180,8 +180,9 @@ template<std::size_t CylinderCapacity>struct BasicOutput {
  // Any proposed edge belongs to the virtual/shadow executor, never GPIO.
  bool proposed_enabled()const{return faults==0&&state!=State::Stopped;}
 };
-using Output=BasicOutput<4>;
+using LegacyOutput=BasicOutput<4>;
 using ExpandedOutput=BasicOutput<8>;
+using Output=ExpandedOutput;
 template<class Config,std::size_t CylinderCapacity>inline bool demand_valid(const Config&t,const BasicOutput<CylinderCapacity>&o,double rpm){
  const bool sequential=t.strategy==Strategy::Sequential;
  if(!strategy_valid(t.strategy)||!firing_order_valid(t.firing_order,t.cylinders)||o.cylinder_count!=t.cylinders||!range(t.max_injection_ms,1,15)||!range(t.max_duty,.1,double(.85f))||!range(t.max_dwell_ms,.5,3.5))return false;
@@ -371,8 +372,9 @@ public:
 };
 struct Edge {std::uint64_t time_us=0;unsigned channel=0;bool high=false;};
 template<std::size_t CylinderCapacity>struct BasicPlan {std::array<Edge,4*CylinderCapacity> edges{};unsigned count=0;bool valid=false;};
-using Plan=BasicPlan<4>;
+using LegacyPlan=BasicPlan<4>;
 using ExpandedPlan=BasicPlan<8>;
+using Plan=ExpandedPlan;
 template<std::size_t CylinderCapacity>inline BasicPlan<CylinderCapacity> plan_revolution(const BasicTune<CylinderCapacity>&t,const BasicOutput<CylinderCapacity>&o,std::uint64_t gap_us){
  BasicPlan<CylinderCapacity> p;if(t.strategy==Strategy::Sequential||!o.proposed_enabled()||!demand_valid(t,o,o.rpm)||validate(t))return p;
  const double rev_us=60000000/o.rpm;

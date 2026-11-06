@@ -1,8 +1,10 @@
 # TunerStudio application interoperability
 
-The unmodified **TunerStudio MS Lite3.3.01** now loads, edits and saves the current own011 definition offline. A fresh own011 online trial still reports `Unsupported Controller Firmware` after correct discovery, before reading calibration or runtime. The current [source-bound packet](../reports/engine/tuning-apps-011/README.md) preserves both results. Physical engine outputs remain inhibited.
+The unmodified **TunerStudio MS Lite3.3.01** loads, edits and saves current own012 offline. Actual C8 cell31→123.25% and C8 spark→3.75° edits reconstruct the entire expected12288-byte page, preserving every unedited byte. It saves222 constants and omits the read-only origin; an explicitly known caller origin materializes223. Both MSL009 formats open in unmodified MegaLogViewerHD4.6.14 and show cylinder8, counts, fitted4+4 capacity and full mask131072. [Cylinder integration and remaining work](engine-cylinder-profiles.md).
 
-## Current application evidence
+Supported online onboarding is still unresolved. The latest fresh observed rejection is own011; own012 online acceptance is unverified. Physical engine outputs remain inhibited. The earlier [own011 source-bound packet](../reports/engine/tuning-apps-011/README.md) remains intact.
+
+## Earlier own011 application evidence
 
 The latest INI has one12288-byte page and1152-byte runtime. Actual GUI edits change open-duty cell0 to13.25%, target cell9 to149.75kPa absolute and feedforward cell18 to31.125%. Both the original application save and a fresh reload/save with the latest editor bounds reconstruct every expected page byte using an explicit known origin7. The202 application-saved constants omit the read-only origin; reconstructed zero/reserved bytes and caller-supplied origin are not additional values saved by the application.
 
@@ -22,7 +24,7 @@ The inspected EFI download pages list [TunerStudio3.3.01](https://www.efianalyti
 
 The earlier [own009/reference packet](../reports/engine/tuning-online-009/README.md) remains historical. The same TunerStudio JAR completed actual online page/runtime reads, a VE-cell85→86 edit, burn acknowledgement, matching CRC and saved MSQ against a separate genuine production Speeduino process. Its pin is `9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20`. The native fixture executes the original parser/loop and static synthetic ADC values at stopped-engine RPM0. Its process-local EEPROM does not prove physical persistence or engine timing.
 
-That control establishes that the application can perform the workflow for the genuine reference identity. It does not authorize us to use that identity. Our own signature remains `ESP32ECU DEV 011 INHIBITED`; supported vendor integration is unresolved. The [reviewable request](../tuning/vendor-integration-request.md) and [email draft](../tuning/vendor-integration-email.txt) are local and unsent.
+That control establishes that the application can perform the workflow for the genuine reference identity. It does not authorize us to use that identity. Our current signature is `ESP32ECU DEV 012 INHIBITED`; supported vendor integration is unresolved. The [reviewable request](../tuning/vendor-integration-request.md) and [email draft](../tuning/vendor-integration-email.txt) are local and unsent.
 
 ## Reproduce and inspect
 

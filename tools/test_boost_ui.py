@@ -43,7 +43,7 @@ async def check(url,device,out):
    await page.locator('#boost-table-kind').select_option('feedforward');await page.locator('[data-boost-cell="38"]').fill('22.5');await page.locator('[data-boost-cell="38"]').dispatch_event('change')
    await page.locator('#sec-fuel-condition').select_option('map_kpa');await page.locator('#sec-fuel-threshold').fill('180');await page.locator('#sec-fuel-threshold').dispatch_event('change')
    await page.locator('#engine-save').click();await page.locator('#engine-save-state').filter(has_text='Revision 2').wait_for()
-   saved=device.engine.tune;assert saved['schema_version']==10 and saved['boost_control']['pressure_enabled'];assert saved['maps']['ve']['load'][-1]==250
+   saved=device.engine.tune;assert saved['schema_version']==11 and saved['boost_control']['pressure_enabled'];assert saved['maps']['ve']['load'][-1]==250
    assert saved['boost_control']['open_duty']['cells'][17]==43.75 and saved['boost_control']['target']['cells'][9]==160.25 and saved['boost_control']['feedforward']['cells'][38]==22.5
    assert saved['secondary_tables']['fuel']['threshold']==180;checks.append('All three boost tables, contextual fuel axis and secondary MAP threshold persist through the native whole-tune validator')
    async with page.expect_download() as pending:await page.locator('#engine-msq').click()

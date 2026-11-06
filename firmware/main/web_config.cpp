@@ -95,6 +95,7 @@ esp_err_t secondary_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application
 esp_err_t load_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::load_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t transient_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::transient_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t idle_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::idle_js,HTTPD_RESP_USE_STRLEN);}
+esp_err_t profile_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::profile_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t cylinder_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");return httpd_resp_send(r,assets::cylinder_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t engine_log_script_get(httpd_req_t*r){httpd_resp_set_type(r,"application/javascript");httpd_resp_set_hdr(r,"Cache-Control","no-store");return httpd_resp_send(r,assets::engine_log_js,HTTPD_RESP_USE_STRLEN);}
 esp_err_t manual_get(httpd_req_t*r){httpd_resp_set_type(r,"application/json");return httpd_resp_send(r,assets::manual,HTTPD_RESP_USE_STRLEN);}
@@ -320,7 +321,7 @@ void service_task(){
   {"/api/engine/sample",HTTP_GET,engine_sample_get,nullptr},
   {"/api/engine/tuning",HTTP_GET,engine_tuning_get,nullptr},{"/tuning_diagnostics.js",HTTP_GET,tuning_script_get,nullptr},{"/idle_control.js",HTTP_GET,idle_script_get,nullptr},{"/transient_enrichment.js",HTTP_GET,transient_script_get,nullptr},{"/load_model.js",HTTP_GET,load_script_get,nullptr},{"/secondary_tables.js",HTTP_GET,secondary_script_get,nullptr},{"/flex_fuel.js",HTTP_GET,flex_script_get,nullptr},{"/boost_control.js",HTTP_GET,boost_script_get,nullptr},
   {"/api/engine/data-log",HTTP_GET,engine_data_log_get,nullptr},{"/api/engine/data-log",HTTP_POST,engine_data_log_post,nullptr},
-  {"/api/engine/data-log.msl",HTTP_GET,engine_data_log_msl_get,nullptr},{"/cylinder_tuning.js",HTTP_GET,cylinder_script_get,nullptr},{"/engine_logger.js",HTTP_GET,engine_log_script_get,nullptr},
+  {"/api/engine/data-log.msl",HTTP_GET,engine_data_log_msl_get,nullptr},{"/profile_metadata.js",HTTP_GET,profile_script_get,nullptr},{"/cylinder_tuning.js",HTTP_GET,cylinder_script_get,nullptr},{"/engine_logger.js",HTTP_GET,engine_log_script_get,nullptr},
   {"/api/engine/trigger-log",HTTP_GET,engine_trigger_get,nullptr},{"/api/engine/trigger-log",HTTP_POST,engine_trigger_post,nullptr},
   {"/api/radio",HTTP_GET,radio_get,nullptr},{"/api/radio",HTTP_POST,radio_post,nullptr},
   {"/",HTTP_GET,index_get,nullptr},{"/trigger_logger.js",HTTP_GET,trigger_script_get,nullptr},{"/api/session",HTTP_GET,session_get,nullptr},{"/api/guide",HTTP_GET,guide_get,nullptr},{"/api/manual",HTTP_GET,manual_get,nullptr},

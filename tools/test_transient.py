@@ -21,7 +21,7 @@ def ramp(runtime,delay=0,apply='multiply'):
 class TransientTests(unittest.TestCase):
  def test_zero_decel_stops_executed_injector_starts_on_both_dispatchers(self):
   for cls in (EngineRuntime,TargetRuntime):
-   for strategy in ('batch_wasted_4cyl','semi_sequential_4cyl'):
+   for strategy in ('batch_wasted','semi_sequential'):
     t=tune();t['strategy']=strategy;t['transient_enrichment'].update(duration_ms=150,decel_fuel_pct=0)
     r=cls(t);r.wheel();edges=[];observations=[];sample=0;index=0
     teeth=[200000+round((rev*60+slot)*50000/60) for rev in range(16) for slot in range(58)]
@@ -101,7 +101,7 @@ class TransientTests(unittest.TestCase):
    self.assertTrue(down['fuel_cut']);self.assertFalse(down['spark_cut']);self.assertEqual(down['pulse_ms'],0)
    self.assertTrue(recorder.append(r.data(),40000));self.assertEqual(recorder.command(dict(action='stop',log_id=1),41000),200)
    page=recorder.page(1,0);self.assertEqual(page['records'][0]['sample']['transient_enrichment']['added_fuel_mg'],d['added_fuel_mg'])
-   rows=list(csv.reader(io.StringIO(recorder.msl(1)),delimiter='\t'));self.assertEqual([len(row) for row in rows[2:]],[245]*4)
+   rows=list(csv.reader(io.StringIO(recorder.msl(1)),delimiter='\t'));self.assertEqual([len(row) for row in rows[2:]],[265]*4)
    row=dict(zip(rows[2],rows[-1]));self.assertEqual(row['AeMode'],'2');self.assertEqual(row['AePhase'],'2');self.assertEqual(row['AeAvailable'],'1')
   finally:r.close();recorder.close()
 
@@ -124,11 +124,11 @@ class TransientTests(unittest.TestCase):
   old=json.loads((R/'config/engine/defaults-v5.json').read_text());old['revision']=47;old['strategy']='semi_sequential_4cyl';old['settings']['accel_gain']=.007
   with tempfile.TemporaryDirectory() as directory:
    path=Path(directory)/'t.json';body=json.dumps(old,indent=1).encode();path.write_bytes(body);store=EngineStore(path)
-   self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);expected=copy.deepcopy(old);expected['schema_version']=10;expected['boost_control']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['boost_control']);expected['boost_control'].update(ki=struct.unpack('<f',struct.pack('<f',.1))[0],derivative_filter_s=struct.unpack('<f',struct.pack('<f',.1))[0]);expected['flex_fuel']=copy.deepcopy(tune()['flex_fuel']);expected['secondary_tables']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['secondary_tables']);expected['load_model']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['load_model']);expected['transient_enrichment']=copy.deepcopy(tune()['transient_enrichment']);expected['transient_enrichment'].update(mode='legacy_tps',tps_min_change_pct=.5,map_min_change_kpa=.5)
+   self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);expected=copy.deepcopy(old);expected['schema_version']=11;expected['strategy']='semi_sequential';expected['timing']['firing_order']+=[0]*4;expected['cylinder_trims']['spark_deg']+=[0]*4;first=expected['cylinder_trims']['fuel_maps'][0];expected['cylinder_trims']['fuel_maps']+=[dict(rpm=first['rpm'][:],load=first['load'][:],cells=[100]*36) for _ in range(4)];expected['boost_control']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['boost_control']);expected['boost_control'].update(ki=struct.unpack('<f',struct.pack('<f',.1))[0],derivative_filter_s=struct.unpack('<f',struct.pack('<f',.1))[0]);expected['flex_fuel']=copy.deepcopy(tune()['flex_fuel']);expected['secondary_tables']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['secondary_tables']);expected['load_model']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['load_model']);expected['transient_enrichment']=copy.deepcopy(tune()['transient_enrichment']);expected['transient_enrichment'].update(mode='legacy_tps',tps_min_change_pct=.5,map_min_change_kpa=.5)
    self.assertEqual(store.tune,expected)
   for path in (R/'tuning/examples').glob('*.msq'):
-   if any(identity in path.read_bytes() for identity in (b'ESP32ECU DEV 007 INHIBITED',b'ESP32ECU DEV 008 INHIBITED',b'ESP32ECU DEV 009 INHIBITED')):continue
-   value=import_msq(path.read_bytes());self.assertEqual(value['schema_version'],10);self.assertEqual(value['transient_enrichment']['mode'],'legacy_tps')
+   if any(identity in path.read_bytes() for identity in tuple(f'ESP32ECU DEV {n:03d} INHIBITED'.encode() for n in range(7,13))):continue
+   value=import_msq(path.read_bytes());self.assertEqual(value['schema_version'],11);self.assertEqual(value['transient_enrichment']['mode'],'legacy_tps')
 
  def test_actual_tunerstudio007_saved_edit_and_curves(self):
   t=import_msq((R/'tuning/examples/tunerstudio-transient-roundtrip.msq').read_bytes())

@@ -2,13 +2,13 @@
 
 This extends the [existing pairing and sensor protocol](espnow.md). It implements the ECU sender plus a [reference receiver](../tools/engine_receiver.py); it does not build a screen. The channel remains 6, encrypted unicast uses the saved 16-byte LMK, and peers remain limited to 4. Peer Storev1 and types 1–6 keep their existing byte layouts. Capabilities are volatile, reset at reboot/unpair/slot reuse and do not change the saved peer blob.
 
-Types7..12 use the existing8-byte `ECN1`, version1, type, little-endian uint16 length header. No native structure is transmitted. Integers are unsigned little endian; floats are IEEE-754 float32. The largest datagram is250bytes; schemas1/2 retain232bytes. Schema5 uses two authenticated datagrams per observation; schema6 uses three and carries boost diagnostics. Send/receive callbacks only signal or queue bounded work; authentication, JSON and framing run in the task, consistent with [Espressif's API guidance](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-reference/network/esp_now.html).
+Types7..13 use the existing8-byte `ECN1`, version1, type, little-endian uint16 length header. No native structure is transmitted. Integers are unsigned little endian; floats are IEEE-754 float32. The largest datagram is250bytes; schemas1/2 retain232bytes. Schema5 uses two authenticated datagrams per observation; schema6 uses three and carries boost diagnostics. Current schema7 adds a fourth cylinder part and is required for1..8-cylinder profiles and wider worker contexts. Send/receive callbacks only signal or queue bounded work; authentication, JSON and framing run in the task, consistent with [Espressif's API guidance](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-reference/network/esp_now.html).
 
 ## Negotiate and recover
 
 1. Load the saved ECU STA MAC and LMK. Send a type 7 read-only query with session/counter/features/schema all 0 and a fresh cryptographic 16-byte client nonce. Start a local monotonic timer for this request. A query does not enable engine telemetry.
 2. Within 1 second, verify type 8's full HMAC with the LMK, echoed nonce, enums, lengths and reserved/status fields. Reject responses from any other MAC. Record the current capability counter/mode, nonzero boot session, boot nonce, sequence floor and ECU reply-send time.
-3. To enable, send type7 with that boot session, counter+1, feature bit0 set, schema6 (or an explicit legacy schema1..5) and a new nonce. Accept the matching authenticated reply before using data. To disable, increment the counter with features/schema0. Counter0 is reserved for queries. Updates must be strictly newer; retry the exact same request bytes if a reply is lost. A same-counter request with changed bytes is rejected. At UINT32_MAX, re-pair/reboot is required before another update; never wrap the counter.
+3. To enable, send type7 with that boot session, counter+1, feature bit0 set, schema7 (or an explicit compatible legacy schema1..6) and a new nonce. Accept the matching authenticated reply before using data. To disable, increment the counter with features/schema0. Counter0 is reserved for queries. Updates must be strictly newer; retry the exact same request bytes if a reply is lost. A same-counter request with changed bytes is rejected. At UINT32_MAX, re-pair/reboot is required before another update; never wrap the counter.
 4. A rebooted screen queries the ECU's accepted counter instead of assuming 0. Queries report the current mode without modifying it. An ECU reboot starts disabled again. A query with session 0 discovers the current boot. Query/reply state is not persisted to NVS.
 5. Refresh the timed nonce query at most 5 seconds later and after a 1 second gap in authenticated engine frames, including no first data within 1 second of a reply. The reference receiver invalidates its cached display while querying. Use a fresh random nonce every time. Never accept an unsolicited, expired or nonce-mismatched reply.
 
@@ -34,7 +34,7 @@ The ASCII domain is 17 bytes. Use all 32 derived bytes for engine data/ACK HMACs
 
 ## Engine packet, type 9
 
-Total232bytes for schemas1/2 or250 for schemas3..6. Multipart BASE retains the schema4 layout with its negotiated schema field. Schema5 needs matching type11; schema6 also needs type12. HMAC verification with the derived key precedes any sequence/freshness update. Reject incorrect lengths, nonzero reserved bytes, unsupported schema/enums, wrong boot/source, duplicate/out-of-order packet IDs and reversed sender time. Packet IDs are global u64 and can have gaps. The source proposal sequence is independently u64. Preserve these as integers, not JavaScript Number values; the web API uses decimal strings.
+Total232bytes for schemas1/2 or250 for schemas3..7. Multipart BASE retains the schema4 layout with its negotiated schema field. Schema5 needs matching type11; schema6 also needs type12; schema7 also needs type13. HMAC verification with the derived key precedes any sequence/freshness update. Reject incorrect lengths, nonzero reserved bytes, unsupported schema/enums, wrong boot/source, duplicate/out-of-order packet IDs and reversed sender time. Packet IDs are global u64 and can have gaps. The source proposal sequence is independently u64. Preserve these as integers, not JavaScript Number values; the web API uses decimal strings.
 
 | Offset | Field |
 | --- | --- |
@@ -187,3 +187,26 @@ python3 -B scripts/test_radio_service.py --output .cache/engine/NEW_SCHEMA6_RADI
 python3 -B tools/check_radio_service_fixtures.py .cache/engine/NEW_SCHEMA6_RADIO .cache/engine/NEW_SCHEMA6_INTEROP.json
 uv run --offline --with playwright==1.64.0 python -B tools/test_flex_radio_ui.py --fixtures .cache/engine/NEW_SCHEMA6_RADIO --output .cache/engine/NEW_SCHEMA6_BROWSER
 ```
+
+
+## Complete cylinder profiles, schema7
+
+[The machine contract](../config/engine-radio-v7.json) preserves existing BASE/FLEX/BOOST layouts with authenticated schema7 fields and adds a236-byte type13 CYLINDERS datagram. Each extension binds the complete BASE HMAC. All four are prepared from one immutable source observation and must authenticate, match session/sequence/schema/base MAC, and complete within the original250ms assembly deadline before display or ACK. Partial or duplicate parts cannot renew observation liveness or deadlines. Query, capability update, key/boot change and unpair retire pending assembly. Repeated proposal checks include the entire cylinder payload across clock queries.
+
+| CYLINDERS field | Offset | Bytes |
+| --- | ---: | ---: |
+| Common header | 0 | 8 |
+| Session / packet sequence / schema7 / zero reserved | 8 | 16 |
+| Full BASE HMAC-SHA256 | 24 | 32 |
+| Proposal count1..8 / earlier-worker count0..8 / fitted injector4 / fitted coil4 | 56 | 4 |
+| Valid mask / trims-enabled bool / capacity / spark-clamp / retard-floor masks | 60 | 5 |
+| Reserved zero | 65 | 3 |
+| Full worker virtual mask / physical command mask, U32 each | 68 | 8 |
+| C1..8 rows: pulse-ms / advance-degrees / fuel-percent / duty-percent, F32 each | 76 | 128 |
+| Full CYLINDERS HMAC-SHA256 | 204 | 32 |
+
+Proposal masks fit proposal count. Worker masks fit the independently declared earlier worker count, with0 meaning unknown/no command and requiring zero masks. Full masks must agree with BASE's low bytes; physical command masks are limited to fitted4+4 IDs. Logical IDs are INJ1..4=0..3, IGN1..4=4..7, idle8, boost9, INJ5..8=10..13, IGN5..8=14..17. Unknown/inactive cylinder values are canonical quiet NaN `0x7fc00000`; the reference receiver displays them as null. None of these masks is electrical readback or remote control permission.
+
+The sender retains the existing per-peer datagram budget and both metadata/sensor reservations. In a15s,1200-slot native API-model replay with four peers, each gets60 complete observations,30 metadata packets across all six sensor channels and30 sensor packets; maximum BASE-to-CYLINDERS time is150ms. Capability/pairing/CPU/RF congestion can reduce rates. This is a deterministic sender model, not a throughput or latency guarantee. Tests cover fourth-part SDK failure/exact retry, original expiry, partial ACK rejection, all24 arrival orders, authenticated semantic failures, every-byte tampering and wider earlier workers.
+
+Schemas1..6 are withheld whenever the current proposal count is not4 or an earlier worker count/mask cannot fit the old contract. Current4/earlier-worker8 also requires schema7. Compatible four-cylinder bundles retain their earlier bytes; sensor fallback remains independent and requires fresh sensor data. The paired-screen UI reports the pending cylinder part and complete-observation ACK separately. Actual screen implementation, two-device/RF/load testing and physical operation remain open.

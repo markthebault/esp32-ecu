@@ -26,7 +26,7 @@ class SecondaryTests(unittest.TestCase):
  def store(self,path):
   r=EngineStore(path);self.addCleanup(r.runtime.close);self.addCleanup(r.data_recorder.close);return r
  def test_modes_sources_strategies_and_coherent_metadata(self):
-  for strategy in ('batch_wasted_4cyl','sequential_4cyl','semi_sequential_4cyl'):
+  for strategy in ('batch_wasted','sequential','semi_sequential'):
    for mode in ENUMS['mode']:
     for source in ENUMS['source']:
      t=tune();t['strategy']=strategy
@@ -89,8 +89,8 @@ class SecondaryTests(unittest.TestCase):
  def test_json7_retains_load_zero_coefficients_and_stored_bytes(self):
   old=json.loads((R/'config/engine/defaults-v7.json').read_text());old['maps']['ve']['cells'][0]=0;old['revision']=71;body=json.dumps(old,indent=2).encode()
   with tempfile.TemporaryDirectory() as d:
-   path=Path(d)/'old.json';path.write_bytes(body);store=self.store(path);self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['revision'],71);self.assertEqual(store.tune['schema_version'],10);self.assertEqual(store.tune['load_model'],old['load_model']);self.assertEqual(store.tune['maps'],old['maps']);self.assertTrue(all(r['mode']=='off' for r in store.tune['secondary_tables'].values()))
-   self.assertEqual(store.save(body)[0],200);self.assertEqual(json.loads(path.read_bytes())['schema_version'],10)
+   path=Path(d)/'old.json';path.write_bytes(body);store=self.store(path);self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body);self.assertEqual(store.tune['revision'],71);self.assertEqual(store.tune['schema_version'],11);self.assertEqual(store.tune['load_model'],old['load_model']);self.assertEqual(store.tune['maps'],old['maps']);self.assertTrue(all(r['mode']=='off' for r in store.tune['secondary_tables'].values()))
+   self.assertEqual(store.save(body)[0],200);self.assertEqual(json.loads(path.read_bytes())['schema_version'],11)
  def test_own008_actual_file_keeps_model_and_full_new_msq_roundtrip(self):
   old=import_msq((R/'tuning/examples/tunerstudio-load-roundtrip.msq').read_bytes());self.assertEqual(old['load_model']['fuel_source'],'tps');self.assertEqual(old['load_model']['afr'],'measured');self.assertEqual(old['load_model']['fixed_baro_kpa'],99.5);self.assertTrue(all(r['mode']=='off' for r in old['secondary_tables'].values()))
   t=tune();configure(t,'fuel','multiply','tps');configure(t,'spark','add','imap_emap');t['secondary_tables']['fuel']['map']['cells'][231]=123.125;t['secondary_tables']['spark']['map']['cells'][17]=-2.5
@@ -105,7 +105,7 @@ class SecondaryTests(unittest.TestCase):
    for i in range(256):
     raw=(.75+i/1000 if name=='lambda' else 10+i/100 if name=='spark' else 1e-38*(1+i/256))
     m['cells'][i]=struct.unpack('<f',struct.pack('<f',raw))[0]
-  body=json.dumps(t,separators=(',',':')).encode();self.assertGreater(len(body),24576);self.assertLess(len(body),49152)
+  body=json.dumps(t,separators=(',',':')).encode();self.assertGreater(len(body),26576);self.assertLess(len(body),49152)
   with tempfile.TemporaryDirectory() as d:
    store=self.store(Path(d)/'dense.json');self.assertEqual(store.save(body)[0],200);self.assertEqual(pages(decode_pages(pages(store.tune),store.tune)),pages(store.tune))
  def test_reserved_regions_and_full_u32_reject_before_narrowing(self):
@@ -129,6 +129,6 @@ class SecondaryTests(unittest.TestCase):
   for key,value in [('threshold',None),('debounce_ms',None),('input_observed_us','1'),('mode_code',5),('flags',0),('extra',0),('valid',False)]:
    bad=copy.deepcopy(data);bad['secondary_tables']['fuel'][key]=value;self.assertFalse(rec.bridge.data_validate(json.dumps(bad).encode()),key)
   self.assertEqual(rec.command(dict(action='start',period_ms=20,duration_s=1),1000000),200);self.assertTrue(rec.append(data,1000000));rec.command(dict(action='stop',log_id=1),1000001)
-  rows=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));self.assertEqual([len(row) for row in rows[2:]],[245,245,245]);values=dict(zip(rows[2],rows[4]));self.assertEqual(values['SecFuelAvailable'],'1');self.assertEqual(values['SecFuelMode'],'0');self.assertEqual(values['SecFuelObservedUs'],'NaN')
+  rows=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));self.assertEqual([len(row) for row in rows[2:]],[265,265,265]);values=dict(zip(rows[2],rows[4]));self.assertEqual(values['SecFuelAvailable'],'1');self.assertEqual(values['SecFuelMode'],'0');self.assertEqual(values['SecFuelObservedUs'],'NaN')
 
 if __name__=='__main__':unittest.main(verbosity=2)

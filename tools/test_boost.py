@@ -23,12 +23,12 @@ def stage(session,t):
 
 class BoostTests(unittest.TestCase):
  def test_all_strategies_pressure_cut_recovery_and_coherent_map(self):
-  for strategy in ('batch_wasted_4cyl','semi_sequential_4cyl','sequential_4cyl'):
+  for strategy in ('batch_wasted','semi_sequential','sequential'):
    t=tune();t['strategy']=strategy;r=EngineRuntime(t);rec=EngineRecorder()
    try:
     out=r.step(sample(),0,use_decoder=False);self.assertEqual(out['faults'],0);self.assertGreater(out['pulse_ms'],0);self.assertEqual(out['boost_control']['duty_pct'],0)
     for now in range(5000,405000,5000):out=r.step(sample(),now,use_decoder=False)
-    data=r.data();self.assertEqual(data['schema_version'],2);self.assertEqual(data['inputs']['map_kpa'],150);self.assertEqual(data['boost_control']['duty_pct'],40)
+    data=r.data();self.assertEqual(data['schema_version'],3);self.assertEqual(data['inputs']['map_kpa'],150);self.assertEqual(data['boost_control']['duty_pct'],40)
     self.assertTrue(rec.bridge.data_validate(json.dumps(data).encode()))
     out=r.step(sample(230),405000,use_decoder=False);self.assertTrue(out['faults']&512);self.assertTrue(out['fuel_cut'] and out['spark_cut']);self.assertEqual(out['boost_control']['duty_pct'],0)
     for now in range(410000,660000,5000):self.assertTrue(r.step(sample(200),now,use_decoder=False)['faults']&512)
@@ -41,7 +41,7 @@ class BoostTests(unittest.TestCase):
   for source in sorted((R/'config/engine').glob('defaults-v*.json')):
    body=source.read_bytes();old=json.loads(body);r=EngineRuntime(old)
    try:
-    self.assertEqual(source.read_bytes(),body);self.assertEqual(r.tune['schema_version'],10)
+    self.assertEqual(source.read_bytes(),body);self.assertEqual(r.tune['schema_version'],11)
     self.assertFalse(r.tune['boost_control']['pressure_enabled']);self.assertEqual(r.tune['boost_control']['mode'],'off')
     self.assertEqual(r.tune['maps'],old['maps']);self.assertEqual(r.tune['revision'],old['revision'])
    finally:r.close()
@@ -55,7 +55,7 @@ class BoostTests(unittest.TestCase):
 
  def test_binary_msq_and_historical_prefix(self):
   import engine_protocol_v10 as previous
-  self.assertEqual(pages(DEFAULT)[1][:8192],previous.pages(DEFAULT)[1])
+  historical=json.loads((R/'config/engine/defaults-v9.json').read_text());self.assertEqual(pages(DEFAULT)[1][:8192],previous.pages(historical)[1])
   t=tune();t['boost_control']['open_duty']['cells']=[(i*7)%91 for i in range(64)];t['boost_control']['target']['cells']=[140+(i%9)*.25 for i in range(64)]
   t['boost_control']['feedforward']['cells']=[(i*11)%93 for i in range(64)];t['maps']['ve']['load'][-1]=250
   r=EngineRuntime(t)
@@ -64,7 +64,8 @@ class BoostTests(unittest.TestCase):
    self.assertEqual(pages(decoded),binary);self.assertEqual(import_msq(export_msq(r.tune)),r.tune)
    with self.assertRaises(ValueError):previous.pages(r.tune)
    # An old layout import gets a neutral new feature, even if its caller has a boosted tune.
-   migrated=previous.decode_pages(previous.pages(DEFAULT),r.tune);self.assertFalse(migrated['boost_control']['pressure_enabled'])
+   caller=json.loads((R/'config/engine/defaults-v10.json').read_text());caller['boost_control']=copy.deepcopy(r.tune['boost_control'])
+   migrated=previous.decode_pages(previous.pages(historical),caller);self.assertFalse(migrated['boost_control']['pressure_enabled'])
    bad=copy.deepcopy(binary);bad[1][8280]=1
    with self.assertRaises(ValueError):decode_pages(bad,r.tune)
   finally:r.close()
@@ -90,7 +91,7 @@ class BoostTests(unittest.TestCase):
   for page in root.findall(tag('page')):
    page.set('size','8192')
    for constant in list(page):
-    if constant.get('name','').startswith('boost_'):page.remove(constant)
+    if constant.get('name','').startswith('boost_') or constant.get('name','') in tuple('fireOrder'+str(i) for i in range(5,9)) or constant.get('name','')[:2] in ('c5','c6','c7','c8'):page.remove(constant)
   imported=import_msq(ET.tostring(root));self.assertFalse(imported['boost_control']['pressure_enabled']);self.assertEqual(imported['boost_control']['mode'],'off')
 
  def test_pid_saturation_logs_preserve_demand_and_u64_counts(self):
@@ -101,7 +102,7 @@ class BoostTests(unittest.TestCase):
     out=r.step(sample(pressure),0,use_decoder=False);self.assertEqual(out['faults'],0);data=r.data()
     self.assertEqual(data['boost_control']['demand_pct'],demand);data['boost_control']['pid_updates']=str(2**53+123)
     self.assertTrue(rec.bridge.data_validate(json.dumps(data).encode()));self.assertEqual(rec.command(dict(action='start',period_ms=20,duration_s=1),0),200);self.assertTrue(rec.append(data,0));rec.command(dict(action='stop',log_id=1),1000)
-    rows=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));self.assertEqual([len(row) for row in rows[2:]],[245,245,245]);row=dict(zip(rows[2],rows[4]));self.assertEqual(float(row['BoostDemand']),demand);self.assertEqual(row['BoostPidUpdates'],str(2**53+123));self.assertIn('ENGINE LOG 008',rows[0][0])
+    rows=list(csv.reader(io.StringIO(rec.msl(1)),delimiter='\t'));self.assertEqual([len(row) for row in rows[2:]],[265,265,265]);row=dict(zip(rows[2],rows[4]));self.assertEqual(float(row['BoostDemand']),demand);self.assertEqual(row['BoostPidUpdates'],str(2**53+123));self.assertIn('ENGINE LOG 009',rows[0][0])
    finally:r.close();rec.close()
 
  def test_target_dispatcher_executes_valve_edges_and_cuts_immediately(self):

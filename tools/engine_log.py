@@ -10,6 +10,18 @@ VALVE_FIELDS=[('ValveCurrent','A','current_a'),('ValveOpening','%','opening_pct'
 AE_FIELDS=[('AeTpsDot','%/s','tps_dot_pct_s'),('AeMapDot','kPa/s','map_dot_kpa_s'),('AeWindowMs','ms','window_ms'),('AeTriggerDot','source_units/s','trigger_dot'),('AeCorrectionPct','%','correction_pct'),('AeUnclampedPct','%','unclamped_pct'),('AeRemainingAtSampleMs','ms','remaining_ms'),('AeAddedFuelMg','mg','added_fuel_mg'),('AeFlags','bitfield','flags'),('AeMode','code','mode_code'),('AeApply','code','apply_code'),('AePhase','code','phase_code'),('AeReason','code','reason_code')]
 LOAD_FIELDS=[('LoadFuel','source_units','fuel_load'),('LoadSpark','source_units','spark_load'),('LoadLambda','source_units','lambda_load'),('LoadTrim','source_units','trim_load'),('LoadPressureFactor','ratio','pressure_factor'),('LoadBaro','kPa','baro_kpa'),('LoadEmap','kPa','emap_kpa'),('LoadAux','kPa','aux_kpa'),('LoadAfrFactor','ratio','afr_factor'),('LoadFlags','bitfield','flags'),('LoadFuelSource','code','fuel_source_code'),('LoadSparkSource','code','spark_source_code'),('LoadLambdaSource','code','lambda_source_code'),('LoadTrimSource','code','trim_source_code'),('LoadPressure','code','pressure_code'),('LoadAuxRole','code','aux_role_code'),('LoadBaroSource','code','baro_source_code'),('LoadAfr','code','afr_code'),('LoadReason','code','reason_code'),('LoadAfrState','code','afr_state_code')]
 PWM_CAUSES=('none','disabled','configuration','engine_fault','command_expired','late_interrupt','invalid_command','clock_reversed','output_fault')
+CYLINDER_VALUES=(('PW','ms','pulse_ms'),('Advance','deg','advance_deg'),('FuelTrim','%','fuel_pct'),('Duty','%','duty_pct'))
+CYLINDER_MASKS=(('CylinderValidMask','bitfield','valid_mask'),('CylinderTrimsEnabled','bool','enabled'),('CylinderCapacityMask','bitfield','capacity_mask'),('CylinderSparkClampMask','bitfield','spark_clamp_mask'),('CylinderRetardFloorMask','bitfield','retard_floor_mask'))
+PROFILE_FIELDS=(('CylinderCount','count'),('WorkerCylinderCount','count'),('FittedInjectorCommands','count'),('FittedCoilCommands','count'),('VirtualMask','bitfield'),('PhysicalCommandMask','bitfield'))
+def cylinder_log_values(sample):
+ c=sample.get('cylinders',{});worker=sample.get('worker_observation',{});board=sample.get('board_capacity',{})
+ values=[c.get(key) for _,_,key in CYLINDER_MASKS]
+ for index in range(8):
+  known=sample.get('available') is True and bool(c.get('valid_mask',0)&(1<<index)) and index<len(c.get('proposals',[]))
+  values += [c['proposals'][index].get(key) if known else None for _,_,key in CYLINDER_VALUES]
+ legacy_count=4 if c and sample.get('schema_version') in (1,2) else None
+ legacy_worker=4 if sample.get('schema_version') in (1,2) and (worker.get('command_sequence','0')!='0' or worker.get('virtual_high_mask',0) or worker.get('physical_command_mask',0)) else None
+ return values+[c.get('count',legacy_count),worker.get('cylinder_count',legacy_worker),board.get('injector_commands'),board.get('coil_commands'),worker.get('virtual_high_mask'),worker.get('physical_command_mask')]
 def value_text(value):
  if isinstance(value,bool):return str(int(value))
  if isinstance(value,float) and math.isfinite(value):return format(value,'.9g')
@@ -17,12 +29,13 @@ def value_text(value):
  if isinstance(value,str) and value.isascii() and value.isdigit() and 0<=int(value)<=18446744073709551615:return str(int(value))
  return 'NaN'
 def export_msl(rows,scenario,strategy=None):
- if strategy is not None and strategy not in ('batch_wasted_4cyl','sequential_4cyl','semi_sequential_4cyl'):raise ValueError('Unknown log strategy')
+ if strategy is not None and strategy not in ('batch_wasted','sequential','semi_sequential','batch_wasted_4cyl','sequential_4cyl','semi_sequential_4cyl'):raise ValueError('Unknown log strategy')
  labels=[(name,unit) for name,unit,_ in FIELDS+IDLE_FIELDS]+[('IdleAvailable','bool')]+[(name,unit) for name,unit,_ in PWM_FIELDS]+[('IdlePwmAvailable','bool'),('IdlePwmFault','code')]+[(name,unit) for name,unit,_ in VALVE_FIELDS]+[('ValveModelAvailable','bool')]+[(name,unit) for name,unit,_ in AE_FIELDS]+[('AeAvailable','bool')]
  labels += [(name,unit) for name,unit,_ in LOAD_FIELDS]+[('LoadAvailable','bool')]
  labels += [(name,unit) for kind in KINDS for name,unit,_ in log_fields(kind)]+[(name,unit) for name,unit,_ in flex_log_fields()]
  labels += [(name,unit) for name,unit,_ in boost_log_fields()]
- out=['"ESP32ECU SIL 008"','"UNVALIDATED REDUCED-ORDER SIMULATION / '+scenario+(' / '+strategy if strategy else '')+' / physical outputs inhibited; proposals/virtual state/synthetic estimates are separate; Load*=fuel model; Sec*=source-tagged secondary values/selection/input diagnostics; check availability/validity; electrical ledger only"','\t'.join(x[0] for x in labels),'\t'.join(x[1] for x in labels)]
+ labels += [(name,unit) for name,unit,_ in CYLINDER_MASKS]+[(f'C{i}{name}',unit) for i in range(1,9) for name,unit,_ in CYLINDER_VALUES]+list(PROFILE_FIELDS)
+ out=['"ESP32ECU SIL 009"','"UNVALIDATED REDUCED-ORDER SIMULATION / '+scenario+(' / '+strategy if strategy else '')+' / physical outputs inhibited; proposals/virtual state/synthetic estimates are separate; Load*=fuel model; Sec*=source-tagged secondary values/selection/input diagnostics; check availability/validity; C*=individual proposals, counts identify proposal and earlier worker separately; electrical ledger only"','\t'.join(x[0] for x in labels),'\t'.join(x[1] for x in labels)]
  for row in rows:
   values=[row.get(key,0) for _,_,key in FIELDS]
   idle=row.get('engine_sample',{}).get('idle',{});known=idle.get('available') is True
@@ -46,5 +59,6 @@ def export_msl(rows,scenario,strategy=None):
   values += [flex.get(key) if known else False if key in FLEX_FLAGS else None if key in FLEX_VALUES+FLEX_TIMES else 0 for _,_,key in flex_log_fields()]
   boost=row.get('engine_sample',{}).get('boost_control',{});known=boost.get('available') is True
   values += [boost.get(key) if known or key in ('mode_code','pressure_enabled') else None if key in BOOST_VALUES else 0 for _,_,key in boost_log_fields()]
+  values += cylinder_log_values(row.get('engine_sample',{}))
   out.append('\t'.join(value_text(value) for value in values))
  return '\n'.join(out)+'\n'

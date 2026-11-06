@@ -33,7 +33,7 @@ struct TimingStats {
   max_lateness_us=0,max_capture_age_us=0,max_producer_gap_us=0,
   max_injector_high_us=0,max_coil_high_us=0,last_fault_us=0,last_progress_us=0,last_capture_us=0;
  std::uint32_t generation=0,epoch=0;
- std::uint8_t high_mask=0;
+ std::uint32_t high_mask=0;
  Cause fault=Cause::None,last_fault=Cause::None,last_cut=Cause::None;
  engine::AngleScheduler::StopReason angle_reason=engine::AngleScheduler::StopReason::None;
 };
@@ -51,6 +51,7 @@ class Executor {
 public:
  static constexpr std::uint64_t none=UINT64_MAX;
  static constexpr unsigned trace_capacity=128,interrupt_budget=16;
+ static constexpr unsigned channel_extent=engine::channels::extent<8>;
  static constexpr std::uint64_t lateness_limit_us=25,producer_timeout_us=5000;
  struct Candidate {
   engine::AngleScheduler scheduler;
@@ -64,6 +65,8 @@ public:
   }
  };
  enum class Commit {Accepted,Retry,Fault};
+ explicit Executor(unsigned cylinder_limit=8):cylinder_limit_(cylinder_limit<=8?cylinder_limit:0){}
+ unsigned maximum_cylinders()const{return cylinder_limit_;}
 
  template<class IO> void command(const Command& c,std::uint64_t now,IO& io){
   const auto expired=expiry(now);if(expired!=Cause::None)trip(now,expired,io);
@@ -79,13 +82,12 @@ public:
   if(!c.sequence||c.sequence<=command_.sequence||c.command_us>now||c.sampled_us>now||
      now-c.command_us>=20000||now-c.sampled_us>=20000){trip(now,Cause::CommandTimeout,io);return;}
   if(c.max_injector_high_us<1000||c.max_injector_high_us>15000||c.max_coil_high_us<500||c.max_coil_high_us>3500){trip(now,Cause::Plan,io);return;}
-  // This executor and its IO, masks, published diagnostics and auxiliary
-  // arbitration still implement the four-cylinder target contract. Expanded
-  // logical profiles must not partially execute through this older boundary.
-  if(c.angle.cylinders!=4||c.output.cylinder_count!=4||!engine::demand_valid(c.angle,c.output,c.output.rpm)){trip(now,Cause::Plan,io);return;}
+  // The caller supplies the actual output-policy capacity. Virtual execution
+  // supports eight; the existing physical dummy-load map is limited to four.
+  if(c.angle.cylinders>cylinder_limit_||!engine::demand_valid(c.angle,c.output,c.output.rpm)){trip(now,Cause::Plan,io);return;}
   if(c.output.proposed_enabled()){
    if(!c.output.spark_cut&&std::llround(c.output.dwell_ms*1000)>c.max_coil_high_us){trip(now,Cause::Plan,io);return;}
-   for(unsigned cylinder=0;cylinder<4;++cylinder)if(!c.output.fuel_cut&&std::llround(c.output.pulse_for(cylinder)*1000)>c.max_injector_high_us){trip(now,Cause::Plan,io);return;}
+   for(unsigned cylinder=0;cylinder<c.angle.cylinders;++cylinder)if(!c.output.fuel_cut&&std::llround(c.output.pulse_for(cylinder)*1000)>c.max_injector_high_us){trip(now,Cause::Plan,io);return;}
   }
   command_=c;
   command_deadline_=std::min(c.command_us,c.sampled_us)+20000;
@@ -144,12 +146,12 @@ public:
   if(tooth_deadline_<next)next=tooth_deadline_;
   if(producer_deadline_<next)next=producer_deadline_;
   if(phase_required()&&phase_deadline_<next)next=phase_deadline_;
-  for(unsigned ch=0;ch<8;++ch)if((stats_.high_mask&(1U<<ch))&&high_deadlines_[ch]<next)next=high_deadlines_[ch];
+  for(unsigned ch=0;ch<channel_extent;++ch)if((stats_.high_mask&(1U<<ch))&&high_deadlines_[ch]<next)next=high_deadlines_[ch];
   return next;
  }
  template<class IO> ECU_ISR_CODE void stop(std::uint64_t now,Cause cause,IO& io){
   io.all_low();
-  for(unsigned ch=0;ch<8;++ch)if(stats_.high_mask&(1U<<ch))record_low(ch,now);
+  for(unsigned ch=0;ch<channel_extent;++ch)if(stats_.high_mask&(1U<<ch))record_low(ch,now);
   if(stats_.high_mask||scheduler_.next_time()!=none){++stats_.cuts;record(now,now,255,false,cause);}
   stats_.high_mask=0;scheduler_.cut();tooth_deadline_=none;active_=false;
   if(cause==Cause::Configuration){phase_known_=false;phase_deadline_=none;}
@@ -169,7 +171,7 @@ public:
   if(now>=producer_deadline_){trip(now,Cause::ProducerTimeout,io);return;}
   if(now>=tooth_deadline_){trip(now,Cause::ToothTimeout,io);return;}
   if(phase_required()&&(!phase_known_||now>=phase_deadline_)){trip(now,Cause::CamPhase,io);return;}
-  for(unsigned ch=0;ch<8;++ch)if((stats_.high_mask&(1U<<ch))&&now>high_deadlines_[ch]){trip(now,Cause::HighLimit,io);return;}
+  for(unsigned ch=0;ch<channel_extent;++ch)if((stats_.high_mask&(1U<<ch))&&now>high_deadlines_[ch]){trip(now,Cause::HighLimit,io);return;}
   if(scheduler_.expired_unstarted(now)){trip(now,Cause::LateInterrupt,io);return;}
   for(unsigned count=0;count<interrupt_budget;++count){
    const auto due=scheduler_.next_time();
@@ -178,20 +180,21 @@ public:
    engine::Edge edge;
    if(!scheduler_.pop(edge)||scheduler_.event_forced_cut()){trip(now,Cause::CommandTimeout,io);return;}
    ++stats_.generation;
-   if(edge.channel>=8){trip(now,Cause::Plan,io);return;}
-   const auto bit=static_cast<std::uint8_t>(1U<<edge.channel);
+   const auto kind=engine::channels::kind(edge.channel);
+   if(edge.channel>=channel_extent||(kind!=engine::channels::Kind::Injector&&kind!=engine::channels::Kind::Coil)||engine::channels::cylinder(edge.channel)>=command_.angle.cylinders){trip(now,Cause::Plan,io);return;}
+   const auto bit=std::uint32_t(1U<<edge.channel);
    if(bool(stats_.high_mask&bit)==edge.high){trip(now,Cause::Plan,io);return;}
    current_event_=edge;
    if(!io.write(edge.channel,edge.high)){trip(now,Cause::Gate,io);return;}
    if(edge.high){
     stats_.high_mask|=bit;rise_us_[edge.channel]=now;
-    high_deadlines_[edge.channel]=now+(edge.channel<4?command_.max_injector_high_us:command_.max_coil_high_us);
-   }else{record_low(edge.channel,now);stats_.high_mask&=static_cast<std::uint8_t>(~bit);}
+    high_deadlines_[edge.channel]=now+(kind==engine::channels::Kind::Injector?command_.max_injector_high_us:command_.max_coil_high_us);
+   }else{record_low(edge.channel,now);stats_.high_mask&=~bit;}
    const auto late=now-due;if(late>stats_.max_lateness_us)stats_.max_lateness_us=late;
    ++stats_.dispatched;record(due,now,static_cast<std::uint8_t>(edge.channel),edge.high,Cause::None);
   }
   if(scheduler_.next_time()!=none&&scheduler_.next_time()<=now){trip(now,Cause::TraceBudget,io);return;}
-  for(unsigned ch=0;ch<8;++ch)if((stats_.high_mask&(1U<<ch))&&now>=high_deadlines_[ch]){trip(now,Cause::HighLimit,io);return;}
+  for(unsigned ch=0;ch<channel_extent;++ch)if((stats_.high_mask&(1U<<ch))&&now>=high_deadlines_[ch]){trip(now,Cause::HighLimit,io);return;}
  }
  bool recover(std::uint64_t now,bool fresh_stopped){
   const bool quiet=!capture_seen_||(now>=stats_.last_capture_us&&now-stats_.last_capture_us>150000);
@@ -230,7 +233,7 @@ private:
  ECU_ISR_CODE bool phase_required()const{return command_.angle.strategy==engine::Strategy::Sequential;}
  ECU_ISR_CODE void record_low(unsigned ch,std::uint64_t now){
   const auto width=now>=rise_us_[ch]?now-rise_us_[ch]:0;
-  auto& maximum=ch<4?stats_.max_injector_high_us:stats_.max_coil_high_us;
+  auto& maximum=engine::channels::kind(ch)==engine::channels::Kind::Injector?stats_.max_injector_high_us:stats_.max_coil_high_us;
   if(width>maximum)maximum=width;
  }
  ECU_ISR_CODE void record(std::uint64_t scheduled,std::uint64_t actual,std::uint8_t channel,bool high,Cause cause){
@@ -244,7 +247,8 @@ private:
  TimingStats stats_;
  // Raw fixed arrays keep ISR indexing intrinsic even when the larger shared
  // timer callback makes the compiler outline std::array::operator[] to flash.
- std::uint64_t rise_us_[8]{},high_deadlines_[8]{};
+ std::uint64_t rise_us_[channel_extent]{},high_deadlines_[channel_extent]{};
+ unsigned cylinder_limit_=8;
  std::array<TimingEvent,trace_capacity> trace_{};
  std::uint64_t trace_sequence_=0,command_deadline_=none,producer_deadline_=none,
   tooth_deadline_=none,phase_deadline_=none,last_dispatch_us_=0,quiet_since_=none,last_recovery_check_us_=0;

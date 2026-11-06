@@ -49,7 +49,7 @@ def engine_flex_fragment(packet,key,expected_schema=5):
  check(packet,11,FLEX_SIZE)
  if not hmac.compare_digest(packet[FLEX_BODY:],hmac.digest(key,packet[:FLEX_BODY],'sha256')):raise ValueError('Flex authentication failed')
  session,sequence,schema,reserved=struct.unpack_from('<IQHH',packet,8)
- if expected_schema not in (5,6) or not session or not sequence or schema!=expected_schema or reserved or packet[191]:raise ValueError('Invalid flex fragment header')
+ if expected_schema not in (5,6,7) or not session or not sequence or schema!=expected_schema or reserved or packet[191]:raise ValueError('Invalid flex fragment header')
  f=decode_record(packet);age,stale=struct.unpack_from('<II',packet,192)
  if stale!=(stale_limit(f['capture_calibration']) if f['available'] else 0):raise ValueError('Flex stale limit changed')
  if age!=UINT32_MAX and (not f['available'] or not timestamp_known(f)):raise ValueError('Unknown flex timestamp cannot have an age')

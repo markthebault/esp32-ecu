@@ -56,7 +56,7 @@ int main(int argc,char**argv){
  in.map_kpa=450;in.sensors_valid=false;in.sampled_us=26000;proposal=controller.step(forced,in,26000);check((proposal.faults&engine::Overboost)&&(proposal.faults&engine::BadSensor));check(proposal.boost_control.inhibit_engine);in.sensors_valid=true;
  std::ifstream file(std::string(argc>1?argv[1]:".")+"/config/engine/defaults-v9.json");std::string legacy((std::istreambuf_iterator<char>(file)),{}),canonical;
  check(!legacy.empty());engine::Tune parsed;check(engine::canonical_tune(legacy.c_str(),parsed,canonical));
- auto*j=cJSON_Parse(canonical.c_str());check(j&&cJSON_GetObjectItemCaseSensitive(j,"schema_version")->valueint==10);
+ auto*j=cJSON_Parse(canonical.c_str());check(j&&cJSON_GetObjectItemCaseSensitive(j,"schema_version")->valueint==11);
  check(!parsed.boost_control.pressure_enabled&&parsed.boost_control.mode==boost::Mode::Off);
  auto*boost=cJSON_GetObjectItemCaseSensitive(j,"boost_control");check(boost&&cJSON_GetArraySize(cJSON_GetObjectItemCaseSensitive(cJSON_GetObjectItemCaseSensitive(boost,"target"),"cells"))==64);
  cJSON_SetNumberValue(cJSON_GetObjectItemCaseSensitive(j,"schema_version"),9);check(!engine::parse_tune(j,parsed));

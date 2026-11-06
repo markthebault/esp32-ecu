@@ -1,6 +1,6 @@
 # Shared development tuning transport
 
-The current definition is **own011 / schema10**, identity `ESP32ECU DEV 011 INHIBITED`. TunerStudio MS Lite3.3.01 loads/edits/saves it offline with a verified three-table roundtrip. A fresh online trial still rejects the own identity after valid discovery. [Actual application evidence](engine-tuning-application.md) distinguishes that result from the genuine Speeduino positive control. Physical outputs remain inhibited.
+The current definition is **own012 / schema11**, identity `ESP32ECU DEV 012 INHIBITED`. Actual TunerStudio3.3.01 offline checks include C8 fuel/spark edits and a complete12288-byte page reconstruction. One to eight logical cylinders are available; fitted hardware remains4+4 and engine outputs remain inhibited. [Cylinder integration](engine-cylinder-profiles.md) describes its boundaries. The latest observed online rejection is own011; supported own012 online acceptance remains unverified. [Application evidence](engine-tuning-application.md).
 
 ## Connection and ownership
 
@@ -14,7 +14,7 @@ The host TCP/PTY endpoints execute the same portable Session/Stream against a sy
 
 ## Current layout
 
-Raw/framed `F` returns serial protocol `002`; `f` advertises protocol2 and256-byte chunks. MS-envelope lengths/CRC32 are big-endian; calibration/runtime values are little-endian. The [layout manifest](../tuning/protocol-layout.json) and [INI](../tuning/esp32-ecu-boost.ini) describe the current12288-byte page and1152-byte runtime.
+Raw/framed `F` returns serial protocol `002`; `f` advertises protocol2 and256-byte chunks. MS-envelope lengths/CRC32 are big-endian; calibration/runtime values are little-endian. The [layout manifest](../tuning/protocol-layout.json) and [INI](../tuning/esp32-ecu-profiles.ini) describe the current12288-byte page and1152-byte runtime.
 
 | Page1 region | Offset | Bytes |
 | --- | ---: | ---: |
@@ -30,9 +30,12 @@ Raw/framed `F` returns serial protocol `002`; `f` advertises protocol2 and256-by
 | Boost open-duty RPM/TPS table | 8320 | 320 |
 | Boost target RPM/TPS table | 8640 | 320 |
 | Boost feedforward RPM/target-pressure table | 8960 | 320 |
-| Reserved zero tail | 9280 | 3008 |
+| C5–8 firing-order positions | 9280 | 4 |
+| C5–8 fuel maps | 9284 | 768 |
+| C5–8 spark offsets | 10052 | 16 |
+| Reserved zero tail | 10068 | 2220 |
 
-The runtime retains the832-byte own010 prefix, adds a64-byte boost record at832 and retains a zero tail to1152. A full reply is1159 framed bytes. **That exceeds each1024-byte target USB ring.** The writer handles incremental enqueue/retry; the nominal2ms budget and host PTY tests do not prove real target throughput or scheduling under flash/RF/ISR load. Do not retain the old839-byte within-ring claim.
+The runtime retains the896-byte own011 prefix and appends proposal/worker counts, fitted4+4 capacity, full32-bit masks and C5–8 proposals at896..984, with a zero tail to1152. A full reply is1159 framed bytes. **That exceeds each1024-byte target USB ring.** The writer handles incremental enqueue/retry; the nominal2ms budget and host PTY tests do not prove real target throughput or scheduling under flash/RF/ISR load. Do not retain the old839-byte within-ring claim.
 
 ## Staging, revision and diagnostics
 
@@ -60,4 +63,4 @@ uv run --with playwright --with numpy --with fmpy==0.3.26 python3 tools/test_tun
 
 `PtyEndpoint(store, fresh_path, on_wire=observer)` can observe complete actual host RX/TX slices. The optional callback receives `(direction, bytes)`, including partial writes; ordinary debug prints still truncate previews. Keep captures bounded and analyze them with `tools/analyze_tuning_wire.py --require-complete`. Host writes do not establish application consumption or physical delivery. The current regression captures an entire1159-byte reply across31-byte OS writes and validates its CRC.
 
-[Current application packet](../reports/engine/tuning-apps-011/README.md) retains actual own011 files, full-page/native/browser checks, current raw rejection and MSL008 plots. [Historical USB packet](../reports/engine/tuning-usb/) retains earlier own004 evidence; [own009 diagnosis](../reports/engine/tuning-online-009/) remains immutable. Engine comparisons and target timing have separate scopes. Supported online onboarding, physical USB/power/load/HIL and [wider ECU features](engine-feature-coverage.md) remain unfinished. The vendor draft is local and unsent.
+[Earlier application packet](../reports/engine/tuning-apps-011/README.md) retains actual own011 files, full-page/native/browser checks, current raw rejection and MSL008 plots. [Historical USB packet](../reports/engine/tuning-usb/) retains earlier own004 evidence; [own009 diagnosis](../reports/engine/tuning-online-009/) remains immutable. Engine comparisons and target timing have separate scopes. Supported online onboarding, physical USB/power/load/HIL and [wider ECU features](engine-feature-coverage.md) remain unfinished. The vendor draft is local and unsent.

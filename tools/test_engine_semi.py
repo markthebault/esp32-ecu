@@ -16,7 +16,7 @@ from engine_receiver import EngineReceiver,capability_request,capability_reply,e
 
 def semi_tune():
     t=json.loads((R/'config/engine/defaults.json').read_text())
-    t['strategy']='semi_sequential_4cyl';t['settings']['afterstart_pct']=0
+    t['strategy']='semi_sequential';t['settings']['afterstart_pct']=0
     return t
 
 
@@ -54,12 +54,12 @@ def prescribed(runtime_type,tune,stray_cam=False,drop_at=None,rev_us=50000,accep
 class SemiTests(unittest.TestCase):
     def test_actual_tunerstudio006_export_retains_selected_mode_and_edit(self):
         tune=import_msq((R/'tuning/examples/tunerstudio-semi-roundtrip.msq').read_bytes())
-        self.assertEqual(tune['strategy'],'semi_sequential_4cyl');self.assertEqual(tune['timing']['injection_end_deg'],535.5)
+        self.assertEqual(tune['strategy'],'semi_sequential');self.assertEqual(tune['timing']['injection_end_deg'],535.5)
         self.assertTrue(tune['settings']['idle_enabled']);self.assertEqual(tune['idle_control']['frequency_hz'],80)
         self.assertEqual(pages(decode_pages(pages(tune),tune)),pages(tune))
 
     def test_two_effective_half_pulses_equal_one_full_mass_with_two_dead_times(self):
-        semi=semi_tune();seq=copy.deepcopy(semi);seq['strategy']='sequential_4cyl'
+        semi=semi_tune();seq=copy.deepcopy(semi);seq['strategy']='sequential'
         for rpm,map_kpa,battery in ((200,100,8),(1200,45,13.8),(6000,85,16)):
             # Use a neutral starting correction so this tests mass splitting,
             # not a default cold profile that can exceed sequential capacity.
@@ -122,16 +122,16 @@ class SemiTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             path=Path(folder)/'tune.json';body=json.dumps(old,indent=1).encode();path.write_bytes(body);store=EngineStore(path)
             self.assertTrue(store.storage_ok);self.assertEqual(path.read_bytes(),body)
-            expected=copy.deepcopy(old);expected['schema_version']=10;expected['boost_control']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['boost_control']);expected['boost_control'].update(ki=struct.unpack('<f',struct.pack('<f',.1))[0],derivative_filter_s=struct.unpack('<f',struct.pack('<f',.1))[0]);expected['flex_fuel']=copy.deepcopy(semi_tune()['flex_fuel']);expected['secondary_tables']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['secondary_tables']);expected['load_model']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['load_model']);expected['transient_enrichment']=copy.deepcopy(semi_tune()['transient_enrichment']);self.assertEqual(store.tune,expected)
+            expected=copy.deepcopy(old);expected['schema_version']=11;expected['strategy']='sequential';expected['timing']['firing_order']+=[0]*4;expected['cylinder_trims']['spark_deg']+=[0]*4;first=expected['cylinder_trims']['fuel_maps'][0];expected['cylinder_trims']['fuel_maps']+=[dict(rpm=first['rpm'][:],load=first['load'][:],cells=[100]*36) for _ in range(4)];expected['boost_control']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['boost_control']);expected['boost_control'].update(ki=struct.unpack('<f',struct.pack('<f',.1))[0],derivative_filter_s=struct.unpack('<f',struct.pack('<f',.1))[0]);expected['flex_fuel']=copy.deepcopy(semi_tune()['flex_fuel']);expected['secondary_tables']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['secondary_tables']);expected['load_model']=copy.deepcopy(json.loads((R/'config/engine/defaults.json').read_text())['load_model']);expected['transient_enrichment']=copy.deepcopy(semi_tune()['transient_enrichment']);self.assertEqual(store.tune,expected)
             self.assertEqual(store.save(json.dumps(store.tune).encode())[0],200)
-            self.assertEqual(json.loads(path.read_bytes())['schema_version'],10);self.assertEqual(store.tune['revision'],38)
+            self.assertEqual(json.loads(path.read_bytes())['schema_version'],11);self.assertEqual(store.tune['revision'],38)
 
     def test_identity_gates_new_mode_and_retains_old005_idle_values(self):
         t=semi_tune();p=pages(t);self.assertEqual(struct.unpack_from('<I',p[1],272)[0],2)
         self.assertEqual(pages(decode_pages(p,t)),p);text=export_msq(t);self.assertEqual(import_msq(text),t)
         with self.assertRaises(ValueError):import_msq(text.replace(SIGNATURE.decode(),IDLE_SIGNATURE.decode()))
         old=import_msq((R/'tuning/examples/tunerstudio-idle-roundtrip.msq').read_bytes())
-        self.assertEqual(old['schema_version'],10);self.assertEqual(old['idle_control']['frequency_hz'],90)
+        self.assertEqual(old['schema_version'],11);self.assertEqual(old['idle_control']['frequency_hz'],90)
         for schema in (1,2,3,4):
             bad=json.loads((R/'config/engine'/f'defaults-v{schema}.json').read_text()) if schema>1 else copy.deepcopy(t)
             bad['schema_version']=schema;bad['strategy']=t['strategy']
@@ -146,9 +146,9 @@ class SemiTests(unittest.TestCase):
                 command=lambda offset,b:b'M'+struct.pack('<BBHH',0,1,offset,len(b))+b
                 self.assertEqual(session.command(command(272,struct.pack('<I',2))),b'\0')
                 self.assertEqual(session.command(command(4752,struct.pack('<I',1))),b'\0')
-                self.assertEqual(session.command(b'b\0\1'),b'\x84');self.assertEqual(store.tune['strategy'],'batch_wasted_4cyl')
+                self.assertEqual(session.command(b'b\0\1'),b'\x84');self.assertEqual(store.tune['strategy'],'batch_wasted')
                 self.assertEqual(session.command(command(4752,bytes(4))),b'\0')
-                self.assertEqual(session.command(b'b\0\1'),b'\4');self.assertEqual(store.tune['strategy'],'semi_sequential_4cyl')
+                self.assertEqual(session.command(b'b\0\1'),b'\4');self.assertEqual(store.tune['strategy'],'semi_sequential')
                 self.assertEqual(store.tune['revision'],2);self.assertEqual(struct.unpack_from('<I',session.buffers[1],268)[0],1)
             finally:session.close()
 
@@ -189,14 +189,14 @@ class SemiTests(unittest.TestCase):
     def test_radio_schema_enum_matrix_checks_current_and_history_independently(self):
         native=EngineRecorder();lmk=bytes(range(16));boot=bytes(range(16,32));key=derive_engine_key(lmk,boot,123)
         try:
-            for mode in ('batch_wasted_4cyl','sequential_4cyl','semi_sequential_4cyl'):
+            for mode in ('batch_wasted','sequential','semi_sequential'):
                 tune=semi_tune();tune['strategy']=mode;r=EngineRuntime(tune)
                 try:r.step(dict(rpm=1200,synced=True,phase_synced=True),1000,use_decoder=False);base=r.data()
                 finally:r.close()
                 for current,history in ((0,0),(16,16),(17,0),(0,17)):
                     s=copy.deepcopy(base);s['worker_observation']['timing_fault_code']=current;s['worker_observation']['last_timing_fault_code']=history
                     for schema in (1,2):
-                        supported=schema==2 or mode!='semi_sequential_4cyl' and max(current,history)<=16
+                        supported=schema==2 or mode!='semi_sequential' and max(current,history)<=16
                         if not supported:
                             with self.assertRaises(ValueError):native.frame(s,lmk,boot,123,1,schema=schema)
                         else:

@@ -4,7 +4,7 @@
 #include "ecu/engine_phase.hpp"
 #include "ecu/engine_scheduler.hpp"
 #include <string>
-struct EngineContext {ecu::engine::RuntimeSample data;std::uint64_t data_sequence=0;ecu::engine::Tune tune;ecu::flex::Capture flex_capture;std::uint32_t flex_revision=0;ecu::engine::Controller controller;ecu::engine::PhaseDecoder decoder{{60,2,8000}};ecu::engine::Output last;ecu::engine::AngleScheduler scheduler;unsigned slots=60,missing=2,max_rpm=8000;std::uint64_t gap=0,control_us=0,sampled_us=0,last_trigger_us=UINT64_MAX;bool have_control=false;std::uint8_t virtual_high_mask=0;std::uint64_t stopped_since=UINT64_MAX;unsigned timing_recoveries=0,timing_stops=0;ecu::engine::AngleScheduler::StopReason last_timing_reason=ecu::engine::AngleScheduler::StopReason::None;};
+struct EngineContext {ecu::engine::RuntimeSample data;std::uint64_t data_sequence=0;ecu::engine::Tune tune;ecu::flex::Capture flex_capture;std::uint32_t flex_revision=0;ecu::engine::Controller controller;ecu::engine::PhaseDecoder decoder{{60,2,8000}};ecu::engine::Output last;ecu::engine::AngleScheduler scheduler;unsigned slots=60,missing=2,max_rpm=8000,scheduler_cylinders=0;std::uint64_t gap=0,control_us=0,sampled_us=0,last_trigger_us=UINT64_MAX;bool have_control=false;std::uint32_t virtual_high_mask=0;std::uint64_t stopped_since=UINT64_MAX;unsigned timing_recoveries=0,timing_stops=0;ecu::engine::AngleScheduler::StopReason last_timing_reason=ecu::engine::AngleScheduler::StopReason::None;};
 thread_local std::string engine_reply;
 static const char* encode(cJSON*j){char*s=cJSON_PrintUnformatted(j);cJSON_Delete(j);engine_reply=s?s:"{}";cJSON_free(s);return engine_reply.c_str();}
 #include "trigger_capture_bridge.hpp"
@@ -17,10 +17,10 @@ extern "C" int engine_configure(void*p,const char*text){
  auto*j=cJSON_ParseWithOpts(text,nullptr,true);ecu::engine::Tune candidate;
  const bool ok=j&&ecu::engine::parse_tune(j,candidate);cJSON_Delete(j);if(!ok)return 0;
  auto*c=static_cast<EngineContext*>(p);c->tune=candidate;if(!c->flex_revision)c->flex_capture=ecu::flex::Capture(candidate.flex_fuel.capture);else if(!c->flex_capture.configure(candidate.flex_fuel.capture))c->flex_capture.context_changed();c->flex_revision=candidate.revision;c->decoder=ecu::engine::PhaseDecoder({c->slots,c->missing,c->max_rpm},ecu::engine::angle_config(c->tune));
- c->controller.reset();c->scheduler.reset();c->last={};c->data={};c->data_sequence=0;c->have_control=false;c->virtual_high_mask=0;c->stopped_since=UINT64_MAX;c->timing_recoveries=0;c->timing_stops=0;c->last_timing_reason=ecu::engine::AngleScheduler::StopReason::None;return 1;
+ c->controller.reset();c->scheduler.reset();c->last={};c->last.cylinder_count=0;c->data={};c->data_sequence=0;c->have_control=false;c->virtual_high_mask=0;c->scheduler_cylinders=0;c->stopped_since=UINT64_MAX;c->timing_recoveries=0;c->timing_stops=0;c->last_timing_reason=ecu::engine::AngleScheduler::StopReason::None;return 1;
 }
 extern "C" int engine_wheel(void*p,unsigned slots,unsigned missing,unsigned max_rpm){
- auto*c=static_cast<EngineContext*>(p);ecu::engine::PhaseDecoder d({slots,missing,max_rpm},ecu::engine::angle_config(c->tune));if(!d.valid())return 0;c->decoder=d;c->gap=0;c->slots=slots;c->missing=missing;c->max_rpm=max_rpm;c->scheduler.reset();return 1;
+ auto*c=static_cast<EngineContext*>(p);ecu::engine::PhaseDecoder d({slots,missing,max_rpm},ecu::engine::angle_config(c->tune));if(!d.valid())return 0;c->decoder=d;c->gap=0;c->slots=slots;c->missing=missing;c->max_rpm=max_rpm;c->scheduler.reset();c->virtual_high_mask=0;c->scheduler_cylinders=0;return 1;
 }
 static bool phase_fault(EngineContext*c){
  if(!c->decoder.faulted())return false;
@@ -39,6 +39,7 @@ extern "C" int engine_trigger(void*p,std::uint64_t time){
    if(!failed_before&&c->scheduler.failed()){++c->timing_stops;c->last_timing_reason=c->scheduler.stop_reason();}
    return 3;
   }
+  if(output.proposed_enabled())c->scheduler_cylinders=c->tune.cylinders;
   if(c->decoder.tooth()==0){c->gap=time;return 1;}
  }else c->scheduler.cut();
  return before&&!c->decoder.synced()?2:0;
@@ -84,7 +85,7 @@ extern "C" const char* engine_step(void*p,const char*text,std::uint64_t now,std:
  }else c->stopped_since=UINT64_MAX;
  if(c->last.faults||c->last.state==ecu::engine::State::Stopped)c->scheduler.cut();else c->scheduler.refresh_control(now,sampled);if(c->scheduler.failed()){c->last.faults|=ecu::engine::Timing;c->last.state=ecu::engine::State::Faulted;c->last.fuel_cut=c->last.spark_cut=true;}c->data=ecu::engine::synthetic_data(c->tune,s,c->last,++c->data_sequence,now);
  if(raw_flex&&c->last.flex_fuel.required&&c->last.flex_fuel.configuration_match&&s.flex_sample.observation.pending_fault)c->flex_capture.acknowledge(s.flex_sample.observation.fault_generation);
- c->data.phase_reason=static_cast<std::uint8_t>(c->decoder.reason());c->data.phase_losses=c->decoder.losses();c->data.cam_rejected=c->decoder.rejected();c->data.cam_error_deg=c->decoder.cam_error_deg();c->data.virtual_high_mask=c->virtual_high_mask;
+ c->data.phase_reason=static_cast<std::uint8_t>(c->decoder.reason());c->data.phase_losses=c->decoder.losses();c->data.cam_rejected=c->decoder.rejected();c->data.cam_error_deg=c->decoder.cam_error_deg();c->data.virtual_high_mask=c->virtual_high_mask;c->data.worker_cylinder_count=c->scheduler_cylinders;
  j=ecu::engine::output_json(c->last);cJSON_AddBoolToObject(j,"synced",s.synced&&(!c->decoder.required()||s.phase_synced));cJSON_AddBoolToObject(j,"crank_synced",s.synced);cJSON_AddBoolToObject(j,"phase_synced",s.phase_synced);cJSON_AddBoolToObject(j,"phase_required",c->decoder.required());cJSON_AddStringToObject(j,"phase_reason",ecu::engine::PhaseDecoder::reason_name(c->decoder.reason()));cJSON_AddNumberToObject(j,"phase_losses",c->decoder.losses());cJSON_AddNumberToObject(j,"cam_rejected",c->decoder.rejected());cJSON_AddNumberToObject(j,"cam_error_deg",c->decoder.cam_error_deg());cJSON_AddNumberToObject(j,"gap_us",c->gap);cJSON_AddNumberToObject(j,"time_us",now);cJSON_AddNumberToObject(j,"timing_recoveries",c->timing_recoveries);cJSON_AddNumberToObject(j,"timing_stops",c->timing_stops);cJSON_AddNumberToObject(j,"executor_high_mask",c->virtual_high_mask);cJSON_AddStringToObject(j,"timing_stop_reason",ecu::engine::AngleScheduler::reason_name(c->last_timing_reason));return encode(j);
 }
 extern "C" const char* engine_plan(void*p){auto*c=static_cast<EngineContext*>(p);auto output=c->last;output.rpm=c->decoder.rpm();auto plan=ecu::engine::plan_revolution(c->tune,output,c->gap);auto*j=cJSON_CreateObject();cJSON_AddBoolToObject(j,"valid",plan.valid);auto*a=cJSON_AddArrayToObject(j,"edges");for(unsigned i=0;i<plan.count;++i){auto*e=cJSON_CreateArray();cJSON_AddItemToArray(e,cJSON_CreateNumber(plan.edges[i].time_us));cJSON_AddItemToArray(e,cJSON_CreateNumber(plan.edges[i].channel));cJSON_AddItemToArray(e,cJSON_CreateBool(plan.edges[i].high));cJSON_AddItemToArray(a,e);}return encode(j);}
