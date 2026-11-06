@@ -1,0 +1,14 @@
+Quantity,Item,MPN candidate,Use,Procurement / acceptance
+1,Carrier ZH5 mating housing,ZHR-5,A7 J21,Actual keyed mating view and cable access require verification
+1,Boost ZH4 mating housing,ZHR-4,BOOST-DRAFT1 J1,Maps A7 pins5/2/3/4 to boost pins1/2/3/4
+9,ZH crimp contact,SZH-002T-P0.5,Five carrier plus four boost contacts,One AWG26 stranded conductor per crimp; OD0.9..1.1mm; verify exact JST tooling
+1,Idle XH4 mating housing,XHP-4,Original IAC-DRAFT2 J1,Maps A7 pins1/2/3/4 to idle pins1/2/3/4
+4,XH ordinary crimp contact,SXH-001T-P0.6,Idle logic input,Use ordinary wire-compatible contact; do not substitute low-insertion N variant; confirm AWG26/OD/tooling
+1,Five-signal Y logic loom,AWG26 stranded;OD0.9..1.1mm,A7 J21 to idle XH4 and boost ZH4,One conductor per contact. Split RUN/+5V/GND at three insulated mechanically secured joints; no actuator return
+3,Insulated fanout joint,Soldered splice plus individual adhesive heat-shrink and strain relief,RUN/+5V/GND shared logic branches,One carrier conductor to two branch conductors; no double-wire connector crimp. Inspect joints/continuity/strain and qualify actual splice process
+1,Boost valve mating housing,VHR-6N,BOOST-DRAFT1 J3,Fit contacts only1 positive and2 BOOST_LS; leave3..6 empty
+2,VH power contact,SVH-21T-P1.1 OR SVH-41T-P1.1,Boost valve harness,Choose one by actual coil current/wire/insulation and JST tooling; no assigned current rating or purchase release
+1,Protected switched actuator branch and independent disconnect,TBD,Boost J2 pins1 positive and2 dedicated return,Specify fuse/relay/reverse/transient protection and independent cutoff for actual coil; separate from carrier/sensor rail
+4,Insulating M3 standoff/hardware set,TBD,Boost H1..H4,82x52mm centres; back parts/leads and actual mounting height unqualified
+1,Accessory enclosure and cable sealing,TBD,Separate boost accessory,No fit-qualified printable case yet; old A3 case/ZIP does not qualify this board
+2,TO220 mounting/insulation arrangement,TBD,Q1 and U6,Different live tabs: drain and regulator output; no uninsulated shared heatsink

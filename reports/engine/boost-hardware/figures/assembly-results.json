@@ -1,0 +1,88 @@
+[
+  {
+    "command": [
+      "kicad-cli",
+      "pcb",
+      "export",
+      "svg",
+      "--mode-single",
+      "--fit-page-to-board",
+      "--exclude-drawing-sheet",
+      "--black-and-white",
+      "--sketch-pads-on-fab-layers",
+      "--layers",
+      "F.Fab,F.SilkS,Edge.Cuts",
+      "--output",
+      "hardware/a7-boost-interface/assembly-front.svg",
+      "hardware/a7-boost-interface/esp32-ecu.kicad_pcb"
+    ],
+    "source_sha256": "d29bf9e7fbfe80e625810ced45c93c1bafadd7ec0052628614fa86bddc1f6a95",
+    "output_sha256": "bb09a9ee9310f63f1acaccaa7b3d5708ca35e3adf6f7a39c17d56debe18c0381",
+    "log": "Plotted to 'hardware/a7-boost-interface/assembly-front.svg'.\nDone.\n"
+  },
+  {
+    "command": [
+      "kicad-cli",
+      "pcb",
+      "export",
+      "svg",
+      "--mode-single",
+      "--fit-page-to-board",
+      "--exclude-drawing-sheet",
+      "--black-and-white",
+      "--sketch-pads-on-fab-layers",
+      "--layers",
+      "B.Fab,B.SilkS,Edge.Cuts",
+      "--output",
+      "hardware/a7-boost-interface/assembly-back.svg",
+      "--mirror",
+      "hardware/a7-boost-interface/esp32-ecu.kicad_pcb"
+    ],
+    "source_sha256": "d29bf9e7fbfe80e625810ced45c93c1bafadd7ec0052628614fa86bddc1f6a95",
+    "output_sha256": "875d168e3c42ce7594b0f1b6c9468824d699dce1463249ceaf93b1b6b0028c69",
+    "log": "Plotted to 'hardware/a7-boost-interface/assembly-back.svg'.\nDone.\n"
+  },
+  {
+    "command": [
+      "kicad-cli",
+      "pcb",
+      "export",
+      "svg",
+      "--mode-single",
+      "--fit-page-to-board",
+      "--exclude-drawing-sheet",
+      "--black-and-white",
+      "--sketch-pads-on-fab-layers",
+      "--layers",
+      "F.Fab,F.SilkS,Edge.Cuts",
+      "--output",
+      "hardware/boost-isolated/assembly-front.svg",
+      "hardware/boost-isolated/isolated.kicad_pcb"
+    ],
+    "source_sha256": "897a7714893bc2c541fa44465aa202f123cf102fa91b0d82b332c1bdde811684",
+    "output_sha256": "fec668826e50f3345224bdaf909c39800a56d818e2b814c6e72fcce32ec21732",
+    "log": "Plotted to 'hardware/boost-isolated/assembly-front.svg'.\nDone.\n"
+  },
+  {
+    "command": [
+      "kicad-cli",
+      "pcb",
+      "export",
+      "svg",
+      "--mode-single",
+      "--fit-page-to-board",
+      "--exclude-drawing-sheet",
+      "--black-and-white",
+      "--sketch-pads-on-fab-layers",
+      "--layers",
+      "B.Fab,B.SilkS,Edge.Cuts",
+      "--output",
+      "hardware/boost-isolated/assembly-back.svg",
+      "--mirror",
+      "hardware/boost-isolated/isolated.kicad_pcb"
+    ],
+    "source_sha256": "897a7714893bc2c541fa44465aa202f123cf102fa91b0d82b332c1bdde811684",
+    "output_sha256": "7097310aad913dd36b740e30c9fad4fc4c3c233a399fae5524560636f9319d4d",
+    "log": "Plotted to 'hardware/boost-isolated/assembly-back.svg'.\nDone.\n"
+  }
+]

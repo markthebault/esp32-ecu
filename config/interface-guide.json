@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "guide_version": "1.10",
+  "guide_version": "1.11",
   "hardware_revision": "A3-120",
   "scope": "Bench configuration and diagnostics. Physical engine outputs remain inhibited; no vehicle qualification.",
   "general": [
@@ -66,6 +66,14 @@
     {
       "title": "AEM flex sensor manual, pinout contradiction remains unresolved",
       "url": "https://documents.aemelectronics.com/4d1c5cae401b6fdb894a16fe7fc697444fb51f37.pdf"
+    },
+    {
+      "title": "Microchip TN0702 low-threshold MOSFET data",
+      "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/TN0702-N-Channel-Enhancement-Mode-Vertical-DMOS-FET-Data-Sheet-20005941A.pdf"
+    },
+    {
+      "title": "JST ZH keyed low-power connector dimensions and contacts",
+      "url": "https://www.jst-mfg.com/product/pdf/eng/eZH.pdf"
     }
   ],
   "sensors": [
@@ -439,11 +447,13 @@
       ]
     },
     {
-      "connector": "A5 J21 / IAC-DRAFT2",
+      "connector": "A5/A6 J21 PH4 or A7 J21 ZH5 / IAC-DRAFT2",
       "title": "Isolated idle PWM",
       "checks": [
         "Engine development contains idle modes, gains, coolant curves and source/age diagnostics. All shipped builds keep physical idle GPIO writes disabled. A3/A4 and the old manual/ZIP do not contain this new carrier connector.",
-        "A5 J21 PH4 maps pin 1 GPIO3/IDLE_CMD, pin 2 RUN_5V, pin 3 carrier 5V, pin 4 carrier GND to IAC-DRAFT2 J1 XH4 pins1 through 4. R154 is the permanent 2.2 kohm carrier bias and stays present with the harness unplugged. Verify the keyed mating view and continuity with power removed.",
+        "A5/A6 J21 PH4 maps pin 1 GPIO3/IDLE_CMD, pin 2 RUN_5V, pin 3 carrier 5V, pin 4 carrier GND to IAC-DRAFT2 J1 XH4 pins1 through 4. R154 is the permanent 2.2 kohm carrier bias and stays present with the harness unplugged. Verify the keyed mating view and continuity with power removed.",
+        "A7 replaces J21 with ZH5 at the old position:1 IDLE_CMD/GPIO3,2 RUN_5V,3 carrier5V,4 GND,5 BOOST_CMD/GPIO45. Its dedicated split harness maps1..4 to IAC-DRAFT2 J1 XH4. It maps5 to BOOST-DRAFT1 J1 ZH4 pin1 and2..4 to boost pins2..4. The original PH4 harness does not mate. R154 remains the idle bias; R180 adds a separate GPIO45 bias. Physical writes stay disabled.",
+        "Use one wire per crimp: one ZHR-5 carrier housing, one ZHR-4 boost housing, one XHP-4 idle housing,9 SZH-002T-P0.5 contacts and4 wire-compatible ordinary XH contacts. Stranded AWG26 with insulation OD0.9..1.1mm fits the stated ZH/XH candidate ranges. RUN,5V and carrier GND each need a defined insulated, strain-relieved fanout joint. Do not stuff two wires into one contact or join actuator returns. Actual crimps, wire length, routing, retention and fit remain unqualified.",
         "Two input-side transistor buffers and 6N137 optocouplers separate carrier power/return from actuator logic. Do not bridge these domains with wires, case foil, heatsinks or scope ground clips. This is low-voltage return separation, not certified isolation.",
         "Accessory J2 fixed screw terminal: pin 1 separate externally protected, fused, relay-switched 9-16 V; pin 2 dedicated return. J3 VH2: pin 1 valve positive, pin 2 IAC_LS. Use an actual <=2 A normally closed two-wire continuous-PWM valve; carrier J1 and sensor rails cannot supply it.",
         "IRLZ44NPBF has no current/thermal shutdown or valve feedback. A drain-source short can energize a normal-current coil without clearing a fuse. Provide an independently operable actuator-branch disconnect. Q1 drain tab and U6 regulator-output tab are live at different voltages.",
@@ -511,6 +521,20 @@
         "The compact A6 draft uses J20 B2B-PH-K-S(LF)(SN), a PHR-2 housing and two SPH-002T-P0.5S contacts selected for the actual wire. Earlier carriers use a different housing. Match the board revision and its BOM before assembling the harness.",
         "Both J20 pins are CHASSIS. Use this internal connector only for the shield or enclosure lining bond. H5 remains the designated chassis lug; J20 is not a normal sensor or actuator current return.",
         "With power removed, verify the keyed mating view and continuity to the lining. Keep the bond inside the water seal. Native PCB checks do not establish crimp quality, electrical rating, enclosure fit or splash resistance."
+      ]
+    },
+    {
+      "connector": "A7 J21 ZH5 / BOOST-DRAFT1",
+      "title": "Boost valve connection and diagnostics",
+      "checks": [
+        "A3/A4/A5/A6 have no released boost connection. A7 and BOOST-DRAFT1 are separate development drafts with physical engine outputs inhibited; no configuration enables GPIO45 writes. Old J24 architecture notes are historical proposals.",
+        "A7 J21 ZH5 carries1 idle GPIO3,2 RUN_5V,3 carrier5V,4 carrier GND,5 boost GPIO45. BOOST-DRAFT1 J1 ZH4 pins1..4 receive J21 pins5,2,3,4. Use the A7 split harness described in the idle guide and verify pin numbers/continuity with all power removed. GPIO45 memory-voltage strapping/eFuses/reset must be checked on the actual module without burns.",
+        "Driver J2 fixed screw terminal:1 separate externally fused, switched, reverse/transient-protected9\u201316V,2 actuator return. J3 VH6:1 valve positive,2 BOOST_LS,3..6 no contacts/wires. Use VHR-6N with exactly two wire-compatible VH contacts. Actual valve coil/current/plumbing and the protected branch are not selected or qualified.",
+        "TN0702 gate buffers, local gate filtering and LED-supply slew limiting address declared hotplug sensitivities. Modeled short-pulse loss and changed electrical width remain visible. Requested or cycle-latched digital duty is not a valve-current/position measurement; no physical minimum pulse or transfer function is established.",
+        "Two optical paths separate carrier inputs from local actuator logic. LOGIC_GND joins ACT_GND only at the source star. Keep case metal, heatsinks and scope grounds from bridging domains. Q1 drain and regulator output tabs are live at different potentials. Back-mounted parts and front lead trimming need assembly/insulation clearance checks.",
+        "With an independent actuator disconnect, eventual bench checks start on a current-limited resistor fixture. Observe loaded carrier RUN and MAIN_IN, optical LED currents, local rail/supervisor/ENA, gate relative to source, drain and return currents through startup/reset, command/RUN loss, boost-stub and shared-trunk opens. Preserve scope protective earth. Do not connect an engine for commissioning.",
+        "Exact UCC27524P/P.B electrical guarantees, MCP100 maximum assertion latency, full-temperature input behavior, real supply transients, actual valve/RL/flyback/thermal behavior, GPIO loading, formed leads, crimp/finished-hole fit, enclosure/sealing and RF remain release holds. Conditional native/circuit checks do not establish these properties.",
+        "Keep de-energized valve plumbing on mechanical spring-pressure control and verify increasing energized duty raises boost. Stored current can persist after a low command. A drain-source short may energize a normal-current coil without blowing a fuse; use the independent branch disconnect. No physical valve feedback exists."
       ]
     }
   ],

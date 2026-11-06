@@ -8,7 +8,7 @@ from engine_runtime import R
 from engine_msq import import_msq
 from web_server import Device,Handler,load_bridge
 
-SOURCES=('web/index.html','web/boost_control.js','web/boost_control_logic.js','web/load_model.js','web/secondary_tables.js','tools/engine_msq.py','tools/test_boost_ui.py')
+SOURCES=('web/index.html','web/boost_control.js','web/boost_control_logic.js','web/idle_control.js','web/idle_control_logic.js','web/load_model.js','web/secondary_tables.js','config/interface-guide.json','config/interface-guide-development.json','tools/engine_msq.py','tools/test_boost_ui.py')
 def hashes():return {name:hashlib.sha256((R/name).read_bytes()).hexdigest() for name in SOURCES}
 
 async def check(url,device,out):
@@ -20,6 +20,20 @@ async def check(url,device,out):
    await page.goto(url);await page.locator('[data-page="engine"]').click();await page.locator('#boost-mode').wait_for()
    assert not await page.locator('#boost-pressure_enabled').is_checked();assert await page.locator('#boost-mode').input_value()=='off'
    assert await page.locator('[data-boost-cell]').count()==64;checks.append('New and migrated defaults retain NA protection and disabled valve control')
+   await page.locator('#engine-boost-panel details summary').first.click()
+   panel=await page.locator('#engine-boost-panel').inner_text()
+   assert 'boost telemetry format6' in panel and 'The screen format needs an extension' not in panel
+   assert 'J21 ZH5' in panel and 'J3 VH6' in panel and 'physical boost writes disabled' in panel
+   guide=(await (await page.request.get(url+'/api/guide')).json())
+   assert guide['guide_version']=='1.11'
+   boost_guide=next(row for row in guide['services'] if row['title']=='Boost valve connection and diagnostics')
+   assert any('pins5,2,3,4' in text for text in boost_guide['checks'])
+   await page.locator('[data-page="guides"]').click()
+   await page.locator('#guide-select').select_option(boost_guide['connector'])
+   await page.get_by_role('heading',name='Boost valve connection and diagnostics',exact=True).wait_for()
+   await page.locator('[data-page="engine"]').click()
+   await page.locator('#boost-mode').wait_for()
+   checks.append('Actual boost and connector-guide views agree on the A7 shared harness, inhibition and current boost-capable screen format')
    await page.locator('#boost-pressure_enabled').check();await page.locator('#boost-mode').select_option('open_loop')
    assert await page.locator('[data-axis="load"]').last.get_attribute('max')=='300'
    await page.locator('[data-axis="load"]').last.fill('250');await page.locator('[data-axis="load"]').last.dispatch_event('change')

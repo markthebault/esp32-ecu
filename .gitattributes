@@ -58,3 +58,19 @@ reports/engine/secondary-core/** -text -whitespace
 # Preserve source-bound secondary integration evidence and vendor export bytes.
 reports/engine/secondary-integration/** -text -whitespace
 tuning/examples/tunerstudio-secondary-roundtrip.msq -text -whitespace
+
+# Preserve reviewed boost CAD/source snapshots and evidence bytes exactly.
+hardware/a7-boost-interface/** -text
+hardware/boost-isolated/** -text
+hardware/boost-control/harness-bom.csv -text
+hardware/a7-boost-interface/*.csv whitespace=cr-at-eol
+hardware/boost-isolated/*.csv whitespace=cr-at-eol
+hardware/boost-control/harness-bom.csv whitespace=cr-at-eol
+hardware/boost-control/footprints/** -text -whitespace
+hardware/a7-boost-interface/lib/** -whitespace
+hardware/a7-boost-interface/generator-source/** -whitespace
+hardware/a7-boost-interface/assembly-*.svg -whitespace
+hardware/boost-isolated/lib/** -whitespace
+hardware/boost-isolated/generator-source/** -whitespace
+hardware/boost-isolated/assembly-*.svg -whitespace
+reports/engine/boost-hardware/** -text -whitespace

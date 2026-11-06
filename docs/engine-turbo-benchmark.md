@@ -1,6 +1,6 @@
 # Coupled turbo research benchmark
 
-The own engine controller and pinned production Speeduino now drive separate turbocharged research plants through actual native fuel, ignition and boost-output transitions. Each engine starts from rest and generates its own crank teeth and sensor history. Physical engine outputs remain inhibited. The protected boost driver and J24/GPIO45 carrier candidate remain unfinished.
+The own engine controller and pinned production Speeduino now drive separate turbocharged research plants through actual native fuel, ignition and boost-output transitions. Each engine starts from rest and generates its own crank teeth and sensor history. Physical engine outputs remain inhibited. The separate [A7/BOOST-DRAFT1 hardware increment](engine-boost-hardware.md) adds routed native sources and conditional circuit experiments; GPIO45 physical allocation and powered hardware acceptance remain open.
 
 This extends [boost software/configuration/debugging](engine-boost-development.md) and the [naturally aspirated benchmark](engine-research-benchmark.md). The existing web simulator keeps its synthetic-data labels and its separate plant. These experiments do not silently replace it.
 
