@@ -80,7 +80,15 @@ class OurController:
     def close(self):self.runtime.close()
 
 
-def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32,idle_options=None,semi_sequential=False,target_dispatcher=False,transient_options=None,load_options=None,secondary_options=None,plant_geometry=None):
+def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=None,control_period_us=1000,sequential=False,reference_timer_bits=32,idle_options=None,semi_sequential=False,target_dispatcher=False,transient_options=None,load_options=None,secondary_options=None,plant_geometry=None,reference_profile_fixture=None,reference_allow_geometry_mismatch=False,reference_wiring_order=None):
+    if type(reference_allow_geometry_mismatch)is not bool:raise ValueError('Geometry diagnostic opt-in must be boolean')
+    if reference_profile_fixture is not None:
+        if controller not in ('speeduino','speeduino_per_tooth') or plant_geometry is None or reference_timer_bits!=32:
+            raise ValueError('Expanded reference requires an explicit reference controller, physical geometry and32-bit timer fixture')
+        if any(v is not None for v in (idle_options,transient_options,load_options,secondary_options)):
+            raise ValueError('Expanded reference basic fixture does not implement auxiliary configuration IPC')
+    elif reference_allow_geometry_mismatch or reference_wiring_order is not None:
+        raise ValueError('Geometry/wiring diagnostics require the explicit expanded reference fixture')
     secondary_tune=None;secondary_program=None;secondary_monitor=None
     if secondary_options is not None:
         from secondary_stimulus import ContactProgram
@@ -131,12 +139,19 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
         finally:prepared.close()
     geometry=plant_geometry or (EngineGeometry.from_tune(tune or benchmark_tune()) if controller=='ours' else EngineGeometry())
     if not isinstance(geometry,EngineGeometry):raise ValueError('Expected explicit physical EngineGeometry')
-    if controller!='ours' and geometry!=EngineGeometry():raise ValueError('Existing production-reference adapter is a four-cylinder2L fixture; expanded fixture required')
+    if controller!='ours' and geometry!=EngineGeometry() and reference_profile_fixture is None:raise ValueError('Existing production-reference adapter is a four-cylinder2L fixture; expanded fixture required')
     # Keep the historical default FMU available for exactly matching4-cylinder
     # regressions. Other declared geometry uses the separately attested model.
     plant=ResearchPlant(cold=scenario=='idle_cold_start' or bool(transient_options and transient_options.get('cold')),idle_valve=idle_options.get('valve_mode','normal') if idle else None,geometry=geometry if geometry!=EngineGeometry() else None,**(dict(ambient_kpa=load_options.get('ambient_kpa',100)) if load_options is not None else {}))
     secondary_channels=tuple(secondary_tune['secondary_tables'][k]['input_channel']for k in('fuel','spark'))if secondary_tune is not None else None
-    try:ecu=(OurController(tune,target_dispatcher=True) if target_dispatcher else OurController(tune)) if controller=='ours' else SpeeduinoRuntime(per_tooth=controller=='speeduino_per_tooth',sequential=sequential,timer_bits=reference_timer_bits,semi_sequential=semi_sequential,secondary_channels=secondary_channels)
+    try:
+        if controller=='ours':ecu=OurController(tune,target_dispatcher=target_dispatcher)
+        elif reference_profile_fixture is not None:
+            from speeduino_profiles_runtime import SpeeduinoProfilesRuntime
+            ecu=SpeeduinoProfilesRuntime(reference_profile_fixture,geometry,'sequential'if sequential else'semi'if semi_sequential else'wasted_cop',per_tooth=controller=='speeduino_per_tooth',wiring_order=reference_wiring_order)
+            if not ecu.profile['representable_ignition_geometry'] and not reference_allow_geometry_mismatch:
+                ecu.close();raise ValueError('Reference fallback does not represent this physical engine; explicit diagnostic opt-in required')
+        else:ecu=SpeeduinoRuntime(per_tooth=controller=='speeduino_per_tooth',sequential=sequential,timer_bits=reference_timer_bits,semi_sequential=semi_sequential,secondary_channels=secondary_channels)
     except Exception:plant.close();raise
     trace=[];edges_all=[];injection_timing=[];accepted_crank=[];trigger_edges=[];cam_edges=[];cam_angles=[geometry.cam_edge_deg+360 if scenario=='cam_wrong_phase' else geometry.cam_edge_deg,geometry.cam_edge_deg+360];now=0;next_sample=0;tooth_index=1
     channels=CHANNEL_EXTENT
@@ -377,7 +392,7 @@ def run(controller='ours',scenario='warm_start',duration=10,step_us=250,tune=Non
             summary['dropout_accepted_crank_watchdog']=dict(last_accepted_us=last[0],timeout_us=last[1],deadline_us=last[0]+last[1],basis='Native production decoder timeout at last successfully accepted plan; period*(missing+2)*2 clamped20..150ms') if last else None
         return dict(summary=summary,trace=trace,edges=edges_all,injection_timing=injection_timing,triggers=trigger_edges,
                     accepted_crank_watchdogs=accepted_crank,cams=cam_edges,spark_timing=plant.spark_errors,dwell=plant.dwell_events,final_ecu=state,
-                    **(dict(combustions=plant.cylinder_combustions) if transient_options is not None or load_options is not None else {}),
+                    **(dict(combustions=plant.cylinder_combustions) if transient_options is not None or load_options is not None or reference_profile_fixture is not None else {}),
                     **(dict(secondary_monitor=secondary_monitor.history if secondary_monitor is not None else None)if secondary_tune is not None else {}))
     finally:
         if secondary_monitor is not None:secondary_monitor.close()

@@ -2,7 +2,7 @@
 
 The development branch now carries one to eight even-fire, four-stroke cylinders through the shared controller, virtual target executor, configuration, browser, own012 tuning files, coherent logs and authenticated screen schema7. **The PCB still has four injector and four coil commands.** Cylinders5–8 have no allocated physical outputs. All normal firmware builds inhibit engine outputs; the separate dummy-load policy rejects profiles above its fitted four-cylinder capacity.
 
-This is a software integration checkpoint toward the wider Speeduino goal. Generalized executed-event comparisons with genuine Speeduino, an expanded turbo plant, matching hardware and physical qualification remain unfinished.
+This is a software integration checkpoint toward the wider Speeduino goal. A [separate sixteen-output production-reference fixture](engine-reference-profiles.md) now supports generalized executed-event comparisons. An expanded turbo plant, matching hardware, further feature gaps and physical qualification remain unfinished.
 
 Public `Tune`, `Output`, `AngleConfig`, `AngleScheduler` and `PhaseDecoder` now select capacity eight. Explicit `Legacy...` aliases preserve the capacity-four types. A capacity fault on any cylinder inhibits every engine channel and retains that cylinder's identifying bit.
 
@@ -20,6 +20,8 @@ Public `Tune`, `Output`, `AngleConfig`, `AngleScheduler` and `PhaseDecoder` now 
 ## Current integration evidence
 
 The [public-profile packet](../reports/engine/cylinder-profiles/README.md) records native/CAS/migration tests,48 coupled count/strategy plant runs, Chrome, actual TunerStudio/MegaLogViewer checks, fresh inhibited builds and independent reviews. The full Speeduino goal is still active.
+
+The later [production-reference comparison](engine-reference-profiles.md) observes sixteen actual native GPIOs and couples both controllers to independent copies of the same declared physical engine. It records effective setup/event modes, explicit incompatible fallbacks, fault runs, fixed-geometry wrong-wiring controls and numerical refinement. The earlier setup-only probe below remains historical geometry evidence. This new fixture does not change the fitted PCB or establish target timing.
 
 Both the quick regression plant and separately built MVEM air path executed1..8 cylinders in all three modes. Declared physical geometry controls TDCs, intake-close events, actuator arrays, total/per-cylinder volume and trapped air. Geometry remains fixed in wrong-order/reference tests. A30-degree reference error outside the configured cam window produces no phase lock, sparks or combustion work; no recorded spark error in that case is an unavailable measurement. These are empirical, uncalibrated research plants. The profile FMU preserves the older adapter/FMU and verifies actual initialized cylinder/displacement parameters.
 
@@ -67,15 +69,15 @@ At the earlier core checkpoint, the completed1296-case fixture measured maximum 
 
 The four-cylinder before/after probe uses exact F64 word output across7776 controller observations, including three strategies, primary load/AFR/transient modes and injected faults. Its baseline is commit `cdbd534a25a3e5594292f9bc65ae6d91a1897b8a`. This checks the declared unchanged path; it does not establish every possible tune.
 
-The genuine Speeduino reference remains pinned at `9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20`. The new probe reuses108 attested production objects, verifies an exact original relink, writes configuration through production storage and runs unchanged `setup()`. It records24 requested/effective configurations and the actual schedule angles. It does not generate shaft events, observe sixteen GPIOs or run an engine plant.
+The genuine Speeduino reference remains pinned at `9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20`. The earlier geometry-only probe reuses108 attested production objects, verifies an exact original relink, writes configuration through production storage and runs unchanged `setup()`. It records24 requested/effective configurations and the actual schedule angles. That earlier probe does not generate shaft events, observe sixteen GPIOs or run an engine plant; the separate expanded fixture above now does.
 
 The reference changes requested wasted-COP to wasted spark for1/2/3/5/7 cylinders, and changes some requested injector layouts. Seven-cylinder sequential schedules use integer102° increments, whereas evenly spaced four-stroke geometry is720/7°. Its two-cylinder sequential fuel schedule has a180° second-channel offset while ignition has360°. These are observed configuration/geometry differences requiring investigation in the generalized plant, not demonstrated physical engine bugs. Relevant primary code: [ignition controller](https://github.com/speeduino/speeduino/blob/9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20/speeduino/scheduler_ignition_controller.cpp) and [fuel controller](https://github.com/speeduino/speeduino/blob/9ff5aae44de51fdc00d3fb1c7c2bfc1f0d0b3e20/speeduino/scheduler_fuel_controller.cpp).
 
-The old native v0.4 fixture aliases injector6 and coil4 at pin50 and does not define sixteen independent outputs. Its four-cylinder benchmark remains a historical four-cylinder result. A broader event comparison needs an explicit native pin fixture and real production IO reinitialization, with its differences disclosed.
+The old native v0.4 fixture aliases injector6 and coil4 at pin50 and does not define sixteen independent outputs. Its four-cylinder benchmark remains a historical four-cylinder result. The separate expanded event fixture uses explicit pin bindings and real production IO reinitialization, with its differences disclosed.
 
 ## Remaining integration
 
-1. Build a distinct16-output native Speeduino fixture, reinitialize actual production IO/schedules and compare both controllers on independently driven generalized plants. Check effective fallback modes, normal/fault cases and step refinement. The earlier24-profile setup probe is geometry evidence only.
+1. Extend the declared production-reference comparison beyond its fixed500cc/cylinder,60-2/Hall, neutral-correction research fixture. Keep unsupported2/7-cylinder non-sequential fallback geometry explicit; additional configurations need their own evidence.
 2. Generalize the turbo gas path and complete its matching geometry, actuator, ledgers and controller comparisons. Do not relabel the existing four-cylinder turbo benchmark as eight-cylinder evidence.
 3. Measure target heap/stack, timing, capture/flash/USB/RF load and fault response on actual inhibited hardware and dummy loads. No source or CAD check supplies these measurements.
 4. Define and route a matching protected driver/input allocation within the120mm/THT/pluggable-module constraints. Extra cylinders need reviewed channels or an explicit banking/coil topology, connector/current/thermal/protection work and enclosure updates. Bridging existing outputs or doubling driver loads is not authorized by this logical model.
